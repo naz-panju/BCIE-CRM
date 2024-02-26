@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (min-width: 1536px) {
+  .container.container-width {
+    max-width: 1400px;
+  }
+
+}
 
 body {
   margin: 0;
