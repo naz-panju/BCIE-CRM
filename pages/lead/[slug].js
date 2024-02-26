@@ -1,12 +1,13 @@
+import LeadDetail from '@/Components/Lead/LeadDetail'
 import Layout from '@/Containers/Common/Layout'
 import React from 'react'
 
-function LeadDetail() {
+function Slug() {
     return (
         <Layout>
-
+            <LeadDetail />
         </Layout>
     )
 }
 
-export default LeadDetail
+export default Slug

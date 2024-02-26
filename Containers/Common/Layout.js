@@ -2,7 +2,6 @@ import React from 'react';
 import SessionLoader from '../../Components/Auth/SessionLoader';
 import Header from './Header';
 import Footer from './Footer';
-import Dashboard from '../../Components/Dashboard/dashboard';
 import Sidebar from './Sidebar';
 import { Grid } from '@mui/material';
 
