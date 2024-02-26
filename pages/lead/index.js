@@ -1,12 +1,12 @@
 import Layout from '@/Containers/Common/Layout'
 import React from 'react'
 
-function New() {
+function LeadIndex() {
   return (
     <Layout>
-      test
+      
     </Layout>
   )
 }
 
-export default New
+export default LeadIndex

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { useSession, getSession, signOut } from "next-auth/react";
 import { useEffect } from "react";
 import { BranchesApi } from "@/data/Endpoints/test";
-import Layout from "@/Components/Common/Layout";
+import Layout from "@/Containers/Common/Layout";
 import { Button } from "@mui/material";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -17,6 +17,11 @@ export default function Home() {
     console.log(response);
   }
 
+  const handleSignout=()=>{
+    localStorage.removeItem('token')
+    signOut()
+  }
+
   useEffect(() => {
     if (status === "authenticated") {
       fecthTask()
@@ -25,9 +30,11 @@ export default function Home() {
 
   return (
     <Layout>
-     
-        <Button sx={{mt:2}} variant="outlined" onClick={() => signOut()}>Signout</Button>
+     <div className="main-content">
        
+          <Button sx={{mt:2}} variant="outlined" onClick={() => handleSignout()}>Signout</Button>
+        
+     </div> 
     </Layout>
   );
 }
