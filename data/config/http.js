@@ -55,7 +55,7 @@ http.interceptors.response.use(
             // Redirect to a specific page
             // You can replace 'YourPageName' with the actual route or URL you want to redirect to
             console.log("Sign out now")
-            // signOut();
+            signOut();
         }
 
         // Return the response for further processing

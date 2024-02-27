@@ -22,11 +22,11 @@ export default function Home() {
     signOut()
   }
 
-  useEffect(() => {
-    if (status === "authenticated") {
-      fecthTask()
-    }
-  }, [status])
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     fecthTask()
+  //   }
+  // }, [status])
 
   return (
     <Layout>
