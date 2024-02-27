@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { BranchesApi } from "@/data/Endpoints/test";
 import Layout from "@/Components/Common/Layout";
 import { Button } from "@mui/material";
+import { AcUnit } from "@mui/icons-material";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,7 @@ export default function Home() {
     console.log(response);
   }
 
-  const handleSignout=()=>{
+  const handleSignout = () => {
     localStorage.removeItem('token')
     signOut()
   }
@@ -30,11 +31,9 @@ export default function Home() {
 
   return (
     <Layout>
-     <div className="main-content">
-       
-          <Button sx={{mt:2}} variant="outlined" onClick={() => handleSignout()}>Signout</Button>
-        
-     </div> 
+      <div className="main-content">
+        <Button sx={{ mt: 2 }} variant="outlined" onClick={() => handleSignout()}>Signout</Button>
+      </div>
     </Layout>
   );
 }
