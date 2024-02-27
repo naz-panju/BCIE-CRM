@@ -32,7 +32,7 @@ const LoginForm = () => {
                 setPassword('');
                 toast.success('Sign in Successfully')
                 localStorage.setItem('token','55555')
-                router.push('/');
+                router.push('/lead');
             } else {
                 toast.error(result?.error)
             }
