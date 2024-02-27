@@ -7,6 +7,8 @@ const SessionLoader = ({children}) => {
     const router = useRouter()
     const session = useSession()
 
+    console.log(session);
+
     if (session.status === 'loading') {
         return <div className="loading" />
     }
@@ -16,8 +18,8 @@ const SessionLoader = ({children}) => {
         localStorage.setItem('token',session.data.user.token)
     }
 
-    if (router.pathname === '/auth/login' && session.status === 'authenticated') {
-        router.push('/admin')
+    if (router.pathname === '/login' && session.status === 'authenticated') {
+        router.push('/')
     }
 
     if (session.status === "unauthenticated"){
