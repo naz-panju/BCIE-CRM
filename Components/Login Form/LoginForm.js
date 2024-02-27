@@ -22,8 +22,8 @@ const LoginForm = () => {
             const result = await signIn('credentials', {
                 email: email,
                 password: password,
-                redirect: true,
-                callbackUrl:'/'
+                redirect: false,
+                // callbackUrl:'/'
             })
             if (result?.ok) {
                 setEmail('');
