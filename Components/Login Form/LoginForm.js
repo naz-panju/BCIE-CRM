@@ -22,19 +22,19 @@ const LoginForm = () => {
             const result = await signIn('credentials', {
                 email: email,
                 password: password,
-                redirect: false,
-                // callbackUrl:'/'
+                redirect: true,
+                callbackUrl:'/'
             })
 
-            console.log(result);
-            if (result?.ok) {
-                setEmail('');
-                setPassword('');
-                toast.success('Sign in Successfully')
-                // router.push('/');
-            } else {
-                toast.error(result?.error)
-            }
+            // console.log(result);
+            // if (result?.ok) {
+            //     setEmail('');
+            //     setPassword('');
+            //     toast.success('Sign in Successfully')
+            //     // router.push('/');
+            // } else {
+            //     toast.error(result?.error)
+            // }
         } catch (error) {
             console.log(error);
         }
