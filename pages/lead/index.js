@@ -1,5 +1,5 @@
 import LeadIndex from '@/Components/Lead/Lead'
-import Layout from '@/Containers/Common/Layout'
+import Layout from '@/Components/Common/Layout'
 import React from 'react'
 
 function Index() {
