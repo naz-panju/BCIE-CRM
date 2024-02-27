@@ -39,21 +39,15 @@ const Sidebar = () => {
 
         <ul className="list-unstyled components mainList" id="menuList">
 
-            <li><a href='#'><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i><span>Menu1</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faTableColumns} /></i><span>Menu2</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faHouseChimney} /></i><span>Menu2</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i><span>Menu1</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faTableColumns} /></i><span>Menu2</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faHouseChimney} /></i><span>Menu2</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i><span>Menu1</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faTableColumns} /></i><span>Menu2</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faHouseChimney} /></i><span>Menu2</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i><span>Menu1</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faTableColumns} /></i><span>Menu2</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faHouseChimney} /></i><span>Menu2</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i><span>Menu1</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faTableColumns} /></i><span>Menu2</span></a></li>
-            <li><a href='#'><i><FontAwesomeIcon icon={faHouseChimney} /></i><span>Menu2</span></a></li>
+            <li><a href='#'><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i><span>Dashboard</span></a></li>
+            <li><a href='#'><i><FontAwesomeIcon icon={faTableColumns} /></i><span>FormDesk</span></a></li>
+            <li><a href='#'><i><FontAwesomeIcon icon={faHouseChimney} /></i><span>Leads Manager</span></a></li>
+            <li><a href='#'><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i><span>Application Manager</span></a></li>
+            <li><a href='#'><i><FontAwesomeIcon icon={faTableColumns} /></i><span>Marketing</span></a></li>
+            <li><a href='#'><i><FontAwesomeIcon icon={faHouseChimney} /></i><span>Campaign Manager</span></a></li>
+            <li><a href='#'><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i><span>Query Manager</span></a></li>
+            <li><a href='#'><i><FontAwesomeIcon icon={faTableColumns} /></i><span>Payment Manager</span></a></li>
+            <li><a href='#'><i><FontAwesomeIcon icon={faHouseChimney} /></i><span>Settings</span></a></li>
         </ul>
     </div>
 </nav>

@@ -35,7 +35,9 @@ body {
   max-height: 50px;
   padding-left: 50px;
 }
-
+.container-fluid {
+  width: 100%;
+}
 .container {
   display: flex;
   height: 100vh;
@@ -193,7 +195,6 @@ body {
   white-space: nowrap;
   color: #fff;
   font-weight: 500;
-  background: #0d1c40;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -254,7 +255,7 @@ ul#menuList li {
   border-bottom: 1px solid rgba(255,255,255,0.035);
 }
 ul#menuList li:nth-child(even){
-  background-color: #0d1d45;
+  background-color: #202b46;
 }
 .sidebar.active .mainList>li a {
   min-width: 208px;
@@ -263,9 +264,8 @@ ul#menuList li:nth-child(even){
 
 .sidebar ul li a{
   text-align: left;
-  padding: 10px 10px;
-  padding: 10.4px 10px;
-  font-size: 0.97em;
+  padding: 10.4px 13px;
+  font-size: 14px;
   display: block;
   color: #f2f2f2;
   text-decoration: none;
@@ -284,7 +284,7 @@ ul#menuList li:nth-child(even){
   position: relative;
   left: 0px;
   background-color: transparent;
-  top: 12px;
+  top: 0px;
   border-radius: 3px;
   z-index: 11;
 }
@@ -331,4 +331,56 @@ ul#menuList li:nth-child(even){
 }
 .inbl {
   display: inline-block;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: rgb(156, 156, 156);
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 2px 1px;
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  font-size: 12px;
+  width: 60px;
+  transform: translate(-50%, 0px);
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.navbar-right ul {
+  display: flex;
+  gap: 15px;
+  justify-content: right;
+  align-items: center;
+}
+.container-fluid {
+  width: 98%;
+  padding: 0 20px;
+}
+.tooltip i {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+button#UserPop span {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  float: left;
+  line-height: 30px;
+  font-size: 12px;
+  background-color: #4285f4;
+  color: #fff;
+  position: relative;
+  border: 1px solid #fff;
 }
