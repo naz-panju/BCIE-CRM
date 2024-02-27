@@ -22,19 +22,19 @@ const LoginForm = () => {
             const result = await signIn('credentials', {
                 email: email,
                 password: password,
-                redirect: true,
-                callbackUrl:'/'
+                redirect: false,
+                // callbackUrl:'/'
             })
 
-            // console.log(result);
-            // if (result?.ok) {
-            //     setEmail('');
-            //     setPassword('');
-            //     toast.success('Sign in Successfully')
-            //     // router.push('/');
-            // } else {
-            //     toast.error(result?.error)
-            // }
+            console.log(result);
+            if (result?.ok) {
+                setEmail('');
+                setPassword('');
+                toast.success('Sign in Successfully')
+                router.push('/');
+            } else {
+                toast.error(result?.error)
+            }
         } catch (error) {
             console.log(error);
         }
@@ -73,7 +73,7 @@ const LoginForm = () => {
             </div>
             <button type="submit">Sign In</button>
 
-            <button onClick={()=>setPassword('123Muzammil$')}>pass</button>
+            <button onClick={() => setPassword('123Muzammil$')}>pass</button>
         </form>
     );
 };
