@@ -48,7 +48,9 @@ export default NextAuth({
   },
 
 
-  secret: 'dsasdasdasdasdasd',
+  secret: '07945',
+  // secret: 'dsasdasdasdasdasd',
+  
   session: {
     jwt: true, // Enable JWT sessions
   },
