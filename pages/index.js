@@ -22,11 +22,11 @@ export default function Home() {
     signOut()
   }
 
-  // useEffect(() => {
-  //   if (status === "authenticated") {
-  //     fecthTask()
-  //   }
-  // }, [status])
+  useEffect(() => {
+    if (status === "authenticated") {
+      fecthTask()
+    }
+  }, [status])
 
   return (
     <Layout>
@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
   if (!session) {
     return {
       redirect: {
-        destination: '/login',
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };

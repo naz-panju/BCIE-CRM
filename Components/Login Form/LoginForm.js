@@ -25,11 +25,13 @@ const LoginForm = () => {
                 redirect: false,
                 // callbackUrl:'/'
             })
+
+            console.log(result);
             if (result?.ok) {
                 setEmail('');
                 setPassword('');
                 toast.success('Sign in Successfully')
-                router.push('/');
+                // router.push('/');
             } else {
                 toast.error(result?.error)
             }
