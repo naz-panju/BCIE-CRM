@@ -42,10 +42,10 @@ export default NextAuth({
     }),
   ],
 
-  pages: {
-    signIn:'/login',
-    error:'/login'
-  },
+  // pages: {
+  //   signIn:'/login',
+  //   error:'/login'
+  // },
 
 
   secret: 'dsasdasdasdasdasd',
