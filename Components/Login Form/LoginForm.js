@@ -31,6 +31,7 @@ const LoginForm = () => {
                 setEmail('');
                 setPassword('');
                 toast.success('Sign in Successfully')
+                localStorage.setItem('token','55555')
                 router.push('/');
             } else {
                 toast.error(result?.error)
