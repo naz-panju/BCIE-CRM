@@ -70,6 +70,8 @@ const LoginForm = () => {
                 />
             </div>
             <button type="submit">Sign In</button>
+
+            <button onClick={()=>setPassword('123Muzammil$')}>pass</button>
         </form>
     );
 };
