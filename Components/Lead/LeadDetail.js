@@ -7,9 +7,9 @@ function LeadDetail() {
   return (
     <section>
       <div className='page-title-block'>
-          <div className='page-title-block-content'>
-              <h1>Lead Details</h1>
-          </div>
+        <div className='page-title-block-content'>
+          <h1>Lead Details</h1>
+        </div>
       </div>
       <div className='content-block'>
         <div className='content-block-top'>
@@ -24,7 +24,9 @@ function LeadDetail() {
                     <div className="tileCellDiv">
                       <h4>Basma</h4>
                       <div className="leadStageBox">
-                        <a className="word-break leadStage lscommonTour">Hot&nbsp;<span class="draw-edit" style="font-weight:600;"></span></a>
+                        <a className="word-break leadStage lscommonTour">Hot&nbsp;
+                          <span className="draw-edit" style={{fontWeight:600}}></span>
+                        </a>
                       </div>
                     </div>
                   </div>

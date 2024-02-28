@@ -7,6 +7,7 @@ function Slug() {
         <Layout>
             <LeadDetail />
         </Layout>
+
     )
 }
 

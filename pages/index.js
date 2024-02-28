@@ -30,23 +30,23 @@ export default function Home() {
   }, [status])
 
   return (
-    <Layout>
-      <div className="main-content">
-        <Button sx={{ mt: 2 }} variant="outlined" onClick={() => handleSignout()}>Signout</Button>
-      </div>
-    </Layout>
+        <Layout>
+          <div className="main-content">
+            <Button sx={{ mt: 2 }} variant="outlined" onClick={() => handleSignout()}>Signout</Button>
+          </div>
+        </Layout>
   );
 }
 
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
-  console.log('yyy',session); 
+  console.log('yyy', session);
 
   if (!session) {
     return {
       redirect: {
-        destination: '/api/auth/signin',
+        destination: '/login',
         permanent: false,
       },
     };
