@@ -13,10 +13,7 @@ export default function Home() {
 
   const { data: session, status } = useSession();
 
-  const fecthTask = async () => {
-    const response = await BranchesApi.get()
-    console.log(response);
-  }
+
 
   const handleSignout = () => {
     localStorage.removeItem('token')
@@ -25,7 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fecthTask()
+      // fecthTask()
     }
   }, [status])
 
@@ -39,19 +36,19 @@ export default function Home() {
 }
 
 
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context)
-//   console.log('yyy', session);
+export async function getServerSideProps(context) {
+  const session = await getSession(context)
+  console.log('yyy', session);
 
-//   if (!session) {
-//     return {
-//       redirect: {
-//         destination: '/login',
-//         permanent: false,
-//       },
-//     };
-//   }
-//   return {
-//     props: { session },
-//   };
-// }
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
+}

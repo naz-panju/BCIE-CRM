@@ -32,7 +32,6 @@ const LoginForm = () => {
                 setPassword('');
                 toast.success('Sign in Successfully')
                 router.push('/');
-                console.log(router);
             } else {
                 toast.error(result?.error)
             }
