@@ -48,7 +48,9 @@ export default NextAuth({
   },
 
 
-  secret: 'dsasdasdasdasdasd',
+  secret: process?.env?.NEXTAUTH_SECRET,
+  // secret: 'dsasdasdasdasdasd',
+  
   session: {
     jwt: true, // Enable JWT sessions
   },

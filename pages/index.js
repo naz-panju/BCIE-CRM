@@ -41,12 +41,12 @@ export default function Home() {
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
-
+  console.log('yyy',session); 
 
   if (!session) {
     return {
       redirect: {
-        destination: '/login',
+        destination: '/api/auth/signin',
         permanent: false,
       },
     };
