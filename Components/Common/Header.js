@@ -2,7 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
-import { Tooltip } from '@mui/material';
+// import { Tooltip } from '@mui/material';
 
 
 
@@ -19,13 +19,13 @@ const Header = ({ }) => {
           <div className='w-full md:w-6/12 lg:w-6/12 pad-15 '>
             <div className='navbar-right'>
               <ul>
-                <li>
+                {/* <li>
                   <div className="tooltip-container">
                     <div class="tooltip">
                       <Tooltip title={'test'}><span class="tooltiptext">Tooltip</span></Tooltip>
                     </div>
                   </div>
-                </li>
+                </li> */}
                 <li>
                   <div className="tooltip-container">
                     <div class="tooltip"><i><FontAwesomeIcon icon={faGear} /></i>
