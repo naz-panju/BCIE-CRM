@@ -17,12 +17,13 @@ export default NextAuth({
           // Make a POST request to your authentication endpoint
           const response = await axios.post(process.env.NEXT_PUBLIC_API_PATH + 'login', { email: credentials.email, password: credentials.password });
           
-          if (response.data.status === 'success') {
+          if (response.data) {
+            console.log('yyy',response);
             const user = {
-              name: response.data.data?.user?.name,
-              email: response.data.data?.user?.email,
-              token: response.data.data?.auth_token,
-              user_id: response.data.data?.user?.user_id
+              name: response?.data?.data?.user?.name,
+              email: response?.data?.data?.user?.email,
+              token: response?.data?.data?._token,
+              user_id: response.data?.data?.user?.user_id
             };
             return Promise.resolve(user);
           } else {

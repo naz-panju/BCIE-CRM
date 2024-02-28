@@ -13,10 +13,7 @@ export default function Home() {
 
   const { data: session, status } = useSession();
 
-  const fecthTask = async () => {
-    const response = await BranchesApi.get()
-    console.log(response);
-  }
+
 
   const handleSignout = () => {
     localStorage.removeItem('token')
@@ -25,7 +22,7 @@ export default function Home() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fecthTask()
+      // fecthTask()
     }
   }, [status])
 
