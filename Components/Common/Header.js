@@ -16,7 +16,7 @@ const Header = ({ }) => {
             <button type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse"><span></span><span></span><span></span></button>
           </div>
 
-          <div className='w-full md:w-6/12 lg:w-6/12 pad-15 '>
+          <div className=''>
             <div className='navbar-right'>
               <ul>
                 <li>
