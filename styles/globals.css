@@ -717,3 +717,18 @@ svg.svg-inline--fa.fa-qrcode {
 .lead-communication-status ul li {
   font-size: 14px;
 }
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 5px solid #f1eded;
+  border-top-color: #007bff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material';
 import { signIn } from 'next-auth/react';
 import { redirect } from 'next/navigation';
 import { useRouter } from 'next/router';
@@ -31,12 +32,15 @@ const LoginForm = () => {
                 setEmail('');
                 setPassword('');
                 toast.success('Sign in Successfully')
+                setLoading(false)
                 router.push('/');
             } else {
                 toast.error(result?.error)
+                setLoading(false)
             }
         } catch (error) {
             console.log(error);
+            setLoading(false)
         }
 
     };
@@ -71,7 +75,14 @@ const LoginForm = () => {
                     required
                 />
             </div>
-            <button disabled={loading} type="submit">Sign In</button>
+            <button disabled={loading} type="submit">
+                {
+                    loading ?
+                        <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                        :
+                        'SignIn'
+                }
+            </button>
         </form>
     );
 };
