@@ -15,7 +15,7 @@ export default NextAuth({
       authorize: async (credentials) => {
         try {
           // Make a POST request to your authentication endpoint
-          const response = await axios.post(process.env.NEXT_PUBLIC_API_PATH + 'login', { email: credentials.email, password: credentials.password });
+          const response = await axios.post('http://bcie.spider.ws/public/api/' + 'login', { email: credentials.email, password: credentials.password });
           
           if (response.data) {
             console.log('yyy',response);
@@ -43,14 +43,14 @@ export default NextAuth({
     }),
   ],
 
-  // pages: {
-  //   signIn:'/login',
-  //   // error:'/login'
-  // },
+  pages: {
+    signIn:'/login',
+    // error:'/login'
+  },
 
 
-  // secret: process?.env?.NEXTAUTH_SECRET,
-  secret: 'dsasdasdasdasdasd',
+  secret: process?.env?.NEXTAUTH_SECRET,
+  // secret: 'dsasdasdasdasdasd',
   
   session: {
     jwt: true, // Enable JWT sessions
