@@ -15,10 +15,11 @@ export default NextAuth({
       authorize: async (credentials) => {
         try {
           // Make a POST request to your authentication endpoint
+          // const response = await axios.post('http://bcie.spider.ws/public/api/' + 'login', { email: credentials.email, password: credentials.password });
           const response = await axios.post(process.env.NEXT_PUBLIC_API_PATH + 'login', { email: credentials.email, password: credentials.password });
-          
+
           if (response.data) {
-            console.log('yyy',response);
+            console.log('yyy', response);
             const user = {
               name: response?.data?.data?.user?.name,
               email: response?.data?.data?.user?.email,
@@ -28,15 +29,15 @@ export default NextAuth({
             return Promise.resolve(user);
           } else {
 
-            // console.log('00000',response?.data);
+            console.log('00000', response?.data);
             const error = response.data?.message || 'Authentication failed';
             // Redirect to custom login page with error message as query parameter
             throw new Error(error);
           }
         } catch (error) {
-          // console.log(error);
-          console.error("Error occurred during authentication:", error);
-          const errorMessage = error || 'An unexpected error occurred';
+          console.log(error);
+          // console.error("Error occurred during authentication:", error);
+          const errorMessage = error?.response?.data?.message || 'An unexpected error occurred';
           throw new Error(errorMessage);
         }
       },
@@ -44,14 +45,14 @@ export default NextAuth({
   ],
 
   pages: {
-    signIn:'/login',
+    signIn: '/login',
     // error:'/login'
   },
 
 
   secret: process?.env?.NEXTAUTH_SECRET,
   // secret: 'dsasdasdasdasdasd',
-  
+
   session: {
     jwt: true, // Enable JWT sessions
   },
