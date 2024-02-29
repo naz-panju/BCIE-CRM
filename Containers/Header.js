@@ -10,7 +10,7 @@ import { Tooltip } from '@mui/material';
 const Header = ({ }) => {
   return (
     <div className='header'>
-      <div className='container-fluid mt-5'>
+      <div className='container-fluid '>
         <div className='row flex items-center'>
           <div className="w-full md:w-6/12 lg:w-6/12 pad-15 clg_header clg_header_">
             <button type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse"><span></span><span></span><span></span></button>
