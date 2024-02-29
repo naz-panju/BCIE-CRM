@@ -29,7 +29,7 @@ export default function Home() {
 
   return (
         <Layout>
-          <div className="main-content">
+          <div className="main-content ml-6">
             <Button sx={{ mt: 2 }} variant="outlined" onClick={() => handleSignout()}>Signout</Button>
           </div>
         </Layout>
