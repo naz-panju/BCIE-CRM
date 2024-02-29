@@ -2,6 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { faPercent } from '@fortawesome/free-solid-svg-icons';
+import LeadTab from './LeadTab'
 
 
 function LeadDetails() {
@@ -136,8 +137,10 @@ function LeadDetails() {
 
 
         </div>
-      </div>
 
+        <LeadTab />
+        
+      </div>
     </section>
   )
 }
