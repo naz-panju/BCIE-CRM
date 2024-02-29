@@ -43,14 +43,14 @@ export default NextAuth({
     }),
   ],
 
-  pages: {
-    signIn:'/login',
-    // error:'/login'
-  },
+  // pages: {
+  //   signIn:'/login',
+  //   // error:'/login'
+  // },
 
 
-  secret: process?.env?.NEXTAUTH_SECRET,
-  // secret: 'dsasdasdasdasdasd',
+  // secret: process?.env?.NEXTAUTH_SECRET,
+  secret: 'dsasdasdasdasdasd',
   
   session: {
     jwt: true, // Enable JWT sessions

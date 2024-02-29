@@ -71,7 +71,7 @@ const LoginForm = () => {
                     required
                 />
             </div>
-            <button type="submit">Sign In</button>
+            <button disabled={loading} type="submit">Sign In</button>
         </form>
     );
 };
