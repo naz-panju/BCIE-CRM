@@ -28,15 +28,15 @@ export default NextAuth({
             return Promise.resolve(user);
           } else {
 
-            // console.log('00000',response?.data);
+            console.log('00000',response?.data);
             const error = response.data?.message || 'Authentication failed';
             // Redirect to custom login page with error message as query parameter
             throw new Error(error);
           }
         } catch (error) {
-          // console.log(error);
-          console.error("Error occurred during authentication:", error);
-          const errorMessage = error || 'An unexpected error occurred';
+          console.log(error);
+          // console.error("Error occurred during authentication:", error);
+          const errorMessage = error?.response?.data?.message || 'An unexpected error occurred';
           throw new Error(errorMessage);
         }
       },
