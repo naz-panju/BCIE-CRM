@@ -1,5 +1,5 @@
 import React from 'react';
-import SessionLoader from '../Components/Auth/SessionLoader';
+import SessionLoader from '../Auth/SessionLoader';
 import Header from './Header';
 import Footer from './Footer';
 import Sidebar from './Sidebar';
