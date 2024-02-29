@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
@@ -10,6 +10,7 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import LeadTable from './LeadTable';
+import CreateLead from './Create/Create';
 
 
 const StyledMenu = styled((props) => (
@@ -55,6 +56,8 @@ const StyledMenu = styled((props) => (
 
 export default function CustomizedMenus() {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [createModal, setCreateModal] = useState(false)
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -65,53 +68,58 @@ export default function CustomizedMenus() {
 
   return (
 
-    <section>
-      <div className='page-title-block'>
-        <div className='page-title-block-content'>
-          <h1>Lead Manager</h1>
-          <div className='quick-view-block'>
-            <p>Quick View : </p>
+    <>
+      <CreateLead open={createModal} setOpen={setCreateModal} />
 
-            <Button className='quick-view-btn' id="demo-customized-button" aria-controls={open ? 'demo-customized-menu' : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              variant="contained"
-              disableElevation
-              onClick={handleClick}
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              System default View
-            </Button>
-            <StyledMenu
-              id="demo-customized-menu"
-              MenuListProps={{
-                'aria-labelledby': 'demo-customized-button',
-              }}
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-            >
-              <MenuItem className='active' onClick={handleClose} disableRipple>
+      <section>
+        <div className='page-title-block'>
+          <div className='page-title-block-content'>
+            <h1>Lead Manager</h1>
+            <div className='quick-view-block'>
+              <p>Quick View : </p>
+
+              <Button className='quick-view-btn' id="demo-customized-button" aria-controls={open ? 'demo-customized-menu' : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? 'true' : undefined}
+                variant="contained"
+                disableElevation
+                onClick={handleClick}
+                endIcon={<KeyboardArrowDownIcon />}
+              >
                 System default View
-              </MenuItem>
-              <MenuItem onClick={handleClose} disableRipple>
-                Hot Leads
-              </MenuItem>
+              </Button>
+              <StyledMenu
+                id="demo-customized-menu"
+                MenuListProps={{
+                  'aria-labelledby': 'demo-customized-button',
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem className='active' onClick={handleClose} disableRipple>
+                  System default View
+                </MenuItem>
+                <MenuItem onClick={handleClose} disableRipple>
+                  Hot Leads
+                </MenuItem>
 
-            </StyledMenu>
+              </StyledMenu>
+            </div>
+          </div>
+
+          <div className='page-title-block-right'>
+            <Button  sx={{ textTransform: 'none' }} onClick={() => setCreateModal(true)} size='small' variant='outlined'>Add</Button>
           </div>
         </div>
 
-        <div className='page-title-block-right'>
-          <Button size='small' variant='outlined'>Add</Button>
+
+        <div className='content-block'>
+          <LeadTable />
         </div>
-      </div>
+      </section>
+    </>
 
-
-      <div className='content-block'>
-        <LeadTable />
-      </div>
-    </section>
   )
 }
 

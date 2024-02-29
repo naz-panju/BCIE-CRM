@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import { useSession, getSession, signOut } from "next-auth/react";
 import { useEffect } from "react";
-import { BranchesApi } from "@/data/Endpoints/test";
+import { BranchesApi } from "@/data/Endpoints/Listing";
 import Layout from "@/Components/Common/Layout";
 import { Button } from "@mui/material";
 import { AcUnit } from "@mui/icons-material";
