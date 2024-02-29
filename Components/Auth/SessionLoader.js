@@ -7,7 +7,7 @@ const SessionLoader = ({ children }) => {
     const router = useRouter()
     const session = useSession()
 
-    console.log(session);
+    // console.log(session);
 
     if (session.status === 'loading') {
         return <div className="loading" />
