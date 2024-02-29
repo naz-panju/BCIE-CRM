@@ -2,6 +2,7 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
+import { SearchOffOutlined, SearchOutlined } from '@mui/icons-material';
 // import { Tooltip } from '@mui/material';
 
 
@@ -36,7 +37,7 @@ const Header = ({ }) => {
 
                 <li>
                   <div className="tooltip-container">
-                    <div className="tooltip"><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i>
+                    <div className="tooltip"><i><SearchOutlined fontSize='small' /></i>
                       <span className="tooltiptext">Service</span>
                     </div>
                   </div>
