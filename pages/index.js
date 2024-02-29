@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { useSession, getSession, signOut } from "next-auth/react";
 import { useEffect } from "react";
 import { BranchesApi } from "@/data/Endpoints/test";
-import Layout from "@/Components/Common/Layout";
+import Layout from "@/Containers/Layout";
 import { Button } from "@mui/material";
 import { AcUnit } from "@mui/icons-material";
 import axios from "axios";

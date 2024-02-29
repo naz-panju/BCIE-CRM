@@ -1,5 +1,5 @@
 import LeadDetail from '@/Components/Lead/LeadDetail'
-import Layout from '@/Components/Common/Layout'
+import Layout from '@/Containers/Layout'
 import React from 'react'
 
 function Slug() {

@@ -1,4 +1,4 @@
-import Layout from '@/Components/Common/Layout'
+import Layout from '@/Containers/Layout'
 import React from 'react'
 
 function New() {
