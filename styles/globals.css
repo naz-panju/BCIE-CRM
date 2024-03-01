@@ -945,3 +945,18 @@ button.loadmore-btn {
   font-size: 14px;
   margin-left: 5px;
 }
+
+.spinner {
+  border: 4px solid rgba(253, 248, 248, 0.1);
+  border-left-color: #daddeb; /* Change color as needed */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+      transform: rotate(360deg);
+  }
+}
