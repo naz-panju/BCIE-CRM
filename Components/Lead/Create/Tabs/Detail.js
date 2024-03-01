@@ -449,8 +449,8 @@ function Detail({ setOpen, setRefresh, refresh }) {
                 </Grid>
 
                 <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                    <Button sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                    <Button type='submit' sx={{ textTransform: 'none' }} variant='contained'>Save</Button>
+                    <Button size='small' sx={{ textTransform: 'none', mr: 2 ,height: 30}} variant='outlined'>Cancel</Button>
+                    <Button size='small' type='submit' sx={{ textTransform: 'none',height: 30 }} variant='contained'>Save</Button>
                 </Grid>
 
             </form>

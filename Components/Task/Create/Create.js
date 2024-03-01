@@ -8,7 +8,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import DateInput from '@/Components/Form/DateInput';
 import SelectX from '@/Components/Form/SelectX';
-import { useForm } from 'react-hook-form';
 import TextInput from '@/Components/Form/TextInput';
 import DynamicChip from '@/utils/DynamicChip';
 import { useState } from 'react';
@@ -18,6 +17,15 @@ import { TaskApi } from '@/data/Endpoints/Task';
 import toast from 'react-hot-toast';
 import { LeadApi } from '@/data/Endpoints/Lead';
 
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+const scheme = yup.object().shape({
+    title: yup.string().required("Title is Required"),
+    // description: yup.string().required("Description is Required"),
+})
+
 export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
     const [state, setState] = React.useState({
         right: false,
@@ -26,7 +34,7 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
 
     const anchor = 'right'; // Set anchor to 'right'
 
-    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({})
+    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
     const priority = [
         { id: 1, name: "Critical" },
@@ -70,6 +78,7 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
         }
 
         let dataToSubmit = {
+            lead_id: data?.lead?.id,
             title: data?.title,
             description: data?.description,
             // start_date: startDate,
@@ -170,6 +179,8 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
                                 <Grid item md={8}>
                                     <TextInput control={control} name="title"
                                         value={watch('title')} />
+                                    {errors.title && <span className='form-validation'>{errors.title.message}</span>}
+
                                 </Grid>
                             </Grid>
 
@@ -248,6 +259,8 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
                                         rows={2}
                                         sx={{ width: '100%', }}
                                     />
+                                    {/* {errors.description && <span className='form-validation'>{errors.description.message}</span>} */}
+
                                     {/* <Editor emoji={false} val={watch('description')}
                                         onValueChange={e => setValue('description', e)}
                                     /> */}
