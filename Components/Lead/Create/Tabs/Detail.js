@@ -20,10 +20,10 @@ const scheme = yup.object().shape({
     name: yup.string().required("Name is Required"),
     email: yup.string().email("Invalid email format").required("Email is Required"),
     phone: yup.string().required('Phone Number is Required'),
-    alt_phone: yup.string().test('not-same-as-phone', 'Alternative phone number cannot be the same as phone number', function(value) {
-        const { phone } = this.parent; // Access the value of the 'phone' field
-        return value !== phone; // Check if 'alt_phone' is different from 'phone'
-    }),
+    // alt_phone: yup.string().test('not-same-as-phone', 'Alternative phone number cannot be the same as phone number', function(value) {
+    //     const { phone } = this.parent; // Access the value of the 'phone' field
+    //     return value !== phone; // Check if 'alt_phone' is different from 'phone'
+    // }),
     assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
     country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
     institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
