@@ -13,7 +13,7 @@ import moment from 'moment'
 import { LeadApi } from '@/data/Endpoints/Lead'
 import toast from 'react-hot-toast'
 
-function Detail({ setOpen }) {
+function Detail({ setOpen,setRefresh,refresh }) {
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({})
 
     const [phone, setPhone] = useState()
@@ -152,6 +152,7 @@ function Detail({ setOpen }) {
 
             if (response?.data?.data) {
                 toast.success('Lead Has Been Successfully Created ')
+                setRefresh(!refresh)
                 reset()
                 setOpen(false)
             }

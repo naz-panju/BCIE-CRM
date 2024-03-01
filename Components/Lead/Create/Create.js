@@ -2,10 +2,10 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Grid, IconButton } from '@mui/material';
 import { useEffect } from 'react';
-import { Close } from '@mui/icons-material';
+import { Close, Refresh } from '@mui/icons-material';
 import CreateTabs from './Tabmenus';
 
-export default function CreateLead({ open, setOpen }) {
+export default function CreateLead({ open, setOpen, refresh,setRefresh}) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -54,7 +54,7 @@ export default function CreateLead({ open, setOpen }) {
                         </IconButton>
                     </Grid>
                     <hr />
-                    <CreateTabs setOpen={setOpen} />
+                    <CreateTabs setOpen={setOpen} refresh={refresh} setRefresh={setRefresh} />
                 </Grid>
             </Drawer>
         </div>

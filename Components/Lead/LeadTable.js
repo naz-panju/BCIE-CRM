@@ -212,7 +212,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable() {
+export default function EnhancedTable({ refresh }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -284,15 +284,17 @@ export default function EnhancedTable() {
   );
 
   const fetchTable = () => {
-    LeadApi.list({limit:1,page:page+1}).then((response) => {
+    LeadApi.list().then((response) => {
       console.log(response);
       setList(response?.data)
+    }).catch((error) => {
+      console.log(error);
     })
   }
 
   useEffect(() => {
     fetchTable()
-  }, [page])
+  }, [page, refresh])
 
 
   return (
@@ -323,7 +325,7 @@ export default function EnhancedTable() {
                   return (
                     <TableRow className='table-custom-tr'
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      // onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
@@ -333,6 +335,7 @@ export default function EnhancedTable() {
                     >
                       <TableCell className='checkbox-tb' padding="checkbox">
                         <Checkbox
+                          onClick={(event) => handleClick(event, row.id)}
                           color="primary"
                           checked={isItemSelected}
                           inputProps={{

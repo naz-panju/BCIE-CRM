@@ -57,6 +57,7 @@ const StyledMenu = styled((props) => (
 export default function CustomizedMenus() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [createModal, setCreateModal] = useState(false)
+  const [refresh, setRefresh] = useState(false)
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -66,11 +67,12 @@ export default function CustomizedMenus() {
     setAnchorEl(null);
   };
 
+  // console.log(refresh);
+
   return (
 
     <>
-      <CreateLead open={createModal} setOpen={setCreateModal} />
-
+      <CreateLead open={createModal} setOpen={setCreateModal} refresh={refresh} setRefresh={setRefresh} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content'>
@@ -109,13 +111,13 @@ export default function CustomizedMenus() {
           </div>
 
           <div className='page-title-block-right'>
-            <Button  sx={{ textTransform: 'none' }} onClick={() => setCreateModal(true)} size='small' variant='outlined'>Add</Button>
+            <Button sx={{ textTransform: 'none' }} onClick={() => setCreateModal(true)} size='small' variant='outlined'>Add</Button>
           </div>
         </div>
 
 
         <div className='content-block'>
-          <LeadTable />
+          <LeadTable refresh={refresh} />
         </div>
       </section>
     </>
