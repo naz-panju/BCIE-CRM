@@ -1,8 +1,8 @@
 import React from 'react';
-import {TextField} from "@mui/material";
-import {Controller} from "react-hook-form";
-import {Alert} from "@mui/material";
-import {alpha} from "@mui/material/styles";
+import { TextField } from "@mui/material";
+import { Controller } from "react-hook-form";
+import { Alert } from "@mui/material";
+import { alpha } from "@mui/material/styles";
 
 const TextInput = (props) => {
     return (
@@ -12,14 +12,14 @@ const TextInput = (props) => {
                 control={props.control}
                 defaultValue={props.value}
                 render={({
-                             field: { onChange, value },
-                             fieldState: { error },
-                             formState,
-                         }) => (
+                    field: { onChange, value },
+                    fieldState: { error },
+                    formState,
+                }) => (
                     <TextField
-                        multiline={props.isMultiline? true:false}
-                        required={props.isRequired? true:false}
-                        rows={props.isMultiline? 2:null}
+                        multiline={props.isMultiline ? true : false}
+                        required={props.isRequired ? true : false}
+                        rows={props.isMultiline ? 2 : null}
 
                         inputProps={{
                             sx: {
@@ -83,13 +83,20 @@ const TextInput = (props) => {
                             },
 
                         }}
+                        FormHelperTextProps={{
+                            sx: {
+                                color: 'blue', // Change the text color
+                                fontSize: '14px', // Change the font size
+                                marginLeft: '5px', // Change the font style
+                            }
+                        }}
 
-                        helperText={error ? error.message : null}
+                        // helperText={error ? error.message : null}
                         error={!!error}
                         value={value || ''}
                         onChange={onChange}
                         label={props.label}
-                        type={props.type? props.type : 'text'}
+                        type={props.type ? props.type : 'text'}
                         fullWidth
                     />
                 )}

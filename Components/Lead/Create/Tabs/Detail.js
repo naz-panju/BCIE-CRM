@@ -2,29 +2,53 @@ import DateInput from '@/Components/Form/DateInput'
 import SelectX from '@/Components/Form/SelectX'
 import TextInput from '@/Components/Form/TextInput'
 import { ListingApi } from '@/data/Endpoints/Listing'
-import { Button, Grid, Typography } from '@mui/material'
+import { Button, Grid, TextField, Typography } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers'
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import 'react-phone-input-2/lib/style.css'
 import PhoneInput from 'react-phone-input-2'
 import moment from 'moment'
 import { LeadApi } from '@/data/Endpoints/Lead'
 import toast from 'react-hot-toast'
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useEffect } from 'react'
 
-function Detail({ setOpen,setRefresh,refresh }) {
-    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({})
+const scheme = yup.object().shape({
+    name: yup.string().required("Name is Required"),
+    email: yup.string().email("Invalid email format").required("Email is Required"),
+    phone: yup.string().required('Phone Number is Required'),
+    alt_phone: yup.string().test('not-same-as-phone', 'Alternative phone number cannot be the same as phone number', function(value) {
+        const { phone } = this.parent; // Access the value of the 'phone' field
+        return value !== phone; // Check if 'alt_phone' is different from 'phone'
+    }),
+    assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
+    country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
+    institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
+    course: yup.object().required("Please Choose a Country").typeError("Please choose a Course"),
+})
+
+function Detail({ setOpen, setRefresh, refresh }) {
+    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
+
+    const phoneValue = watch('phone');
 
     const [phone, setPhone] = useState()
     const [code, setCode] = useState()
     const [altPhone, setAltPhone] = useState()
     const [altCode, setAltCode] = useState()
 
+
+    const [selectedCountryID, setselectedCountryID] = useState()
+    const [selectedInstituteID, setselectedInstituteID] = useState()
+    const [selectedCourseID, setselectedCourseID] = useState()
+
     const fetchCounty = (e) => {
         return ListingApi.country({ keyword: e }).then(response => {
-            if (typeof response.data.data !== "undefined") {
-                return response.data.data;
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data;
             } else {
                 return [];
             }
@@ -50,16 +74,16 @@ function Detail({ setOpen,setRefresh,refresh }) {
     }
 
     const fetchUniversities = (e) => {
-        return ListingApi.universities({ keyword: e }).then(response => {
-            if (typeof response.data.data !== "undefined") {
-                return response.data.data;
+        return ListingApi.universities({ keyword: e, country: selectedCountryID }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data;
             } else {
                 return [];
             }
         })
     }
     const fetchCourse = (e) => {
-        return ListingApi.courses({ keyword: e }).then(response => {
+        return ListingApi.courses({ keyword: e, university: selectedInstituteID }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -162,37 +186,38 @@ function Detail({ setOpen,setRefresh,refresh }) {
             toast.error(error?.message)
 
         }
-        // "name": "Lead 1",
-        // "": "lead1@spiderworks.in",
-        // "": "91",
-        // "": "9496856556",
-        // "": "91",
-        // "": "9496856556",
-        // "": 1,
-        // "": 1,
-        // "": 1,
-        // "": 1,
-        // "": 1,
-        // "agency_id": 1,
-        // "assigned_to": 1,
-        // "": "2024-03-15",
-        // "follow_up_assigned_to": 2,
-        // "verification_status": "No",
-        // "": "Lead 1 note"
+
     }
 
-
+    useEffect(() => {
+        if (watch('country')) {
+            setselectedCountryID(watch('country')?.id)
+        } if (watch('course')) {
+            setselectedCourseID(watch('course')?.id)
+        } if (watch('institute')) {
+            setselectedInstituteID(watch('institute')?.id)
+        }
+    }, [watch('country'), watch('course'), watch('institute')])
 
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
+
                 <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                     <Grid item md={5}>
                         <Typography sx={{ fontWeight: '500' }}>Email Address</Typography>
                     </Grid>
                     <Grid item md={7}>
-                        <TextInput control={control} name="email"
+                        <TextInput control={control} {...register('email', {
+                            required: 'Please enter your email',
+                            pattern: {
+                                value: /^\S+@\S+$/i,
+                                message: 'Please enter valid email address',
+                            },
+                        })}
                             value={watch('email')} />
+                        {errors.email && <span className='form-validation'>{errors.email.message}</span>}
+
                     </Grid>
                 </Grid>
 
@@ -229,6 +254,8 @@ function Detail({ setOpen,setRefresh,refresh }) {
                                 marginLeft: '5px',
                             }}
                         />
+                        {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
+
                     </Grid>
                 </Grid>
 
@@ -238,7 +265,15 @@ function Detail({ setOpen,setRefresh,refresh }) {
                     </Grid>
                     <Grid item md={7}>
                         <PhoneInput
-                            {...register('alt_phone')}
+                            {...register('alt_phone', {
+                                validate: value => {
+                                    // If alt_phone is empty, no validation needed
+                                    if (!value) return true;
+                                    // Validate that alt_phone is not the same as phone
+                                    return value !== phoneValue || 'Alternative phone number cannot be the same as phone number';
+                                }
+                            })}
+
                             international
                             // autoFormat
                             placeholder="Enter your number"
@@ -262,6 +297,8 @@ function Detail({ setOpen,setRefresh,refresh }) {
                                 marginLeft: '5px',
                             }}
                         />
+                        {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
+
                     </Grid>
                 </Grid>
 
@@ -270,8 +307,9 @@ function Detail({ setOpen,setRefresh,refresh }) {
                         <Typography sx={{ fontWeight: '500' }}>Name</Typography>
                     </Grid>
                     <Grid item md={7}>
-                        <TextInput control={control} name="name"
+                        <TextInput control={control} {...register('name', { required: 'The Name field is required' })}
                             value={watch('name')} />
+                        {errors.name && <span className='form-validation'>{errors.name.message}</span>}
                     </Grid>
                 </Grid>
 
@@ -283,11 +321,11 @@ function Detail({ setOpen,setRefresh,refresh }) {
                         <SelectX
                             options={fetchCounty}
                             control={control}
-                            error={errors?.country?.id ? errors?.country?.id?.message : false}
-                            error2={errors?.country?.message ? errors?.country?.message : false}
                             name={'country'}
                             defaultValue={watch('country')}
                         />
+                        {errors.country && <span className='form-validation'>{errors.country.message}</span>}
+
                     </Grid>
                 </Grid>
 
@@ -298,23 +336,26 @@ function Detail({ setOpen,setRefresh,refresh }) {
                     </Grid>
                     <Grid item md={7}>
                         <SelectX
+                            key={selectedCountryID}
                             options={fetchUniversities}
                             control={control}
-                            // error={errors?.institute?.id ? errors?.institute?.id?.message : false}
-                            // error2={errors?.institute?.message ? errors?.institute?.message : false}
+                            rules={{ required: 'Institute is required' }}
                             name={'institute'}
                             defaultValue={watch('institute')}
                         />
+                        {errors.institute && <span className='form-validation'>{errors.institute.message}</span>}
+
                     </Grid>
                 </Grid>
 
-                {/* institute */}
+                {/* course */}
                 <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                     <Grid item md={5}>
                         <Typography sx={{ fontWeight: '500' }}>Course Applying For</Typography>
                     </Grid>
                     <Grid item md={7}>
                         <SelectX
+                            key={selectedInstituteID}
                             options={fetchCourse}
                             control={control}
                             // error={errors?.institute?.id ? errors?.institute?.id?.message : false}
@@ -322,6 +363,8 @@ function Detail({ setOpen,setRefresh,refresh }) {
                             name={'course'}
                             defaultValue={watch('course')}
                         />
+                        {errors.course && <span className='form-validation'>{errors.course.message}</span>}
+
                     </Grid>
                 </Grid>
 
@@ -373,6 +416,7 @@ function Detail({ setOpen,setRefresh,refresh }) {
                             name={'assigned_to'}
                             defaultValue={watch('assigned_to')}
                         />
+                        {errors?.assigned_to && <span className='form-validation'>{errors.assigned_to.message}</span>}
                     </Grid>
                 </Grid>
 
@@ -399,7 +443,7 @@ function Detail({ setOpen,setRefresh,refresh }) {
                         <Typography sx={{ fontWeight: '500' }}>Note</Typography>
                     </Grid>
                     <Grid item md={7}>
-                        <TextInput control={control} name="note"
+                        <TextField multiline rows={2} fullWidth control={control} name="note"
                             value={watch('note')} />
                     </Grid>
                 </Grid>

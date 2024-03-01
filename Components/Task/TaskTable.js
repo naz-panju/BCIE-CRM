@@ -24,6 +24,8 @@ import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
+import { TaskApi } from '@/data/Endpoints/Task';
+import moment from 'moment';
 
 function createData(id, name, calories, fat, carbs, protein) {
   return {
@@ -70,34 +72,34 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'name',
+    id: 'title',
     numeric: false,
     disablePadding: true,
-    label: 'Registered Name',
+    label: 'Title',
   },
   {
-    id: 'email',
+    id: 'assigned_to',
     numeric: true,
     disablePadding: false,
-    label: 'Registered Email ',
+    label: 'Assigned To ',
   },
   {
-    id: 'mobile',
+    id: 'reviewer',
     numeric: true,
     disablePadding: false,
-    label: 'Registered Mobile',
+    label: 'Reviewer',
   },
   {
-    id: 'country',
+    id: 'due',
     numeric: true,
     disablePadding: false,
-    label: 'Applied Country',
+    label: 'Due Date',
   },
   {
-    id: 'university',
+    id: 'priority',
     numeric: true,
     disablePadding: false,
-    label: 'Applied University',
+    label: 'Priority',
   },
 ];
 
@@ -212,7 +214,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh }) {
+export default function TaskTable({ refresh }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -220,7 +222,6 @@ export default function EnhancedTable({ refresh }) {
   const [dense, setDense] = React.useState(false);
   const [limit, setLimit] = React.useState(10);
   const [list, setList] = useState([])
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -273,19 +274,19 @@ export default function EnhancedTable({ refresh }) {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - list?.meta?.total?.length) : 0;
+    page > 0 ? Math.max(0, (1 + page) * limit - list?.meta?.total?.length) : 0;
 
-  const visibleRows = React.useMemo(
-    () =>
-      stableSort(list?.data, getComparator(order, orderBy))?.slice(
-        page * limit,
-        page * limit + limit,
-      ),
-    [order, orderBy, page, limit],
-  );
+  // const visibleRows = React.useMemo(
+  //   () =>
+  //     stableSort(list?.data, getComparator(order, orderBy))?.slice(
+  //       page * rowsPerPage,
+  //       page * rowsPerPage + rowsPerPage,
+  //     ),
+  //   [order, orderBy, page, rowsPerPage],
+  // );
 
   const fetchTable = () => {
-    LeadApi.list({ limit: limit, page: page + 1 }).then((response) => {
+    TaskApi.list({ limit: limit, page: page + 1 }).then((response) => {
       // console.log(response);
       setList(response?.data)
     }).catch((error) => {
@@ -351,12 +352,12 @@ export default function EnhancedTable({ refresh }) {
                         padding="none"
                         className='reg-name'
                       >
-                        {row.name}
+                        {row?.title}
                       </TableCell>
-                      <TableCell align="left">{row?.email}</TableCell>
-                      <TableCell align="left">{row?.phone_number}</TableCell>
-                      <TableCell align="left">{row?.applyingForCountry?.name}</TableCell>
-                      <TableCell align="left">{row.applyingForUniversity?.name}</TableCell>
+                      <TableCell align="left">{row?.assignedToUser?.name}</TableCell>
+                      <TableCell align="left">{row?.reviewer?.name}</TableCell>
+                      <TableCell align="left">{moment(row?.due_date).format('DD-MM-YYYY')}</TableCell>
+                      <TableCell align="left">{row.priority}</TableCell>
                     </TableRow>
                   );
                 })}

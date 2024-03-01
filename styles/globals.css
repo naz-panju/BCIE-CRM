@@ -939,3 +939,9 @@ button.loadmore-btn {
   width: 100% !important;
   outline: none;
 }
+
+.form-validation {
+  color: red;
+  font-size: 14px;
+  margin-left: 5px;
+}
