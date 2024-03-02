@@ -3,13 +3,41 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQrcode } from '@fortawesome/free-solid-svg-icons';
 import { faPercent } from '@fortawesome/free-solid-svg-icons';
 import LeadTab from './LeadTab'
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { LeadApi } from '@/data/Endpoints/Lead';
+import { useState } from 'react';
+import moment from 'moment';
 
 
 function LeadDetails() {
+
+  const [details, setDetails] = useState()
+
+
+  const router = useRouter()
+  const urlID = router?.query?.slug
+
+  const getDetails = async () => {
+    try {
+      const response = await LeadApi.view({ id: urlID })
+      console.log(response?.data?.data);
+      setDetails(response?.data?.data)
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getDetails()
+  }, [])
+
+
+
   return (
 
 
-<section>
+    <section>
       <div className='page-title-block'>
         <div className='page-title-block-content'>
           <h1>Lead Details</h1>
@@ -26,10 +54,10 @@ function LeadDetails() {
                       <div className="nameInitials">B</div>
                     </div>
                     <div className="tileCellDiv">
-                      <h4>Basma</h4>
+                      <h4>{details?.name}</h4>
                       <div className="leadStageBox">
-                        <a className="word-break leadStage lscommonTour">Hot&nbsp;
-                          <span className="draw-edit" style={{fontWeight:600}}></span>
+                        <a className="word-break leadStage lscommonTour">{details?.stage?.name}
+                          <span className="draw-edit" style={{ fontWeight: 600 }}></span>
                         </a>
                       </div>
                     </div>
@@ -41,10 +69,10 @@ function LeadDetails() {
                 </div>
 
                 <div className='lead-top-contact-details'>
-                  <p>Email: bas.baarma@fikrgs.edu.sa</p>
-                  <p>Mobile: +91 8888888888</p>
-                  <p>Added On: 01 Feb 2024 11:02 AM</p>
-                  <p>Last Active: 01 Feb 2024 11:42 AM</p>
+                  <p>Email: {details?.email}</p>
+                  <p>Mobile: +{details?.phone_country_code} {details?.phone_number}</p>
+                  <p>Added On: {moment(details?.created_at).format('DD MMM YYYY hh:mm A')}</p>
+                  <p>Last Active: {moment(details?.updated_at).format('DD MMM YYYY hh:mm A')}</p>
                 </div>
               </div>
             </div>
@@ -67,40 +95,40 @@ function LeadDetails() {
               <div className='lead-status-block'>
                 <div className='lead-communication-status'>
                   <h4>Communication Status</h4>
-                    <ul>
-                      <li>Email Sent - <span>5</span></li>
-                      <li>SMS Sent - <span>1</span></li>
-                      <li>Whatsapp Sent - <span>0</span></li>
-                    </ul>
+                  <ul>
+                    <li>Email Sent - <span>5</span></li>
+                    <li>SMS Sent - <span>1</span></li>
+                    <li>Whatsapp Sent - <span>0</span></li>
+                  </ul>
                 </div>
 
                 <div className='lead-communication-status'>
                   <h4>Upcoming Followup</h4>
-                    <ul>
-                      <li>NA</li>
-                    </ul>
+                  <ul>
+                    <li>NA</li>
+                  </ul>
                 </div>
 
                 <div className='lead-communication-status'>
                   <h4>Telephony Status</h4>
-                    <ul>
-                      <li>Inbound Call - <span>0</span></li>
-                      <li>Outbound Call - <span>0</span></li>
-                    </ul>
+                  <ul>
+                    <li>Inbound Call - <span>0</span></li>
+                    <li>Outbound Call - <span>0</span></li>
+                  </ul>
                 </div>
 
                 <div className='lead-communication-status'>
                   <h4>Lead Source</h4>
-                    <ul>
-                      <li>Direct</li>
-                    </ul>
+                  <ul>
+                    <li>Direct</li>
+                  </ul>
                 </div>
 
                 <div className='lead-communication-status'>
                   <h4>Assigned Counsellor</h4>
-                    <ul>
-                      <li>NA</li>
-                    </ul>
+                  <ul>
+                    <li>NA</li>
+                  </ul>
                 </div>
 
               </div>
@@ -110,36 +138,36 @@ function LeadDetails() {
 
 
         <div className='lead-details-stepper-block'>
-          
 
-        <div className="arrow-steps clearfix fadeIn">
-          <div className="step unverified filled">
-            <span className="stepTitle">Unverified</span>
+
+          <div className="arrow-steps clearfix fadeIn">
+            <div className="step unverified filled">
+              <span className="stepTitle">Unverified</span>
               <a tabindex="0" className="stepsOpt" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-container="body" data-content="Manipal Academy of Higher Education, India">1</a>
+            </div>
+
+            <div className="step verified prl10 pr0 filled">
+              <span className="stepTitle">Verified</span>
+            </div>
+
+            <div className="step app-started active">
+              <span className="stepTitle">Application Started</span>
+            </div>
+
+            <div className="step app-complete ">
+              <span className="stepTitle">Payment Approved</span>
+            </div>
+
+            <div className="step app-submitted ">
+              <span className="stepTitle">Application Submitted</span>
+            </div>
           </div>
-          
-          <div className="step verified prl10 pr0 filled">
-            <span className="stepTitle">Verified</span>
-          </div>
-          
-          <div className="step app-started active">
-            <span className="stepTitle">Application Started</span>
-          </div>
-          
-          <div className="step app-complete ">
-            <span className="stepTitle">Payment Approved</span>
-          </div>
-          
-          <div className="step app-submitted ">
-            <span className="stepTitle">Application Submitted</span>
-          </div>
-        </div>
 
 
         </div>
 
         <LeadTab />
-        
+
       </div>
     </section>
   )

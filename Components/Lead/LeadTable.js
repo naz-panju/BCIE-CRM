@@ -24,6 +24,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
+import Link from 'next/link';
 
 function createData(id, name, calories, fat, carbs, protein) {
   return {
@@ -351,7 +352,7 @@ export default function EnhancedTable({ refresh }) {
                         padding="none"
                         className='reg-name'
                       >
-                        {row.name}
+                        <Link href={`/lead/${row?.id}`}>{row.name}</Link>
                       </TableCell>
                       <TableCell align="left">{row?.email}</TableCell>
                       <TableCell align="left">{row?.phone_number}</TableCell>

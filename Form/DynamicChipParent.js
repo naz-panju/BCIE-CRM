@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import DynamicChip from "../../utils/DynamicChip";
+import DynamicChip from "../utils/DynamicChip";
 
 const DynamicChipParent = (props) => {
     const [value, setValue] = useState();
