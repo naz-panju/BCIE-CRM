@@ -352,7 +352,7 @@ export default function EnhancedTable({ refresh }) {
                         padding="none"
                         className='reg-name'
                       >
-                        <Link href={`/lead/${row?.id}`}>{row.name}</Link>
+                        <Link target='_blank' href={`/lead/${row?.id}`}>{row.name}</Link>
                       </TableCell>
                       <TableCell align="left">{row?.email}</TableCell>
                       <TableCell align="left">{row?.phone_number}</TableCell>

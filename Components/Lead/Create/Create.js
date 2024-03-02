@@ -4,15 +4,14 @@ import { Grid, IconButton } from '@mui/material';
 import { useEffect } from 'react';
 import { Close, Refresh } from '@mui/icons-material';
 import CreateTabs from './Tabmenus';
+import { useState } from 'react';
 
-export default function CreateLead({ open, setOpen, refresh,setRefresh}) {
+export default function CreateLead({ editId, setEditId, refresh, setRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
 
-    const handleClose = () => {
-        setOpen(false)
-    }
+    const [open, setOpen] = useState(false)
 
     const handleDrawerClose = (event) => {
         if (
@@ -24,17 +23,26 @@ export default function CreateLead({ open, setOpen, refresh,setRefresh}) {
         // Check if the close icon was clicked
         if (event.target.tagName === 'svg') {
             setOpen(false);
+            setEditId()
         }
     };
+
+    const handleClose = () => {
+        setEditId()
+        setOpen(false)
+    }
 
 
     const anchor = 'right'; // Set anchor to 'right'
 
     useEffect(() => {
-        if (open) {
-
+        if (editId > 0) {
+            setOpen(true)
         }
-    }, [open])
+        if (editId == 0) {
+            setOpen(true)
+        }
+    }, [editId])
 
 
     return (
@@ -46,15 +54,15 @@ export default function CreateLead({ open, setOpen, refresh,setRefresh}) {
             >
                 <Grid width={650}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{fontWeight:500,fontSize:'19px'}}>Add Quick Lead</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Add Quick Lead</a>
                         <IconButton
-                            onClick={() => setOpen(false)}
+                            onClick={handleClose}
                         >
                             <Close />
                         </IconButton>
                     </Grid>
                     <hr />
-                    <CreateTabs setOpen={setOpen} refresh={refresh} setRefresh={setRefresh} />
+                    <CreateTabs handleClose={handleClose} editId={editId} refresh={refresh} setRefresh={setRefresh} />
                 </Grid>
             </Drawer>
         </div>

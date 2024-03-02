@@ -13,6 +13,7 @@ import moment from 'moment';
 function LeadDetails() {
 
   const [details, setDetails] = useState()
+  const [refresh, setRefresh] = useState(false)
 
 
   const router = useRouter()
@@ -30,7 +31,7 @@ function LeadDetails() {
 
   useEffect(() => {
     getDetails()
-  }, [])
+  }, [refresh])
 
 
 
@@ -166,7 +167,7 @@ function LeadDetails() {
 
         </div>
 
-        <LeadTab />
+        <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} />
 
       </div>
     </section>

@@ -3,7 +3,7 @@ import SelectX from '@/Form/SelectX'
 import TextInput from '@/Form/TextInput'
 import { ListingApi } from '@/data/Endpoints/Listing'
 import { Button, Grid, TextField, Typography } from '@mui/material'
-import { LocalizationProvider } from '@mui/x-date-pickers'
+import { DatePicker, DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import React, { useState } from 'react'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import 'react-phone-input-2/lib/style.css'
@@ -20,7 +20,7 @@ const scheme = yup.object().shape({
     name: yup.string().required("Name is Required"),
     email: yup.string().email("Invalid email format").required("Email is Required"),
     phone: yup.string().required('Phone Number is Required'),
-    alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function(value) {
+    alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
         return value !== this.parent.phone;
     }),
     assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
@@ -29,7 +29,7 @@ const scheme = yup.object().shape({
     course: yup.object().required("Please Choose a Country").typeError("Please choose a Course"),
 })
 
-function Detail({ setOpen, setRefresh, refresh }) {
+function Detail({ handleClose, setRefresh, refresh, editId }) {
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
     const phoneValue = watch('phone');
@@ -177,7 +177,7 @@ function Detail({ setOpen, setRefresh, refresh }) {
                 toast.success('Lead Has Been Successfully Created ')
                 setRefresh(!refresh)
                 reset()
-                setOpen(false)
+                handleClose()
             }
 
         } catch (error) {
@@ -186,6 +186,34 @@ function Detail({ setOpen, setRefresh, refresh }) {
 
         }
 
+    }
+
+    const getDetails = async () => {
+        const response = await LeadApi.view({ id: editId })
+        if (response?.data?.data) {
+            let data = response?.data?.data
+            console.log(data);
+
+            console.log(watch('phone'),data?.phone_number);
+
+            setValue('name', data?.name)
+            // setValue('phone',data?.phone_number)
+            setValue('email', data?.email)
+            setValue('country', data?.applyingForCountry)
+            setValue('institute', data?.applyingForUniversity)
+            setValue('course', data?.applyingForCourse)
+            setValue('stage', data?.stage)
+            setValue('sub_stage', data?.substage)
+            setValue('assigned_to', data?.followUpAssignedToUser)
+            if (data?.next_follow_up_date) {
+                const date = moment(data.next_follow_up_date, 'YYYY-MM-DD').toDate();
+                setValue('date', date);
+            }
+            setValue('note', data?.note)
+            // setValue()
+            // setValue()
+            // setValue()
+        }
     }
 
     useEffect(() => {
@@ -197,6 +225,12 @@ function Detail({ setOpen, setRefresh, refresh }) {
             setselectedInstituteID(watch('institute')?.id)
         }
     }, [watch('country'), watch('course'), watch('institute')])
+
+    useEffect(() => {
+        if (editId > 0) {
+            getDetails()
+        }
+    }, [editId])
 
     return (
         <div>
@@ -418,14 +452,15 @@ function Detail({ setOpen, setRefresh, refresh }) {
                         <Typography sx={{ fontWeight: '500' }}>Set Follow-up Date</Typography>
                     </Grid>
                     <Grid item md={7}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DateInput
-                                control={control}
-                                label='Followup Date'
-                                name="date"
-                                value={watch('date')}
-                            />
-                        </LocalizationProvider>
+                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
+                        <DateInput
+                            control={control}
+                            // label='Followup Date'
+                            name="date"
+                            value={watch('date') || null}
+                            textField={(props) => <TextField {...props} />}
+                        />
+                        {/* </LocalizationProvider> */}
 
                     </Grid>
                 </Grid>
@@ -441,8 +476,8 @@ function Detail({ setOpen, setRefresh, refresh }) {
                 </Grid>
 
                 <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                    <Button size='small' sx={{ textTransform: 'none', mr: 2 ,height: 30}} variant='outlined'>Cancel</Button>
-                    <Button size='small' type='submit' sx={{ textTransform: 'none',height: 30 }} variant='contained'>Save</Button>
+                    <Button size='small' sx={{ textTransform: 'none', mr: 2, height: 30 }} variant='outlined'>Cancel</Button>
+                    <Button size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</Button>
                 </Grid>
 
             </form>

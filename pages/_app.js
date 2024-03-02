@@ -3,6 +3,10 @@ import "@/styles/Editor.css";
 
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
 
@@ -10,6 +14,8 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
 
   return <SessionProvider session={session}>
     <Toaster />
-    <Component {...pageProps} />
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <Component {...pageProps} />
+    </LocalizationProvider>
   </SessionProvider>
 }

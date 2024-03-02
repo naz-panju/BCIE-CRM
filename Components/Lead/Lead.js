@@ -58,6 +58,7 @@ export default function CustomizedMenus() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [createModal, setCreateModal] = useState(false)
   const [refresh, setRefresh] = useState(false)
+  const [editId, setEditId] = useState()
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -67,12 +68,14 @@ export default function CustomizedMenus() {
     setAnchorEl(null);
   };
 
-  // console.log(refresh);
+  const handleCreateNew = () => {
+    setEditId(0)
+  }
 
   return (
 
     <>
-      <CreateLead open={createModal} setOpen={setCreateModal} refresh={refresh} setRefresh={setRefresh} />
+      <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content'>
@@ -111,7 +114,7 @@ export default function CustomizedMenus() {
           </div>
 
           <div className='page-title-block-right'>
-            <Button sx={{ textTransform: 'none' }} onClick={() => setCreateModal(true)} size='small' variant='outlined'>Add</Button>
+            <Button sx={{ textTransform: 'none' }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
           </div>
         </div>
 
