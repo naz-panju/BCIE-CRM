@@ -54,7 +54,7 @@ export default function CreateLead({ editId, setEditId, refresh, setRefresh }) {
             >
                 <Grid width={650}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Add Quick Lead</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? `Edit Lead ` : `Add Quick Lead`}</a>
                         <IconButton
                             onClick={handleClose}
                         >

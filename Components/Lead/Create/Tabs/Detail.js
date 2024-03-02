@@ -194,10 +194,17 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             let data = response?.data?.data
             console.log(data);
 
-            console.log(watch('phone'), data?.phone_number);
+            // console.log(`+${data?.phone_country_code}${data?.phone_number}`);
 
             setValue('name', data?.name)
-            // setValue('phone',data?.phone_number)
+            setValue('phone',`+${data?.phone_country_code}${data?.phone_number}`)
+            setPhone(data?.phone_number)
+            setCode(data?.phone_country_code)
+
+            setValue('alt_phone',`+${data?.alternate_phone_country_code}${data?.alternate_phone_number}`)
+            setPhone(data?.alternate_phone_number)
+            setCode(data?.alternate_phone_country_code)
+
             setValue('email', data?.email)
             setValue('country', data?.applyingForCountry)
             setValue('institute', data?.applyingForUniversity)
@@ -284,7 +291,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                             inputprops={{
                                 autoFocus: true,
                                 autoComplete: 'off',
-                                name: 'phone',
+                                // name: 'phone',
                                 required: true,
                             }}
                             inputstyle={{
