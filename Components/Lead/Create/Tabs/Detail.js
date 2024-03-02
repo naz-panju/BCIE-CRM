@@ -20,10 +20,11 @@ const scheme = yup.object().shape({
     name: yup.string().required("Name is Required"),
     email: yup.string().email("Invalid email format").required("Email is Required"),
     phone: yup.string().required('Phone Number is Required'),
-    // alt_phone: yup.string().test('not-same-as-phone', 'Alternative phone number cannot be the same as phone number', function(value) {
-    //     const { phone } = this.parent; // Access the value of the 'phone' field
-    //     return value !== phone; // Check if 'alt_phone' is different from 'phone'
-    // }),
+    alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function(value) {
+        console.log('phone:', this.parent.phone);
+        console.log('alt_phone:', value);
+        return value !== this.parent.phone;
+    }),
     assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
     country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
     institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
@@ -56,7 +57,7 @@ function Detail({ setOpen, setRefresh, refresh }) {
     }
     const fetchStages = (e) => {
         return ListingApi.stages({ keyword: e }).then(response => {
-            if (typeof response.data.data !== "undefined") {
+            if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
                 return [];
@@ -65,7 +66,7 @@ function Detail({ setOpen, setRefresh, refresh }) {
     }
     const fetchSubStages = (e) => {
         return ListingApi.substages({ keyword: e }).then(response => {
-            if (typeof response.data.data !== "undefined") {
+            if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
                 return [];
@@ -84,7 +85,7 @@ function Detail({ setOpen, setRefresh, refresh }) {
     }
     const fetchCourse = (e) => {
         return ListingApi.courses({ keyword: e, university: selectedInstituteID }).then(response => {
-            if (typeof response.data.data !== "undefined") {
+            if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
                 return [];
@@ -93,7 +94,7 @@ function Detail({ setOpen, setRefresh, refresh }) {
     }
     const fetchUser = (e) => {
         return ListingApi.users({ keyword: e }).then(response => {
-            if (typeof response.data.data !== "undefined") {
+            if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
                 return [];
@@ -131,7 +132,7 @@ function Detail({ setOpen, setRefresh, refresh }) {
 
         const { dialCode } = country;
         setAltCode(dialCode)
-        setValue('alt_phone', '')
+        setValue('alt_phone', value)
         if (value.startsWith(dialCode)) {
             const trimmedPhone = value.slice(dialCode.length);
             setAltPhone(trimmedPhone);
@@ -265,14 +266,7 @@ function Detail({ setOpen, setRefresh, refresh }) {
                     </Grid>
                     <Grid item md={7}>
                         <PhoneInput
-                            {...register('alt_phone', {
-                                validate: value => {
-                                    // If alt_phone is empty, no validation needed
-                                    if (!value) return true;
-                                    // Validate that alt_phone is not the same as phone
-                                    return value !== phoneValue || 'Alternative phone number cannot be the same as phone number';
-                                }
-                            })}
+                            {...register('alt_phone')}
 
                             international
                             // autoFormat
