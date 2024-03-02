@@ -194,7 +194,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             let data = response?.data?.data
             console.log(data);
 
-            console.log(watch('phone'),data?.phone_number);
+            console.log(watch('phone'), data?.phone_number);
 
             setValue('name', data?.name)
             // setValue('phone',data?.phone_number)
@@ -235,6 +235,17 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
+
+                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                    <Grid item md={5}>
+                        <Typography sx={{ fontWeight: '500' }}>Name</Typography>
+                    </Grid>
+                    <Grid item md={7}>
+                        <TextInput control={control} {...register('name', { required: 'The Name field is required' })}
+                            value={watch('name')} />
+                        {errors.name && <span className='form-validation'>{errors.name.message}</span>}
+                    </Grid>
+                </Grid>
 
                 <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                     <Grid item md={5}>
@@ -325,17 +336,6 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                         />
                         {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
 
-                    </Grid>
-                </Grid>
-
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Name</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <TextInput control={control} {...register('name', { required: 'The Name field is required' })}
-                            value={watch('name')} />
-                        {errors.name && <span className='form-validation'>{errors.name.message}</span>}
                     </Grid>
                 </Grid>
 
