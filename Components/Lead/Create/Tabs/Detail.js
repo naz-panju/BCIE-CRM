@@ -21,8 +21,6 @@ const scheme = yup.object().shape({
     email: yup.string().email("Invalid email format").required("Email is Required"),
     phone: yup.string().required('Phone Number is Required'),
     alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function(value) {
-        console.log('phone:', this.parent.phone);
-        console.log('alt_phone:', value);
         return value !== this.parent.phone;
     }),
     assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
