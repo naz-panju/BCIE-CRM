@@ -56,7 +56,7 @@ const Sidebar = () => {
 
                     {
                         SideBarOptions?.map((obj, index) => (
-                            <li key={index}><Link href={`/task`}><i><obj.icon fontSize='small' /></i><span>{obj?.title}</span></Link></li>
+                            <li key={index}><Link href={obj?.href}><i><obj.icon fontSize='small' /></i><span>{obj?.title}</span></Link></li>
                         ))
                     }
                     {/* <li><a href='#'><i><DashboardOutlined fontSize='small' /></i><span>Dashboard</span></a></li>
