@@ -25,6 +25,7 @@ import { useEffect } from 'react';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 function createData(id, name, calories, fat, carbs, protein) {
   return {
@@ -214,6 +215,11 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function EnhancedTable({ refresh }) {
+
+  const router = useRouter();
+
+  // console.log(router);
+
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -259,6 +265,7 @@ export default function EnhancedTable({ refresh }) {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
+    router.replace(`/lead?page=${newPage + 1}`);
   };
 
   const handleChangeRowsPerPage = (event) => {

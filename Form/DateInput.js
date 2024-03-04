@@ -11,6 +11,7 @@ const DateInput = (props) => {
         '& .MuiFilledInput-root': {
             backgroundColor: 'background.paper',
             borderWidth: 1,
+            // width: '100%',
             borderStyle: 'solid',
             borderColor: 'neutral.300',
             borderRadius: 1,
@@ -59,6 +60,7 @@ const DateInput = (props) => {
             alignItems: 'center',
             display: 'flex',
             fontSize: 14,
+            width: '85%',
             height: 'unset',
             lineHeight: 1.6,
             px: 1.5,
@@ -89,6 +91,7 @@ const DateInput = (props) => {
                         renderInput={(params) => {
                             return (
                                 <TextField {...params}
+                                    style={{ width: '100%' }}  //fullwidth
                                     sx={textFiledStyles}
                                     InputLabelProps={InputLabelProps}
                                     variant="filled"
@@ -96,17 +99,18 @@ const DateInput = (props) => {
                                     helperText={error ? error.message : null}
                                     error={!!error}
                                     inputProps={inputProps}
-                                    // InputProps={{
-                                    //     endAdornment: value ? (
-                                    //         <IconButton
-                                    //             aria-label="clear date"
-                                    //             onClick={() => onChange(null)} // Clear the field on click
-                                    //             edge="end"
-                                    //         >
-                                    //             <ClearIcon />
-                                    //         </IconButton>
-                                    //     ) : null,
-                                    // }}
+                                    placeholder={props?.placeholder || ''}
+                                // InputProps={{
+                                //     endAdornment: value ? (
+                                //         <IconButton
+                                //             aria-label="clear date"
+                                //             onClick={() => onChange(null)} // Clear the field on click
+                                //             edge="end"
+                                //         >
+                                //             <ClearIcon />
+                                //         </IconButton>
+                                //     ) : null,
+                                // }}
                                 />
                             );
                         }}

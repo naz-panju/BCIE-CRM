@@ -20,17 +20,21 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { LoadingButton } from '@mui/lab';
 
 const scheme = yup.object().shape({
     title: yup.string().required("Title is Required"),
-    // description: yup.string().required("Description is Required"),
+    description: yup.string().required("Description is Required"),
 })
 
-export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
+export default function CreateTask({ editId, setEditId, refresh, setRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
     const [selectedPriority, setSelectedPriority] = useState('Medium');
+    const [open, setOpen] = useState(false)
+
+    const [loading, setLoading] = useState(false)
 
     const anchor = 'right'; // Set anchor to 'right'
 
@@ -71,18 +75,16 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
 
     const onSubmit = async (data) => {
 
-
+        setLoading(true)
         let dueDate = ''
         if (data?.date) {
-            dueDate = moment(data?.date?.$d).format('YYYY-MM-DD')
+            dueDate = moment(data?.date).format('YYYY-MM-DD')
         }
 
         let dataToSubmit = {
-            lead_id: data?.lead?.id,
+            // lead_id: data?.lead?.id,
             title: data?.title,
             description: data?.description,
-            // start_date: startDate,
-            // end_date: phone,
             due_date: dueDate,
             assigned_to_user_id: data?.assigned_to?.id,
             reviewer_id: data?.reviewer?.id,
@@ -91,27 +93,55 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
 
         console.log(dataToSubmit);
 
-        try {
-            const response = await TaskApi.add(dataToSubmit)
-            console.log(response);
+        let action;
 
+        if (editId > 0) {
+            dataToSubmit['id'] = editId
+            action = TaskApi.update(dataToSubmit)
+        } else {
+            action = TaskApi.add(dataToSubmit)
+        }
+
+        action.then((response) => {
             if (response?.data) {
                 toast.success('Task Has Been Successfully Created ')
-                setRefresh(!refresh)
                 reset()
-                setOpen(false)
+                handleClose()
+                setRefresh()
+                setLoading(false)
             }
 
-        } catch (error) {
+            setLoading(false)
+        }).catch((error) => {
             console.log(error);
             toast.error(error?.message)
+            setLoading(false)
+        })
 
-        }
+        // try {
+        //     const response = await TaskApi.add(dataToSubmit)
+        //     console.log(response);
+
+        //     if (response?.data) {
+        //         toast.success('Task Has Been Successfully Created ')
+        //         setRefresh(!refresh)
+        //         reset()
+        //         setOpen(false)
+        //     }
+
+        // } catch (error) {
+        //     console.log(error);
+        //     toast.error(error?.message)
+
+        // }
     }
 
 
     const handleClose = () => {
         setOpen(false)
+        reset()
+        setSelectedPriority('Medium')
+        setEditId()
     }
 
     const handleDrawerClose = (event) => {
@@ -127,13 +157,32 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
         }
     };
 
+    const getDetails = async () => {
+        const response = await TaskApi.view({ id: editId })
+        if (response?.data?.data) {
+            let data = response?.data?.data
+            // console.log(data);
+
+            setValue('title', data?.title)
+            setValue('date', data?.due_date)
+            setValue('assigned_to', data?.assignedToUser)
+            setValue('reviewer', data?.reviewer)
+            setSelectedPriority(data?.priority)
+            setValue('description', data?.description)
+
+        }
+    }
+
 
 
     useEffect(() => {
-        if (open) {
-
+        if (editId > 0) {
+            setOpen(true)
+            getDetails()
+        } else if (editId == 0) {
+            setOpen(true)
         }
-    }, [open])
+    }, [editId])
 
 
     return (
@@ -145,9 +194,9 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
             >
                 <Grid width={650}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Add Task</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? "Edit Task" : 'Add Task'}</a>
                         <IconButton
-                            onClick={() => setOpen(false)}
+                            onClick={handleClose}
                         >
                             <Close />
                         </IconButton>
@@ -156,7 +205,7 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
                     <div>
                         <form onSubmit={handleSubmit(onSubmit)}>
 
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                            {/* <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                 <Grid item md={4}>
                                     <Typography sx={{ fontWeight: '500' }}>Select Lead</Typography>
                                 </Grid>
@@ -170,13 +219,13 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
                                         defaultValue={watch('lead')}
                                     />
                                 </Grid>
-                            </Grid>
+                            </Grid> */}
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item md={4}>
+                                <Grid item xs={12} md={4}>
                                     <Typography sx={{ fontWeight: '500' }}>Title</Typography>
                                 </Grid>
-                                <Grid item md={8}>
+                                <Grid item xs={12} md={8}>
                                     <TextInput control={control} name="title"
                                         value={watch('title')} />
                                     {errors.title && <span className='form-validation'>{errors.title.message}</span>}
@@ -186,30 +235,30 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
 
                             {/* date */}
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item md={4}>
+                                <Grid item xs={12} md={4}>
                                     <Typography sx={{ fontWeight: '500' }}>Due Date</Typography>
                                 </Grid>
-                                <Grid item md={8}>
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <Grid item xs={12} md={8}>
+                                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
                                         <DateInput
                                             control={control}
-                                            label='Due Date'
                                             name="date"
                                             value={watch('date')}
+                                            // placeholder='Due Date'
                                         />
-                                    </LocalizationProvider>
+                                    {/* </LocalizationProvider> */}
 
                                 </Grid>
                             </Grid>
 
                             {/* assigned to */}
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item md={4}>
+                                <Grid item xs={12} md={4}>
                                     <Typography sx={{ fontWeight: '500' }}>Assigned To</Typography>
                                 </Grid>
-                                <Grid item md={8}>
+                                <Grid item xs={12} md={8}>
                                     <SelectX
-                                        options={fetchUser}
+                                        loadOptions={fetchUser}
                                         control={control}
                                         // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
                                         // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
@@ -220,12 +269,12 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
                             </Grid>
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item md={4}>
+                                <Grid item xs={12} md={4}>
                                     <Typography sx={{ fontWeight: '500' }}>Reviewer</Typography>
                                 </Grid>
-                                <Grid item md={8}>
+                                <Grid item xs={12} md={8}>
                                     <SelectX
-                                        options={fetchUser}
+                                        loadOptions={fetchUser}
                                         control={control}
                                         // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
                                         // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
@@ -236,10 +285,10 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
                             </Grid>
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item md={4}>
+                                <Grid item xs={12} md={4}>
                                     <Typography sx={{ fontWeight: '500' }}>Priority</Typography>
                                 </Grid>
-                                <Grid item md={8}>
+                                <Grid item xs={12} md={8}>
                                     {priority.map(obj => {
                                         return <DynamicChip key={obj.name} name={obj.name} id={obj.name} active={selectedPriority} onChipCLick={handlePriorityChange} />
                                     })}
@@ -247,10 +296,10 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
                             </Grid>
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item md={4}>
+                                <Grid item xs={12} md={4}>
                                     <Typography sx={{ fontWeight: '500' }}>Description</Typography>
                                 </Grid>
-                                <Grid item md={8}>
+                                <Grid item xs={12} md={8}>
                                     <TextField
                                         {...register('description')}
                                         variant="outlined"
@@ -259,7 +308,7 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
                                         rows={2}
                                         sx={{ width: '100%', }}
                                     />
-                                    {/* {errors.description && <span className='form-validation'>{errors.description.message}</span>} */}
+                                    {errors.description && <span className='form-validation'>{errors.description.message}</span>}
 
                                     {/* <Editor emoji={false} val={watch('description')}
                                         onValueChange={e => setValue('description', e)}
@@ -269,7 +318,7 @@ export default function CreateTask({ open, setOpen, refresh, setRefresh }) {
 
                             <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                                 <Button size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <Button size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</Button>
+                                <LoadingButton loading={loading} disabled={loading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
                             </Grid>
 
                         </form>

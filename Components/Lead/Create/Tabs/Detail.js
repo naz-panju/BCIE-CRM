@@ -385,7 +385,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                     </Grid>
                     <Grid item md={7}>
                         <SelectX
-                            options={fetchCounty}
+                            loadOptions={fetchCounty}
                             control={control}
                             name={'country'}
                             defaultValue={watch('country')}
@@ -403,7 +403,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                     <Grid item md={7}>
                         <SelectX
                             key={selectedCountryID}
-                            options={fetchUniversities}
+                            loadOptions={fetchUniversities}
                             control={control}
                             rules={{ required: 'Institute is required' }}
                             name={'institute'}
@@ -422,7 +422,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                     <Grid item md={7}>
                         <SelectX
                             key={selectedInstituteID}
-                            options={fetchCourse}
+                            loadOptions={fetchCourse}
                             control={control}
                             // error={errors?.institute?.id ? errors?.institute?.id?.message : false}
                             // error2={errors?.institute?.message ? errors?.institute?.message : false}
@@ -441,7 +441,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                     </Grid>
                     <Grid item md={7}>
                         <SelectX
-                            options={fetchStages}
+                            loadOptions={fetchStages}
                             control={control}
                             // error={errors?.stage?.id ? errors?.stage?.id?.message : false}
                             // error2={errors?.stage?.message ? errors?.stage?.message : false}
@@ -458,7 +458,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                     </Grid>
                     <Grid item md={7}>
                         <SelectX
-                            options={fetchSubStages}
+                            loadOptions={fetchSubStages}
                             control={control}
                             // error={errors?.sub_stage?.id ? errors?.sub_stage?.message : false}
                             // error2={errors?.sub_stage?.message ? errors?.sub_stage?.message : false}
@@ -475,7 +475,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                     </Grid>
                     <Grid item md={7}>
                         <SelectX
-                            options={fetchUser}
+                            loadOptions={fetchUser}
                             control={control}
                             // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
                             // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}

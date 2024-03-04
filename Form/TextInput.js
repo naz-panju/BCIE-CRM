@@ -4,7 +4,9 @@ import { Controller } from "react-hook-form";
 import { Alert } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 
-const TextInput = (props) => {
+//old metho
+// const TextInput = (props) => {  
+const TextInput = React.forwardRef((props, ref) => {   //new method from gpt
     return (
         <>
             <Controller
@@ -104,5 +106,6 @@ const TextInput = (props) => {
         </>
     );
 }
+) //while using new method forward ref
 
 export default TextInput;

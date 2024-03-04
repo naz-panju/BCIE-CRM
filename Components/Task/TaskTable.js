@@ -26,6 +26,8 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import { TaskApi } from '@/data/Endpoints/Task';
 import moment from 'moment';
+import { Button } from '@mui/material';
+import { Edit } from '@mui/icons-material';
 
 function createData(id, name, calories, fat, carbs, protein) {
   return {
@@ -214,11 +216,11 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function TaskTable({ refresh }) {
+export default function TaskTable({ refresh, editId, setEditId ,page, setPage}) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
+  // const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [limit, setLimit] = React.useState(10);
   const [list, setList] = useState([])
@@ -270,6 +272,10 @@ export default function TaskTable({ refresh }) {
     setDense(event.target.checked);
   };
 
+  const handleEdit = (id) => {
+    setEditId(id)
+  }
+
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -296,7 +302,7 @@ export default function TaskTable({ refresh }) {
 
   useEffect(() => {
     fetchTable()
-  }, [page, refresh,limit])
+  }, [page, refresh, limit])
 
 
   return (
@@ -358,6 +364,7 @@ export default function TaskTable({ refresh }) {
                       <TableCell align="left">{row?.reviewer?.name}</TableCell>
                       <TableCell align="left">{moment(row?.due_date).format('DD-MM-YYYY')}</TableCell>
                       <TableCell align="left">{row.priority}</TableCell>
+                      <TableCell align="left"><Button style={{textTransform:'none'}} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
                     </TableRow>
                   );
                 })}

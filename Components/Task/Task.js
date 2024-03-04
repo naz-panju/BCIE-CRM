@@ -52,20 +52,27 @@ export default function TaskIndex() {
   const [createModal, setCreateModal] = useState(false)
   const [refresh, setRefresh] = useState(false)
 
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [editId, setEditId] = useState()
+  const [page, setPage] = useState(0)
+
+  const handleCreate = () => {
+    setEditId(0)
+  }
+
+  const handleRefresh = () => {
+    if (page != 0) {
+      setPage(0)
+    }
+    setRefresh(!refresh)
+  }
+
 
   // console.log(refresh);
 
   return (
 
     <>
-      <CreateTask open={createModal} setOpen={setCreateModal} refresh={refresh} setRefresh={setRefresh} />
+      <CreateTask editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={handleRefresh} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content'>
@@ -73,13 +80,13 @@ export default function TaskIndex() {
           </div>
 
           <div className='page-title-block-right'>
-            <Button sx={{ textTransform: 'none' }} onClick={() => setCreateModal(true)} size='small' variant='outlined'>Add</Button>
+            <Button sx={{ textTransform: 'none' }} onClick={handleCreate} size='small' variant='outlined'>Add</Button>
           </div>
         </div>
 
 
         <div className='content-block'>
-          <TaskTable refresh={refresh} />
+          <TaskTable page={page} setPage={setPage} editId={editId} setEditId={setEditId} refresh={refresh} />
         </div>
       </section>
     </>
