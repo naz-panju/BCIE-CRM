@@ -15,6 +15,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from 'react'
+import { LoadingButton } from '@mui/lab'
 
 const scheme = yup.object().shape({
     name: yup.string().required("Name is Required"),
@@ -43,6 +44,8 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
     const [selectedCountryID, setselectedCountryID] = useState()
     const [selectedInstituteID, setselectedInstituteID] = useState()
     const [selectedCourseID, setselectedCourseID] = useState()
+
+    const [loading, setLoading] = useState(false)
 
     const fetchCounty = (e) => {
         return ListingApi.country({ keyword: e }).then(response => {
@@ -144,6 +147,8 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
 
     const onSubmit = async (data) => {
 
+        setLoading(true)
+
         let leadDate = ''
         if (data?.date) {
             leadDate = moment(data?.date).format('YYYY-MM-DD')
@@ -152,39 +157,66 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
         let dataToSubmit = {
             name: data?.name,
             email: data?.email,
+
             phone_country_code: code,
             phone_number: phone,
+
             alternate_phone_country_code: altCode,
             alternate_phone_number: altPhone,
+
+            follow_up_assigned_to:data?.assigned_to?.id,
             applying_for_country_id: data?.country?.id,
             applying_for_university_id: data?.institute?.id,
             applying_for_course_id: data?.course?.id,
             next_follow_up_date: leadDate,
             stage_id: data?.stage?.id,
-            substage_id: data?.sub_stage?.id,
-
+            substage_id: data?.sub_stage?.id,    
             note: data?.note
-
         }
 
         console.log(dataToSubmit);
 
-        try {
-            const response = await LeadApi.add(dataToSubmit)
-            console.log(response);
+        let action;
 
+        if (editId > 0) {
+            dataToSubmit['id'] = editId;
+            action = LeadApi.update(dataToSubmit)
+        } else {
+            console.log('here');
+            action = LeadApi.add(dataToSubmit)
+        }
+        action.then((response) => {
             if (response?.data?.data) {
                 toast.success('Lead Has Been Successfully Created ')
                 setRefresh(!refresh)
                 reset()
                 handleClose()
+                setLoading(false)
+            }else{
+                toast.error(response?.response?.data?.message)
             }
-
-        } catch (error) {
+        }).catch((error) => {
             console.log(error);
             toast.error(error?.message)
+            setLoading(false)
+        })
 
-        }
+        // try {
+        //     const response = await LeadApi.add(dataToSubmit)
+        //     console.log(response);
+
+        //     if (response?.data?.data) {
+        //         toast.success('Lead Has Been Successfully Created ')
+        //         setRefresh(!refresh)
+        //         reset()
+        //         handleClose()
+        //     }
+
+        // } catch (error) {
+        //     console.log(error);
+        //     toast.error(error?.message)
+
+        // }
 
     }
 
@@ -197,13 +229,13 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             // console.log(`+${data?.phone_country_code}${data?.phone_number}`);
 
             setValue('name', data?.name)
-            setValue('phone',`+${data?.phone_country_code}${data?.phone_number}`)
+            setValue('phone', `+${data?.phone_country_code}${data?.phone_number}`)
             setPhone(data?.phone_number)
             setCode(data?.phone_country_code)
 
-            setValue('alt_phone',`+${data?.alternate_phone_country_code}${data?.alternate_phone_number}`)
-            setPhone(data?.alternate_phone_number)
-            setCode(data?.alternate_phone_country_code)
+            setValue('alt_phone', `+${data?.alternate_phone_country_code}${data?.alternate_phone_number}`)
+            setAltPhone(data?.alternate_phone_number)
+            setAltCode(data?.alternate_phone_country_code)
 
             setValue('email', data?.email)
             setValue('country', data?.applyingForCountry)
@@ -242,6 +274,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
+                {/* <button type='reset' onClick={() => setLoading(false)}>click</button> */}
 
                 <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                     <Grid item md={5}>
@@ -477,14 +510,14 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                         <Typography sx={{ fontWeight: '500' }}>Note</Typography>
                     </Grid>
                     <Grid item md={7}>
-                        <TextField multiline rows={2} fullWidth control={control} name="note"
+                        <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
                             value={watch('note')} />
                     </Grid>
                 </Grid>
 
                 <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                     <Button size='small' sx={{ textTransform: 'none', mr: 2, height: 30 }} variant='outlined'>Cancel</Button>
-                    <Button size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</Button>
+                    <LoadingButton loading={loading} disabled={loading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
                 </Grid>
 
             </form>

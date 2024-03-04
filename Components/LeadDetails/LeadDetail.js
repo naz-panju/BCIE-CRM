@@ -72,8 +72,14 @@ function LeadDetails() {
                 <div className='lead-top-contact-details'>
                   <p>Email: {details?.email}</p>
                   <p>Mobile: +{details?.phone_country_code} {details?.phone_number}</p>
-                  <p>Added On: {moment(details?.created_at).format('DD MMM YYYY hh:mm A')}</p>
-                  <p>Last Active: {moment(details?.updated_at).format('DD MMM YYYY hh:mm A')}</p>
+                  {
+                    details?.created_at &&
+                    <p>Added On: {moment(details?.created_at).format('DD MMM YYYY hh:mm A')}</p>
+                  }
+                  {
+                    details?.updated_at &&
+                    <p>Last Active: {moment(details?.updated_at).format('DD MMM YYYY hh:mm A')}</p>
+                  }
                 </div>
               </div>
             </div>
@@ -144,7 +150,7 @@ function LeadDetails() {
           <div className="arrow-steps clearfix fadeIn">
             <div className="step unverified filled">
               <span className="stepTitle">Unverified</span>
-              <a tabindex="0" className="stepsOpt" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-container="body" data-content="Manipal Academy of Higher Education, India">1</a>
+              <a tabIndex="0" className="stepsOpt" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-container="body" data-content="Manipal Academy of Higher Education, India">1</a>
             </div>
 
             <div className="step verified prl10 pr0 filled">
