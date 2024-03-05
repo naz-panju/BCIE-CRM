@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import { toast } from 'react-hot-toast';
 import moment from 'moment';
-import { DeleteForever, Edit } from '@mui/icons-material';
+import { Delete, DeleteForever, Edit } from '@mui/icons-material';
 import { TaskApi } from '@/data/Endpoints/Task';
 
 
@@ -205,7 +205,7 @@ const TaskNotes = (props) => {
                                                 <Edit fontSize='small' />
                                             </Button>
                                             <LoadingButton onClick={() => deleteNote(note.id)}>
-                                                <DeleteForever color='error' fontSize='small' />
+                                                <Delete color='error' fontSize='small' />
                                             </LoadingButton>
                                         </Grid>
                                     </Grid>
