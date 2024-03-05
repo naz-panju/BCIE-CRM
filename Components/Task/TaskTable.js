@@ -29,6 +29,7 @@ import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
 import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
+import TaskDetailModal from '../TaskDetails/Modal';
 
 
 
@@ -105,6 +106,12 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Priority',
+  },
+  {
+    id: 'status',
+    numeric: true,
+    disablePadding: false,
+    label: 'Status',
   },
 ];
 
@@ -223,7 +230,7 @@ EnhancedTableToolbar.propTypes = {
 
 export default function TaskTable({ refresh, editId, setEditId, page, setPage }) {
 
-  const { watch,setValue } = useForm()
+  const { watch, setValue } = useForm()
 
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
@@ -236,6 +243,8 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
   const [selectedUser, setselectedUser] = useState()
   const [selectedCreatedUser, setSelectedCreatedUser] = useState()
   const [selectedStatus, setSelectedStatus] = useState()
+
+  const [detailId, setDetailId] = useState()
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -338,7 +347,11 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
   }
   const handleStatusSelect = (e) => {
     setSelectedStatus(e?.value || '');
-    setValue('status',e?.value || '')
+    setValue('status', e?.value || '')
+  }
+
+  const handleDetailOpen = (id) => {
+    setDetailId(id)
   }
 
 
@@ -349,6 +362,9 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
 
   return (
     <>
+
+      <TaskDetailModal id={detailId} setId={setDetailId} />
+
       <Grid p={1} pl={0} mb={1} container >
         <Grid mr={1} item md={2}>
           <AsyncSelect
@@ -376,7 +392,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
 
         <Grid item md={2}>
           <ReactSelector
-            placeholder={'Select Status'}
+            placeholder={'Status'}
             onInputChange={Status}
             styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}
             options={Status}
@@ -440,6 +456,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
                           />
                         </TableCell>
                         <TableCell
+                          onClick={() => handleDetailOpen(row?.id)}
                           component="th"
                           id={labelId}
                           scope="row"
@@ -452,6 +469,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
                         <TableCell align="left">{row?.reviewer?.name}</TableCell>
                         <TableCell align="left">{moment(row?.due_date).format('DD-MM-YYYY')}</TableCell>
                         <TableCell align="left">{row.priority}</TableCell>
+                        <TableCell align="left">{row.status}</TableCell>
                         <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
                       </TableRow>
                     );

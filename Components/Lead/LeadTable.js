@@ -218,7 +218,7 @@ export default function EnhancedTable({ refresh }) {
 
   const router = useRouter();
 
-  const pageNumber = parseInt(router?.asPath?.split("=")[1]-1 || 0);
+  const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
 
 
   // console.log(router);
@@ -230,6 +230,8 @@ export default function EnhancedTable({ refresh }) {
   const [dense, setDense] = React.useState(false);
   const [limit, setLimit] = React.useState(10);
   const [list, setList] = useState([])
+
+  const [loading, setLoading] = useState(false)
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -268,7 +270,7 @@ export default function EnhancedTable({ refresh }) {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     // console.log(newPage);
-    router.push(`/lead?page=${newPage+1}`);
+    router.replace(`/lead?page=${newPage + 1}`);
     // router.push(`/lead?page=${newPage + 1}`);
   };
 
@@ -300,9 +302,11 @@ export default function EnhancedTable({ refresh }) {
   // console.log(page);
 
   const fetchTable = () => {
+    setLoading(true)
     LeadApi.list({ limit: limit, page: page + 1 }).then((response) => {
       // console.log(response);
       setList(response?.data)
+      setLoading(false)
     }).catch((error) => {
       console.log(error);
     })
@@ -325,87 +329,90 @@ export default function EnhancedTable({ refresh }) {
 
 
       {
-        list?.data !== undefined &&
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size={dense ? 'small' : 'medium'}
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={list?.meta?.total}
-              />
-              <TableBody>
-                {list?.data?.map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+        loading ?
+          <div>Loading....</div>
+          :
+          list?.data !== undefined &&
+          <Paper sx={{ width: '100%', mb: 2 }}>
+            {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+            <TableContainer>
+              <Table
+                sx={{ minWidth: 750 }}
+                aria-labelledby="tableTitle"
+                size={dense ? 'small' : 'medium'}
+              >
+                <EnhancedTableHead
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  rowCount={list?.meta?.total}
+                />
+                <TableBody>
+                  {list?.data?.map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                  return (
-                    <TableRow className='table-custom-tr'
-                      hover
-                      // onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                      sx={{ cursor: 'pointer' }}
-                    >
-                      <TableCell className='checkbox-tb' padding="checkbox">
-                        <Checkbox
-                          onClick={(event) => handleClick(event, row.id)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        className='reg-name'
+                    return (
+                      <TableRow className='table-custom-tr'
+                        hover
+                        // onClick={(event) => handleClick(event, row.id)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
+                        sx={{ cursor: 'pointer' }}
                       >
-                        <Link href={`/lead/${row?.id}`}>{row.name}</Link>
-                      </TableCell>
-                      <TableCell align="left">{row?.email}</TableCell>
-                      <TableCell align="left">{row?.phone_number}</TableCell>
-                      <TableCell align="left">{row?.applyingForCountry?.name}</TableCell>
-                      <TableCell align="left">{row.applyingForUniversity?.name}</TableCell>
+                        <TableCell className='checkbox-tb' padding="checkbox">
+                          <Checkbox
+                            onClick={(event) => handleClick(event, row.id)}
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          className='reg-name'
+                        >
+                          <Link href={`/lead/${row?.id}`}>{row.name}</Link>
+                        </TableCell>
+                        <TableCell align="left">{row?.email}</TableCell>
+                        <TableCell align="left">{row?.phone_number}</TableCell>
+                        <TableCell align="left">{row?.applyingForCountry?.name}</TableCell>
+                        <TableCell align="left">{row.applyingForUniversity?.name}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                  {emptyRows > 0 && (
+                    <TableRow
+                      style={{
+                        height: (dense ? 33 : 53) * emptyRows,
+                      }}
+                    >
+                      <TableCell colSpan={6} />
                     </TableRow>
-                  );
-                })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: (dense ? 33 : 53) * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 15, 25]}
-            component="div"
-            count={list?.meta?.total}
-            rowsPerPage={list?.meta?.per_page}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Paper>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 15, 25]}
+              component="div"
+              count={list?.meta?.total}
+              rowsPerPage={list?.meta?.per_page}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
       }
 
     </Box>
