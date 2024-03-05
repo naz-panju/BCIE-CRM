@@ -16,8 +16,6 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
@@ -26,6 +24,8 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { Grid } from '@mui/material';
+
 
 function createData(id, name, calories, fat, carbs, protein) {
   return {
@@ -218,16 +218,18 @@ export default function EnhancedTable({ refresh }) {
 
   const router = useRouter();
 
+  const pageNumber = parseInt(router?.asPath?.split("=")[1]-1 || 0);
+
+
   // console.log(router);
 
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(pageNumber);
   const [dense, setDense] = React.useState(false);
   const [limit, setLimit] = React.useState(10);
   const [list, setList] = useState([])
-
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -265,7 +267,9 @@ export default function EnhancedTable({ refresh }) {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    router.replace(`/lead?page=${newPage + 1}`);
+    // console.log(newPage);
+    router.push(`/lead?page=${newPage+1}`);
+    // router.push(`/lead?page=${newPage + 1}`);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -292,6 +296,9 @@ export default function EnhancedTable({ refresh }) {
     [order, orderBy, page, limit],
   );
 
+  // console.log(pageNumber);
+  // console.log(page);
+
   const fetchTable = () => {
     LeadApi.list({ limit: limit, page: page + 1 }).then((response) => {
       // console.log(response);
@@ -300,14 +307,23 @@ export default function EnhancedTable({ refresh }) {
       console.log(error);
     })
   }
+  // console.log(list);
+
+  // useEffect(() => {
+  //   // Update URL when page changes
+  //   console.log(page);
+  //   router.push(`/lead?page=${page+1}`);
+  // }, [page]);
 
   useEffect(() => {
     fetchTable()
-  }, [page, refresh,limit])
+  }, [page, refresh, limit])
 
 
   return (
     <Box sx={{ width: '100%' }}>
+
+
       {
         list?.data !== undefined &&
         <Paper sx={{ width: '100%', mb: 2 }}>

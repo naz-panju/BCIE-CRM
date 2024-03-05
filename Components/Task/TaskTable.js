@@ -16,18 +16,21 @@ import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
-import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import { TaskApi } from '@/data/Endpoints/Task';
 import moment from 'moment';
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { Edit } from '@mui/icons-material';
+import { ListingApi } from '@/data/Endpoints/Listing';
+import AsyncSelect from "react-select/async";
+import ReactSelector from 'react-select';
+import { useForm } from 'react-hook-form';
+
+
 
 function createData(id, name, calories, fat, carbs, protein) {
   return {
@@ -113,6 +116,7 @@ function EnhancedTableHead(props) {
   };
 
   return (
+
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
@@ -149,6 +153,7 @@ function EnhancedTableHead(props) {
         ))}
       </TableRow>
     </TableHead>
+
   );
 }
 
@@ -216,7 +221,10 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function TaskTable({ refresh, editId, setEditId ,page, setPage}) {
+export default function TaskTable({ refresh, editId, setEditId, page, setPage }) {
+
+  const { watch,setValue } = useForm()
+
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -224,6 +232,10 @@ export default function TaskTable({ refresh, editId, setEditId ,page, setPage}) 
   const [dense, setDense] = React.useState(false);
   const [limit, setLimit] = React.useState(10);
   const [list, setList] = useState([])
+
+  const [selectedUser, setselectedUser] = useState()
+  const [selectedCreatedUser, setSelectedCreatedUser] = useState()
+  const [selectedStatus, setSelectedStatus] = useState()
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -291,8 +303,26 @@ export default function TaskTable({ refresh, editId, setEditId ,page, setPage}) 
   //   [order, orderBy, page, rowsPerPage],
   // );
 
+  const fetchUser = (e) => {
+    return ListingApi.users({ keyword: e }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
+    })
+  }
+
+  const Status = [
+    { id: 1, name: "Not Started", value: "Not Started" },
+    { id: 2, name: "In progress", value: "In progress" },
+    { id: 3, name: "Review pending", value: "Review pending" },
+    { id: 4, name: "Review Failed", value: "Review Failed" },
+    { id: 5, name: "Completed", value: "Completed" },
+  ]
+
   const fetchTable = () => {
-    TaskApi.list({ limit: limit, page: page + 1 }).then((response) => {
+    TaskApi.list({ limit: limit, page: page + 1, assigned_to_user: selectedUser, created_by: selectedCreatedUser, status: selectedStatus }).then((response) => {
       // console.log(response);
       setList(response?.data)
     }).catch((error) => {
@@ -300,98 +330,157 @@ export default function TaskTable({ refresh, editId, setEditId ,page, setPage}) 
     })
   }
 
+  const handleUserSelect = (e) => {
+    setselectedUser(e?.id || '');
+  }
+  const handleCreateSelect = (e) => {
+    setSelectedCreatedUser(e?.id || '');
+  }
+  const handleStatusSelect = (e) => {
+    setSelectedStatus(e?.value || '');
+    setValue('status',e?.value || '')
+  }
+
+
   useEffect(() => {
     fetchTable()
-  }, [page, refresh, limit])
+  }, [page, refresh, limit, selectedUser, selectedCreatedUser, selectedStatus])
 
 
   return (
-    <Box sx={{ width: '100%' }}>
-      {
-        list?.data !== undefined &&
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size={dense ? 'small' : 'medium'}
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={list?.meta?.total}
-              />
-              <TableBody>
-                {list?.data?.map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  const labelId = `enhanced-table-checkbox-${index}`;
-
-                  return (
-                    <TableRow className='table-custom-tr'
-                      hover
-                      // onClick={(event) => handleClick(event, row.id)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.id}
-                      selected={isItemSelected}
-                      sx={{ cursor: 'pointer' }}
-                    >
-                      <TableCell className='checkbox-tb' padding="checkbox">
-                        <Checkbox
-                          onClick={(event) => handleClick(event, row.id)}
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                        className='reg-name'
-                      >
-                        {row?.title}
-                      </TableCell>
-                      <TableCell align="left">{row?.assignedToUser?.name}</TableCell>
-                      <TableCell align="left">{row?.reviewer?.name}</TableCell>
-                      <TableCell align="left">{moment(row?.due_date).format('DD-MM-YYYY')}</TableCell>
-                      <TableCell align="left">{row.priority}</TableCell>
-                      <TableCell align="left"><Button style={{textTransform:'none'}} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
-                    </TableRow>
-                  );
-                })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: (dense ? 33 : 53) * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 15, 25]}
-            component="div"
-            count={list?.meta?.total}
-            rowsPerPage={list?.meta?.per_page}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+    <>
+      <Grid p={1} pl={0} mb={1} container >
+        <Grid mr={1} item md={2}>
+          <AsyncSelect
+            isClearable
+            defaultOptions
+            loadOptions={fetchUser}
+            getOptionLabel={(e) => e.name}
+            getOptionValue={(e) => e.id}
+            placeholder={<div>Created By</div>}
+            onChange={handleCreateSelect}
           />
-        </Paper>
-      }
+        </Grid>
 
-    </Box>
+        <Grid mr={1} item md={2}>
+          <AsyncSelect
+            isClearable
+            defaultOptions
+            loadOptions={fetchUser}
+            getOptionLabel={(e) => e.name}
+            getOptionValue={(e) => e.id}
+            placeholder={<div>Assigned To</div>}
+            onChange={handleUserSelect}
+          />
+        </Grid>
+
+        <Grid item md={2}>
+          <ReactSelector
+            placeholder={'Select Status'}
+            onInputChange={Status}
+            styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}
+            options={Status}
+            getOptionLabel={option => option.name}
+            getOptionValue={option => option.value}
+            value={
+              Status.filter(options =>
+                options?.name == watch('status')
+              )
+            }
+            name='status'
+            isClearable
+            defaultValue={(watch('status'))}
+            onChange={(selectedOption) => handleStatusSelect(selectedOption)}
+          />
+        </Grid>
+      </Grid>
+      <Box sx={{ width: '100%' }}>
+        {
+          list?.data !== undefined &&
+          <Paper sx={{ width: '100%', mb: 2 }}>
+            {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+            <TableContainer>
+              <Table
+                sx={{ minWidth: 750 }}
+                aria-labelledby="tableTitle"
+                size={dense ? 'small' : 'medium'}
+              >
+                <EnhancedTableHead
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  rowCount={list?.meta?.total}
+                />
+                <TableBody>
+                  {list?.data?.map((row, index) => {
+                    const isItemSelected = isSelected(row.id);
+                    const labelId = `enhanced-table-checkbox-${index}`;
+
+                    return (
+                      <TableRow className='table-custom-tr'
+                        hover
+                        // onClick={(event) => handleClick(event, row.id)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.id}
+                        selected={isItemSelected}
+                        sx={{ cursor: 'pointer' }}
+                      >
+                        <TableCell className='checkbox-tb' padding="checkbox">
+                          <Checkbox
+                            onClick={(event) => handleClick(event, row.id)}
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          className='reg-name'
+                        >
+                          {row?.title}
+                        </TableCell>
+                        <TableCell align="left">{row?.assignedToUser?.name}</TableCell>
+                        <TableCell align="left">{row?.reviewer?.name}</TableCell>
+                        <TableCell align="left">{moment(row?.due_date).format('DD-MM-YYYY')}</TableCell>
+                        <TableCell align="left">{row.priority}</TableCell>
+                        <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
+                      </TableRow>
+                    );
+                  })}
+                  {emptyRows > 0 && (
+                    <TableRow
+                      style={{
+                        height: (dense ? 33 : 53) * emptyRows,
+                      }}
+                    >
+                      <TableCell colSpan={6} />
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 15, 25]}
+              component="div"
+              count={list?.meta?.total}
+              rowsPerPage={list?.meta?.per_page}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
+        }
+
+      </Box>
+    </>
   );
 }
