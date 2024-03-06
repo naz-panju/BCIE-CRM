@@ -10,5 +10,6 @@ export const TaskApi = {
     addNote: (data) => http.post(`tasks/notes/store`, data),
     updateNote: (data) => http.post(`tasks/notes/update`, data),
     viewNote: (data) => http.get(`tasks/notes/view/${data?.id}`, {params:data}),
+    deleteNote:(data) => http.post(`tasks/notes/delete`, data),
 }
 

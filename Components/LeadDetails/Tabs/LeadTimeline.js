@@ -16,157 +16,102 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import TimelineOppositeContent, {
     timelineOppositeContentClasses,
-  } from '@mui/lab/TimelineOppositeContent';
-  
-export default function BasicSelect() {
-  const [select, setAge] = React.useState('');
+} from '@mui/lab/TimelineOppositeContent';
+import { LeadApi } from '@/data/Endpoints/Lead';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import moment from 'moment';
+import { Skeleton } from '@mui/material';
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+export default function BasicSelect({ id }) {
+    const [select, setAge] = React.useState('');
+    const [list, setList] = useState([])
+    const [limit, setLimit] = useState(10)
+    const [laoding, setLaoding] = useState(false)
 
-  return (
-   
-    <div className='lead-tabpanel-content-block timeline'>
-        <div className='lead-tabpanel-content-block-title'>
-            <h2>Timeline</h2>
-            <div className='timeline-top-right-block'>
-                <Box className="" sx={{ minWidth: 120 }}>
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                        <Select className='tabpanel-select' labelId="demo-simple-select-label" id="demo-simple-select" value={select} label="Select" onChange={handleChange} >
-                            <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Box>
-            </div>
-        </div>
+    const handleChange = (event) => {
+        setAge(event.target.value);
+    };
 
-        <div className='timeline-content-block-item'>
-            <Timeline sx={{[`& .${timelineOppositeContentClasses.root}`]: {flex: 0.2,},}}>
-            <TimelineItem className='TimelineItemClass'>
-                <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
-                    13 Feb 2024 07:15 PM
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                <ThumbUpOffAltIcon className='timelineIcon'/>
-                <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                    <div className='timeline-content-content'>
-                        <p>NPF HE Demo [College Admin] changed lead stage from Stage: Untouched to Stage: Hot  .</p>
-                        <span>+10</span>
-                    </div>
-                </TimelineContent>
-            </TimelineItem>
+    const getData = async () => {
+        setLaoding(true)
+        const response = await LeadApi.timeline({ id, limit })
+        setList(response?.data)
+        setLaoding(false)
+    }
 
-            <TimelineItem className='TimelineItemClass'>
-                <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
-                01 Feb 2024 11:45 AM
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                <HelpOutlineIcon className='timelineIcon' />
-                <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                    <div className='timeline-content-content'>
-                        <p>NPF HE Demo closed Query Ticket: #19836</p>
-                        <span>0</span>
-                    </div>
-                </TimelineContent>
-            </TimelineItem>
-            
-            <TimelineItem className='TimelineItemClass'>
-                <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
-                    01 Feb 2024 11:44 AM
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                <ThumbUpOffAltIcon className='timelineIcon' />
-                <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                    <div className='timeline-content-content'>
-                        <p>NPF HE Demo replied to Query Ticket: #19836 .</p>
-                        <span>0</span>
-                    </div>
-                </TimelineContent>
-            </TimelineItem>
+    useEffect(() => {
+        getData()
+    }, [limit])
 
-            <TimelineItem className='TimelineItemClass'>
-                <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
-                    01 Feb 2024 11:42 AM
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                <ThumbUpOffAltIcon className='timelineIcon'/>
-                <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                    <div className='timeline-content-content'>
-                        <p>Basma raised Query Ticket: #19836 assigned to NA.</p>
-                        <span>+3</span>
-                    </div>
-                </TimelineContent>
-            </TimelineItem>
 
-            <TimelineItem className='TimelineItemClass'>
-                <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
-                01 Feb 2024 11:45 AM
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                <HelpOutlineIcon className='timelineIcon'/>
-                <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                    <div className='timeline-content-content'>
-                        <p>NPF HE Demo closed Query Ticket: #19836</p>
-                        <span>0</span>
-                    </div>
-                </TimelineContent>
-            </TimelineItem>
-            
-            <TimelineItem className='TimelineItemClass'>
-                <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
-                    01 Feb 2024 11:44 AM
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                <ThumbUpOffAltIcon className='timelineIcon'/>
-                <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                    <div className='timeline-content-content'>
-                        <p>NPF HE Demo replied to Query Ticket: #19836 .</p>
-                        <span>0</span>
-                    </div>
-                </TimelineContent>
-            </TimelineItem>
+    return (
 
-            <TimelineItem className='TimelineItemClass'>
-                <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
-                    01 Feb 2024 11:42 AM
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                <ThumbUpOffAltIcon className='timelineIcon'/>
-                <TimelineConnector />
-                </TimelineSeparator>
-                <TimelineContent>
-                    <div className='timeline-content-content'>
-                        <p>Basma raised Query Ticket: #19836 assigned to NA.</p>
-                        <span>+3</span>
-                    </div>
-                </TimelineContent>
-            </TimelineItem>
-
-            </Timeline>
-
-            <div className='loadmore-btn-block'>
-                <button className='loadmore-btn' > <CachedIcon />Load More </button>
+        <div className='lead-tabpanel-content-block timeline'>
+            <div className='lead-tabpanel-content-block-title'>
+                <h2>Timeline</h2>
+                <div className='timeline-top-right-block'>
+                    <Box className="" sx={{ minWidth: 120 }}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                            <Select className='tabpanel-select' labelId="demo-simple-select-label" id="demo-simple-select" value={select} label="Select" onChange={handleChange} >
+                                <MenuItem value={10}>Ten</MenuItem>
+                                <MenuItem value={20}>Twenty</MenuItem>
+                                <MenuItem value={30}>Thirty</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                </div>
             </div>
 
+            {
+                laoding ?
+                    <Skeleton variant="rectangular" width={'100%'} height={200} />
+                    :
+                    <div className='timeline-content-block-item'>
+                        {
+                            list?.data?.length > 0 ?
+                                <Timeline sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
+                                    {
+                                        list?.data?.map((obj, index) => (
+                                            <TimelineItem key={index} className='TimelineItemClass'>
+                                                <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
+                                                    {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')}
+                                                </TimelineOppositeContent>
+                                                <TimelineSeparator>
+                                                    <ThumbUpOffAltIcon className='timelineIcon' />
+                                                    <TimelineConnector />
+                                                </TimelineSeparator>
+                                                <TimelineContent>
+                                                    <div className='timeline-content-content'>
+                                                        <p>{obj?.description}</p>
+                                                        {/* <span>+10</span> */}
+                                                    </div>
+                                                </TimelineContent>
+                                            </TimelineItem>
+                                        ))
+                                    }
+
+                                </Timeline>
+                                :
+                                <div className='no-follw-up-block'>
+                                    <h4>No Timeline for this Lead</h4>
+                                </div>
+                        }
+
+
+                        {
+                            (list?.meta?.total != list?.meta?.to && list?.meta?.total != 0) &&
+                            <div className='loadmore-btn-block'>
+                                <button className='loadmore-btn' onClick={() => setLimit(limit + 5)} > <CachedIcon />Load More </button>
+                            </div>
+                        }
+
+
+                    </div>
+            }
         </div>
-    </div>
-   
-   
-  );
+
+
+    );
 }

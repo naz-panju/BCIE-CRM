@@ -254,9 +254,10 @@ ul#menuList li {
   align-items: center;
   border-bottom: 1px solid rgba(255,255,255,0.035);
 }
-ul#menuList li:nth-child(even){
+/* for background color purpose */
+/* ul#menuList li:nth-child(even){
   background-color: #202b46;
-}
+} */
 .sidebar.active .mainList>li a {
   min-width: 208px;
   white-space: nowrap;
@@ -960,5 +961,9 @@ button.loadmore-btn {
   to {
       transform: rotate(360deg);
   }
+}
+
+.sidebar-selected{
+  background-color: #4285f4;
 }
 

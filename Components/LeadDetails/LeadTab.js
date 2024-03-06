@@ -18,6 +18,8 @@ import LeadCommunicationLog from './Tabs/LeadCommunicationLog'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import CreateLead from '../Lead/Create/Create';
+import LeadDocuments from './Tabs/document/LeadDocuments';
+import { Skeleton } from '@mui/material';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -57,7 +59,7 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh }) {
+export default function VerticalTabs({ data, refresh, setRefresh,loading }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
@@ -96,12 +98,16 @@ export default function VerticalTabs({ data, refresh, setRefresh }) {
           <Tab className='lead-tab-item' icon={<AccessTimeIcon />} label="Timeline" {...a11yProps(1)} />
           <Tab className='lead-tab-item' icon={<ChecklistIcon />} label="Follow up & Notes" {...a11yProps(2)} />
           <Tab className='lead-tab-item' icon={<ChatBubbleOutlineIcon />} label="Communication Logs" {...a11yProps(3)} />
-          <Tab className='lead-tab-item' icon={<FolderOpenIcon />} label="Document Locker" {...a11yProps(4)} />
+          <Tab className='lead-tab-item' icon={<FolderOpenIcon />} label="Documents" {...a11yProps(4)} />
           <Tab className='lead-tab-item' icon={<PostAddIcon />} label="Tickets" {...a11yProps(5)} />
           <Tab className='lead-tab-item' icon={<PhoneIcon />} label="Call Logs" {...a11yProps(6)} />
         </Tabs>
         <TabPanel className='lead-tabpanel' value={value} index={0}>
+
           {
+            loading ?
+            <Skeleton variant="rectangular" width={'100%'} height={300} /> 
+            :
             isClient && (
               <div className='lead-tabpanel-content-block'>
                 <div className='lead-tabpanel-content-block-title'>
@@ -158,7 +164,7 @@ export default function VerticalTabs({ data, refresh, setRefresh }) {
         </TabPanel>
 
         <TabPanel className='lead-tabpanel' value={value} index={1}>
-          <LeadTimeline />
+          <LeadTimeline id={data?.id} />
         </TabPanel>
 
         <TabPanel className='lead-tabpanel' value={value} index={2}>
@@ -168,15 +174,7 @@ export default function VerticalTabs({ data, refresh, setRefresh }) {
           <LeadCommunicationLog />
         </TabPanel>
         <TabPanel className='lead-tabpanel' value={value} index={4}>
-          <div className='lead-tabpanel-content-block'>
-            <div className='lead-tabpanel-content-block-title'>
-              <h2>Lead Details</h2>
-            </div>
-            <div className='no-follw-up-block'>
-              <h4>You have no follow-ups<br />
-                and Remarks for Basma</h4>
-            </div>
-          </div>
+          <LeadDocuments id={data?.id} />
         </TabPanel>
         <TabPanel className='lead-tabpanel' value={value} index={5}>
           Item Six

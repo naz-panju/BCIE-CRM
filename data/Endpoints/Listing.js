@@ -7,4 +7,5 @@ export const ListingApi = {
     universities: (data) => http.get(`listing/universities`, { params: data }),
     courses:(data) => http.get(`listing/courses`, { params: data }),
     users:(data) => http.get(`listing/users`, { params: data }),
+    documentTemplate:(data) => http.get(`listing/document-templates`, { params: data }),
 }

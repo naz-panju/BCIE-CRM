@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import Image from "next/image";
 import LogoIcon from '@/styles/logo65cc654bac92a.png';
 import Logo from '@/styles/logo65cc655649912.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { faTableColumns } from '@fortawesome/free-solid-svg-icons';
-import { faHouseChimney } from '@fortawesome/free-solid-svg-icons';
-import { AccountBalance, AccountBalanceOutlined, CampaignOutlined, Dashboard, DashboardOutlined, HelpOutline, LeaderboardOutlined, NoteAltOutlined, PaidOutlined, PersonOutline, PieChartOutline, PlaylistAddOutlined, SignalCellular0BarOutlined } from '@mui/icons-material';
+
+import { NoteAltOutlined, PersonOutline } from '@mui/icons-material';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Sidebar = () => {
     const [isExpanded, setIsExpanded] = useState(false);
+
+    const router = useRouter()
 
     const handleMouseEnter = () => {
         setIsExpanded(true);
@@ -56,7 +56,8 @@ const Sidebar = () => {
 
                     {
                         SideBarOptions?.map((obj, index) => (
-                            <li key={index}><Link href={obj?.href}><i><obj.icon fontSize='small' /></i><span>{obj?.title}</span></Link></li>
+
+                            <li className={router?.route == obj?.href ? 'sidebar-selected' : ''} key={index}><Link href={obj?.href}><i><obj.icon fontSize='small' /></i><span>{obj?.title}</span></Link></li>
                         ))
                     }
                     {/* <li><a href='#'><i><DashboardOutlined fontSize='small' /></i><span>Dashboard</span></a></li>

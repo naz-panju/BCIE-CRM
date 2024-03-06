@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast';
 import moment from 'moment';
 import { Delete, DeleteForever, Edit } from '@mui/icons-material';
 import { TaskApi } from '@/data/Endpoints/Task';
+import DeletePopup from '@/Components/Common/Popup/delete';
 
 
 
@@ -45,7 +46,7 @@ const TaskNotes = (props) => {
 
         let dataToSubmit = {
             task_id: props.id,
-            note: data.note,
+            note: watch('note'),
         }
 
         console.log(dataToSubmit);
@@ -98,10 +99,9 @@ const TaskNotes = (props) => {
         setbuttonText('Add');
     }
 
-    // const deleteFunction = () => {
-    //     fetchNotes()
-    //     props?.count()
-    // }
+    const deleteFunction = () => {
+        fetchNotes()
+    }
 
     const toggleReadMore = (id) => {
         if (expandedNotes.includes(id)) {
@@ -126,17 +126,18 @@ const TaskNotes = (props) => {
     return (
         <Grid p={2}>
 
-            {/* {
+            {
                 deleteID &&
-                <Delete
+                <DeletePopup
+                    type={'post'}
                     ID={deleteID}
                     setID={setDeleteID}
                     setDeletePopup={setDeleteID}
                     Callfunc={() => deleteFunction()}
-                    url="/projects/tasks/notes/delete?id="
+                    api={TaskApi.deleteNote}
                     title="Note"
                 />
-            } */}
+            }
 
 
 
@@ -162,8 +163,7 @@ const TaskNotes = (props) => {
                 </Grid>
 
                 <Grid sx={{ pt: 2, pb: 2 }} display={'flex'} justifyContent={'end'} item xs={12}>
-                    <LoadingButton loading={submitLoading} disabled={submitLoading}
-                        variant="outlined" type="submit">{buttonText}</LoadingButton>
+                    <LoadingButton loading={submitLoading} disabled={submitLoading} size='small' sx={{ textTransform: 'none', height: 35 }} onClick={onSubmit} variant='outlined'>{buttonText}</LoadingButton>
                 </Grid>
             </form>
 

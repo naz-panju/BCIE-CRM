@@ -60,6 +60,7 @@ const SelectX = (props) => {
                 render={({ field }) => (
                     <AsyncSelect
                         {...field}
+                        required={props?.required || false}
                         isClearable={true}
                         defaultOptions
                         loadOptions={props.loadOptions} // Corrected prop name
