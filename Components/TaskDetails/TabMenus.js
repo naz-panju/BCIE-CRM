@@ -12,6 +12,7 @@ import { Close } from '@mui/icons-material';
 import { TaskApi } from '@/data/Endpoints/Task';
 import { useEffect } from 'react';
 import TaskNotes from './Tabs/Notes';
+import CheckListTab from './Tabs/CheckList';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,17 +51,25 @@ export default function TaskDetailTabs({ id, close }) {
     const [value, setValue] = React.useState(0);
     const [activeTab, setActiveTab] = useState(0);
     const [details, setDetails] = useState()
+    const [loading, setLoading] = useState(false)
 
     const handleChange = (event, newValue) => {
         setActiveTab(newValue);
     };
 
     const getDetails = async () => {
-        const response = await TaskApi.view({ id })
-        if (response?.data?.data) {
-            let data = response?.data?.data
-            setDetails(response?.data?.data)
+        setLoading(true)
+        try {
+            const response = await TaskApi.view({ id })
+            if (response?.data?.data) {
+                setDetails(response?.data?.data)
+                setLoading(false)
+            }
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
         }
+
     }
 
     useEffect(() => {
@@ -72,7 +81,7 @@ export default function TaskDetailTabs({ id, close }) {
 
     const tabs = [
         {
-            component: <Details data={details} />,
+            component: <Details data={details} loading={loading} />,
             label: 'Details'
         },
         {
@@ -80,7 +89,7 @@ export default function TaskDetailTabs({ id, close }) {
             label: 'Document'
         },
         {
-            component: <Details />,
+            component: <CheckListTab id={id} />,
             label: 'Checklist'
         },
         {

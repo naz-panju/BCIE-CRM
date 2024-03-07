@@ -9,6 +9,7 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import moment from 'moment';
 import { Skeleton } from '@mui/material';
+import { Percent, QrCode } from '@mui/icons-material';
 
 
 function LeadDetails() {
@@ -25,7 +26,7 @@ function LeadDetails() {
     setLoading(true)
     try {
       const response = await LeadApi.view({ id: urlID })
-      console.log(response?.data?.data);
+      // console.log(response?.data?.data);
       setDetails(response?.data?.data)
       setLoading(false)
     } catch (error) {
@@ -55,45 +56,87 @@ function LeadDetails() {
             <div className='w-full md:w-4/12 lg:w-4/12 pad-10 '>
 
               <div className='lead-top-details-block'>
-                {
+                {/* {
                   loading ?
-                    <Skeleton variant="rectangular" width={'100%'} height={165} />  
-                    :  
-                    <>
-                      <div className='lead-top-details-block-name'>
-                        <div>
-                          <div className="nameInitialsDiv">
-                            <div className="nameInitials">{details?.name && details.name[0]}</div>
-                          </div>
-                          <div className="tileCellDiv">
-                            <h4>{details?.name}</h4>
-                            <div className="leadStageBox">
+                    <Skeleton variant="rectangular" width={'100%'} height={165} />
+                    : */}
+                <>
+                  <div className='lead-top-details-block-name'>
+                    <div>
+                      <div className="nameInitialsDiv">
+                        <div className="nameInitials">
+                          {
+                            loading ?
+                              <Skeleton variant="circular" width={30} height={30} />
+                              :
+                              details?.name && details.name[0]
+                          }
+                        </div>
+                      </div>
+                      <div className="tileCellDiv">
+                        <h4>{details?.name}</h4>
+                        <div className="leadStageBox">
+                          {
+                            loading ?
+                              <Skeleton variant="rectangular" width={100} height={30} />
+                              :
                               <a className="word-break leadStage lscommonTour">{details?.stage?.name}
                                 <span className="draw-edit" style={{ fontWeight: 600 }}></span>
                               </a>
-                            </div>
-                          </div>
+                          }
+
                         </div>
+                      </div>
+                    </div>
 
-                        <div className="tileCellDiv qr-code-scan text-right">
+                    <div className="tileCellDiv qr-code-scan text-right">
+                      {
+                        loading ?
+                          <Skeleton variant="rectangular" width={40} height={40} />
+                          :
                           <div id="leadQrCode">
-                            <a href="#" type="button"><FontAwesomeIcon icon={faQrcode} /><small className="text-dark">Scan from App</small></a></div></div>
-                      </div>
+                            <a href="#" type="button" className=''><QrCode /><small className="text-dark">Scan from App</small></a>
+                          </div>
+                      }
+                    </div>
+                  </div>
 
-                      <div className='lead-top-contact-details'>
+                  <div className='lead-top-contact-details'>
+                    {
+                      loading ?
+                        <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
+                        :
+                        details?.email &&
                         <p>Email: {details?.email}</p>
+                    }
+
+                    {
+                      loading ?
+                        <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
+                        :
+                        details?.phone_number &&
                         <p>Mobile: +{details?.phone_country_code} {details?.phone_number}</p>
-                        {
-                          details?.created_at &&
-                          <p>Added On: {moment(details?.created_at).format('DD MMM YYYY hh:mm A')}</p>
-                        }
-                        {
-                          details?.updated_at &&
-                          <p>Last Active: {moment(details?.updated_at).format('DD MMM YYYY hh:mm A')}</p>
-                        }
-                      </div>
-                    </>
-                }
+                    }
+
+                    {
+                      loading ?
+                        <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
+                        :
+                        details?.created_at &&
+                        <p>Added On: {moment(details?.created_at).format('DD MMM YYYY hh:mm A')}</p>
+                    }
+
+                    {
+                      loading ?
+                        <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
+                        :
+                        details?.updated_at &&
+                        <p>Last Active: {moment(details?.updated_at).format('DD MMM YYYY hh:mm A')}</p>
+                    }
+
+                  </div>
+                </>
+                {/* } */}
 
               </div>
 
@@ -108,7 +151,8 @@ function LeadDetails() {
 
               <div className='generate-lead-block'>
                 <div className='lead-percent-icon'>
-                  <FontAwesomeIcon icon={faPercent} />
+                  <Percent />
+                  {/* <FontAwesomeIcon icon={faPercent} /> */}
                 </div>
                 <h4>Generate Lead Strength</h4>
               </div>

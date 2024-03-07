@@ -1,4 +1,4 @@
-import LeadDetail from '@/Components/LeadDetails/LeadDetail'
+import LeadDetail from '@/Components/LeadDetails/LeadDetailIndex'
 import Layout from '@/Components/Common/Layout'
 import React, { useEffect } from 'react'
 import { getSession } from 'next-auth/react'

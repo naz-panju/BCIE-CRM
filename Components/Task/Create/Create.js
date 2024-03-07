@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
-import { Button, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { Close, Refresh } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
@@ -18,6 +18,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
+import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 
 const scheme = yup.object().shape({
     title: yup.string().required("Title is Required"),
@@ -32,6 +33,18 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh }) {
     const [open, setOpen] = useState(false)
 
     const [loading, setLoading] = useState(false)
+
+    const [dataLoading, setDataLoading] = useState(false)
+
+    const items = [
+        { label: 'Title' },
+        { label: 'Due Date' },
+        { label: 'Assigned To' },
+        { label: 'Reviewer' },
+        { label: 'Priority' },
+        { label: 'Description', multi: true },
+
+    ]
 
     const anchor = 'right'; // Set anchor to 'right'
 
@@ -101,7 +114,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh }) {
 
         action.then((response) => {
             if (response?.data) {
-                toast.success('Task Has Been Successfully Created ')
+                toast.success(editId > 0 ? 'Task Has Been Successfully Updated' : 'Task Has Been Successfully Created')
                 reset()
                 handleClose()
                 setRefresh()
@@ -135,10 +148,14 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh }) {
 
 
     const handleClose = () => {
-        setOpen(false)
-        reset()
-        setSelectedPriority('Medium')
         setEditId()
+        reset()
+        setValue('title', '')
+        setValue('date', '')
+        setValue('assigned_to', '')
+        setValue('reviewer', '')
+        setOpen(false)
+        setSelectedPriority('Medium')
     }
 
     const handleDrawerClose = (event) => {
@@ -155,18 +172,24 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh }) {
     };
 
     const getDetails = async () => {
-        const response = await TaskApi.view({ id: editId })
-        if (response?.data?.data) {
-            let data = response?.data?.data
-            // console.log(data);
+        setDataLoading(true)
+        try {
+            const response = await TaskApi.view({ id: editId })
+            if (response?.data?.data) {
+                let data = response?.data?.data
+                // console.log(data);
 
-            setValue('title', data?.title)
-            setValue('date', data?.due_date)
-            setValue('assigned_to', data?.assignedToUser)
-            setValue('reviewer', data?.reviewer)
-            setSelectedPriority(data?.priority)
-            setValue('description', data?.description)
-
+                setValue('title', data?.title)
+                setValue('date', data?.due_date)
+                setValue('assigned_to', data?.assignedToUser)
+                setValue('reviewer', data?.reviewer)
+                setSelectedPriority(data?.priority)
+                setValue('description', data?.description)
+                setDataLoading(false)
+            }
+            setDataLoading(false)
+        } catch (error) {
+            setDataLoading(false)
         }
     }
 
@@ -200,6 +223,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh }) {
                     </Grid>
                     <hr />
                     <div>
+
                         <form onSubmit={handleSubmit(onSubmit)}>
 
                             {/* <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
@@ -217,105 +241,110 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh }) {
                                     />
                                 </Grid>
                             </Grid> */}
+                            {
+                                dataLoading ?
+                                    <LoadingEdit item={items} />
+                                    :
+                                    <>
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Title</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                <TextInput control={control} name="title"
+                                                    value={watch('title')} />
+                                                {errors.title && <span className='form-validation'>{errors.title.message}</span>}
+                                            </Grid>
+                                        </Grid>
 
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={4}>
-                                    <Typography sx={{ fontWeight: '500' }}>Title</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={8}>
-                                    <TextInput control={control} name="title"
-                                        value={watch('title')} />
-                                    {errors.title && <span className='form-validation'>{errors.title.message}</span>}
+                                        {/* date */}
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Due Date</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
+                                                <DateInput
+                                                    control={control}
+                                                    name="date"
+                                                    value={watch('date')}
+                                                // placeholder='Due Date'
+                                                />
+                                                {/* </LocalizationProvider> */}
 
-                                </Grid>
-                            </Grid>
+                                            </Grid>
+                                        </Grid>
 
-                            {/* date */}
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={4}>
-                                    <Typography sx={{ fontWeight: '500' }}>Due Date</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={8}>
-                                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
-                                        <DateInput
-                                            control={control}
-                                            name="date"
-                                            value={watch('date')}
-                                            // placeholder='Due Date'
-                                        />
-                                    {/* </LocalizationProvider> */}
+                                        {/* assigned to */}
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Assigned To</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                <SelectX
+                                                    loadOptions={fetchUser}
+                                                    control={control}
+                                                    // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                    // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                    name={'assigned_to'}
+                                                    defaultValue={watch('assigned_to')}
+                                                />
+                                            </Grid>
+                                        </Grid>
 
-                                </Grid>
-                            </Grid>
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Reviewer</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                <SelectX
+                                                    loadOptions={fetchUser}
+                                                    control={control}
+                                                    // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                    // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                    name={'reviewer'}
+                                                    defaultValue={watch('reviewer')}
+                                                />
+                                            </Grid>
+                                        </Grid>
 
-                            {/* assigned to */}
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={4}>
-                                    <Typography sx={{ fontWeight: '500' }}>Assigned To</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={8}>
-                                    <SelectX
-                                        loadOptions={fetchUser}
-                                        control={control}
-                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'assigned_to'}
-                                        defaultValue={watch('assigned_to')}
-                                    />
-                                </Grid>
-                            </Grid>
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Priority</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                {priority.map(obj => {
+                                                    return <DynamicChip key={obj.name} name={obj.name} id={obj.name} active={selectedPriority} onChipCLick={handlePriorityChange} />
+                                                })}
+                                            </Grid>
+                                        </Grid>
 
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={4}>
-                                    <Typography sx={{ fontWeight: '500' }}>Reviewer</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={8}>
-                                    <SelectX
-                                        loadOptions={fetchUser}
-                                        control={control}
-                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'reviewer'}
-                                        defaultValue={watch('reviewer')}
-                                    />
-                                </Grid>
-                            </Grid>
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Description</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                <TextField
+                                                    {...register('description')}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    multiline
+                                                    rows={2}
+                                                    sx={{ width: '100%', }}
+                                                />
+                                                {errors.description && <span className='form-validation'>{errors.description.message}</span>}
 
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={4}>
-                                    <Typography sx={{ fontWeight: '500' }}>Priority</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={8}>
-                                    {priority.map(obj => {
-                                        return <DynamicChip key={obj.name} name={obj.name} id={obj.name} active={selectedPriority} onChipCLick={handlePriorityChange} />
-                                    })}
-                                </Grid>
-                            </Grid>
-
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={4}>
-                                    <Typography sx={{ fontWeight: '500' }}>Description</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={8}>
-                                    <TextField
-                                        {...register('description')}
-                                        variant="outlined"
-                                        fullWidth
-                                        multiline
-                                        rows={2}
-                                        sx={{ width: '100%', }}
-                                    />
-                                    {errors.description && <span className='form-validation'>{errors.description.message}</span>}
-
-                                    {/* <Editor emoji={false} val={watch('description')}
-                                        onValueChange={e => setValue('description', e)}
-                                    /> */}
-                                </Grid>
-                            </Grid>
+                                                {/* <Editor emoji={false} val={watch('description')}
+                                            onValueChange={e => setValue('description', e)}
+                                        /> */}
+                                            </Grid>
+                                        </Grid>
+                                    </>
+                            }
 
                             <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                                 <Button size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <LoadingButton loading={loading} disabled={loading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
+                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
                             </Grid>
 
                         </form>

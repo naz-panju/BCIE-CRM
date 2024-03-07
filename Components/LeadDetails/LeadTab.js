@@ -11,7 +11,6 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import PostAddIcon from '@mui/icons-material/PostAdd';
-import EditNoteIcon from '@mui/icons-material/EditNote';
 import LeadTimeline from './Tabs/LeadTimeline';
 import LeadFollowUp from './Tabs/LeadFollowUp';
 import LeadCommunicationLog from './Tabs/LeadCommunicationLog'
@@ -20,6 +19,7 @@ import { useEffect } from 'react';
 import CreateLead from '../Lead/Create/Create';
 import LeadDocuments from './Tabs/document/LeadDocuments';
 import { Skeleton } from '@mui/material';
+import LeadDetail from './Tabs/LeadDetail';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -105,60 +105,8 @@ export default function VerticalTabs({ data, refresh, setRefresh,loading }) {
         <TabPanel className='lead-tabpanel' value={value} index={0}>
 
           {
-            loading ?
-            <Skeleton variant="rectangular" width={'100%'} height={300} /> 
-            :
             isClient && (
-              <div className='lead-tabpanel-content-block'>
-                <div className='lead-tabpanel-content-block-title'>
-                  <h2>Lead Details</h2>
-                  <a onClick={handleEdit} className='edit-btn' style={{ cursor: 'pointer' }}><EditNoteIcon /></a>
-                </div>
-                <div className='lead-tabpanel-content-item'>
-                  <div className="lead-details-list">
-                    <label>Form Interested In </label>: {data?.applyingForCourse?.name}
-                  </div>
-
-                  <div className="lead-details-list">
-                    <label>Email Address </label>: {data?.email}
-                  </div>
-
-                  <div className="lead-details-list">
-                    <label>Mobile Number  </label>: +{data?.phone_country_code} {data?.phone_number}
-                  </div>
-
-                  <div className="lead-details-list">
-                    <label>Alternate Mobile Number </label>:
-                    {
-                      data?.alternate_phone_number ?
-                        ` +${data?.alternate_phone_country_code} ${data?.alternate_phone_number}`
-                        : ' NA'
-                    }
-                  </div>
-
-                  <div className="lead-details-list">
-                    <label>Name </label>: {data?.name}
-                  </div>
-
-                  <div className="lead-details-list">
-                    <label>Country Applying For </label>: {data?.applyingForCountry?.name}
-                  </div>
-
-                  <div className="lead-details-list">
-
-                    <label>University Applying For </label>: {data?.applyingForUniversity?.name}
-                  </div>
-
-                  <div className="lead-details-list">
-                    <label>Lead Stage </label>: {data?.stage?.name}
-                  </div>
-
-                  <div className="lead-details-list">
-                    <label>Forms Applied </label>: {data?.applyingForCourse?.name}
-                  </div>
-
-                </div>
-              </div>
+              <LeadDetail handleEdit={handleEdit} data={data} loading={loading} /> 
             )
           }
         </TabPanel>

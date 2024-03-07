@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from 'react'
 import { LoadingButton } from '@mui/lab'
+import LoadingEdit from '@/Components/Common/Loading/LoadingEdit'
 
 const scheme = yup.object().shape({
     name: yup.string().required("Name is Required"),
@@ -46,6 +47,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
     const [selectedCourseID, setselectedCourseID] = useState()
 
     const [loading, setLoading] = useState(false)
+    const [dataLoading, setDataLoading] = useState(false)
 
     const fetchCounty = (e) => {
         return ListingApi.country({ keyword: e }).then(response => {
@@ -164,13 +166,13 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             alternate_phone_country_code: altCode,
             alternate_phone_number: altPhone,
 
-            follow_up_assigned_to:data?.assigned_to?.id,
+            follow_up_assigned_to: data?.assigned_to?.id,
             applying_for_country_id: data?.country?.id,
             applying_for_university_id: data?.institute?.id,
             applying_for_course_id: data?.course?.id,
             next_follow_up_date: leadDate,
             stage_id: data?.stage?.id,
-            substage_id: data?.sub_stage?.id,    
+            substage_id: data?.sub_stage?.id,
             note: data?.note
         }
 
@@ -192,7 +194,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                 reset()
                 handleClose()
                 setLoading(false)
-            }else{
+            } else {
                 toast.error(response?.response?.data?.message)
             }
         }).catch((error) => {
@@ -221,6 +223,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
     }
 
     const getDetails = async () => {
+        setDataLoading(true)
         const response = await LeadApi.view({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
@@ -253,6 +256,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             // setValue()
             // setValue()
         }
+        setDataLoading(false)
     }
 
     useEffect(() => {
@@ -271,249 +275,271 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
         }
     }, [editId])
 
+    const items = [
+        { label: 'Name' },
+        { label: 'Email Address' },
+        { label: 'Mobile Number' },
+        { label: 'Alternate Mobile Number' },
+        { label: 'Country Applying For' },
+        { label: 'Institute Applying For' },
+        { label: 'Course Applying For' },
+        { label: 'Select Lead Stage' },
+        { label: 'Select Lead Sub Stage' },
+        { label: 'Follow-up Assigned To' },
+        { label: 'Set Follow-up Date' },
+        { label: 'Note', multi: true },
+
+    ]
+
     return (
         <div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 {/* <button type='reset' onClick={() => setLoading(false)}>click</button> */}
+                {
+                    dataLoading ?
+                        <LoadingEdit item={items} />
+                        :
+                        <>
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Name</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <TextInput control={control} {...register('name', { required: 'The Name field is required' })}
+                                        value={watch('name')} />
+                                    {errors.name && <span className='form-validation'>{errors.name.message}</span>}
+                                </Grid>
+                            </Grid>
 
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Name</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <TextInput control={control} {...register('name', { required: 'The Name field is required' })}
-                            value={watch('name')} />
-                        {errors.name && <span className='form-validation'>{errors.name.message}</span>}
-                    </Grid>
-                </Grid>
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Email Address</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <TextInput control={control} {...register('email', {
+                                        required: 'Please enter your email',
+                                        pattern: {
+                                            value: /^\S+@\S+$/i,
+                                            message: 'Please enter valid email address',
+                                        },
+                                    })}
+                                        value={watch('email')} />
+                                    {errors.email && <span className='form-validation'>{errors.email.message}</span>}
 
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Email Address</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <TextInput control={control} {...register('email', {
-                            required: 'Please enter your email',
-                            pattern: {
-                                value: /^\S+@\S+$/i,
-                                message: 'Please enter valid email address',
-                            },
-                        })}
-                            value={watch('email')} />
-                        {errors.email && <span className='form-validation'>{errors.email.message}</span>}
+                                </Grid>
+                            </Grid>
 
-                    </Grid>
-                </Grid>
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Mobile Number</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    {/* <TextInput control={control} name="mobile"
+                                value={watch('mobile')} /> */}
 
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Mobile Number</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        {/* <TextInput control={control} name="mobile"
-                            value={watch('mobile')} /> */}
+                                    <PhoneInput
+                                        {...register('phone', { required: 'Please enter your mobile number' })}
+                                        international
+                                        // autoFormat
+                                        placeholder="Enter your number"
+                                        country="in"
+                                        value={watch('phone')}
+                                        onChange={handlePhoneNumber}
+                                        inputprops={{
+                                            autoFocus: true,
+                                            autoComplete: 'off',
+                                            // name: 'phone',
+                                            required: true,
+                                        }}
+                                        inputstyle={{
+                                            width: '100%',
+                                            height: '40px',
+                                            paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                        }}
+                                        buttonstyle={{
+                                            border: 'none',
+                                            backgroundColor: 'transparent',
+                                            marginLeft: '5px',
+                                        }}
+                                    />
+                                    {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
 
-                        <PhoneInput
-                            {...register('phone', { required: 'Please enter your mobile number' })}
-                            international
-                            // autoFormat
-                            placeholder="Enter your number"
-                            country="in"
-                            value={watch('phone')}
-                            onChange={handlePhoneNumber}
-                            inputprops={{
-                                autoFocus: true,
-                                autoComplete: 'off',
-                                // name: 'phone',
-                                required: true,
-                            }}
-                            inputstyle={{
-                                width: '100%',
-                                height: '40px',
-                                paddingLeft: '40px', // Adjust the padding to make space for the country symbol
-                            }}
-                            buttonstyle={{
-                                border: 'none',
-                                backgroundColor: 'transparent',
-                                marginLeft: '5px',
-                            }}
-                        />
-                        {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
+                                </Grid>
+                            </Grid>
 
-                    </Grid>
-                </Grid>
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Alternate Mobile Number</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <PhoneInput
+                                        {...register('alt_phone')}
 
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Alternate Mobile Number</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <PhoneInput
-                            {...register('alt_phone')}
+                                        international
+                                        // autoFormat
+                                        placeholder="Enter your number"
+                                        country="in"
+                                        value={watch('alt_phone')}
+                                        onChange={handleAltPhoneNumber}
+                                        inputprops={{
+                                            autoFocus: true,
+                                            autoComplete: 'off',
+                                            name: 'phone',
+                                            required: true,
+                                        }}
+                                        inputstyle={{
+                                            width: '100%',
+                                            height: '40px',
+                                            paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                        }}
+                                        buttonstyle={{
+                                            border: 'none',
+                                            backgroundColor: 'transparent',
+                                            marginLeft: '5px',
+                                        }}
+                                    />
+                                    {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
 
-                            international
-                            // autoFormat
-                            placeholder="Enter your number"
-                            country="in"
-                            value={watch('alt_phone')}
-                            onChange={handleAltPhoneNumber}
-                            inputprops={{
-                                autoFocus: true,
-                                autoComplete: 'off',
-                                name: 'phone',
-                                required: true,
-                            }}
-                            inputstyle={{
-                                width: '100%',
-                                height: '40px',
-                                paddingLeft: '40px', // Adjust the padding to make space for the country symbol
-                            }}
-                            buttonstyle={{
-                                border: 'none',
-                                backgroundColor: 'transparent',
-                                marginLeft: '5px',
-                            }}
-                        />
-                        {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
+                                </Grid>
+                            </Grid>
 
-                    </Grid>
-                </Grid>
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Country Applying For</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <SelectX
+                                        loadOptions={fetchCounty}
+                                        control={control}
+                                        name={'country'}
+                                        defaultValue={watch('country')}
+                                    />
+                                    {errors.country && <span className='form-validation'>{errors.country.message}</span>}
 
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Country Applying For</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <SelectX
-                            loadOptions={fetchCounty}
-                            control={control}
-                            name={'country'}
-                            defaultValue={watch('country')}
-                        />
-                        {errors.country && <span className='form-validation'>{errors.country.message}</span>}
+                                </Grid>
+                            </Grid>
 
-                    </Grid>
-                </Grid>
+                            {/* institute */}
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Institute Applying For</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <SelectX
+                                        key={selectedCountryID}
+                                        loadOptions={fetchUniversities}
+                                        control={control}
+                                        rules={{ required: 'Institute is required' }}
+                                        name={'institute'}
+                                        defaultValue={watch('institute')}
+                                    />
+                                    {errors.institute && <span className='form-validation'>{errors.institute.message}</span>}
 
-                {/* institute */}
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Institute Applying For</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <SelectX
-                            key={selectedCountryID}
-                            loadOptions={fetchUniversities}
-                            control={control}
-                            rules={{ required: 'Institute is required' }}
-                            name={'institute'}
-                            defaultValue={watch('institute')}
-                        />
-                        {errors.institute && <span className='form-validation'>{errors.institute.message}</span>}
+                                </Grid>
+                            </Grid>
 
-                    </Grid>
-                </Grid>
+                            {/* course */}
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Course Applying For</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <SelectX
+                                        key={selectedInstituteID}
+                                        loadOptions={fetchCourse}
+                                        control={control}
+                                        // error={errors?.institute?.id ? errors?.institute?.id?.message : false}
+                                        // error2={errors?.institute?.message ? errors?.institute?.message : false}
+                                        name={'course'}
+                                        defaultValue={watch('course')}
+                                    />
+                                    {errors.course && <span className='form-validation'>{errors.course.message}</span>}
 
-                {/* course */}
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Course Applying For</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <SelectX
-                            key={selectedInstituteID}
-                            loadOptions={fetchCourse}
-                            control={control}
-                            // error={errors?.institute?.id ? errors?.institute?.id?.message : false}
-                            // error2={errors?.institute?.message ? errors?.institute?.message : false}
-                            name={'course'}
-                            defaultValue={watch('course')}
-                        />
-                        {errors.course && <span className='form-validation'>{errors.course.message}</span>}
+                                </Grid>
+                            </Grid>
 
-                    </Grid>
-                </Grid>
+                            {/* stage */}
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Select Lead Stage</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <SelectX
+                                        loadOptions={fetchStages}
+                                        control={control}
+                                        // error={errors?.stage?.id ? errors?.stage?.id?.message : false}
+                                        // error2={errors?.stage?.message ? errors?.stage?.message : false}
+                                        name={'stage'}
+                                        defaultValue={watch('stage')}
+                                    />
+                                </Grid>
+                            </Grid>
 
-                {/* stage */}
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Select Lead Stage</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <SelectX
-                            loadOptions={fetchStages}
-                            control={control}
-                            // error={errors?.stage?.id ? errors?.stage?.id?.message : false}
-                            // error2={errors?.stage?.message ? errors?.stage?.message : false}
-                            name={'stage'}
-                            defaultValue={watch('stage')}
-                        />
-                    </Grid>
-                </Grid>
+                            {/* sub stage */}
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Select Lead Sub Stage</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <SelectX
+                                        loadOptions={fetchSubStages}
+                                        control={control}
+                                        // error={errors?.sub_stage?.id ? errors?.sub_stage?.message : false}
+                                        // error2={errors?.sub_stage?.message ? errors?.sub_stage?.message : false}
+                                        name={'sub_stage'}
+                                        defaultValue={watch('sub_stage')}
+                                    />
+                                </Grid>
+                            </Grid>
 
-                {/* sub stage */}
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Select Lead Sub Stage</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <SelectX
-                            loadOptions={fetchSubStages}
-                            control={control}
-                            // error={errors?.sub_stage?.id ? errors?.sub_stage?.message : false}
-                            // error2={errors?.sub_stage?.message ? errors?.sub_stage?.message : false}
-                            name={'sub_stage'}
-                            defaultValue={watch('sub_stage')}
-                        />
-                    </Grid>
-                </Grid>
+                            {/* assigned to */}
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Follow-up Assigned To</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <SelectX
+                                        loadOptions={fetchUser}
+                                        control={control}
+                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                        name={'assigned_to'}
+                                        defaultValue={watch('assigned_to')}
+                                    />
+                                    {errors?.assigned_to && <span className='form-validation'>{errors.assigned_to.message}</span>}
+                                </Grid>
+                            </Grid>
 
-                {/* assigned to */}
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Follow-up Assigned To</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <SelectX
-                            loadOptions={fetchUser}
-                            control={control}
-                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                            name={'assigned_to'}
-                            defaultValue={watch('assigned_to')}
-                        />
-                        {errors?.assigned_to && <span className='form-validation'>{errors.assigned_to.message}</span>}
-                    </Grid>
-                </Grid>
+                            {/* date */}
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Set Follow-up Date</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
+                                    <DateInput
+                                        control={control}
+                                        // label='Followup Date'
+                                        name="date"
+                                        value={watch('date') || null}
+                                        textField={(props) => <TextField {...props} />}
+                                    />
+                                    {/* </LocalizationProvider> */}
 
-                {/* date */}
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Set Follow-up Date</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
-                        <DateInput
-                            control={control}
-                            // label='Followup Date'
-                            name="date"
-                            value={watch('date') || null}
-                            textField={(props) => <TextField {...props} />}
-                        />
-                        {/* </LocalizationProvider> */}
+                                </Grid>
+                            </Grid>
 
-                    </Grid>
-                </Grid>
-
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Note</Typography>
-                    </Grid>
-                    <Grid item md={7}>
-                        <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
-                            value={watch('note')} />
-                    </Grid>
-                </Grid>
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Note</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
+                                        value={watch('note')} />
+                                </Grid>
+                            </Grid>
+                        </>
+                }
 
                 <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                     <Button size='small' sx={{ textTransform: 'none', mr: 2, height: 30 }} variant='outlined'>Cancel</Button>

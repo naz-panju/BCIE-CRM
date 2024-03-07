@@ -11,5 +11,12 @@ export const TaskApi = {
     updateNote: (data) => http.post(`tasks/notes/update`, data),
     viewNote: (data) => http.get(`tasks/notes/view/${data?.id}`, {params:data}),
     deleteNote:(data) => http.post(`tasks/notes/delete`, data),
+
+    listChecklist: (data) => http.get(`tasks/checklists/${data?.id}`, {params:data}),
+    addChecklist: (data) => http.post(`tasks/checklists/store`, data),
+    viewChecklist: (data) => http.get(`tasks/checklists/view/${data?.id}`, {params:data}),
+    updateChecklist: (data) => http.post(`tasks/checklists/update`, data),
+    deleteChecklist:(data) => http.post(`tasks/checklists/delete`, data),
+
 }
 

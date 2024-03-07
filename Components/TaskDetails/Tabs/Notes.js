@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Divider, Grid, Slide, TextField, Typography } from "@mui/material";
+import { Button, Divider, Grid, Skeleton, Slide, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { LoadingButton } from "@mui/lab";
 import { toast } from 'react-hot-toast';
@@ -22,15 +22,17 @@ const TaskNotes = (props) => {
     const [expandedNotes, setExpandedNotes] = useState([]);
     const [submitLoading, setSubmitLoading] = useState(false)
     const [buttonText, setbuttonText] = useState('Add')
+    const [total, setTotal] = useState()
 
 
     const fetchNotes = () => {
         setLoading(true)
-        TaskApi.listNotes({ id: props.id }).then((notes) => {
+        TaskApi.listNotes({ limit: 50, id: props.id }).then((notes) => {
             console.log(notes);
             if (notes?.data?.data?.length > 0) {
                 setNotes(notes.data)
                 setLoading(false)
+                setTotal(notes?.data?.meta?.total)
             }
             setLoading(false)
         }).catch((error) => {
@@ -70,16 +72,6 @@ const TaskNotes = (props) => {
         }).catch(errors => {
             setSubmitLoading(false)
             toast.error("server error")
-        })
-    }
-
-    const fetchDetails = () => {
-        setLoading(true)
-        TaskApi.getNoteDetails({ id: props.id }).then((response) => {
-            console.log(response);
-            let data = response.data.data
-            setValue('note', data.note)
-            setLoading(false)
         })
     }
 
@@ -172,47 +164,77 @@ const TaskNotes = (props) => {
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={12}>
 
-                    {Notes &&
-                        Notes?.data?.map((note) => (
+                    {
+                        loading ?
+                            // for loading
                             <>
-                                <Typography variant="body2" style={{ paddingTop: 2, fontSize: '16px', whiteSpace: 'pre-line' }}>
-
-                                    <a style={{}} className="text">
-                                        {note.note.length <= 140 ? (
-                                            <a style={{ fontWeight: 400 }}>{note.note}</a>
-                                        ) : (
-                                            expandedNotes.includes(note.id) ? (
-                                                <div>
-                                                    <a>{note?.note}</a>
-                                                    <a onClick={() => toggleReadLess(note?.id)} style={{ color: 'blue', cursor: 'pointer' }}>  read less</a>
-                                                </div>
-                                            ) : (
-                                                <div>
-                                                    <a>{note?.note.slice(0, 140)}</a>
-                                                    <a onClick={() => toggleReadMore(note?.id)} style={{ color: 'blue', cursor: 'pointer' }}> ...read more</a>
-                                                </div>
-                                            )
-                                        )}
-                                    </a>
-
-                                    <Grid display={'flex'} justifyContent={'space-between'} mt={1}>
-                                        <Grid display={'flex'} justifyContent={'space-between'} xs={6}>
-                                            <a style={{ fontSize: 13, color: 'grey' }}>Date: {moment(note?.created_at).format('DD-MM-YYYY')}</a>
-                                            <a style={{ fontSize: 13, color: 'grey' }}>Added By: {note?.createdBy?.name}</a>
-                                        </Grid>
-                                        <Grid display={'flex'} justifyContent={'end'}>
-                                            <Button onClick={() => handleEdit(note)}>
-                                                <Edit fontSize='small' />
-                                            </Button>
-                                            <LoadingButton onClick={() => deleteNote(note.id)}>
-                                                <Delete color='error' fontSize='small' />
-                                            </LoadingButton>
-                                        </Grid>
-                                    </Grid>
-                                </Typography>
-                                <Divider sx={{ mb: 1 }} />
+                                {
+                                    [...Array(total || 4)]?.map((_, index) => (
+                                        <div key={index}>
+                                            <Typography variant="body2" style={{ paddingTop: 2 }}>
+                                                <a>
+                                                    <Skeleton variant="rectangular" width={350} height={20} />
+                                                </a>
+                                                <Grid display={'flex'} justifyContent={'space-between'} mt={2}>
+                                                    <Grid mb={1} display={'flex'} xs={6}>
+                                                        <Skeleton sx={{ mr: 2 }} variant="rectangular" width={100} height={20} />
+                                                        <Skeleton variant="rectangular" width={100} height={20} />
+                                                    </Grid>
+                                                </Grid>
+                                            </Typography>
+                                            <Divider sx={{ mb: 1 }} />
+                                        </div>
+                                    ))}
                             </>
-                        ))}
+                            :
+                            Notes && Notes.data && Notes.data.length > 0 ? (
+                                Notes.data.map((note) => (
+                                    <div key={note.id}>
+                                        <Typography variant="body2" style={{ paddingTop: 2, fontSize: '16px', whiteSpace: 'pre-line' }}>
+                                            <a style={{}} className="text">
+                                                {note.note.length <= 140 ? (
+                                                    <a style={{ fontWeight: 400 }}>{note.note}</a>
+                                                ) : (
+                                                    expandedNotes.includes(note.id) ? (
+                                                        <div>
+                                                            <a>{note?.note}</a>
+                                                            <a onClick={() => toggleReadLess(note?.id)} style={{ color: 'blue', cursor: 'pointer' }}>  read less</a>
+                                                        </div>
+                                                    ) : (
+                                                        <div>
+                                                            <a>{note?.note.slice(0, 140)}</a>
+                                                            <a onClick={() => toggleReadMore(note?.id)} style={{ color: 'blue', cursor: 'pointer' }}> ...read more</a>
+                                                        </div>
+                                                    )
+                                                )}
+                                            </a>
+
+                                            <Grid display={'flex'} justifyContent={'space-between'} mt={1}>
+                                                <Grid display={'flex'} justifyContent={'space-between'} xs={6}>
+                                                    <a style={{ fontSize: 13, color: 'grey' }}>Date: {moment(note?.created_at).format('DD-MM-YYYY')}</a>
+                                                    <a style={{ fontSize: 13, color: 'grey' }}>Added By: {note?.createdBy?.name}</a>
+                                                </Grid>
+                                                <Grid display={'flex'} justifyContent={'end'}>
+                                                    <Button onClick={() => handleEdit(note)}>
+                                                        <Edit fontSize='small' />
+                                                    </Button>
+                                                    <LoadingButton onClick={() => deleteNote(note.id)}>
+                                                        <Delete color='error' fontSize='small' />
+                                                    </LoadingButton>
+                                                </Grid>
+                                            </Grid>
+                                        </Typography>
+                                        <Divider sx={{ mb: 1 }} />
+                                    </div>
+                                ))
+                            ) : (
+                                <div className='timeline-content-block-item'>
+                                    <div className='no-follw-up-block'>
+                                        <h4 style={{ color: 'grey' }}>No Notes Found For This Task</h4>
+                                    </div>
+                                </div>
+                            )
+                    }
                 </Grid>
             </Grid>
 
