@@ -270,7 +270,7 @@ button[type="submit"]:hover {
 .body-active .header .sbarCollapsebtn {
   padding: 3px;
   position: relative;
-  left: 158px;
+  left: 0px;
   background-color: transparent;
   top: 0px;
   border-radius: 3px;
@@ -1278,4 +1278,13 @@ button.loadmore-btn {
 }
 .login-dropdown-list-item.dropdown-name-block {
   padding: 10px 15px;
+}
+
+section {
+  transition: .5s;
+}
+
+body.body-active section , body.body-active .header {
+  margin-left: 160px;
+  transition: .5s;
 }
