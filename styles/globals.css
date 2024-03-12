@@ -254,6 +254,117 @@ button[type="submit"]:hover {
   position: absolute;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+.body-active .header .sbarCollapsebtn {
+  padding: 3px;
+  position: relative;
+  left: 158px;
+  background-color: transparent;
+  top: 0px;
+  border-radius: 3px;
+  z-index: 11;
+  transition: .5s;
+}
+
+.body-active .sidebar {
+  min-width: 220px !important;
+  max-width: 220px !important;
+  background: #0d1c40;
+  color: #fff;
+  transition: all 0.3s;
+  position: fixed;
+  top: 0;
+  height: 100%;
+  left: 0;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -ms-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  z-index: 1111;
+  padding: 0;
+}
+
+.body-active .sidebar .tiny-sidebar {
+  opacity: 0;
+  transform: scale(0);
+  transition: all ease .5s .5s;
+  position: absolute;
+}
+
+.body-active .sidebar .tiny-sidebar {
+  opacity: 1;
+  transform: scale(1);
+  transition: all ease .5s;
+}
+
+
+.body-active .sidebar .mainList>li a {
+  min-width: 208px;
+  white-space: nowrap;
+  color: #fff;
+  font-weight: 400;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+
+
+.body-active .sidebar .max-sidebar {
+  opacity: 1 !important;
+  transform: translate(0, 0);
+  -webkit-transition-delay: -1.5s;
+  -webkit-transition: .5s all;
+  -webkit-transition-delay: .5s;
+  -moz-transition: .5s all;
+  -moz-transition-delay: .5s;
+  -ms-transition: .5s all;
+  -ms-transition-delay: .5s;
+  -o-transition: .5s all;
+  -o-transition-delay: .5s;
+  transition: .5s all;
+  transition-delay: 0s;
+  position: relative;
+}
+
+
+.body-active .sidebar.active:not(:hover) .sidebar__inner ul.mainList>li>a>span {
+  visibility: visible !important;
+}
+
+
+.body-active .sidebar .tiny-sidebar {
+  opacity: 0;
+  transform: scale(0);
+  transition: all ease .5s .5s;
+  position: absolute;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 .sidebar .site-logo {
   padding: 3px 5px;
   border-bottom: thin solid rgba(255, 255, 255, 0.05);
@@ -1140,7 +1251,7 @@ button.loadmore-btn {
 
 .popup-content a {
   color: black;
-  padding: 12px 16px;
+  padding: 10px 15px;
   text-decoration: none;
   display: block;
 }
@@ -1148,4 +1259,23 @@ button.loadmore-btn {
 .popup-content a:hover {
   background-color: #f1f1f1;
   cursor: pointer;
+}
+
+.login-dropdown-list-item {
+  border-bottom: 1px solid #ededed;
+}
+.login-dropdown-list-item.dropdown-name-block {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.login-dropdown-list-item.dropdown-name-block div h3 {
+  color: #4285f4 !important;
+}
+.login-dropdown-list-item.dropdown-name-block div h6 {
+  color: #777;
+  font-size: 12px;
+}
+.login-dropdown-list-item.dropdown-name-block {
+  padding: 10px 15px;
 }
