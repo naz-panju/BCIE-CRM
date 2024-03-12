@@ -6,37 +6,44 @@ import Modal from '@mui/material/Modal';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Grid, IconButton, Tooltip } from '@mui/material';
+import { Grid, IconButton, TextField, Tooltip } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Close, Delete } from '@mui/icons-material';
 import SelectX from '@/Form/SelectX';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import toast from 'react-hot-toast';
+import TextInput from '@/Form/TextInput';
+import AsyncSelect from "react-select/async";
 
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 750,
     bgcolor: 'background.paper',
     borderRadius: 2,
     boxShadow: 24,
     p: 4,
 };
 
-export default function LeadDocumentModal({ id, editId, setEditId }) {
+export default function LeadDocumentModal({ id, editId, setEditId, refresh, setRefresh }) {
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const [loading, setLoading] = useState(false)
+    const [reqLoading, setReqLoading] = useState(false)
+    const [details, setDetails] = useState()
 
     const handleClose = () => {
         setValue('template', '')
+        setValue('title', '')
         setSelectedFile(null)
+        setDetails()
+        setValue('remarks', '')
         setEditId()
         setOpen(false);
     }
@@ -85,13 +92,27 @@ export default function LeadDocumentModal({ id, editId, setEditId }) {
 
         formData.append('document_template_id', data?.template?.id)
         formData.append('lead_id', id)
-        formData.append('file', selectedFile)
+        formData.append('title', data?.title)
+        formData.append('note', data?.remarks)
+        if (selectedFile) {
+            formData.append('file', selectedFile)
+        }
 
-        LeadApi.addDocument(formData).then((response) => {
+        let action;
+
+        if (editId > 0) {
+            formData.append('id', editId)
+            action = LeadApi.updateDocument(formData)
+        } else {
+            action = LeadApi.addDocument(formData)
+        }
+
+        action.then((response) => {
             console.log(response);
             if (response?.data?.data) {
                 handleClose()
-                toast.success('Document has been successfully added')
+                toast.success(editId>0?'Document has been successfully updated':'Document has been successfully added')
+                setRefresh(!refresh)
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
@@ -106,17 +127,43 @@ export default function LeadDocumentModal({ id, editId, setEditId }) {
 
     }
 
+    const handleTemplateSelect = (e) => {
+        setValue('template', e || '');
+        setValue('title', e?.name || '')
+    }
+
+    const getDetails = async () => {
+        // setDataLoading(true)
+        const response = await LeadApi.viewDocuments({ id: editId })
+        if (response?.data?.data) {
+            let data = response?.data?.data
+            console.log(data);
+            setDetails(data)
+            setValue('template', data?.document_template)
+            console.log(data);
+            console.log(data);
+            setValue('title', data?.title)
+            setValue('remarks', data?.note)
+        }
+        // setDataLoading(false)
+    }
+
+
+
 
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
+            getDetails()
         } else if (editId == 0) {
             setOpen(true)
         }
     }, [editId])
 
+
     return (
         <div>
+
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -136,17 +183,47 @@ export default function LeadDocumentModal({ id, editId, setEditId }) {
                     </Grid>
 
                     <form onSubmit={handleSubmit(onSubmit)}>
+                        <Grid container>
+                            <Grid pr={1} mt={2} md={6}>
+                                <a>Select Template</a>
+                                {/* <SelectX
+                                    required={true}
+                                    loadOptions={fetchTemplates}
+                                    control={control}
+                                    rules={{ required: 'Template is required' }}
+                                    name={'template'}
+                                    defaultValue={watch('template')}
+                                /> */}
+                                <AsyncSelect
+                                    key={watch('template')}
+                                    name={'template'}
+                                    defaultValue={watch('template')}
+                                    isClearable
+                                    defaultOptions
+                                    loadOptions={fetchTemplates}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    onChange={handleTemplateSelect}
+                                />
+                            </Grid>
+                            <Grid mt={2} md={6}>
+                                <a>Title</a>
+                                <TextInput control={control} name="title"
+                                    value={watch('title')} />
+                            </Grid>
+                        </Grid>
                         <Grid mt={2}>
-                            <a>Choose Template</a>
-                            <SelectX
-                                required={true}
-                                loadOptions={fetchTemplates}
-                                control={control}
-                                rules={{ required: 'Template is required' }}
-                                name={'template'}
-                                defaultValue={watch('template')}
+                            <a>Remarks</a>
+                            <TextField
+                                {...register('remarks')}
+                                variant="outlined"
+                                fullWidth
+                                multiline
+                                rows={2}
+                                sx={{ width: '100%', }}
                             />
                         </Grid>
+
                         <div
                             className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
                             onDrop={handleDrop}
@@ -164,32 +241,61 @@ export default function LeadDocumentModal({ id, editId, setEditId }) {
                             >
                                 Select File or Drag and Drop Here
                             </label>
-                            {selectedFile && (
+                            {(selectedFile || details?.file) && (
                                 <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
                                     <Grid mr={1}>
                                         {
+                                            selectedFile &&
                                             <Tooltip title={selectedFile?.name}>
                                                 <p className="text-gray-700">
-                                                    {selectedFile?.name?.length > 20
-                                                        ? selectedFile?.name?.slice(0, 20) + '....'
-                                                        : selectedFile?.name}
+                                                    {
+                                                        selectedFile?.name?.length > 20
+                                                            ? selectedFile?.name?.slice(0, 20) + '....'
+                                                            : selectedFile?.name
+                                                    }
                                                 </p>
-                                            </Tooltip>}
+                                            </Tooltip>
+                                        }
+                                        {
+                                            !selectedFile &&
+                                            <Tooltip title={details?.file}>
+                                                <p className="text-gray-700">
+                                                    {
+                                                        details?.file?.length > 60
+                                                            ? details?.file?.slice(0, 60) + '....'
+                                                            : details?.file
+                                                    }
+                                                </p>
+                                            </Tooltip>
+                                        }
                                     </Grid>
-                                    <Grid>
-                                        <Delete sx={{ cursor: 'pointer' }} color='error' fontSize='small' onClick={handleDelete} />
-                                    </Grid>
+                                    {
+                                        selectedFile &&
+                                        <Grid>
+                                            <Delete sx={{ cursor: 'pointer' }} color='error' fontSize='small' onClick={handleDelete} />
+                                        </Grid>
+                                    }
                                 </Grid>
                             )}
                         </div>
-                        <Grid display={'flex'} justifyContent={'end'}>
+                        <Grid mt={2} display={'flex'} justifyContent={'space-between'}>
+                            <LoadingButton
+                                loading={reqLoading}
+                                disabled={reqLoading || loading}
+                                size='small'
+                                sx={{ textTransform: 'none', height: 30 }}
+                                className=" bg-sky-500 hover:bg-sky-700 text-white font-bold  rounded"
+                            >
+                                Request Document
+                            </LoadingButton>
                             <LoadingButton
                                 type='submit'
                                 variant='contained'
-                                disabled={!selectedFile}
-                                loading={loading}
-                                sx={{ textTransform: 'none' }}
-                                className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+                                disabled={loading || reqLoading}
+                                loading={loading }
+                                size='small'
+                                sx={{ textTransform: 'none', height: 30 }}
+                            // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
                             >
                                 Upload
                             </LoadingButton>

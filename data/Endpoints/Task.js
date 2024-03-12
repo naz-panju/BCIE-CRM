@@ -18,5 +18,8 @@ export const TaskApi = {
     updateChecklist: (data) => http.post(`tasks/checklists/update`, data),
     deleteChecklist:(data) => http.post(`tasks/checklists/delete`, data),
 
+    statusChange: (data) => http.post(`tasks/change-status`, data),
+    statusTimeline: (data) => http.get(`tasks/timeline/${data?.id}`, {params:data}),
+
 }
 

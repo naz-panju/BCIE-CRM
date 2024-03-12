@@ -3,11 +3,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from '@mui/material';
+import { useState } from 'react';
+import { signOut } from 'next-auth/react';
 
 
 
 
 const Header = ({ }) => {
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const closePopup = () => {
+    setIsOpen(false);
+  };
+
+  const handleSignout = () => {
+    localStorage.removeItem('token')
+    signOut()
+  }
+
+
   return (
     <div className='header'>
       <div className='container-fluid '>
@@ -60,7 +79,13 @@ const Header = ({ }) => {
 
                 <li>
                   <div className='dropdown headerDropDown userDropDown'>
-                    <button id="UserPop"><span>MT</span></button>
+                    <button onClick={togglePopup} id="UserPop"><span>MT</span></button>
+                    {isOpen && (
+                      <div className="popup-content" onClick={closePopup}>
+                        <a onClick={handleSignout}>Sign Out</a>
+                        {/* Add more signout options here if needed */}
+                      </div>
+                    )}
                   </div>
                 </li>
               </ul>

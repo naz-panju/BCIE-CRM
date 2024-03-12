@@ -3,9 +3,7 @@ import SelectX from '@/Form/SelectX'
 import TextInput from '@/Form/TextInput'
 import { ListingApi } from '@/data/Endpoints/Listing'
 import { Button, Grid, TextField, Typography } from '@mui/material'
-import { DatePicker, DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers'
 import React, { useState } from 'react'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import 'react-phone-input-2/lib/style.css'
 import PhoneInput from 'react-phone-input-2'
 import moment from 'moment'
@@ -516,7 +514,6 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                                     <Typography sx={{ fontWeight: '500' }}>Set Follow-up Date</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={7}>
-                                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
                                     <DateInput
                                         control={control}
                                         // label='Followup Date'
@@ -524,7 +521,6 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                                         value={watch('date') || null}
                                         textField={(props) => <TextField {...props} />}
                                     />
-                                    {/* </LocalizationProvider> */}
 
                                 </Grid>
                             </Grid>

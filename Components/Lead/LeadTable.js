@@ -315,7 +315,6 @@ export default function EnhancedTable({ refresh }) {
     fetchTable()
   }, [page, refresh, limit])
 
-
   return (
     loading ?
       <LoadingTable columns={5} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
@@ -375,7 +374,7 @@ export default function EnhancedTable({ refresh }) {
                             <Link href={`/lead/${row?.id}`}>{row.name}</Link>
                           </TableCell>
                           <TableCell align="left">{row?.email}</TableCell>
-                          <TableCell align="left">{row?.phone_number}</TableCell>
+                          <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
                           <TableCell align="left">{row?.applyingForCountry?.name}</TableCell>
                           <TableCell align="left">{row.applyingForUniversity?.name}</TableCell>
                         </TableRow>

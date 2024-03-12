@@ -31,6 +31,7 @@ import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
 import TaskDetailModal from '../TaskDetails/Modal';
 import LoadingTable from '../Common/Loading/LoadingTable';
+import StatusModal from './StatusModal';
 
 
 
@@ -246,6 +247,10 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
   const [selectedCreatedUser, setSelectedCreatedUser] = useState()
   const [selectedStatus, setSelectedStatus] = useState()
 
+  const [taskDetails, setTaskDetails] = useState()
+  const [statusOpen, setStatusOpen] = useState(false)
+
+
   const [detailId, setDetailId] = useState()
 
   const handleRequestSort = (event, property) => {
@@ -359,6 +364,11 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
     setDetailId(id)
   }
 
+  const handleStatusChange = (data) => {
+    setStatusOpen(true)
+    setTaskDetails(data)
+  }
+
 
   useEffect(() => {
     fetchTable()
@@ -369,6 +379,11 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
     <>
 
       <TaskDetailModal id={detailId} setId={setDetailId} />
+    
+      {
+        taskDetails &&
+        <StatusModal onUpdate={fetchTable} setDataSet={setTaskDetails} dataSet={taskDetails} setOpen={setStatusOpen} Open={statusOpen} />
+      }
 
       <Grid p={1} pl={0} mb={1} container >
         <Grid mr={1} item md={2}>
@@ -478,7 +493,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
                                 <TableCell align="left">{row?.reviewer?.name}</TableCell>
                                 <TableCell align="left">{moment(row?.due_date).format('DD-MM-YYYY')}</TableCell>
                                 <TableCell align="left">{row.priority}</TableCell>
-                                <TableCell align="left">{row.status}</TableCell>
+                                <TableCell align="left" onClick={() => handleStatusChange(row)}>{row.status}</TableCell>
                                 <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
                               </TableRow>
                             );
