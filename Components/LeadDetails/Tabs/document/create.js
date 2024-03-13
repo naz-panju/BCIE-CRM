@@ -4,7 +4,9 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from 'react';
 import { Grid, IconButton, TextField, Tooltip } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -29,8 +31,14 @@ const style = {
 };
 
 export default function LeadDocumentModal({ id, editId, setEditId, refresh, setRefresh }) {
+    const scheme = yup.object().shape({
 
-    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
+        template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
+        // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
+
+    })
+
+    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -111,7 +119,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, refresh, setR
             console.log(response);
             if (response?.data?.data) {
                 handleClose()
-                toast.success(editId>0?'Document has been successfully updated':'Document has been successfully added')
+                toast.success(editId > 0 ? 'Document has been successfully updated' : 'Document has been successfully added')
                 setRefresh(!refresh)
                 setLoading(false)
             } else {
@@ -125,6 +133,30 @@ export default function LeadDocumentModal({ id, editId, setEditId, refresh, setR
             setLoading(false)
         })
 
+    }
+
+    const requestDocument = () => {
+        setReqLoading(true)
+
+        let dataToSubmit = {
+            lead_id: id,
+            document_template_ids: [watch('template')?.id]
+        }
+
+        LeadApi.requestDocument(dataToSubmit).then((response) => {
+            if (response?.statusText == 'OK') {
+                toast.success(response?.data?.message)
+                handleClose()
+                setReqLoading(false)
+            } else {
+                toast.error(response?.response?.data?.message)
+                setReqLoading(false)
+            }
+        }).catch((error) => {
+            console.log(error);
+            toast.error(error?.response?.data?.message)
+            setReqLoading(false)
+        })
     }
 
     const handleTemplateSelect = (e) => {
@@ -173,7 +205,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, refresh, setR
                 <Box sx={style}>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Add Document
+                            {editId > 0 ? 'Edit Document' : 'Add Document'}
                         </Typography>
                         <IconButton
                             onClick={handleClose}
@@ -205,6 +237,8 @@ export default function LeadDocumentModal({ id, editId, setEditId, refresh, setR
                                     getOptionValue={(e) => e.id}
                                     onChange={handleTemplateSelect}
                                 />
+                                {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+
                             </Grid>
                             <Grid mt={2} md={6}>
                                 <a>Title</a>
@@ -280,6 +314,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, refresh, setR
                         </div>
                         <Grid mt={2} display={'flex'} justifyContent={'space-between'}>
                             <LoadingButton
+                                onClick={requestDocument}
                                 loading={reqLoading}
                                 disabled={reqLoading || loading}
                                 size='small'
@@ -292,7 +327,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, refresh, setR
                                 type='submit'
                                 variant='contained'
                                 disabled={loading || reqLoading}
-                                loading={loading }
+                                loading={loading}
                                 size='small'
                                 sx={{ textTransform: 'none', height: 30 }}
                             // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"

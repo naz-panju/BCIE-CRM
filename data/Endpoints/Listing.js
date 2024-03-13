@@ -8,4 +8,5 @@ export const ListingApi = {
     courses:(data) => http.get(`listing/courses`, { params: data }),
     users:(data) => http.get(`listing/users`, { params: data }),
     documentTemplate:(data) => http.get(`listing/document-templates`, { params: data }),
+    reference:(data) => http.get(`listing/referrals`, { params: data }),
 }

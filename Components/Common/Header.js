@@ -3,14 +3,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { faGear } from '@fortawesome/free-solid-svg-icons';
 import { Tooltip } from '@mui/material';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { LockOpenIcon } from '@mui/icons-material/LockOpen';
 import { ExitToAppIcon } from '@mui/icons-material/ExitToApp';
+import { ExitToApp, LockOpen } from '@mui/icons-material';
+import { blue } from '@mui/material/colors';
 
 
 const Header = ({ }) => {
 
+  const { data: session, status } = useSession();
+  // console.log(session);
+
   const [isOpen, setIsOpen] = useState(false);
+
 
   const togglePopup = () => {
     setIsOpen(!isOpen);
@@ -31,6 +37,20 @@ const Header = ({ }) => {
     // Toggle the state to add or remove the class
     setIsBodyClassAdded((prev) => !prev);
   };
+
+  const getFirstLettersOfTwoWords = (name) => {
+    if (name) {
+        const words = name.split(" "); // Split the name into an array of words
+        if (words.length >= 2) {
+            // Extract the first letter of the first two words and concatenate them
+            return words[0].charAt(0) + words[1].charAt(0);
+        } else if (words.length === 1) {
+            // If there's only one word, return its first letter
+            return words[0].charAt(0);
+        }
+    }
+    return ""; // Return an empty string if name is not provided
+};
 
   // Use a useEffect hook to add or remove the class on the body element
   useEffect(() => {
@@ -53,20 +73,21 @@ const Header = ({ }) => {
           <div className="w-full md:w-6/12 lg:w-6/12 pad-15 clg_header clg_header_">
             <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse"><span></span><span></span><span></span></button>
 
-          
+
           </div>
 
           <div className='w-full md:w-6/12 lg:w-6/12 pad-15 '>
             <div className='navbar-right'>
               <ul>
-                <li>
+                {/* <li>
                   <div className="tooltip-container">
                     <div className="tooltip">
                       <Tooltip title={'test'}><span className="tooltiptext">Tooltip</span></Tooltip>
                     </div>
                   </div>
-                </li>
-                <li>
+                </li> */}
+
+                {/* <li>
                   <div className="tooltip-container">
                     <div className="tooltip"><i><FontAwesomeIcon icon={faGear} /></i>
                       <span className="tooltiptext">Service</span>
@@ -96,35 +117,35 @@ const Header = ({ }) => {
                       <span className="tooltiptext">Service</span>
                     </div>
                   </div>
-                </li>
+                </li> */}
 
                 <li>
                   <div className='dropdown headerDropDown userDropDown'>
-                    <button onClick={togglePopup} id="UserPop"><span>MT</span></button>
+                    <button onClick={togglePopup} id="UserPop"><span>{getFirstLettersOfTwoWords(session?.user?.name)}</span></button>
                     {isOpen && (
                       <div className="popup-content" onClick={closePopup}>
-                        
+
                         <div className='login-dropdown-list'>
                           <div className='login-dropdown-list-item dropdown-name-block'>
-                            <button onClick={togglePopup} id="UserPop"><span>MT</span></button>
+                            <button onClick={togglePopup} id="UserPop"><span>{getFirstLettersOfTwoWords(session?.user?.name)}</span></button>
                             <div>
-                              <h3>Meritto Trial User</h3>
-                              <h6>shahabaz.s@gmail.com</h6>
+                              <h3>{session?.user?.name}</h3>
+                              <h6>{session?.user?.email}</h6>
                             </div>
                           </div>
 
                           <div className='login-dropdown-list-item'>
-                            <FontAwesomeIcon icon={LockOpenIcon} />
-                            <a>Change Password</a>
+                            
+                            <a><LockOpen sx={{color:blue[300]}} fontSize='small' /> Change Password</a>
                           </div>
 
                           <div className='login-dropdown-list-item'>
-                            <FontAwesomeIcon icon={ExitToAppIcon} />
-                            <a onClick={handleSignout}>Sign Out</a>
+                          
+                            <a onClick={handleSignout}><ExitToApp sx={{color:blue[300]}} fontSize='small' /> Sign Out</a>
                           </div>
                         </div>
 
-                        
+
                         {/* Add more signout options here if needed */}
                       </div>
                     )}

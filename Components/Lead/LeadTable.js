@@ -90,18 +90,6 @@ const headCells = [
     disablePadding: false,
     label: 'Registered Mobile',
   },
-  {
-    id: 'country',
-    numeric: true,
-    disablePadding: false,
-    label: 'Applied Country',
-  },
-  {
-    id: 'university',
-    numeric: true,
-    disablePadding: false,
-    label: 'Applied University',
-  },
 ];
 
 function EnhancedTableHead(props) {
@@ -317,7 +305,7 @@ export default function EnhancedTable({ refresh }) {
 
   return (
     loading ?
-      <LoadingTable columns={5} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
+      <LoadingTable columns={3} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
       :
       <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
@@ -375,8 +363,7 @@ export default function EnhancedTable({ refresh }) {
                           </TableCell>
                           <TableCell align="left">{row?.email}</TableCell>
                           <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
-                          <TableCell align="left">{row?.applyingForCountry?.name}</TableCell>
-                          <TableCell align="left">{row.applyingForUniversity?.name}</TableCell>
+                         
                         </TableRow>
                       );
                     })

@@ -15,6 +15,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from 'react'
 import { LoadingButton } from '@mui/lab'
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit'
+import ReactSelector from 'react-select';
+
 
 const scheme = yup.object().shape({
     name: yup.string().required("Name is Required"),
@@ -23,10 +25,11 @@ const scheme = yup.object().shape({
     alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
         return value !== this.parent.phone;
     }),
-    assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
-    country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
-    institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
-    course: yup.object().required("Please Choose a Country").typeError("Please choose a Course"),
+    preffered_course: yup.string().required("Preffered Course is Required"),
+    // assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
+    // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
+    // institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
+    // course: yup.object().required("Please Choose a Country").typeError("Please choose a Course"),
 })
 
 function Detail({ handleClose, setRefresh, refresh, editId }) {
@@ -39,6 +42,8 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
     const [altPhone, setAltPhone] = useState()
     const [altCode, setAltCode] = useState()
 
+    const [referenceOption, setreferenceOption] = useState([])
+
 
     const [selectedCountryID, setselectedCountryID] = useState()
     const [selectedInstituteID, setselectedInstituteID] = useState()
@@ -47,62 +52,15 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
     const [loading, setLoading] = useState(false)
     const [dataLoading, setDataLoading] = useState(false)
 
-    const fetchCounty = (e) => {
-        return ListingApi.country({ keyword: e }).then(response => {
+    const fetchReference = (e) => {
+        ListingApi.reference({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
-                return response?.data?.data;
+                setreferenceOption(response?.data?.data)
             } else {
                 return [];
             }
         })
     }
-    const fetchStages = (e) => {
-        return ListingApi.stages({ keyword: e }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
-                return response.data.data;
-            } else {
-                return [];
-            }
-        })
-    }
-    const fetchSubStages = (e) => {
-        return ListingApi.substages({ keyword: e }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
-                return response.data.data;
-            } else {
-                return [];
-            }
-        })
-    }
-
-    const fetchUniversities = (e) => {
-        return ListingApi.universities({ keyword: e, country: selectedCountryID }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
-                return response?.data?.data;
-            } else {
-                return [];
-            }
-        })
-    }
-    const fetchCourse = (e) => {
-        return ListingApi.courses({ keyword: e, university: selectedInstituteID }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
-                return response.data.data;
-            } else {
-                return [];
-            }
-        })
-    }
-    const fetchUser = (e) => {
-        return ListingApi.users({ keyword: e }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
-                return response.data.data;
-            } else {
-                return [];
-            }
-        })
-    }
-
 
     const handlePhoneNumber = (value, country) => {
         if (!value) {
@@ -164,13 +122,17 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             alternate_phone_country_code: altCode,
             alternate_phone_number: altPhone,
 
-            follow_up_assigned_to: data?.assigned_to?.id,
-            applying_for_country_id: data?.country?.id,
-            applying_for_university_id: data?.institute?.id,
-            applying_for_course_id: data?.course?.id,
-            next_follow_up_date: leadDate,
-            stage_id: data?.stage?.id,
-            substage_id: data?.sub_stage?.id,
+            preferred_course: data?.preffered_course,
+            referrance_from: data?.reference,
+
+            // follow_up_assigned_to: data?.assigned_to?.id,
+            // applying_for_country_id: data?.country?.id,
+            // applying_for_university_id: data?.institute?.id,
+            // applying_for_course_id: data?.course?.id,
+            // next_follow_up_date: leadDate,
+            // stage_id: data?.stage?.id,
+            // substage_id: data?.sub_stage?.id,
+
             note: data?.note
         }
 
@@ -182,10 +144,10 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             dataToSubmit['id'] = editId;
             action = LeadApi.update(dataToSubmit)
         } else {
-            console.log('here');
             action = LeadApi.add(dataToSubmit)
         }
         action.then((response) => {
+            console.log(response);
             if (response?.data?.data) {
                 toast.success('Lead Has Been Successfully Created ')
                 setRefresh(!refresh)
@@ -194,6 +156,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
+                setLoading(false)
             }
         }).catch((error) => {
             console.log(error);
@@ -239,16 +202,21 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             setAltCode(data?.alternate_phone_country_code)
 
             setValue('email', data?.email)
-            setValue('country', data?.applyingForCountry)
-            setValue('institute', data?.applyingForUniversity)
-            setValue('course', data?.applyingForCourse)
-            setValue('stage', data?.stage)
-            setValue('sub_stage', data?.substage)
-            setValue('assigned_to', data?.followUpAssignedToUser)
-            if (data?.next_follow_up_date) {
-                const date = moment(data.next_follow_up_date, 'YYYY-MM-DD').toDate();
-                setValue('date', date);
-            }
+            setValue('preffered_course', data?.preferred_course)
+            setValue('reference', data?.referrance_from)
+
+
+            // setValue('country', data?.applyingForCountry)
+            // setValue('institute', data?.applyingForUniversity)
+            // setValue('course', data?.applyingForCourse)
+            // setValue('stage', data?.stage)
+            // setValue('sub_stage', data?.substage)
+            // setValue('assigned_to', data?.followUpAssignedToUser)
+            // if (data?.next_follow_up_date) {
+            //     const date = moment(data.next_follow_up_date, 'YYYY-MM-DD').toDate();
+            //     setValue('date', date);
+            // }
+
             setValue('note', data?.note)
             // setValue()
             // setValue()
@@ -271,6 +239,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
         if (editId > 0) {
             getDetails()
         }
+        fetchReference()
     }, [editId])
 
     const items = [
@@ -278,15 +247,9 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
         { label: 'Email Address' },
         { label: 'Mobile Number' },
         { label: 'Alternate Mobile Number' },
-        { label: 'Country Applying For' },
-        { label: 'Institute Applying For' },
-        { label: 'Course Applying For' },
-        { label: 'Select Lead Stage' },
-        { label: 'Select Lead Sub Stage' },
-        { label: 'Follow-up Assigned To' },
-        { label: 'Set Follow-up Date' },
+        { label: 'Preferred Course' },
+        { label: ' Reference From' },
         { label: 'Note', multi: true },
-
     ]
 
     return (
@@ -297,7 +260,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                     dataLoading ?
                         <LoadingEdit item={items} />
                         :
-                        <>
+                        <form onSubmit={handleSubmit(onSubmit)}>
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                 <Grid item xs={12} md={5}>
                                     <Typography sx={{ fontWeight: '500' }}>Name</Typography>
@@ -403,127 +366,40 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                 <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Country Applying For</Typography>
+                                    <Typography sx={{ fontWeight: '500' }}>Preferred Course</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={7}>
-                                    <SelectX
-                                        loadOptions={fetchCounty}
-                                        control={control}
-                                        name={'country'}
-                                        defaultValue={watch('country')}
-                                    />
-                                    {errors.country && <span className='form-validation'>{errors.country.message}</span>}
-
+                                    <TextInput control={control} {...register('preffered_course')}
+                                        value={watch('preffered_course')} />
+                                    {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
                                 </Grid>
                             </Grid>
 
-                            {/* institute */}
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                 <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Institute Applying For</Typography>
+                                    <Typography sx={{ fontWeight: '500' }}>Reference From</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={7}>
-                                    <SelectX
-                                        key={selectedCountryID}
-                                        loadOptions={fetchUniversities}
-                                        control={control}
-                                        rules={{ required: 'Institute is required' }}
-                                        name={'institute'}
-                                        defaultValue={watch('institute')}
-                                    />
-                                    {errors.institute && <span className='form-validation'>{errors.institute.message}</span>}
-
-                                </Grid>
-                            </Grid>
-
-                            {/* course */}
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Course Applying For</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={7}>
-                                    <SelectX
-                                        key={selectedInstituteID}
-                                        loadOptions={fetchCourse}
-                                        control={control}
-                                        // error={errors?.institute?.id ? errors?.institute?.id?.message : false}
-                                        // error2={errors?.institute?.message ? errors?.institute?.message : false}
-                                        name={'course'}
-                                        defaultValue={watch('course')}
-                                    />
-                                    {errors.course && <span className='form-validation'>{errors.course.message}</span>}
-
-                                </Grid>
-                            </Grid>
-
-                            {/* stage */}
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Select Lead Stage</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={7}>
-                                    <SelectX
-                                        loadOptions={fetchStages}
-                                        control={control}
-                                        // error={errors?.stage?.id ? errors?.stage?.id?.message : false}
-                                        // error2={errors?.stage?.message ? errors?.stage?.message : false}
-                                        name={'stage'}
-                                        defaultValue={watch('stage')}
+                                    <ReactSelector
+                                        onInputChange={fetchReference}
+                                        styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}
+                                        options={referenceOption}
+                                        getOptionLabel={option => option.name}
+                                        getOptionValue={option => option.name}
+                                        value={
+                                            referenceOption.filter(options =>
+                                                options?.name == watch('reference')
+                                            )
+                                        }
+                                        name='reference'
+                                        isClearable
+                                        defaultValue={(watch('reference'))}
+                                        onChange={(selectedOption) => setValue('reference', selectedOption?.name || '')}
                                     />
                                 </Grid>
+
                             </Grid>
 
-                            {/* sub stage */}
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Select Lead Sub Stage</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={7}>
-                                    <SelectX
-                                        loadOptions={fetchSubStages}
-                                        control={control}
-                                        // error={errors?.sub_stage?.id ? errors?.sub_stage?.message : false}
-                                        // error2={errors?.sub_stage?.message ? errors?.sub_stage?.message : false}
-                                        name={'sub_stage'}
-                                        defaultValue={watch('sub_stage')}
-                                    />
-                                </Grid>
-                            </Grid>
-
-                            {/* assigned to */}
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Follow-up Assigned To</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={7}>
-                                    <SelectX
-                                        loadOptions={fetchUser}
-                                        control={control}
-                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'assigned_to'}
-                                        defaultValue={watch('assigned_to')}
-                                    />
-                                    {errors?.assigned_to && <span className='form-validation'>{errors.assigned_to.message}</span>}
-                                </Grid>
-                            </Grid>
-
-                            {/* date */}
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Set Follow-up Date</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={7}>
-                                    <DateInput
-                                        control={control}
-                                        // label='Followup Date'
-                                        name="date"
-                                        value={watch('date') || null}
-                                        textField={(props) => <TextField {...props} />}
-                                    />
-
-                                </Grid>
-                            </Grid>
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                 <Grid item xs={12} md={5}>
@@ -534,7 +410,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                                         value={watch('note')} />
                                 </Grid>
                             </Grid>
-                        </>
+                        </form>
                 }
 
                 <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
@@ -543,7 +419,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                 </Grid>
 
             </form>
-        </div>
+        </div >
     )
 }
 

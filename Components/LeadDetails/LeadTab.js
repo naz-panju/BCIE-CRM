@@ -59,10 +59,9 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh,loading }) {
+export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
-
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -73,6 +72,46 @@ export default function VerticalTabs({ data, refresh, setRefresh,loading }) {
   }
 
   const [isClient, setIsClient] = useState(false);
+
+  const TabData = [
+    {
+      label: 'Lead Details',
+      component: isClient && (
+        <LeadDetail handleEdit={handleEdit} data={data} loading={loading} />
+      ),
+      icon: <PermIdentityIcon />
+    },
+    {
+      label: 'Timeline',
+      component: <LeadTimeline id={data?.id} />,
+      icon: <AccessTimeIcon />
+    },
+    {
+      label: 'Follow up & Notes',
+      component: <LeadFollowUp id={data?.id} />,
+      icon: <ChecklistIcon />
+    },
+    {
+      label: 'Communication Logs',
+      component: <LeadCommunicationLog id={data?.id} />,
+      icon: <ChatBubbleOutlineIcon />
+    },
+    {
+      label: 'Documents',
+      component: <LeadDocuments id={data?.id} />,
+      icon: <FolderOpenIcon />
+    },
+    {
+      label: 'Tickets',
+      component: 'Item Six',
+      icon: <PostAddIcon />
+    },
+    {
+      label: 'Call Logs',
+      component: 'Item Seven',
+      icon: <PhoneIcon />
+    },
+  ]
 
   useEffect(() => {
     setIsClient(true);
@@ -94,19 +133,24 @@ export default function VerticalTabs({ data, refresh, setRefresh,loading }) {
           aria-label="Vertical tabs example"
           sx={{ borderRight: 1, borderColor: 'divider' }}
         >
-          <Tab className='lead-tab-item' icon={<PermIdentityIcon />} label="Lead Details " {...a11yProps(0)} />
-          <Tab className='lead-tab-item' icon={<AccessTimeIcon />} label="Timeline" {...a11yProps(1)} />
-          <Tab className='lead-tab-item' icon={<ChecklistIcon />} label="Follow up & Notes" {...a11yProps(2)} />
-          <Tab className='lead-tab-item' icon={<ChatBubbleOutlineIcon />} label="Communication Logs" {...a11yProps(3)} />
-          <Tab className='lead-tab-item' icon={<FolderOpenIcon />} label="Documents" {...a11yProps(4)} />
-          <Tab className='lead-tab-item' icon={<PostAddIcon />} label="Tickets" {...a11yProps(5)} />
-          <Tab className='lead-tab-item' icon={<PhoneIcon />} label="Call Logs" {...a11yProps(6)} />
+          {
+            TabData?.map((obj, index) => (
+              <Tab key={index} className='lead-tab-item' icon={obj?.icon} label={obj?.label} {...a11yProps(index)} />
+            ))
+          }
         </Tabs>
-        <TabPanel className='lead-tabpanel' value={value} index={0}>
+        {
+          TabData?.map((obj, index) => (
+            <TabPanel className='lead-tabpanel' value={value} index={index}>
+              {obj?.component}
+            </TabPanel>
+          ))
+        }
+        {/* <TabPanel className='lead-tabpanel' value={value} index={0}>
 
           {
             isClient && (
-              <LeadDetail handleEdit={handleEdit} data={data} loading={loading} /> 
+              <LeadDetail handleEdit={handleEdit} data={data} loading={loading} />
             )
           }
         </TabPanel>
@@ -129,7 +173,7 @@ export default function VerticalTabs({ data, refresh, setRefresh,loading }) {
         </TabPanel>
         <TabPanel className='lead-tabpanel' value={value} index={6}>
           Item Seven
-        </TabPanel>
+        </TabPanel> */}
       </Box>
     </>
   );

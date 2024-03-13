@@ -40,49 +40,46 @@ export default function LeadDocumentRequest({ id, reqId, setReqId }) {
         setOpen(false);
     }
 
-    const handleTemplateChange = (event) => {
-        const checkboxValue = event.target.value;
-        if (event.target.checked) {
-            // Add the checkbox value to the selectedScopes array if checked
-            setSelectedTemplates([...selectedTemplates, checkboxValue]);
+    const handleTemplateChange = (id) => {
+        // const checkboxValue = event.target.value;
+        const isSelected = selectedTemplates.includes(id);
+
+        if (isSelected) {
+            // If the template is already selected, remove it from the array
+            setSelectedTemplates(selectedTemplates.filter(value => value !== id));
         } else {
-            // Remove the checkbox value from the selectedScopes array if unchecked
-            setSelectedTemplates(selectedTemplates?.filter((value) => value !== checkboxValue));
+            // If the template is not selected, add it to the array
+            setSelectedTemplates([...selectedTemplates, id]);
         }
     };
 
     const isTemplateChecked = (value) => selectedTemplates.includes(value);
 
 
-    const onSubmit = (data) => {
+    const requestDocument = () => {
         setLoading(true)
-        console.log(data);
-        console.log(selectedFile)
 
-        const formData = new FormData()
+        let dataToSubmit = {
+            lead_id: id,
+            document_template_ids: selectedTemplates
+        }
 
-        formData.append('document_template_id', data?.template?.id)
-        formData.append('lead_id', id)
-        formData.append('file', selectedFile)
-
-        LeadApi.addDocument(formData).then((response) => {
-            console.log(response);
-            if (response?.data?.data) {
+        LeadApi.requestDocument(dataToSubmit).then((response) => {
+            if (response?.statusText == 'OK') {
+                toast.success(response?.data?.message)
                 handleClose()
-                toast.success('Document has been successfully added')
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
                 setLoading(false)
             }
-            setLoading(false)
         }).catch((error) => {
             console.log(error);
             toast.error(error?.response?.data?.message)
             setLoading(false)
         })
-
     }
+
 
     const fetchTemplates = () => {
         setdatLoading(true)
@@ -127,7 +124,7 @@ export default function LeadDocumentRequest({ id, reqId, setReqId }) {
                         </IconButton>
                     </Grid>
 
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form >
                         {
                             datLoading ?
                                 loadingGrid()
@@ -140,7 +137,7 @@ export default function LeadDocumentRequest({ id, reqId, setReqId }) {
                                                 templates?.map((obj, index) => (
 
                                                     <Grid key={index} item xs={12} sm={6}>
-                                                        <FormControlLabel control={<Checkbox onChange={handleTemplateChange} value={obj?.name} checked={isTemplateChecked(obj?.name)} />} label={obj?.name} />
+                                                        <FormControlLabel control={<Checkbox onChange={() => handleTemplateChange(obj?.id)} value={obj?.id} checked={isTemplateChecked(obj?.id)} />} label={obj?.name} />
                                                     </Grid>
                                                 ))
                                             }
@@ -151,9 +148,11 @@ export default function LeadDocumentRequest({ id, reqId, setReqId }) {
 
                         <Grid mt={2} display={'flex'} justifyContent={'end'}>
                             <LoadingButton
+                                onClick={requestDocument}
                                 loading={loading}
+                                disabled={loading}
                                 size='small'
-                                sx={{ textTransform: 'none', }}
+                                sx={{ textTransform: 'none', height: 30 }}
                                 className=" bg-sky-500 hover:bg-sky-700 text-white font-bold  rounded"
                             >
                                 Request

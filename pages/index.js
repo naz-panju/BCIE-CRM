@@ -16,30 +16,22 @@ export default function Home() {
 
 
 
-  const handleSignout = () => {
-    localStorage.removeItem('token')
-    signOut()
-  }
-
   useEffect(() => {
-    if (status === "authenticated") {
-      // fecthTask()
-    }
-  }, [status])
+    // Redirect to the new home page
+    window.location.href = '/lead';
+  }, []);
+  // useEffect(() => {
+  //   if (status === "authenticated") {
+  //     // fecthTask()
+  //   }
+  // }, [status])
 
-  return (
-        <Layout>
-          <div className="main-content ml-6">
-            <Button sx={{ mt: 2 }} variant="outlined" onClick={() => handleSignout()}>Signout</Button>
-          </div>
-        </Layout>
-  );
 }
 
 
 export async function getServerSideProps(context) {
   const session = await getSession(context)
-  console.log('yyy', session);
+  // console.log('yyy', session);
 
   if (!session) {
     return {

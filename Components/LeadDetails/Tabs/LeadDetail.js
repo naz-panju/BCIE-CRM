@@ -53,8 +53,13 @@ function LeadDetail({ data, handleEdit, loading }) {
                     </div>
                     :
                     <div className='lead-tabpanel-content-item'>
+
                         <div className="lead-details-list">
-                            <label>Form Interested In </label>: {data?.applyingForCourse?.name}
+                            <label>Name </label>: {data?.name}
+                        </div>
+
+                        <div className="lead-details-list">
+                            <label>Preferred Course </label>: {data?.preferred_course}
                         </div>
 
                         <div className="lead-details-list">
@@ -74,26 +79,30 @@ function LeadDetail({ data, handleEdit, loading }) {
                             }
                         </div>
 
-                        <div className="lead-details-list">
-                            <label>Name </label>: {data?.name}
-                        </div>
+                        {
+                            data?.applyingForCountry &&
+                            <div className="lead-details-list">
+                                <label>Country Applying For </label>: {data?.applyingForCountry?.name}
+                            </div>
+                        }
 
-                        <div className="lead-details-list">
-                            <label>Country Applying For </label>: {data?.applyingForCountry?.name}
-                        </div>
+                        {
+                            data?.applyingForUniversity &&
+                            <div className="lead-details-list">
+                                <label>University Applying For </label>: {data?.applyingForUniversity?.name}
+                            </div>
+                        }
 
-                        <div className="lead-details-list">
+                        {
+                            data?.stage &&
+                            <div className="lead-details-list">
+                                <label>Lead Stage </label>: {data?.stage?.name}
+                            </div>
+                        }
 
-                            <label>University Applying For </label>: {data?.applyingForUniversity?.name}
-                        </div>
-
-                        <div className="lead-details-list">
-                            <label>Lead Stage </label>: {data?.stage?.name}
-                        </div>
-
-                        <div className="lead-details-list">
+                        {/* <div className="lead-details-list">
                             <label>Forms Applied </label>: {data?.applyingForCourse?.name}
-                        </div>
+                        </div> */}
 
                     </div>
             }

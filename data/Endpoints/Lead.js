@@ -12,5 +12,5 @@ export const LeadApi = {
     updateDocument: (data) => http.post(`documents/update`, data),   
     listDocuments: (data) => http.get(`documents`, {params:data}),
     viewDocuments: (data) => http.get(`documents/view/${data?.id}`, {params:data}),
-    
+    requestDocument: (data) => http.post(`documents/request`, data),   
 }

@@ -435,8 +435,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
           <LoadingTable columns={6} columnWidth={80} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
           :
           <Box sx={{ width: '100%' }}>
-            {
-              list?.data !== undefined &&
+        
               <Paper sx={{ width: '100%', mb: 2 }}>
                 <TableContainer>
                   <Table
@@ -526,7 +525,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
                   onRowsPerPageChange={handleChangeRowsPerPage}
                 />
               </Paper>
-            }
+            
 
           </Box>
       }
