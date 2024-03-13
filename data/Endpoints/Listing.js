@@ -9,4 +9,8 @@ export const ListingApi = {
     users:(data) => http.get(`listing/users`, { params: data }),
     documentTemplate:(data) => http.get(`listing/document-templates`, { params: data }),
     reference:(data) => http.get(`listing/referrals`, { params: data }),
+    globalCountry:(data) => http.get(`listing/global-countries`,{ params: data }),
+    intakes: (data) => http.get(`listing/intakes`,{ params: data }),
 }
+
+

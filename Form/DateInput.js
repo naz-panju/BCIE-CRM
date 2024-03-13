@@ -96,7 +96,7 @@ const DateInput = (props) => {
                                     InputLabelProps={InputLabelProps}
                                     variant="filled"
                                     value={value ? moment(value).format('DD-MM-YYYY') : ''}
-                                    helperText={error ? error.message : null}
+                                    // helperText={error ? error.message : null}
                                     error={!!error}
                                     inputProps={inputProps}
                                     placeholder={props?.placeholder || ''}

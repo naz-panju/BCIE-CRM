@@ -22,6 +22,7 @@ const TextInput = React.forwardRef((props, ref) => {   //new method from gpt
                         multiline={props.isMultiline ? true : false}
                         required={props.isRequired ? true : false}
                         rows={props.isMultiline ? 2 : null}
+                        disabled={props?.disabled}
 
                         inputProps={{
                             sx: {

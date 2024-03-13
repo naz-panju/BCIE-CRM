@@ -522,6 +522,7 @@ ul#menuList li {
   display: flex;
   align-items: center;
   gap: 20px;
+  width: 100%;
 }
 
 .page-title-block-content h1 {
@@ -1287,4 +1288,8 @@ section {
 body.body-active section , body.body-active .header {
   margin-left: 160px;
   transition: .5s;
+}
+
+.form-text{
+  font-size: 15px;
 }

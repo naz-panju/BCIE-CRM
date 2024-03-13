@@ -18,29 +18,32 @@ import LoadingEdit from '@/Components/Common/Loading/LoadingEdit'
 import ReactSelector from 'react-select';
 
 
-const scheme = yup.object().shape({
-    name: yup.string().required("Name is Required"),
-    email: yup.string().email("Invalid email format").required("Email is Required"),
-    phone: yup.string().required('Phone Number is Required'),
-    alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
-        return value !== this.parent.phone;
-    }),
-    preffered_course: yup.string().required("Preffered Course is Required"),
-    // assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
-    // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
-    // institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
-    // course: yup.object().required("Please Choose a Country").typeError("Please choose a Course"),
-})
+
 
 function Detail({ handleClose, setRefresh, refresh, editId }) {
-    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
-    const phoneValue = watch('phone');
+   
 
     const [phone, setPhone] = useState()
     const [code, setCode] = useState()
     const [altPhone, setAltPhone] = useState()
     const [altCode, setAltCode] = useState()
+    const scheme = yup.object().shape({
+        name: yup.string().required("Name is Required"),
+        email: yup.string().email("Invalid email format").required("Email is Required"),
+        phone: yup.string().required('Phone Number is Required'),
+        alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
+            return value !== this.parent.phone;
+        }),
+        preffered_course: yup.string().required("Preffered Course is Required"),
+        // assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
+        // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
+        // institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
+        // course: yup.object().required("Please Choose a Country").typeError("Please choose a Course"),
+    })
+
+    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
+    const phoneValue = watch('phone');
 
     const [referenceOption, setreferenceOption] = useState([])
 

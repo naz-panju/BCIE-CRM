@@ -20,6 +20,8 @@ import CreateLead from '../Lead/Create/Create';
 import LeadDocuments from './Tabs/document/LeadDocuments';
 import { Skeleton } from '@mui/material';
 import LeadDetail from './Tabs/LeadDetail';
+import LeadApplication from './Tabs/application/LeadApplication';
+import { Apps } from '@mui/icons-material';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -72,7 +74,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
   }
 
   const [isClient, setIsClient] = useState(false);
-
+  
   const TabData = [
     {
       label: 'Lead Details',
@@ -80,6 +82,11 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
         <LeadDetail handleEdit={handleEdit} data={data} loading={loading} />
       ),
       icon: <PermIdentityIcon />
+    },
+    {
+      label: 'Application',
+      component: <LeadApplication lead_id={data?.id} />,
+      icon: <Apps />
     },
     {
       label: 'Timeline',
@@ -120,7 +127,6 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
   return (
     <>
       <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
-
       <Box
         sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
       >
@@ -141,7 +147,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
         </Tabs>
         {
           TabData?.map((obj, index) => (
-            <TabPanel className='lead-tabpanel' value={value} index={index}>
+            <TabPanel key={index} className='lead-tabpanel' value={value} index={index}>
               {obj?.component}
             </TabPanel>
           ))
