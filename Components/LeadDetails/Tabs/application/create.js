@@ -96,7 +96,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
 
 
     const onSubmit = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         setLoading(true)
 
@@ -110,7 +110,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
         }
 
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         let action;
 
@@ -122,7 +122,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.statusText == 'Created') {
                 toast.success('Applied Successfully')
                 reset()
