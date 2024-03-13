@@ -13,10 +13,9 @@ import { blue } from '@mui/material/colors';
 const Header = ({ }) => {
 
   const { data: session, status } = useSession();
-  console.log(session);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState()
+  // const [user, setUser] = useState()
 
 
   const togglePopup = () => {
@@ -67,9 +66,9 @@ const Header = ({ }) => {
     };
   }, [isBodyClassAdded]);
 
-  useEffect(() => {
-    setUser(session?.user)
-  }, [session]);
+  // useEffect(() => {
+  //   setUser(session?.user)
+  // }, [session]);
 
 
 
@@ -128,16 +127,16 @@ const Header = ({ }) => {
 
                 <li>
                   <div className='dropdown headerDropDown userDropDown'>
-                    <button onClick={togglePopup} id="UserPop"><span>{getFirstLettersOfTwoWords(user?.name)}</span></button>
+                    <button onClick={togglePopup} id="UserPop"><span>{getFirstLettersOfTwoWords(session?.user?.name)}</span></button>
                     {isOpen && (
                       <div className="popup-content" onClick={closePopup}>
 
                         <div className='login-dropdown-list'>
                           <div className='login-dropdown-list-item dropdown-name-block'>
-                            <button onClick={togglePopup} id="UserPop"><span>{getFirstLettersOfTwoWords(user?.name)}</span></button>
+                            <button onClick={togglePopup} id="UserPop"><span>{getFirstLettersOfTwoWords(session?.user?.name)}</span></button>
                             <div>
-                              <h3>{user?.name}</h3>
-                              <h6>{user?.email}</h6>
+                              <h3>{session?.user?.name}</h3>
+                              <h6>{session?.user?.email}</h6>
                             </div>
                           </div>
 
