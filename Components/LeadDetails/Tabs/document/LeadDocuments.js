@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import LeadDocumentModal from './create'
 import { useEffect } from 'react'
@@ -16,6 +16,19 @@ function LeadDocuments({ id }) {
     const [reqId, setReqId] = useState()
     const [refresh, setRefresh] = useState(false)
 
+    const [page, setPage] = useState(0);
+    const [limit, setLimit] = useState(10);
+
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+    const handleChangeRowsPerPage = (event) => {
+        setLimit(parseInt(event.target.value));
+        setPage(0);
+      };
+    
+
     const handleCreate = () => {
         setEditId(0)
     }
@@ -29,12 +42,12 @@ function LeadDocuments({ id }) {
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await LeadApi.listDocuments({ lead_id: id })
+        const response = await LeadApi.listDocuments({limit: limit, lead_id:id, page: page + 1 })
         setList(response?.data)
         setLoading(false)
     }
 
-    console.log(list?.data);
+    // console.log(list?.data);
 
     function trimUrlAndNumbers(url) {
         const lastSlashIndex = url.lastIndexOf('/');
@@ -45,7 +58,7 @@ function LeadDocuments({ id }) {
 
     useEffect(() => {
         fetchList()
-    }, [refresh])
+    }, [refresh,page])
 
     return (
         <>
@@ -69,65 +82,77 @@ function LeadDocuments({ id }) {
                             {
                                 list?.data?.length > 0 ?
 
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>
+                                    <TableContainer>
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>
 
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Name
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Document
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Created By
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Created Date
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Uploaded By
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Uploaded Date
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Status
-                                                    </Typography>
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {
-                                                list?.data?.map((obj, index) => (
-                                                    <TableRow key={obj?.id}>
-                                                        <TableCell><Tooltip title={obj?.note}>{obj?.document_template?.name}</Tooltip></TableCell>
-                                                        <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell>
-                                                        <TableCell>{obj?.created_by?.name}</TableCell>
-                                                        <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
-                                                        <TableCell>{obj?.uploaded_by?.name}</TableCell>
-                                                        <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
-                                                        <TableCell>{obj?.status}</TableCell>
-                                                        <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
-                                                    </TableRow>
-                                                ))
-                                            }
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Name
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Document
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Created By
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Created Date
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Uploaded By
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Uploaded Date
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Status
+                                                        </Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {
+                                                    list?.data?.map((obj, index) => (
+                                                        <TableRow key={obj?.id}>
+                                                            <TableCell><Tooltip title={obj?.note}>{obj?.document_template?.name}</Tooltip></TableCell>
+                                                            <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell>
+                                                            <TableCell>{obj?.created_by?.name}</TableCell>
+                                                            <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell>{obj?.uploaded_by?.name}</TableCell>
+                                                            <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell>{obj?.status}</TableCell>
+                                                            <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
+                                                        </TableRow>
+                                                    ))
+                                                }
 
-                                        </TableBody>
-                                    </Table>
+                                            </TableBody>
+                                        </Table>
+
+                                        <TablePagination
+                                            rowsPerPageOptions={[10, 15, 25]}
+                                            component="div"
+                                            count={list?.meta?.total || 0}
+                                            rowsPerPage={list?.meta?.per_page || 0}
+                                            page={page}
+                                            onPageChange={handleChangePage}
+                                            onRowsPerPageChange={handleChangeRowsPerPage}
+                                        />
+                                    </TableContainer>
 
                                     :
                                     <h4>You have no Documents</h4>

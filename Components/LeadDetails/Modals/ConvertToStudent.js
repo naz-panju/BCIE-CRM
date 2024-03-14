@@ -16,7 +16,6 @@ import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import PhoneInput from 'react-phone-input-2';
 import moment from 'moment';
-import { LeadApi } from '@/data/Endpoints/Lead';
 import { StudentApi } from '@/data/Endpoints/Student';
 import toast from 'react-hot-toast';
 
@@ -24,10 +23,10 @@ const scheme = yup.object().shape({
     first_name: yup.string().required("First Name is Required"),
     email: yup.string().required("Email is Required"),
     phone: yup.string().required("Phone Number is Required"),
-    dob: yup.string().required("Required Field"),
-    zip: yup.string().required("Required Field"),
+    dob: yup.string().required("Date Of Birth is Required"),
+    zip: yup.string().required("Zip Code is Required"),
     country: yup.object().required("Please Choose a Country").typeError("Please choose a Country"),
-    state: yup.string().required("Required Field"),
+    state: yup.string().required("State is Required"),
 })
 
 export default function ConvertLeadToStudent({ details, editId, setEditId, refresh, setRefresh }) {
@@ -187,7 +186,7 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
                 open={open}
                 onClose={handleDrawerClose}
             >
-                <Grid width={750}>
+                <Grid width={550}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <a style={{ fontWeight: 500, fontSize: '19px' }}>Convert To Student</a>
                         <IconButton
@@ -208,45 +207,66 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
                                     <>
 
                                         <Grid p={1} container >
-                                            <Grid item pr={1} xs={6} md={1.2}>
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Title</a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+
                                                 <TextInput control={control} name="title"
                                                     value={watch('title')} />
                                                 {errors.title && <span className='form-validation'>{errors.title.message}</span>}
                                             </Grid>
+                                        </Grid>
 
-                                            <Grid item pr={1} xs={6} md={3.6}>
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>First Name </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <TextInput control={control} name="first_name"
                                                     value={watch('first_name')} />
                                                 {errors.first_name && <span className='form-validation'>{errors.first_name.message}</span>}
                                             </Grid>
+                                        </Grid>
 
-                                            <Grid item pr={1} xs={6} md={3.6}>
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Middle Name </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <TextInput control={control} name="middle_name"
                                                     value={watch('middle_name')} />
                                                 {errors.middle_name && <span className='form-validation'>{errors.middle_name.message}</span>}
                                             </Grid>
+                                        </Grid>
 
-                                            <Grid item pr={1} xs={6} md={3.6}>
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Last Name </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <TextInput control={control} name="last_name"
                                                     value={watch('last_name')} />
                                                 {errors.last_name && <span className='form-validation'>{errors.last_name.message}</span>}
                                             </Grid>
-
                                         </Grid>
 
-                                        <Grid mt={1} p={1} container >
-                                            <Grid item pr={1} xs={6} md={6}>
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Email Address </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <TextInput control={control} name="email"
                                                     value={watch('email')} />
                                                 {errors.email && <span className='form-validation'>{errors.email.message}</span>}
                                             </Grid>
-                                            <Grid item pr={1} xs={6} md={6}>
+                                        </Grid>
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Phone Number </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <PhoneInput
                                                     {...register('phone')}
                                                     international
@@ -273,48 +293,28 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
                                                     }}
                                                 />
                                                 {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
-
                                             </Grid>
                                         </Grid>
 
-                                        <Grid mt={1} p={1} container >
-                                            <Grid item pr={1} xs={6} md={2.5}>
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Date Of Birth </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <DateInput
                                                     control={control}
                                                     name="dob"
                                                     value={watch('dob')}
-                                                // placeholder='Due Date'
                                                 />
                                                 {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
                                             </Grid>
-                                            <Grid item pr={1} xs={6} md={2.5}>
-                                                <a className='form-text'>Zip Code </a>
-                                                <TextInput type='number' control={control} name="zip"
-                                                    value={watch('zip')} />
-                                                {errors.zip && <span className='form-validation'>{errors.zip.message}</span>}
-                                            </Grid>
-                                            <Grid item pr={1} xs={6} md={3.5}>
-                                                <a className='form-text'>Country </a>
-                                                <SelectX
-                                                    loadOptions={fetchGlobalCountry}
-                                                    control={control}
-                                                    name={'country'}
-                                                    defaultValue={watch('country')}
-                                                />
-                                                {errors.country && <span className='form-validation'>{errors.country.message}</span>}
-                                            </Grid>
-                                            <Grid item pr={1} xs={6} md={3.5}>
-                                                <a className='form-text'>State/Province </a>
-                                                <TextInput disabled={!watch('country')} control={control} name="state"
-                                                    value={watch('state')} />
-                                                {errors.state && <span className='form-validation'>{errors.state.message}</span>}
-                                            </Grid>
                                         </Grid>
 
-                                        <Grid mt={1} p={1} container >
-                                            <Grid item pr={1} xs={8} md={8}>
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'> Address </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <TextField
                                                     {...register('address')}
                                                     variant="outlined"
@@ -326,6 +326,44 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
                                                 {errors.email && <span className='form-validation'>{errors.email.message}</span>}
                                             </Grid>
                                         </Grid>
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>Country </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <SelectX
+                                                    loadOptions={fetchGlobalCountry}
+                                                    control={control}
+                                                    name={'country'}
+                                                    defaultValue={watch('country')}
+                                                />
+                                                {errors.country && <span className='form-validation'>{errors.country.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>State / Province</a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <TextInput disabled={!watch('country')} control={control} name="state"
+                                                    value={watch('state')} />
+                                                {errors.state && <span className='form-validation'>{errors.state.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>Zip Code </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <TextInput type='number' control={control} name="zip"
+                                                    value={watch('zip')} />
+                                                {errors.zip && <span className='form-validation'>{errors.zip.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
 
                                     </>
                             }

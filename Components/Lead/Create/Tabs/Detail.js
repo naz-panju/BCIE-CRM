@@ -369,7 +369,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                 <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Preferred Course</Typography>
+                                    <Typography sx={{ fontWeight: '500' }}>Preferred courses</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={7}>
                                     <TextInput control={control} {...register('preffered_course')}

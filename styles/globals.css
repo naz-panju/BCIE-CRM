@@ -1076,7 +1076,9 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.timelineIcon.css-i4bv87-MuiSvgIcon
   word-wrap: break-word;
   vertical-align: top;
   display: flex;
-  justify-content: space-between;
+  /* added direction */
+  flex-direction: column;
+  /* justify-content: space-between; */
   gap: 15px;
   margin-top: -6px;
 }
@@ -1292,4 +1294,16 @@ body.body-active section , body.body-active .header {
 
 .form-text{
   font-size: 15px;
+}
+
+.course-popup {
+  transition: height 0.5s ease, opacity 0.5s ease; /* Transition for height and opacity */
+    opacity: 0; /* Initially hide the popup */
+    height: 0; /* Initially collapse the popup */
+    overflow: hidden; /* Hide any overflow content */
+}
+
+.course-popup.show {
+    opacity: 1; /* Show the popup */
+    height: auto; /* Expand the height to fit content */
 }

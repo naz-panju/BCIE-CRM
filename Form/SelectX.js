@@ -69,6 +69,7 @@ const SelectX = (props) => {
                         menuPortalTarget={document.body}
                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                         onInputChange={props.onInputChange} // Pass the provided onInputChange handler
+                        menuPlacement='auto'
                     />
                 )}
             />

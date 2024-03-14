@@ -51,7 +51,7 @@ export default function BasicSelect({ id }) {
             <div className='lead-tabpanel-content-block-title'>
                 <h2>Timeline</h2>
                 <div className='timeline-top-right-block'>
-                    <Box className="" sx={{ minWidth: 120 }}>
+                    {/* <Box className="" sx={{ minWidth: 120 }}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Age</InputLabel>
                             <Select className='tabpanel-select' labelId="demo-simple-select-label" id="demo-simple-select" value={select} label="Select" onChange={handleChange} >
@@ -60,13 +60,13 @@ export default function BasicSelect({ id }) {
                                 <MenuItem value={30}>Thirty</MenuItem>
                             </Select>
                         </FormControl>
-                    </Box>
+                    </Box> */}
                 </div>
             </div>
 
             {
                 laoding ?
-                    <Skeleton variant="rectangular" width={'100%'} height={200} />
+                    loadingTimeline()
                     :
                     <div className='timeline-content-block-item'>
                         {
@@ -115,3 +115,27 @@ export default function BasicSelect({ id }) {
 
     );
 }
+
+const loadingTimeline = () => (
+    <div className='timeline-content-block-item'>
+        <Timeline sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
+            {
+                [...Array(5)]?.map((_, index) => (
+                    <TimelineItem key={index} className='TimelineItemClass'>
+                        <TimelineOppositeContent className='TimelineOppositeContent' >
+                            <Skeleton variant="rectangular" width={150} height={20} />
+                        </TimelineOppositeContent>
+                        <TimelineSeparator>
+                            <Skeleton className='timelineIcon' variant="circular" width={33} height={33} />
+                            <TimelineConnector />
+                        </TimelineSeparator>
+                        <TimelineContent>
+                            <Skeleton variant="rectangular" width={'100%'} height={30} />
+                        </TimelineContent>
+                    </TimelineItem>
+                ))
+            }
+
+        </Timeline>
+    </div>
+)

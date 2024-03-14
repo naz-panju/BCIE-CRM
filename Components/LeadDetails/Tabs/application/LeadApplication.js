@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { LeadApi } from '@/data/Endpoints/Lead'
@@ -6,6 +6,7 @@ import moment from 'moment'
 import { Edit } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
 import LeadApplicationModal from './create'
+import { ApplicationApi } from '@/data/Endpoints/Application'
 
 function LeadApplication({ lead_id }) {
 
@@ -14,6 +15,20 @@ function LeadApplication({ lead_id }) {
     const [loading, setLoading] = useState(false)
     const [reqId, setReqId] = useState()
     const [refresh, setRefresh] = useState(false)
+
+    const [page, setPage] = useState(0);
+    const [limit, setLimit] = useState(10);
+
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+    const handleChangeRowsPerPage = (event) => {
+        setLimit(parseInt(event.target.value));
+        setPage(0);
+      };
+    
+
 
     const handleCreate = () => {
         setEditId(0)
@@ -26,17 +41,18 @@ function LeadApplication({ lead_id }) {
         setEditId(id)
     }
 
-    // const fetchList = async () => {
-    //     setLoading(true)
-    //     const response = await LeadApi.listDocuments({ lead_id: id })
-    //     setList(response?.data)
-    //     setLoading(false)
-    // }
+    const fetchList = async () => {
+        setLoading(true)
+        const response = await ApplicationApi.list({limit: limit, lead_id, page: page + 1, })
+        setList(response?.data)
+        setLoading(false)
+    }
 
+    console.log(list);
 
     useEffect(() => {
-        // fetchList()
-    }, [refresh])
+        fetchList()
+    }, [refresh,page])
 
     return (
         <>
@@ -44,12 +60,12 @@ function LeadApplication({ lead_id }) {
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
-                    <h2>Application</h2>
+                    <h2>Applications</h2>
                     <Grid display={'flex'} alignItems={'end'}>
                         <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
                     </Grid>
                 </div>
-                {/* {
+                {
                     loading ?
                         loadTable()
                         :
@@ -57,71 +73,59 @@ function LeadApplication({ lead_id }) {
                             {
                                 list?.data?.length > 0 ?
 
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>
+                                    <TableContainer>
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>
 
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Name
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Document
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Created By
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Created Date
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Uploaded By
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Uploaded Date
-                                                    </Typography>
-                                                </TableCell>
-                                                <TableCell>
-                                                    <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                        Status
-                                                    </Typography>
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {
-                                                list?.data?.map((obj, index) => (
-                                                    <TableRow key={obj?.id}>
-                                                        <TableCell><Tooltip title={obj?.note}>{obj?.document_template?.name}</Tooltip></TableCell>
-                                                        <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell>
-                                                        <TableCell>{obj?.created_by?.name}</TableCell>
-                                                        <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
-                                                        <TableCell>{obj?.uploaded_by?.name}</TableCell>
-                                                        <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
-                                                        <TableCell>{obj?.status}</TableCell>
-                                                        <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
-                                                    </TableRow>
-                                                ))
-                                            }
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            University
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Course
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Intake
+                                                        </Typography>
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {
+                                                    list?.data?.map((obj, index) => (
+                                                        <TableRow key={obj?.id}>
+                                                            <TableCell>{obj?.university?.name}</TableCell>
+                                                            <TableCell>{obj?.course?.name}</TableCell>
+                                                            <TableCell>{obj?.intake?.name}</TableCell>
 
-                                        </TableBody>
-                                    </Table>
+                                                            <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
+                                                        </TableRow>
+                                                    ))
+                                                }
 
+                                            </TableBody>
+                                        </Table>
+                                        <TablePagination
+                                            rowsPerPageOptions={[10, 15, 25]}
+                                            component="div"
+                                            count={list?.meta?.total || 0}
+                                            rowsPerPage={list?.meta?.per_page || 0}
+                                            page={page}
+                                            onPageChange={handleChangePage}
+                                            onRowsPerPageChange={handleChangeRowsPerPage}
+                                        />
+
+                                    </TableContainer>
                                     :
-                                    <h4>You have no Documents</h4>
+                                    <h4>No Application Found</h4>
                             }
                         </div>
-                } */}
+                }
 
             </div>
         </>
@@ -130,33 +134,33 @@ function LeadApplication({ lead_id }) {
 
 export default LeadApplication
 
-// const loadTable = () => {
-//     return (
-//         <Table>
-//             <TableHead>
-//                 <TableRow>
-//                     {[...Array(7)].map((_, index) => (
-//                         <TableCell key={index} align="left">
-//                             <Skeleton variant='rounded' width={60} height={20} />
-//                         </TableCell>
-//                     ))}
-//                 </TableRow>
-//             </TableHead>
-//             <TableBody>
-//                 {
-//                     [...Array(5)]?.map((_, index) => (
-//                         <TableRow key={index} className='table-custom-tr'>
-//                             {
-//                                 [...Array(7)]?.map((_, colindex) => (
-//                                     <TableCell key={colindex} align="left"><Skeleton variant='rounded' width={120} height={20} /></TableCell>
-//                                 ))
-//                             }
-//                         </TableRow>
-//                     ))
-//                 }
+const loadTable = () => {
+    return (
+        <Table>
+            <TableHead>
+                <TableRow>
+                    {[...Array(3)].map((_, index) => (
+                        <TableCell key={index} align="left">
+                            <Skeleton variant='rounded' width={60} height={20} />
+                        </TableCell>
+                    ))}
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {
+                    [...Array(5)]?.map((_, index) => (
+                        <TableRow key={index} className='table-custom-tr'>
+                            {
+                                [...Array(3)]?.map((_, colindex) => (
+                                    <TableCell key={colindex} align="left"><Skeleton variant='rounded' width={120} height={20} /></TableCell>
+                                ))
+                            }
+                        </TableRow>
+                    ))
+                }
 
-//             </TableBody>
-//         </Table>
-//     )
+            </TableBody>
+        </Table>
+    )
 
-// }
+}

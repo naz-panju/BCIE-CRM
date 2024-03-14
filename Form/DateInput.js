@@ -11,7 +11,7 @@ const DateInput = (props) => {
         '& .MuiFilledInput-root': {
             backgroundColor: 'background.paper',
             borderWidth: 1,
-            // width: '100%',
+            width: '100%',
             borderStyle: 'solid',
             borderColor: 'neutral.300',
             borderRadius: 1,

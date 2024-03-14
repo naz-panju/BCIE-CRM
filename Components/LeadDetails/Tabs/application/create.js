@@ -4,9 +4,6 @@ import { Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/
 import { useEffect } from 'react';
 import { Close, Refresh } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
-import DateInput from '@/Form/DateInput';
-import SelectX from '@/Form/SelectX';
-import TextInput from '@/Form/TextInput';
 import { useState } from 'react';
 
 import * as yup from "yup";
@@ -17,6 +14,7 @@ import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import AsyncSelect from "react-select/async";
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import toast from 'react-hot-toast';
+import TextInput from '@/Form/TextInput';
 
 
 const scheme = yup.object().shape({
@@ -54,6 +52,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
 
     const [selectedCountryID, setselectedCountryID] = useState()
     const [selectedUniversityId, setselectedUniversityId] = useState()
+    const [coursePopup, setcoursePopup] = useState(false)
 
     const fetchCounty = (e) => {
         return ListingApi.country({ keyword: e }).then(response => {
@@ -127,7 +126,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
                 toast.success('Applied Successfully')
                 reset()
                 handleClose()
-                setRefresh()
+                setRefresh(!refresh)
                 setLoading(false)
             }
 
@@ -189,6 +188,10 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
 
     }
 
+    const handleCoursePopup = () => {
+        setcoursePopup(!coursePopup)
+    }
+
     useEffect(() => {
         if (watch('country')) {
             setselectedCountryID(watch('country')?.id)
@@ -238,8 +241,11 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
                                     <>
 
                                         <Grid p={1} container >
-                                            <Grid item pr={1} xs={6} md={6}>
+                                            <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
                                                 <a className='form-text'>Country</a>
+                                            </Grid>
+
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <AsyncSelect
                                                     name='country'
                                                     defaultValue={watch('country')}
@@ -257,10 +263,19 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
                                                     defaultValue={watch('country')}
                                                 /> */}
                                                 {errors.country && <span className='form-validation'>{errors.country.message}</span>}
+
                                             </Grid>
 
-                                            <Grid item pr={1} xs={6} md={6}>
+                                        </Grid>
+
+
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
                                                 <a className='form-text'>University</a>
+                                            </Grid>
+
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <AsyncSelect
                                                     isDisabled={!selectedCountryID}
                                                     key={selectedCountryID}
@@ -275,13 +290,14 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
                                                 />
                                                 {errors.university && <span className='form-validation'>{errors.university.message}</span>}
                                             </Grid>
-
                                         </Grid>
 
-
                                         <Grid p={1} container >
-                                            <Grid item pr={1} xs={6} md={6}>
+                                            <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
                                                 <a className='form-text'>Course</a>
+                                            </Grid>
+
+                                            <Grid item pr={1} xs={8} md={8}>
 
                                                 <AsyncSelect
                                                     isDisabled={!selectedUniversityId}
@@ -295,12 +311,49 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
                                                     getOptionValue={(e) => e.id}
                                                     onChange={handleCourseChange}
                                                 />
-
                                                 {errors.course && <span className='form-validation'>{errors.course.message}</span>}
                                             </Grid>
+                                        </Grid>
 
-                                            <Grid item pr={1} xs={6} md={6}>
+                                        <Grid p={1} container  >
+                                            <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
+
+                                            </Grid>
+
+                                            <Grid item display={'flex'} justifyContent={'end'} pr={1} xs={8} md={8}>
+                                                <Button onClick={handleCoursePopup} size='small' className='bg-sky-300 text-white h-6 text-xs hover:bg-sky-500 text-white' variant='contained'>{coursePopup ? 'Cancel' : 'Add Course'}</Button>
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid className={`border border-sky-100 bg-sky-50 course-popup ${coursePopup ? 'show' : ''}`}>
+                                            <Grid p={1} container >
+                                                <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
+                                                    <a className='form-text'>Course Level</a>
+                                                </Grid>
+
+                                                <Grid item pr={1} xs={8} md={8}>
+                                                    <TextInput control={control} name="course_field"
+                                                        value={watch('course_field')} />
+                                                </Grid>
+                                            </Grid>
+                                            <Grid p={1} container >
+                                                <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
+                                                    <a className='form-text'>Course</a>
+                                                </Grid>
+
+                                                <Grid item pr={1} xs={8} md={8}>
+                                                    <TextInput control={control} name="course_field"
+                                                        value={watch('course_field')} />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
                                                 <a className='form-text'>Intake</a>
+                                            </Grid>
+
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <AsyncSelect
                                                     isDisabled={!selectedUniversityId}
                                                     key={selectedUniversityId}
@@ -315,12 +368,14 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
                                                 />
                                                 {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
                                             </Grid>
-
                                         </Grid>
 
-                                        <Grid mt={1} p={1} container >
-                                            <Grid item pr={1} xs={12} md={12}>
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'> Remarks </a>
+                                            </Grid>
+
+                                            <Grid item pr={1} xs={8} md={8}>
                                                 <TextField
                                                     {...register('remarks')}
                                                     variant="outlined"
@@ -330,8 +385,11 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
                                                     sx={{ width: '100%', }}
                                                 />
                                                 {errors.email && <span className='form-validation'>{errors.email.message}</span>}
+
                                             </Grid>
+
                                         </Grid>
+
 
                                     </>
                             }

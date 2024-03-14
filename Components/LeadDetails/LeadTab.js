@@ -22,6 +22,7 @@ import { Skeleton } from '@mui/material';
 import LeadDetail from './Tabs/LeadDetail';
 import LeadApplication from './Tabs/application/LeadApplication';
 import { Apps } from '@mui/icons-material';
+import FollowUp from './Tabs/follow-up/LeadFollowup';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -74,7 +75,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
   }
 
   const [isClient, setIsClient] = useState(false);
-  
+
   const TabData = [
     {
       label: 'Lead Details',
@@ -83,11 +84,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
       ),
       icon: <PermIdentityIcon />
     },
-    {
-      label: 'Application',
-      component: <LeadApplication lead_id={data?.id} />,
-      icon: <Apps />
-    },
+
     {
       label: 'Timeline',
       component: <LeadTimeline id={data?.id} />,
@@ -95,7 +92,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
     },
     {
       label: 'Follow up & Notes',
-      component: <LeadFollowUp id={data?.id} />,
+      component: <FollowUp data={data} lead_id={data?.id} />,
       icon: <ChecklistIcon />
     },
     {
@@ -107,6 +104,11 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
       label: 'Documents',
       component: <LeadDocuments id={data?.id} />,
       icon: <FolderOpenIcon />
+    },
+    {
+      label: 'Applications',
+      component: <LeadApplication lead_id={data?.id} />,
+      icon: <Apps />
     },
     {
       label: 'Tickets',
