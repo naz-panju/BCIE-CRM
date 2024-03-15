@@ -55,7 +55,7 @@ export default function FollowUp({ lead_id, data }) {
         }
         FollowupApi.complete(dataToSubmit).then((response) => {
             console.log(response);
-            if (response?.statusText == 'OK') {
+            if (response?.status == 200 || 201) {
                 toast.success(response?.data?.message)
                 setconfirmId()
                 noLoadingFetch()
