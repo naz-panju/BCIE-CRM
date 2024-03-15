@@ -16,18 +16,24 @@ import { useEffect } from 'react'
 import { LoadingButton } from '@mui/lab'
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit'
 import ReactSelector from 'react-select';
+import { StudentApi } from '@/data/Endpoints/Student'
+import AsyncSelect from "react-select/async";
 
 
 
 
-function Detail({ handleClose, setRefresh, refresh, editId }) {
+function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
 
-   
+
 
     const [phone, setPhone] = useState()
     const [code, setCode] = useState()
+
     const [altPhone, setAltPhone] = useState()
     const [altCode, setAltCode] = useState()
+
+    const [whatsapp, setWhatsapp] = useState()
+    const [whatsappCode, setWhatsappCode] = useState()
     const scheme = yup.object().shape({
         name: yup.string().required("Name is Required"),
         email: yup.string().email("Invalid email format").required("Email is Required"),
@@ -59,6 +65,46 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
         ListingApi.reference({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 setreferenceOption(response?.data?.data)
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchCourseLevel = (e) => {
+        return ListingApi.courseLevel({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchStudents = (e) => {
+        return StudentApi.list({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchAgencies = (e) => {
+        return ListingApi.agencies({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchSources = (e) => {
+        return ListingApi.leadSource({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
             } else {
                 return [];
             }
@@ -105,15 +151,37 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
         trigger('alt_phone');
     };
 
+    const handleWhatsAppNumber = (value, country) => {
+        if (!value) {
+            setWhatsapp('');
+            setValue('whatsapp', '')
+            return;
+        }
+
+        const { dialCode } = country;
+        setWhatsappCode(dialCode)
+        setValue('whatsapp', value)
+        if (value.startsWith(dialCode)) {
+            const trimmedPhone = value.slice(dialCode.length);
+            setWhatsapp(trimmedPhone);
+        } else {
+            setWhatsapp(value);
+        }
+        // Trigger validation for the 'phone' field
+        trigger('whatsapp');
+    };
+
+    const handleSourseChange = (data) => {
+        setValue('source', data || '')
+        setValue('student', '')
+        setValue('agency', '')
+    }
+
+
 
     const onSubmit = async (data) => {
 
         setLoading(true)
-
-        let leadDate = ''
-        if (data?.date) {
-            leadDate = moment(data?.date).format('YYYY-MM-DD')
-        }
 
         let dataToSubmit = {
             name: data?.name,
@@ -125,16 +193,19 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             alternate_phone_country_code: altCode,
             alternate_phone_number: altPhone,
 
+            whatsapp_country_code: whatsappCode,
+            whatsapp_number: whatsapp,
+
             preferred_course: data?.preffered_course,
+            preferred_countries: data?.preffered_country,
+
+            course_level_id: data?.preffered_course_level?.id,
+
             referrance_from: data?.reference,
 
-            // follow_up_assigned_to: data?.assigned_to?.id,
-            // applying_for_country_id: data?.country?.id,
-            // applying_for_university_id: data?.institute?.id,
-            // applying_for_course_id: data?.course?.id,
-            // next_follow_up_date: leadDate,
-            // stage_id: data?.stage?.id,
-            // substage_id: data?.sub_stage?.id,
+            source_id: data?.source?.id,
+            agency_id: data?.agency?.id,
+            referred_student_id: data?.student?.id,
 
             note: data?.note
         }
@@ -152,8 +223,12 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
         action.then((response) => {
             console.log(response);
             if (response?.data?.data) {
-                toast.success('Lead Has Been Successfully Created ')
-                setRefresh(!refresh)
+                toast.success(editId>0?'Lead Has Been Successfully Updated ':'Lead Has Been Successfully Created')
+                if (handleRefresh) {
+                    handleRefresh()
+                } else {
+                    setRefresh(!refresh)
+                }
                 reset()
                 handleClose()
                 setLoading(false)
@@ -167,23 +242,6 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             setLoading(false)
         })
 
-        // try {
-        //     const response = await LeadApi.add(dataToSubmit)
-        //     console.log(response);
-
-        //     if (response?.data?.data) {
-        //         toast.success('Lead Has Been Successfully Created ')
-        //         setRefresh(!refresh)
-        //         reset()
-        //         handleClose()
-        //     }
-
-        // } catch (error) {
-        //     console.log(error);
-        //     toast.error(error?.message)
-
-        // }
-
     }
 
     const getDetails = async () => {
@@ -196,6 +254,8 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             // console.log(`+${data?.phone_country_code}${data?.phone_number}`);
 
             setValue('name', data?.name)
+            setValue('email', data?.email)
+
             setValue('phone', `+${data?.phone_country_code}${data?.phone_number}`)
             setPhone(data?.phone_number)
             setCode(data?.phone_country_code)
@@ -204,39 +264,34 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
             setAltPhone(data?.alternate_phone_number)
             setAltCode(data?.alternate_phone_country_code)
 
-            setValue('email', data?.email)
+            setValue('whatsapp', `+${data?.whatsapp_country_code}${data?.whatsapp_number}`)
+            setWhatsapp(data?.whatsapp_number)
+            setWhatsappCode(data?.whatsapp_country_code)
+
+            setValue('preffered_country', data?.preferred_countries)
+            setValue('preffered_course_level', data?.course_level)
             setValue('preffered_course', data?.preferred_course)
+
+            setValue('source', data?.lead_source)
+            setValue('student', data?.referredStudent)
+            setValue('agency', data?.agency)
             setValue('reference', data?.referrance_from)
 
-
-            // setValue('country', data?.applyingForCountry)
-            // setValue('institute', data?.applyingForUniversity)
-            // setValue('course', data?.applyingForCourse)
-            // setValue('stage', data?.stage)
-            // setValue('sub_stage', data?.substage)
-            // setValue('assigned_to', data?.followUpAssignedToUser)
-            // if (data?.next_follow_up_date) {
-            //     const date = moment(data.next_follow_up_date, 'YYYY-MM-DD').toDate();
-            //     setValue('date', date);
-            // }
-
             setValue('note', data?.note)
-            // setValue()
-            // setValue()
-            // setValue()
+            
         }
         setDataLoading(false)
     }
 
-    useEffect(() => {
-        if (watch('country')) {
-            setselectedCountryID(watch('country')?.id)
-        } if (watch('course')) {
-            setselectedCourseID(watch('course')?.id)
-        } if (watch('institute')) {
-            setselectedInstituteID(watch('institute')?.id)
-        }
-    }, [watch('country'), watch('course'), watch('institute')])
+    // useEffect(() => {
+    //     if (watch('country')) {
+    //         setselectedCountryID(watch('country')?.id)
+    //     } if (watch('course')) {
+    //         setselectedCourseID(watch('course')?.id)
+    //     } if (watch('institute')) {
+    //         setselectedInstituteID(watch('institute')?.id)
+    //     }
+    // }, [watch('country'), watch('course'), watch('institute')])
 
     useEffect(() => {
         if (editId > 0) {
@@ -250,8 +305,11 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
         { label: 'Email Address' },
         { label: 'Mobile Number' },
         { label: 'Alternate Mobile Number' },
-        { label: 'Preferred Course' },
-        { label: ' Reference From' },
+        { label: 'Whatsapp Number' },
+        { label: 'Preferred Countries' },
+        { label: 'Preferred Courses' },
+        { label: 'Lead Source' },
+        { label: 'How did you know about us?' },
         { label: 'Note', multi: true },
     ]
 
@@ -261,7 +319,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                 {/* <button type='reset' onClick={() => setLoading(false)}>click</button> */}
                 {
                     dataLoading ?
-                        <LoadingEdit item={items} />
+                        <LoadingEdit leftMD={5} rightMD={7} item={items} />
                         :
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
@@ -369,6 +427,72 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                 <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Whatsapp Number</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <PhoneInput
+                                        {...register('whatsapp')}
+
+                                        international
+                                        // autoFormat
+                                        placeholder="Enter your number"
+                                        country="in"
+                                        value={watch('whatsapp')}
+                                        onChange={handleWhatsAppNumber}
+                                        inputprops={{
+                                            autoFocus: true,
+                                            autoComplete: 'off',
+                                            name: 'phone',
+                                            required: true,
+                                        }}
+                                        inputstyle={{
+                                            width: '100%',
+                                            height: '40px',
+                                            paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                        }}
+                                        buttonstyle={{
+                                            border: 'none',
+                                            backgroundColor: 'transparent',
+                                            marginLeft: '5px',
+                                        }}
+                                    />
+                                    {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
+
+                                </Grid>
+                            </Grid>
+
+
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Preferred Countries</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <TextInput control={control} {...register('preffered_country')}
+                                        value={watch('preffered_country')} />
+                                    {errors.preffered_country && <span className='form-validation'>{errors.preffered_country.message}</span>}
+                                </Grid>
+                            </Grid>
+
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Preferred Course Level</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <SelectX
+                                        menuPlacement='top'
+                                        loadOptions={fetchCourseLevel}
+                                        control={control}
+                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                        name={'preffered_course_level'}
+                                        defaultValue={watch('preffered_course_level')}
+                                    />
+                                    {errors.preffered_course_level && <span className='form-validation'>{errors.preffered_course_level.message}</span>}
+                                </Grid>
+                            </Grid>
+
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
                                     <Typography sx={{ fontWeight: '500' }}>Preferred courses</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={7}>
@@ -377,13 +501,77 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
                                     {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
                                 </Grid>
                             </Grid>
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Lead Source</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={7}>
+                                    <AsyncSelect
+                                        // isDisabled={!selectedUniversityId}
+                                        // key={selectedUniversityId}
+                                        name={'source'}
+                                        defaultValue={watch('source')}
+                                        isClearable
+                                        defaultOptions
+                                        loadOptions={fetchSources}
+                                        getOptionLabel={(e) => e.name}
+                                        getOptionValue={(e) => e.id}
+                                        onChange={handleSourseChange}
+                                    />
+                                </Grid>
+
+                            </Grid>
+
+                            {
+                                watch('source')?.name == 'Referral' &&
+                                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                    <Grid item xs={12} md={5}>
+                                        <Typography sx={{ fontWeight: '500' }}>Referred Student</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={7}>
+                                        <SelectX
+                                            menuPlacement='top'
+                                            loadOptions={fetchStudents}
+                                            control={control}
+                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                            name={'student'}
+                                            defaultValue={watch('student')}
+                                        />
+                                        {/* {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>} */}
+                                    </Grid>
+                                </Grid>
+                            }
+
+
+                            {
+                                watch('source')?.name == 'Agency' &&
+                                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                    <Grid item xs={12} md={5}>
+                                        <Typography sx={{ fontWeight: '500' }}>Referred Agency</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={7}>
+                                        <SelectX
+                                            menuPlacement='top'
+                                            loadOptions={fetchAgencies}
+                                            control={control}
+                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                            name={'agency'}
+                                            defaultValue={watch('agency')}
+                                        />
+                                        {/* {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>} */}
+                                    </Grid>
+                                </Grid>
+                            }
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                 <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Reference From</Typography>
+                                    <Typography sx={{ fontWeight: '500' }}>How did you know about us? </Typography>
                                 </Grid>
                                 <Grid item xs={12} md={7}>
                                     <ReactSelector
+                                        menuPlacement='auto'
                                         onInputChange={fetchReference}
                                         styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}
                                         options={referenceOption}
@@ -403,8 +591,7 @@ function Detail({ handleClose, setRefresh, refresh, editId }) {
 
                             </Grid>
 
-
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                            <Grid display={'flex'} container p={1.5} item xs={12}>
                                 <Grid item xs={12} md={5}>
                                     <Typography sx={{ fontWeight: '500' }}>Note</Typography>
                                 </Grid>

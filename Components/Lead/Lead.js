@@ -11,6 +11,7 @@ import FileCopyIcon from '@mui/icons-material/FileCopy';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import LeadTable from './LeadTable';
 import CreateLead from './Create/Create';
+import { useRouter } from 'next/router';
 
 
 const StyledMenu = styled((props) => (
@@ -55,10 +56,18 @@ const StyledMenu = styled((props) => (
 }));
 
 export default function CustomizedMenus() {
+
+  const router = useRouter();
+
+  const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
+
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [createModal, setCreateModal] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const [editId, setEditId] = useState()
+
+  const [page, setPage] = React.useState(pageNumber);
 
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -72,10 +81,17 @@ export default function CustomizedMenus() {
     setEditId(0)
   }
 
+  const handleRefresh = () => {
+    if (page != 0) {
+      setPage(0)
+    }
+    setRefresh(!refresh)
+  }
+
   return (
 
     <>
-      <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
+      <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content'>
@@ -120,7 +136,7 @@ export default function CustomizedMenus() {
 
 
         <div className='content-block'>
-          <LeadTable refresh={refresh} />
+          <LeadTable refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>
     </>

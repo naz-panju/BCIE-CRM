@@ -25,7 +25,7 @@ const scheme = yup.object().shape({
     description: yup.string().required("Description is Required"),
 })
 
-export default function CreateTask({ editId, setEditId, refresh, setRefresh }) {
+export default function CreateTask({ editId, setEditId, refresh, setRefresh ,lead_id}) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -102,6 +102,11 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh }) {
         }
 
         console.log(dataToSubmit);
+
+        if(lead_id){
+            dataToSubmit['lead_id'] = lead_id
+        }
+
 
         let action;
 

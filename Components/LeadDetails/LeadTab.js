@@ -21,8 +21,9 @@ import LeadDocuments from './Tabs/document/LeadDocuments';
 import { Skeleton } from '@mui/material';
 import LeadDetail from './Tabs/LeadDetail';
 import LeadApplication from './Tabs/application/LeadApplication';
-import { Apps } from '@mui/icons-material';
+import { Apps, TaskSharp } from '@mui/icons-material';
 import FollowUp from './Tabs/follow-up/LeadFollowup';
+import LeadTask from './Tabs/LeadTask';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -104,6 +105,11 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
       label: 'Documents',
       component: <LeadDocuments id={data?.id} />,
       icon: <FolderOpenIcon />
+    },
+    {
+      label: 'Task',
+      component: <LeadTask lead_id={data?.id} />,
+      icon: <TaskSharp />
     },
     {
       label: 'Applications',

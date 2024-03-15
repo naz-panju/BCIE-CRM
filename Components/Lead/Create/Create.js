@@ -6,7 +6,7 @@ import { Close, Refresh } from '@mui/icons-material';
 import CreateTabs from './Tabmenus';
 import { useState } from 'react';
 
-export default function CreateLead({ editId, setEditId, refresh, setRefresh }) {
+export default function CreateLead({ editId, setEditId, refresh, setRefresh,handleRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -62,7 +62,7 @@ export default function CreateLead({ editId, setEditId, refresh, setRefresh }) {
                         </IconButton>
                     </Grid>
                     <hr />
-                    <CreateTabs handleClose={handleClose} editId={editId} refresh={refresh} setRefresh={setRefresh} />
+                    <CreateTabs handleClose={handleClose} editId={editId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
                 </Grid>
             </Drawer>
         </div>

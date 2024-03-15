@@ -40,6 +40,12 @@ function LeadApplication({ lead_id }) {
     const handleEditDocument = (id) => {
         setEditId(id)
     }
+    const handleRefresh = () => {
+        if (page != 0) {
+          setPage(0)
+        }
+        setRefresh(!refresh)
+      }
 
     const fetchList = async () => {
         setLoading(true)
@@ -56,7 +62,7 @@ function LeadApplication({ lead_id }) {
 
     return (
         <>
-            <LeadApplicationModal lead_id={lead_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
+            <LeadApplicationModal lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>

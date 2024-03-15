@@ -30,7 +30,7 @@ function LeadDetails() {
     setLoading(true)
     try {
       const response = await LeadApi.view({ id: urlID })
-      // console.log(response?.data?.data);
+      console.log(response?.data?.data);
       setDetails(response?.data?.data)
       setLoading(false)
     } catch (error) {
@@ -58,10 +58,10 @@ function LeadDetails() {
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>
             <h1>Lead Details</h1>
-            
-              {/* disabled={details?.verification_status == 'Yes'} */}
+
+            {/* disabled={details?.verification_status == 'Yes'} */}
             <Button disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-500 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
-           
+
           </div>
         </div>
         <div className='content-block-details'>
@@ -88,8 +88,14 @@ function LeadDetails() {
                           </div>
                         </div>
                         <div className="tileCellDiv">
-                          <h4>{details?.name}</h4>
-                          <div className="leadStageBox">
+
+                          {
+                            loading ?
+                              <Skeleton variant="rectangular" width={150} height={30} />
+                              :
+                              <h4>{details?.name}</h4>
+                          }
+                          {/* <div className="leadStageBox">  
                             {
                               loading ?
                                 <Skeleton variant="rectangular" width={100} height={30} />
@@ -99,19 +105,19 @@ function LeadDetails() {
                                 </a>
                             }
 
-                          </div>
+                          </div> */} 
                         </div>
                       </div>
 
                       <div className="tileCellDiv qr-code-scan text-right">
-                        {
+                        {/* {
                           loading ?
                             <Skeleton variant="rectangular" width={40} height={40} />
                             :
                             <div id="leadQrCode">
                               <a href="#" type="button" className=''><QrCode /><small className="text-dark">Scan from App</small></a>
                             </div>
-                        }
+                        } */}
                       </div>
                     </div>
 

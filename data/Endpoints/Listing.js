@@ -11,6 +11,9 @@ export const ListingApi = {
     reference:(data) => http.get(`listing/referrals`, { params: data }),
     globalCountry:(data) => http.get(`listing/global-countries`,{ params: data }),
     intakes: (data) => http.get(`listing/intakes`,{ params: data }),
+    courseLevel: (data) => http.get(`listing/course-levels`,{ params: data }),
+    agencies: (data) => http.get(`listing/agencies`,{ params: data }),
+    leadSource: (data) => http.get(`listing/lead-sources`,{ params: data }),
 }
 
 

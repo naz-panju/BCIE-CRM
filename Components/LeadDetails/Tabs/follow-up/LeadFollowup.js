@@ -26,6 +26,7 @@ export default function FollowUp({ lead_id, data }) {
     const [laoding, setLaoding] = useState(false)
     const [confirmId, setconfirmId] = useState()
     const [confirmLoading, setconfirmLoading] = useState(false)
+    const [total, setTotal] = useState(5)
 
     const [editId, setEditId] = useState()
     const [refresh, setRefresh] = useState(false)
@@ -60,9 +61,9 @@ export default function FollowUp({ lead_id, data }) {
                 setconfirmId()
                 noLoadingFetch()
                 setconfirmLoading(false)
-            }else{
+            } else {
                 toast.error(response?.response?.data?.message)
-                setconfirmLoading(false) 
+                setconfirmLoading(false)
             }
         }).catch((error) => {
             console.log(error);
@@ -73,11 +74,13 @@ export default function FollowUp({ lead_id, data }) {
 
     const getData = async () => {
         setLaoding(true)
-        const response = await FollowupApi.list({ id: lead_id })
+        const response = await FollowupApi.list({ id: lead_id, limit })
         setList(response?.data)
+        setTotal(response?.data?.meta?.total)
         setLaoding(false)
     }
 
+    console.log(list);
 
     useEffect(() => {
         getData()
@@ -118,7 +121,7 @@ export default function FollowUp({ lead_id, data }) {
 
                 {
                     laoding ?
-                        loadingTimeline()
+                        loadingTimeline(total)
                         :
                         <div className='timeline-content-block-item'>
                             {
@@ -188,11 +191,11 @@ export default function FollowUp({ lead_id, data }) {
     );
 }
 
-const loadingTimeline = () => (
+const loadingTimeline = (total) => (
     <div className='timeline-content-block-item'>
         <Timeline sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
             {
-                [...Array(5)]?.map((_, index) => (
+                [...Array(total || 5)]?.map((_, index) => (
                     <TimelineItem key={index} className='TimelineItemClass'>
                         <TimelineOppositeContent className='TimelineOppositeContent' >
                             <Skeleton variant="rectangular" width={150} height={20} />

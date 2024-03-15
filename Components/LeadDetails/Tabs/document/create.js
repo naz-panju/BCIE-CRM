@@ -30,7 +30,7 @@ const style = {
     p: 4,
 };
 
-export default function LeadDocumentModal({ id, editId, setEditId, refresh, setRefresh }) {
+export default function LeadDocumentModal({ id, editId, setEditId,handleRefresh }) {
     const scheme = yup.object().shape({
 
         template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -120,7 +120,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, refresh, setR
             if (response?.data?.data) {
                 handleClose()
                 toast.success(editId > 0 ? 'Document has been successfully updated' : 'Document has been successfully added')
-                setRefresh(!refresh)
+                handleRefresh()
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)

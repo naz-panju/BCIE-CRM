@@ -589,10 +589,10 @@ button#UserPop span {
   width: 70px;
 }
 
-.table-custom-tr:nth-child(even) {
+/* .table-custom-tr:nth-child(even) {
   border-left: 4px solid #e7483b;
   border-radius: 0 10px 10px 0;
-}
+} */
 
 .arrow-steps {
   margin: 30px -3px;

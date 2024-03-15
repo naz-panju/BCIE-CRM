@@ -1,14 +1,17 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import LeadDocumentModal from './create'
 import { useEffect } from 'react'
 import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
-import LeadDocumentRequest from './request'
 import { Edit } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
+import { ApplicationApi } from '@/data/Endpoints/Application'
+import { TaskApi } from '@/data/Endpoints/Task'
+import CreateTask from '@/Components/Task/Create/Create'
+import TaskDetailModal from '@/Components/TaskDetails/Modal'
+import StatusModal from '@/Components/Task/StatusModal'
 
-function LeadDocuments({ id }) {
+function LeadTask({ lead_id }) {
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
@@ -19,66 +22,76 @@ function LeadDocuments({ id }) {
     const [page, setPage] = useState(0);
     const [limit, setLimit] = useState(10);
 
+    const [taskDetails, setTaskDetails] = useState()
+    const [statusOpen, setStatusOpen] = useState(false)
+    const [detailId, setDetailId] = useState()
+
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
+
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
         setPage(0);
-      };
-    
+    };
+
+
 
     const handleCreate = () => {
         setEditId(0)
     }
-    const handleRequest = () => {
-        setReqId(0)
+
+    const handleEdit = (id) => {
+        setEditId(id)
     }
 
-    const handleEditDocument = (id) => {
-        setEditId(id)
+    const handleDetailOpen = (id) => {
+        setDetailId(id)
+    }
+
+    const handleStatusChange = (data) => {
+        setStatusOpen(true)
+        setTaskDetails(data)
     }
 
     const handleRefresh = () => {
         if (page != 0) {
-          setPage(0)
+            setPage(0)
         }
         setRefresh(!refresh)
-      }
+    }
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await LeadApi.listDocuments({limit: limit, lead_id:id, page: page + 1 })
+        const response = await TaskApi.list({ limit: limit, lead_id, page: page + 1, })
         setList(response?.data)
         setLoading(false)
     }
 
-    // console.log(list?.data);
-
-    function trimUrlAndNumbers(url) {
-        const lastSlashIndex = url.lastIndexOf('/');
-        let trimmedString = url.substring(lastSlashIndex + 1);
-        trimmedString = trimmedString.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
-        return trimmedString.replace(/_/g, ''); // Replace all underscores with an empty string
-    }
+    console.log(list);
 
     useEffect(() => {
         fetchList()
-    }, [refresh,page])
+    }, [refresh, page])
 
     return (
         <>
-            <LeadDocumentModal id={id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
-            <LeadDocumentRequest id={id} reqId={reqId} setReqId={setReqId} />
 
+            <CreateTask lead_id={lead_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={handleRefresh} />
+
+            <TaskDetailModal id={detailId} setId={setDetailId} />
+
+            {
+                taskDetails &&
+                <StatusModal onUpdate={fetchList} setDataSet={setTaskDetails} dataSet={taskDetails} setOpen={setStatusOpen} Open={statusOpen} />
+            }
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
-                    <h2>Documents</h2>
+                    <h2>Task</h2>
                     <Grid display={'flex'} alignItems={'end'}>
                         <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Add</Button>
-                        <Button onClick={handleRequest} className='bg-sky-400 ' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Request</Button>
                     </Grid>
                 </div>
                 {
@@ -96,32 +109,27 @@ function LeadDocuments({ id }) {
                                                     <TableCell>
 
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Name
+                                                            Title
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Document
+                                                            Assigned To
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Created By
+                                                            Reviewer
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Created Date
+                                                            Due Date
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Uploaded By
-                                                        </Typography>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Uploaded Date
+                                                            Priority
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
@@ -135,21 +143,18 @@ function LeadDocuments({ id }) {
                                                 {
                                                     list?.data?.map((obj, index) => (
                                                         <TableRow key={obj?.id}>
-                                                            <TableCell><Tooltip title={obj?.note}>{obj?.document_template?.name}</Tooltip></TableCell>
-                                                            <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell>
-                                                            <TableCell>{obj?.created_by?.name}</TableCell>
-                                                            <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
-                                                            <TableCell>{obj?.uploaded_by?.name}</TableCell>
-                                                            <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
-                                                            <TableCell>{obj?.status}</TableCell>
-                                                            <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
-                                                        </TableRow>
+                                                            <TableCell onClick={() => handleDetailOpen(obj?.id)} sx={{cursor:'pointer'}}>{obj?.title}</TableCell>
+                                                            <TableCell>{obj?.assignedToUser?.name}</TableCell>
+                                                            <TableCell >{obj?.reviewer?.name}</TableCell>
+                                                            <TableCell >{moment(obj?.due_date).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell >{obj.priority}</TableCell>
+                                                            <TableCell sx={{cursor:'pointer'}} onClick={() => handleStatusChange(obj)}>{obj.status}</TableCell>
+                                                            <TableCell ><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button></TableCell>    </TableRow>
                                                     ))
                                                 }
 
                                             </TableBody>
                                         </Table>
-
                                         <TablePagination
                                             rowsPerPageOptions={[10, 15, 25]}
                                             component="div"
@@ -159,10 +164,10 @@ function LeadDocuments({ id }) {
                                             onPageChange={handleChangePage}
                                             onRowsPerPageChange={handleChangeRowsPerPage}
                                         />
-                                    </TableContainer>
 
+                                    </TableContainer>
                                     :
-                                    <h4>You have no Documents</h4>
+                                    <h4>No Task Found</h4>
                             }
                         </div>
                 }
@@ -172,14 +177,14 @@ function LeadDocuments({ id }) {
     )
 }
 
-export default LeadDocuments
+export default LeadTask
 
 const loadTable = () => {
     return (
         <Table>
             <TableHead>
                 <TableRow>
-                    {[...Array(5)].map((_, index) => (
+                    {[...Array(3)].map((_, index) => (
                         <TableCell key={index} align="left">
                             <Skeleton variant='rounded' width={60} height={20} />
                         </TableCell>
@@ -191,7 +196,7 @@ const loadTable = () => {
                     [...Array(5)]?.map((_, index) => (
                         <TableRow key={index} className='table-custom-tr'>
                             {
-                                [...Array(5)]?.map((_, colindex) => (
+                                [...Array(3)]?.map((_, colindex) => (
                                     <TableCell key={colindex} align="left"><Skeleton variant='rounded' width={120} height={20} /></TableCell>
                                 ))
                             }

@@ -41,7 +41,7 @@ function a11yProps(index) {
     };
 }
 
-export default function CreateTabs({ handleClose, refresh, setRefresh,editId }) {
+export default function CreateTabs({ handleClose, refresh, setRefresh,editId,handleRefresh }) {
     const [value, setValue] = React.useState(0);
     const [activeTab, setActiveTab] = useState(0);
 
@@ -51,7 +51,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh,editId }) 
 
     const tabs = [
         {
-            component: <Detail editId={editId} handleClose={handleClose} refresh={refresh} setRefresh={setRefresh} />,
+            component: <Detail editId={editId} handleClose={handleClose} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />,
             label: 'Lead Details'
         },
     ];

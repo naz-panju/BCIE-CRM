@@ -36,6 +36,12 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
     const [selectedPriority, setSelectedPriority] = useState('Medium');
     const [open, setOpen] = useState(false)
 
+    const [altPhone, setAltPhone] = useState()
+    const [altCode, setAltCode] = useState()
+
+    const [whatsapp, setWhatsapp] = useState()
+    const [whatsappCode, setWhatsappCode] = useState()
+
     const [loading, setLoading] = useState(false)
 
     const [dataLoading, setDataLoading] = useState(false)
@@ -162,9 +168,51 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
         trigger('phone');
     };
 
+    const handleAltPhoneNumber = (value, country) => {
+        if (!value) {
+            setAltPhone('');
+            setValue('alt_phone', '')
+            return;
+        }
+
+        const { dialCode } = country;
+        setAltCode(dialCode)
+        setValue('alt_phone', value)
+        if (value.startsWith(dialCode)) {
+            const trimmedPhone = value.slice(dialCode.length);
+            setAltPhone(trimmedPhone);
+        } else {
+            setAltPhone(value);
+        }
+        // Trigger validation for the 'phone' field
+        trigger('alt_phone');
+    };
+
+    const handleWhatsAppNumber = (value, country) => {
+        if (!value) {
+            setWhatsapp('');
+            setValue('whatsapp', '')
+            return;
+        }
+
+        const { dialCode } = country;
+        setWhatsappCode(dialCode)
+        setValue('whatsapp', value)
+        if (value.startsWith(dialCode)) {
+            const trimmedPhone = value.slice(dialCode.length);
+            setWhatsapp(trimmedPhone);
+        } else {
+            setWhatsapp(value);
+        }
+        // Trigger validation for the 'phone' field
+        trigger('whatsapp');
+    };
+
     const initialValues = () => {
         setValue('email', details?.email)
         setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
+        setValue('alt_phone', `${details?.alternate_phone_country_code}${details?.alternate_phone_number}`)
+        console.log(details);
     }
 
 
@@ -296,6 +344,78 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
                                             </Grid>
                                         </Grid>
 
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Alternate Mobile Number</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                <PhoneInput
+                                                    {...register('alt_phone')}
+
+                                                    international
+                                                    // autoFormat
+                                                    placeholder="Enter your number"
+                                                    country="in"
+                                                    value={watch('alt_phone')}
+                                                    onChange={handleAltPhoneNumber}
+                                                    inputprops={{
+                                                        autoFocus: true,
+                                                        autoComplete: 'off',
+                                                        name: 'phone',
+                                                        required: true,
+                                                    }}
+                                                    inputstyle={{
+                                                        width: '100%',
+                                                        height: '40px',
+                                                        paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                                    }}
+                                                    buttonstyle={{
+                                                        border: 'none',
+                                                        backgroundColor: 'transparent',
+                                                        marginLeft: '5px',
+                                                    }}
+                                                />
+                                                {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
+
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Whatsapp Number</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                <PhoneInput
+                                                    {...register('whatsapp')}
+
+                                                    international
+                                                    // autoFormat
+                                                    placeholder="Enter your number"
+                                                    country="in"
+                                                    value={watch('whatsapp')}
+                                                    onChange={handleWhatsAppNumber}
+                                                    inputprops={{
+                                                        autoFocus: true,
+                                                        autoComplete: 'off',
+                                                        name: 'phone',
+                                                        required: true,
+                                                    }}
+                                                    inputstyle={{
+                                                        width: '100%',
+                                                        height: '40px',
+                                                        paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                                    }}
+                                                    buttonstyle={{
+                                                        border: 'none',
+                                                        backgroundColor: 'transparent',
+                                                        marginLeft: '5px',
+                                                    }}
+                                                />
+                                                {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
+
+                                            </Grid>
+                                        </Grid>
+
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Date Of Birth </a>
@@ -333,6 +453,7 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
                                             </Grid>
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <SelectX
+                                                    menuPlacement='top'
                                                     loadOptions={fetchGlobalCountry}
                                                     control={control}
                                                     name={'country'}

@@ -1,9 +1,5 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+
 
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
@@ -28,6 +24,7 @@ export default function BasicSelect({ id }) {
     const [list, setList] = useState([])
     const [limit, setLimit] = useState(10)
     const [laoding, setLaoding] = useState(false)
+    const [total, setTotal] = useState(5)
 
     const handleChange = (event) => {
         setAge(event.target.value);
@@ -37,8 +34,10 @@ export default function BasicSelect({ id }) {
         setLaoding(true)
         const response = await LeadApi.timeline({ id, limit })
         setList(response?.data)
+        setTotal(response?.data?.meta?.total)
         setLaoding(false)
     }
+    // console.log(list);
 
     useEffect(() => {
         getData()
@@ -66,7 +65,7 @@ export default function BasicSelect({ id }) {
 
             {
                 laoding ?
-                    loadingTimeline()
+                    loadingTimeline(total)
                     :
                     <div className='timeline-content-block-item'>
                         {
@@ -116,11 +115,11 @@ export default function BasicSelect({ id }) {
     );
 }
 
-const loadingTimeline = () => (
+const loadingTimeline = (total) => (
     <div className='timeline-content-block-item'>
         <Timeline sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
             {
-                [...Array(5)]?.map((_, index) => (
+                [...Array(total || 5)]?.map((_, index) => (
                     <TimelineItem key={index} className='TimelineItemClass'>
                         <TimelineOppositeContent className='TimelineOppositeContent' >
                             <Skeleton variant="rectangular" width={150} height={20} />

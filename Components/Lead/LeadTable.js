@@ -203,11 +203,11 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh }) {
+export default function EnhancedTable({ refresh,page, setPage }) {
 
   const router = useRouter();
 
-  const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
+  // const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
 
 
   // console.log(router);
@@ -215,7 +215,7 @@ export default function EnhancedTable({ refresh }) {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
-  const [page, setPage] = React.useState(pageNumber);
+  // const [page, setPage] = React.useState(pageNumber);
   const [dense, setDense] = React.useState(false);
   const [limit, setLimit] = React.useState(10);
   const [list, setList] = useState([])
@@ -271,6 +271,7 @@ export default function EnhancedTable({ refresh }) {
   const handleChangeDense = (event) => {
     setDense(event.target.checked);
   };
+
 
   const isSelected = (id) => selected.indexOf(id) !== -1;
 

@@ -64,12 +64,12 @@ const SelectX = (props) => {
                         isClearable={true}
                         defaultOptions
                         loadOptions={props.loadOptions} // Corrected prop name
-                        getOptionLabel={e => e.name}
+                        getOptionLabel={e => e.name || e.first_name}
                         getOptionValue={e => e.id}
                         menuPortalTarget={document.body}
                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                         onInputChange={props.onInputChange} // Pass the provided onInputChange handler
-                        menuPlacement='auto'
+                        menuPlacement={props?.menuPlacement || 'auto'}
                     />
                 )}
             />

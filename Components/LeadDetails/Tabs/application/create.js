@@ -25,7 +25,7 @@ const scheme = yup.object().shape({
 
 })
 
-export default function LeadApplicationModal({ lead_id, editId, setEditId, refresh, setRefresh }) {
+export default function LeadApplicationModal({ lead_id, editId, setEditId, handleRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -126,7 +126,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
                 toast.success('Applied Successfully')
                 reset()
                 handleClose()
-                setRefresh(!refresh)
+                handleRefresh()
                 setLoading(false)
             }
 
@@ -328,22 +328,22 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, refre
                                         <Grid className={`border border-sky-100 bg-sky-50 course-popup ${coursePopup ? 'show' : ''}`}>
                                             <Grid p={1} container >
                                                 <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
-                                                    <a className='form-text'>Course Level</a>
+                                                    <a className='form-text'>Add Course Level</a>
                                                 </Grid>
 
                                                 <Grid item pr={1} xs={8} md={8}>
-                                                    <TextInput control={control} name="course_field"
-                                                        value={watch('course_field')} />
+                                                    <TextInput control={control} name="add_course_level"
+                                                        value={watch('add_course_level')} />
                                                 </Grid>
                                             </Grid>
                                             <Grid p={1} container >
                                                 <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
-                                                    <a className='form-text'>Course</a>
+                                                    <a className='form-text'>Add Course</a>
                                                 </Grid>
 
                                                 <Grid item pr={1} xs={8} md={8}>
-                                                    <TextInput control={control} name="course_field"
-                                                        value={watch('course_field')} />
+                                                    <TextInput control={control} name="add_course"
+                                                        value={watch('add_course')} />
                                                 </Grid>
                                             </Grid>
                                         </Grid>
