@@ -21,7 +21,8 @@ import { FollowupApi } from '@/data/Endpoints/Followup';
 
 
 const scheme = yup.object().shape({
-    // country: yup.object().required("Please Choose a Country").typeError("Please choose a Country"),
+    assigned_to: yup.object().required("Please Choose an User").typeError("Please choose an User"),
+    date: yup.string().required('Date field is Required')
     // university: yup.object().required("Please Choose an University").typeError("Please choose an University"),
     // course: yup.object().required("Please Choose a Course").typeError("Please choose a Course"),
     // intake: yup.object().required("Please Choose an Intake").typeError("Please choose an Intake"),
@@ -111,7 +112,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                 handleClose()
                 setRefresh(!refresh)
                 setLoading(false)
-            }else{
+            } else {
                 toast.error(response?.response?.data?.message)
             }
 
@@ -219,7 +220,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                                                     name={'country'}
                                                     defaultValue={watch('country')}
                                                 /> */}
-                                                {errors.country && <span className='form-validation'>{errors.country.message}</span>}
+                                                {errors.assigned_to && <span className='form-validation'>{errors.assigned_to.message}</span>}
 
                                             </Grid>
 
@@ -234,6 +235,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
 
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <DateInput
+                                                    minDate={true}
                                                     control={control}
                                                     name="date"
                                                     value={watch('date')}

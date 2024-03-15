@@ -88,6 +88,7 @@ const DateInput = (props) => {
                         readOnly={props.disabled}
                         onChange={onChange}
                         disableFuture={props.disableFuture}
+                        minDate={props?.minDate ? new Date() : ''}
                         renderInput={(params) => {
                             return (
                                 <TextField {...params}

@@ -78,7 +78,6 @@ export default function FollowUp({ lead_id, data }) {
         setLaoding(false)
     }
 
-    console.log(list);
 
     useEffect(() => {
         getData()
