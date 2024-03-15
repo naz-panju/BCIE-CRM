@@ -65,7 +65,7 @@ export default function LeadDocumentRequest({ id, reqId, setReqId }) {
         }
 
         LeadApi.requestDocument(dataToSubmit).then((response) => {
-            if (response?.statusText == 'OK') {
+            if (response?.status == 200 || 201) {
                 toast.success(response?.data?.message)
                 handleClose()
                 setLoading(false)

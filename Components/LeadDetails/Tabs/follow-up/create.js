@@ -107,7 +107,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
 
         action.then((response) => {
             console.log(response);
-            if (response?.statusText == "Created") {
+            if (response?.status == 200 || 201) {
                 toast.success('Follow-up has been created successfully')
                 handleClose()
                 setRefresh(!refresh)

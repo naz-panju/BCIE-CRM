@@ -144,7 +144,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, refresh, setR
         }
 
         LeadApi.requestDocument(dataToSubmit).then((response) => {
-            if (response?.statusText == 'OK') {
+            if (response?.status == 200 || 201) {
                 toast.success(response?.data?.message)
                 handleClose()
                 setReqLoading(false)
