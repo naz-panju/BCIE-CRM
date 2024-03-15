@@ -6,7 +6,7 @@ import { Tooltip } from '@mui/material';
 import { signOut, useSession } from 'next-auth/react';
 import { LockOpenIcon } from '@mui/icons-material/LockOpen';
 import { ExitToAppIcon } from '@mui/icons-material/ExitToApp';
-import { ExitToApp, LockOpen } from '@mui/icons-material';
+import { ExitToApp, LockOpen, Menu, MenuOpen } from '@mui/icons-material';
 import { blue } from '@mui/material/colors';
 
 
@@ -33,28 +33,44 @@ const Header = ({ }) => {
 
   const [isBodyClassAdded, setIsBodyClassAdded] = useState(false);
 
+  const [sideBarActive, setSideBarActive] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const storedSettings = localStorage.getItem('settings');
+      return storedSettings ? JSON.parse(storedSettings).sidebar : false;
+    }
+    return false;
+  });
+
   const handleButtonClick = () => {
     // Toggle the state to add or remove the class
+    setSideBarActive(!sideBarActive)
+    localStorage.setItem('settings', JSON.stringify({ sidebar: !sideBarActive }));
     setIsBodyClassAdded((prev) => !prev);
   };
 
   const getFirstLettersOfTwoWords = (name) => {
     if (name) {
-        const words = name.split(" "); // Split the name into an array of words
-        if (words.length >= 2) {
-            // Extract the first letter of the first two words and concatenate them
-            return words[0].charAt(0) + words[1].charAt(0);
-        } else if (words.length === 1) {
-            // If there's only one word, return its first letter
-            return words[0].charAt(0);
-        }
+      const words = name.split(" "); // Split the name into an array of words
+      if (words.length >= 2) {
+        // Extract the first letter of the first two words and concatenate them
+        return words[0].charAt(0) + words[1].charAt(0);
+      } else if (words.length === 1) {
+        // If there's only one word, return its first letter
+        return words[0].charAt(0);
+      }
     }
     return ""; // Return an empty string if name is not provided
-};
+  };
+
+  // useEffect(() => {
+  //     if (typeof window !== 'undefined') {
+  //         localStorage.setItem('settings', JSON.stringify({ sidebar: sideBarActive }));
+  //     }
+  // }, [sideBarActive]);
 
   // Use a useEffect hook to add or remove the class on the body element
   useEffect(() => {
-    if (isBodyClassAdded) {
+    if (sideBarActive) {
       document.body.classList.add('body-active');
     } else {
       document.body.classList.remove('body-active');
@@ -64,7 +80,7 @@ const Header = ({ }) => {
     return () => {
       document.body.classList.remove('body-active');
     };
-  }, [isBodyClassAdded]);
+  }, [sideBarActive]);
 
   // useEffect(() => {
   //   setUser(session?.user)
@@ -77,9 +93,10 @@ const Header = ({ }) => {
       <div className='container-fluid '>
         <div className='row flex items-center'>
           <div className="w-full md:w-6/12 lg:w-6/12 pad-15 clg_header clg_header_">
-            <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse"><span></span><span></span><span></span></button>
-
-
+            <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse">
+              {/* {sideBarActive ? <MenuOpen sx={{fontWeight:400}} /> :  <Menu />} */}
+              <span></span><span></span><span></span>
+            </button>
           </div>
 
           <div className='w-full md:w-6/12 lg:w-6/12 pad-15 '>
@@ -141,13 +158,13 @@ const Header = ({ }) => {
                           </div>
 
                           <div className='login-dropdown-list-item'>
-                            
-                            <a><LockOpen sx={{color:blue[300]}} fontSize='small' /> Change Password</a>
+
+                            <a><LockOpen sx={{ color: blue[300] }} fontSize='small' /> Change Password</a>
                           </div>
 
                           <div className='login-dropdown-list-item'>
-                          
-                            <a onClick={handleSignout}><ExitToApp sx={{color:blue[300]}} fontSize='small' /> Sign Out</a>
+
+                            <a onClick={handleSignout}><ExitToApp sx={{ color: blue[300] }} fontSize='small' /> Sign Out</a>
                           </div>
                         </div>
 

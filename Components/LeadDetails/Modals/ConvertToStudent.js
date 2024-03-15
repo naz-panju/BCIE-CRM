@@ -369,7 +369,7 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
                             }
 
                             <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                                <Button size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
+                                <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
                                 <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
                             </Grid>
 
