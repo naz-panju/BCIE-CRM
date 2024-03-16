@@ -72,7 +72,7 @@ export default function TaskIndex() {
   return (
 
     <>
-      <CreateTask editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={handleRefresh} />
+      <CreateTask editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content'>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Close, Refresh } from '@mui/icons-material';
+import { Archive, Close, Refresh } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import DateInput from '@/Form/DateInput';
 import SelectX from '@/Form/SelectX';
@@ -19,13 +19,14 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
+import ConfirmPopup from '@/Components/Common/Popup/confirm';
 
 const scheme = yup.object().shape({
     title: yup.string().required("Title is Required"),
     description: yup.string().required("Description is Required"),
 })
 
-export default function CreateTask({ editId, setEditId, refresh, setRefresh ,lead_id}) {
+export default function CreateTask({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -35,6 +36,9 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh ,lea
     const [loading, setLoading] = useState(false)
 
     const [dataLoading, setDataLoading] = useState(false)
+
+    const [archiveId, setArchiveId] = useState()
+    const [archiveLoading, setArchiveLoading] = useState(false)
 
     const items = [
         { label: 'Title' },
@@ -103,7 +107,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh ,lea
 
         console.log(dataToSubmit);
 
-        if(lead_id){
+        if (lead_id) {
             dataToSubmit['lead_id'] = lead_id
         }
 
@@ -122,7 +126,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh ,lea
                 toast.success(editId > 0 ? 'Task Has Been Successfully Updated' : 'Task Has Been Successfully Created')
                 reset()
                 handleClose()
-                setRefresh()
+                handleRefresh()
                 setLoading(false)
             }
 
@@ -149,6 +153,38 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh ,lea
         //     toast.error(error?.message)
 
         // }
+    }
+
+
+    const handleConfirmArchive = () => {
+        setArchiveId(editId)
+    }
+
+
+    const archiveTask = () => {
+        setArchiveLoading(true)
+        let dataToSubmit = {
+            id: archiveId
+        }
+
+        TaskApi.archive(dataToSubmit).then((response) => {
+            if (response?.status === 200 || response?.status === 201) {
+                toast.success('Task has been Archived')
+                setArchiveId()
+                setRefresh(!refresh)
+                setArchiveLoading(false)
+                handleClose()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setArchiveId()
+                setArchiveLoading(false)
+            }
+        }).catch((error) => {
+            console.log(error);
+            toast.error(error?.response?.data?.message)
+            setArchiveLoading(false)
+        })
+
     }
 
 
@@ -212,6 +248,10 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh ,lea
 
     return (
         <div>
+
+            <ConfirmPopup loading={archiveLoading} ID={archiveId} setID={setArchiveId} clickFunc={archiveTask} title={'Do you want to Archive this Task?'} />
+
+
             <Drawer
                 anchor={anchor}
                 open={open}
@@ -246,6 +286,14 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh ,lea
                                     />
                                 </Grid>
                             </Grid> */}
+
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} pb={0} item xs={12}>
+                                <Grid item md={4}>
+                                </Grid>
+                                <Grid item display={'flex'} justifyContent={'end'} md={8}>
+                                    <Button onClick={handleConfirmArchive} size='small' sx={{ textTransform: 'none' }} className='bg-sky-500' variant='contained'><Archive sx={{ mr: 1 }} fontSize='small' /> Archive</Button>
+                                </Grid>
+                            </Grid>
                             {
                                 dataLoading ?
                                     <LoadingEdit item={items} />

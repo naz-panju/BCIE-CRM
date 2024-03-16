@@ -23,7 +23,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import { TaskApi } from '@/data/Endpoints/Task';
 import moment from 'moment';
-import { Button, Grid } from '@mui/material';
+import { Button, FormControlLabel, FormGroup, Grid } from '@mui/material';
 import { Edit } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
@@ -250,6 +250,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
   const [taskDetails, setTaskDetails] = useState()
   const [statusOpen, setStatusOpen] = useState(false)
 
+  const [archived, setArchived] = useState(false)
 
   const [detailId, setDetailId] = useState()
 
@@ -339,7 +340,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
 
   const fetchTable = () => {
     setLoading(true)
-    TaskApi.list({ limit: limit, page: page + 1, assigned_to_user: selectedUser, created_by: selectedCreatedUser, status: selectedStatus }).then((response) => {
+    TaskApi.list({ limit: limit, page: page + 1, assigned_to_user: selectedUser, created_by: selectedCreatedUser, status: selectedStatus, archived: archived ? 'archived' : '' }).then((response) => {
       // console.log(response);
       setList(response?.data)
       setLoading(false)
@@ -369,23 +370,33 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
     setTaskDetails(data)
   }
 
+  const handleArchived = (event) => {
+    // setArchived('archived');
+    if (event.target.checked) {
+      setArchived(true)
+    } else {
+      setArchived(false)
+    }
+  };
+
+
 
   useEffect(() => {
     fetchTable()
-  }, [page, refresh, limit, selectedUser, selectedCreatedUser, selectedStatus])
+  }, [page, refresh, limit, selectedUser, selectedCreatedUser, selectedStatus, archived])
 
 
   return (
     <>
 
       <TaskDetailModal id={detailId} setId={setDetailId} />
-    
+
       {
         taskDetails &&
         <StatusModal onUpdate={fetchTable} setDataSet={setTaskDetails} dataSet={taskDetails} setOpen={setStatusOpen} Open={statusOpen} />
       }
 
-      <Grid p={1} pl={0} mb={1} container >
+      <Grid p={1} pl={0} mb={1} container display={'flex'} justifyContent={'space-between'}>
         <Grid mr={1} item md={2}>
           <AsyncSelect
             isClearable
@@ -429,103 +440,111 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
             onChange={(selectedOption) => handleStatusSelect(selectedOption)}
           />
         </Grid>
+
+        <Grid item md={5} display={'flex'} justifyContent={'end'}>
+
+          <FormGroup>
+            <FormControlLabel control={<Checkbox checked={archived} onChange={handleArchived} />} label="Archived Task" />
+          </FormGroup>
+        </Grid>
+
       </Grid>
       {
         loading ?
           <LoadingTable columns={6} columnWidth={80} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
           :
           <Box sx={{ width: '100%' }}>
-        
-              <Paper sx={{ width: '100%', mb: 2 }}>
-                <TableContainer>
-                  <Table
-                    sx={{ minWidth: 750 }}
-                    aria-labelledby="tableTitle"
-                    size={dense ? 'small' : 'medium'}
-                  >
-                    <EnhancedTableHead
-                      numSelected={selected.length}
-                      order={order}
-                      orderBy={orderBy}
-                      onSelectAllClick={handleSelectAllClick}
-                      onRequestSort={handleRequestSort}
-                      rowCount={list?.meta?.total}
-                    />
-                    <TableBody>
-                      {
-                        list?.data?.length > 0 ?
-                          list?.data?.map((row, index) => {
-                            const isItemSelected = isSelected(row.id);
-                            const labelId = `enhanced-table-checkbox-${index}`;
 
-                            return (
-                              <TableRow className='table-custom-tr'
-                                hover
-                                role="checkbox"
-                                aria-checked={isItemSelected}
-                                tabIndex={-1}
-                                key={row.id}
-                                selected={isItemSelected}
-                                sx={{ cursor: 'pointer' }}
-                              >
-                                <TableCell className='checkbox-tb' padding="checkbox">
-                                  <Checkbox
-                                    onClick={(event) => handleClick(event, row.id)}
-                                    color="primary"
-                                    checked={isItemSelected}
-                                    inputProps={{
-                                      'aria-labelledby': labelId,
-                                    }}
-                                  />
-                                </TableCell>
-                                <TableCell
-                                  onClick={() => handleDetailOpen(row?.id)}
-                                  component="th"
-                                  id={labelId}
-                                  scope="row"
-                                  padding="none"
-                                  className='reg-name'
-                                >
-                                  {row?.title}
-                                </TableCell>
-                                <TableCell align="left">{row?.assignedToUser?.name}</TableCell>
-                                <TableCell align="left">{row?.reviewer?.name}</TableCell>
-                                <TableCell align="left">{moment(row?.due_date).format('DD-MM-YYYY')}</TableCell>
-                                <TableCell align="left">{row.priority}</TableCell>
-                                <TableCell align="left" onClick={() => handleStatusChange(row)}>{row.status}</TableCell>
-                                <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
-                              </TableRow>
-                            );
-                          })
-                          : (
-                            <TableRow
-                              style={{
-                                height: (dense ? 33 : 53) * emptyRows,
-                                width: '100%',
-                              }}
+            <Paper sx={{ width: '100%', mb: 2 }}>
+              <TableContainer>
+                <Table
+                  sx={{ minWidth: 750 }}
+                  aria-labelledby="tableTitle"
+                  size={dense ? 'small' : 'medium'}
+                >
+                  <EnhancedTableHead
+                    numSelected={selected.length}
+                    order={order}
+                    orderBy={orderBy}
+                    onSelectAllClick={handleSelectAllClick}
+                    onRequestSort={handleRequestSort}
+                    rowCount={list?.meta?.total}
+                  />
+                  <TableBody>
+                    {
+                      list?.data?.length > 0 ?
+                        list?.data?.map((row, index) => {
+                          const isItemSelected = isSelected(row.id);
+                          const labelId = `enhanced-table-checkbox-${index}`;
+
+                          return (
+                            <TableRow className='table-custom-tr'
+                              hover
+                              role="checkbox"
+                              aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={row.id}
+                              selected={isItemSelected}
+                              sx={{ cursor: 'pointer' }}
                             >
-                              <TableCell colSpan={8} align="center">
-                                <div className='no-table-ask-block'>
-                                  <h4 style={{ color: 'grey' }}>No Task Found</h4>
-                                </div>
+                              <TableCell className='checkbox-tb' padding="checkbox">
+                                <Checkbox
+                                  onClick={(event) => handleClick(event, row.id)}
+                                  color="primary"
+                                  checked={isItemSelected}
+                                  inputProps={{
+                                    'aria-labelledby': labelId,
+                                  }}
+                                />
                               </TableCell>
+                              <TableCell
+                                onClick={() => handleDetailOpen(row?.id)}
+                                component="th"
+                                id={labelId}
+                                scope="row"
+                                padding="none"
+                                className='reg-name'
+                              >
+                                {row?.title}
+                              </TableCell>
+                              <TableCell align="left">{row?.assignedToUser?.name}</TableCell>
+                              <TableCell align="left">{row?.reviewer?.name}</TableCell>
+                              <TableCell align="left">{moment(row?.due_date).format('DD-MM-YYYY')}</TableCell>
+                              <TableCell align="left">{row.priority}</TableCell>
+                              <TableCell align="left" onClick={() => handleStatusChange(row)}>{row.status}</TableCell>
+                              <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
                             </TableRow>
-                          )
-                      }
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <TablePagination
-                  rowsPerPageOptions={[10, 15, 25]}
-                  component="div"
-                  count={list?.meta?.total}
-                  rowsPerPage={list?.meta?.per_page}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </Paper>
-            
+                          );
+                        })
+                        : (
+                          <TableRow
+                            style={{
+                              height: (dense ? 33 : 53) * emptyRows,
+                              width: '100%',
+                            }}
+                          >
+                            <TableCell colSpan={8} align="center">
+                              <div className='no-table-ask-block'>
+                                <h4 style={{ color: 'grey' }}>No Task Found</h4>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        )
+                    }
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[10, 15, 25]}
+                component="div"
+                count={list?.meta?.total}
+                rowsPerPage={list?.meta?.per_page}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
+
 
           </Box>
       }

@@ -140,25 +140,9 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
         }
     };
 
-    const initialValues = () => {
-        // setValue('email', details?.email)
-        // setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
-    }
-
     const handleAssignedToChange = (data) => {
         setValue('assigned_to', data || '')
     }
-
-
-    useEffect(() => {
-        if (watch('country')) {
-            setselectedCountryID(watch('country')?.id)
-        }
-        if (watch('university')) {
-            setselectedUniversityId(watch('university')?.id || '')
-        }
-    }, [watch('country'), watch('university')])
-
 
 
     useEffect(() => {
@@ -166,7 +150,6 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
             setOpen(true)
         } else if (editId == 0) {
             setOpen(true)
-            initialValues()
         }
     }, [editId])
 

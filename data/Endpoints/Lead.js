@@ -16,5 +16,11 @@ export const LeadApi = {
 
     convertToStudent: (data) => http.post(`documents/request`, data),   
 
+    addNote: (data) => http.post(`leads/notes/store`, data),
+    listNote: (data) => http.get(`leads/notes/${data?.id}`, {params:data}),
+    viewNote: (data) => http.get(`leads/notes/view/${data?.id}`, {params:data}),
+    updateNote: (data) => http.post(`leads/notes/update`, data),
+    deleteNote:(data) => http.post(`leads/notes/delete`, data),
+
 
 }

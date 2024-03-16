@@ -79,6 +79,10 @@ function LeadDetail({ data, handleEdit, loading }) {
                             }
                         </div>
 
+                        <div className="lead-details-list">
+                            <label>Note </label>: {data?.note}
+                        </div>
+
                         {
                             data?.applyingForCountry &&
                             <div className="lead-details-list">

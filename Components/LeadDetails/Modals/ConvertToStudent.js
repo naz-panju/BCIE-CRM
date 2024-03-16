@@ -72,6 +72,16 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
         })
     }
 
+    const fetchNameTitles = (e) => {
+        return ListingApi.nameTitle({ keyword: e }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
 
 
 
@@ -86,7 +96,7 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
 
         let dataToSubmit = {
             lead_id: details.id,
-            title: data?.title,
+            title: data?.title?.name,
             first_name: data?.first_name,
             middle_name: data?.middle_name,
             last_name: data?.last_name,
@@ -258,10 +268,14 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
                                             <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Title</a>
                                             </Grid>
-                                            <Grid item pr={1} xs={8} md={8}>
-
-                                                <TextInput control={control} name="title"
-                                                    value={watch('title')} />
+                                            <Grid item pr={1} xs={6} md={3}>
+                                                <SelectX
+                                                    // menuPlacement='top'
+                                                    loadOptions={fetchNameTitles}
+                                                    control={control}
+                                                    name={'title'}
+                                                    defaultValue={watch('title')}
+                                                />
                                                 {errors.title && <span className='form-validation'>{errors.title.message}</span>}
                                             </Grid>
                                         </Grid>

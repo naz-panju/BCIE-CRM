@@ -18,6 +18,7 @@ import FollowUpModal from './create';
 import { FollowupApi } from '@/data/Endpoints/Followup';
 import ConfirmPopup from '@/Components/Common/Popup/confirm';
 import toast from 'react-hot-toast';
+import LeadNoteModal from './noteCreate';
 
 export default function FollowUp({ lead_id, data }) {
     const [select, setAge] = React.useState('');
@@ -31,6 +32,8 @@ export default function FollowUp({ lead_id, data }) {
     const [editId, setEditId] = useState()
     const [refresh, setRefresh] = useState(false)
 
+    const [noteId, setNoteId] = useState()
+
     const handleChange = (event) => {
         setAge(event.target.value);
     };
@@ -42,6 +45,10 @@ export default function FollowUp({ lead_id, data }) {
 
     const handleCreate = () => {
         setEditId(0)
+    }
+
+    const handleNoteCreate = () => {
+        setNoteId(0)
     }
 
     const noLoadingFetch = async () => {
@@ -91,6 +98,8 @@ export default function FollowUp({ lead_id, data }) {
         <>
 
             <FollowUpModal lead_id={lead_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
+            <LeadNoteModal lead_id={lead_id} editId={noteId} setEditId={setNoteId} refresh={refresh} setRefresh={setRefresh} />
+
 
             <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleComplete} title={'Do you want to mark this follow-up as complete?'} />
 
@@ -98,10 +107,8 @@ export default function FollowUp({ lead_id, data }) {
                 <div className='lead-tabpanel-content-block-title'>
                     <h2>Follow Up & Notes</h2>
                     <div className='timeline-top-right-block'>
-                        <div className='add-note'>
-                            {/* <CreateIcon /> */}
-                            Add Note
-                        </div>
+                        
+                        <Button size='small' onClick={handleNoteCreate} variant='outlined' >Add Note</Button>
                         <Button size='small' onClick={handleCreate} variant='contained' className='bg-sky-500'>Add Follow Up</Button>
                         {/* <div className='add-note'>
                             Add Follow Up

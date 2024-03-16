@@ -14,6 +14,7 @@ export const ListingApi = {
     courseLevel: (data) => http.get(`listing/course-levels`,{ params: data }),
     agencies: (data) => http.get(`listing/agencies`,{ params: data }),
     leadSource: (data) => http.get(`listing/lead-sources`,{ params: data }),
+    nameTitle: (data) => http.get(`listing/titles`,{ params: data }),
 }
 
 

@@ -94,7 +94,7 @@ const Header = ({ }) => {
         <div className='row flex items-center'>
           <div className="w-full md:w-6/12 lg:w-6/12 pad-15 clg_header clg_header_">
             <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse">
-              {sideBarActive ? <MenuOpen sx={{fontWeight:400}} /> :  <Menu />}
+              {sideBarActive ? <MenuOpen /> :  <Menu />}
               {/* <span></span><span></span><span></span> */}
             </button>
           </div>

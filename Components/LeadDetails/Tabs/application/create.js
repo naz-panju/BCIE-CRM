@@ -34,15 +34,14 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
     const [loading, setLoading] = useState(false)
 
-    const [dataLoading, setDataLoading] = useState(false)
 
     const items = [
-        { label: 'Title' },
-        { label: 'Due Date' },
-        { label: 'Assigned To' },
-        { label: 'Reviewer' },
-        { label: 'Priority' },
-        { label: 'Description', multi: true },
+        { label: 'Country' },
+        { label: 'Course Level' },
+        { label: 'University' },
+        { label: 'Course' },
+        { label: 'Intake' },
+        { label: 'Remarks', multi: true },
 
     ]
 
@@ -53,6 +52,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     const [selectedCountryID, setselectedCountryID] = useState()
     const [selectedUniversityId, setselectedUniversityId] = useState()
     const [coursePopup, setcoursePopup] = useState(false)
+    const [dataLoading, setDataLoading] = useState(false)
 
     const fetchCounty = (e) => {
         return ListingApi.country({ keyword: e }).then(response => {
@@ -83,6 +83,17 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         })
     }
 
+    const fetchCourseLevel = (e) => {
+        return ListingApi.courseLevel({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e, university_id: selectedUniversityId }).then(response => {
             if (typeof response.data.data !== "undefined") {
@@ -103,8 +114,12 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             lead_id: lead_id,
             country_id: data?.country?.id,
             university_id: data?.university?.id,
+            course_level_id: data?.course_level?.id,
             course_id: data?.course?.id,
             intake_id: data?.intake?.id,
+
+            courses:data?.add_course,
+
             remarks: data.remarks,
         }
 
@@ -114,16 +129,16 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         let action;
 
         if (editId > 0) {
-            // dataToSubmit['id'] = editId
-            // action = TaskApi.update(dataToSubmit)
+            dataToSubmit['id'] = editId
+            action = ApplicationApi.update(dataToSubmit)
         } else {
             action = ApplicationApi.add(dataToSubmit)
         }
 
         action.then((response) => {
-            // console.log(response);
-            if (response?.statusText == 'Created') {
-                toast.success('Applied Successfully')
+            console.log(response);
+            if (response?.status == 200 || 201) {
+                toast.success(editId > 0 ? 'Application has been Updated Successfully' : 'Applied Successfully')
                 reset()
                 handleClose()
                 handleRefresh()
@@ -144,6 +159,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         reset()
         setselectedCountryID()
         setselectedUniversityId()
+        setcoursePopup(false)
         setOpen(false)
 
     }
@@ -160,11 +176,6 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             setOpen(false);
         }
     };
-
-    const initialValues = () => {
-        // setValue('email', details?.email)
-        // setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
-    }
 
     const handleCountryChange = (data) => {
         setValue('country', data || '')
@@ -183,6 +194,9 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     const handleCourseChange = (data) => {
         setValue('course', data || '')
     }
+    const handleCourseLevelChange = (data) => {
+        setValue('course_level', data || '')
+    }
     const handleinTakeChange = (data) => {
         setValue('intake', data || '')
 
@@ -190,6 +204,24 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
     const handleCoursePopup = () => {
         setcoursePopup(!coursePopup)
+    }
+
+    const getDetails = async () => {
+        setDataLoading(true)
+        const response = await ApplicationApi.view({ id: editId })
+        if (response?.data?.data) {
+            let data = response?.data?.data
+            console.log(data);
+
+            setValue('country', data?.country)
+            setValue('university', data?.university)
+            setValue('course_level', data?.course_level)
+            setValue('course', data?.course)
+            setValue('intake', data?.intake)
+            setValue('remarks', data?.remarks)
+
+        }
+        setDataLoading(false)
     }
 
     useEffect(() => {
@@ -206,9 +238,9 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
+            getDetails()
         } else if (editId == 0) {
             setOpen(true)
-            initialValues()
         }
     }, [editId])
 
@@ -269,6 +301,30 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                         </Grid>
 
 
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
+                                                <a className='form-text'>Course Level</a>
+                                            </Grid>
+
+                                            <Grid item pr={1} xs={8} md={8}>
+
+                                                <AsyncSelect
+                                                    // isDisabled={!selectedUniversityId}
+                                                    key={selectedUniversityId}
+                                                    name={'course_level'}
+                                                    defaultValue={watch('course_level')}
+                                                    // isClearable
+                                                    defaultOptions
+                                                    loadOptions={fetchCourseLevel}
+                                                    getOptionLabel={(e) => e.name}
+                                                    getOptionValue={(e) => e.id}
+                                                    onChange={handleCourseLevelChange}
+                                                />
+                                                {errors.course_level && <span className='form-validation'>{errors.course_level.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
+
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
@@ -291,6 +347,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                 {errors.university && <span className='form-validation'>{errors.university.message}</span>}
                                             </Grid>
                                         </Grid>
+
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
@@ -338,7 +395,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             </Grid>
                                             <Grid p={1} container >
                                                 <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
-                                                    <a className='form-text'>Add Course</a>
+                                                    <a className='form-text'>Add Courses</a>
                                                 </Grid>
 
                                                 <Grid item pr={1} xs={8} md={8}>

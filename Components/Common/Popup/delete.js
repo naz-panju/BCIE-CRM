@@ -46,6 +46,8 @@ export default function DeletePopup({ ID, setID, setDeletePopup, Callfunc, api, 
     const DeleteHandler = async () => {
         setFormButtonStatus({ ...formButtonStatus, loading: true, disabled: true });
 
+        // console.log(api);
+
         try {
             let response;
             if (type == 'post') {
@@ -60,11 +62,12 @@ export default function DeletePopup({ ID, setID, setDeletePopup, Callfunc, api, 
 
             // console.log(response);
             if (response?.statusText == "OK") {
+              
                 toast.success(`${response?.data?.message}`, { autoClose: 1000, position: "top-center" });
                 handleClose()
                 Callfunc()
             } else {
-                toast.error('An error occurred. Please try again later', { autoClose: 1000, position: "top-center" })
+                toast.error(response?.response?.data?.message, { autoClose: 1000, position: "top-center" })
             }
 
             handleClose()

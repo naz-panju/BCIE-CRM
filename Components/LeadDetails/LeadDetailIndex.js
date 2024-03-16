@@ -8,9 +8,10 @@ import { useEffect } from 'react';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import moment from 'moment';
-import { Button, Skeleton } from '@mui/material';
-import { Percent, QrCode } from '@mui/icons-material';
+import { Button, Grid, Skeleton } from '@mui/material';
+import { Percent, PieChart, QrCode } from '@mui/icons-material';
 import ConvertLeadToStudent from './Modals/ConvertToStudent';
+import BasicPie from './Chart/Pie';
 
 
 function LeadDetails() {
@@ -105,7 +106,7 @@ function LeadDetails() {
                                 </a>
                             }
 
-                          </div> */} 
+                          </div> */}
                         </div>
                       </div>
 
@@ -170,9 +171,9 @@ function LeadDetails() {
                 </div>
 
                 <div className='generate-lead-block'>
+                  {/* <Grid display={'flex'} justifyContent={'center'} alignItems={'center'}><BasicPie /></Grid> */}
                   <div className='lead-percent-icon'>
-                    <Percent />
-                    {/* <FontAwesomeIcon icon={faPercent} /> */}
+                    <PieChart color='success' />
                   </div>
                   <h4>Generate Lead Strength</h4>
                 </div>
