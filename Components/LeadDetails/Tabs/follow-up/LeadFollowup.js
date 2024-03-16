@@ -87,7 +87,7 @@ export default function FollowUp({ lead_id, data }) {
         setLaoding(false)
     }
 
-    console.log(list);
+    // console.log(list);
 
     useEffect(() => {
         getData()
@@ -107,7 +107,7 @@ export default function FollowUp({ lead_id, data }) {
                 <div className='lead-tabpanel-content-block-title'>
                     <h2>Follow Up & Notes</h2>
                     <div className='timeline-top-right-block'>
-                        
+
                         <Button size='small' onClick={handleNoteCreate} variant='outlined' >Add Note</Button>
                         <Button size='small' onClick={handleCreate} variant='contained' className='bg-sky-500'>Add Follow Up</Button>
                         {/* <div className='add-note'>
@@ -164,6 +164,10 @@ export default function FollowUp({ lead_id, data }) {
                                                                 <p> {obj?.status}
                                                                     {obj?.status !== 'Completed' && <React.Fragment> | <Button onClick={() => handleConfirmOpen(obj?.id)} sx={{ textTransform: 'none' }} variant='contained' className='h-4 text-black hover:bg-lime-600 hover:text-white' size='small'>Mark as Completed</Button></React.Fragment>}
                                                                 </p>
+                                                            </Grid>
+                                                            <Grid display={'flex'}>
+                                                                <p><b>Note</b>: </p>
+                                                                <p> {obj?.note}</p>
                                                             </Grid>
                                                         </div>
 
