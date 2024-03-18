@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import LeadTable from './LeadTable';
-import CreateLead from './Create/Create';
 import { useRouter } from 'next/router';
+import CreateEmailTemplate from './Create/create';
+import TemplateTable from './TemplateTable';
 
 
 const StyledMenu = styled((props) => (
@@ -50,7 +48,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function CustomizedMenus() {
+export default function EmailTemplateIndex() {
 
   const router = useRouter();
 
@@ -86,42 +84,11 @@ export default function CustomizedMenus() {
   return (
 
     <>
-      <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
+      <CreateEmailTemplate editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content'>
-            <h1>Lead Manager</h1>
-            <div className='quick-view-block'>
-              <p>Quick View : </p>
-
-              <Button className='quick-view-btn' id="demo-customized-button" aria-controls={open ? 'demo-customized-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                variant="contained"
-                disableElevation
-                onClick={handleClick}
-                endIcon={<KeyboardArrowDownIcon />}
-              >
-                System default View
-              </Button>
-              <StyledMenu
-                id="demo-customized-menu"
-                MenuListProps={{
-                  'aria-labelledby': 'demo-customized-button',
-                }}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-              >
-                <MenuItem className='active' onClick={handleClose} disableRipple>
-                  System default View
-                </MenuItem>
-                <MenuItem onClick={handleClose} disableRipple>
-                  Hot Leads
-                </MenuItem>
-
-              </StyledMenu>
-            </div>
+            <h1>Email Templates</h1>
           </div>
 
           <div className='page-title-block-right'>
@@ -131,7 +98,7 @@ export default function CustomizedMenus() {
 
 
         <div className='content-block'>
-          <LeadTable refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
+          <TemplateTable refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>
     </>

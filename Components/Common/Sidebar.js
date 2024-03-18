@@ -4,7 +4,7 @@ import Image from "next/image";
 import LogoIcon from '@/styles/logo65cc654bac92a.png';
 import Logo from '@/styles/logo65cc655649912.png';
 
-import { NoteAltOutlined, PersonOutline } from '@mui/icons-material';
+import { Email, EmailOutlined, NoteAltOutlined, PersonOutline } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -31,6 +31,11 @@ const Sidebar = () => {
             title: 'Task Manager',
             icon: NoteAltOutlined,
             href: '/task'
+        },
+        {
+            title: 'Email Templates',
+            icon: EmailOutlined,
+            href: '/email-template'
         }
     ]
 
