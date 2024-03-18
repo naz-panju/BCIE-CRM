@@ -20,8 +20,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import ConfirmPopup from '@/Components/Common/Popup/confirm';
-import Editor from '@/Form/Editor';
 import { TemplateApi } from '@/data/Endpoints/Template';
+import Editorr from '@/Form/Editor';
 
 const scheme = yup.object().shape({
 
@@ -46,12 +46,12 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
     };
 
     const items = [
-        { label: 'Title' },
-        { label: 'Due Date' },
-        { label: 'Assigned To' },
-        { label: 'Reviewer' },
-        { label: 'Priority' },
-        { label: 'Description', multi: true },
+        { label: 'Template Name' },
+        { label: 'Subject' },
+        { label: 'Body', multi: true },
+        { label: 'Body Footer' },
+        { label: 'Default CC' },
+        // { label: 'Description' },
 
     ]
 
@@ -89,7 +89,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
         if (editId > 0) {
             dataToSubmit['id'] = editId
-            // action = TemplateApi.update(dataToSubmit)
+            action = TemplateApi.update(dataToSubmit)
         } else {
             action = TemplateApi.add(dataToSubmit)
         }
@@ -115,12 +115,12 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
     const handleClose = () => {
         setEditId()
         reset()
-        setValue('title', '')
-        setValue('date', '')
-        setValue('assigned_to', '')
-        setValue('reviewer', '')
+        setValue('name', '')
+        setValue('subject', '')
+        setValue('body', '')
+        setValue('default_cc', '')
+        setValue('body_footer', '')
         setOpen(false)
-        setSelectedPriority('Medium')
     }
 
     const handleDrawerClose = (event) => {
@@ -139,17 +139,17 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
     const getDetails = async () => {
         setDataLoading(true)
         try {
-            const response = await TaskApi.view({ id: editId })
+            const response = await TemplateApi.view({ id: editId })
             if (response?.data?.data) {
                 let data = response?.data?.data
                 // console.log(data);
 
-                setValue('title', data?.title)
-                setValue('date', data?.due_date)
-                setValue('assigned_to', data?.assignedToUser)
-                setValue('reviewer', data?.reviewer)
+                setValue('name', data?.name)
+                setValue('subject', data?.subject)
+                setValue('body', data?.body)
+                setValue('body_footer', data?.body_footer)
                 setSelectedPriority(data?.priority)
-                setValue('description', data?.description)
+                setValue('default_cc', data?.default_cc)
                 setDataLoading(false)
             }
             setDataLoading(false)
@@ -169,6 +169,8 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         }
     }, [editId])
 
+    // console.log(watch('body'));
+
 
     return (
         <div>
@@ -181,7 +183,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
             >
                 <Grid width={650}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? "Edit Task" : 'Add Task'}</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? "Edit Email Template" : 'Add Email Template'}</a>
                         <IconButton
                             onClick={handleClose}
                         >
@@ -237,24 +239,24 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                         </Grid>
 
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
+                                        <Grid display={'flex'} container p={1.5} item xs={12}>
+                                            <Grid item display={'flex'} xs={12} md={4}>
                                                 <Typography sx={{ fontWeight: '500' }}>Body</Typography>
                                             </Grid>
                                             <Grid item xs={12} md={8}>
-                                                <TextField
+                                                {/* <TextField
                                                     {...register('body')}
                                                     variant="outlined"
                                                     fullWidth
                                                     multiline
                                                     rows={2}
                                                     sx={{ width: '100%', }}
-                                                />
+                                                /> 
                                                 {errors.body && <span className='form-validation'>{errors.body.message}</span>}
-
-                                                {/* <Editor emoji={false} val={watch('description')}
-                                            onValueChange={e => setValue('description', e)}
-                                        /> */}
+                                                */}
+                                                <Editorr emoji={false} val={watch('body')}
+                                                    onValueChange={e => setValue('body', e)}
+                                                />
                                             </Grid>
                                         </Grid>
 

@@ -98,7 +98,7 @@ export default function EmailTemplateIndex() {
 
 
         <div className='content-block'>
-          <TemplateTable refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
+          <TemplateTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>
     </>
