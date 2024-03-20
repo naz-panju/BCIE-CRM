@@ -107,6 +107,8 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
             zipcode: data?.zip,
             state: data?.state,
             country_id: data?.country?.id,
+            alternate_phone_number:data?.alt_phone,
+            whatsapp_number:data?.whatsapp
         }
 
         console.log(dataToSubmit);
@@ -222,7 +224,9 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
         setValue('email', details?.email)
         setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
         setValue('alt_phone', `${details?.alternate_phone_country_code}${details?.alternate_phone_number}`)
-        console.log(details);
+        setValue('whatsapp', `+${details?.whatsapp_country_code}${details?.whatsapp_number}`)
+
+        // console.log(details);
     }
 
 

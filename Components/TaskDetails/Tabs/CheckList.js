@@ -60,16 +60,20 @@ const CheckListTab = ({ id }) => {
         }
         action.then((response) => {
             console.log(response);
-            if (response?.statusText == "Created" || "OK") {
+            if (response?.status == 200 || 201) {
                 toast.success(checkNoteEdit > 0 ? 'Checklist has been successfully updated.' : 'Checklist has been successfully added.')
                 fetchDetails()
                 handleCancelEdit()
                 setButtonLoading(false)
             }
+            else{
+                toast.error(response?.response?.data?.message)
+                setButtonLoading(false)
+            }
 
         }).catch(errors => {
             console.log(errors);
-            toast.error("server error")
+            toast.error(errors?.response?.response?.data?.message)
             setButtonLoading(false)
         })
     }
@@ -100,6 +104,28 @@ const CheckListTab = ({ id }) => {
             setLoading(false)
         }).catch((error) => {
             setLoading(false)
+        })
+    }
+
+    console.log(checkNotes);
+
+    const handleCheck = (id) => {
+        // console.log(id);
+        const loadingToast = toast.loading('Changing...');
+
+        TaskApi.completeChecklist({ id:id }).then((response) => {
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                toast.dismiss(loadingToast);
+                fetchDetails()
+            }else{
+                toast.error(response?.response?.data?.message)
+                toast.dismiss(loadingToast);
+            }
+        }).catch(errors => {
+            console.log(errors);
+            toast.error(errors?.response?.data?.message)
+            toast.dismiss(loadingToast);
         })
     }
 
@@ -186,10 +212,10 @@ const CheckListTab = ({ id }) => {
                                         </Grid>
                                         <Grid display={'flex'} alignItems={'center'} mt={.6} sx={2} sm={2} pl={2}>
                                             {
-                                                notes.is_completed === 1 ?
+                                                notes.completed === 1 ?
                                                     <a><CheckCircle sx={{ color: 'green', cursor: 'pointer', marginTop: 1 }} fontSize='small' /></a>
                                                     :
-                                                    <a><PanoramaFishEye sx={{ color: 'grey', cursor: 'pointer', marginTop: 1 }} fontSize='small' /></a>
+                                                    <a><PanoramaFishEye onClick={() => handleCheck(notes?.id)} sx={{ color: 'grey', cursor: 'pointer', marginTop: 1 }} fontSize='small' /></a>
                                             }
 
                                             {/* <Checkbox style={{ color: notes.is_completed === 1 ? 'green' : '' }} defaultChecked={notes.is_completed === 1} onChange={(e) => statusChange(e, notes)} /> */}
