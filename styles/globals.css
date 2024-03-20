@@ -1315,3 +1315,6 @@ body.body-active section , body.body-active .header {
     border-radius: 4px;
   }
 
+  .ck-content {
+    height: 350px;
+}

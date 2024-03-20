@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
-import { Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
+import { Button, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { Archive, Close, Refresh } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
@@ -19,8 +19,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
-import ConfirmPopup from '@/Components/Common/Popup/confirm';
-import Editor from '@/Form/Editor';
+
 
 const scheme = yup.object().shape({
     title: yup.string().required("Title is Required"),
@@ -38,8 +37,6 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
     const [dataLoading, setDataLoading] = useState(false)
 
-    const [archiveId, setArchiveId] = useState()
-    const [archiveLoading, setArchiveLoading] = useState(false)
 
     const items = [
         { label: 'Title' },
@@ -162,33 +159,6 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
     }
 
 
-    const archiveTask = () => {
-        setArchiveLoading(true)
-        let dataToSubmit = {
-            id: archiveId
-        }
-
-        TaskApi.archive(dataToSubmit).then((response) => {
-            if (response?.status === 200 || response?.status === 201) {
-                toast.success('Task has been Archived')
-                setArchiveId()
-                setRefresh(!refresh)
-                setArchiveLoading(false)
-                handleClose()
-            } else {
-                toast.error(response?.response?.data?.message)
-                setArchiveId()
-                setArchiveLoading(false)
-            }
-        }).catch((error) => {
-            console.log(error);
-            toast.error(error?.response?.data?.message)
-            setArchiveLoading(false)
-        })
-
-    }
-
-
     const handleClose = () => {
         setEditId()
         reset()
@@ -249,9 +219,6 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
     return (
         <div>
-
-            <ConfirmPopup loading={archiveLoading} ID={archiveId} setID={setArchiveId} clickFunc={archiveTask} title={'Do you want to Archive this Task?'} />
-
 
             <Drawer
                 anchor={anchor}

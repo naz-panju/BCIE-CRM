@@ -49,7 +49,7 @@ function LeadDocuments({ id }) {
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await LeadApi.listDocuments({limit: limit, lead_id:id, page: page + 1 })
+        const response = await LeadApi.listDocuments({limit: limit, lead_id:id,page: page + 1 })
         setList(response?.data)
         setLoading(false)
     }
@@ -57,10 +57,10 @@ function LeadDocuments({ id }) {
     // console.log(list?.data);
 
     function trimUrlAndNumbers(url) {
-        const lastSlashIndex = url.lastIndexOf('/');
-        let trimmedString = url.substring(lastSlashIndex + 1);
-        trimmedString = trimmedString.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
-        return trimmedString.replace(/_/g, ''); // Replace all underscores with an empty string
+        const lastSlashIndex = url?.lastIndexOf('/');
+        let trimmedString = url?.substring(lastSlashIndex + 1);
+        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
     }
 
     useEffect(() => {
@@ -135,7 +135,7 @@ function LeadDocuments({ id }) {
                                                 {
                                                     list?.data?.map((obj, index) => (
                                                         <TableRow key={obj?.id}>
-                                                            <TableCell><Tooltip title={obj?.note}>{obj?.document_template?.name}</Tooltip></TableCell>
+                                                            <TableCell><Tooltip title={obj?.note}>{obj?.title || obj?.document_template?.name}</Tooltip></TableCell>
                                                             <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell>
                                                             <TableCell>{obj?.created_by?.name}</TableCell>
                                                             <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>

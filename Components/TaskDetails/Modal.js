@@ -10,7 +10,7 @@ import TaskDetailTabs from './TabMenus';
 
 
 
-export default function TaskDetailModal({ id, setId }) {
+export default function TaskDetailModal({ id, setId,archiveRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -57,7 +57,7 @@ export default function TaskDetailModal({ id, setId }) {
                 <Grid width={650}>
                     
                     <Grid>
-                        <TaskDetailTabs id={id} setId={setId} close={handleClose} />
+                        <TaskDetailTabs id={id} setId={setId} close={handleClose} archiveRefresh={archiveRefresh} />
                     </Grid>
 
                 </Grid>

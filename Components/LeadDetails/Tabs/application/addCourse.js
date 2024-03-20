@@ -212,7 +212,7 @@ export default function AddCourse({ id, addId, setAddId,handleRefresh }) {
                                     htmlFor="file-upload"
                                     className="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                                 >
-                                    Select File or Drag and Drop Here
+                                    Select Image or Drag and Drop Here
                                 </label>
                                 {(selectedFile) && (
                                     <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">

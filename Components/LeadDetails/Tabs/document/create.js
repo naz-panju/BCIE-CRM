@@ -103,7 +103,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
         formData.append('document_template_id', data?.template?.id)
         formData.append('lead_id', id)
         formData.append('title', data?.title)
-        formData.append('note', data?.remarks)
+        formData.append('note', data?.remarks || '')
         if (selectedFile) {
             formData.append('file', selectedFile)
         }
@@ -183,7 +183,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
             console.log(data);
             console.log(data);
             setValue('title', data?.title)
-            setValue('remarks', data?.note)
+            setValue('remarks', data?.note || '')
         }
         // setDataLoading(false)
     }

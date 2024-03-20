@@ -230,7 +230,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function TaskTable({ refresh, editId, setEditId, page, setPage }) {
+export default function TaskTable({ refresh, editId, setEditId, page, setPage,archiveRefresh }) {
 
   const { watch, setValue } = useForm()
 
@@ -379,8 +379,6 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
     }
   };
 
-
-
   useEffect(() => {
     fetchTable()
   }, [page, refresh, limit, selectedUser, selectedCreatedUser, selectedStatus, archived])
@@ -389,7 +387,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage })
   return (
     <>
 
-      <TaskDetailModal id={detailId} setId={setDetailId} />
+      <TaskDetailModal id={detailId} setId={setDetailId} archiveRefresh={archiveRefresh} />
 
       {
         taskDetails &&

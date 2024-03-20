@@ -91,7 +91,8 @@ export default function CustomizedMenus() {
         <div className='page-title-block'>
           <div className='page-title-block-content'>
             <h1>Lead Manager</h1>
-            <div className='quick-view-block'>
+
+            {/* <div className='quick-view-block'>
               <p>Quick View : </p>
 
               <Button className='quick-view-btn' id="demo-customized-button" aria-controls={open ? 'demo-customized-menu' : undefined}
@@ -121,7 +122,8 @@ export default function CustomizedMenus() {
                 </MenuItem>
 
               </StyledMenu>
-            </div>
+            </div> */}
+
           </div>
 
           <div className='page-title-block-right'>

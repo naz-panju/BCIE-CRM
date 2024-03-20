@@ -21,8 +21,14 @@ import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import ConfirmPopup from '@/Components/Common/Popup/confirm';
 import { TemplateApi } from '@/data/Endpoints/Template';
-import Editorr from '@/Form/Editor';
 import Editor from '@/Form/Editor';
+import dynamic from 'next/dynamic';
+
+// import MyEditor from '@/Form/MyEditor';
+
+const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
+    ssr: false,
+}); 
 
 const scheme = yup.object().shape({
 
@@ -46,6 +52,8 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         // Add any additional logic here if needed
     };
 
+    
+
     const items = [
         { label: 'Template Name' },
         { label: 'Subject' },
@@ -59,7 +67,6 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
     const anchor = 'right'; // Set anchor to 'right'
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
-
 
 
     const onSubmit = async (data) => {
@@ -182,7 +189,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                 open={open}
                 onClose={handleDrawerClose}
             >
-                <Grid width={650}>
+                <Grid width={750}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? "Edit Email Template" : 'Add Email Template'}</a>
                         <IconButton
@@ -218,10 +225,10 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                     :
                                     <>
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid item xs={12} md={2.5}>
                                                 <Typography sx={{ fontWeight: '500' }}>Template Name</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8}>
+                                            <Grid item xs={12} md={9.5}>
                                                 <TextInput control={control} name="name"
                                                     value={watch('name')} />
                                                 {errors.name && <span className='form-validation'>{errors.name.message}</span>}
@@ -229,10 +236,10 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                         </Grid>
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid item xs={12} md={2.5}>
                                                 <Typography sx={{ fontWeight: '500' }}> Subject</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8}>
+                                            <Grid item xs={12} md={9.5}>
                                                 <TextInput control={control} name="subject"
                                                     value={watch('subject')} />
                                                 {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
@@ -241,10 +248,10 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
 
                                         <Grid display={'flex'} container p={1.5} item xs={12}>
-                                            <Grid item display={'flex'} xs={12} md={4}>
+                                            <Grid item display={'flex'} xs={12} md={2.5}>
                                                 <Typography sx={{ fontWeight: '500' }}>Body</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8}>
+                                            <Grid item xs={12} md={9.5}>
                                                 {/* <TextField
                                                     {...register('body')}
                                                     variant="outlined"
@@ -255,17 +262,19 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                 /> 
                                                 {errors.body && <span className='form-validation'>{errors.body.message}</span>}
                                                 */}
-                                                <Editor emoji={false} val={watch('body')}
+
+                                                <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
+                                                {/* <Editor emoji={false} val={watch('body')}
                                                     onValueChange={e => setValue('body', e)}
-                                                />
+                                                /> */}
                                             </Grid>
                                         </Grid>
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid item xs={12} md={2.5}>
                                                 <Typography sx={{ fontWeight: '500' }}> Body Footer</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8}>
+                                            <Grid item xs={12} md={9.5}>
                                                 <TextInput control={control} name="body_footer"
                                                     value={watch('body_footer')} />
                                                 {errors.body_footer && <span className='form-validation'>{errors.body_footer.message}</span>}
@@ -273,10 +282,10 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                         </Grid>
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid item xs={12} md={2.5}>
                                                 <Typography sx={{ fontWeight: '500' }}> Default CC</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8}>
+                                            <Grid item xs={12} md={9.5}>
                                                 <TextInput control={control} name="default_cc"
                                                     value={watch('default_cc')} />
                                                 {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
@@ -285,10 +294,10 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
+                                            <Grid item xs={12} md={2.5}>
                                                 <Typography sx={{ fontWeight: '500' }}>Is Public Template</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={8}>
+                                            <Grid item xs={12} md={9.5}>
                                                 <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
                                             </Grid>
                                         </Grid>

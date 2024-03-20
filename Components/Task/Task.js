@@ -66,6 +66,10 @@ export default function TaskIndex() {
     setRefresh(!refresh)
   }
 
+  const archiveRefresh=()=>{
+    setRefresh(!refresh)
+  }
+
 
   // console.log(refresh);
 
@@ -86,7 +90,7 @@ export default function TaskIndex() {
 
 
         <div className='content-block'>
-          <TaskTable page={page} setPage={setPage} editId={editId} setEditId={setEditId} refresh={refresh} />
+          <TaskTable page={page} setPage={setPage} editId={editId} setEditId={setEditId} refresh={refresh} archiveRefresh={archiveRefresh} />
         </div>
       </section>
     </>
