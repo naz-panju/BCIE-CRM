@@ -12,6 +12,7 @@ import { Button, Grid, Skeleton } from '@mui/material';
 import { Percent, PieChart, QrCode } from '@mui/icons-material';
 import ConvertLeadToStudent from './Modals/ConvertToStudent';
 import BasicPie from './Chart/Pie';
+import SendMail from './Modals/SendMail';
 
 
 function LeadDetails() {
@@ -22,6 +23,8 @@ function LeadDetails() {
   const [disabled, setdisabled] = useState(false)
 
   const [editId, setEditId] = useState()
+
+  const [mailId, setMailId] = useState()
 
 
   const router = useRouter()
@@ -43,6 +46,10 @@ function LeadDetails() {
     setEditId(0)
   }
 
+  const handleOpenMailModal=()=>{
+    setMailId(0)
+  }
+
   useEffect(() => {
     getDetails()
   }, [refresh])
@@ -53,6 +60,7 @@ function LeadDetails() {
 
     <>
       <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
+      <SendMail editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
 
       <section>
         <div className='page-title-block'>
@@ -60,8 +68,12 @@ function LeadDetails() {
             <h1>Lead Details</h1>
 
             {/* disabled={details?.verification_status == 'Yes'} */}
-            <Button disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-500 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
+            <Grid>
+              <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Mail</Button>
 
+              <Button disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-500 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
+
+            </Grid>
           </div>
         </div>
         <div className='content-block-details'>
