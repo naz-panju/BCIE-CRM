@@ -22,6 +22,7 @@ import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import ConfirmPopup from '@/Components/Common/Popup/confirm';
 import { TemplateApi } from '@/data/Endpoints/Template';
 import Editorr from '@/Form/Editor';
+import Editor from '@/Form/Editor';
 
 const scheme = yup.object().shape({
 
@@ -254,7 +255,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                 /> 
                                                 {errors.body && <span className='form-validation'>{errors.body.message}</span>}
                                                 */}
-                                                <Editorr emoji={false} val={watch('body')}
+                                                <Editor emoji={false} val={watch('body')}
                                                     onValueChange={e => setValue('body', e)}
                                                 />
                                             </Grid>

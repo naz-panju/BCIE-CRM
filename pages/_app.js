@@ -4,7 +4,7 @@ import "@/styles/Editor.css";
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 
 

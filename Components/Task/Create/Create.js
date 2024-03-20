@@ -20,6 +20,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import ConfirmPopup from '@/Components/Common/Popup/confirm';
+import Editor from '@/Form/Editor';
 
 const scheme = yup.object().shape({
     title: yup.string().required("Title is Required"),

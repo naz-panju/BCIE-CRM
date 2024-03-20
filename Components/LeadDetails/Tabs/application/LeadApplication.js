@@ -54,8 +54,6 @@ function LeadApplication({ lead_id }) {
         setLoading(false)
     }
 
-    console.log(list);
-
     useEffect(() => {
         fetchList()
     }, [refresh,page])

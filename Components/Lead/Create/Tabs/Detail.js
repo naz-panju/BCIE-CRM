@@ -315,7 +315,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
 
     return (
         <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            
                 {/* <button type='reset' onClick={() => setLoading(false)}>click</button> */}
                 {
                     dataLoading ?
@@ -596,8 +596,8 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     <Typography sx={{ fontWeight: '500' }}>Note</Typography>
                                 </Grid>
                                 <Grid item xs={12} md={7}>
-                                    <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
-                                        value={watch('note')} />
+                                    <TextField multiline rows={2} fullWidth control={control}  {...register('note') }
+                                        value={watch('note') || ''} />
                                 </Grid>
                             </Grid>
                         </form>
@@ -608,7 +608,6 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                     <LoadingButton loading={loading} disabled={loading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
                 </Grid>
 
-            </form>
         </div >
     )
 }

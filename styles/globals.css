@@ -1309,3 +1309,9 @@ body.body-active section , body.body-active .header {
     height: auto; /* Expand the height to fit content */
 }
 
+  .custom-editor-container {
+    max-height: 200px;
+    overflow-y: auto !important;
+    border-radius: 4px;
+  }
+

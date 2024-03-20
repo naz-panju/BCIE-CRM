@@ -11,7 +11,6 @@ import { useState } from 'react';
 import { Grid, IconButton, TextField, Tooltip } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Close, Delete } from '@mui/icons-material';
-import SelectX from '@/Form/SelectX';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import toast from 'react-hot-toast';
@@ -30,7 +29,7 @@ const style = {
     p: 4,
 };
 
-export default function LeadDocumentModal({ id, editId, setEditId,handleRefresh }) {
+export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh }) {
     const scheme = yup.object().shape({
 
         template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -57,8 +56,11 @@ export default function LeadDocumentModal({ id, editId, setEditId,handleRefresh 
     }
 
     const [selectedFile, setSelectedFile] = useState(null);
+    const [fileInputKey, setFileInputKey] = useState(0);
+
 
     const handleFileChange = (event) => {
+        setFileInputKey(prevKey => prevKey + 1);
         setSelectedFile(event.target.files[0]);
     };
 
@@ -138,25 +140,31 @@ export default function LeadDocumentModal({ id, editId, setEditId,handleRefresh 
     const requestDocument = () => {
         setReqLoading(true)
 
-        let dataToSubmit = {
-            lead_id: id,
-            document_template_ids: [watch('template')?.id]
+        if (watch('template')) {
+            let dataToSubmit = {
+                lead_id: id,
+                document_template_ids: [watch('template')?.id]
+            }
+
+            LeadApi.requestDocument(dataToSubmit).then((response) => {
+                if (response?.status == 200 || 201) {
+                    toast.success(response?.data?.message)
+                    handleClose()
+                    setReqLoading(false)
+                } else {
+                    toast.error(response?.response?.data?.message)
+                    setReqLoading(false)
+                }
+            }).catch((error) => {
+                console.log(error);
+                toast.error(error?.response?.data?.message)
+                setReqLoading(false)
+            })
+        } else {
+            toast.error('Please choose a Template')
+            setReqLoading(false)
         }
 
-        LeadApi.requestDocument(dataToSubmit).then((response) => {
-            if (response?.status == 200 || 201) {
-                toast.success(response?.data?.message)
-                handleClose()
-                setReqLoading(false)
-            } else {
-                toast.error(response?.response?.data?.message)
-                setReqLoading(false)
-            }
-        }).catch((error) => {
-            console.log(error);
-            toast.error(error?.response?.data?.message)
-            setReqLoading(false)
-        })
     }
 
     const handleTemplateSelect = (e) => {
@@ -268,6 +276,7 @@ export default function LeadDocumentModal({ id, editId, setEditId,handleRefresh 
                                 onChange={handleFileChange}
                                 className="hidden"
                                 id="file-upload"
+                                key={fileInputKey}
                             />
                             <label
                                 htmlFor="file-upload"
@@ -314,6 +323,7 @@ export default function LeadDocumentModal({ id, editId, setEditId,handleRefresh 
                         </div>
                         <Grid mt={2} display={'flex'} justifyContent={'space-between'}>
                             <LoadingButton
+                                variant='contained'
                                 onClick={requestDocument}
                                 loading={reqLoading}
                                 disabled={reqLoading || loading}

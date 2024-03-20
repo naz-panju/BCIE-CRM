@@ -15,6 +15,7 @@ import AsyncSelect from "react-select/async";
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import toast from 'react-hot-toast';
 import TextInput from '@/Form/TextInput';
+import AddCourse from './addCourse';
 
 
 const scheme = yup.object().shape({
@@ -54,6 +55,14 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     const [coursePopup, setcoursePopup] = useState(false)
     const [dataLoading, setDataLoading] = useState(false)
 
+    const [courseRefresh, setcourseRefresh] = useState()
+
+    const [addId, setAddId] = useState()
+
+    const handleCourseRefresh=()=>{
+        setcourseRefresh(Math.random())
+    }
+
     const fetchCounty = (e) => {
         return ListingApi.country({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
@@ -74,7 +83,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         })
     }
     const fetchCourse = (e) => {
-        return ListingApi.courses({ keyword: e, university: selectedUniversityId }).then(response => {
+        return ListingApi.courses({ keyword: e}).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -118,7 +127,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             course_id: data?.course?.id,
             intake_id: data?.intake?.id,
 
-            courses:data?.add_course,
+            courses: data?.add_course,
 
             remarks: data.remarks,
         }
@@ -187,7 +196,6 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
     const handleUniversityChange = (data) => {
         setValue('university', data || '')
-        setValue('course', '')
         setValue('intake', '')
     }
 
@@ -203,8 +211,10 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     }
 
     const handleCoursePopup = () => {
-        setcoursePopup(!coursePopup)
+        setAddId(0)
     }
+
+
 
     const getDetails = async () => {
         setDataLoading(true)
@@ -247,6 +257,8 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
     return (
         <div>
+
+            <AddCourse id={lead_id} addId={addId} setAddId={setAddId} handleRefresh={handleCourseRefresh} />
             <Drawer
                 anchor={anchor}
                 open={open}
@@ -295,9 +307,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                     defaultValue={watch('country')}
                                                 /> */}
                                                 {errors.country && <span className='form-validation'>{errors.country.message}</span>}
-
                                             </Grid>
-
                                         </Grid>
 
 
@@ -307,7 +317,6 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             </Grid>
 
                                             <Grid item pr={1} xs={8} md={8}>
-
                                                 <AsyncSelect
                                                     // isDisabled={!selectedUniversityId}
                                                     key={selectedUniversityId}
@@ -357,8 +366,8 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             <Grid item pr={1} xs={8} md={8}>
 
                                                 <AsyncSelect
-                                                    isDisabled={!selectedUniversityId}
-                                                    key={selectedUniversityId}
+                                                    isDisabled={!selectedCountryID}
+                                                    key={courseRefresh}
                                                     name={'course'}
                                                     defaultValue={watch('course')}
                                                     // isClearable
@@ -382,28 +391,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             </Grid>
                                         </Grid>
 
-                                        <Grid className={`border border-sky-100 bg-sky-50 course-popup ${coursePopup ? 'show' : ''}`}>
-                                            <Grid p={1} container >
-                                                <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
-                                                    <a className='form-text'>Add Course Level</a>
-                                                </Grid>
 
-                                                <Grid item pr={1} xs={8} md={8}>
-                                                    <TextInput control={control} name="add_course_level"
-                                                        value={watch('add_course_level')} />
-                                                </Grid>
-                                            </Grid>
-                                            <Grid p={1} container >
-                                                <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
-                                                    <a className='form-text'>Add Courses</a>
-                                                </Grid>
-
-                                                <Grid item pr={1} xs={8} md={8}>
-                                                    <TextInput control={control} name="add_course"
-                                                        value={watch('add_course')} />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import draftToHtml from 'draftjs-to-html';
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 // import htmlToDraft from 'html-to-draftjs';
 let htmlToDraft;
 if (typeof window !== 'undefined') {
@@ -19,12 +19,18 @@ if (typeof window !== 'undefined') {
 const Editor = (props) => {
     const [value_, setValue] = useState();
     const [editorState, setEditorState] = useState(
-        () => EditorState.createWithContent(
-            ContentState.createFromBlockArray(
-                htmlToDraft(props.val ? props.val : "<p> </p>")
-            )
-        ),
+        () => {
+            if (props.initialHtml) {
+                const contentBlock = htmlToDraft(props.initialHtml);
+                if (contentBlock) {
+                    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+                    return EditorState.createWithContent(contentState);
+                }
+            }
+            return EditorState.createEmpty();
+        }
     );
+
 
     // const uploadImageCallBack = async (file) => {
 
@@ -37,7 +43,20 @@ const Editor = (props) => {
 
     // Define editor styles for multiline input
 
-
+    const uploadCallback = (file) => {
+        return new Promise(
+            (resolve, reject) => {
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = (e) => {
+                        resolve({ data: { link: e.target.result } });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        );
+    };
+    
 
     useEffect(() => {
 
@@ -52,11 +71,39 @@ const Editor = (props) => {
 
         <EditorDraft
             editorClassName="custom-editor-container"
-            editorState={editorState ? editorState : null}
-            onEditorStateChange={e => {
-                setEditorState(e)
+            editorState={editorState}
+            onEditorStateChange={(e) => {
+                setEditorState(e);
                 props.onValueChange(draftToHtml(convertToRaw(e.getCurrentContent())));
             }}
+            toolbar={{
+                image: {
+                    uploadCallback: uploadCallback,
+                    alt: { present: true, mandatory: false }
+                },
+                
+            }}
+        />
+    );
+};
+
+export default Editor;
+
+ //     toolbar={{
+        //         options: ['image',],
+                            
+        //         image: {
+        //         uploadEnabled: true,
+        //         uploadCallback: uploadCallback,
+        //         previewImage: true,
+        //         inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+        //         alt: { present: false, mandatory: false },
+        //         defaultSize: {
+        //              height: 'auto',
+        //              width: 'auto',
+        //         },
+        //      },
+        //    }}
             // toolbar={{
             //     options: ['inline', 'blockType', 'fontSize', 'fontFamily'], // Include essential options
             //     inline: {
@@ -71,66 +118,10 @@ const Editor = (props) => {
             //     },
             //     fontFamily: {
             //         options: ['Arial', 'Georgia', 'Impact', 'Tahoma', 'Verdana'], // Include font family options
-            //     },                // inline: { inDropdown: true },
+            //     },  
+                          // inline: { inDropdown: true },
             //     // list: { inDropdown: true },
             //     // textAlign: { inDropdown: true },
             //     // link: { inDropdown: false },
             //     // history: { inDropdown: false },
             // }}
-        />
-
-    );
-};
-
-export default Editor;
-
-
-// import { Editor } from "react-draft-wysiwyg";
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-
-// import { ContentState, EditorState, convertToRaw } from 'draft-js';
-// import dynamic from 'next/dynamic';
-// import { useEffect, useState } from 'react';
-// const htmlToDraft = dynamic(() => import('html-to-draftjs'), { ssr: false });
-// // import draftToHtml from "draftjs-to-html"; 
-
-// // Dynamically import the Editor component with SSR disabled
-// const Editor = dynamic(
-//     () => import('react-draft-wysiwyg').then(mod => mod.Editor),
-//     { ssr: false }
-// );
-
-
-// const Editorr = (props) => {
-
-//     const [editorState, setEditorState] = useState(
-//         () => EditorState.createWithContent(
-//             ContentState.createFromBlockArray(
-//                 htmlToDraft(props.val ? props.val : "<p> </p>")
-//             )
-//         ),
-//     );
-
-//     useEffect(() => {
-//         setEditorState(EditorState.createWithContent(
-//             ContentState.createFromBlockArray(
-//                 htmlToDraft(props.val ? props.val : "<p> </p>").contentBlocks
-//             )
-//         ));
-//     }, [props.val]);
-
-//     return (
-//         <Editor
-//             editorState={editorState}
-//             toolbarClassName="toolbarClassName"
-//             wrapperClassName="wrapperClassName"
-//             editorClassName="editorClassName"
-//             onEditorStateChange={e => {
-//                 setEditorState(e);
-//                 props.onValueChange(draftToHtml(convertToRaw(e.getCurrentContent())));
-//             }}
-//         />
-//     )
-// }
-
-// export default Editorr
