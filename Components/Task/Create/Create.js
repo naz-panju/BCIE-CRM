@@ -257,10 +257,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
                             <Grid display={'flex'} alignItems={'center'} container p={1.5} pb={0} item xs={12}>
                                 <Grid item md={4}>
-                                </Grid>
-                                <Grid item display={'flex'} justifyContent={'end'} md={8}>
-                                    <Button onClick={handleConfirmArchive} size='small' sx={{ textTransform: 'none' }} className='bg-sky-500' variant='contained'><Archive sx={{ mr: 1 }} fontSize='small' /> Archive</Button>
-                                </Grid>
+                                </Grid> 
                             </Grid>
                             {
                                 dataLoading ?
