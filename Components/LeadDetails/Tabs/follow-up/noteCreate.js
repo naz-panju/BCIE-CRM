@@ -48,37 +48,43 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh }) => {
 
 
     const onSubmit = (data) => {
-        setSubmitLoading(true)
 
-        let dataToSubmit = {
-            lead_id: lead_id,
-            note: watch('note'),
-        }
+        if (watch('note')) {
 
-        let action;
+            setSubmitLoading(true)
 
-        if (editID > 0) {
-            dataToSubmit['id'] = editID
-            action = LeadApi.updateNote(dataToSubmit)
-        } else {
-            action = LeadApi.addNote(dataToSubmit)
-        }
-        action.then((response) => {
-            // console.log(response);
-            if (response?.status==200 || response?.status==201) {
-                toast.success(editID > 0 ? 'Note has been successfully updated.' : 'Note has been successfully added.')
-                setSubmitLoading(false)
-                fetchNotes()
-                handleCancelEdit()
-            }else{
-                setSubmitLoading(false)
-                toast.error(response?.response?.data?.message)
+            let dataToSubmit = {
+                lead_id: lead_id,
+                note: watch('note'),
             }
-            setSubmitLoading(false)
-        }).catch(errors => {
-            setSubmitLoading(false)
-            toast.error("server error")
-        })
+
+            let action;
+
+            if (editID > 0) {
+                dataToSubmit['id'] = editID
+                action = LeadApi.updateNote(dataToSubmit)
+            } else {
+                action = LeadApi.addNote(dataToSubmit)
+            }
+            action.then((response) => {
+                // console.log(response);
+                if (response?.status == 200 || response?.status == 201) {
+                    toast.success(editID > 0 ? 'Note has been successfully updated.' : 'Note has been successfully added.')
+                    setSubmitLoading(false)
+                    fetchNotes()
+                    handleCancelEdit()
+                } else {
+                    setSubmitLoading(false)
+                    toast.error(response?.response?.data?.message)
+                }
+                setSubmitLoading(false)
+            }).catch(errors => {
+                setSubmitLoading(false)
+                toast.error("server error")
+            })
+        }else{
+            toast.error('note field is required')
+        }
     }
 
     const handleEdit = (data) => {

@@ -4,7 +4,7 @@ import Image from "next/image";
 import LogoIcon from '@/styles/logo65cc654bac92a.png';
 import Logo from '@/styles/logo65cc655649912.png';
 
-import { Email, EmailOutlined, NoteAltOutlined, PersonOutline } from '@mui/icons-material';
+import { Email, EmailOutlined, Groups2, NoteAltOutlined, PersonOutline, SettingsApplications } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -26,6 +26,11 @@ const Sidebar = () => {
             title: 'Lead Manager',
             icon: PersonOutline,
             href: '/lead'
+        },
+        {
+            title: 'Applicants',
+            icon: Groups2,
+            href: '/applicants'
         },
         {
             title: 'Task Manager',

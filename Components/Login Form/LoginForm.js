@@ -49,7 +49,6 @@ const LoginForm = () => {
         <form onSubmit={handleSubmit} className="login-form">
             <div className="input-group">
                 <label htmlFor="email">
-                    {/* <AiOutlineMail /> */}
                 </label>
                 <input
                     type="email"
@@ -63,7 +62,6 @@ const LoginForm = () => {
             </div>
             <div className="input-group">
                 <label htmlFor="password">
-                    {/* <AiOutlineLock /> */}
                 </label>
                 <input
                     type="password"

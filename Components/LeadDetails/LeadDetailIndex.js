@@ -60,7 +60,7 @@ function LeadDetails() {
 
     <>
       <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
-      <SendMail editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
+      <SendMail details={details} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
 
       <section>
         <div className='page-title-block'>

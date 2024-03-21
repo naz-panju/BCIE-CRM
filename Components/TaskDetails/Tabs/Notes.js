@@ -44,35 +44,41 @@ const TaskNotes = (props) => {
 
 
     const onSubmit = (data) => {
-        setSubmitLoading(true)
 
-        let dataToSubmit = {
-            task_id: props.id,
-            note: watch('note'),
-        }
+        if(watch('note')){
+            setSubmitLoading(true)
 
-        console.log(dataToSubmit);
-        let action;
-
-        if (editID > 0) {
-            dataToSubmit['id'] = editID
-            action = TaskApi.updateNote(dataToSubmit)
-        } else {
-            console.log(dataToSubmit);
-            action = TaskApi.addNote(dataToSubmit)
-        }
-        action.then((response) => {
-            console.log(response);
-            if (response?.data) {
-                toast.success(editID > 0 ? 'Note has been successfully updated.' : 'Note has been successfully added.')
-                setSubmitLoading(false)
-                fetchNotes()
-                handleCancelEdit()
+            let dataToSubmit = {
+                task_id: props.id,
+                note: watch('note'),
             }
-        }).catch(errors => {
-            setSubmitLoading(false)
-            toast.error("server error")
-        })
+    
+            console.log(dataToSubmit);
+            let action;
+    
+            if (editID > 0) {
+                dataToSubmit['id'] = editID
+                action = TaskApi.updateNote(dataToSubmit)
+            } else {
+                console.log(dataToSubmit);
+                action = TaskApi.addNote(dataToSubmit)
+            }
+            action.then((response) => {
+                console.log(response);
+                if (response?.data) {
+                    toast.success(editID > 0 ? 'Note has been successfully updated.' : 'Note has been successfully added.')
+                    setSubmitLoading(false)
+                    fetchNotes()
+                    handleCancelEdit()
+                }
+            }).catch(errors => {
+                setSubmitLoading(false)
+                toast.error("server error")
+            })
+        }else{
+            toast.error('Note field is required')
+        }
+       
     }
 
     const handleEdit = (data) => {
