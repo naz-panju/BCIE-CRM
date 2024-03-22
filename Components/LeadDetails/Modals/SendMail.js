@@ -20,6 +20,7 @@ import { StudentApi } from '@/data/Endpoints/Student';
 import toast from 'react-hot-toast';
 import { TemplateApi } from '@/data/Endpoints/Template';
 import dynamic from 'next/dynamic';
+import { LeadApi } from '@/data/Endpoints/Lead';
 
 
 const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
@@ -28,13 +29,13 @@ const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
 
 
 const scheme = yup.object().shape({
-    first_name: yup.string().required("First Name is Required"),
-    email: yup.string().required("Email is Required"),
-    phone: yup.string().required("Phone Number is Required"),
-    dob: yup.string().required("Date Of Birth is Required"),
-    zip: yup.string().required("Zip Code is Required"),
-    country: yup.object().required("Please Choose a Country").typeError("Please choose a Country"),
-    state: yup.string().required("State is Required"),
+    subject: yup.string().required("Subject is Required"),
+    body: yup.string().required("Body is Required"),
+    default_cc: yup.string().required("Mail CC is Required"),
+    // dob: yup.string().required("Date Of Birth is Required"),
+    // zip: yup.string().required("Zip Code is Required"),
+    // country: yup.object().required("Please Choose a Country").typeError("Please choose a Country"),
+    // state: yup.string().required("State is Required"),
 })
 
 export default function SendMail({ details, editId, setEditId, refresh, setRefresh }) {
@@ -85,61 +86,46 @@ export default function SendMail({ details, editId, setEditId, refresh, setRefre
 
 
     const onSubmit = async (data) => {
-        // console.log(data);
 
-        // setLoading(true)
-        // let dob = ''
-        // if (data?.dob) {
-        //     dob = moment(data?.dob).format('YYYY-MM-DD')
-        // }
+        setLoading(true)
+        const formData = new FormData()
 
-        // let dataToSubmit = {
-        //     lead_id: details.id,
-        //     title: data?.title?.name,
-        //     first_name: data?.first_name,
-        //     middle_name: data?.middle_name,
-        //     last_name: data?.last_name,
-        //     email: data?.email,
-        //     phone_number: data?.phone,
-        //     date_of_birth: dob,
-        //     address: data?.address,
-        //     zipcode: data?.zip,
-        //     state: data?.state,
-        //     country_id: data?.country?.id,
-        //     alternate_phone_number: data?.alt_phone,
-        //     whatsapp_number: data?.whatsapp
-        // }
-
+        formData.append('to', data?.to)
+        formData.append('cc', data?.default_cc)
+        formData.append('subject', data?.subject || '')
+        formData.append('body', data?.body || '')
+        formData.append('lead_id', details?.id || '')
+        
         // console.log(dataToSubmit);
 
-        // let action;
+        let action;
 
-        // if (editId > 0) {
-        //     // dataToSubmit['id'] = editId
-        //     // action = TaskApi.update(dataToSubmit)
-        // } else {
-        //     action = StudentApi.add(dataToSubmit)
-        // }
+        if (editId > 0) {
+            // dataToSubmit['id'] = editId
+            // action = TaskApi.update(dataToSubmit)
+        } else {
+            action = LeadApi.sendMail(formData)
+        }
 
-        // action.then((response) => {
-        //     console.log(response);
-        //     if (response?.statusText == "Created") {
-        //         toast.success('Student Has Been Successfully Created')
-        //         reset()
-        //         handleClose()
-        //         setRefresh(!refresh)
-        //         setLoading(false)
-        //     } else {
-        //         toast.error(response?.response?.data?.message)
-        //         setLoading(false)
-        //     }
+        action.then((response) => {
+            // console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success('Email Sent Successfully');
+                reset()
+                handleClose()
+                // setRefresh(!refresh)
+                setLoading(false)
+            } else {
+                toast.error(response?.response?.data?.message)
+                setLoading(false)
+            }
 
-        //     setLoading(false)
-        // }).catch((error) => {
-        //     console.log(error);
-        //     toast.error(error?.message)
-        //     setLoading(false)
-        // })
+            setLoading(false)
+        }).catch((error) => {
+            console.log(error);
+            toast.error(error?.message)
+            setLoading(false)
+        })
     }
 
 
@@ -261,7 +247,7 @@ export default function SendMail({ details, editId, setEditId, refresh, setRefre
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={3} md={3}>
-                                                <a className='form-text'>Default CC </a>
+                                                <a className='form-text'>Mail CC </a>
                                             </Grid>
                                             <Grid item pr={1} xs={9} md={9}>
                                                 <TextInput control={control} name="default_cc"
@@ -297,7 +283,7 @@ export default function SendMail({ details, editId, setEditId, refresh, setRefre
 
                             <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                                 <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
+                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Send</LoadingButton>
                             </Grid>
 
                         </form>

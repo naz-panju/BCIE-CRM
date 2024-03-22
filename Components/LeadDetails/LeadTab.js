@@ -21,9 +21,10 @@ import LeadDocuments from './Tabs/document/LeadDocuments';
 import { Skeleton } from '@mui/material';
 import LeadDetail from './Tabs/LeadDetail';
 import LeadApplication from './Tabs/application/LeadApplication';
-import { Apps, TaskSharp } from '@mui/icons-material';
+import { Apps, Payment, TaskSharp } from '@mui/icons-material';
 import FollowUp from './Tabs/follow-up/LeadFollowup';
 import LeadTask from './Tabs/LeadTask';
+import LeadPayments from './Tabs/payments/LeadPayments';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -107,6 +108,11 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
       icon: <FolderOpenIcon />
     },
     {
+      label: 'Payments',
+      component: <LeadPayments id={data?.id} />,
+      icon: <Payment />
+    },
+    {
       label: 'Task',
       component: <LeadTask lead_id={data?.id} />,
       icon: <TaskSharp />
@@ -116,16 +122,16 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
       component: <LeadApplication lead_id={data?.id} />,
       icon: <Apps />
     },
-    {
-      label: 'Tickets',
-      component: 'Item Six',
-      icon: <PostAddIcon />
-    },
-    {
-      label: 'Call Logs',
-      component: 'Item Seven',
-      icon: <PhoneIcon />
-    },
+    // {
+    //   label: 'Tickets',
+    //   component: 'Item Six',
+    //   icon: <PostAddIcon />
+    // },
+    // {
+    //   label: 'Call Logs',
+    //   component: 'Item Seven',
+    //   icon: <PhoneIcon />
+    // },
   ]
 
   useEffect(() => {

@@ -4,7 +4,7 @@ import Image from "next/image";
 import LogoIcon from '@/styles/logo65cc654bac92a.png';
 import Logo from '@/styles/logo65cc655649912.png';
 
-import { Email, EmailOutlined, Groups2, NoteAltOutlined, PersonOutline, SettingsApplications } from '@mui/icons-material';
+import { Email, EmailOutlined, Groups2, Groups2Outlined, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -29,8 +29,13 @@ const Sidebar = () => {
         },
         {
             title: 'Applicants',
-            icon: Groups2,
+            icon: Groups2Outlined,
             href: '/applicants'
+        },
+        {
+            title: 'Alumni',
+            icon: Groups2Outlined,
+            href: '/alumni'
         },
         {
             title: 'Task Manager',

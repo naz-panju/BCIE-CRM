@@ -215,7 +215,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ApplicantTable({ refresh, editId, setEditId, page, setPage }) {
+export default function AlumniTable({ refresh, editId, setEditId, page, setPage }) {
 
     const router = useRouter();
 
@@ -315,7 +315,7 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
 
     const fetchTable = () => {
         setLoading(true)
-        StudentApi.list({ limit: limit, page: page + 1 }).then((response) => {
+        LeadApi.list({ limit: limit,closed:1, page: page + 1 }).then((response) => {
             console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -395,7 +395,7 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                               <Link href={`lead/${row?.lead_id}`}> {row?.first_name  } {row?.last_name  }</Link>
+                                                               <Link href={`lead/${row?.lead_id}`}> {row?.first_name} {row?.last_name  }</Link>
                                                                {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.email}</TableCell>

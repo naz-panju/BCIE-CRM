@@ -1,17 +1,18 @@
+import AlumniIndex from '@/Components/Alumni/AlumniIndex'
+import ApplicantsIndex from '@/Components/Applicants/ApllicantsIndex'
 import Layout from '@/Components/Common/Layout'
-import EmailTemplateIndex from '@/Components/EmailTemplates/EmailTemplateIndex'
 import { getSession } from 'next-auth/react'
 import React from 'react'
 
-function EmailTemplate() {
+function Applicants() {
     return (
         <Layout>
-            <EmailTemplateIndex />
+            <AlumniIndex />
         </Layout>
     )
 }
 
-export default EmailTemplate
+export default Applicants
 
 export async function getServerSideProps(context) {
     const session = await getSession(context)

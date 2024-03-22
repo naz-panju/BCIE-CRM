@@ -6,4 +6,7 @@ export const StudentApi = {
     // view: (data) => http.get(`leads/view/${data?.id}`, {params:data}),
     // update: (data) => http.post(`leads/update`, data),
 
+    closeStudent: (data) => http.post(`students/close`, data),
+
+
 }

@@ -26,6 +26,9 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
+import { ListingApi } from '@/data/Endpoints/Listing';
+import AsyncSelect from "react-select/async";
+
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -203,7 +206,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh,page, setPage }) {
+export default function EnhancedTable({ refresh, page, setPage }) {
 
   const router = useRouter();
 
@@ -221,6 +224,9 @@ export default function EnhancedTable({ refresh,page, setPage }) {
   const [list, setList] = useState([])
 
   const [loading, setLoading] = useState(false)
+
+  const [selectedAssignedTo, setSelectedAssignedTo] = useState()
+  const [selectedStage, setSelectedStage] = useState()
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -288,10 +294,36 @@ export default function EnhancedTable({ refresh,page, setPage }) {
     [order, orderBy, page, limit],
   );
 
+  const fetchUser = (e) => {
+    return ListingApi.users({ keyword: e }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
+    })
+  }
+
+  const fetchStage = (e) => {
+    return ListingApi.stages({ keyword: e }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
+    })
+  }
+
+  const handleAssignedTo = (e) => {
+    setSelectedAssignedTo(e?.id || '');
+  }
+  const handleSelectStage = (e) => {
+    setSelectedStage(e?.id || '');
+  }
 
   const fetchTable = () => {
     setLoading(true)
-    LeadApi.list({ limit: limit, page: page + 1 }).then((response) => {
+    LeadApi.list({ limit: limit,assigned_to:selectedAssignedTo,stage:selectedStage, page: page + 1 }).then((response) => {
       // console.log(response);
       setList(response?.data)
       setLoading(false)
@@ -302,100 +334,129 @@ export default function EnhancedTable({ refresh,page, setPage }) {
   }
   useEffect(() => {
     fetchTable()
-  }, [page, refresh, limit])
+  }, [page, refresh, limit,selectedAssignedTo,selectedStage])
 
   return (
-    loading ?
-      <LoadingTable columns={3} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
-      :
-      <Box sx={{ width: '100%' }}>
-        <Paper sx={{ width: '100%', mb: 2 }}>
-          {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-          <TableContainer>
-            <Table
-              sx={{ minWidth: 750 }}
-              aria-labelledby="tableTitle"
-              size={dense ? 'small' : 'medium'}
-            >
-              <EnhancedTableHead
-                numSelected={selected.length}
-                order={order}
-                orderBy={orderBy}
-                onSelectAllClick={handleSelectAllClick}
-                onRequestSort={handleRequestSort}
-                rowCount={list?.meta?.total || 0}
-              />
-              <TableBody>
-                {
-                  list?.data?.length > 0 ?
-                    list?.data?.map((row, index) => {
-                      const isItemSelected = isSelected(row.id);
-                      const labelId = `enhanced-table-checkbox-${index}`;
-
-                      return (
-                        <TableRow className='table-custom-tr'
-                          hover
-                          // onClick={(event) => handleClick(event, row.id)}
-                          role="checkbox"
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          key={row.id}
-                          selected={isItemSelected}
-                          sx={{ cursor: 'pointer' }}
-                        >
-                          <TableCell className='checkbox-tb' padding="checkbox">
-                            <Checkbox
-                              onClick={(event) => handleClick(event, row.id)}
-                              color="primary"
-                              checked={isItemSelected}
-                              inputProps={{
-                                'aria-labelledby': labelId,
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                            padding="none"
-                            className='reg-name'
-                          >
-                            <Link href={`/lead/${row?.id}`}>{row.name}</Link>
-                          </TableCell>
-                          <TableCell align="left">{row?.email}</TableCell>
-                          <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
-                         
-                        </TableRow>
-                      );
-                    })
-                    : (
-                      <TableRow
-                        style={{
-                          height: (dense ? 33 : 53) * emptyRows,
-                          width: '100%',
-                        }}
-                      >
-                        <TableCell colSpan={8} align="center">
-                          <div className='no-table-ask-block'>
-                            <h4 style={{ color: 'grey' }}>No Lead Found</h4>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )
-                }
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            rowsPerPageOptions={[10, 15, 25]}
-            component="div"
-            count={list?.meta?.total || 0}
-            rowsPerPage={list?.meta?.per_page || 0}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+    <>
+      <Grid p={1} pl={0} mb={1} container display={'flex'}>
+        <Grid  width={300} mr={1} item md={2.5}>
+          <AsyncSelect
+            isClearable
+            defaultOptions
+            loadOptions={fetchUser}
+            getOptionLabel={(e) => e.name}
+            getOptionValue={(e) => e.id}
+            placeholder={<div>Assigned To</div>}
+            onChange={handleAssignedTo}
           />
-        </Paper>
-      </Box>
+        </Grid>
+
+        <Grid mr={1} item md={2.5}>
+          <AsyncSelect
+            isClearable
+            defaultOptions
+            loadOptions={fetchStage}
+            getOptionLabel={(e) => e.name}
+            getOptionValue={(e) => e.id}
+            placeholder={<div>Select Stage</div>}
+            onChange={handleSelectStage}
+          />
+        </Grid>
+      </Grid>
+      {
+        loading ?
+          <LoadingTable columns={3} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
+          :
+          <Box sx={{ width: '100%' }}>
+            <Paper sx={{ width: '100%', mb: 2 }}>
+              {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+              <TableContainer>
+                <Table
+                  sx={{ minWidth: 750 }}
+                  aria-labelledby="tableTitle"
+                  size={dense ? 'small' : 'medium'}
+                >
+                  <EnhancedTableHead
+                    numSelected={selected.length}
+                    order={order}
+                    orderBy={orderBy}
+                    onSelectAllClick={handleSelectAllClick}
+                    onRequestSort={handleRequestSort}
+                    rowCount={list?.meta?.total || 0}
+                  />
+                  <TableBody>
+                    {
+                      list?.data?.length > 0 ?
+                        list?.data?.map((row, index) => {
+                          const isItemSelected = isSelected(row.id);
+                          const labelId = `enhanced-table-checkbox-${index}`;
+
+                          return (
+                            <TableRow className='table-custom-tr'
+                              hover
+                              // onClick={(event) => handleClick(event, row.id)}
+                              role="checkbox"
+                              aria-checked={isItemSelected}
+                              tabIndex={-1}
+                              key={row.id}
+                              selected={isItemSelected}
+                              sx={{ cursor: 'pointer' }}
+                            >
+                              <TableCell className='checkbox-tb' padding="checkbox">
+                                <Checkbox
+                                  onClick={(event) => handleClick(event, row.id)}
+                                  color="primary"
+                                  checked={isItemSelected}
+                                  inputProps={{
+                                    'aria-labelledby': labelId,
+                                  }}
+                                />
+                              </TableCell>
+                              <TableCell
+                                component="th"
+                                id={labelId}
+                                scope="row"
+                                padding="none"
+                                className='reg-name'
+                              >
+                                <Link href={`/lead/${row?.id}`}>{row.name}</Link>
+                              </TableCell>
+                              <TableCell align="left">{row?.email}</TableCell>
+                              <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
+
+                            </TableRow>
+                          );
+                        })
+                        : (
+                          <TableRow
+                            style={{
+                              height: (dense ? 33 : 53) * emptyRows,
+                              width: '100%',
+                            }}
+                          >
+                            <TableCell colSpan={8} align="center">
+                              <div className='no-table-ask-block'>
+                                <h4 style={{ color: 'grey' }}>No Lead Found</h4>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        )
+                    }
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <TablePagination
+                rowsPerPageOptions={[10, 15, 25]}
+                component="div"
+                count={list?.meta?.total || 0}
+                rowsPerPage={list?.meta?.per_page || 0}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            </Paper>
+          </Box>
+      }
+    </>
   );
 }

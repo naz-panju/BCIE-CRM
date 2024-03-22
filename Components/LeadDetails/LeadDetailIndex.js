@@ -13,6 +13,8 @@ import { Percent, PieChart, QrCode } from '@mui/icons-material';
 import ConvertLeadToStudent from './Modals/ConvertToStudent';
 import BasicPie from './Chart/Pie';
 import SendMail from './Modals/SendMail';
+import ConfirmPopup from '../Common/Popup/confirm';
+import toast from 'react-hot-toast';
 
 
 function LeadDetails() {
@@ -25,6 +27,10 @@ function LeadDetails() {
   const [editId, setEditId] = useState()
 
   const [mailId, setMailId] = useState()
+
+
+  const [confirmId, setconfirmId] = useState()
+  const [confirmLoading, setconfirmLoading] = useState(false)
 
 
   const router = useRouter()
@@ -42,12 +48,39 @@ function LeadDetails() {
     }
   }
 
+  console.log(details);
   const handleStudentModalOpen = () => {
     setEditId(0)
   }
 
-  const handleOpenMailModal=()=>{
+  const handleOpenMailModal = () => {
     setMailId(0)
+  }
+
+  const handleConfirmOpen = () => {
+    setconfirmId(details?.id)
+  }
+
+  const handleCloseAdmission = () => {
+    setconfirmLoading(true)
+    let dataToSubmit = {
+      id: confirmId
+    }
+    LeadApi.closeLead(dataToSubmit).then((response) => {
+      // console.log(response);
+      if (response?.status == 200 || response?.status == 201) {
+        toast.success(response?.data?.message)
+        setconfirmId()
+        getDetails()
+        setconfirmLoading(false)
+      } else {
+        toast.error(response?.response?.data?.message)
+        setconfirmLoading(false)
+      }
+    }).catch((error) => {
+      console.log(error);
+      setconfirmLoading(false)
+    })
   }
 
   useEffect(() => {
@@ -62,6 +95,9 @@ function LeadDetails() {
       <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
       <SendMail details={details} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
 
+      <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleCloseAdmission} title={`Do you want to close the Admission of ${details?.name}?`} />
+
+
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>
@@ -71,8 +107,9 @@ function LeadDetails() {
             <Grid>
               <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Mail</Button>
 
-              <Button disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-500 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
+              <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-500 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
 
+              <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-lime-500 text-white hover:bg-lime-600 text-white'>Close Admission</Button>
             </Grid>
           </div>
         </div>

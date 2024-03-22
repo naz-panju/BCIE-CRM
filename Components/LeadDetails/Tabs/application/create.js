@@ -360,7 +360,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
-                                                <a className='form-text'>Course</a>
+                                                <a className='form-text'>Subject Area</a>
                                             </Grid>
 
                                             <Grid item pr={1} xs={8} md={8}>

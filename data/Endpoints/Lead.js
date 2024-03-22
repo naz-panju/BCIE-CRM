@@ -22,5 +22,9 @@ export const LeadApi = {
     updateNote: (data) => http.post(`leads/notes/update`, data),
     deleteNote:(data) => http.post(`leads/notes/delete`, data),
 
+    sendMail: (data) => http.post(`emails/store`, data),
+
+    closeLead: (data) => http.post(`leads/close`, data),
+
 
 }
