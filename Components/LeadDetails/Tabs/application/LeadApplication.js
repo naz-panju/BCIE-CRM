@@ -8,7 +8,7 @@ import { blue } from '@mui/material/colors'
 import LeadApplicationModal from './create'
 import { ApplicationApi } from '@/data/Endpoints/Application'
 
-function LeadApplication({ lead_id }) {
+function LeadApplication({ data, lead_id }) {
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
@@ -26,8 +26,8 @@ function LeadApplication({ lead_id }) {
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
         setPage(0);
-      };
-    
+    };
+
 
 
     const handleCreate = () => {
@@ -42,31 +42,43 @@ function LeadApplication({ lead_id }) {
     }
     const handleRefresh = () => {
         if (page != 0) {
-          setPage(0)
+            setPage(0)
         }
         setRefresh(!refresh)
-      }
+    }
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await ApplicationApi.list({limit: limit, lead_id, page: page + 1, })
+        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
         setList(response?.data)
         setLoading(false)
     }
 
+    // console.log(list?.data);
+
     useEffect(() => {
         fetchList()
-    }, [refresh,page])
+    }, [refresh, page])
 
     return (
         <>
-            <LeadApplicationModal lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
+            <LeadApplicationModal details={data} lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
                     <h2>Applications</h2>
                     <Grid display={'flex'} alignItems={'end'}>
-                        <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
+                        {
+                            data?.student?.id ?
+                                <Button variant='contained' disabled={data?.verification_status != 'Yes'} onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
+                                :
+                                <Tooltip title="Only for Students" >
+                                    <a>
+                                        <Button variant='contained' disabled={true} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
+                                    </a>
+                                </Tooltip>
+                        }
+
                     </Grid>
                 </div>
                 {
@@ -82,9 +94,15 @@ function LeadApplication({ lead_id }) {
                                             <TableHead>
                                                 <TableRow>
                                                     <TableCell>
-
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             University
+                                                        </Typography>
+                                                    </TableCell>
+
+                                                    <TableCell>
+
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Subject Area
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
@@ -104,7 +122,8 @@ function LeadApplication({ lead_id }) {
                                                     list?.data?.map((obj, index) => (
                                                         <TableRow key={obj?.id}>
                                                             <TableCell>{obj?.university?.name}</TableCell>
-                                                            <TableCell>{obj?.course?.name}</TableCell>
+                                                            <TableCell>{obj?.subject_area?.name}</TableCell>
+                                                            <TableCell>{obj?.course}</TableCell>
                                                             <TableCell>{obj?.intake?.name}</TableCell>
 
                                                             <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
@@ -143,7 +162,7 @@ const loadTable = () => {
         <Table>
             <TableHead>
                 <TableRow>
-                    {[...Array(3)].map((_, index) => (
+                    {[...Array(4)].map((_, index) => (
                         <TableCell key={index} align="left">
                             <Skeleton variant='rounded' width={60} height={20} />
                         </TableCell>
@@ -155,7 +174,7 @@ const loadTable = () => {
                     [...Array(5)]?.map((_, index) => (
                         <TableRow key={index} className='table-custom-tr'>
                             {
-                                [...Array(3)]?.map((_, colindex) => (
+                                [...Array(4)]?.map((_, colindex) => (
                                     <TableCell key={colindex} align="left"><Skeleton variant='rounded' width={120} height={20} /></TableCell>
                                 ))
                             }

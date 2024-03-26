@@ -172,6 +172,13 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
         setValue('title', e?.name || '')
     }
 
+    function trimUrlAndNumbers(url) {
+        const lastSlashIndex = url?.lastIndexOf('/');
+        let trimmedString = url?.substring(lastSlashIndex + 1);
+        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
+    }
+
     const getDetails = async () => {
         // setDataLoading(true)
         const response = await LeadApi.viewDocuments({ id: editId })
@@ -303,11 +310,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
                                             !selectedFile &&
                                             <Tooltip title={details?.file}>
                                                 <p className="text-gray-700">
-                                                    {
-                                                        details?.file?.length > 60
-                                                            ? details?.file?.slice(0, 60) + '....'
-                                                            : details?.file
-                                                    }
+                                                    {trimUrlAndNumbers(details?.file)}
                                                 </p>
                                             </Tooltip>
                                         }

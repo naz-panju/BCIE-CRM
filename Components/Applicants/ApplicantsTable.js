@@ -415,7 +415,7 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
                                                     >
                                                         <TableCell colSpan={8} align="center">
                                                             <div className='no-table-ask-block'>
-                                                                <h4 style={{ color: 'grey' }}>No Template Found</h4>
+                                                                <h4 style={{ color: 'grey' }}>No Applicants Found</h4>
                                                             </div>
                                                         </TableCell>
                                                     </TableRow>

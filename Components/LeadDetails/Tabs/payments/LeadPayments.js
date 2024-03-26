@@ -57,6 +57,8 @@ function LeadPayments({ id }) {
         return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
     }
 
+    // console.log(list?.data);
+
     useEffect(() => {
         fetchList()
     }, [refresh, page])
@@ -97,6 +99,16 @@ function LeadPayments({ id }) {
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Payment Date
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Receipt
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Details
                                                         </Typography>
                                                     </TableCell>
@@ -119,6 +131,8 @@ function LeadPayments({ id }) {
                                                             {/* <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell> */}
                                                             <TableCell>{obj?.amount}</TableCell>
                                                             <TableCell>{obj?.payment_mode}</TableCell>
+                                                            <TableCell>{moment(obj?.payment_date).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell><a href={obj?.receipt_file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.receipt_file)}</a></TableCell>
                                                             <TableCell>
                                                                 {
                                                                     obj?.details?.length > 50 ?

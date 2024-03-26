@@ -49,6 +49,8 @@ function LeadDetails() {
   }
 
   console.log(details);
+
+  // console.log(details);
   const handleStudentModalOpen = () => {
     setEditId(0)
   }
@@ -93,7 +95,7 @@ function LeadDetails() {
 
     <>
       <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
-      <SendMail details={details} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
+      <SendMail details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
 
       <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleCloseAdmission} title={`Do you want to close the Admission of ${details?.name}?`} />
 

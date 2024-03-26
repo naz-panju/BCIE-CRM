@@ -4,7 +4,7 @@ import Image from "next/image";
 import LogoIcon from '@/styles/logo65cc654bac92a.png';
 import Logo from '@/styles/logo65cc655649912.png';
 
-import { Email, EmailOutlined, Groups2, Groups2Outlined, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications } from '@mui/icons-material';
+import { CrisisAlertOutlined, Email, EmailOutlined, GroupOutlined, Groups2, Groups2Outlined, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -34,7 +34,7 @@ const Sidebar = () => {
         },
         {
             title: 'Alumni',
-            icon: Groups2Outlined,
+            icon: GroupOutlined,
             href: '/alumni'
         },
         {
@@ -46,6 +46,11 @@ const Sidebar = () => {
             title: 'Email Templates',
             icon: EmailOutlined,
             href: '/email-template'
+        },
+        {
+            title: 'Goals & Targets',
+            icon: CrisisAlertOutlined,
+            href: '/goals-and-targets'
         }
     ]
 

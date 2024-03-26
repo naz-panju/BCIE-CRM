@@ -17,12 +17,13 @@ import toast from 'react-hot-toast';
 import TextInput from '@/Form/TextInput';
 import DateInput from '@/Form/DateInput';
 import { PaymentApi } from '@/data/Endpoints/Payments';
+import moment from 'moment';
 
 
 const scheme = yup.object().shape({
     amount: yup.string().required("Amount is Required"),
     payment_mode: yup.string().required("Payment Mode is Required"),
-  
+
 })
 
 export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRefresh }) {
@@ -50,6 +51,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
     const [dataLoading, setDataLoading] = useState(false)
     const [attachment, setAttachment] = useState(null);
     const [fileInputKey, setFileInputKey] = useState(0);
+    const [details, setdetails] = useState()
 
     const handleFileUpload = (event) => {
         setFileInputKey(prevKey => prevKey + 1);
@@ -67,35 +69,56 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
     const onSubmit = async (data) => {
         // console.log(data);
 
-        setLoading(true)
+        let date;
 
-        let dataToSubmit = {
-            lead_id: lead_id,
-            amount: data?.amount,
-            payment_mode: data?.payment_mode,
-            details: data?.details,
+        if (data?.date) {
+            date = moment(data?.date).format('YYYY-MM-DD')
         }
 
-        console.log(dataToSubmit);
+        setLoading(true)
+
+
+        const formData = new FormData()
+
+        formData.append('lead_id', lead_id)
+        formData.append('amount', data?.amount)
+        formData.append('payment_mode', data?.payment_mode)
+        formData.append('payment_date', date)
+        formData.append('details', data?.details)
+
+        if (attachment) {
+            formData.append('receipt', attachment)
+        }
+
+        // let dataToSubmit = {
+        //     lead_id: lead_id,
+        //     amount: data?.amount,
+        //     payment_mode: data?.payment_mode,
+        //     payment_date: date,
+        //     details: data?.details,
+
+        // }
+
+        // console.log(formData);
 
         let action;
 
         if (editId > 0) {
-            dataToSubmit['id'] = editId
-            action = PaymentApi.update(dataToSubmit)
+            formData.append('id', editId)
+            action = PaymentApi.update(formData)
         } else {
-            action = PaymentApi.add(dataToSubmit)
+            action = PaymentApi.add(formData)
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Payment has been Updated Successfully' : 'Payment has been Added Successfully')
                 reset()
                 handleClose()
                 handleRefresh()
                 setLoading(false)
-            }else{
+            } else {
                 toast.error(response?.response?.data?.message)
                 setLoading(false)
             }
@@ -130,6 +153,13 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
         }
     };
 
+    function trimUrlAndNumbers(url) {
+        const lastSlashIndex = url?.lastIndexOf('/');
+        let trimmedString = url?.substring(lastSlashIndex + 1);
+        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
+    }
+
 
     const getDetails = async () => {
         setDataLoading(true)
@@ -137,8 +167,9 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
         if (response?.data?.data) {
             let data = response?.data?.data
 
+            setdetails(data)
             setValue('amount', data?.amount)
-            // setValue('date', data?.university)
+            setValue('date', data?.payment_date)
             setValue('payment_mode', data?.payment_mode)
             setValue('details', data?.details)
 
@@ -255,7 +286,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
 
                                         </Grid>
 
-                                        {/* <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container className='bg-sky-100' height={80} >
+                                        <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container className='bg-sky-100' height={80} >
                                             <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
                                                 <Button
                                                     onClick={handleClick}
@@ -275,21 +306,33 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                             </Grid>
 
                                             {
-                                                attachment &&
+                                                (attachment || details?.receipt_file) &&
                                                 <Grid display={'flex'} justifyContent={'space-between'} item pr={1} xs={8} md={8}>
 
                                                     {
-                                                        attachment?.name?.length > 30 ?
+                                                        attachment &&
+                                                            attachment?.name?.length > 30 ?
                                                             <Tooltip title={attachment?.name}>
                                                                 <p>{attachment?.name?.substring(0, 30) + '...'}</p>
                                                             </Tooltip>
                                                             :
                                                             <p>{attachment?.name}</p>
                                                     }
-                                                    <Delete onClick={handleDelete} fontSize='small' sx={{ color: 'red', cursor: 'pointer' }} />
+                                                    {
+                                                        !attachment &&
+                                                        <Tooltip title={details?.receipt_file}>
+                                                            <p className="text-gray-700">
+                                                                {trimUrlAndNumbers(details?.receipt_file)}
+                                                            </p>
+                                                        </Tooltip>
+                                                    }
+                                                    {
+                                                        attachment &&
+                                                        <Delete onClick={handleDelete} fontSize='small' sx={{ color: 'red', cursor: 'pointer' }} />
+                                                    }
                                                 </Grid>
                                             }
-                                        </Grid> */}
+                                        </Grid>
                                     </>
                             }
 

@@ -5,7 +5,7 @@ export const ListingApi = {
     stages: (data) => http.get(`listing/stages`, { params: data }),
     substages: (data) => http.get(`listing/substages`, { params: data }),
     universities: (data) => http.get(`listing/universities`, { params: data }),
-    courses:(data) => http.get(`listing/courses`, { params: data }),
+    // courses:(data) => http.get(`listing/courses`, { params: data }),
     users:(data) => http.get(`listing/users`, { params: data }),
     documentTemplate:(data) => http.get(`listing/document-templates`, { params: data }),
     reference:(data) => http.get(`listing/referrals`, { params: data }),
@@ -15,6 +15,7 @@ export const ListingApi = {
     agencies: (data) => http.get(`listing/agencies`,{ params: data }),
     leadSource: (data) => http.get(`listing/lead-sources`,{ params: data }),
     nameTitle: (data) => http.get(`listing/titles`,{ params: data }),
+    subjectAreas:(data) => http.get(`listing/subject-areas`, { params: data }),
 }
 
 

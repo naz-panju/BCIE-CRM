@@ -24,13 +24,11 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
-import { TemplateApi } from '@/data/Endpoints/Template';
-import { Edit } from '@mui/icons-material';
-import EmailTemplateDetailModal from '../EmailTemplateDetail/Modal';
-import { ApplicationApi } from '@/data/Endpoints/Application';
-import { StudentApi } from '@/data/Endpoints/Student';
+import AsyncSelect from "react-select/async";
+import { ListingApi } from '@/data/Endpoints/Listing';
+
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -87,19 +85,13 @@ const headCells = [
         id: 'email',
         numeric: false,
         disablePadding: false,
-        label: 'email ',
+        label: 'Registered Email ',
     },
     {
         id: 'phone',
         numeric: true,
         disablePadding: false,
-        label: 'Phone Number ',
-    },
-    {
-        id: 'country',
-        numeric: false,
-        disablePadding: false,
-        label: 'Country',
+        label: 'Registered Phone ',
     },
 ];
 
@@ -236,6 +228,19 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
 
     const [detailId, setDetailId] = useState()
 
+    const [selectedCountry, setselectedCountry] = useState()
+    const [selectedUniversity, setselectedUniversity] = useState()
+
+
+    const fetchCountry = (e) => {
+        return ListingApi.country({ keyword: e }).then(response => {
+          if (typeof response?.data?.data !== "undefined") {
+            return response.data.data;
+          } else {
+            return [];
+          }
+        })
+      }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -278,11 +283,6 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
         // router.push(`/lead?page=${newPage + 1}`);
     };
 
-
-    const handleEdit = (id) => {
-        setEditId(id)
-    }
-
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
         setPage(0);
@@ -312,10 +312,15 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
         setDetailId(id)
     }
 
+    const handleCountryChange = (data) => {
+        setselectedCountry(data?.id)
+      }
+    
+
 
     const fetchTable = () => {
         setLoading(true)
-        LeadApi.list({ limit: limit,closed:1, page: page + 1 }).then((response) => {
+        LeadApi.list({ limit: limit, closed: 1,applying_for_country:selectedCountry, page: page + 1 }).then((response) => {
             console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -326,12 +331,63 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit])
+    }, [page, refresh, limit,selectedCountry])
 
     return (
 
         <>
             {/* <EmailTemplateDetailModal id={detailId} setId={setDetailId} /> */}
+
+            <Grid p={1} pl={0} mb={1} container display={'flex'} >
+                <Grid mr={1} item md={2}>
+                    <AsyncSelect
+                        isClearable
+                        defaultOptions
+                        loadOptions={fetchCountry}
+                        getOptionLabel={(e) => e.name}
+                        getOptionValue={(e) => e.id}
+                        placeholder={<div>Country</div>}
+                        onChange={handleCountryChange}
+                    />
+                </Grid>
+
+                <Grid mr={1} item md={2}>
+                    <AsyncSelect
+                        isClearable
+                        defaultOptions
+                        loadOptions={fetchCountry}
+                        getOptionLabel={(e) => e.name}
+                        getOptionValue={(e) => e.id}
+                        placeholder={<div>University</div>}
+                        // onChange={handleUserSelect}
+                    />
+                </Grid>
+
+                <Grid mr={1} item md={2}>
+                    <AsyncSelect
+                        isClearable
+                        defaultOptions
+                        loadOptions={fetchCountry}
+                        getOptionLabel={(e) => e.name}
+                        getOptionValue={(e) => e.id}
+                        placeholder={<div>Intake</div>}
+                        // onChange={handleUserSelect}
+                    />
+                </Grid>
+
+                <Grid mr={1} item md={2}>
+                    <AsyncSelect
+                        isClearable
+                        defaultOptions
+                        loadOptions={fetchCountry}
+                        getOptionLabel={(e) => e.name}
+                        getOptionValue={(e) => e.id}
+                        placeholder={<div> Stream</div>}
+                        // onChange={handleUserSelect}
+                    />
+                </Grid>
+
+            </Grid>
 
             {
 
@@ -395,8 +451,8 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                               <Link href={`lead/${row?.lead_id}`}> {row?.first_name} {row?.last_name  }</Link>
-                                                               {/* {row?.first_name  } {row?.last_name} */}
+                                                                <Link href={`lead/${row?.id}`}> {row?.name}</Link>
+                                                                {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.email}</TableCell>
                                                             <TableCell align="left">{row?.phone_number}</TableCell>
@@ -415,7 +471,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
                                                     >
                                                         <TableCell colSpan={8} align="center">
                                                             <div className='no-table-ask-block'>
-                                                                <h4 style={{ color: 'grey' }}>No Template Found</h4>
+                                                                <h4 style={{ color: 'grey' }}>No Alumni Found</h4>
                                                             </div>
                                                         </TableCell>
                                                     </TableRow>

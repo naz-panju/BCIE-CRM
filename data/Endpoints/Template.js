@@ -6,4 +6,6 @@ export const TemplateApi = {
     view: (data) => http.get(`email-templates/view/${data?.id}`, {params:data}),
     update: (data) => http.post(`email-templates/update`, data),
 
+    mailTemplate: (data) => http.get(`email-templates/template/${data?.template_id}/lead/${data?.lead_id}`, {params:data}),
+    
 }

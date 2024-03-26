@@ -119,7 +119,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
     },
     {
       label: 'Applications',
-      component: <LeadApplication lead_id={data?.id} />,
+      component: <LeadApplication data={data} lead_id={data?.id} />,
       icon: <Apps />
     },
     // {

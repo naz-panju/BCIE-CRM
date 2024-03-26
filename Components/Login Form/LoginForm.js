@@ -27,7 +27,7 @@ const LoginForm = () => {
                 // callbackUrl:'/'
             })
 
-            console.log(result);
+            // console.log(result);
             if (result?.ok) {
                 setEmail('');
                 setPassword('');

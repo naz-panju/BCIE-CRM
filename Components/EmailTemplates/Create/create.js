@@ -2,7 +2,7 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Button, Checkbox, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Archive, Close, Refresh } from '@mui/icons-material';
+import { Archive, AttachFile, Close, Delete, Refresh } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import DateInput from '@/Form/DateInput';
 import SelectX from '@/Form/SelectX';
@@ -28,7 +28,7 @@ import dynamic from 'next/dynamic';
 
 const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
     ssr: false,
-}); 
+});
 
 const scheme = yup.object().shape({
 
@@ -47,12 +47,21 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     const [isChecked, setIsChecked] = useState(false);
 
+    const [file, setFile] = useState([])
+
+    const handleDeleteAttachment = (index) => {
+        const updatedAttachments = [...file];
+        updatedAttachments.splice(index, 1);
+        setFile(updatedAttachments);
+    };
+
+
     const handleCheckboxChange = (event) => {
         setIsChecked(event.target.checked);
         // Add any additional logic here if needed
     };
 
-    
+
 
     const items = [
         { label: 'Template Name' },
@@ -68,38 +77,40 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
+    const handleFileChange = (e) => {
+        const newFile = e?.target?.files[0];
+        setFile([...file, newFile]); // Add the new file to the state
+    };
 
     const onSubmit = async (data) => {
 
         setLoading(true)
-        let dueDate = ''
-        if (data?.date) {
-            dueDate = moment(data?.date).format('YYYY-MM-DD')
-        }
+        
+        const formData = new FormData();
 
-        let dataToSubmit = {
-            // lead_id: data?.lead?.id,
-            name: data?.name,
-            subject: data?.subject,
-            body: data?.body,
-            body_footer: data?.body_footer,
-            default_cc: data?.default_cc,
-        }
+        formData.append('name', data?.name)
+        formData.append('subject', data?.subject)
+        formData.append('body', data?.body)
+        formData.append('body_footer', data?.body_footer)
+        formData.append('default_cc', data?.default_cc)
 
-        console.log(dataToSubmit);
+        if (editId === 0) {
+            file?.map(obj => {
+                formData.append('attachments[]', obj)
+            })
+        }
 
         if (lead_id) {
-            dataToSubmit['lead_id'] = lead_id
+            formData.append('lead_id', lead_id)
         }
-
 
         let action;
 
         if (editId > 0) {
-            dataToSubmit['id'] = editId
-            action = TemplateApi.update(dataToSubmit)
+            formData.append('id',editId) 
+            action = TemplateApi.update(formData)
         } else {
-            action = TemplateApi.add(dataToSubmit)
+            action = TemplateApi.add(formData)
         }
 
         action.then((response) => {
@@ -292,6 +303,34 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                             </Grid>
                                         </Grid>
 
+                                        {/* Attachments */}
+                                        <Grid display={'flex'}  container p={1.5} item xs={12}>
+                                            <Grid  item xs={12} md={2.5}>
+                                                <label htmlFor="file-input">
+                                                    <input
+                                                        type="file"
+                                                        id="file-input"
+                                                        style={{ display: 'none' }}
+                                                        onChange={handleFileChange}
+                                                    />
+                                                    <Button sx={{ textTransform: 'none', height: 30 }}
+                                                        variant='contained'
+                                                        className='bg-sky-800' size='small' component="span">
+                                                        Attachments<AttachFile />
+                                                    </Button>
+                                                </label>
+                                            </Grid>
+                                            <Grid item xs={12} md={9.5}>
+                                                {file?.map((obj, index) => (
+                                                    <Grid display={'flex'} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item xs={12}>
+                                                        <a style={{ color: 'grey', fontSize: '14px' }}>{obj?.name}</a>
+                                                        <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
+                                                            {/* You can use any icon for delete, for example, a delete icon */}
+                                                            <Delete fontSize='small' style={{ color: 'red' }} />
+                                                        </a>
+                                                    </Grid>
+                                                ))} </Grid>
+                                        </Grid>
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                             <Grid item xs={12} md={2.5}>

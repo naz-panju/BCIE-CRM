@@ -8,7 +8,7 @@ function LoadingEdit({ item,leftMD,rightMD }) {
                 item?.map((obj, index) => (
                     <Grid key={index} display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                         <Grid item xs={12} md={leftMD || 4}>
-                            <Typography sx={{ fontWeight: '500' }}>{obj?.label}</Typography>
+                            <Typography className='form-text' sx={{ fontWeight: '500' }}>{obj?.label}</Typography>
                         </Grid>
                         <Grid item xs={12} md={rightMD || 8}>
                             {

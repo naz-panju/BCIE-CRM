@@ -23,10 +23,9 @@ const scheme = yup.object().shape({
     university: yup.object().required("Please Choose an University").typeError("Please choose an University"),
     course: yup.object().required("Please Choose a Course").typeError("Please choose a Course"),
     intake: yup.object().required("Please Choose an Intake").typeError("Please choose an Intake"),
-
 })
 
-export default function LeadApplicationModal({ lead_id, editId, setEditId, handleRefresh }) {
+export default function LeadApplicationModal({ lead_id, editId, setEditId, handleRefresh,details }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -59,7 +58,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
     const [addId, setAddId] = useState()
 
-    const handleCourseRefresh=()=>{
+    const handleCourseRefresh = () => {
         setcourseRefresh(Math.random())
     }
 
@@ -83,7 +82,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         })
     }
     const fetchCourse = (e) => {
-        return ListingApi.courses({ keyword: e}).then(response => {
+        return ListingApi.subjectAreas({ keyword: e }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -120,14 +119,15 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         setLoading(true)
 
         let dataToSubmit = {
-            lead_id: lead_id,
+            student_id: details?.student?.id,
             country_id: data?.country?.id,
             university_id: data?.university?.id,
             course_level_id: data?.course_level?.id,
-            course_id: data?.course?.id,
+            subject_area_id: data?.course?.id,
             intake_id: data?.intake?.id,
 
-            courses: data?.add_course,
+            // courses: data?.add_course,
+            course:data?.coursetext,
 
             remarks: data.remarks,
         }
@@ -146,12 +146,16 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
         action.then((response) => {
             console.log(response);
-            if (response?.status == 200 || 201) {
+            if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Application has been Updated Successfully' : 'Applied Successfully')
                 reset()
                 handleClose()
                 handleRefresh()
                 setLoading(false)
+            }
+            else{
+                toast.error(response?.response?.data?.message)
+ 
             }
 
             setLoading(false)
@@ -192,6 +196,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         setValue('university', '')
         setValue('course', '')
         setValue('intake', '')
+        setValue('coursetext','')
     }
 
     const handleUniversityChange = (data) => {
@@ -226,9 +231,10 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             setValue('country', data?.country)
             setValue('university', data?.university)
             setValue('course_level', data?.course_level)
-            setValue('course', data?.course)
+            setValue('course', data?.subject_area)
             setValue('intake', data?.intake)
             setValue('remarks', data?.remarks)
+            setValue('coursetext',data?.course)
 
         }
         setDataLoading(false)
@@ -381,7 +387,18 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             </Grid>
                                         </Grid>
 
-                                        <Grid p={1} container  >
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={4} md={4}>
+                                                <a  className='form-text' > Course</a>
+                                            </Grid>
+                                            <Grid item xs={8} md={8}>
+                                                <TextInput control={control} name="coursetext"
+                                                    value={watch('coursetext')} />
+                                                {errors.coursetext && <span className='form-validation'>{errors.coursetext.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
+                                        {/* <Grid p={1} container  >
                                             <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
 
                                             </Grid>
@@ -389,7 +406,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             <Grid item display={'flex'} justifyContent={'end'} pr={1} xs={8} md={8}>
                                                 <Button onClick={handleCoursePopup} size='small' className='bg-sky-300 text-white h-6 text-xs hover:bg-sky-500 text-white' variant='contained'>{coursePopup ? 'Cancel' : 'Add Course'}</Button>
                                             </Grid>
-                                        </Grid>
+                                        </Grid> */}
 
 
 
