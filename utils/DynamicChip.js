@@ -6,7 +6,7 @@ const DynamicChip = (props) => {
     const handleClick = () => {
         props.onChipCLick(props.id)
     }
-    return <Chip onClick={handleClick} clickable={true} label={props.name} sx={{ m: 0.3 }} icon={props.active === props.id ? <Check fontSize='small' /> : null} />
+    return <Chip color={props?.color} onClick={handleClick} clickable={true} label={props.name} sx={{ m: 0.3 }} icon={props.active === props.id ? <Check fontSize='small' /> : null} />
 };
 
 export default DynamicChip;

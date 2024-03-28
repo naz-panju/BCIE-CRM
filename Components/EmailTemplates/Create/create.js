@@ -49,6 +49,14 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     const [file, setFile] = useState([])
 
+    const [attachmentFiles, setattachmentFiles] = useState([])
+
+    const [confirmId, setconfirmId] = useState()
+    const [confirmLoading, setconfirmLoading] = useState(false)
+
+    const [isSysytemTemplate, setIsSysytemTemplate] = useState(false)
+
+
     const handleDeleteAttachment = (index) => {
         const updatedAttachments = [...file];
         updatedAttachments.splice(index, 1);
@@ -60,8 +68,6 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         setIsChecked(event.target.checked);
         // Add any additional logic here if needed
     };
-
-
 
     const items = [
         { label: 'Template Name' },
@@ -85,7 +91,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
     const onSubmit = async (data) => {
 
         setLoading(true)
-        
+
         const formData = new FormData();
 
         formData.append('name', data?.name)
@@ -94,7 +100,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         formData.append('body_footer', data?.body_footer)
         formData.append('default_cc', data?.default_cc)
 
-        if (editId === 0) {
+        if (file?.length > 0) {
             file?.map(obj => {
                 formData.append('attachments[]', obj)
             })
@@ -104,28 +110,42 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
             formData.append('lead_id', lead_id)
         }
 
+        if (attachmentFiles?.length > 0) {
+            attachmentFiles?.map((obj) => {
+                formData.append('attachment_ids[]', obj?.id)
+            })
+        }
+
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]); // Iterate through form data and log key-value pairs
+        }
+
         let action;
 
         if (editId > 0) {
-            formData.append('id',editId) 
+            formData.append('id', editId)
             action = TemplateApi.update(formData)
         } else {
             action = TemplateApi.add(formData)
         }
 
         action.then((response) => {
-            if (response?.data) {
+            console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Email Template Has Been Successfully Updated' : 'Email Template Has Been Successfully Created')
                 reset()
                 handleClose()
                 handleRefresh()
+                setLoading(false)
+            } else {
+                toast.error(response?.response?.data?.message)
                 setLoading(false)
             }
 
             setLoading(false)
         }).catch((error) => {
             console.log(error);
-            toast.error(error?.message)
+            toast.error(error?.response?.data?.message)
             setLoading(false)
         })
     }
@@ -134,6 +154,8 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
     const handleClose = () => {
         setEditId()
         reset()
+        setattachmentFiles([])
+        setFile([])
         setValue('name', '')
         setValue('subject', '')
         setValue('body', '')
@@ -155,6 +177,29 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         }
     };
 
+    function trimUrlAndNumbers(url) {
+        const lastSlashIndex = url?.lastIndexOf('/');
+        let trimmedString = url?.substring(lastSlashIndex + 1);
+        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
+    }
+
+    const handleDeleteConfirm = (obj) => {
+        setconfirmId(obj?.id)
+    }
+
+    const handleDeleteFiles = () => {
+        setconfirmLoading(true)
+
+        const index = attachmentFiles.findIndex(obj => obj.id === confirmId);
+        if (index !== -1) {
+            attachmentFiles.splice(index, 1);
+        }
+
+        setconfirmId()
+        setconfirmLoading(false)
+    }
+
     const getDetails = async () => {
         setDataLoading(true)
         try {
@@ -169,6 +214,10 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                 setValue('body_footer', data?.body_footer)
                 setSelectedPriority(data?.priority)
                 setValue('default_cc', data?.default_cc)
+
+                console.log(data?.attchments);
+                setattachmentFiles(data?.attchments)
+
                 setDataLoading(false)
             }
             setDataLoading(false)
@@ -193,6 +242,8 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     return (
         <div>
+
+            <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleDeleteFiles} title={`Do you want to Delete this Attachment?`} />
 
 
             <Drawer
@@ -235,12 +286,22 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                     <LoadingEdit item={items} />
                                     :
                                     <>
+
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={2.5}>
+                                                <Typography sx={{ fontWeight: '500' }}>System Template</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={9.5}>
+                                                <Checkbox checked={isSysytemTemplate} disabled />
+                                            </Grid>
+                                        </Grid>
+
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                             <Grid item xs={12} md={2.5}>
                                                 <Typography sx={{ fontWeight: '500' }}>Template Name</Typography>
                                             </Grid>
                                             <Grid item xs={12} md={9.5}>
-                                                <TextInput control={control} name="name"
+                                                <TextInput disabled={isSysytemTemplate} control={control} name="name"
                                                     value={watch('name')} />
                                                 {errors.name && <span className='form-validation'>{errors.name.message}</span>}
                                             </Grid>
@@ -303,9 +364,30 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                             </Grid>
                                         </Grid>
 
+                                        {
+                                            attachmentFiles?.length > 0 &&
+                                            <Grid display={'flex'} container p={1.5} item xs={12}>
+                                                <Grid item display={'flex'} xs={12} md={2.5}>
+                                                    <Typography sx={{ fontWeight: '500' }}>Attachments</Typography>
+                                                </Grid>
+                                                <Grid item xs={12} md={9.5}>
+                                                    {
+                                                        attachmentFiles?.map((obj, index) => (
+                                                            <Grid key={index} display={'flex'} justifyContent={'space-between'}>
+                                                                <p style={{ textDecoration: 'underLine', color: 'blue', cursor: 'pointer' }} className="text-gray-700">
+                                                                    <a target='_blank' href={obj?.attachment}>{trimUrlAndNumbers(obj?.attachment)}</a>
+                                                                </p>
+                                                                <Delete onClick={() => handleDeleteConfirm(obj)} fontSize='small' style={{ color: 'red', cursor: 'pointer' }} />
+                                                            </Grid>
+                                                        ))
+                                                    }
+                                                </Grid>
+                                            </Grid>
+                                        }
+
                                         {/* Attachments */}
-                                        <Grid display={'flex'}  container p={1.5} item xs={12}>
-                                            <Grid  item xs={12} md={2.5}>
+                                        <Grid display={'flex'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={2.5}>
                                                 <label htmlFor="file-input">
                                                     <input
                                                         type="file"
@@ -326,7 +408,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         <a style={{ color: 'grey', fontSize: '14px' }}>{obj?.name}</a>
                                                         <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
                                                             {/* You can use any icon for delete, for example, a delete icon */}
-                                                            <Delete fontSize='small' style={{ color: 'red' }} />
+                                                            <Delete fontSize='small' style={{ color: 'grey' }} />
                                                         </a>
                                                     </Grid>
                                                 ))} </Grid>

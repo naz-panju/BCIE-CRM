@@ -4,7 +4,7 @@ import Image from "next/image";
 import LogoIcon from '@/styles/logo65cc654bac92a.png';
 import Logo from '@/styles/logo65cc655649912.png';
 
-import { CrisisAlertOutlined, Email, EmailOutlined, GroupOutlined, Groups2, Groups2Outlined, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications } from '@mui/icons-material';
+import { ArchiveOutlined, CrisisAlertOutlined, DescriptionOutlined, Email, EmailOutlined, GroupOutlined, Groups2, Groups2Outlined, LinkOutlined, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -33,9 +33,19 @@ const Sidebar = () => {
             href: '/applicants'
         },
         {
+            title: 'Archives',
+            icon: ArchiveOutlined,
+            href: '/archive'
+        },
+        {
             title: 'Alumni',
             icon: GroupOutlined,
             href: '/alumni'
+        },
+        {
+            title: 'Application Manager',
+            icon: DescriptionOutlined,
+            href: '/applications'
         },
         {
             title: 'Task Manager',
@@ -48,10 +58,20 @@ const Sidebar = () => {
             href: '/email-template'
         },
         {
+            title: 'Events',
+            icon: EmailOutlined,
+            href: '/events'
+        },
+        {
             title: 'Goals & Targets',
             icon: CrisisAlertOutlined,
             href: '/goals-and-targets'
-        }
+        },
+        {
+            title: 'Referral Links',
+            icon: LinkOutlined,
+            href: '/referral-links'
+        },
     ]
 
 

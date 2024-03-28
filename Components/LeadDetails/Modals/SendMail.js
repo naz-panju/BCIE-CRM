@@ -187,7 +187,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         setValue('body', '')
         setOpen(false)
         setFile()
-        setattachmentFiles()
+        setattachmentFiles([])
 
     }
 

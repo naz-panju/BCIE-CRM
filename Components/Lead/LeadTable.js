@@ -206,7 +206,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh, page, setPage }) {
+export default function EnhancedTable({ refresh, page, setPage,selected,setSelected }) {
 
   const router = useRouter();
 
@@ -217,7 +217,8 @@ export default function EnhancedTable({ refresh, page, setPage }) {
 
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
-  const [selected, setSelected] = React.useState([]);
+
+  // const [selected, setSelected] = React.useState([]);  //recieving props from parent lead componnet
   // const [page, setPage] = React.useState(pageNumber);
   const [dense, setDense] = React.useState(false);
   const [limit, setLimit] = React.useState(10);
@@ -235,11 +236,25 @@ export default function EnhancedTable({ refresh, page, setPage }) {
   };
 
   const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
+
+    // if (event.target.checked) {
+    //   const newSelected = list?.data?.map((n) => n.id);
+    //   setSelected(newSelected);
+    //   return;
+    // }
+    // setSelected([]);
+    if (event.target.checked &&  selected?.length != list?.data?.length) {
       const newSelected = list?.data?.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
+
+    // Uncheck all if all are checked
+    if (selected?.length === list?.data?.length) {
+      setSelected([]);
+      return;
+    }
+
     setSelected([]);
   };
 
@@ -323,7 +338,7 @@ export default function EnhancedTable({ refresh, page, setPage }) {
 
   const fetchTable = () => {
     setLoading(true)
-    LeadApi.list({ limit: limit,assigned_to:selectedAssignedTo,stage:selectedStage, page: page + 1 }).then((response) => {
+    LeadApi.list({ limit: limit, assigned_to: selectedAssignedTo, stage: selectedStage, page: page + 1 }).then((response) => {
       // console.log(response);
       setList(response?.data)
       setLoading(false)
@@ -334,12 +349,12 @@ export default function EnhancedTable({ refresh, page, setPage }) {
   }
   useEffect(() => {
     fetchTable()
-  }, [page, refresh, limit,selectedAssignedTo,selectedStage])
+  }, [page, refresh, limit, selectedAssignedTo, selectedStage])
 
   return (
     <>
       <Grid p={1} pl={0} mb={1} container display={'flex'}>
-        <Grid  width={300} mr={1} item md={2.5}>
+        <Grid width={300} mr={1} item md={2.5}>
           <AsyncSelect
             isClearable
             defaultOptions

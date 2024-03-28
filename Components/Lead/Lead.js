@@ -7,6 +7,9 @@ import MenuItem from '@mui/material/MenuItem';
 import LeadTable from './LeadTable';
 import CreateLead from './Create/Create';
 import { useRouter } from 'next/router';
+import { Grid, IconButton, Popover, Typography } from '@mui/material';
+import AssignLeadModal from './Modal/AssignModal';
+import { MoreVert } from '@mui/icons-material';
 
 
 const StyledMenu = styled((props) => (
@@ -62,9 +65,14 @@ export default function CustomizedMenus() {
   const [refresh, setRefresh] = useState(false)
   const [editId, setEditId] = useState()
 
+  const [selected, setSelected] = React.useState([]);
+
   const [page, setPage] = React.useState(pageNumber);
 
+  const [assignId, setAssignId] = useState()
+
   const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -74,6 +82,10 @@ export default function CustomizedMenus() {
 
   const handleCreateNew = () => {
     setEditId(0)
+  }
+
+  const handleCreateassign = () => {
+    setAssignId(0)
   }
 
   const handleRefresh = () => {
@@ -87,9 +99,10 @@ export default function CustomizedMenus() {
 
     <>
       <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
+      <AssignLeadModal selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} handlePopClose={handleClose} />
       <section>
         <div className='page-title-block'>
-          <div className='page-title-block-content'>
+          <div className='page-title-block-content justify-between'>
             <h1>Lead Manager</h1>
 
             {/* <div className='quick-view-block'>
@@ -124,16 +137,37 @@ export default function CustomizedMenus() {
               </StyledMenu>
             </div> */}
 
+            <Grid >
+              <Button sx={{ textTransform: 'none', mr: 1 }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
+
+              {/* disabled={selected?.length == 0} */}
+              <IconButton onClick={handleClick}>
+                <MoreVert fontSize='small' sx={{ color: 'grey', cursor: 'pointer' }} />
+              </IconButton>
+              <Popover
+                id={id}
+                open={open}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+              >
+                {
+                  selected?.length > 0 &&
+                  <Typography onClick={handleCreateassign} sx={{ p: 1, pl: 2, pr: 2 }}>Assign</Typography>
+                }
+              </Popover>
+
+              {/* <Button className='bg-sky-500' disabled={selected?.length == 0} sx={{ textTransform: 'none' }} onClick={handleCreateassign} size='small' variant='contained'>Assign</Button> */}
+            </Grid>
           </div>
 
-          <div className='page-title-block-right'>
-            <Button sx={{ textTransform: 'none' }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
-          </div>
         </div>
 
-
         <div className='content-block'>
-          <LeadTable refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
+          <LeadTable refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} selected={selected} setSelected={setSelected} />
         </div>
       </section>
     </>

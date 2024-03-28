@@ -525,6 +525,7 @@ ul#menuList li {
   gap: 20px;
   width: 100%;
 }
+/* table heading width change */
 
 .page-title-block-content h1 {
   font-size: 22px;
@@ -1295,6 +1296,11 @@ body.body-active section , body.body-active .header {
 
 .form-text{
   font-size: 15px;
+}
+
+.form-text-purpose a{
+  font-size: 15px;
+
 }
 
 .course-popup {

@@ -97,7 +97,7 @@ function LeadDetails() {
       <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
       <SendMail details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
 
-      <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleCloseAdmission} title={`Do you want to close the Admission of ${details?.name}?`} />
+      <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleCloseAdmission} title={`Do you want to Archive ${details?.name}?`} />
 
 
       <section>
@@ -111,7 +111,7 @@ function LeadDetails() {
 
               <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-500 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
 
-              <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-lime-500 text-white hover:bg-lime-600 text-white'>Close Admission</Button>
+              <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>Archive</Button>
             </Grid>
           </div>
         </div>
