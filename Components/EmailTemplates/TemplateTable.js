@@ -266,7 +266,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         // console.log(newPage);
-        router.replace(`/lead?page=${newPage + 1}`);
+        // router.replace(`/lead?page=${newPage + 1}`);
         // router.push(`/lead?page=${newPage + 1}`);
     };
 

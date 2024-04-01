@@ -216,6 +216,9 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                BackdropProps={{
+                    onClick: null, // Prevent closing when clicking outside
+                }}
             >
                 <Box sx={style}>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>

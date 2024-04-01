@@ -18,11 +18,13 @@ import LoadingEdit from '@/Components/Common/Loading/LoadingEdit'
 import ReactSelector from 'react-select';
 import { StudentApi } from '@/data/Endpoints/Student'
 import AsyncSelect from "react-select/async";
+import { ReferralApi } from '@/data/Endpoints/Referrals'
+import axios from 'axios'
 
 
 
 
-function Form({ }) {
+function EventForm({ }) {
 
 
 
@@ -320,7 +322,7 @@ function Form({ }) {
                 dataLoading ?
                     <LoadingEdit leftMD={5} rightMD={7} item={items} />
                     :
-                    <form>
+                    <form style={{ width: 600 }}>
                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                             <Grid item xs={12} md={5}>
                                 <Typography sx={{ fontWeight: '500' }}>Name</Typography>
@@ -388,218 +390,6 @@ function Form({ }) {
                             </Grid>
                         </Grid>
 
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Alternate Mobile Number</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <PhoneInput
-                                    {...register('alt_phone')}
-
-                                    international
-                                    // autoFormat
-                                    placeholder="Enter your number"
-                                    country="in"
-                                    value={watch('alt_phone')}
-                                    onChange={handleAltPhoneNumber}
-                                    inputprops={{
-                                        autoFocus: true,
-                                        autoComplete: 'off',
-                                        name: 'phone',
-                                        required: true,
-                                    }}
-                                    inputstyle={{
-                                        width: '100%',
-                                        height: '40px',
-                                        paddingLeft: '40px', // Adjust the padding to make space for the country symbol
-                                    }}
-                                    buttonstyle={{
-                                        border: 'none',
-                                        backgroundColor: 'transparent',
-                                        marginLeft: '5px',
-                                    }}
-                                />
-                                {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
-
-                            </Grid>
-                        </Grid>
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Whatsapp Number</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <PhoneInput
-                                    {...register('whatsapp')}
-
-                                    international
-                                    // autoFormat
-                                    placeholder="Enter your number"
-                                    country="in"
-                                    value={watch('whatsapp')}
-                                    onChange={handleWhatsAppNumber}
-                                    inputprops={{
-                                        autoFocus: true,
-                                        autoComplete: 'off',
-                                        name: 'phone',
-                                        required: true,
-                                    }}
-                                    inputstyle={{
-                                        width: '100%',
-                                        height: '40px',
-                                        paddingLeft: '40px', // Adjust the padding to make space for the country symbol
-                                    }}
-                                    buttonstyle={{
-                                        border: 'none',
-                                        backgroundColor: 'transparent',
-                                        marginLeft: '5px',
-                                    }}
-                                />
-                                {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
-
-                            </Grid>
-                        </Grid>
-
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Preferred Countries</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <TextInput control={control} {...register('preffered_country')}
-                                    value={watch('preffered_country')} />
-                                {errors.preffered_country && <span className='form-validation'>{errors.preffered_country.message}</span>}
-                            </Grid>
-                        </Grid>
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Preferred Course Level</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                {/* <SelectX
-                                    menuPlacement='top'
-                                    loadOptions={fetchCourseLevel}
-                                    control={control}
-                                    // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                    // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                    name={'preffered_course_level'}
-                                    defaultValue={watch('preffered_course_level')}
-                                /> */}
-                                {errors.preffered_course_level && <span className='form-validation'>{errors.preffered_course_level.message}</span>}
-                            </Grid>
-                        </Grid>
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Preferred courses</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <TextInput control={control} {...register('preffered_course')}
-                                    value={watch('preffered_course')} />
-                                {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
-                            </Grid>
-                        </Grid>
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Lead Source</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <AsyncSelect
-                                    // isDisabled={!selectedUniversityId}
-                                    // key={selectedUniversityId}
-                                    name={'source'}
-                                    defaultValue={watch('source')}
-                                    isClearable
-                                    defaultOptions
-                                    loadOptions={fetchSources}
-                                    getOptionLabel={(e) => e.name}
-                                    getOptionValue={(e) => e.id}
-                                    onChange={handleSourseChange}
-                                />
-                            </Grid>
-
-                        </Grid>
-
-                        {
-                            watch('source')?.name == 'Referral' &&
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Referred Student</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={7}>
-                                    <SelectX
-                                        menuPlacement='top'
-                                        loadOptions={fetchStudents}
-                                        control={control}
-                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'student'}
-                                        defaultValue={watch('student')}
-                                    />
-                                    {/* {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>} */}
-                                </Grid>
-                            </Grid>
-                        }
-
-
-                        {
-                            watch('source')?.name == 'Agency' &&
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Referred Agency</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={7}>
-                                    <SelectX
-                                        menuPlacement='top'
-                                        loadOptions={fetchAgencies}
-                                        control={control}
-                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'agency'}
-                                        defaultValue={watch('agency')}
-                                    />
-                                    {/* {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>} */}
-                                </Grid>
-                            </Grid>
-                        }
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>How did you know about us? </Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <ReactSelector
-                                    menuPlacement='auto'
-                                    onInputChange={fetchReference}
-                                    styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}
-                                    options={referenceOption}
-                                    getOptionLabel={option => option.name}
-                                    getOptionValue={option => option.name}
-                                    value={
-                                        referenceOption.filter(options =>
-                                            options?.name == watch('reference')
-                                        )
-                                    }
-                                    name='reference'
-                                    isClearable
-                                    defaultValue={(watch('reference'))}
-                                    onChange={(selectedOption) => setValue('reference', selectedOption?.name || '')}
-                                />
-                            </Grid>
-
-                        </Grid>
-
-                        <Grid display={'flex'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Note</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
-                                    value={watch('note') || ''} />
-                            </Grid>
-                        </Grid>
-
                         <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                             <LoadingButton loading={loading} disabled={loading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
                         </Grid>
@@ -611,4 +401,72 @@ function Form({ }) {
     )
 }
 
-export default Form
+export default EventForm
+
+// export async function getStaticPaths() {
+//     const list = await ModalitiesApi.list();
+//     // Extract slugs from the data (replace 'slugField' with the actual field containing slugs)
+//     const paths = list?.data?.data?.map((item) => ({
+//       params: { slug: item?.slug },
+//     })) || [];
+
+//     // console.log(paths);
+//     return { paths, fallback: 'blocking' };
+//   }
+
+//   export async function getStaticProps(context) {
+//     console.log(context);
+//     try {
+//     //   const megaMenu = await MenuApi.megaMenu();
+//           return {
+//         props: {
+//         },
+//         revalidate: 10,
+//       };
+//     } catch (error) {
+//       console.error('Error', error);
+
+//       return {
+//         props: {
+//           header: null, // or handle the error in a way that makes sense for your application
+//         },
+//         revalidate: 10,
+//         notFound: true
+//       };
+//     }
+//   }
+
+export async function getServerSideProps(context) {
+    try {
+        const formCheck = await axios.get(process.env.NEXT_PUBLIC_API_PATH +`referral-links/form/${context?.query?.slug}`)
+        // console.log('ss',formCheck);
+        if (formCheck?.status == 200 || formCheck?.status == 201) {
+            return {
+                props: {
+                    data: formCheck?.data?.data || null
+                },
+
+            };
+        } else {
+            console.log(':;;');
+            return {
+                props: {
+                    data: null
+                },
+                notFound: true
+
+            };
+        }
+    } catch (error) {
+        // console.error('Error', error);
+
+        return {
+            props: {
+                data: null, // or handle the error in a way that makes sense for your application
+
+            },
+            // notFound: true
+        };
+    }
+}
+

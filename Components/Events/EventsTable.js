@@ -20,15 +20,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
-import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Button, Grid } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
-import { TemplateApi } from '@/data/Endpoints/Template';
 import { Edit } from '@mui/icons-material';
-import EmailTemplateDetailModal from '../EmailTemplateDetail/Modal';
+import { EventsApi } from '@/data/Endpoints/Events';
+import moment from 'moment';
+import EventDetailModal from './Details/Modal';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -79,19 +78,31 @@ const headCells = [
         id: 'name',
         numeric: false,
         disablePadding: true,
-        label: 'Template Name',
+        label: 'Event Name',
     },
     {
-        id: 'subject',
+        id: 'venue',
         numeric: false,
         disablePadding: false,
-        label: 'Subject ',
+        label: 'Venue ',
     },
     {
-        id: 'default_cc',
+        id: 'branch',
         numeric: false,
         disablePadding: false,
-        label: 'Default CC',
+        label: 'Branch ',
+    },
+    {
+        id: 'start_date',
+        numeric: true,
+        disablePadding: false,
+        label: 'Start Date',
+    },
+    {
+        id: 'end_date',
+        numeric: true,
+        disablePadding: false,
+        label: 'End Date',
     },
 ];
 
@@ -307,7 +318,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
 
     const fetchTable = () => {
         setLoading(true)
-        TemplateApi.list({ limit: limit, page: page + 1 }).then((response) => {
+        EventsApi.list({ limit: limit, page: page + 1 }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -323,7 +334,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
     return (
 
         <>
-            <EmailTemplateDetailModal id={detailId} setId={setDetailId} />
+            <EventDetailModal id={detailId} setId={setDetailId} />
 
             {
 
@@ -354,9 +365,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
                                                     const isItemSelected = isSelected(row.id);
                                                     const labelId = `enhanced-table-checkbox-${index}`;
 
-                                                    let defaultCC = row?.default_cc || '';
-                                                    let emails = defaultCC.split(',').map(email => email.trim());
-                                                    let mainEmail = emails.shift();
+                                                    // console.log(row);
 
                                                     return (
                                                         <TableRow className='table-custom-tr'
@@ -389,13 +398,10 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
                                                             >
                                                                 {row.name}
                                                             </TableCell>
-                                                            <TableCell align="left">{row?.subject}</TableCell>
-                                                            <TableCell align="left"> {mainEmail}
-                                                                {emails.length > 0 && (
-                                                                    <Tooltip title={emails.join(', ')}>
-                                                                        <span style={{ color: 'grey' }}> +{emails.length}</span>
-                                                                    </Tooltip>
-                                                                )}</TableCell>
+                                                            <TableCell align="left">{row?.venue}</TableCell>
+                                                            <TableCell align="left">{row?.office?.name}</TableCell>
+                                                            <TableCell align="left">{row?.start_date && moment(row?.start_date).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell align="left">{row?.end_date && moment(row?.end_date).format('DD-MM-YYYY')}</TableCell>
                                                             <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
 
                                                         </TableRow>

@@ -16,6 +16,7 @@ import { ApplicationApi } from '@/data/Endpoints/Application';
 import toast from 'react-hot-toast';
 import TextInput from '@/Form/TextInput';
 import AddCourse from './addCourse';
+import { LeadApi } from '@/data/Endpoints/Lead';
 
 
 const scheme = yup.object().shape({
@@ -25,7 +26,7 @@ const scheme = yup.object().shape({
     intake: yup.object().required("Please Choose an Intake").typeError("Please choose an Intake"),
 })
 
-export default function LeadApplicationModal({ lead_id, editId, setEditId, handleRefresh,details }) {
+export default function LeadApplicationModal({ lead_id, editId, setEditId, handleRefresh, details }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -112,11 +113,26 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         })
     }
 
+    const fetchDocuments = (e) => {
+        return LeadApi.listDocuments({ keyword: e, lead_id: lead_id,limit:50 }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
 
     const onSubmit = async (data) => {
         // console.log(data);
 
         setLoading(true)
+
+        let docs = []
+        data?.documents?.map((obj) => {
+            docs.push(obj?.id)
+        })
 
         let dataToSubmit = {
             student_id: details?.student?.id,
@@ -125,15 +141,16 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             course_level_id: data?.course_level?.id,
             subject_area_id: data?.course?.id,
             intake_id: data?.intake?.id,
+            documents:docs,
 
             // courses: data?.add_course,
-            course:data?.coursetext,
+            course: data?.coursetext,
 
             remarks: data.remarks,
         }
 
 
-        // console.log(dataToSubmit);
+        console.log(dataToSubmit);
 
         let action;
 
@@ -153,9 +170,9 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                 handleRefresh()
                 setLoading(false)
             }
-            else{
+            else {
                 toast.error(response?.response?.data?.message)
- 
+
             }
 
             setLoading(false)
@@ -196,7 +213,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         setValue('university', '')
         setValue('course', '')
         setValue('intake', '')
-        setValue('coursetext','')
+        setValue('coursetext', '')
     }
 
     const handleUniversityChange = (data) => {
@@ -212,6 +229,12 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     }
     const handleinTakeChange = (data) => {
         setValue('intake', data || '')
+
+    }
+
+
+    const handleDocumentChange = (data) => {
+        setValue('documents', data || '')
 
     }
 
@@ -234,7 +257,8 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             setValue('course', data?.subject_area)
             setValue('intake', data?.intake)
             setValue('remarks', data?.remarks)
-            setValue('coursetext',data?.course)
+            setValue('coursetext', data?.course)
+            setValue('documents',data?.documents)
 
         }
         setDataLoading(false)
@@ -389,7 +413,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                             <Grid item xs={4} md={4}>
-                                                <a  className='form-text' > Course</a>
+                                                <a className='form-text' > Course</a>
                                             </Grid>
                                             <Grid item xs={8} md={8}>
                                                 <TextInput control={control} name="coursetext"
@@ -429,6 +453,26 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                     onChange={handleinTakeChange}
                                                 />
                                                 {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
+                                            </Grid>
+                                        </Grid>
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} display={'flex'} xs={4} md={4}>
+                                                <a className='form-text'>Documents</a>
+                                            </Grid>
+
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <AsyncSelect
+                                                    isMulti
+                                                    name={'documents'}
+                                                    defaultValue={watch('documents')}
+                                                    // isClearable
+                                                    defaultOptions
+                                                    loadOptions={fetchDocuments}
+                                                    getOptionLabel={(e) => e.title}
+                                                    getOptionValue={(e) => e.id}
+                                                    onChange={handleDocumentChange}
+                                                />
+                                                {errors.documents && <span className='form-validation'>{errors.documents.message}</span>}
                                             </Grid>
                                         </Grid>
 

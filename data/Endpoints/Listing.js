@@ -16,6 +16,7 @@ export const ListingApi = {
     leadSource: (data) => http.get(`listing/lead-sources`,{ params: data }),
     nameTitle: (data) => http.get(`listing/titles`,{ params: data }),
     subjectAreas:(data) => http.get(`listing/subject-areas`, { params: data }),
+    office:(data) => http.get(`listing/offices`, { params: data }),
 }
 
 

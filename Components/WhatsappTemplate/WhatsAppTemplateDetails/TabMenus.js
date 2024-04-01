@@ -10,8 +10,7 @@ import Details from './Tabs/Details';
 import { Grid, IconButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import { useEffect } from 'react';
-import { TemplateApi } from '@/data/Endpoints/Template';
-import { ReferralApi } from '@/data/Endpoints/Referrals';
+import { WhatsAppTemplateApi } from '@/data/Endpoints/WhatsAppTemplate';
 
 
 function CustomTabPanel(props) {
@@ -47,7 +46,7 @@ function a11yProps(index) {
     };
 }
 
-export default function ReferralDetailTab({ id, close }) {
+export default function WhatsAppTemplateDetailTabs({ id, close }) {
     const [value, setValue] = React.useState(0);
     const [activeTab, setActiveTab] = useState(0);
     const [details, setDetails] = useState()
@@ -60,7 +59,7 @@ export default function ReferralDetailTab({ id, close }) {
     const getDetails = async () => {
         setLoading(true)
         try {
-            const response = await ReferralApi.view({ id })
+            const response = await WhatsAppTemplateApi.view({ id })
             if (response?.data?.data) {
                 setDetails(response?.data?.data)
                 setLoading(false)
@@ -71,8 +70,6 @@ export default function ReferralDetailTab({ id, close }) {
         }
 
     }
-
-    // console.log(details);
 
     useEffect(() => {
         if (activeTab == 0) {

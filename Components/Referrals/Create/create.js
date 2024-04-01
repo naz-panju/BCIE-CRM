@@ -113,7 +113,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
 
     const onSubmit = async (data) => {
 
-        // setLoading(true)
+        setLoading(true)
 
         let date;
         if (data?.validity_date) {

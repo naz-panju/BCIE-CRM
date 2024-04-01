@@ -121,7 +121,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
         action.then((response) => {
             if (response?.data) {
-                toast.success(editId > 0 ? 'Task Has Been Successfully Updated' : 'Task Has Been Successfully Created')
+                toast.success(editId > 0 ? 'Referral Link Has Been Successfully Updated' : 'Referral Link Has Been Successfully Created')
                 reset()
                 handleClose()
                 handleRefresh()

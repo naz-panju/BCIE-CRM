@@ -4,7 +4,7 @@ import Image from "next/image";
 import LogoIcon from '@/styles/logo65cc654bac92a.png';
 import Logo from '@/styles/logo65cc655649912.png';
 
-import { ArchiveOutlined, CrisisAlertOutlined, DescriptionOutlined, Email, EmailOutlined, GroupOutlined, Groups2, Groups2Outlined, LinkOutlined, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications } from '@mui/icons-material';
+import { ArchiveOutlined, CrisisAlertOutlined, DescriptionOutlined, Email, EmailOutlined, EventOutlined, GroupOutlined, Groups2, Groups2Outlined, LinkOutlined, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications, WhatsApp } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
@@ -37,11 +37,11 @@ const Sidebar = () => {
             icon: ArchiveOutlined,
             href: '/archive'
         },
-        {
-            title: 'Alumni',
-            icon: GroupOutlined,
-            href: '/alumni'
-        },
+        // {
+        //     title: 'Alumni',
+        //     icon: GroupOutlined,
+        //     href: '/alumni'
+        // },
         {
             title: 'Application Manager',
             icon: DescriptionOutlined,
@@ -58,8 +58,13 @@ const Sidebar = () => {
             href: '/email-template'
         },
         {
+            title: 'WhatsApp Templates',
+            icon: WhatsApp,
+            href: '/whatsapp-template'
+        },
+        {
             title: 'Events',
-            icon: EmailOutlined,
+            icon: EventOutlined,
             href: '/events'
         },
         {

@@ -15,6 +15,7 @@ import BasicPie from './Chart/Pie';
 import SendMail from './Modals/SendMail';
 import ConfirmPopup from '../Common/Popup/confirm';
 import toast from 'react-hot-toast';
+import ArchiveConfirmPopup from './Modals/ArchiveConfirmation';
 
 
 function LeadDetails() {
@@ -47,8 +48,6 @@ function LeadDetails() {
       setLoading(false)
     }
   }
-
-  console.log(details);
 
   // console.log(details);
   const handleStudentModalOpen = () => {
@@ -97,7 +96,7 @@ function LeadDetails() {
       <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
       <SendMail details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
 
-      <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleCloseAdmission} title={`Do you want to Archive ${details?.name}?`} />
+      <ArchiveConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} />
 
 
       <section>

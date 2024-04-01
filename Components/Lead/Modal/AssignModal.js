@@ -24,13 +24,16 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
+    // maxHeight: 500,
+    // overflowY: 'auto',
     bgcolor: 'background.paper',
     borderRadius: 2,
     boxShadow: 24,
     p: 4,
 };
 
-export default function AssignLeadModal({ selected, setSelected, editId, setEditId, handleRefresh,handlePopClose }) {
+
+export default function AssignLeadModal({ selected, setSelected, editId, setEditId, handleRefresh, handlePopClose, setsingle, single ,assignToUser, setassignToUser}) {
     const scheme = yup.object().shape({
 
         // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -49,6 +52,11 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
     const handleClose = () => {
         setValue('counsellor', '')
+        handlePopClose()
+        setsingle(false)
+        setassignToUser()
+        setseletctedoption()
+        setSelected([])
         setEditId()
         setOpen(false);
     }
@@ -67,46 +75,77 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
     const onSubmit = () => {
         setLoading(true)
 
-        if (selectedoption == 2 && !watch('counsellor')) {
-            toast.error('Please Select a Counsellor')
-        } else {
-            let dataToSubmit = {
-                user_id: watch('counsellor')?.id,
-                leads: selected
-            }
-
-            // console.log(dataToSubmit);
-
-            let action;
-
-            if (editId > 0) {
-                // formData.append('id', editId)
-                // action = LeadApi.updateDocument(formData)
+        let dataToSubmit;
+        if (selectedoption == 1) {
+            console.log(watch('counsellors'));
+            if (!watch('counsellors')) {
+                toast.error('Please Select Counsellors')
+                setLoading(false)
             } else {
-                action = LeadApi.bulkAssign(dataToSubmit)
-            }
 
-            action.then((response) => {
-                // console.log(response);
-                if (response?.status == 200 || response?.status == 201) {
-                    toast.success(response?.data?.message)
-                    handleClose()
-                    setSelected([])
-                    handlePopClose()
-                    // handleRefresh()
-                    setLoading(false)
-                } else {
-                    toast.error(response?.response?.data?.message)
-                    setLoading(false)
+                let counsellorIds = []
+                watch('counsellors')?.map((obj) => {
+                    counsellorIds?.push(obj?.id)
+                })
+
+                dataToSubmit = {
+                    users: counsellorIds,
+                    leads: selected
                 }
-                setLoading(false)
-            }).catch((error) => {
-                console.log(error);
-                toast.error(error?.response?.data?.message)
-                setLoading(false)
-            })
+
+                // console.log(dataToSubmit);
+                LeadApi.roundRobin(dataToSubmit).then((response) => {
+                    console.log(response);
+                    if (response?.status == 200 || response?.status == 201) {
+                        toast.success(response?.data?.message)
+                        handleClose()
+                        setSelected([])
+                        handlePopClose()
+                        setLoading(false)
+                        handleRefresh()
+                    } else {
+                        toast.error(response?.response?.data?.message)
+                        setLoading(false)
+                    }
+                    setLoading(false)
+                }).catch((error) => {
+                    console.log(error);
+                    toast.error(error?.response?.data?.message)
+                    setLoading(false)
+                })
+            }
         }
 
+        if (selectedoption == 2) {
+            if (!watch('counsellor')) {
+                toast.error('Please Select a Counsellor')
+                setLoading(false)
+            } else {
+                dataToSubmit = {
+                    user_id: watch('counsellor')?.id,
+                    leads: selected
+                }
+                LeadApi.bulkAssign(dataToSubmit).then((response) => {
+                    // console.log(response);
+                    if (response?.status == 200 || response?.status == 201) {
+                        toast.success(response?.data?.message)
+                        handleClose()
+                        setSelected([])
+                        handlePopClose()
+                        setLoading(false)
+                        handleRefresh()
+                    } else {
+                        toast.error(response?.response?.data?.message)
+                        setLoading(false)
+                    }
+                    setLoading(false)
+                }).catch((error) => {
+                    console.log(error);
+                    toast.error(error?.response?.data?.message)
+                    setLoading(false)
+                })
+            }
+        }
     }
 
 
@@ -114,10 +153,21 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
         setValue('counsellor', e || '');
     }
 
-    const Options = [
-        { id: 1, name: 'Round Robin' },
-        { id: 2, name: 'Counsellor' },
-    ]
+    const handleBulkCouncsellorChange = (e) => {
+        setValue('counsellors', e || '');
+    }
+
+    let Options;
+    if (single) {
+        Options = [
+            { id: 2, name: 'Counsellor' }
+        ];
+    } else {
+        Options = [
+            { id: 1, name: 'Round Robin' },
+            { id: 2, name: 'Counsellor' }
+        ];
+    }
 
     const handleOptionChange = (name) => {
         // console.log(id);
@@ -128,8 +178,13 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
+            setseletctedoption(2)
+            setValue('counsellor',assignToUser)
         } else if (editId == 0) {
             setOpen(true)
+            if (single) {
+                setseletctedoption(2)
+            }
         }
     }, [editId])
 
@@ -142,6 +197,9 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
+                BackdropProps={{
+                    onClick: null, // Prevent closing when clicking outside
+                }}
             >
                 <Box sx={style}>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
@@ -162,9 +220,32 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                     </Grid>
 
                     {
+                        selectedoption == 1 &&
+                        <Grid container>
+                            <Grid item mt={2} mb={2} md={12}>
+                                <AsyncSelect
+                                    isMulti
+                                    placeholder='Select Counsellor'
+                                    name={'counsellors'}
+                                    defaultValue={watch('counsellors')}
+                                    isClearable
+                                    defaultOptions
+                                    loadOptions={fetchCounsellor}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    onChange={handleBulkCouncsellorChange}
+                                />
+                                {errors.counsellors && <span className='form-validation'>{errors.counsellors.message}</span>}
+
+                            </Grid>
+                        </Grid>
+                    }
+
+
+                    {
                         selectedoption == 2 &&
                         <Grid container>
-                            <Grid mt={2} mb={2} md={12}>
+                            <Grid item mt={2} mb={2} md={12}>
                                 <AsyncSelect
                                     placeholder='Select Counsellor'
                                     name={'counsellor'}
@@ -186,6 +267,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                     <Grid mt={2} display={'flex'} justifyContent={'end'}>
 
                         <Button
+                            onClick={handleClose}
                             variant='outlined'
                             size='small'
                             sx={{ textTransform: 'none', height: 30, mr: 2 }}

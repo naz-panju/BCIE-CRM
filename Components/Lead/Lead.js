@@ -71,6 +71,9 @@ export default function CustomizedMenus() {
 
   const [assignId, setAssignId] = useState()
 
+  const [singleAssign, setsingleAssign] = useState(false)
+  const [assignToUser, setassignToUser] = useState()
+
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const handleClick = (event) => {
@@ -88,6 +91,19 @@ export default function CustomizedMenus() {
     setAssignId(0)
   }
 
+  const handleSigleAssign = (id) => {
+    setAssignId(0)
+    setSelected([id])
+    setsingleAssign(true)
+  }
+
+  const handleEditAssign=(detail)=>{
+    setAssignId(2)
+    setSelected([detail?.id])
+    setassignToUser(detail?.assignedToUser)
+    setsingleAssign(true)
+  }
+
   const handleRefresh = () => {
     if (page != 0) {
       setPage(0)
@@ -95,11 +111,15 @@ export default function CustomizedMenus() {
     setRefresh(!refresh)
   }
 
+  const noPageRefresh=()=>{
+    setRefresh(!refresh)
+  }
+
   return (
 
     <>
       <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
-      <AssignLeadModal selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} handlePopClose={handleClose} />
+      <AssignLeadModal assignToUser={assignToUser} setassignToUser={setassignToUser} single={singleAssign} setsingle={setsingleAssign} selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} handlePopClose={handleClose} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>
@@ -156,7 +176,7 @@ export default function CustomizedMenus() {
               >
                 {
                   selected?.length > 0 &&
-                  <Typography onClick={handleCreateassign} sx={{ p: 1, pl: 2, pr: 2 }}>Assign</Typography>
+                  <Typography onClick={handleCreateassign} sx={{ p: 1, pl: 2, pr: 2,cursor:'pointer' }}>Assign</Typography>
                 }
               </Popover>
 
@@ -167,7 +187,7 @@ export default function CustomizedMenus() {
         </div>
 
         <div className='content-block'>
-          <LeadTable refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} selected={selected} setSelected={setSelected} />
+          <LeadTable handleEditAssign={handleEditAssign} openAssign={handleSigleAssign} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} selected={selected} setSelected={setSelected} />
         </div>
       </section>
     </>

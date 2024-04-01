@@ -20,18 +20,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
-import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Button, Grid } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
-import { TemplateApi } from '@/data/Endpoints/Template';
 import { Edit } from '@mui/icons-material';
-import EmailTemplateDetailModal from '../EmailTemplateDetail/Modal';
-import { ReferralApi } from '@/data/Endpoints/Referrals';
-import moment from 'moment';
-import ReferralDetailModal from './RefferalDetails/Modal';
+import { WhatsAppTemplateApi } from '@/data/Endpoints/WhatsAppTemplate';
+import WhatsAppTemplateDetailModal from './WhatsAppTemplateDetails/Modal';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -79,28 +74,22 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'title',
+        id: 'name',
         numeric: false,
         disablePadding: true,
         label: 'Title',
     },
-    // {
-    //     id: 'link',
-    //     numeric: false,
-    //     disablePadding: true,
-    //     label: 'Referral Link',
-    // },
     {
-        id: 'source',
+        id: 'approval',
         numeric: false,
         disablePadding: false,
-        label: 'Lead Source',
+        label: 'Approval',
     },
     {
-        id: 'validity',
+        id: 'created_by',
         numeric: false,
         disablePadding: false,
-        label: 'Validity',
+        label: 'Created By ',
     },
 ];
 
@@ -216,10 +205,9 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ReferralTable({ refresh, editId, setEditId, page, setPage }) {
+export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page, setPage }) {
 
     const router = useRouter();
-
 
     // const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
 
@@ -233,8 +221,6 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
     const [dense, setDense] = React.useState(false);
     const [limit, setLimit] = React.useState(10);
     const [list, setList] = useState([])
-
-    const [currentURL, setcurrentURL] = useState()
 
     const [loading, setLoading] = useState(false)
 
@@ -278,7 +264,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         // console.log(newPage);
-        router.replace(`/lead?page=${newPage + 1}`);
+        // router.replace(`/lead?page=${newPage + 1}`);
         // router.push(`/lead?page=${newPage + 1}`);
     };
 
@@ -319,7 +305,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
 
     const fetchTable = () => {
         setLoading(true)
-        ReferralApi.list({ limit: limit, page: page + 1 }).then((response) => {
+        WhatsAppTemplateApi.list({ limit: limit, page: page + 1 }).then((response) => {
             console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -328,18 +314,14 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
             setLoading(false)
         })
     }
-
-    // console.log(list?.data);
-
     useEffect(() => {
-        setcurrentURL(window?.location?.origin)
         fetchTable()
     }, [page, refresh, limit])
 
     return (
 
         <>
-            <ReferralDetailModal id={detailId} setId={setDetailId} />
+            <WhatsAppTemplateDetailModal id={detailId} setId={setDetailId} />
 
             {
 
@@ -369,6 +351,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                 list?.data?.map((row, index) => {
                                                     const isItemSelected = isSelected(row.id);
                                                     const labelId = `enhanced-table-checkbox-${index}`;
+
                                                     return (
                                                         <TableRow className='table-custom-tr'
                                                             hover
@@ -398,11 +381,11 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                                {row?.title}
+                                                                {row.title}
                                                             </TableCell>
-                                                            {/* <TableCell align="left"><a style={{ color: 'blue' }}>{`${currentURL}/forms/lead`}</a></TableCell> */}
-                                                            <TableCell align="left">{row?.lead_source?.name}</TableCell>
-                                                            <TableCell align="left">{moment(row?.date_of_validity).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell align="left">{row?.approved == 1 ? 'Approved' : 'Not Approved'}</TableCell>
+                                                            <TableCell align="left">{row?.created_by?.name}</TableCell>
+
                                                             <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
 
                                                         </TableRow>

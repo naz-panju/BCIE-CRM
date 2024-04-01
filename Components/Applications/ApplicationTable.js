@@ -292,7 +292,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         // console.log(newPage);
-        router.replace(`/lead?page=${newPage + 1}`);
+        router.replace(`/applications?page=${newPage + 1}`);
         // router.push(`/lead?page=${newPage + 1}`);
     };
 

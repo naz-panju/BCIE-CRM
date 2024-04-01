@@ -24,10 +24,11 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
+import { PersonAdd } from '@mui/icons-material';
 
 
 
@@ -92,6 +93,12 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: 'Registered Mobile',
+  },
+  {
+    id: 'assigned_to',
+    numeric: true,
+    disablePadding: false,
+    label: 'Assigned To',
   },
 ];
 
@@ -206,7 +213,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh, page, setPage,selected,setSelected }) {
+export default function EnhancedTable({ refresh, page, setPage, selected, setSelected,openAssign,handleEditAssign }) {
 
   const router = useRouter();
 
@@ -243,7 +250,7 @@ export default function EnhancedTable({ refresh, page, setPage,selected,setSelec
     //   return;
     // }
     // setSelected([]);
-    if (event.target.checked &&  selected?.length != list?.data?.length) {
+    if (event.target.checked && selected?.length != list?.data?.length) {
       const newSelected = list?.data?.map((n) => n.id);
       setSelected(newSelected);
       return;
@@ -406,6 +413,8 @@ export default function EnhancedTable({ refresh, page, setPage,selected,setSelec
                           const isItemSelected = isSelected(row.id);
                           const labelId = `enhanced-table-checkbox-${index}`;
 
+                          // console.log(row);
+
                           return (
                             <TableRow className='table-custom-tr'
                               hover
@@ -438,6 +447,15 @@ export default function EnhancedTable({ refresh, page, setPage,selected,setSelec
                               </TableCell>
                               <TableCell align="left">{row?.email}</TableCell>
                               <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
+                              <TableCell align="left">
+                                {  
+                                  row?.assignedToUser ?
+                                   <Button onClick={()=>handleEditAssign(row)} style={{color:'blue',textTransform:'none'}} >{ row?.assignedToUser?.name}</Button>
+                                    :
+                                    <Button onClick={()=>openAssign(row?.id)}><PersonAdd  sx={{ color: 'blue', cursor: 'pointer' }} /></Button>
+                                }
+                                {/* {row?.assignedToUser?.name} */}
+                              </TableCell>
 
                             </TableRow>
                           );
