@@ -7,6 +7,8 @@ import React, { useState } from 'react'
 
 function Details({ data, loading }) {
 
+    console.log(data);
+
     const [copied, setcopied] = useState(false)
 
 

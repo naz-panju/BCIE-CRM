@@ -37,10 +37,10 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
     const scheme = yup.object().shape({
         name: yup.string().required("Name is Required"),
         email: yup.string().email("Invalid email format").required("Email is Required"),
-        phone: yup.string().required('Phone Number is Required'),
-        alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
-            return value !== this.parent.phone;
-        }),
+        // phone: yup.string().required('Phone Number is Required'),
+        // alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
+        //     return value !== this.parent.phone;
+        // }),
         preffered_course: yup.string().required("Preffered Course is Required"),
         // assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
         // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
@@ -105,6 +105,17 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
         return ListingApi.leadSource({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchGlobalCountry = (e) => {
+        return ListingApi.globalCountry({ keyword: e }).then(response => {
+            // console.log(response?.data?.data);
+            if (response?.data?.data) {
+                return response.data.data;
             } else {
                 return [];
             }
@@ -207,10 +218,13 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
             agency_id: data?.agency?.id,
             referred_student_id: data?.student?.id,
 
+            state: data?.state,
+            country_id: data?.country?.id,
+
             note: data?.note
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         let action;
 
@@ -276,6 +290,9 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
             setValue('student', data?.referredStudent)
             setValue('agency', data?.agency)
             setValue('reference', data?.referrance_from)
+
+            setValue('country', data?.country)
+            setValue('state', data?.state)
 
             setValue('note', data?.note)
 
@@ -501,6 +518,40 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                 {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
                             </Grid>
                         </Grid>
+
+                        <Grid p={1} container >
+                            <Grid item xs={12} md={5}>
+                                <a className='form-text'>Country From</a>
+                            </Grid>
+                            <Grid item xs={12} md={7}>
+                                <AsyncSelect
+                                    menuPlacement='top'
+                                    loadOptions={fetchGlobalCountry}
+                                    onInputChange={fetchGlobalCountry}
+                                    defaultOptions
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    control={control}
+                                    name={'country'}
+                                    defaultValue={watch('country')}
+                                    onChange={(data) => setValue('country', data)}
+                                />
+                                {errors.country && <span className='form-validation'>{errors.country.message}</span>}
+                            </Grid>
+                        </Grid>
+
+                        <Grid p={1} container >
+                            <Grid item xs={12} md={5}>
+                                <a className='form-text'>State / Province</a>
+                            </Grid>
+                            <Grid item xs={12} md={7}>
+                                <TextInput control={control} name="state"
+                                    // disabled={!watch('country')}
+                                    value={watch('state')} />
+                                {errors.state && <span className='form-validation'>{errors.state.message}</span>}
+                            </Grid>
+                        </Grid>
+
                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                             <Grid item xs={12} md={5}>
                                 <Typography sx={{ fontWeight: '500' }}>Lead Source</Typography>

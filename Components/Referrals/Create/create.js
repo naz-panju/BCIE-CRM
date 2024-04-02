@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
-import { Button, Grid, IconButton, TextField, Tooltip, Typography } from '@mui/material';
+import { Button, Grid, IconButton, TextField, Tooltip } from '@mui/material';
 import { useEffect } from 'react';
 import { Close, Delete, } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
@@ -8,15 +8,11 @@ import TextInput from '@/Form/TextInput';
 import { useState } from 'react';
 import moment from 'moment';
 import toast from 'react-hot-toast';
-import { LeadApi } from '@/data/Endpoints/Lead';
-
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
-import ConfirmPopup from '@/Components/Common/Popup/confirm';
-import { TemplateApi } from '@/data/Endpoints/Template';
 import dynamic from 'next/dynamic';
 import AsyncSelect from "react-select/async";
 import SelectX from '@/Form/SelectX';
@@ -86,6 +82,16 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         })
     }
 
+    const fetchEvents = (e) => {
+        return ListingApi.events({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
 
     const handleSourseChange = (data) => {
         // trigger('source')
@@ -128,6 +134,9 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         }
         if (data?.agent) {
             formData.append('agency_id', data?.agent?.id)
+        }
+        if(data?.events){
+            formData.append('events_id', data?.events?.id)
         }
         if (data?.validity_date) {
             formData.append('last_date_of_validity', date)
@@ -178,8 +187,8 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
     const handleClose = () => {
         setEditId()
         reset()
-        setValue('title','')
-        setValue('validity_date','')
+        setValue('title', '')
+        setValue('validity_date', '')
         setOpen(false)
     }
 
@@ -324,6 +333,26 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                         // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
                                                         name={'agent'}
                                                         defaultValue={watch('agent')}
+                                                    />
+                                                </Grid>
+                                            </Grid>
+                                        }
+
+                                        {
+                                            watch('source')?.name == 'Events' &&
+                                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                                <Grid item xs={12} md={3}>
+                                                    <a sx={{ fontWeight: '500' }}>Events</a>
+                                                </Grid>
+                                                <Grid item xs={12} md={9}>
+                                                    <SelectX
+                                                        // menuPlacement='top'
+                                                        loadOptions={fetchEvents}
+                                                        control={control}
+                                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                        name={'events'}
+                                                        defaultValue={watch('events')}
                                                     />
                                                 </Grid>
                                             </Grid>

@@ -225,6 +225,8 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
         setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
         setValue('alt_phone', `${details?.alternate_phone_country_code}${details?.alternate_phone_number}`)
         setValue('whatsapp', `+${details?.whatsapp_country_code}${details?.whatsapp_number}`)
+        setValue('country',details?.country)
+        setValue('state',details?.state)
 
         // console.log(details);
     }
@@ -461,7 +463,7 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
                                                     rows={2}
                                                     sx={{ width: '100%', }}
                                                 />
-                                                {errors.email && <span className='form-validation'>{errors.email.message}</span>}
+                                                {errors.address && <span className='form-validation'>{errors.address.message}</span>}
                                             </Grid>
                                         </Grid>
 

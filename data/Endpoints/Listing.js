@@ -17,6 +17,7 @@ export const ListingApi = {
     nameTitle: (data) => http.get(`listing/titles`,{ params: data }),
     subjectAreas:(data) => http.get(`listing/subject-areas`, { params: data }),
     office:(data) => http.get(`listing/offices`, { params: data }),
+    events:(data) => http.get(`listing/events`, { params: data }),
 }
 
 

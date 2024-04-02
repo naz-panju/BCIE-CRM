@@ -19,7 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, loading }) {
+export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, loading, details, getDetails }) {
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
@@ -51,7 +51,14 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
         let dataToSubmit = {
             id: ID
         }
-        LeadApi.closeLead(dataToSubmit).then((response) => {
+
+        let action;
+        if (details?.closed == 1) {
+            action = LeadApi.reOpenLead(dataToSubmit)
+        } else {
+            action = LeadApi.closeLead(dataToSubmit)
+        }
+        action.then((response) => {
             // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
@@ -89,42 +96,47 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
                 aria-describedby="alert-dialog-slide-description"
                 PaperProps={{
                     style: {
-                        width:400,
+                        width: 400,
                     },
                 }}
             >
-                <DialogTitle>Archive {title}</DialogTitle>
+                <DialogTitle>{details?.closed == 1 ? 'Unarchive' : 'Archive'} {title}</DialogTitle>
                 <DialogContent>
                     {/* <DialogContentText id="alert-dialog-slide-description">
                         {title}
                     </DialogContentText> */}
 
-                    <Grid display={'flex'} container item xs={12}>
-                        <Grid item xs={12} md={12}>
-                            <Typography sx={{ fontWeight: '500' }}>Note</Typography>
-                        </Grid>
-                        <Grid item xs={12} md={12}>
-                            <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
-                                value={watch('note') || ''} />
-                        </Grid>
-                    </Grid>
+                    {
+                        details?.closed != 1 &&
+                        <>
+                            <Grid display={'flex'} container item xs={12}>
+                                <Grid item xs={12} md={12}>
+                                    <Typography sx={{ fontWeight: '500' }}>Note</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={12}>
+                                    <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
+                                        value={watch('note') || ''} />
+                                </Grid>
+                            </Grid>
 
-                    <Grid display={'flex'} container item xs={12}>
-                        <Grid item xs={12} md={12}>
-                            <Typography sx={{ fontWeight: '500' }}>Reason</Typography>
-                        </Grid>
-                        <Grid item xs={12} md={12}>
-                            <SelectX
-                                menuPlacement='top'
-                                loadOptions={fetchStudents}
-                                control={control}
-                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                name={'student'}
-                                defaultValue={watch('student')}
-                            />
-                        </Grid>
-                    </Grid>
+                            <Grid display={'flex'} container item xs={12}>
+                                <Grid item xs={12} md={12}>
+                                    <Typography sx={{ fontWeight: '500' }}>Reason</Typography>
+                                </Grid>
+                                <Grid item xs={12} md={12}>
+                                    <SelectX
+                                        menuPlacement='top'
+                                        loadOptions={fetchStudents}
+                                        control={control}
+                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                        name={'student'}
+                                        defaultValue={watch('student')}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </>
+                    }
                 </DialogContent>
                 <DialogActions>
                     <Button size='small' onClick={handleClose} variant="outlined" color="inherit">

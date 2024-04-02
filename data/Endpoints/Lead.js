@@ -6,6 +6,8 @@ export const LeadApi = {
     view: (data) => http.get(`leads/view/${data?.id}`, {params:data}),
     update: (data) => http.post(`leads/update`, data),
 
+    publicAdd: (data) => http.post(`leads/public/store`, data),
+
     timeline: (data) => http.get(`leads/timeline/${data?.id}`, {params:data}),
 
     addDocument: (data) => http.post(`documents/store`, data),   
@@ -25,6 +27,7 @@ export const LeadApi = {
     sendMail: (data) => http.post(`emails/store`, data),
 
     closeLead: (data) => http.post(`leads/close`, data),
+    reOpenLead: (data) => http.post(`leads/reopen`, data),
 
     bulkAssign: (data) => http.post(`leads/bulk-assign`, data),
     roundRobin: (data) => http.post(`leads/round-robin-assign`, data),

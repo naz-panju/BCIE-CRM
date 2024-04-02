@@ -78,22 +78,33 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     : ' NA'
                             }
                         </div>
-
                         <div className="lead-details-list">
-                            <label>Note </label>: {data?.note}
+                            <label>WhatsApp Number </label>:
+                            {
+                                data?.whatsapp_number ?
+                                    ` +${data?.whatsapp_country_code} ${data?.whatsapp_number}`
+                                    : ' NA'
+                            }
                         </div>
 
                         {
-                            data?.applyingForCountry &&
+                            data?.note &&
                             <div className="lead-details-list">
-                                <label>Country Applying For </label>: {data?.applyingForCountry?.name}
+                                <label>Note </label>: {data?.note}
                             </div>
                         }
 
                         {
-                            data?.applyingForUniversity &&
+                            data?.country &&
                             <div className="lead-details-list">
-                                <label>University Applying For </label>: {data?.applyingForUniversity?.name}
+                                <label>Country From </label>: {data?.country?.name}
+                            </div>
+                        }
+
+                        {
+                            data?.state &&
+                            <div className="lead-details-list">
+                                <label>State </label>: {data?.state}
                             </div>
                         }
 

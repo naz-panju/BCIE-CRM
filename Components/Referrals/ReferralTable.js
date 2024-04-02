@@ -417,7 +417,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                     >
                                                         <TableCell colSpan={8} align="center">
                                                             <div className='no-table-ask-block'>
-                                                                <h4 style={{ color: 'grey' }}>No Template Found</h4>
+                                                                <h4 style={{ color: 'grey' }}>No Referral Link Found</h4>
                                                             </div>
                                                         </TableCell>
                                                     </TableRow>

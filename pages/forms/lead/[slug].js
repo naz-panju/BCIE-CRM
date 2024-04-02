@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect } from 'react'
 import { LoadingButton } from '@mui/lab'
-import LoadingEdit from '@/Components/Common/Loading/LoadingEdit'
 import ReactSelector from 'react-select';
 import { StudentApi } from '@/data/Endpoints/Student'
 import AsyncSelect from "react-select/async";
@@ -34,6 +33,7 @@ function Form({ data }) {
     }
 
 
+    const [referralId, setreferralId] = useState(data?.id)
 
     const [phone, setPhone] = useState()
     const [code, setCode] = useState()
@@ -46,7 +46,7 @@ function Form({ data }) {
     const scheme = yup.object().shape({
         name: yup.string().required("Name is Required"),
         email: yup.string().email("Invalid email format").required("Email is Required"),
-        phone: yup.string().required('Phone Number is Required'),
+        // phone: yup.string().required('Phone Number is Required'),
         alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
             return value !== this.parent.phone;
         }),
@@ -89,6 +89,19 @@ function Form({ data }) {
             }
         })
     }
+
+
+    const fetchGlobalCountry = (e) => {
+        return ListingApi.globalCountry({ keyword: e }).then(response => {
+            // console.log(response?.data?.data);
+            if (response?.data?.data) {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
 
     const fetchStudents = (e) => {
         return StudentApi.list({ keyword: e }).then(response => {
@@ -186,11 +199,32 @@ function Form({ data }) {
         setValue('agency', '')
     }
 
+    const handleClear = () => {
+        setValue('country', '')
+        setValue('preffered_course_level', '')
 
+        setValue('phone', code)
+        setPhone()
+        setCode()
+
+        setValue('alt_phone', altCode)
+        setAltPhone()
+        setAltCode()
+
+        setValue('whatsapp', whatsappCode)
+        setWhatsapp()
+        setWhatsappCode()
+
+    }
 
     const onSubmit = async (data) => {
 
         setLoading(true)
+
+        let date_of_birth = '';
+        if (data?.dob) {
+            date_of_birth = moment(data?.dob).format('YYYY-MM-DD')
+        }
 
         let dataToSubmit = {
             name: data?.name,
@@ -205,126 +239,68 @@ function Form({ data }) {
             whatsapp_country_code: whatsappCode,
             whatsapp_number: whatsapp,
 
+            date_of_birth: date_of_birth,
+
+            address: data?.address,
+            zipcode: data?.zip,
+            state: data?.state,
+            country_id: data?.country?.id,
+
             preferred_course: data?.preffered_course,
             preferred_countries: data?.preffered_country,
 
             course_level_id: data?.preffered_course_level?.id,
 
-            referrance_from: data?.reference,
+            referral_link_id: referralId,
 
-            source_id: data?.source?.id,
-            agency_id: data?.agency?.id,
-            referred_student_id: data?.student?.id,
+            // referrance_from: data?.reference,
+
+            // source_id: data?.source?.id,
+            // agency_id: data?.agency?.id,
+            // referred_student_id: data?.student?.id,
 
             note: data?.note
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
-        let action;
+        // let action;
 
         // if (editId > 0) {
         //     dataToSubmit['id'] = editId;
-        //     action = LeadApi.update(dataToSubmit)
+        // action = LeadApi.publicAdd(dataToSubmit)
         // } else {
         //     action = LeadApi.add(dataToSubmit)
         // }
-        // action.then((response) => {
-        //     console.log(response);
-        //     if (response?.data?.data) {
-        //         // toast.success(editId > 0 ? 'Lead Has Been Successfully Updated ' : 'Lead Has Been Successfully Created')
-        //         if (handleRefresh) {
-        //             handleRefresh()
-        //         } else {
-        //             setRefresh(!refresh)
-        //         }
-        //         reset()
-        //         setLoading(false)
-        //     } else {
-        //         toast.error(response?.response?.data?.message)
-        //         setLoading(false)
-        //     }
-        // }).catch((error) => {
-        //     console.log(error);
-        //     toast.error(error?.message)
-        //     setLoading(false)
-        // })
+        LeadApi.publicAdd(dataToSubmit).then((response) => {
+            console.log(response);
+            if (response?.data?.data) {
+
+                toast.success('Lead Has Been Successfully Created')
+                reset()
+                handleClear()
+                setLoading(false)
+                location.reload()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setLoading(false)
+            }
+        }).catch((error) => {
+            console.log(error);
+            toast.error(error?.message)
+            setLoading(false)
+        })
 
     }
-
-    const getDetails = async () => {
-        setDataLoading(true)
-        // const response = await LeadApi.view({ id: editId })
-        if (response?.data?.data) {
-            let data = response?.data?.data
-            console.log(data);
-
-            // console.log(`+${data?.phone_country_code}${data?.phone_number}`);
-
-            setValue('name', data?.name)
-            setValue('email', data?.email)
-
-            setValue('phone', `+${data?.phone_country_code}${data?.phone_number}`)
-            setPhone(data?.phone_number)
-            setCode(data?.phone_country_code)
-
-            setValue('alt_phone', `+${data?.alternate_phone_country_code}${data?.alternate_phone_number}`)
-            setAltPhone(data?.alternate_phone_number)
-            setAltCode(data?.alternate_phone_country_code)
-
-            setValue('whatsapp', `+${data?.whatsapp_country_code}${data?.whatsapp_number}`)
-            setWhatsapp(data?.whatsapp_number)
-            setWhatsappCode(data?.whatsapp_country_code)
-
-            setValue('preffered_country', data?.preferred_countries)
-            setValue('preffered_course_level', data?.course_level)
-            setValue('preffered_course', data?.preferred_course)
-
-            setValue('source', data?.lead_source)
-            setValue('student', data?.referredStudent)
-            setValue('agency', data?.agency)
-            setValue('reference', data?.referrance_from)
-
-            setValue('note', data?.note)
-
-        }
-        setDataLoading(false)
-    }
-
-    // useEffect(() => {
-    //     if (watch('country')) {
-    //         setselectedCountryID(watch('country')?.id)
-    //     } if (watch('course')) {
-    //         setselectedCourseID(watch('course')?.id)
-    //     } if (watch('institute')) {
-    //         setselectedInstituteID(watch('institute')?.id)
-    //     }
-    // }, [watch('source'), watch('course'), watch('institute')])
-
-    useEffect(() => {
-        // if (editId > 0) {
-        //     getDetails()
-        // }
-        fetchReference()
-    }, [])
-
-    const items = [
-        { label: 'Name' },
-        { label: 'Email Address' },
-        { label: 'Mobile Number' },
-        { label: 'Alternate Mobile Number' },
-        { label: 'Whatsapp Number' },
-        { label: 'Preferred Countries' },
-        { label: 'Preferred Courses' },
-        { label: 'Lead Source' },
-        { label: 'How did you know about us?' },
-        { label: 'Note', multi: true },
-    ]
 
     return (
         <Grid mt={5} mb={5} display={'flex'} alignItems={'center'} flexDirection={'column'} justifyContent={'center'} >
 
-            <Image loader={myLoader} src={data?.banner_image} width={200} height={200} />
+            {
+                data?.banner_image &&
+                <Image loader={myLoader} src={data?.banner_image} width={200} height={200} />
+            }
+
             <Typography>{data?.top_description}</Typography>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
@@ -466,6 +442,21 @@ function Form({ data }) {
                     </Grid>
                 </Grid>
 
+                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                    <Grid item xs={12} md={5}>
+                        <Typography sx={{ fontWeight: '500' }}>Date of Birth</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={7}>
+                        <DateInput
+                            control={control}
+                            name="dob"
+                            value={watch('dob')}
+                        // placeholder='Due Date'
+                        />
+                        {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
+                    </Grid>
+                </Grid>
+
 
                 <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                     <Grid item xs={12} md={5}>
@@ -483,15 +474,18 @@ function Form({ data }) {
                         <Typography sx={{ fontWeight: '500' }}>Preferred Course Level</Typography>
                     </Grid>
                     <Grid item xs={12} md={7}>
-                        {/* <SelectX
-                                    menuPlacement='top'
-                                    loadOptions={fetchCourseLevel}
-                                    control={control}
-                                    // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                    // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                    name={'preffered_course_level'}
-                                    defaultValue={watch('preffered_course_level')}
-                                /> */}
+                        <AsyncSelect
+                            defaultOptions
+                            menuPlacement='auto'
+                            loadOptions={fetchCourseLevel}
+                            onInputChange={fetchCourseLevel}
+                            getOptionLabel={(e) => e.name}
+                            getOptionValue={(e) => e.id}
+                            control={control}
+                            name={'preffered_course_level'}
+                            defaultValue={watch('preffered_course_level')}
+                            onChange={(data) => setValue('preffered_course_level', data)}
+                        />
                         {errors.preffered_course_level && <span className='form-validation'>{errors.preffered_course_level.message}</span>}
                     </Grid>
                 </Grid>
@@ -506,14 +500,76 @@ function Form({ data }) {
                         {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
                     </Grid>
                 </Grid>
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+
+                <Grid p={1} container >
+                    <Grid item pr={1} xs={12} md={5}>
+                        <a className='form-text'> Address </a>
+                    </Grid>
+                    <Grid item pr={1} xs={12} md={7}>
+                        <TextField
+                            {...register('address')}
+                            variant="outlined"
+                            fullWidth
+                            multiline
+                            rows={2}
+                            sx={{ width: '100%', }}
+                        />
+                        {errors.address && <span className='form-validation'>{errors.address.message}</span>}
+                    </Grid>
+                </Grid>
+
+                <Grid p={1} container >
+                    <Grid item xs={12} md={5}>
+                        <a className='form-text'>Country From</a>
+                    </Grid>
+                    <Grid item xs={12} md={7}>
+                        <AsyncSelect
+                            menuPlacement='top'
+                            loadOptions={fetchGlobalCountry}
+                            onInputChange={fetchGlobalCountry}
+                            defaultOptions
+                            getOptionLabel={(e) => e.name}
+                            getOptionValue={(e) => e.id}
+                            control={control}
+                            name={'country'}
+                            defaultValue={watch('country')}
+                            onChange={(data) => setValue('country', data)}
+                        />
+                        {errors.country && <span className='form-validation'>{errors.country.message}</span>}
+                    </Grid>
+                </Grid>
+
+                <Grid p={1} container >
+                    <Grid item xs={12} md={5}>
+                        <a className='form-text'>State / Province</a>
+                    </Grid>
+                    <Grid item xs={12} md={7}>
+                        <TextInput control={control} name="state"
+                            // disabled={!watch('country')}
+                            value={watch('state')} />
+                        {errors.state && <span className='form-validation'>{errors.state.message}</span>}
+                    </Grid>
+                </Grid>
+
+                <Grid p={1} container >
+                    <Grid item xs={12} md={5}>
+                        <a className='form-text'>Zip Code </a>
+                    </Grid>
+                    <Grid item xs={12} md={7}>
+                        <TextInput type='number' control={control} name="zip"
+                            value={watch('zip')} />
+                        {errors.zip && <span className='form-validation'>{errors.zip.message}</span>}
+                    </Grid>
+                </Grid>
+
+
+                {/* lead source */}
+                {/* <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                     <Grid item xs={12} md={5}>
                         <Typography sx={{ fontWeight: '500' }}>Lead Source</Typography>
                     </Grid>
                     <Grid item xs={12} md={7}>
                         <AsyncSelect
-                            // isDisabled={!selectedUniversityId}
-                            // key={selectedUniversityId}
                             name={'source'}
                             defaultValue={watch('source')}
                             isClearable
@@ -526,7 +582,6 @@ function Form({ data }) {
                     </Grid>
 
                 </Grid>
-
                 {
                     watch('source')?.name == 'Referral' &&
                     <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
@@ -538,17 +593,12 @@ function Form({ data }) {
                                 menuPlacement='top'
                                 loadOptions={fetchStudents}
                                 control={control}
-                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
                                 name={'student'}
                                 defaultValue={watch('student')}
                             />
-                            {/* {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>} */}
                         </Grid>
                     </Grid>
                 }
-
-
                 {
                     watch('source')?.name == 'Agency' &&
                     <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
@@ -560,17 +610,14 @@ function Form({ data }) {
                                 menuPlacement='top'
                                 loadOptions={fetchAgencies}
                                 control={control}
-                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
                                 name={'agency'}
                                 defaultValue={watch('agency')}
                             />
-                            {/* {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>} */}
                         </Grid>
                     </Grid>
-                }
+                } */}
 
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                {/* <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                     <Grid item xs={12} md={5}>
                         <Typography sx={{ fontWeight: '500' }}>How did you know about us? </Typography>
                     </Grid>
@@ -594,7 +641,7 @@ function Form({ data }) {
                         />
                     </Grid>
 
-                </Grid>
+                </Grid> */}
 
                 <Grid display={'flex'} container p={1.5} item xs={12}>
                     <Grid item xs={12} md={5}>
@@ -624,7 +671,7 @@ export default Form
 export async function getServerSideProps(context) {
     try {
         const formCheck = await axios.get(process.env.NEXT_PUBLIC_API_PATH + `referral-links/form/${context?.query?.slug}`)
-        console.log('ss', formCheck);
+        // console.log('ss', formCheck);
         if (formCheck?.status == 200 || formCheck?.status == 201) {
             return {
                 props: {
@@ -633,7 +680,7 @@ export async function getServerSideProps(context) {
 
             };
         } else {
-            console.log(':;;');
+            // console.log(':;;');
             return {
                 props: {
                     data: null
@@ -648,9 +695,8 @@ export async function getServerSideProps(context) {
         return {
             props: {
                 data: null, // or handle the error in a way that makes sense for your application
-
             },
-            // notFound: true
+            notFound: true
         };
     }
 }

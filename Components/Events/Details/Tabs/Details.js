@@ -5,7 +5,7 @@ import React from 'react'
 
 function Details({ data, loading }) {
 
-    console.log(data);
+    // console.log(data);
 
     return (
         loading ?

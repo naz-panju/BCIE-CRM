@@ -354,6 +354,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       setLoading(false)
     })
   }
+
+
   useEffect(() => {
     fetchTable()
   }, [page, refresh, limit, selectedAssignedTo, selectedStage])
