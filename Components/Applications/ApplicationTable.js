@@ -27,10 +27,16 @@ import { useRouter } from 'next/router';
 import { Button, Grid } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { TemplateApi } from '@/data/Endpoints/Template';
-import { Edit } from '@mui/icons-material';
+import { Edit, MoreHorizOutlined } from '@mui/icons-material';
 import EmailTemplateDetailModal from '../EmailTemplateDetail/Modal';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import { StudentApi } from '@/data/Endpoints/Student';
+import Popper from '@mui/material/Popper';
+import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
+import Fade from '@mui/material/Fade';
+import Popup from 'reactjs-popup'; 
+import 'reactjs-popup/dist/index.css'; 
+import DownloadDocumentModal from './Modals/downloadDocument';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -254,6 +260,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
     const [detailId, setDetailId] = useState()
 
+    const [downloadId, setDownloadId] = useState()
+
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -330,6 +338,10 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setDetailId(id)
     }
 
+    const handleDownloadOpen = (id) => {
+        setDownloadId(id)
+    }
+
 
     const fetchTable = () => {
         setLoading(true)
@@ -350,6 +362,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
         <>
             {/* <EmailTemplateDetailModal id={detailId} setId={setDetailId} /> */}
+            <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 
             {
 
@@ -413,8 +426,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                               <Link href={`lead/${row?.lead_id}`}> {row?.student?.first_name  } {row?.student?.last_name  }</Link>
-                                                               {/* {row?.first_name  } {row?.last_name} */}
+                                                                <Link href={`lead/${row?.lead_id}`}> {row?.student?.first_name} {row?.student?.last_name}</Link>
+                                                                {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.student?.email}</TableCell>
                                                             <TableCell align="left">{row?.student?.phone_number}</TableCell>
@@ -423,6 +436,27 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                             <TableCell align="left"> {row?.course_level?.name}</TableCell>
                                                             <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                             {/* <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell> */}
+                                                            <Popup trigger={<TableCell align="left"><IconButton style={{ textTransform: 'none' }} ><MoreHorizOutlined fontSize='small' /></IconButton></TableCell>}
+                                                                position="left center">
+                                                                <div onClick={()=>handleDownloadOpen(row?.id)}>Download Document</div>
+                                                                
+                                                            </Popup>
+                                                            {/* <PopupState variant="popper" popupId="demo-popup-popper">
+                                                                {(popupState) => (
+                                                                    <div>
+                                                                        <TableCell align="left"><IconButton style={{ textTransform: 'none' }} {...bindToggle(popupState)}><MoreHorizOutlined fontSize='small' /></IconButton></TableCell>
+                                                                        <Popper {...bindPopper(popupState)} transition>
+                                                                            {({ TransitionProps }) => (
+                                                                                <Fade {...TransitionProps} timeout={350}>
+                                                                                    <Paper>
+                                                                                        <Typography sx={{ p: 2 }}>The content of the Popper.</Typography>
+                                                                                    </Paper>
+                                                                                </Fade>
+                                                                            )}
+                                                                        </Popper>
+                                                                    </div>
+                                                                )}
+                                                            </PopupState> */}
 
                                                         </TableRow>
                                                     );
@@ -436,7 +470,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                     >
                                                         <TableCell colSpan={8} align="center">
                                                             <div className='no-table-ask-block'>
-                                                                <h4 style={{ color: 'grey' }}>No Applicants Found</h4>
+                                                                <h4 style={{ color: 'grey' }}>No Application Found</h4>
                                                             </div>
                                                         </TableCell>
                                                     </TableRow>
