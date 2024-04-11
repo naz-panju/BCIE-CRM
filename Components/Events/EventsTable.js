@@ -416,7 +416,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
                                                     >
                                                         <TableCell colSpan={8} align="center">
                                                             <div className='no-table-ask-block'>
-                                                                <h4 style={{ color: 'grey' }}>No Template Found</h4>
+                                                                <h4 style={{ color: 'grey' }}>No Events Found</h4>
                                                             </div>
                                                         </TableCell>
                                                     </TableRow>

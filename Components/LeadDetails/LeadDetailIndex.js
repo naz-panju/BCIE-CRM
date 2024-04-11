@@ -16,6 +16,7 @@ import SendMail from './Modals/SendMail';
 import ConfirmPopup from '../Common/Popup/confirm';
 import toast from 'react-hot-toast';
 import ArchiveConfirmPopup from './Modals/ArchiveConfirmation';
+import StageChangeModal from './Modals/StageChange';
 
 
 function LeadDetails() {
@@ -28,6 +29,8 @@ function LeadDetails() {
   const [editId, setEditId] = useState()
 
   const [mailId, setMailId] = useState()
+
+  const [stageId, setStageId] = useState()
 
 
   const [confirmId, setconfirmId] = useState()
@@ -56,6 +59,10 @@ function LeadDetails() {
 
   const handleOpenMailModal = () => {
     setMailId(0)
+  }
+
+  const handleOpenStageModal = () => {
+    setStageId(0)
   }
 
   const handleConfirmOpen = () => {
@@ -94,6 +101,8 @@ function LeadDetails() {
 
     <>
       <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
+      <StageChangeModal details={details} editId={stageId} setEditId={setStageId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
+
       <SendMail details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
 
       <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
@@ -107,9 +116,8 @@ function LeadDetails() {
             {/* disabled={details?.verification_status == 'Yes'} */}
             <Grid>
               <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Mail</Button>
-
-              <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-500 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
-
+              <Button sx={{ mr: 2 }} onClick={details && handleOpenStageModal} variant='contained' className='bg-sky-500 text-white hover:bg-sky-600 text-white'>Change Stage</Button>
+              <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
               <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed==1?'UnArchive':'Archive'}</Button>
             </Grid>
           </div>

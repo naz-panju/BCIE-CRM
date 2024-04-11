@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import axios from 'axios';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useEffect } from 'react';
@@ -9,6 +9,8 @@ import { Grid, IconButton, Skeleton, Tooltip } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { CheckCircle, Close, Delete } from '@mui/icons-material';
 import { ApplicationApi } from '@/data/Endpoints/Application';
+import JSZip from 'jszip';
+import { saveAs } from 'file-saver';
 
 
 const style = {
@@ -31,13 +33,13 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
     const [documents, setdocuments] = useState([])
     const [selectedDocuments, setselectedDocuments] = useState([])
 
-    const handleSelectDocs = (id) => {
-        if (selectedDocuments.includes(id)) {
+    const handleSelectDocs = (data) => {
+        if (selectedDocuments.includes(data)) {
             // If the ID is already in selectedImages, remove it
-            setselectedDocuments(selectedDocuments.filter(imageId => imageId !== id));
+            setselectedDocuments(selectedDocuments.filter(imageId => imageId !== data));
         } else {
             // If the ID is not in selectedImages, add it
-            setselectedDocuments([...selectedDocuments, id]);
+            setselectedDocuments([...selectedDocuments, data]);
         }
     }
 
@@ -47,6 +49,36 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
         setEditId()
         setOpen(false);
     }
+
+    console.log(selectedDocuments);
+
+    const downloadDocument = async () => {
+        try {
+            console.log(selectedDocuments[0]?.file);
+            const pdfUrl = selectedDocuments[0]?.file; // URL of the PDF file
+
+            // Fetch the PDF file
+            const response = await fetch(pdfUrl);
+            console.log(response);
+            // Convert the response to a Blob
+            const pdfBlob = await response.blob();
+            console.log(pdfBlob);
+
+            // Create a new instance of JSZip
+            const zip = new JSZip();
+
+            // Add the PDF file to the ZIP archive
+            zip.file("selected.pdf", pdfBlob);
+
+            // Generate the ZIP asynchronously
+            const zipBlob = await zip.generateAsync({ type: "blob" });
+
+            // Save the ZIP file
+            saveAs(zipBlob, "documents.zip");
+        } catch (error) {
+            console.error('Error downloading document:', error);
+        }
+    };
 
 
 
@@ -146,34 +178,34 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
                     </Grid>
                     {
                         dataLoading ?
-                        loadingGrid()
-                        :
-                        documents?.length == 0 ?
-                            <Grid>
-                                <div className='no-table-ask-block'>
-                                    <h4 style={{ color: 'grey' }}>No Document Found</h4>
-                                </div>
-                            </Grid>
+                            loadingGrid()
                             :
-                            <Grid mt={4} container>
-                                {
-                                    documents?.map((obj, index) => (
+                            documents?.length == 0 ?
+                                <Grid>
+                                    <div className='no-table-ask-block'>
+                                        <h4 style={{ color: 'grey' }}>No Document Found</h4>
+                                    </div>
+                                </Grid>
+                                :
+                                <Grid mt={4} container>
+                                    {
+                                        documents?.map((obj, index) => (
 
-                                        <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'} key={index} onClick={() => handleSelectDocs(obj?.id)} item md={5.5} mr={1} mt={1} style={{ border: selectedDocuments.includes(obj?.id) ? '1px solid blue' : '1px solid grey', padding: '10px', cursor: 'pointer' }}>
-                                            <Grid>
-                                                {obj?.title}
-                                            </Grid>
-                                            {
-                                                selectedDocuments?.includes(obj?.id) &&
+                                            <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'} key={index} onClick={() => handleSelectDocs(obj)} item md={5.5} mr={1} mt={1} style={{ border: selectedDocuments.includes(obj) ? '1px solid blue' : '1px solid grey', padding: '10px', cursor: 'pointer' }}>
                                                 <Grid>
-                                                    <CheckCircle fontSize='small' sx={{ color: 'blue' }} />
+                                                    {obj?.title}
                                                 </Grid>
-                                            }
+                                                {
+                                                    selectedDocuments?.includes(obj) &&
+                                                    <Grid>
+                                                        <CheckCircle fontSize='small' sx={{ color: 'blue' }} />
+                                                    </Grid>
+                                                }
 
-                                        </Grid>
-                                    ))
-                                }
-                            </Grid>
+                                            </Grid>
+                                        ))
+                                    }
+                                </Grid>
                     }
                     {/* {
                         documents?.length == 0 ?
@@ -206,7 +238,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
 
 
                     <Grid mt={3} display={'flex'} justifyContent={'end'}>
-                        <LoadingButton disabled={documents?.length == 0} variant='outlined' sx={{ textTransform: 'none' }}>Download</LoadingButton>
+                        <LoadingButton onClick={downloadDocument} disabled={documents?.length == 0} variant='outlined' sx={{ textTransform: 'none' }}>Download</LoadingButton>
                     </Grid>
 
                 </Box>
@@ -221,7 +253,7 @@ const loadingGrid = () => {
         <Grid mt={4} container>
             {[...Array(4)].map((_, index) => (
                 <Grid item md={5.5} mr={1} display={'flex'} justifyContent={'space-between'} alignItems={'center'} key={index} >
-                   <Skeleton width={'100%'} height={60} />
+                    <Skeleton width={'100%'} height={60} />
                 </Grid>
             ))}
 
