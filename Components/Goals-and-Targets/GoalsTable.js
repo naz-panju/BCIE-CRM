@@ -46,7 +46,7 @@ function GoalsTable() {
                 </Grid>
 
                 <Grid mr={1} item md={2.5}>
-                    or
+                <ReactSelector
                         placeholder={'Periods'}
                         onInputChange={Periods}
                         styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}
