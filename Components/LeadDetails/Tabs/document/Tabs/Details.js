@@ -49,111 +49,40 @@ function Details({ data, loading }) {
                 <Grid container style={{ marginBottom: '10px' }}>
                     <Grid item xs={6} sm={6}>
                         <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Lead Source:
+                            Document Template:
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.lead_source?.name}
+                            {data?.document_template?.name}
                         </Typography>
                     </Grid>
                     <Grid item xs={6} sm={6}>
                         <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Last Date of Validity:
+                            Status:
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {
-                                data?.created_at &&
-                                moment(data?.last_date_of_validity).format("DD-MM-YYYY")
-                            }
+                            {data?.status}
                         </Typography>
                     </Grid>
                 </Grid>
                 <Divider sx={{ mb: 1 }} />
 
                 {
-                    data?.lead_source?.name == 'Agency' || data?.lead_source?.name == 'Event' &&
-                    <>
-                        <Grid container style={{ marginBottom: '10px' }}>
-                            {
-                                data?.lead_source?.name == 'Agency' &&
-                                <Grid item xs={6} sm={6}>
-                                    <Typography variant="" style={{ fontWeight: 'bold' }}>
-                                        Agency:
-                                    </Typography>
-                                    <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                                        {data?.agency?.name}
-                                    </Typography>
-                                </Grid>
-                            }
-                            {
-                                data?.lead_source?.name == 'Event' &&
-                                <Grid item xs={6} sm={6}>
-                                    <Typography variant="" style={{ fontWeight: 'bold' }}>
-                                        Event:
-                                    </Typography>
-                                    <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                                        {data?.event?.name}
-                                    </Typography>
-                                </Grid>
-                            }
-                        </Grid>
-                        <Divider sx={{ mb: 1 }} />
-                    </>
-                }
-
-
-                {
-                    data?.banner_image &&
+                    data?.note &&
                     <>
                         <Grid container spacing={2} style={{ marginBottom: '10px' }}>
                             <Grid item xs={12} sm={12}>
                                 <Typography variant="" style={{ fontWeight: 'bold' }}>
-                                    Banner Image:
+                                    Note:
                                 </Typography>
-                                <Image loader={myLoader} src={data?.banner_image || ''} width={250} height={250} />
-                                {/* <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                                    {data?.top_description}
-                                </Typography> */}
+                                <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
+                                    {data?.note}
+                                </Typography>
                             </Grid>
                         </Grid >
                         <Divider sx={{ mb: 1 }} />
                     </>
                 }
 
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Top Description:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.top_description}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
-
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Bottom Description:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.bottom_description}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
-
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Private Remarks:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.private_remarks}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
 
                 <Grid container style={{ marginBottom: '10px' }}>
                     <Grid item xs={6} sm={6}>
@@ -178,27 +107,42 @@ function Details({ data, loading }) {
                 </Grid>
                 <Divider sx={{ mb: 1 }} />
 
+                <Grid container style={{ marginBottom: '10px' }}>
+                    {
+                        data?.uploaded_by?.name &&
+                        <Grid item xs={6} sm={6}>
+                            <Typography variant="" style={{ fontWeight: 'bold' }}>
+                                Uploaded By:
+                            </Typography>
+                            <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
+                                {data?.uploaded_by?.name}
+                            </Typography>
+                        </Grid>
+                    }
+                    <Grid item xs={6} sm={6}>
+                        <Typography variant="" style={{ fontWeight: 'bold' }}>
+                            Uploaded At:
+                        </Typography>
+                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
+                            {
+                                data?.created_at &&
+                                moment(data?.uploaded_at).format("DD-MM-YYYY")
+                            }
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Divider sx={{ mb: 1 }} />
+
+
                 <Grid container spacing={2} style={{ marginBottom: '10px' }}>
                     <Grid item xs={12} sm={12}>
                         <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Referral Link:
+                            File:
                         </Typography>
-                        <Grid item width={50} xs={12} sm={12} md={12}>
-                            <a href={`${currentURL}/forms/lead/${data?.token}`} target='_blank' style={{ fontSize: '16px', color: 'blue' }}>
-                                {`${currentURL}/forms/lead/${data?.token}`}
+                        <Grid item xs={12} sm={12} md={12}>
+                            <a href={data?.file} target='_blank' style={{ fontSize: '16px', color: 'blue' }}>
+                               {data?.file}
                             </a>
-                        </Grid>
-                        <Grid display={'flex'} alignItems={'center'} justifyContent={'end'} item xs={12} sm={12} md={12}>
-                            {/* <IconButton> */}
-                            {
-                                copied ?
-                                    <a style={{ fontSize: '13px', marginRight: 5, cursor: 'pointer' }} onClick={handleCopy}>
-                                        copied <Check fontSize='small' />
-                                    </a> :
-                                    <a style={{ fontSize: '13px', marginRight: 5, cursor: 'pointer' }} onClick={handleCopy}>
-                                        copy <Link fontSize='small' />
-                                    </a>
-                            }
                         </Grid>
                     </Grid>
                 </Grid >
@@ -219,29 +163,25 @@ const loadingDetail = () => (
             </Grid>
         </Grid>
         <Divider sx={{ mb: 1 }} />
-        <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-            <Grid item xs={12} sm={12}>
+
+        <Grid container style={{ marginBottom: '10px' }}>
+            <Grid item xs={6} sm={6}>
+                <Skeleton variant="rounded" width={100} height={20} />
+                <Skeleton sx={{ mt: 1 }} variant="rounded" width={200} height={20} />
+            </Grid>
+            <Grid item xs={6} sm={6}>
                 <Skeleton variant="rounded" width={100} height={20} />
                 <Skeleton sx={{ mt: 1 }} variant="rounded" width={200} height={20} />
             </Grid>
         </Grid>
         <Divider sx={{ mb: 1 }} />
-        <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-            <Grid item xs={12} sm={12}>
+        
+        <Grid container style={{ marginBottom: '10px' }}>
+            <Grid item xs={6} sm={6}>
                 <Skeleton variant="rounded" width={100} height={20} />
                 <Skeleton sx={{ mt: 1 }} variant="rounded" width={200} height={20} />
             </Grid>
-        </Grid>
-        <Divider sx={{ mb: 1 }} />
-        <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-            <Grid item xs={12} sm={12}>
-                <Skeleton variant="rounded" width={100} height={20} />
-                <Skeleton sx={{ mt: 1 }} variant="rounded" width={200} height={20} />
-            </Grid>
-        </Grid>
-        <Divider sx={{ mb: 1 }} />
-        <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-            <Grid item xs={12} sm={12}>
+            <Grid item xs={6} sm={6}>
                 <Skeleton variant="rounded" width={100} height={20} />
                 <Skeleton sx={{ mt: 1 }} variant="rounded" width={200} height={20} />
             </Grid>

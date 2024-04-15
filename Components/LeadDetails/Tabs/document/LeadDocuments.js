@@ -7,6 +7,9 @@ import moment from 'moment'
 import LeadDocumentRequest from './request'
 import { Edit } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
+import LeadDocumentDetailModal from './Modal'
+import DocumentConfirmPopup from './confirmPopup'
+import DocumentRejectPopup from './rejectPopup'
 
 function LeadDocuments({ id }) {
 
@@ -19,6 +22,12 @@ function LeadDocuments({ id }) {
     const [page, setPage] = useState(0);
     const [limit, setLimit] = useState(10);
 
+    const [detailId, setDetailId] = useState()
+
+    const [confirmId, setconfirmId] = useState()
+    const [confirmLoading, setconfirmLoading] = useState(false)
+
+    const [rejectId, setrejectId] = useState()
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -26,8 +35,8 @@ function LeadDocuments({ id }) {
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
         setPage(0);
-      };
-    
+    };
+
 
     const handleCreate = () => {
         setEditId(0)
@@ -40,16 +49,28 @@ function LeadDocuments({ id }) {
         setEditId(id)
     }
 
+    const handleDetailOpen = (id) => {
+        setDetailId(id)
+    }
+
+    const handleAccept = (id) => {
+        setconfirmId(id)
+    }
+
+    const handleReject = (id) => {
+        setrejectId(id)
+    }
+
     const handleRefresh = () => {
         if (page != 0) {
-          setPage(0)
+            setPage(0)
         }
         setRefresh(!refresh)
-      }
+    }
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await LeadApi.listDocuments({limit: limit, lead_id:id,page: page + 1 })
+        const response = await LeadApi.listDocuments({ limit: limit, lead_id: id, page: page + 1 })
         setList(response?.data)
         setLoading(false)
     }
@@ -65,13 +86,17 @@ function LeadDocuments({ id }) {
 
     useEffect(() => {
         fetchList()
-    }, [refresh,page])
+    }, [refresh, page])
 
     return (
         <>
             <LeadDocumentModal id={id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
             <LeadDocumentRequest id={id} reqId={reqId} setReqId={setReqId} />
 
+            <LeadDocumentDetailModal id={detailId} setId={setDetailId} />
+
+            <DocumentConfirmPopup ID={confirmId} setID={setconfirmId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Are your want to Approve this Document?'} getDetails={handleRefresh} />
+            <DocumentRejectPopup ID={rejectId} setID={setrejectId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Are your want to Reject this Document?'} getDetails={handleRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
@@ -104,7 +129,7 @@ function LeadDocuments({ id }) {
                                                             Document
                                                         </Typography>
                                                     </TableCell>
-                                                    <TableCell>
+                                                    {/* <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Created By
                                                         </Typography>
@@ -123,7 +148,7 @@ function LeadDocuments({ id }) {
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Uploaded Date
                                                         </Typography>
-                                                    </TableCell>
+                                                    </TableCell> */}
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Status
@@ -135,14 +160,19 @@ function LeadDocuments({ id }) {
                                                 {
                                                     list?.data?.map((obj, index) => (
                                                         <TableRow key={obj?.id}>
-                                                            <TableCell><Tooltip title={obj?.note}>{obj?.title || obj?.document_template?.name}</Tooltip></TableCell>
+                                                            <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleDetailOpen(obj?.id)}><Tooltip title={obj?.note}>{obj?.title || obj?.document_template?.name}</Tooltip></TableCell>
                                                             <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell>
-                                                            <TableCell>{obj?.created_by?.name}</TableCell>
+                                                            {/* <TableCell>{obj?.created_by?.name}</TableCell>
                                                             <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
                                                             <TableCell>{obj?.uploaded_by?.name}</TableCell>
-                                                            <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell> */}
                                                             <TableCell>{obj?.status}</TableCell>
-                                                            <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
+                                                            <TableCell>
+                                                                <Button onClick={() => handleAccept(obj?.id)} sx={{ textTransform: 'none', mr: 1 }} size='small' className='bg-lime-300 text-black hover:bg-lime-400'>Approve</Button>
+                                                                <Button onClick={() => handleReject(obj?.id)} sx={{ textTransform: 'none',mr:5 }} size='small' className='bg-red-500 text-white hover:bg-red-600'>Reject</Button>
+                                                                <Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
+                                                            </TableCell>
+                                                            {/* <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell> */}
                                                         </TableRow>
                                                     ))
                                                 }

@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from 'react';
-import { Grid, IconButton, TextField, Tooltip } from '@mui/material';
+import { Grid, IconButton, TextField, Tooltip, Skeleton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Close, Delete } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
@@ -44,6 +44,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
     const [loading, setLoading] = useState(false)
     const [reqLoading, setReqLoading] = useState(false)
     const [details, setDetails] = useState()
+    const [dataLoading, setDataLoading] = useState(false)
 
     const handleClose = () => {
         setValue('template', '')
@@ -180,19 +181,16 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
     }
 
     const getDetails = async () => {
-        // setDataLoading(true)
+        setDataLoading(true)
         const response = await LeadApi.viewDocuments({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
-            console.log(data);
             setDetails(data)
             setValue('template', data?.document_template)
-            console.log(data);
-            console.log(data);
             setValue('title', data?.title)
             setValue('remarks', data?.note || '')
         }
-        // setDataLoading(false)
+        setDataLoading(false)
     }
 
 
@@ -232,11 +230,15 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
                         </IconButton>
                     </Grid>
 
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <Grid container>
-                            <Grid pr={1} mt={2} md={6}>
-                                <a>Select Template</a>
-                                {/* <SelectX
+                    {
+                        dataLoading ?
+                            loadingFields()
+                            :
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <Grid container>
+                                    <Grid pr={1} mt={2} md={6}>
+                                        <a>Select Template</a>
+                                        {/* <SelectX
                                     required={true}
                                     loadOptions={fetchTemplates}
                                     control={control}
@@ -244,130 +246,165 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
                                     name={'template'}
                                     defaultValue={watch('template')}
                                 /> */}
-                                <AsyncSelect
-                                    key={watch('template')}
-                                    name={'template'}
-                                    defaultValue={watch('template')}
-                                    isClearable
-                                    defaultOptions
-                                    loadOptions={fetchTemplates}
-                                    getOptionLabel={(e) => e.name}
-                                    getOptionValue={(e) => e.id}
-                                    onChange={handleTemplateSelect}
-                                />
-                                {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+                                        <AsyncSelect
+                                            key={watch('template')}
+                                            name={'template'}
+                                            defaultValue={watch('template')}
+                                            isClearable
+                                            defaultOptions
+                                            loadOptions={fetchTemplates}
+                                            getOptionLabel={(e) => e.name}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleTemplateSelect}
+                                        />
+                                        {errors.template && <span className='form-validation'>{errors.template.message}</span>}
 
-                            </Grid>
-                            <Grid mt={2} md={6}>
-                                <a>Title</a>
-                                <TextInput control={control} name="title"
-                                    value={watch('title')} />
-                            </Grid>
-                        </Grid>
-                        <Grid mt={2}>
-                            <a>Remarks</a>
-                            <TextField
-                                {...register('remarks')}
-                                variant="outlined"
-                                fullWidth
-                                multiline
-                                rows={2}
-                                sx={{ width: '100%', }}
-                            />
-                        </Grid>
-
-                        <div
-                            className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
-                            onDrop={handleDrop}
-                            onDragOver={handleDragOver}
-                        >
-                            <input
-                                type="file"
-                                onChange={handleFileChange}
-                                className="hidden"
-                                id="file-upload"
-                                key={fileInputKey}
-                            />
-                            <label
-                                htmlFor="file-upload"
-                                className="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                            >
-                                Select File or Drag and Drop Here
-                            </label>
-                            {(selectedFile || details?.file) && (
-                                <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
-                                    <Grid mr={1}>
-                                        {
-                                            selectedFile &&
-                                            <Tooltip title={selectedFile?.name}>
-                                                <p className="text-gray-700">
-                                                    {
-                                                        selectedFile?.name?.length > 20
-                                                            ? selectedFile?.name?.slice(0, 20) + '....'
-                                                            : selectedFile?.name
-                                                    }
-                                                </p>
-                                            </Tooltip>
-                                        }
-                                        {
-                                            !selectedFile &&
-                                            <Tooltip title={details?.file}>
-                                                <p className="text-gray-700">
-                                                    {trimUrlAndNumbers(details?.file)}
-                                                </p>
-                                            </Tooltip>
-                                        }
                                     </Grid>
-                                    {
-                                        selectedFile &&
-                                        <Grid>
-                                            <Delete sx={{ cursor: 'pointer' }} color='error' fontSize='small' onClick={handleDelete} />
-                                        </Grid>
-                                    }
+                                    <Grid mt={2} md={6}>
+                                        <a>Title</a>
+                                        <TextInput control={control} name="title"
+                                            value={watch('title')} />
+                                    </Grid>
                                 </Grid>
-                            )}
-                        </div>
-                        <Grid mt={2} display={'flex'} justifyContent={'space-between'}>
-                            <LoadingButton
-                                variant='contained'
-                                onClick={requestDocument}
-                                loading={reqLoading}
-                                disabled={reqLoading || loading}
-                                size='small'
-                                sx={{ textTransform: 'none', height: 30 }}
-                                className=" bg-sky-500 hover:bg-sky-700 text-white font-bold  rounded"
-                            >
-                                Request Document
-                            </LoadingButton>
-                            <LoadingButton
-                                type='submit'
-                                variant='contained'
-                                disabled={loading || reqLoading}
-                                loading={loading}
-                                size='small'
-                                sx={{ textTransform: 'none', height: 30 }}
-                            // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
-                            >
-                                Upload
-                            </LoadingButton>
-                        </Grid>
-                    </form>
+                                <Grid mt={2}>
+                                    <a>Remarks</a>
+                                    <TextField
+                                        {...register('remarks')}
+                                        variant="outlined"
+                                        fullWidth
+                                        multiline
+                                        rows={2}
+                                        sx={{ width: '100%', }}
+                                    />
+                                </Grid>
+
+                                <div
+                                    className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
+                                    onDrop={handleDrop}
+                                    onDragOver={handleDragOver}
+                                >
+                                    <input
+                                        type="file"
+                                        onChange={handleFileChange}
+                                        className="hidden"
+                                        id="file-upload"
+                                        key={fileInputKey}
+                                    />
+                                    <label
+                                        htmlFor="file-upload"
+                                        className="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                    >
+                                        Select File or Drag and Drop Here
+                                    </label>
+                                    {(selectedFile || details?.file) && (
+                                        <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
+                                            <Grid mr={1}>
+                                                {
+                                                    selectedFile &&
+                                                    <Tooltip title={selectedFile?.name}>
+                                                        <p className="text-gray-700">
+                                                            {
+                                                                selectedFile?.name?.length > 20
+                                                                    ? selectedFile?.name?.slice(0, 20) + '....'
+                                                                    : selectedFile?.name
+                                                            }
+                                                        </p>
+                                                    </Tooltip>
+                                                }
+                                                {
+                                                    !selectedFile &&
+                                                    <Tooltip title={details?.file}>
+                                                        <p className="text-gray-700">
+                                                            {trimUrlAndNumbers(details?.file)}
+                                                        </p>
+                                                    </Tooltip>
+                                                }
+                                            </Grid>
+                                            {
+                                                selectedFile &&
+                                                <Grid>
+                                                    <Delete sx={{ cursor: 'pointer' }} color='error' fontSize='small' onClick={handleDelete} />
+                                                </Grid>
+                                            }
+                                        </Grid>
+                                    )}
+                                </div>
+                                <Grid mt={2} display={'flex'} justifyContent={'space-between'}>
+                                    <LoadingButton
+                                        variant='contained'
+                                        onClick={requestDocument}
+                                        loading={reqLoading}
+                                        disabled={reqLoading || loading || dataLoading}
+                                        size='small'
+                                        sx={{ textTransform: 'none', height: 30 }}
+                                        className=" bg-sky-500 hover:bg-sky-700 text-white font-bold  rounded"
+                                    >
+                                        Request Document
+                                    </LoadingButton>
+                                    <LoadingButton
+                                        type='submit'
+                                        variant='contained'
+                                        disabled={loading || reqLoading || dataLoading}
+                                        loading={loading}
+                                        size='small'
+                                        sx={{ textTransform: 'none', height: 30 }}
+                                    // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+                                    >
+                                        Upload
+                                    </LoadingButton>
+                                </Grid>
+                            </form>
+                    }
+
                 </Box>
             </Modal>
         </div>
     );
 }
-// <div className="flex flex-col items-center justify-center mt-8">
-//     <input type="file" onChange={handleFileChange} className="hidden" id="file-upload" />
-//     <label htmlFor="file-upload" className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-//         Select File
-//     </label>
-//     {selectedFile && (
-//         <div className="mt-4">
-//             <p className="text-gray-700">{selectedFile.name}</p>
-//             <button onClick={handleUpload} className="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-//                 Upload
-//             </button>
-//         </div>
-//     )}
-// </div>
+
+
+const loadingFields = () => {
+    return (
+        <Grid>
+            <Grid container>
+                <Grid pr={1} mt={2} md={6}>
+                    <a>Select Template</a>
+                    {/* <SelectX
+                    required={true}
+                    loadOptions={fetchTemplates}
+                    control={control}
+                    rules={{ required: 'Template is required' }}
+                    name={'template'}
+                    defaultValue={watch('template')}
+                /> */}
+                    <Skeleton variant="rounded" width={'100%'} height={40} />
+                </Grid>
+                <Grid mt={2} md={6}>
+                    <a>Title</a>
+                    <Skeleton variant="rounded" width={'100%'} height={40} />
+                </Grid>
+            </Grid>
+            <Grid mt={2}>
+                <a>Remarks</a>
+                <Skeleton variant="rounded" width={'100%'} height={70} />
+            </Grid>
+
+            <Grid mt={2}>
+                
+                <Skeleton variant="rounded" width={'100%'} height={100} />
+            </Grid>
+
+
+
+
+            <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
+                <Grid mr={1}>
+                    <Skeleton variant="rounded" width={'100%'} height={60} />
+                </Grid>
+            </Grid>
+
+
+
+        </Grid>
+    )
+}

@@ -50,7 +50,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
         setOpen(false);
     }
 
-    console.log(selectedDocuments);
+    // console.log(selectedDocuments);
 
     const downloadDocument = async () => {
         try {
@@ -133,6 +133,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
         const response = await ApplicationApi.view({ id: editId })
         if (response?.status == 200 || response?.status == 201) {
             setdocuments(response?.data?.data?.documents)
+            setselectedDocuments(response?.data?.data?.documents)
             setDataLoading(false)
         } else {
             // toast.
@@ -140,6 +141,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
         }
         // console.log(response);
     }
+
 
 
 

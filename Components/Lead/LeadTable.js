@@ -28,7 +28,7 @@ import { Button, Grid } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
-import { PersonAdd } from '@mui/icons-material';
+import { PersonAdd, PersonAddAlt } from '@mui/icons-material';
 
 
 
@@ -454,7 +454,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                   row?.assignedToUser ?
                                    <Button onClick={()=>handleEditAssign(row)} style={{color:'blue',textTransform:'none'}} >{ row?.assignedToUser?.name}</Button>
                                     :
-                                    <Button onClick={()=>openAssign(row?.id)}><PersonAdd  sx={{ color: 'blue', cursor: 'pointer' }} /></Button>
+                                    <Button onClick={()=>openAssign(row?.id)}><PersonAddAlt  sx={{ color: 'blue', cursor: 'pointer' }} /></Button>
                                 }
                                 {/* {row?.assignedToUser?.name} */}
                               </TableCell>

@@ -525,6 +525,7 @@ ul#menuList li {
   gap: 20px;
   width: 100%;
 }
+
 /* table heading width change */
 
 .page-title-block-content h1 {
@@ -1269,18 +1270,22 @@ button.loadmore-btn {
 .login-dropdown-list-item {
   border-bottom: 1px solid #ededed;
 }
+
 .login-dropdown-list-item.dropdown-name-block {
   display: flex;
   align-items: center;
   gap: 5px;
 }
+
 .login-dropdown-list-item.dropdown-name-block div h3 {
   color: #4285f4 !important;
 }
+
 .login-dropdown-list-item.dropdown-name-block div h6 {
   color: #777;
   font-size: 12px;
 }
+
 .login-dropdown-list-item.dropdown-name-block {
   padding: 10px 15px;
 }
@@ -1289,38 +1294,60 @@ section {
   transition: .5s;
 }
 
-body.body-active section , body.body-active .header {
+body.body-active section,
+body.body-active .header {
   margin-left: 160px;
   transition: .5s;
 }
 
-.form-text{
+.form-text {
   font-size: 15px;
 }
 
-.form-text-purpose a{
+.form-text-purpose a {
   font-size: 15px;
 
 }
 
 .course-popup {
-  transition: height 0.5s ease, opacity 0.5s ease; /* Transition for height and opacity */
-    opacity: 0; /* Initially hide the popup */
-    height: 0; /* Initially collapse the popup */
-    overflow: hidden; /* Hide any overflow content */
+  transition: height 0.5s ease, opacity 0.5s ease;
+  /* Transition for height and opacity */
+  opacity: 0;
+  /* Initially hide the popup */
+  height: 0;
+  /* Initially collapse the popup */
+  overflow: hidden;
+  /* Hide any overflow content */
 }
 
 .course-popup.show {
-    opacity: 1; /* Show the popup */
-    height: auto; /* Expand the height to fit content */
+  opacity: 1;
+  /* Show the popup */
+  height: auto;
+  /* Expand the height to fit content */
 }
 
-  .custom-editor-container {
-    max-height: 200px;
-    overflow-y: auto !important;
-    border-radius: 4px;
-  }
+.custom-editor-container {
+  max-height: 200px;
+  overflow-y: auto !important;
+  border-radius: 4px;
+}
 
-  .ck-content {
-    height: 350px;
+.ck-content {
+  height: 350px;
+}
+
+.app-table-options li{
+  padding: 5px;
+  font-size: 14px;
+}
+
+.app-table-options li:hover{
+  color: rgb(78, 78, 163);
+  background-color: rgb(239, 242, 243);
+  cursor: pointer;
+  font-size: 14px;
+}
+.app-table-container{
+  padding: 0px;
 }

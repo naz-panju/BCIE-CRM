@@ -1,5 +1,4 @@
 import React from 'react'
-import LeadTab from './LeadTab'
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { LeadApi } from '@/data/Endpoints/Lead';
@@ -7,21 +6,15 @@ import { useState } from 'react';
 import moment from 'moment';
 import { Button, Grid, Skeleton } from '@mui/material';
 import { PieChart } from '@mui/icons-material';
-import ConvertLeadToStudent from './Modals/ConvertToStudent';
-import BasicPie from './Chart/Pie';
-import SendMail from './Modals/SendMail';
-import ConfirmPopup from '../Common/Popup/confirm';
+
 import toast from 'react-hot-toast';
-import ArchiveConfirmPopup from './Modals/ArchiveConfirmation';
-import StageChangeModal from './Modals/StageChange';
 
 
-function LeadDetails() {
+function ApplicationDetails() {
 
   const [details, setDetails] = useState()
   const [refresh, setRefresh] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [disabled, setdisabled] = useState(false)
 
   const [editId, setEditId] = useState()
 
@@ -99,26 +92,26 @@ function LeadDetails() {
   return (
 
     <>
-      <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
-      <StageChangeModal details={details} editId={stageId} setEditId={setStageId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
+      {/* <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} /> */}
+      {/* <StageChangeModal details={details} editId={stageId} setEditId={setStageId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} /> */}
 
-      <SendMail details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
+      {/* <SendMail details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} /> */}
 
-      <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
+      {/* <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} /> */}
 
 
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>
-            <h1>Lead Details</h1>
+            <h1>Application Details</h1>
 
             {/* disabled={details?.verification_status == 'Yes'} */}
-            <Grid>
+            {/* <Grid>
               <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Mail</Button>
               <Button sx={{ mr: 2 }} onClick={details && handleOpenStageModal} variant='contained' className='bg-sky-500 text-white hover:bg-sky-600 text-white'>Change Stage</Button>
               <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
               <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed==1?'UnArchive':'Archive'}</Button>
-            </Grid>
+            </Grid> */}
           </div>
         </div>
         <div className='content-block-details'>
@@ -310,7 +303,7 @@ function LeadDetails() {
 
           </div>
 
-          <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} />
+          {/* <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} /> */}
 
         </div>
       </section>
@@ -318,7 +311,7 @@ function LeadDetails() {
   )
 }
 
-export default LeadDetails
+export default ApplicationDetails
 
 
 

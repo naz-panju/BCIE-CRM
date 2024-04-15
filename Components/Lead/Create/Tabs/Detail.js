@@ -620,7 +620,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             <Grid item xs={12} md={5}>
                                 <Typography sx={{ fontWeight: '500' }}>How did you know about us? </Typography>
                             </Grid>
-                            <Grid item xs={12} md={7}>
+                            <Grid item xs={12} md={7}> 
                                 <ReactSelector
                                     menuPlacement='auto'
                                     onInputChange={fetchReference}

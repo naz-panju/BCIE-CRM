@@ -34,9 +34,10 @@ import { StudentApi } from '@/data/Endpoints/Student';
 import Popper from '@mui/material/Popper';
 import PopupState, { bindToggle, bindPopper } from 'material-ui-popup-state';
 import Fade from '@mui/material/Fade';
-import Popup from 'reactjs-popup'; 
-import 'reactjs-popup/dist/index.css'; 
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 import DownloadDocumentModal from './Modals/downloadDocument';
+import ApplicationStageChangeModal from './Modals/stageChange';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -239,7 +240,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ApplicationTable({ refresh, editId, setEditId, page, setPage }) {
+export default function ApplicationTable({ refresh, editId, setEditId, page, setPage, setRefresh }) {
 
     const router = useRouter();
 
@@ -261,6 +262,9 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     const [detailId, setDetailId] = useState()
 
     const [downloadId, setDownloadId] = useState()
+    const [stageId, setStageId] = useState()
+
+    const [details, setDetails] = useState()
 
 
     const handleRequestSort = (event, property) => {
@@ -342,11 +346,15 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setDownloadId(id)
     }
 
+    const handleStageOpen = (row) => {
+        setStageId(row?.id)
+        setDetails(row)
+    }
+
 
     const fetchTable = () => {
         setLoading(true)
         ApplicationApi.list({ limit: limit, page: page + 1 }).then((response) => {
-            console.log(response);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {
@@ -358,11 +366,14 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         fetchTable()
     }, [page, refresh, limit])
 
+    console.log(list);
+
     return (
 
         <>
             {/* <EmailTemplateDetailModal id={detailId} setId={setDetailId} /> */}
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
+            <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
             {
 
@@ -426,7 +437,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                                <Link href={`lead/${row?.lead_id}`}> {row?.student?.first_name} {row?.student?.last_name}</Link>
+                                                                <Link href={`applications/${row?.id}`}> {row?.student?.first_name} {row?.student?.last_name}</Link>
                                                                 {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.student?.email}</TableCell>
@@ -438,8 +449,14 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                             {/* <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell> */}
                                                             <Popup trigger={<TableCell align="left"><IconButton style={{ textTransform: 'none' }} ><MoreHorizOutlined fontSize='small' /></IconButton></TableCell>}
                                                                 position="left center">
-                                                                <div onClick={()=>handleDownloadOpen(row?.id)}>Download Document</div>
-                                                                
+                                                                <div className='app-table-container'>
+                                                                    <ul className='app-table-options'>
+                                                                        <li onClick={() => handleDownloadOpen(row?.id)}> Download Document</li>
+                                                                        <li onClick={() => handleStageOpen(row)}> Change Application Stage</li>
+                                                                    </ul>
+
+                                                                </div>
+
                                                             </Popup>
                                                             {/* <PopupState variant="popper" popupId="demo-popup-popper">
                                                                 {(popupState) => (

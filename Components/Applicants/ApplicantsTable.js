@@ -316,7 +316,7 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
     const fetchTable = () => {
         setLoading(true)
         StudentApi.list({ limit: limit, page: page + 1 }).then((response) => {
-            console.log(response);
+            // console.log(response);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {

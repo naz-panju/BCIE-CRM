@@ -80,12 +80,12 @@ const Sidebar = () => {
     ]
 
 
-    const filterUrl = (url) => {
-        const urls = url.split("/").filter(Boolean); // Split the string by "/", then remove empty strings from the resulting array
-        const firstUrl = '/' + urls[0];
+    // const filterUrl = (url) => {
+    //     const urls = url.split("/").filter(Boolean); // Split the string by "/", then remove empty strings from the resulting array
+    //     const firstUrl = '/' + urls[0];
 
-        return firstUrl;
-    }
+    //     return firstUrl;
+    // }
 
     return (
 
@@ -109,7 +109,7 @@ const Sidebar = () => {
                     {
                         SideBarOptions?.map((obj, index) => (
 
-                            <li className={filterUrl(router?.route) == obj?.href ? 'sidebar-selected' : ''} key={index}><Link href={obj?.href}><i><obj.icon fontSize='small' /></i><span>{obj?.title}</span></Link></li>
+                            <li className={router?.route == obj?.href ? 'sidebar-selected' : ''} key={index}><Link href={obj?.href}><i><obj.icon fontSize='small' /></i><span>{obj?.title}</span></Link></li>
                         ))
                     }
                     {/* <li><a href='#'><i><DashboardOutlined fontSize='small' /></i><span>Dashboard</span></a></li>

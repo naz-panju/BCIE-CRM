@@ -165,10 +165,13 @@ export default function FollowUp({ lead_id, data }) {
                                                                     {obj?.status !== 'Completed' && <React.Fragment> | <Button onClick={() => handleConfirmOpen(obj?.id)} sx={{ textTransform: 'none' }} variant='contained' className='h-4 text-black hover:bg-lime-600 hover:text-white' size='small'>Mark as Completed</Button></React.Fragment>}
                                                                 </p>
                                                             </Grid>
-                                                            <Grid display={'flex'}>
-                                                                <p><b>Note</b>: </p>
-                                                                <p> {obj?.note}</p>
-                                                            </Grid>
+                                                            {
+                                                                obj?.note &&
+                                                                <Grid display={'flex'}>
+                                                                    <p><b>Note</b>: </p>
+                                                                    <p> {obj?.note}</p>
+                                                                </Grid>
+                                                            }
                                                         </div>
 
 

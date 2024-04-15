@@ -114,7 +114,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     }
 
     const fetchDocuments = (e) => {
-        return LeadApi.listDocuments({ keyword: e, lead_id: lead_id,limit:50 }).then(response => {
+        return LeadApi.listDocuments({ keyword: e, lead_id: lead_id,limit:50,status:'Accepted' }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
