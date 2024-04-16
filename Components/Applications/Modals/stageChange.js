@@ -3,8 +3,6 @@ import Drawer from '@mui/material/Drawer';
 import { Button, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { Close, Delete, Refresh } from '@mui/icons-material';
-import { ListingApi } from '@/data/Endpoints/Listing';
-import SelectX from '@/Form/SelectX';
 import { useState } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import * as yup from "yup";
@@ -13,13 +11,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import toast from 'react-hot-toast';
-import { LeadApi } from '@/data/Endpoints/Lead';
 import ReactSelector from 'react-select';
-import { id } from 'date-fns/locale';
 import { ApplicationStagesApi } from '@/data/Endpoints/ApplicationStages';
 import TextInput from '@/Form/TextInput';
-import { ApplicationApi } from '@/data/Endpoints/Application';
-import { useRef } from 'react';
+
 
 
 const scheme = yup.object().shape({
@@ -47,6 +42,10 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     const [casFile, setCasFile] = useState()
     const [feeFile, setFeeFile] = useState()
     const [fileInputKey, setFileInputKey] = useState(0);
+
+    const [acceptanceDetail, setacceptanceDetail] = useState()
+    const [casDetail, setcasDetail] = useState()
+    const [feeDetail, setfeeDetail] = useState()
 
     const anchor = 'right'; // Set anchor to 'right'
 
@@ -157,7 +156,6 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
             }
 
             ApplicationStagesApi.appliedInUniversity(dataToSubmit).then((response) => {
-                console.log(response);
                 if (response?.status == 200 || response?.status == 201) {
                     afterResponse(response?.data?.message)
                 } else {
@@ -195,7 +193,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     }
     const universityAccepted = (data) => {
 
-        if (acceptFile) {
+        if (acceptFile || acceptanceDetail) {
             const formData = new FormData();
 
             formData.append('id', details?.id)
@@ -227,7 +225,6 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         }
 
         ApplicationStagesApi.casRejected(dataToSubmit).then((response) => {
-            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 afterResponse(response?.data?.message)
             } else {
@@ -248,7 +245,6 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         }
 
         ApplicationStagesApi.visaApplied(dataToSubmit).then((response) => {
-            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 afterResponse(response?.data?.message)
             } else {
@@ -269,7 +265,6 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         }
 
         ApplicationStagesApi.visaApproved(dataToSubmit).then((response) => {
-            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 afterResponse(response?.data?.message)
             } else {
@@ -291,7 +286,6 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         }
 
         ApplicationStagesApi.visaRejected(dataToSubmit).then((response) => {
-            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 afterResponse(response?.data?.message)
             } else {
@@ -307,15 +301,14 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     }
     const casApproved = (data) => {
 
-        if (casFile) {
+        if (casFile || casDetail) {
             const formData = new FormData();
 
             formData.append('id', details?.id)
-            if (acceptFile) {
+            if (casFile) {
                 formData.append('cas_document', casFile)
             }
             ApplicationStagesApi.casApproved(formData).then((response) => {
-                // console.log(response);
                 if (response?.status == 200 || response?.status == 201) {
                     afterResponse(response?.data?.message)
                 } else {
@@ -334,26 +327,26 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     }
     const universityFeePaid = (data) => {
 
-       
-            const formData = new FormData();
 
-            formData.append('id', details?.id)
-            if (acceptFile) {
-                formData.append('feeFile', acceptFile)
+        const formData = new FormData();
+
+        formData.append('id', details?.id)
+        if (feeFile) {
+            formData.append('fee_receipt', feeFile)
+        }
+        ApplicationStagesApi.universityFeePaid(formData).then((response) => {
+            // console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                afterResponse(response?.data?.message)
+            } else {
+                errorResponse(response?.response?.data?.message)
             }
-            ApplicationStagesApi.universityFeePaid(formData).then((response) => {
-                // console.log(response);
-                if (response?.status == 200 || response?.status == 201) {
-                    afterResponse(response?.data?.message)
-                } else {
-                    errorResponse(response?.response?.data?.message)
-                }
-                setLoading(false)
-            }).catch((error) => {
-                // console.log(error);
-                errorResponse(error?.response?.data?.message)
-            })
-       
+            setLoading(false)
+        }).catch((error) => {
+            // console.log(error);
+            errorResponse(error?.response?.data?.message)
+        })
+
 
     }
 
@@ -366,7 +359,6 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         }
 
         ApplicationStagesApi.admissionCompleted(dataToSubmit).then((response) => {
-            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 afterResponse(response?.data?.message)
             } else {
@@ -385,10 +377,15 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         setEditId()
         reset()
         setValue('stage', '')
-        setDetails()
+        if(setDetails){
+            setDetails()
+        }
         setAcceptFile()
         setCasFile()
         setFeeFile()
+        setcasDetail()
+        setfeeDetail()
+        setacceptanceDetail()
         setOpen(false)
     }
 
@@ -408,9 +405,18 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
 
     const initialValues = () => {
         setValue('stage', details?.status)
+        setValue('app_number', details?.application_number)
+        setacceptanceDetail(details?.acceptance_letter)
+        setfeeDetail(details?.fee_receipt)
+        setcasDetail(details?.cas_document)
     }
 
-
+    function trimUrlAndNumbers(url) {
+        const lastSlashIndex = url?.lastIndexOf('/');
+        let trimmedString = url?.substring(lastSlashIndex + 1);
+        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
+    }
 
     useEffect(() => {
         if (editId > 0) {
@@ -503,6 +509,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                                 <Grid item pr={1} xs={8} md={8} display={'flex'}>
                                                     <Grid item md={2.5}>
                                                         <Button
+                                                            disabled={acceptanceDetail ? true : false}
                                                             onClick={handleAcceptClick}
                                                             sx={{ textTransform: 'none', height: 30 }}
                                                             variant='contained'
@@ -530,6 +537,19 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                                                     acceptFile?.name
                                                             }
                                                             <Delete onClick={() => setAcceptFile()} fontSize='small' sx={{ color: 'red', cursor: 'pointer' }} />
+                                                        </Grid>
+                                                    }
+                                                    {
+                                                        (!acceptFile && acceptanceDetail) &&
+                                                        <Grid item md={9.5} ml={2} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+                                                            {
+                                                                trimUrlAndNumbers(acceptanceDetail)?.length > 25 ?
+                                                                    <Tooltip title={acceptanceDetail}>
+                                                                        {trimUrlAndNumbers(acceptanceDetail)?.slice(0, 25)} ...
+                                                                    </Tooltip>
+                                                                    :
+                                                                    <a href={acceptanceDetail} target='_blank' style={{ color: 'blue', cursor: 'pointer' }}> {trimUrlAndNumbers(acceptanceDetail)}</a>
+                                                            }
                                                         </Grid>
                                                     }
                                                 </Grid>
@@ -574,6 +594,19 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                                             <Delete onClick={() => setCasFile()} fontSize='small' sx={{ color: 'red', cursor: 'pointer' }} />
                                                         </Grid>
                                                     }
+                                                    {
+                                                        (!casFile && casDetail) &&
+                                                        <Grid item md={9.5} ml={2} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+                                                            {
+                                                                trimUrlAndNumbers(casDetail)?.length > 25 ?
+                                                                    <Tooltip title={casDetail}>
+                                                                        {trimUrlAndNumbers(casDetail)?.slice(0, 25)} ...
+                                                                    </Tooltip>
+                                                                    :
+                                                                    <a href={casDetail} target='_blank' style={{ color: 'blue', cursor: 'pointer' }}> {trimUrlAndNumbers(casDetail)}</a>
+                                                            }
+                                                        </Grid>
+                                                    }
                                                 </Grid>
                                             </Grid>
                                         }
@@ -614,6 +647,19 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                                                     feeFile?.name
                                                             }
                                                             <Delete onClick={() => setFeeFile()} fontSize='small' sx={{ color: 'red', cursor: 'pointer' }} />
+                                                        </Grid>
+                                                    }
+                                                    {
+                                                        (!feeFile && feeDetail) &&
+                                                        <Grid item md={9.5} ml={2} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+                                                            {
+                                                                trimUrlAndNumbers(feeDetail)?.length > 25 ?
+                                                                    <Tooltip title={feeDetail}>
+                                                                        {trimUrlAndNumbers(feeDetail)?.slice(0, 25)} ...
+                                                                    </Tooltip>
+                                                                    :
+                                                                    <a href={feeDetail} target='_blank' style={{ color: 'blue', cursor: 'pointer' }}> {trimUrlAndNumbers(feeDetail)}</a>
+                                                            }
                                                         </Grid>
                                                     }
                                                 </Grid>

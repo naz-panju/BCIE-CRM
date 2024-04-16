@@ -10,8 +10,10 @@ import { blue } from '@mui/material/colors'
 import LeadDocumentDetailModal from './Modal'
 import DocumentConfirmPopup from './confirmPopup'
 import DocumentRejectPopup from './rejectPopup'
+import toast from 'react-hot-toast';
 
-function LeadDocuments({ id }) {
+
+function LeadDocuments({ lead_id, from, app_id }) {
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
@@ -70,9 +72,30 @@ function LeadDocuments({ id }) {
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await LeadApi.listDocuments({ limit: limit, lead_id: id, page: page + 1 })
-        setList(response?.data)
-        setLoading(false)
+        let params = {
+            lead_id: lead_id,
+            limit: limit,
+            page: page + 1
+        }
+        if (from == 'app') {
+            params['application_id'] = app_id
+        }
+        console.log(params);
+        try {
+            const response = await LeadApi.listDocuments(params)
+            console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                setList(response?.data)
+                setLoading(false)
+            } else {
+                toast.error(response?.response?.data?.message)
+                setLoading(false)
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message)
+            setLoading(false)
+        }
+
     }
 
     // console.log(list?.data);
@@ -90,8 +113,8 @@ function LeadDocuments({ id }) {
 
     return (
         <>
-            <LeadDocumentModal id={id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
-            <LeadDocumentRequest id={id} reqId={reqId} setReqId={setReqId} />
+            <LeadDocumentModal lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
+            <LeadDocumentRequest id={lead_id} reqId={reqId} setReqId={setReqId} />
 
             <LeadDocumentDetailModal id={detailId} setId={setDetailId} />
 
@@ -101,10 +124,13 @@ function LeadDocuments({ id }) {
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
                     <h2>Documents</h2>
-                    <Grid display={'flex'} alignItems={'end'}>
-                        <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Add</Button>
-                        <Button onClick={handleRequest} className='bg-sky-400 ' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Request</Button>
-                    </Grid>
+                    {
+                        from != 'app' &&
+                        <Grid display={'flex'} alignItems={'end'}>
+                            <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Add</Button>
+                            <Button onClick={handleRequest} className='bg-sky-400 ' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Request</Button>
+                        </Grid>
+                    }
                 </div>
                 {
                     loading ?
@@ -168,9 +194,14 @@ function LeadDocuments({ id }) {
                                                             <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell> */}
                                                             <TableCell>{obj?.status}</TableCell>
                                                             <TableCell>
-                                                                <Button onClick={() => handleAccept(obj?.id)} sx={{ textTransform: 'none', mr: 1 }} size='small' className='bg-lime-300 text-black hover:bg-lime-400'>Approve</Button>
-                                                                <Button onClick={() => handleReject(obj?.id)} sx={{ textTransform: 'none',mr:5 }} size='small' className='bg-red-500 text-white hover:bg-red-600'>Reject</Button>
-                                                                <Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
+                                                                {
+                                                                    from != 'app' &&
+                                                                    <>
+                                                                        <Button onClick={() => handleAccept(obj?.id)} sx={{ textTransform: 'none', mr: 1 }} size='small' className='bg-lime-300 text-black hover:bg-lime-400'>Approve</Button>
+                                                                        <Button onClick={() => handleReject(obj?.id)} sx={{ textTransform: 'none', mr: 5 }} size='small' className='bg-red-500 text-white hover:bg-red-600'>Reject</Button>
+                                                                        <Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
+                                                                    </>
+                                                                }
                                                             </TableCell>
                                                             {/* <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell> */}
                                                         </TableRow>

@@ -8,7 +8,7 @@ import { blue } from '@mui/material/colors'
 import LeadPaymentModal from './create'
 import { PaymentApi } from '@/data/Endpoints/Payments'
 
-function LeadPayments({ id }) {
+function LeadPayments({ lead_id, from, app_id }) {
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
@@ -45,7 +45,15 @@ function LeadPayments({ id }) {
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await PaymentApi.list({ limit: limit, lead_id: id, page: page + 1 })
+        let params = {
+            lead_id,
+            limit,
+            page: page + 1
+        }
+        if (from == 'app') {
+            params['application_id'] = app_id
+        }
+        const response = await PaymentApi.list( params )
         setList(response?.data)
         setLoading(false)
     }
@@ -57,7 +65,6 @@ function LeadPayments({ id }) {
         return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
     }
 
-    // console.log(list?.data);
 
     useEffect(() => {
         fetchList()
@@ -65,7 +72,7 @@ function LeadPayments({ id }) {
 
     return (
         <>
-            <LeadPaymentModal lead_id={id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
+            <LeadPaymentModal lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>

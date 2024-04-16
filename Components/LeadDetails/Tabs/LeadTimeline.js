@@ -18,8 +18,9 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import moment from 'moment';
 import { Skeleton } from '@mui/material';
+import { ApplicationApi } from '@/data/Endpoints/Application';
 
-export default function BasicSelect({ id }) {
+export default function BasicSelect({ lead_id, from, app_id }) {
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [limit, setLimit] = useState(10)
@@ -31,8 +32,19 @@ export default function BasicSelect({ id }) {
     };
 
     const getData = async () => {
+
+        let action
+
+        if (from == 'lead') {
+            action = LeadApi.timeline({id:lead_id,limit})
+        }
+        if (from == 'app') {
+            action = ApplicationApi.timeline({id:app_id,limit})
+        }
+
         setLaoding(true)
-        const response = await LeadApi.timeline({ id, limit })
+        const response = await action
+        // console.log(response);
         setList(response?.data)
         setTotal(response?.data?.meta?.total)
         setLaoding(false)

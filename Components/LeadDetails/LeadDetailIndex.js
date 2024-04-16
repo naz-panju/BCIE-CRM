@@ -264,14 +264,14 @@ function LeadDetails() {
                   <div className='lead-communication-status'>
                     <h4>Lead Source</h4>
                     <ul>
-                      <li>Direct</li>
+                    <li>{details?.lead_source || 'NA'}</li>
                     </ul>
                   </div>
 
                   <div className='lead-communication-status'>
                     <h4>Assigned Counsellor</h4>
                     <ul>
-                      <li>NA</li>
+                    <li>{details?.assignedToUser?.name || 'NA'}</li>
                     </ul>
                   </div>
 

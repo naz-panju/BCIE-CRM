@@ -26,7 +26,7 @@ const scheme = yup.object().shape({
     description: yup.string().required("Description is Required"),
 })
 
-export default function CreateTask({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh }) {
+export default function CreateTask({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh,from,app_id }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -107,6 +107,9 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
         if (lead_id) {
             dataToSubmit['lead_id'] = lead_id
+            if (from == 'app') {
+                dataToSubmit['application_id'] = app_id
+            }
         }
 
 
@@ -121,7 +124,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
         action.then((response) => {
             if (response?.data) {
-                toast.success(editId > 0 ? 'Referral Link Has Been Successfully Updated' : 'Referral Link Has Been Successfully Created')
+                toast.success(editId > 0 ? 'Task Has Been Successfully Updated' : 'Task Has Been Successfully Created')
                 reset()
                 handleClose()
                 handleRefresh()
@@ -337,7 +340,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                             </Grid>
                                         </Grid>
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                        <Grid display={'flex'}  container p={1.5} item xs={12}>
                                             <Grid item xs={12} md={4}>
                                                 <Typography sx={{ fontWeight: '500' }}>Description</Typography>
                                             </Grid>

@@ -29,7 +29,7 @@ const style = {
     p: 4,
 };
 
-export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRefresh, from, app_id }) {
+export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh }) {
     const scheme = yup.object().shape({
 
         template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -102,10 +102,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
         const formData = new FormData()
 
         formData.append('document_template_id', data?.template?.id)
-        formData.append('lead_id', lead_id)
-        // if (from == 'app') {
-        //     formData.append('application_id', app_id)
-        // }
+        formData.append('lead_id', id)
         formData.append('title', data?.title)
         formData.append('note', data?.remarks || '')
         if (selectedFile) {
@@ -393,7 +390,7 @@ const loadingFields = () => {
             </Grid>
 
             <Grid mt={2}>
-
+                
                 <Skeleton variant="rounded" width={'100%'} height={100} />
             </Grid>
 

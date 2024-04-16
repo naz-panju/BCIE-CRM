@@ -14,13 +14,13 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import moment from 'moment';
 import { Button, Grid, Skeleton } from '@mui/material';
-import FollowUpModal from './create';
 import { FollowupApi } from '@/data/Endpoints/Followup';
 import ConfirmPopup from '@/Components/Common/Popup/confirm';
 import toast from 'react-hot-toast';
-import LeadNoteModal from './noteCreate';
+import FollowUpModal from '@/Components/LeadDetails/Tabs/follow-up/create';
+import LeadNoteModal from '@/Components/LeadDetails/Tabs/follow-up/noteCreate';
 
-export default function FollowUp({ lead_id, data, from, app_id }) {
+export default function FollowUp({ lead_id, data }) {
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [limit, setLimit] = useState(10)
@@ -52,13 +52,7 @@ export default function FollowUp({ lead_id, data, from, app_id }) {
     }
 
     const noLoadingFetch = async () => {
-        let params = {
-            id: lead_id,
-        }
-        if (from == 'app') {
-            params['application_id'] = app_id
-        }
-        const response = await FollowupApi.list(params)
+        const response = await FollowupApi.list({ id: lead_id })
         setList(response?.data)
     }
 
@@ -87,14 +81,7 @@ export default function FollowUp({ lead_id, data, from, app_id }) {
 
     const getData = async () => {
         setLaoding(true)
-        let params = {
-            id: lead_id,
-            limit
-        }
-        if (from == 'app') {
-            params['application_id'] = app_id
-        }
-        const response = await FollowupApi.list(params)
+        const response = await FollowupApi.list({ id: lead_id, limit })
         setList(response?.data)
         setTotal(response?.data?.meta?.total)
         setLaoding(false)
@@ -110,8 +97,8 @@ export default function FollowUp({ lead_id, data, from, app_id }) {
     return (
         <>
 
-            <FollowUpModal from={from} lead_id={lead_id} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
-            <LeadNoteModal from={from} lead_id={lead_id} app_id={app_id} editId={noteId} setEditId={setNoteId} refresh={refresh} setRefresh={setRefresh} />
+            <FollowUpModal lead_id={lead_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
+            <LeadNoteModal lead_id={lead_id} editId={noteId} setEditId={setNoteId} refresh={refresh} setRefresh={setRefresh} />
 
 
             <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleComplete} title={'Do you want to mark this follow-up as complete?'} />

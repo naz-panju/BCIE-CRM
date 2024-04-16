@@ -81,6 +81,13 @@ const setAuthorizationHeader = (token) => {
     http.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };
 
+const setToken = (token) => {
+    // console.log(token);
+        // if (typeof window !== 'undefined') {
+            setAuthorizationHeader(token);
+        // }
+    }
+
 // Set Authorization header initially if token is available
 const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 if (token) {
@@ -125,4 +132,4 @@ http.interceptors.response.use(
     }
 );
 
-export { http };
+export { http,setToken };

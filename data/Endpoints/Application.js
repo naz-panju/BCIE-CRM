@@ -6,4 +6,6 @@ export const ApplicationApi = {
     view: (data) => http.get(`applications/view/${data?.id}`, {params:data}),
     update: (data) => http.post(`applications/update`, data),
 
+    timeline: (data) => http.get(`applications/timeline/${data?.id}`, {params:data}),
+
 }

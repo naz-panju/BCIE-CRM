@@ -11,20 +11,18 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import PostAddIcon from '@mui/icons-material/PostAdd';
-import LeadTimeline from './Tabs/LeadTimeline';
-import LeadFollowUp from './Tabs/LeadFollowUp';
-import LeadCommunicationLog from './Tabs/LeadCommunicationLog'
+import LeadTimeline from '../LeadDetails/Tabs/LeadTimeline';
+import LeadCommunicationLog from './Tabs/AppCommunicationLog'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import CreateLead from '../Lead/Create/Create';
-import LeadDocuments from './Tabs/document/LeadDocuments';
+import LeadDocuments from '../LeadDetails/Tabs/document/LeadDocuments';
 import { Skeleton } from '@mui/material';
-import LeadDetail from './Tabs/LeadDetail';
-import LeadApplication from './Tabs/application/LeadApplication';
+import LeadDetail from './Tabs/AppDetails';
 import { Apps, Payment, TaskSharp } from '@mui/icons-material';
-import FollowUp from './Tabs/follow-up/LeadFollowup';
-import LeadTask from './Tabs/LeadTask';
-import LeadPayments from './Tabs/payments/LeadPayments';
+import FollowUp from '../LeadDetails/Tabs/follow-up/LeadFollowup';
+import LeadTask from '../LeadDetails/Tabs/LeadTask';
+import LeadPayments from '../LeadDetails/Tabs/payments/LeadPayments';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,7 +62,7 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
+export default function ApplicationVerticalTabs({ data, refresh, setRefresh, loading,leadDetails }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
@@ -82,45 +80,40 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
     {
       label: 'Lead Details',
       component: isClient && (
-        <LeadDetail handleEdit={handleEdit} data={data} loading={loading} />
+        <LeadDetail handleEdit={handleEdit} data={leadDetails} appDetails={data} loading={loading} />
       ),
       icon: <PermIdentityIcon />
     },
 
     {
       label: 'Timeline',
-      component: <LeadTimeline from='lead' lead_id={data?.id}  />,
+      component: <LeadTimeline from={'app'} lead_id={data?.lead_id} app_id={data?.id} />,
       icon: <AccessTimeIcon />
     },
     {
       label: 'Follow up & Notes',
-      component: <FollowUp from='lead' data={data} lead_id={data?.id}  />,
+      component: <FollowUp from={'app'} app_id={data?.id} data={data} lead_id={data?.id} />,
       icon: <ChecklistIcon />
     },
     {
       label: 'Communication Logs',
-      component: <LeadCommunicationLog from='lead' lead_id={data?.id}  />,
+      component: <LeadCommunicationLog id={data?.id} />,
       icon: <ChatBubbleOutlineIcon />
     },
     {
       label: 'Documents',
-      component: <LeadDocuments from='lead' lead_id={data?.id}  />,
+      component: <LeadDocuments lead_id={data?.lead_id} from={'app'} app_id={data?.id} />,
       icon: <FolderOpenIcon />
     },
     {
       label: 'Payments',
-      component: <LeadPayments from='lead' lead_id={data?.id}  />,
+      component: <LeadPayments from={'app'} app_id={data?.id} lead_id={data?.lead_id} />,
       icon: <Payment />
     },
     {
       label: 'Task',
-      component: <LeadTask from='lead' lead_id={data?.id}  />,
+      component: <LeadTask from={'app'} app_id={data?.id} lead_id={data?.id} />,
       icon: <TaskSharp />
-    },
-    {
-      label: 'Applications',
-      component: <LeadApplication from='lead' data={data} lead_id={data?.id}  />,
-      icon: <Apps />
     },
     // {
     //   label: 'Tickets',

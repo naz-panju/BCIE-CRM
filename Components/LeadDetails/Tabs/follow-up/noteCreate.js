@@ -11,7 +11,7 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 
 
 
-const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh }) => {
+const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, app_id }) => {
 
     const { register, handleSubmit, watch, setValue, reset } = useForm();
 
@@ -31,7 +31,14 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh }) => {
 
     const fetchNotes = () => {
         setLoading(true)
-        LeadApi.listNote({ limit: 50, id: lead_id }).then((notes) => {
+        let params = {
+            id: lead_id,
+            limit: 50,
+        }
+        if (from == 'app') {
+            params['application_id'] = app_id
+        }
+        LeadApi.listNote(params).then((notes) => {
             // console.log(notes);
             if (notes?.data?.data?.length > 0) {
                 setNotes(notes.data)
@@ -57,7 +64,9 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh }) => {
                 lead_id: lead_id,
                 note: watch('note'),
             }
-
+            if (from == 'app') {
+                dataToSubmit['application_id'] = app_id
+            }
             let action;
 
             if (editID > 0) {
@@ -82,7 +91,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh }) => {
                 setSubmitLoading(false)
                 toast.error("server error")
             })
-        }else{
+        } else {
             toast.error('note field is required')
         }
     }

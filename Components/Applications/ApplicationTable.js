@@ -366,7 +366,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         fetchTable()
     }, [page, refresh, limit])
 
-    console.log(list);
 
     return (
 

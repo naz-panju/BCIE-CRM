@@ -11,7 +11,7 @@ import CreateTask from '@/Components/Task/Create/Create'
 import TaskDetailModal from '@/Components/TaskDetails/Modal'
 import StatusModal from '@/Components/Task/StatusModal'
 
-function LeadTask({ lead_id, from, app_id }) {
+function LeadTask({ lead_id }) {
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
@@ -64,19 +64,12 @@ function LeadTask({ lead_id, from, app_id }) {
 
     const fetchList = async () => {
         setLoading(true)
-        let params = {
-            lead_id: lead_id,
-            limit,
-            page: page + 1
-        }
-        if (from == 'app') {
-            params['application_id'] = app_id
-        }
-        const response = await TaskApi.list(params)
+        const response = await TaskApi.list({ limit: limit, lead_id, page: page + 1, })
         setList(response?.data)
         setLoading(false)
     }
 
+    console.log(list);
 
     useEffect(() => {
         fetchList()
@@ -85,7 +78,7 @@ function LeadTask({ lead_id, from, app_id }) {
     return (
         <>
 
-            <CreateTask lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh}/>
+            <CreateTask lead_id={lead_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={handleRefresh} />
 
             <TaskDetailModal id={detailId} setId={setDetailId} />
 
@@ -150,12 +143,12 @@ function LeadTask({ lead_id, from, app_id }) {
                                                 {
                                                     list?.data?.map((obj, index) => (
                                                         <TableRow key={obj?.id}>
-                                                            <TableCell onClick={() => handleDetailOpen(obj?.id)} sx={{ cursor: 'pointer' }}>{obj?.title}</TableCell>
+                                                            <TableCell onClick={() => handleDetailOpen(obj?.id)} sx={{cursor:'pointer'}}>{obj?.title}</TableCell>
                                                             <TableCell>{obj?.assignedToUser?.name}</TableCell>
                                                             <TableCell >{obj?.reviewer?.name}</TableCell>
                                                             <TableCell >{moment(obj?.due_date).format('DD-MM-YYYY')}</TableCell>
                                                             <TableCell >{obj.priority}</TableCell>
-                                                            <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleStatusChange(obj)}>{obj.status}</TableCell>
+                                                            <TableCell sx={{cursor:'pointer'}} onClick={() => handleStatusChange(obj)}>{obj.status}</TableCell>
                                                             <TableCell ><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button></TableCell>    </TableRow>
                                                     ))
                                                 }

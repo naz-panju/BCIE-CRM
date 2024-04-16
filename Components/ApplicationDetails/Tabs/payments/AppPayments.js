@@ -5,54 +5,35 @@ import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
 import { Edit } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
-import { ApplicationApi } from '@/data/Endpoints/Application'
-import { TaskApi } from '@/data/Endpoints/Task'
-import CreateTask from '@/Components/Task/Create/Create'
-import TaskDetailModal from '@/Components/TaskDetails/Modal'
-import StatusModal from '@/Components/Task/StatusModal'
+import { PaymentApi } from '@/data/Endpoints/Payments'
+import LeadPaymentModal from '@/Components/LeadDetails/Tabs/payments/create'
 
-function LeadTask({ lead_id, from, app_id }) {
+function LeadPayments({ id }) {
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(false)
-    const [reqId, setReqId] = useState()
     const [refresh, setRefresh] = useState(false)
 
     const [page, setPage] = useState(0);
     const [limit, setLimit] = useState(10);
 
-    const [taskDetails, setTaskDetails] = useState()
-    const [statusOpen, setStatusOpen] = useState(false)
-    const [detailId, setDetailId] = useState()
-
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
-
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
         setPage(0);
     };
 
 
-
     const handleCreate = () => {
         setEditId(0)
     }
 
-    const handleEdit = (id) => {
+    const handleEditDocument = (id) => {
         setEditId(id)
-    }
-
-    const handleDetailOpen = (id) => {
-        setDetailId(id)
-    }
-
-    const handleStatusChange = (data) => {
-        setStatusOpen(true)
-        setTaskDetails(data)
     }
 
     const handleRefresh = () => {
@@ -64,19 +45,19 @@ function LeadTask({ lead_id, from, app_id }) {
 
     const fetchList = async () => {
         setLoading(true)
-        let params = {
-            lead_id: lead_id,
-            limit,
-            page: page + 1
-        }
-        if (from == 'app') {
-            params['application_id'] = app_id
-        }
-        const response = await TaskApi.list(params)
+        const response = await PaymentApi.list({ limit: limit, lead_id: id, page: page + 1 })
         setList(response?.data)
         setLoading(false)
     }
 
+    function trimUrlAndNumbers(url) {
+        const lastSlashIndex = url?.lastIndexOf('/');
+        let trimmedString = url?.substring(lastSlashIndex + 1);
+        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
+    }
+
+    // console.log(list?.data);
 
     useEffect(() => {
         fetchList()
@@ -84,19 +65,11 @@ function LeadTask({ lead_id, from, app_id }) {
 
     return (
         <>
-
-            <CreateTask lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh}/>
-
-            <TaskDetailModal id={detailId} setId={setDetailId} />
-
-            {
-                taskDetails &&
-                <StatusModal onUpdate={fetchList} setDataSet={setTaskDetails} dataSet={taskDetails} setOpen={setStatusOpen} Open={statusOpen} />
-            }
+            <LeadPaymentModal lead_id={id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
-                    <h2>Task</h2>
+                    <h2>Payments</h2>
                     <Grid display={'flex'} alignItems={'end'}>
                         <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Add</Button>
                     </Grid>
@@ -116,32 +89,37 @@ function LeadTask({ lead_id, from, app_id }) {
                                                     <TableCell>
 
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Title
+                                                            Amount
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Assigned To
+                                                            Payment Mode
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Reviewer
+                                                            Payment Date
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Due Date
+                                                            Receipt
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Priority
+                                                            Details
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Status
+                                                            Created By
+                                                        </Typography>
+                                                    </TableCell>
+                                                    <TableCell>
+                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Created Date
                                                         </Typography>
                                                     </TableCell>
                                                 </TableRow>
@@ -150,18 +128,33 @@ function LeadTask({ lead_id, from, app_id }) {
                                                 {
                                                     list?.data?.map((obj, index) => (
                                                         <TableRow key={obj?.id}>
-                                                            <TableCell onClick={() => handleDetailOpen(obj?.id)} sx={{ cursor: 'pointer' }}>{obj?.title}</TableCell>
-                                                            <TableCell>{obj?.assignedToUser?.name}</TableCell>
-                                                            <TableCell >{obj?.reviewer?.name}</TableCell>
-                                                            <TableCell >{moment(obj?.due_date).format('DD-MM-YYYY')}</TableCell>
-                                                            <TableCell >{obj.priority}</TableCell>
-                                                            <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleStatusChange(obj)}>{obj.status}</TableCell>
-                                                            <TableCell ><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button></TableCell>    </TableRow>
+                                                            {/* <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell> */}
+                                                            <TableCell>{obj?.amount}</TableCell>
+                                                            <TableCell>{obj?.payment_mode}</TableCell>
+                                                            <TableCell>{moment(obj?.payment_date).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell><a href={obj?.receipt_file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.receipt_file)}</a></TableCell>
+                                                            <TableCell>
+                                                                {
+                                                                    obj?.details?.length > 50 ?
+
+                                                                        <Tooltip title={obj?.details}>
+                                                                            {obj?.details?.slice(0, 50) + '...'}
+                                                                        </Tooltip>
+                                                                        :
+                                                                        obj?.details
+                                                                }
+                                                            </TableCell>
+                                                            <TableCell>{obj?.created_by?.name}</TableCell>
+                                                            <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell>{obj?.uploaded_by?.name}</TableCell>
+                                                            <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
+                                                        </TableRow>
                                                     ))
                                                 }
 
                                             </TableBody>
                                         </Table>
+
                                         <TablePagination
                                             rowsPerPageOptions={[10, 15, 25]}
                                             component="div"
@@ -171,10 +164,10 @@ function LeadTask({ lead_id, from, app_id }) {
                                             onPageChange={handleChangePage}
                                             onRowsPerPageChange={handleChangeRowsPerPage}
                                         />
-
                                     </TableContainer>
+
                                     :
-                                    <h4>No Task Found</h4>
+                                    <h4>No Payments Found</h4>
                             }
                         </div>
                 }
@@ -184,14 +177,14 @@ function LeadTask({ lead_id, from, app_id }) {
     )
 }
 
-export default LeadTask
+export default LeadPayments
 
 const loadTable = () => {
     return (
         <Table>
             <TableHead>
                 <TableRow>
-                    {[...Array(3)].map((_, index) => (
+                    {[...Array(5)].map((_, index) => (
                         <TableCell key={index} align="left">
                             <Skeleton variant='rounded' width={60} height={20} />
                         </TableCell>
@@ -203,7 +196,7 @@ const loadTable = () => {
                     [...Array(5)]?.map((_, index) => (
                         <TableRow key={index} className='table-custom-tr'>
                             {
-                                [...Array(3)]?.map((_, colindex) => (
+                                [...Array(5)]?.map((_, colindex) => (
                                     <TableCell key={colindex} align="left"><Skeleton variant='rounded' width={120} height={20} /></TableCell>
                                 ))
                             }

@@ -29,7 +29,7 @@ const scheme = yup.object().shape({
 
 })
 
-export default function FollowUpModal({ lead_id, editId, setEditId, refresh, setRefresh }) {
+export default function FollowUpModal({ lead_id, editId, setEditId, refresh, setRefresh, from, app_id }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -86,13 +86,15 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
             date = moment(data?.date).format('YYYY-MM-DD')
         }
 
-        let dataToSubmit = {
+        let  dataToSubmit = {
             lead_id: lead_id,
             follow_up_date: date,
             assigned_to: data?.assigned_to?.id,
             note: data?.note,
         }
-
+        if (from == 'app') {
+            dataToSubmit['application_id'] = app_id
+        }
 
         // console.log(dataToSubmit);
 

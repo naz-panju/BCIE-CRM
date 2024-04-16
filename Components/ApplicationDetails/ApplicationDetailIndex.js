@@ -8,11 +8,15 @@ import { Button, Grid, Skeleton } from '@mui/material';
 import { PieChart } from '@mui/icons-material';
 
 import toast from 'react-hot-toast';
+import ApplicationVerticalTabs from './ApplicationTab';
+import { ApplicationApi } from '@/data/Endpoints/Application';
+import ApplicationStageChangeModal from '../Applications/Modals/stageChange';
 
 
 function ApplicationDetails() {
 
   const [details, setDetails] = useState()
+  const [leaddetails, setleaddetails] = useState()
   const [refresh, setRefresh] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -34,9 +38,11 @@ function ApplicationDetails() {
     setLoading(true)
     try {
       // console.log(urlID);
-      const response = await LeadApi.view({ id: urlID })
+      const response = await ApplicationApi.view({ id: urlID })
+      const leadResponse = await LeadApi.view({ id: response?.data?.data?.lead_id })
       // console.log(response);
       setDetails(response?.data?.data)
+      setleaddetails(leadResponse?.data?.data)
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -88,12 +94,11 @@ function ApplicationDetails() {
   }, [refresh])
 
 
-
   return (
 
     <>
       {/* <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} /> */}
-      {/* <StageChangeModal details={details} editId={stageId} setEditId={setStageId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} /> */}
+      <ApplicationStageChangeModal details={details} editId={stageId} setEditId={setStageId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
 
       {/* <SendMail details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} /> */}
 
@@ -106,12 +111,12 @@ function ApplicationDetails() {
             <h1>Application Details</h1>
 
             {/* disabled={details?.verification_status == 'Yes'} */}
-            {/* <Grid>
-              <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Mail</Button>
+            <Grid>
+              {/* <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Mail</Button> */}
               <Button sx={{ mr: 2 }} onClick={details && handleOpenStageModal} variant='contained' className='bg-sky-500 text-white hover:bg-sky-600 text-white'>Change Stage</Button>
-              <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
-              <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed==1?'UnArchive':'Archive'}</Button>
-            </Grid> */}
+              {/* <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
+              <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed==1?'UnArchive':'Archive'}</Button> */}
+            </Grid>
           </div>
         </div>
         <div className='content-block-details'>
@@ -133,7 +138,7 @@ function ApplicationDetails() {
                               loading ?
                                 <Skeleton variant="circular" width={30} height={30} />
                                 :
-                                details?.name && details.name[0]
+                                details?.student?.first_name && details?.student?.first_name[0]
                             }
                           </div>
                         </div>
@@ -143,7 +148,7 @@ function ApplicationDetails() {
                             loading ?
                               <Skeleton variant="rectangular" width={150} height={30} />
                               :
-                              <h4>{details?.name}</h4>
+                              <h4>{details?.student?.first_name}</h4>
                           }
                           {/* <div className="leadStageBox">  
                             {
@@ -176,16 +181,16 @@ function ApplicationDetails() {
                         loading ?
                           <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
                           :
-                          details?.email &&
-                          <p>Email: {details?.email}</p>
+                          details?.student?.email &&
+                          <p>Email: {details?.student?.email}</p>
                       }
 
                       {
                         loading ?
                           <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
                           :
-                          details?.phone_number &&
-                          <p>Mobile: +{details?.phone_country_code} {details?.phone_number}</p>
+                          details?.student?.phone_number &&
+                          <p>Mobile: +{details?.student?.phone_number}</p>
                       }
 
                       {
@@ -213,22 +218,8 @@ function ApplicationDetails() {
 
               </div>
 
-              <div className='w-full md:w-3/12 lg:w-2/12 pad-10 '>
-                <div className='lead-score-block'>
-                  <h3>30</h3>
-                  <h4>Lead Score </h4>
-                </div>
 
-                <div className='generate-lead-block'>
-                  {/* <Grid display={'flex'} justifyContent={'center'} alignItems={'center'}><BasicPie /></Grid> */}
-                  <div className='lead-percent-icon'>
-                    <PieChart color='success' />
-                  </div>
-                  <h4>Generate Lead Strength</h4>
-                </div>
-              </div>
-
-              <div className='w-full md:w-5/12 lg:w-6/12 pad-10 '>
+              <div className='w-full md:w-8/12 lg:w-8/12 pad-10 '>
                 <div className='lead-status-block'>
                   <div className='lead-communication-status'>
                     <h4>Communication Status</h4>
@@ -257,14 +248,14 @@ function ApplicationDetails() {
                   <div className='lead-communication-status'>
                     <h4>Lead Source</h4>
                     <ul>
-                      <li>Direct</li>
+                      <li>{leaddetails?.lead_source?.name || 'NA'}</li>
                     </ul>
                   </div>
 
                   <div className='lead-communication-status'>
                     <h4>Assigned Counsellor</h4>
                     <ul>
-                      <li>NA</li>
+                      <li>{leaddetails?.assignedToUser?.name || 'NA'}</li>
                     </ul>
                   </div>
 
@@ -303,7 +294,7 @@ function ApplicationDetails() {
 
           </div>
 
-          {/* <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} /> */}
+          <ApplicationVerticalTabs data={details} leadDetails={leaddetails} refresh={refresh} setRefresh={setRefresh} loading={loading} />
 
         </div>
       </section>

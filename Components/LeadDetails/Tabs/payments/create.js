@@ -26,7 +26,7 @@ const scheme = yup.object().shape({
 
 })
 
-export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRefresh }) {
+export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRefresh, from, app_id }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -67,7 +67,6 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
 
 
     const onSubmit = async (data) => {
-        // console.log(data);
 
         let date;
 
@@ -79,8 +78,10 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
 
 
         const formData = new FormData()
-
         formData.append('lead_id', lead_id)
+        if (from == 'app') {
+            formData.append('application_id', app_id)
+        }
         formData.append('amount', data?.amount)
         formData.append('payment_mode', data?.payment_mode)
         formData.append('payment_date', date)
@@ -89,6 +90,14 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
         if (attachment) {
             formData.append('receipt', attachment)
         }
+
+        const formDataObject = {};
+        formData.forEach((value, key) => {
+            formDataObject[key] = value;
+        });
+    
+        // Log the form data
+        console.log('Form Data:', formDataObject);
 
         // let dataToSubmit = {
         //     lead_id: lead_id,
@@ -111,7 +120,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
         }
 
         action.then((response) => {
-            // console.log(response);
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Payment has been Updated Successfully' : 'Payment has been Added Successfully')
                 reset()
