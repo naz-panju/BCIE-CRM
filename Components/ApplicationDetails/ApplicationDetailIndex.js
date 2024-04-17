@@ -5,7 +5,9 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import moment from 'moment';
 import { Button, Grid, Skeleton } from '@mui/material';
-import { PieChart } from '@mui/icons-material';
+import { LaunchOutlined, PieChart } from '@mui/icons-material';
+import Link from 'next/link';
+
 
 import toast from 'react-hot-toast';
 import ApplicationVerticalTabs from './ApplicationTab';
@@ -87,6 +89,10 @@ function ApplicationDetails() {
       console.log(error);
       setconfirmLoading(false)
     })
+  }
+
+  const handleRefresh=()=>{
+    setRefresh(!refresh)
   }
 
   useEffect(() => {
@@ -209,6 +215,12 @@ function ApplicationDetails() {
                           <p>Last Active: {moment(details?.updated_at).format('DD MMM YYYY hh:mm A')}</p>
                       }
 
+                      {
+                        loading ?
+                          <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
+                          :
+                          <p className=''><Link href={`/lead/${details?.lead_id}`} className='text-sky-500' >Go to Lead Detail <LaunchOutlined fontSize='small' /></Link></p>
+                      }
                     </div>
                   </>
                   {/* } */}
@@ -294,7 +306,7 @@ function ApplicationDetails() {
 
           </div>
 
-          <ApplicationVerticalTabs data={details} leadDetails={leaddetails} refresh={refresh} setRefresh={setRefresh} loading={loading} />
+          <ApplicationVerticalTabs data={details} leadDetails={leaddetails} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} />
 
         </div>
       </section>

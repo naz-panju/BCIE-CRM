@@ -46,94 +46,97 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
     const handleClose = () => {
         setdocuments([])
         setselectedDocuments([])
+        setDetails()
         setEditId()
         setOpen(false);
     }
 
-    // console.log(selectedDocuments);
+    const [files, setFiles] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-    const downloadDocument = async () => {
-        try {
-            console.log(selectedDocuments[0]?.file);
-            const pdfUrl = selectedDocuments[0]?.file; // URL of the PDF file
+    function getLastExtension(url) {
+        // Split the URL by '.' to get an array of parts
+        const parts = url.split('.');
+        
+        // Extract the last part from the array
+        const lastPart = parts[parts.length - 1];
+        
+        // Return the last part as the last extension
+        return lastPart.toLowerCase(); // Optional: Convert to lowercase
+    }
 
-            // Fetch the PDF file
-            const response = await fetch(pdfUrl);
-            console.log(response);
-            // Convert the response to a Blob
-            const pdfBlob = await response.blob();
-            console.log(pdfBlob);
 
-            // Create a new instance of JSZip
-            const zip = new JSZip();
+    const getFiles = async () => {
+        let downloadables = []
+        selectedDocuments?.map((obj) => {
+            let fileType=getLastExtension(obj?.file)
+            let object = {
+                name: obj?.title,
+                url: obj?.file,
+                type: fileType
+                // type:obj?.file_type
+            }
+            downloadables.push(object)
+        })
+        const res = await fetch("/api/files", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(downloadables)
+        });
+        const files = await res.json();
 
-            // Add the PDF file to the ZIP archive
-            zip.file("selected.pdf", pdfBlob);
-
-            // Generate the ZIP asynchronously
-            const zipBlob = await zip.generateAsync({ type: "blob" });
-
-            // Save the ZIP file
-            saveAs(zipBlob, "documents.zip");
-        } catch (error) {
-            console.error('Error downloading document:', error);
-        }
+        setFiles(files);
     };
 
+    useEffect(() => {
+        getFiles();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedDocuments]);
 
+    const downloadDocument = async () => {
+        setLoading(true);
+        try {
+            const zip = new JSZip();
+            const remoteZips = files.map(async (file) => {
+                const response = await fetch(file.url);
+                const data = await response.blob();
+                zip.file(`${file.name}.${file.type}`, data);
 
+                return data;
+            });
 
-    // const onSubmit = (data) => {
-    //     setLoading(true)
-    //     console.log(data);
-    //     console.log(selectedFile)
+            Promise.all(remoteZips)
+                .then(() => {
+                    zip.generateAsync({ type: "blob" }).then((content) => {
+                        // give the zip file a name
+                        saveAs(content, `${details?.student?.first_name} ${details?.student?.middle_name} ${details?.student?.last_name} Application Documents .zip`);
+                    });
+                    setLoading(false);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    setLoading(false);
+                });
 
-    //     const formData = new FormData()
-
-    //     formData.append('document_template_id', data?.template?.id)
-    //     formData.append('lead_id', id)
-    //     formData.append('title', data?.title)
-    //     formData.append('note', data?.remarks || '')
-    //     if (selectedFile) {
-    //         formData.append('file', selectedFile)
-    //     }
-
-    //     let action;
-
-    //     if (editId > 0) {
-    //         formData.append('id', editId)
-    //         action = LeadApi.updateDocument(formData)
-    //     } else {
-    //         action = LeadApi.addDocument(formData)
-    //     }
-
-    //     action.then((response) => {
-    //         console.log(response);
-    //         if (response?.data?.data) {
-    //             handleClose()
-    //             toast.success(editId > 0 ? 'Document has been successfully updated' : 'Document has been successfully added')
-    //             handleRefresh()
-    //             setLoading(false)
-    //         } else {
-    //             toast.error(response?.response?.data?.message)
-    //             setLoading(false)
-    //         }
-    //         setLoading(false)
-    //     }).catch((error) => {
-    //         console.log(error);
-    //         toast.error(error?.response?.data?.message)
-    //         setLoading(false)
-    //     })
-
-    // }
+            setLoading(false);
+        } catch (error) {
+            setLoading(false);
+        }
+    };
 
 
     const getDetails = async () => {
         setDataLoading(true)
         const response = await ApplicationApi.view({ id: editId })
+        // console.log(response?.data?.data?.documents);
         if (response?.status == 200 || response?.status == 201) {
-            setdocuments(response?.data?.data?.documents)
-            setselectedDocuments(response?.data?.data?.documents)
+            setDetails(response?.data?.data)
+            // setdocuments(response?.data?.data?.documents)
+            const filteredDocuments = response?.data?.data?.documents.filter(document => document?.status === 'Accepted');
+            setdocuments(filteredDocuments);
+            setselectedDocuments(filteredDocuments)
             setDataLoading(false)
         } else {
             // toast.

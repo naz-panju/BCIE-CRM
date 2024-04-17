@@ -62,7 +62,7 @@ function a11yProps(index) {
   };
 }
 
-export default function ApplicationVerticalTabs({ data, refresh, setRefresh, loading,leadDetails }) {
+export default function ApplicationVerticalTabs({ data, refresh, setRefresh, loading,leadDetails,handleRefresh }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
@@ -102,7 +102,7 @@ export default function ApplicationVerticalTabs({ data, refresh, setRefresh, loa
     },
     {
       label: 'Documents',
-      component: <LeadDocuments lead_id={data?.lead_id} from={'app'} app_id={data?.id} />,
+      component: <LeadDocuments lead_id={data?.lead_id} from={'app'} app_id={data?.id} app_details={data} appRefresh={handleRefresh} />,
       icon: <FolderOpenIcon />
     },
     {

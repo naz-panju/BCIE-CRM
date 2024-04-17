@@ -7,9 +7,14 @@ import MenuItem from '@mui/material/MenuItem';
 import LeadTable from './LeadTable';
 import CreateLead from './Create/Create';
 import { useRouter } from 'next/router';
-import { Grid, IconButton, Popover, Typography } from '@mui/material';
+import { Grid, IconButton, Popover, Typography, TextField } from '@mui/material';
 import AssignLeadModal from './Modal/AssignModal';
-import { MoreVert } from '@mui/icons-material';
+import { MoreVert, PersonAddAlt1Outlined } from '@mui/icons-material';
+import ReactSelector from 'react-select';
+import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
+import Tooltip from '@mui/material/Tooltip';
+
 
 
 const StyledMenu = styled((props) => (
@@ -57,7 +62,15 @@ export default function CustomizedMenus() {
 
   const router = useRouter();
 
+  const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
+
   const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
+
+  const searchOptions = [
+    { name: 'Email' },
+    { name: 'Name' },
+    { name: 'Mobile' },
+  ]
 
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -97,7 +110,7 @@ export default function CustomizedMenus() {
     setsingleAssign(true)
   }
 
-  const handleEditAssign=(detail)=>{
+  const handleEditAssign = (detail) => {
     setAssignId(2)
     setSelected([detail?.id])
     setassignToUser(detail?.assignedToUser)
@@ -111,9 +124,14 @@ export default function CustomizedMenus() {
     setRefresh(!refresh)
   }
 
-  const noPageRefresh=()=>{
+  const noPageRefresh = () => {
     setRefresh(!refresh)
   }
+
+  useEffect(() => {
+    setValue('searchType', searchOptions[0]?.name)
+  }, [])
+
 
   return (
 
@@ -157,9 +175,73 @@ export default function CustomizedMenus() {
               </StyledMenu>
             </div> */}
 
-            <Grid >
-              <Button sx={{ textTransform: 'none', mr: 1 }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
+            <Grid display={'flex'} >
 
+              <Grid display={'flex'}>
+                <Grid width={200}>
+                  <ReactSelector
+                    onInputChange={searchOptions}
+                    styles={{
+                      menu: provided => ({ ...provided, zIndex: 9999 })
+                    }}
+                    options={searchOptions}
+                    getOptionLabel={option => option.name}
+                    getOptionValue={option => option.name}
+
+                    // inputValue={inProject}
+                    value={
+                      searchOptions.find(options =>
+                        options.name === watch('searchType')
+                      )
+                    }
+                    name='searchType'
+
+                    defaultValue={(watch('searchType'))}
+                    onChange={(selectedOption) => setValue('searchType', selectedOption?.name)}
+                  />
+                </Grid>
+                {
+                  watch('searchType') == 'Email' &&
+                  <TextField
+                    {...register('emailSearch')}
+                    style={{ width: 300, marginRight: 10 }}
+                    size='small'
+                    id="outlined-name"
+                    placeholder='search by email'
+                  // label="Search Tasks"
+                  />
+                }
+                {
+                  watch('searchType') == 'Mobile' &&
+                  <TextField
+                    {...register('mobileSearch')}
+                    style={{ width: 300, marginRight: 10 }}
+                    size='small'
+                    id="outlined-name"
+                    placeholder='search by mobile'
+                  // label="Search Tasks"
+                  />
+                }
+                {
+                  watch('searchType') == 'Name' &&
+                  <TextField
+                    {...register('nameSearch')}
+                    style={{ width: 300, marginRight: 10 }}
+                    size='small'
+                    id="outlined-name"
+                    placeholder='search by name'
+                  // label="Search Tasks"
+                  />
+                }
+
+                <Tooltip title={'Add Lead'}>
+                  <IconButton onClick={handleCreateNew}>
+                    <PersonAddAlt1Outlined fontSize='small' sx={{ color: 'grey', cursor: 'pointer' }} />
+                  </IconButton>
+                </Tooltip>
+                {/* <Button sx={{ textTransform: 'none', mr: 1 }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button> */}
+
+              </Grid>
               {/* disabled={selected?.length == 0} */}
               <IconButton onClick={handleClick}>
                 <MoreVert fontSize='small' sx={{ color: 'grey', cursor: 'pointer' }} />
@@ -176,7 +258,7 @@ export default function CustomizedMenus() {
               >
                 {
                   selected?.length > 0 &&
-                  <Typography onClick={handleCreateassign} sx={{ p: 1, pl: 2, pr: 2,cursor:'pointer' }}>Assign</Typography>
+                  <Typography onClick={handleCreateassign} sx={{ p: 1, pl: 2, pr: 2, cursor: 'pointer' }}>Assign</Typography>
                 }
               </Popover>
 

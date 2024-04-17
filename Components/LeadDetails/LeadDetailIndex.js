@@ -264,7 +264,7 @@ function LeadDetails() {
                   <div className='lead-communication-status'>
                     <h4>Lead Source</h4>
                     <ul>
-                    <li>{details?.lead_source || 'NA'}</li>
+                    <li>{details?.lead_source?.name || 'NA'}</li>
                     </ul>
                   </div>
 
