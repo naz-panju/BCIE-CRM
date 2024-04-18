@@ -27,6 +27,7 @@ export const LeadApi = {
     deleteNote:(data) => http.post(`leads/notes/delete`, data),
 
     sendMail: (data) => http.post(`emails/store`, data),
+    sendWhatsapp: (data) => http.post(`whatsapp/store`, data),
 
     closeLead: (data) => http.post(`leads/close`, data),
     reOpenLead: (data) => http.post(`leads/reopen`, data),

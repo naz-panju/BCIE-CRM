@@ -231,7 +231,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                                                 <TableCell>{obj?.status}</TableCell>
                                                                 <TableCell>
                                                                     {
-                                                                        from != 'app' &&
+                                                                        from != 'app' || obj?.status!='request' &&
                                                                         <>
                                                                             <Button onClick={() => handleAccept(obj?.id)} sx={{ textTransform: 'none', mr: 1 }} size='small' className='bg-lime-300 text-black hover:bg-lime-400'>Approve</Button>
                                                                             <Button onClick={() => handleReject(obj?.id)} sx={{ textTransform: 'none', mr: 5 }} size='small' className='bg-red-500 text-white hover:bg-red-600'>Reject</Button>

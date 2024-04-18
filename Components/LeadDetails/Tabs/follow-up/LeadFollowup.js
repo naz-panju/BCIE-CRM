@@ -19,6 +19,7 @@ import { FollowupApi } from '@/data/Endpoints/Followup';
 import ConfirmPopup from '@/Components/Common/Popup/confirm';
 import toast from 'react-hot-toast';
 import LeadNoteModal from './noteCreate';
+import { LocalPhoneOutlined, NotesOutlined } from '@mui/icons-material';
 
 export default function FollowUp({ lead_id, data, from, app_id }) {
     const [select, setAge] = React.useState('');
@@ -68,7 +69,7 @@ export default function FollowUp({ lead_id, data, from, app_id }) {
             id: confirmId
         }
         FollowupApi.complete(dataToSubmit).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setconfirmId()
@@ -94,13 +95,11 @@ export default function FollowUp({ lead_id, data, from, app_id }) {
         if (from == 'app') {
             params['application_id'] = app_id
         }
-        const response = await FollowupApi.list(params)
+        const response = await FollowupApi.notesAndFollowUp(params)
         setList(response?.data)
         setTotal(response?.data?.meta?.total)
         setLaoding(false)
     }
-
-    // console.log(list);
 
     useEffect(() => {
         getData()
@@ -110,7 +109,7 @@ export default function FollowUp({ lead_id, data, from, app_id }) {
     return (
         <>
 
-            <FollowUpModal from={from} lead_id={lead_id} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
+            <FollowUpModal from={from} lead_id={lead_id} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} data={data} />
             <LeadNoteModal from={from} lead_id={lead_id} app_id={app_id} editId={noteId} setEditId={setNoteId} refresh={refresh} setRefresh={setRefresh} />
 
 
@@ -149,47 +148,75 @@ export default function FollowUp({ lead_id, data, from, app_id }) {
                                     <Timeline sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
                                         {
                                             list?.data?.map((obj, index) => (
-                                                <TimelineItem key={index} className='TimelineItemClass'>
-                                                    <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
-                                                        {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')}
-                                                    </TimelineOppositeContent>
-                                                    <TimelineSeparator>
-                                                        <ThumbUpOffAltIcon className='timelineIcon' />
-                                                        <TimelineConnector />
-                                                    </TimelineSeparator>
-                                                    <TimelineContent>
-                                                        <div className='timeline-content-content'>
-                                                            <Grid display={'flex'}>
-                                                                <p><b>Follow Up</b> -</p> <p> with {data?.name?.toUpperCase()}</p>
-                                                            </Grid>
-                                                            <Grid display={'flex'}>
-                                                                <p><b>Assigned To</b>: </p>
-                                                                <p> {obj?.assigned_to_user?.name}</p>
-                                                                <p> | <b>Due</b> </p>
-                                                                <p>: </p>
-                                                                <p> {moment(obj?.follow_up_date).format('DD MMM hh:mm A')}</p>
-                                                            </Grid>
-                                                            <Grid display={'flex'}>
-                                                                <p><b>Created By</b>: </p>
-                                                                <p> {obj?.created_by?.name}</p>
-                                                                <p> | <b>Status</b> </p>
-                                                                <p>:  </p>
-                                                                <p> {obj?.status}
-                                                                    {obj?.status !== 'Completed' && <React.Fragment> | <Button onClick={() => handleConfirmOpen(obj?.id)} sx={{ textTransform: 'none' }} variant='contained' className='h-4 text-black hover:bg-lime-600 hover:text-white' size='small'>Mark as Completed</Button></React.Fragment>}
-                                                                </p>
-                                                            </Grid>
-                                                            {
-                                                                obj?.note &&
+
+                                                obj?.type == 'Note' ?
+                                                    <TimelineItem key={index} className='TimelineItemClass'>
+                                                        <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
+                                                            {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')}
+                                                        </TimelineOppositeContent>
+                                                        <TimelineSeparator>
+                                                            <NotesOutlined className='timelineIcon' />
+                                                            <TimelineConnector />
+                                                        </TimelineSeparator>
+                                                        <TimelineContent>
+                                                            <div className='timeline-content-content'>
                                                                 <Grid display={'flex'}>
-                                                                    <p><b>Note</b>: </p>
-                                                                    <p> {obj?.note}</p>
+                                                                    <p><b>Note</b> - </p> <p> {obj?.note}</p>
                                                                 </Grid>
-                                                            }
-                                                        </div>
+                                                              
+                                                                <Grid display={'flex'}>
+                                                                    <p><b>Created By</b>: </p>
+                                                                    <p> {obj?.created_by?.name}</p>
+                                                                   
+                                                                </Grid>
+                                                               
+                                                            </div>
 
 
-                                                    </TimelineContent>
-                                                </TimelineItem>
+                                                        </TimelineContent>
+                                                    </TimelineItem>
+                                                    :
+                                                    <TimelineItem key={index} className='TimelineItemClass'>
+                                                        <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
+                                                            {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')}
+                                                        </TimelineOppositeContent>
+                                                        <TimelineSeparator>
+                                                            <LocalPhoneOutlined className='timelineIcon' />
+                                                            <TimelineConnector />
+                                                        </TimelineSeparator>
+                                                        <TimelineContent>
+                                                            <div className='timeline-content-content'>
+                                                                <Grid display={'flex'}>
+                                                                    <p><b>Follow Up</b> -</p> <p> with {data?.name?.toUpperCase()}</p>
+                                                                </Grid>
+                                                                <Grid display={'flex'}>
+                                                                    <p><b>Assigned To</b>: </p>
+                                                                    <p> {obj?.assigned_to_user?.name}</p>
+                                                                    <p> | <b>Due</b> </p>
+                                                                    <p>: </p>
+                                                                    <p> {moment(obj?.follow_up_date).format('DD MMM hh:mm A')}</p>
+                                                                </Grid>
+                                                                <Grid display={'flex'}>
+                                                                    <p><b>Created By</b>: </p>
+                                                                    <p> {obj?.created_by?.name}</p>
+                                                                    <p> | <b>Status</b> </p>
+                                                                    <p>:  </p>
+                                                                    <p> {obj?.status}
+                                                                        {obj?.status !== 'Completed' && <React.Fragment> | <Button onClick={() => handleConfirmOpen(obj?.id)} sx={{ textTransform: 'none' }} variant='contained' className='h-4 text-black hover:bg-lime-600 hover:text-white' size='small'>Mark as Completed</Button></React.Fragment>}
+                                                                    </p>
+                                                                </Grid>
+                                                                {
+                                                                    obj?.note &&
+                                                                    <Grid display={'flex'}>
+                                                                        <p><b>Note</b>: </p>
+                                                                        <p> {obj?.note}</p>
+                                                                    </Grid>
+                                                                }
+                                                            </div>
+
+
+                                                        </TimelineContent>
+                                                    </TimelineItem>
                                             ))
                                         }
 

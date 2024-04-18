@@ -13,7 +13,7 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import LeadTimeline from './Tabs/LeadTimeline';
 import LeadFollowUp from './Tabs/LeadFollowUp';
-import LeadCommunicationLog from './Tabs/LeadCommunicationLog'
+import LeadCommunicationLog from './Tabs/communication/LeadCommunicationLog'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import CreateLead from '../Lead/Create/Create';
@@ -76,6 +76,8 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
     setEditId(data?.id)
   }
 
+  // console.log(data);
+
   const [isClient, setIsClient] = useState(false);
 
   const TabData = [
@@ -99,7 +101,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
     },
     {
       label: 'Communication Logs',
-      component: <LeadCommunicationLog from='lead' lead_id={data?.id}  />,
+      component: <LeadCommunicationLog refresh={refresh} from='lead' lead_id={data?.id}  />,
       icon: <ChatBubbleOutlineIcon />
     },
     {

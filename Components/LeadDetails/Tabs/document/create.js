@@ -146,7 +146,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
 
         if (watch('template')) {
             let dataToSubmit = {
-                lead_id: id,
+                lead_id: lead_id,
                 document_template_ids: [watch('template')?.id]
             }
 

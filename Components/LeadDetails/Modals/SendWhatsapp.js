@@ -21,6 +21,8 @@ import toast from 'react-hot-toast';
 import { TemplateApi } from '@/data/Endpoints/Template';
 import dynamic from 'next/dynamic';
 import { LeadApi } from '@/data/Endpoints/Lead';
+import PhoneInput from 'react-phone-input-2';
+import { WhatsAppTemplateApi } from '@/data/Endpoints/WhatsAppTemplate';
 
 
 
@@ -39,7 +41,7 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function SendMail({ details, editId, setEditId, lead_id, refresh, setRefresh,from,app_id }) {
+export default function SendWhatsApp({ details, editId, setEditId, lead_id, refresh, setRefresh, from, app_id }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -108,7 +110,8 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
 
     const fetchTemplates = (e) => {
-        return TemplateApi.list({ keyword: e }).then(response => {
+        return WhatsAppTemplateApi.list({ keyword: e }).then(response => {
+            console.log(response);
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -125,29 +128,32 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         setLoading(true)
         const formData = new FormData()
 
-        formData.append('to', data?.to)
-        formData.append('cc', data?.default_cc)
-        formData.append('subject', data?.subject || '')
+        formData.append('to', data?.whatsapp?.substring(1))
+        // formData.append('to', data?.whatsapp)
+        formData.append('template_id', data?.template?.id)
         formData.append('message', data?.body || '')
-        formData.append('lead_id', lead_id || '')
+        formData.append('lead_id',lead_id || '')
 
         if (from == 'app') {
             formData.append('application_id', app_id || '')
         }
 
 
-        if (attachmentFiles?.length > 0) {
-            attachmentFiles?.map(obj => {
-                // console.log(obj?.file_path);
-                formData.append('attachment_files[]', obj?.file_path)
-            })
-        }
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ': ' + pair[1]);
+        // }
+        // if (attachmentFiles?.length > 0) {
+        //     attachmentFiles?.map(obj => {
+        //         // console.log(obj?.file_path);
+        //         formData.append('attachment_files[]', obj?.file_path)
+        //     })
+        // }
 
-        if (file?.length > 0) {
-            file?.map(obj => {
-                formData.append('attachments[]', obj)
-            })
-        }
+        // if (file?.length > 0) {
+        //     file?.map(obj => {
+        //         formData.append('attachments[]', obj)
+        //     })
+        // }
 
         // console.log(dataToSubmit);
 
@@ -157,16 +163,16 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
             // dataToSubmit['id'] = editId
             // action = TaskApi.update(dataToSubmit)
         } else {
-            action = LeadApi.sendMail(formData)
+            action = LeadApi.sendWhatsapp(formData)
         }
 
         action.then((response) => {
             console.log(response);
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
-                toast.success('Email Sent Successfully');
+                toast.success('Whatsapp Message Sent Successfully');
                 reset()
                 handleClose()
-                setRefresh()
                 // setRefresh(!refresh)
                 setLoading(false)
             } else {
@@ -187,9 +193,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         setEditId()
         // reset()
         setValue('template', '')
-        setValue('default_cc', '')
-        setValue('subject', '')
-        setValue('to', '')
+        setValue('whatsapp', '')
         setValue('body', '')
         setOpen(false)
         setFile()
@@ -245,12 +249,13 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
 
     const getInitialValue = () => {
+        // setValue('whatsapp', details?.whatsapp_number)
         if (from == 'app') {
-            setValue('to', details?.student?.email)
-        } else if(from=='lead'){
-            setValue('to', details?.email)
+            setValue('whatsapp', `${details?.student?.whatsapp_number}`)
         }
-
+        else if (from == 'lead') {
+            setValue('whatsapp', `+${details?.whatsapp_country_code}${details?.whatsapp_number}`)
+        }
     }
 
     const handleClick = () => {
@@ -277,7 +282,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
             >
                 <Grid width={650}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Send Mail</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Send Whatsapp Message</a>
                         <IconButton
                             onClick={handleClose}
                         >
@@ -301,9 +306,6 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                             </Grid>
                                             <Grid item pr={1} xs={9} md={9}>
                                                 <AsyncSelect
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 9999 })
-                                                    }}
                                                     // isDisabled={!selectedUniversityId}
                                                     // key={selectedUniversityId}
                                                     name={'template'}
@@ -311,9 +313,12 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     // isClearable
                                                     defaultOptions
                                                     loadOptions={fetchTemplates}
-                                                    getOptionLabel={(e) => e.name}
+                                                    getOptionLabel={(e) => e.title}
                                                     getOptionValue={(e) => e.id}
                                                     onChange={handleTemplateChange}
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 9999 })
+                                                    }}
                                                 />
                                                 {/* <SelectX
                                                     // menuPlacement='top'
@@ -328,47 +333,50 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={3} md={3}>
-                                                <a className='form-text'>Mail To </a>
+                                                <a className='form-text'>Message To</a>
                                             </Grid>
                                             <Grid item pr={1} xs={9} md={9}>
-                                                <TextInput disabled control={control} name="to"
-                                                    value={watch('to')} />
-                                                {errors.to && <span className='form-validation'>{errors.to.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                                <PhoneInput
+                                                    {...register('whatsapp')}
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={3} md={3}>
-                                                <a className='form-text'>Mail CC </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={9} md={9}>
-                                                <TextInput control={control} name="default_cc"
-                                                    value={watch('default_cc')} />
-                                                {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
-                                            </Grid>
-                                        </Grid>
-
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={3} md={3}>
-                                                <a className='form-text'>Subject </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={9} md={9}>
-                                                <TextInput control={control} name="subject"
-                                                    value={watch('subject')} />
-                                                {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
+                                                    international
+                                                    // autoFormat
+                                                    disabled
+                                                    placeholder="Enter your number"
+                                                    country="in"
+                                                    value={watch('whatsapp')}
+                                                    // onChange={handleWhatsAppNumber}
+                                                    inputprops={{
+                                                        autoFocus: true,
+                                                        autoComplete: 'off',
+                                                        name: 'phone',
+                                                        required: true,
+                                                    }}
+                                                    inputstyle={{
+                                                        width: '100%',
+                                                        height: '40px',
+                                                        paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                                    }}
+                                                    buttonstyle={{
+                                                        border: 'none',
+                                                        backgroundColor: 'transparent',
+                                                        marginLeft: '5px',
+                                                    }}
+                                                />
+                                                {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
                                             </Grid>
                                         </Grid>
 
                                         <Grid display={'flex'} container p={1.5} item xs={12}>
                                             <Grid item display={'flex'} xs={3} md={3}>
-                                                <Typography sx={{ fontWeight: '500' }}>Body</Typography>
+                                                <Typography sx={{ fontWeight: '500' }}>Messsage</Typography>
                                             </Grid>
                                             <Grid item xs={9} md={9}>
                                                 <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
                                             </Grid>
                                         </Grid>
 
-                                        {
+                                        {/* {
                                             attachmentFiles?.length > 0 &&
                                             <Grid display={'flex'} container p={1.5} item xs={12}>
                                                 <Grid item display={'flex'} xs={3} md={3}>
@@ -384,9 +392,9 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     }
                                                 </Grid>
                                             </Grid>
-                                        }
+                                        } */}
 
-                                        <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container className='bg-sky-100'  >
+                                        {/* <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container className='bg-sky-100'  >
                                             <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
                                                 <label htmlFor="file-input">
                                                     <input
@@ -418,14 +426,13 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                         <Grid display={'flex'} xs={12} md={12} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item >
                                                             <a style={{ color: 'grey', fontSize: '14px' }}>{obj?.name}</a>
                                                             <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
-                                                                {/* You can use any icon for delete, for example, a delete icon */}
                                                                 <Delete fontSize='small' style={{ color: 'red' }} />
                                                             </a>
                                                         </Grid>
                                                     ))}
                                                 </Grid>
                                             }
-                                        </Grid>
+                                        </Grid> */}
 
 
 

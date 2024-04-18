@@ -7,9 +7,9 @@ import MenuItem from '@mui/material/MenuItem';
 import LeadTable from './LeadTable';
 import CreateLead from './Create/Create';
 import { useRouter } from 'next/router';
-import { Grid, IconButton, Popover, Typography, TextField } from '@mui/material';
+import { Grid, IconButton, Popover, Typography, TextField, InputAdornment } from '@mui/material';
 import AssignLeadModal from './Modal/AssignModal';
-import { MoreVert, PersonAddAlt1Outlined } from '@mui/icons-material';
+import { Close, MoreVert, PersonAddAlt1Outlined, Search } from '@mui/icons-material';
 import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
@@ -90,7 +90,9 @@ export default function CustomizedMenus() {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    if(selected?.length>0){
+      setAnchorEl(event.currentTarget);
+    }
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -126,6 +128,24 @@ export default function CustomizedMenus() {
 
   const noPageRefresh = () => {
     setRefresh(!refresh)
+  }
+
+  const handleClearSearch = (from) => {
+    if (from == 'email') {
+      setValue('emailSearch', '')
+    } else if (from == 'name') {
+      setValue('nameSearch', '')
+    } else if(from == 'mobile'){
+      setValue('mobileSearch', '')
+    }
+  }
+
+  const handleTypeChange = (type) => {
+    setValue('searchType', type)
+    setValue('emailSearch', '')
+    setValue('mobileSearch', '')
+    setValue('nameSearch', '')
+
   }
 
   useEffect(() => {
@@ -197,7 +217,7 @@ export default function CustomizedMenus() {
                     name='searchType'
 
                     defaultValue={(watch('searchType'))}
-                    onChange={(selectedOption) => setValue('searchType', selectedOption?.name)}
+                    onChange={(selectedOption) => handleTypeChange(selectedOption?.name)}
                   />
                 </Grid>
                 {
@@ -208,6 +228,19 @@ export default function CustomizedMenus() {
                     size='small'
                     id="outlined-name"
                     placeholder='search by email'
+                    InputProps={{
+                      endAdornment: (
+                        <>
+                          <InputAdornment position="end">
+                            <Search fontSize='small' />
+                          </InputAdornment>
+                          <InputAdornment onClick={()=>handleClearSearch('email')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
+                            <Close fontSize='small' />
+                          </InputAdornment>
+                        </>
+                      ),
+                    }}
+
                   // label="Search Tasks"
                   />
                 }
@@ -216,9 +249,23 @@ export default function CustomizedMenus() {
                   <TextField
                     {...register('mobileSearch')}
                     style={{ width: 300, marginRight: 10 }}
+                    className="no-spinners"
+                    type='number'
                     size='small'
                     id="outlined-name"
                     placeholder='search by mobile'
+                    InputProps={{
+                      endAdornment: (
+                        <>
+                          <InputAdornment position="end">
+                            <Search fontSize='small' />
+                          </InputAdornment>
+                          <InputAdornment onClick={()=>handleClearSearch('mobile')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
+                            <Close fontSize='small' />
+                          </InputAdornment>
+                        </>
+                      ),
+                    }}
                   // label="Search Tasks"
                   />
                 }
@@ -230,6 +277,18 @@ export default function CustomizedMenus() {
                     size='small'
                     id="outlined-name"
                     placeholder='search by name'
+                    InputProps={{
+                      endAdornment: (
+                        <>
+                          <InputAdornment position="end">
+                            <Search fontSize='small' />
+                          </InputAdornment>
+                          <InputAdornment onClick={()=>handleClearSearch('name')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
+                            <Close fontSize='small' />
+                          </InputAdornment>
+                        </>
+                      ),
+                    }}
                   // label="Search Tasks"
                   />
                 }
@@ -243,9 +302,11 @@ export default function CustomizedMenus() {
 
               </Grid>
               {/* disabled={selected?.length == 0} */}
-              <IconButton onClick={handleClick}>
-                <MoreVert fontSize='small' sx={{ color: 'grey', cursor: 'pointer' }} />
-              </IconButton>
+             <Tooltip title={selected?.length == 0 && 'Please Select a lead'}>
+                <IconButton onClick={handleClick}>
+                  <MoreVert fontSize='small' sx={{ color: 'grey', cursor: 'pointer' }} />
+                </IconButton>
+             </Tooltip>
               <Popover
                 id={id}
                 open={open}

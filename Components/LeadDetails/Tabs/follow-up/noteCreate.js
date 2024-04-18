@@ -81,6 +81,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                     toast.success(editID > 0 ? 'Note has been successfully updated.' : 'Note has been successfully added.')
                     setSubmitLoading(false)
                     fetchNotes()
+                    setRefresh(!refresh)
                     handleCancelEdit()
                 } else {
                     setSubmitLoading(false)

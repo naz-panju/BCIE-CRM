@@ -132,6 +132,17 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
         const { dialCode } = country;
         setCode(dialCode)
         setValue('phone', value)
+        if (editId == 0) {
+            setValue('whatsapp', value)
+            setWhatsappCode(dialCode)
+            setValue('whatsapp', value)
+            if (value.startsWith(dialCode)) {
+                const trimmedPhone = value.slice(dialCode.length);
+                setWhatsapp(trimmedPhone);
+            } else {
+                setWhatsapp(value);
+            }
+        }
         if (value.startsWith(dialCode)) {
             const trimmedPhone = value.slice(dialCode.length);
             setPhone(trimmedPhone);
@@ -141,6 +152,8 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
         // Trigger validation for the 'phone' field
         trigger('phone');
     };
+
+    // console.log(whatsappCode,whatsapp);
 
     const handleAltPhoneNumber = (value, country) => {
         if (!value) {
@@ -620,7 +633,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             <Grid item xs={12} md={5}>
                                 <Typography sx={{ fontWeight: '500' }}>How did you know about us? </Typography>
                             </Grid>
-                            <Grid item xs={12} md={7}> 
+                            <Grid item xs={12} md={7}>
                                 <ReactSelector
                                     menuPlacement='auto'
                                     onInputChange={fetchReference}

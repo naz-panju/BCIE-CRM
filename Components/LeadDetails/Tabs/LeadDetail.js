@@ -114,6 +114,12 @@ function LeadDetail({ data, handleEdit, loading }) {
                                 <label>Lead Stage </label>: {data?.stage?.name}
                             </div>
                         }
+                        {
+                            data?.substage &&
+                            <div className="lead-details-list">
+                                <label>Lead Sub Stage </label>: {data?.substage?.name}
+                            </div>
+                        }
 
                         {/* <div className="lead-details-list">
                             <label>Forms Applied </label>: {data?.applyingForCourse?.name}

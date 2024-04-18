@@ -2,14 +2,14 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Close, Refresh } from '@mui/icons-material';
+import { Close, Refresh, ThumbUpOffAlt } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import { useState } from 'react';
 
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { LoadingButton } from '@mui/lab';
+import { LoadingButton, } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import AsyncSelect from "react-select/async";
 import { ApplicationApi } from '@/data/Endpoints/Application';
@@ -18,7 +18,16 @@ import TextInput from '@/Form/TextInput';
 import DateInput from '@/Form/DateInput';
 import moment from 'moment';
 import { FollowupApi } from '@/data/Endpoints/Followup';
-
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import CachedIcon from '@mui/icons-material/Cached';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import TimelineOppositeContent, {
+    timelineOppositeContentClasses,
+} from '@mui/lab/TimelineOppositeContent';
 
 const scheme = yup.object().shape({
     assigned_to: yup.object().required("Please Choose an User").typeError("Please choose an User"),
@@ -29,7 +38,7 @@ const scheme = yup.object().shape({
 
 })
 
-export default function FollowUpModal({ lead_id, editId, setEditId, refresh, setRefresh, from, app_id }) {
+export default function FollowUpModal({ lead_id, editId, setEditId, refresh, setRefresh, from, app_id, data }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -37,6 +46,12 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
     const [open, setOpen] = useState(false)
 
     const [loading, setLoading] = useState(false)
+
+    const [laoding, setLaoding] = useState(false)
+
+
+    const [list, setList] = useState([])
+    const [limit, setLimit] = useState(50)
 
     const [dataLoading, setDataLoading] = useState(false)
 
@@ -86,7 +101,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
             date = moment(data?.date).format('YYYY-MM-DD')
         }
 
-        let  dataToSubmit = {
+        let dataToSubmit = {
             lead_id: lead_id,
             follow_up_date: date,
             assigned_to: data?.assigned_to?.id,
@@ -147,12 +162,30 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
     }
 
 
+    const getData = async () => {
+        setLaoding(true)
+        let params = {
+            id: lead_id,
+            limit
+        }
+        if (from == 'app') {
+            params['application_id'] = app_id
+        }
+        const response = await FollowupApi.list(params)
+        setList(response?.data)
+        // setTotal(response?.data?.meta?.total)
+        setLaoding(false)
+    }
+
+    console.log(list);
+
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
         } else if (editId == 0) {
             setOpen(true)
         }
+        getData()
     }, [editId])
 
 
@@ -258,7 +291,69 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                             </Grid>
 
                         </form>
+
                     </div>
+
+                    <hr />
+
+                    {
+                        list?.data?.length > 0 ?
+                            <Timeline sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
+                                {
+                                    list?.data?.map((obj, index) => (
+                                       
+                                        <TimelineItem key={index} className='TimelineItemClass'>
+                                            <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
+                                                {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')}
+                                            </TimelineOppositeContent>
+                                            <TimelineSeparator>
+                                                <ThumbUpOffAlt className='timelineIcon' />
+                                                <TimelineConnector />
+                                            </TimelineSeparator>
+                                            <TimelineContent>
+                                                <div className='timeline-content-content'>
+                                                    <Grid display={'flex'}>
+                                                        <p><b>Follow Up</b> -</p> <p> with {data?.name?.toUpperCase()}</p>
+                                                    </Grid>
+                                                    <Grid display={'flex'}>
+                                                        <p><b>Assigned To</b>: </p>
+                                                        <p> {obj?.assigned_to_user?.name}</p>
+                                                        <p> | <b>Due</b> </p>
+                                                        <p>: </p>
+                                                        <p> {moment(obj?.follow_up_date).format('DD MMM hh:mm A')}</p>
+                                                    </Grid>
+                                                    <Grid display={'flex'}>
+                                                        <p><b>Created By</b>: </p>
+                                                        <p> {obj?.created_by?.name}</p>
+                                                        <p> | <b>Status</b> </p>
+                                                        <p>:  </p>
+                                                        <p> {obj?.status}
+                                                            {/* {obj?.status !== 'Completed' && <React.Fragment> | <Button onClick={() => handleConfirmOpen(obj?.id)} sx={{ textTransform: 'none' }} variant='contained' className='h-4 text-black hover:bg-lime-600 hover:text-white' size='small'>Mark as Completed</Button></React.Fragment>} */}
+                                                        </p>
+                                                    </Grid>
+                                                    {
+                                                        obj?.note &&
+                                                        <Grid display={'flex'}>
+                                                            <p><b>Note</b>: </p>
+                                                            <p> {obj?.note}</p>
+                                                        </Grid>
+                                                    }
+                                                </div>
+
+
+                                            </TimelineContent>
+                                        </TimelineItem>
+                                    ))
+                                }
+
+                            </Timeline>
+                            :
+                            <div className='no-follw-up-block'>
+                                <h4>No Follow-up Found</h4>
+                            </div>
+                    }
+
+                  
                 </Grid>
             </Drawer>
         </div >

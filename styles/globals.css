@@ -902,6 +902,18 @@ svg.svg-inline--fa.fa-qrcode {
   margin-right: 5px;
 }
 
+.lead-score-block-tab{
+  text-align: center;
+  padding: 10px 6px;
+  white-space: nowrap;
+  min-height: 15px;
+  border: 1px solid #eaeaea;
+  border-top: 2px solid #ea4537;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+
 .generate-lead-block {
   text-align: center;
   padding: 15px 8px;
@@ -1350,4 +1362,15 @@ body.body-active .header {
 }
 .app-table-container{
   padding: 0px;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+ -webkit-appearance: none;
+ margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+ -moz-appearance: textfield;
 }

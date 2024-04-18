@@ -12,7 +12,7 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import LeadTimeline from '../LeadDetails/Tabs/LeadTimeline';
-import LeadCommunicationLog from './Tabs/AppCommunicationLog'
+import LeadCommunicationLog from'../LeadDetails/Tabs/communication/LeadCommunicationLog'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import CreateLead from '../Lead/Create/Create';
@@ -97,7 +97,7 @@ export default function ApplicationVerticalTabs({ data, refresh, setRefresh, loa
     },
     {
       label: 'Communication Logs',
-      component: <LeadCommunicationLog id={data?.id} />,
+      component: <LeadCommunicationLog refresh={refresh} from={'app'} app_id={data?.id} data={data} lead_id={data?.lead_id} />,
       icon: <ChatBubbleOutlineIcon />
     },
     {

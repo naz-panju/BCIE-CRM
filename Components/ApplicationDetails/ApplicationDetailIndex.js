@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import moment from 'moment';
-import { Button, Grid, Skeleton } from '@mui/material';
+import { Button, Grid, Skeleton, Tooltip } from '@mui/material';
 import { LaunchOutlined, PieChart } from '@mui/icons-material';
 import Link from 'next/link';
 
@@ -13,6 +13,8 @@ import toast from 'react-hot-toast';
 import ApplicationVerticalTabs from './ApplicationTab';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import ApplicationStageChangeModal from '../Applications/Modals/stageChange';
+import SendMail from '../LeadDetails/Modals/SendMail';
+import SendWhatsApp from '../LeadDetails/Modals/SendWhatsapp';
 
 
 function ApplicationDetails() {
@@ -25,6 +27,8 @@ function ApplicationDetails() {
   const [editId, setEditId] = useState()
 
   const [mailId, setMailId] = useState()
+
+  const [whatsappId, setWhatsappId] = useState()
 
   const [stageId, setStageId] = useState()
 
@@ -91,7 +95,12 @@ function ApplicationDetails() {
     })
   }
 
-  const handleRefresh=()=>{
+  const handleOpenWhatsappModal = () => {
+    setWhatsappId(0)
+  }
+
+
+  const handleRefresh = () => {
     setRefresh(!refresh)
   }
 
@@ -100,13 +109,16 @@ function ApplicationDetails() {
   }, [refresh])
 
 
+  console.log(details);
+
   return (
 
     <>
       {/* <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} /> */}
       <ApplicationStageChangeModal details={details} editId={stageId} setEditId={setStageId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
 
-      {/* <SendMail details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} /> */}
+      <SendMail from={'app'} app_id={details?.id}  details={details} lead_id={details?.lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh}  />
+      <SendWhatsApp from={'app'} app_id={details?.id} details={details} lead_id={details?.lead_id} editId={whatsappId} setEditId={setWhatsappId} refresh={refresh} setRefresh={handleRefresh}  />
 
       {/* <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} /> */}
 
@@ -118,7 +130,20 @@ function ApplicationDetails() {
 
             {/* disabled={details?.verification_status == 'Yes'} */}
             <Grid>
-              {/* <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Mail</Button> */}
+              <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-300 text-white hover:bg-sky-500 text-white'>Send Mail</Button>
+              {/* <Tooltip title={!details?.whatsapp_number && 'Whatsapp Number not Found'}>
+                <Button sx={{ mr: 2 }} onClick={details && handleOpenWhatsappModal} disabled={!details?.whatsapp_number} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Whatsapp</Button>
+              </Tooltip> */}
+              {
+                details?.student?.whatsapp_number ?
+                  <Button variant='contained' disabled={!details?.student?.whatsapp_number} onClick={handleOpenWhatsappModal} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Send Whatsapp</Button>
+                  :
+                  <Tooltip title="Whatsapp Number not Found" >
+                    <a>
+                      <Button variant='contained' disabled={true} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Send Whatsapp</Button>
+                    </a>
+                  </Tooltip>
+              }
               <Button sx={{ mr: 2 }} onClick={details && handleOpenStageModal} variant='contained' className='bg-sky-500 text-white hover:bg-sky-600 text-white'>Change Stage</Button>
               {/* <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
               <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed==1?'UnArchive':'Archive'}</Button> */}

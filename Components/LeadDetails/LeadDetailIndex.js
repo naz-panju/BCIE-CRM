@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import moment from 'moment';
-import { Button, Grid, Skeleton } from '@mui/material';
+import { Button, Grid, Skeleton, Tooltip } from '@mui/material';
 import { PieChart } from '@mui/icons-material';
 import ConvertLeadToStudent from './Modals/ConvertToStudent';
 import BasicPie from './Chart/Pie';
@@ -14,6 +14,7 @@ import ConfirmPopup from '../Common/Popup/confirm';
 import toast from 'react-hot-toast';
 import ArchiveConfirmPopup from './Modals/ArchiveConfirmation';
 import StageChangeModal from './Modals/StageChange';
+import SendWhatsApp from './Modals/SendWhatsapp';
 
 
 function LeadDetails() {
@@ -28,6 +29,8 @@ function LeadDetails() {
   const [mailId, setMailId] = useState()
 
   const [stageId, setStageId] = useState()
+
+  const [whatsappId, setWhatsappId] = useState()
 
 
   const [confirmId, setconfirmId] = useState()
@@ -60,6 +63,10 @@ function LeadDetails() {
     setMailId(0)
   }
 
+  const handleOpenWhatsappModal = () => {
+    setWhatsappId(0)
+  }
+
   const handleOpenStageModal = () => {
     setStageId(0)
   }
@@ -90,6 +97,10 @@ function LeadDetails() {
     })
   }
 
+  const handleRefresh=()=>{
+    setRefresh(!refresh)
+  }
+
   useEffect(() => {
     getDetails()
   }, [refresh])
@@ -102,7 +113,9 @@ function LeadDetails() {
       <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
       <StageChangeModal details={details} editId={stageId} setEditId={setStageId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
 
-      <SendMail details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={setRefresh} />
+      <SendMail from={'lead'} details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
+      <SendWhatsApp details={details} lead_id={details?.id} editId={whatsappId} setEditId={setWhatsappId} refresh={refresh} setRefresh={handleRefresh} from={'lead'} />
+
 
       <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
 
@@ -114,10 +127,23 @@ function LeadDetails() {
 
             {/* disabled={details?.verification_status == 'Yes'} */}
             <Grid>
-              <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Mail</Button>
+              <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-300 text-white hover:bg-sky-500 text-white'>Send Mail</Button>
+              {/* <Tooltip title={!details?.whatsapp_number && 'Whatsapp Number not Found'}>
+                <Button sx={{ mr: 2 }} onClick={details && handleOpenWhatsappModal} disabled={!details?.whatsapp_number} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Whatsapp</Button>
+              </Tooltip> */}
+              {
+                details?.whatsapp_number ?
+                  <Button variant='contained' disabled={!details?.whatsapp_number} onClick={handleOpenWhatsappModal} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Send Whatsapp</Button>
+                  :
+                  <Tooltip title="Whatsapp Number not Found" >
+                    <a>
+                      <Button variant='contained' disabled={true} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Send Whatsapp</Button>
+                    </a>
+                  </Tooltip>
+              }
               <Button sx={{ mr: 2 }} onClick={details && handleOpenStageModal} variant='contained' className='bg-sky-500 text-white hover:bg-sky-600 text-white'>Change Stage</Button>
               <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
-              <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed==1?'UnArchive':'Archive'}</Button>
+              <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed == 1 ? 'UnArchive' : 'Archive'}</Button>
             </Grid>
           </div>
         </div>
@@ -264,14 +290,14 @@ function LeadDetails() {
                   <div className='lead-communication-status'>
                     <h4>Lead Source</h4>
                     <ul>
-                    <li>{details?.lead_source?.name || 'NA'}</li>
+                      <li>{details?.lead_source?.name || 'NA'}</li>
                     </ul>
                   </div>
 
                   <div className='lead-communication-status'>
                     <h4>Assigned Counsellor</h4>
                     <ul>
-                    <li>{details?.assignedToUser?.name || 'NA'}</li>
+                      <li>{details?.assignedToUser?.name || 'NA'}</li>
                     </ul>
                   </div>
 
