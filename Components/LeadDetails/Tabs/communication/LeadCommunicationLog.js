@@ -52,18 +52,18 @@ export default function BasicSelect({ lead_id,from,app_id ,refresh}) {
         let params = {
             lead_id:lead_id,
             limit:emailLimit,
+            // type:'whatsapp'
             // page: page + 1
         }
         if (from == 'app') {
             params['application_id'] = app_id
         }
         const response = await CommunicationLogApi.list(params)
-        console.log(response);
+        // console.log(response);
         setList(response?.data)
         setLoading(false)
     }
 
-    console.log(list);
 
     const handleEmailLimit=()=>{
         setEmailLimit(emailLimit+5)

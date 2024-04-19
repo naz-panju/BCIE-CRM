@@ -29,7 +29,7 @@ const scheme = yup.object().shape({
     state: yup.string().required("State is Required"),
 })
 
-export default function ConvertLeadToStudent({ details, editId, setEditId, refresh, setRefresh }) {
+export default function ConvertLeadToStudent({ lead_id, details, editId, setEditId, refresh, setRefresh,handleRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -46,13 +46,23 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
 
     const [dataLoading, setDataLoading] = useState(false)
 
+    const [titles, settitles] = useState([])
+    const [currentTitle, setcurrentTitle] = useState()
+
     const items = [
         { label: 'Title' },
         { label: 'Due Date' },
         { label: 'Assigned To' },
         { label: 'Reviewer' },
         { label: 'Priority' },
+        { label: 'Title' },
+        { label: 'Title' },
+        { label: 'Title' },
+        { label: 'Title' },
         { label: 'Description', multi: true },
+        { label: 'Title' },
+        { label: 'Title' },
+        { label: 'Title' },
 
     ]
 
@@ -72,9 +82,10 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
         })
     }
 
-    const fetchNameTitles = (e) => {
-        return ListingApi.nameTitle({ keyword: e }).then(response => {
+    const fetchNameTitles = (e, title) => {
+        return ListingApi.nameTitle({ keyword: e ,limit:30}).then(response => {
             if (typeof response.data.data !== "undefined") {
+                settitles(response.data.data)
                 return response.data.data;
             } else {
                 return [];
@@ -95,7 +106,7 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
         }
 
         let dataToSubmit = {
-            lead_id: details.id,
+            lead_id: lead_id,
             title: data?.title?.name,
             first_name: data?.first_name,
             middle_name: data?.middle_name,
@@ -107,28 +118,29 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
             zipcode: data?.zip,
             state: data?.state,
             country_id: data?.country?.id,
-            alternate_phone_number:data?.alt_phone,
-            whatsapp_number:data?.whatsapp
+            alternate_phone_number: data?.alt_phone,
+            whatsapp_number: data?.whatsapp
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         let action;
 
         if (editId > 0) {
-            // dataToSubmit['id'] = editId
-            // action = TaskApi.update(dataToSubmit)
+            dataToSubmit['id'] = editId
+            action = StudentApi.update(dataToSubmit)
         } else {
             action = StudentApi.add(dataToSubmit)
         }
 
         action.then((response) => {
-            console.log(response);
-            if (response?.statusText == "Created") {
-                toast.success('Student Has Been Successfully Created')
+            // console.log(response);
+            if (response?.status==200 || response?.status==201 ) {
+                toast.success(`Student Has Been Successfully ${editId>0?'Updated':'Created'} `)
                 reset()
                 handleClose()
-                setRefresh(!refresh)
+                // setRefresh(!refresh)
+                handleRefresh()
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
@@ -221,14 +233,62 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
     };
 
     const initialValues = () => {
-        setValue('email', details?.email)
-        setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
-        setValue('alt_phone', `${details?.alternate_phone_country_code}${details?.alternate_phone_number}`)
-        setValue('whatsapp', `+${details?.whatsapp_country_code}${details?.whatsapp_number}`)
-        setValue('country',details?.country)
-        setValue('state',details?.state)
+
+        if (details) {
+            setValue('email', details?.email)
+            setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
+            setValue('alt_phone', `${details?.alternate_phone_country_code}${details?.alternate_phone_number}`)
+            setValue('whatsapp', `+${details?.whatsapp_country_code}${details?.whatsapp_number}`)
+            setValue('country', details?.country)
+            setValue('state', details?.state)
+        }
 
         // console.log(details);
+    }
+
+    const setTitleValue = () => {
+        let getTitle = titles?.find((obj => obj?.name == currentTitle))
+        setValue('title', getTitle)
+    }
+
+
+    const getDetails = async () => {
+        setDataLoading(true)
+        const response = await StudentApi.view({ id: editId })
+        if (response?.data?.data) {
+            let data = response?.data?.data
+
+            // console.log(data);
+
+            setcurrentTitle(data?.title)
+
+            setValue('first_name', data?.first_name)
+            setValue('middle_name', data?.middle_name)
+            setValue('last_name', data?.last_name)
+            setValue('email', data?.email)
+
+            setValue('phone', `+${data?.phone_number}`)
+            // setPhone(data?.phone_number)
+            // setCode(data?.phone_country_code)
+
+            setValue('alt_phone', `${data?.alternate_phone_number}`)
+            // setAltPhone(data?.alternate_phone_number)
+            // setAltCode(data?.alternate_phone_country_code)
+
+            setValue('whatsapp', `${data?.whatsapp_number}`)
+            // setWhatsapp(data?.whatsapp_number)
+            // setWhatsappCode(data?.whatsapp_country_code)
+
+            setValue('dob', data?.date_of_birth)
+
+            setValue('address', data?.address)
+            setValue('country', data?.country)
+            setValue('state', data?.state)
+
+            setValue('zip', data?.zipcode)
+
+        }
+        setDataLoading(false)
     }
 
 
@@ -236,12 +296,16 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
+            getDetails()
         } else if (editId == 0) {
             setOpen(true)
             initialValues()
         }
     }, [editId])
 
+    useEffect(() => {
+        setTitleValue()
+    }, [titles])
 
     return (
         <div>
@@ -252,7 +316,7 @@ export default function ConvertLeadToStudent({ details, editId, setEditId, refre
             >
                 <Grid width={550}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Convert To Student</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId == 0 ? 'Convert To Student' : 'Edit Student'}</a>
                         <IconButton
                             onClick={handleClose}
                         >

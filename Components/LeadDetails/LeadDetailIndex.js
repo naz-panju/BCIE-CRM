@@ -110,7 +110,7 @@ function LeadDetails() {
   return (
 
     <>
-      <ConvertLeadToStudent details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
+      <ConvertLeadToStudent lead_id={details?.id} details={details} editId={editId} setEditId={setEditId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <StageChangeModal details={details} editId={stageId} setEditId={setStageId} leadId={urlID} refresh={refresh} setRefresh={setRefresh} />
 
       <SendMail from={'lead'} details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
@@ -267,7 +267,7 @@ function LeadDetails() {
                     <h4>Communication Status</h4>
                     <ul>
                       <li>Email Sent - <span>5</span></li>
-                      <li>SMS Sent - <span>1</span></li>
+                      {/* <li>SMS Sent - <span>1</span></li> */}
                       <li>Whatsapp Sent - <span>0</span></li>
                     </ul>
                   </div>
@@ -279,13 +279,13 @@ function LeadDetails() {
                     </ul>
                   </div>
 
-                  <div className='lead-communication-status'>
+                  {/* <div className='lead-communication-status'>
                     <h4>Telephony Status</h4>
                     <ul>
                       <li>Inbound Call - <span>0</span></li>
                       <li>Outbound Call - <span>0</span></li>
                     </ul>
-                  </div>
+                  </div> */}
 
                   <div className='lead-communication-status'>
                     <h4>Lead Source</h4>
@@ -336,7 +336,7 @@ function LeadDetails() {
 
           </div>
 
-          <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} />
+          <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} />
 
         </div>
       </section>

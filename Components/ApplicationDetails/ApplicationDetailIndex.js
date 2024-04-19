@@ -15,6 +15,7 @@ import { ApplicationApi } from '@/data/Endpoints/Application';
 import ApplicationStageChangeModal from '../Applications/Modals/stageChange';
 import SendMail from '../LeadDetails/Modals/SendMail';
 import SendWhatsApp from '../LeadDetails/Modals/SendWhatsapp';
+import AlumniConfirmConfirmPopup from './Modals/ArchiveConfirmation';
 
 
 function ApplicationDetails() {
@@ -70,7 +71,7 @@ function ApplicationDetails() {
   }
 
   const handleConfirmOpen = () => {
-    setconfirmId(details?.id)
+    setconfirmId(details?.student?.id)
   }
 
   const handleCloseAdmission = () => {
@@ -120,7 +121,7 @@ function ApplicationDetails() {
       <SendMail from={'app'} app_id={details?.id}  details={details} lead_id={details?.lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh}  />
       <SendWhatsApp from={'app'} app_id={details?.id} details={details} lead_id={details?.lead_id} editId={whatsappId} setEditId={setWhatsappId} refresh={refresh} setRefresh={handleRefresh}  />
 
-      {/* <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} /> */}
+      {/* <AlumniConfirmConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.student?.first_name} ${details?.student?.last_name}`} details={details} /> */}
 
 
       <section>
@@ -145,8 +146,8 @@ function ApplicationDetails() {
                   </Tooltip>
               }
               <Button sx={{ mr: 2 }} onClick={details && handleOpenStageModal} variant='contained' className='bg-sky-500 text-white hover:bg-sky-600 text-white'>Change Stage</Button>
-              {/* <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Convert To Student</Button>
-              <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed==1?'UnArchive':'Archive'}</Button> */}
+              {/* <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Convert To Student</Button> */}
+              {/* <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>Convert to Alumini</Button> */}
             </Grid>
           </div>
         </div>

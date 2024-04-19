@@ -21,10 +21,12 @@ import LeadDocuments from './Tabs/document/LeadDocuments';
 import { Skeleton } from '@mui/material';
 import LeadDetail from './Tabs/LeadDetail';
 import LeadApplication from './Tabs/application/LeadApplication';
-import { Apps, Payment, TaskSharp } from '@mui/icons-material';
+import { Apps, Payment, SchoolOutlined, TaskSharp } from '@mui/icons-material';
 import FollowUp from './Tabs/follow-up/LeadFollowup';
 import LeadTask from './Tabs/LeadTask';
 import LeadPayments from './Tabs/payments/LeadPayments';
+import StudentDetail from './Tabs/StudentDetail';
+import ConvertLeadToStudent from './Modals/ConvertToStudent';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -64,9 +66,13 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
+export default function VerticalTabs({ data, refresh, setRefresh, loading,handleRefresh }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
+
+  const [studentEditId, setstudentEditId] = useState()
+
+  // console.log(data);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -76,11 +82,16 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
     setEditId(data?.id)
   }
 
+  const handleStudentEdit = () => {
+    setstudentEditId(data?.student?.id)
+  }
+
+
   // console.log(data);
 
   const [isClient, setIsClient] = useState(false);
 
-  const TabData = [
+  let TabData = [
     {
       label: 'Lead Details',
       component: isClient && (
@@ -91,50 +102,51 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
 
     {
       label: 'Timeline',
-      component: <LeadTimeline from='lead' lead_id={data?.id}  />,
+      component: <LeadTimeline from='lead' lead_id={data?.id} />,
       icon: <AccessTimeIcon />
     },
     {
       label: 'Follow up & Notes',
-      component: <FollowUp from='lead' data={data} lead_id={data?.id}  />,
+      component: <FollowUp from='lead' data={data} lead_id={data?.id} />,
       icon: <ChecklistIcon />
     },
     {
       label: 'Communication Logs',
-      component: <LeadCommunicationLog refresh={refresh} from='lead' lead_id={data?.id}  />,
+      component: <LeadCommunicationLog refresh={refresh} from='lead' lead_id={data?.id} />,
       icon: <ChatBubbleOutlineIcon />
     },
     {
       label: 'Documents',
-      component: <LeadDocuments from='lead' lead_id={data?.id}  />,
+      component: <LeadDocuments from='lead' lead_id={data?.id} />,
       icon: <FolderOpenIcon />
     },
     {
       label: 'Payments',
-      component: <LeadPayments from='lead' lead_id={data?.id}  />,
+      component: <LeadPayments from='lead' lead_id={data?.id} />,
       icon: <Payment />
     },
     {
       label: 'Task',
-      component: <LeadTask from='lead' lead_id={data?.id}  />,
+      component: <LeadTask from='lead' lead_id={data?.id} />,
       icon: <TaskSharp />
     },
     {
       label: 'Applications',
-      component: <LeadApplication from='lead' data={data} lead_id={data?.id}  />,
+      component: <LeadApplication from='lead' data={data} lead_id={data?.id} />,
       icon: <Apps />
     },
-    // {
-    //   label: 'Tickets',
-    //   component: 'Item Six',
-    //   icon: <PostAddIcon />
-    // },
-    // {
-    //   label: 'Call Logs',
-    //   component: 'Item Seven',
-    //   icon: <PhoneIcon />
-    // },
   ]
+
+  if (data?.student) {
+    const newTab = {
+      label: 'Student Details',
+      component: isClient && <StudentDetail handleEdit={handleStudentEdit} data={data} loading={loading} handleRefresh={handleRefresh} />,
+      icon: <SchoolOutlined />
+    };
+    TabData.splice(1, 0, newTab);
+  }
+
+  
 
   useEffect(() => {
     setIsClient(true);
@@ -143,6 +155,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading }) {
   return (
     <>
       <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
+      <ConvertLeadToStudent lead_id={data?.id} editId={studentEditId} setEditId={setstudentEditId} leadId={data?.id} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <Box
         sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
       >

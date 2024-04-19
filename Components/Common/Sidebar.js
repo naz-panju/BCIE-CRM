@@ -37,11 +37,11 @@ const Sidebar = () => {
             icon: ArchiveOutlined,
             href: '/archive'
         },
-        // {
-        //     title: 'Alumni',
-        //     icon: GroupOutlined,
-        //     href: '/alumni'
-        // },
+        {
+            title: 'Alumni',
+            icon: GroupOutlined,
+            href: '/alumni'
+        },
         {
             title: 'Application Manager',
             icon: DescriptionOutlined,

@@ -28,6 +28,8 @@ import { Grid } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import AsyncSelect from "react-select/async";
 import { ListingApi } from '@/data/Endpoints/Listing';
+import { StudentApi } from '@/data/Endpoints/Student';
+import { ApplicationApi } from '@/data/Endpoints/Application';
 
 
 
@@ -230,17 +232,49 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
 
     const [selectedCountry, setselectedCountry] = useState()
     const [selectedUniversity, setselectedUniversity] = useState()
+    const [selectedIntake, setselectedIntake] = useState()
+    const [selectedStream, setselectedStream] = useState()
 
 
     const fetchCountry = (e) => {
         return ListingApi.country({ keyword: e }).then(response => {
-          if (typeof response?.data?.data !== "undefined") {
-            return response.data.data;
-          } else {
-            return [];
-          }
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
         })
-      }
+    }
+
+    const fetchUniversity = (e) => {
+        return ListingApi.universities({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchIntakes = (e) => {
+        return ListingApi.intakes({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchSubjectAreas = (e) => {
+        return ListingApi.subjectAreas({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -314,13 +348,23 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
 
     const handleCountryChange = (data) => {
         setselectedCountry(data?.id)
-      }
-    
+    }
 
+    const handleUniversityChange = (data) => {
+        setselectedUniversity(data?.id)
+    }
+
+    const handleIntakeChange = (data) => {
+        setselectedIntake(data?.id)
+    }
+
+    const handleStreamChange = (data) => {
+        setselectedStream(data?.id)
+    }
 
     const fetchTable = () => {
         setLoading(true)
-        LeadApi.list({ limit: limit, closed: 1,applying_for_country:selectedCountry, page: page + 1 }).then((response) => {
+        ApplicationApi.list({ limit: limit, status: 'Admission Completed', country_id: selectedCountry, university_id: selectedUniversity, intake_id: selectedIntake, page: page + 1 }).then((response) => {
             console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -331,7 +375,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit,selectedCountry])
+    }, [page, refresh, limit, selectedCountry, selectedUniversity, selectedIntake, selectedStream])
 
     return (
 
@@ -355,11 +399,11 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
                     <AsyncSelect
                         isClearable
                         defaultOptions
-                        loadOptions={fetchCountry}
+                        loadOptions={fetchUniversity}
                         getOptionLabel={(e) => e.name}
                         getOptionValue={(e) => e.id}
                         placeholder={<div>University</div>}
-                        // onChange={handleUserSelect}
+                        onChange={handleUniversityChange}
                     />
                 </Grid>
 
@@ -367,11 +411,11 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
                     <AsyncSelect
                         isClearable
                         defaultOptions
-                        loadOptions={fetchCountry}
+                        loadOptions={fetchIntakes}
                         getOptionLabel={(e) => e.name}
                         getOptionValue={(e) => e.id}
                         placeholder={<div>Intake</div>}
-                        // onChange={handleUserSelect}
+                        onChange={handleIntakeChange}
                     />
                 </Grid>
 
@@ -379,11 +423,11 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
                     <AsyncSelect
                         isClearable
                         defaultOptions
-                        loadOptions={fetchCountry}
+                        loadOptions={fetchSubjectAreas}
                         getOptionLabel={(e) => e.name}
                         getOptionValue={(e) => e.id}
-                        placeholder={<div> Stream</div>}
-                        // onChange={handleUserSelect}
+                        placeholder={<div> subject Area</div>}
+                        onChange={handleStreamChange}
                     />
                 </Grid>
 
@@ -451,12 +495,12 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                                <Link href={`lead/${row?.id}`}> {row?.name}</Link>
+                                                                <Link href={`lead/${row?.lead_id}`}> {row?.student?.first_name} {row?.student?.last_name}</Link>
                                                                 {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
-                                                            <TableCell align="left">{row?.email}</TableCell>
-                                                            <TableCell align="left">{row?.phone_number}</TableCell>
-                                                            <TableCell align="left"> {row?.country?.name}</TableCell>
+                                                            <TableCell align="left">{row?.student?.email}</TableCell>
+                                                            <TableCell align="left">{row?.student?.phone_number}</TableCell>
+                                                            <TableCell align="left"> {row?.student?.country?.name}</TableCell>
                                                             {/* <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell> */}
 
                                                         </TableRow>
