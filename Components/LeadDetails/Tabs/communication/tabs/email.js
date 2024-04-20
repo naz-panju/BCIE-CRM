@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Skeleton, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import moment from 'moment';
 import { AttachmentOutlined, CachedOutlined } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
@@ -7,6 +7,8 @@ import CommEmailDetailModal from '../details/email/detailModal';
 
 function EmailTab({ list, setEmailLimit, loading }) {
     const [detailId, setdetailId] = useState()
+
+    // console.log(list);
 
     const handleDetailOpen = (id) => {
         setdetailId(id)
@@ -26,12 +28,38 @@ function EmailTab({ list, setEmailLimit, loading }) {
                         <>
                             <TableContainer>
                                 <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell >
+                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                    Subject
+                                                </Typography>
+
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                    Email Type
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                    From
+                                                </Typography>
+
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                    To
+                                                </Typography>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
                                     <TableBody>
                                         {
                                             list?.data?.map((obj, index) => {
                                                 return (
                                                     <TableRow key={index}>
-                                                        <TableCell sx={{cursor:'pointer'}} onClick={()=>handleDetailOpen(obj?.id)}>
+                                                        <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleDetailOpen(obj?.id)}>
                                                             {
                                                                 obj?.subject?.length > 50 ?
                                                                     <b> {obj?.subject?.slice(0, 50)} ...</b>
@@ -39,7 +67,9 @@ function EmailTab({ list, setEmailLimit, loading }) {
                                                                     <b>{obj?.subject}</b>
                                                             }
                                                         </TableCell>
-                                                        <TableCell>{obj?.cc}</TableCell>
+                                                        <TableCell>{obj?.type}</TableCell>
+                                                        <TableCell>{obj?.from}</TableCell>
+                                                        <TableCell>{obj?.to}</TableCell>
                                                         <TableCell>
                                                             {
                                                                 obj?.attachments?.length > 0 &&

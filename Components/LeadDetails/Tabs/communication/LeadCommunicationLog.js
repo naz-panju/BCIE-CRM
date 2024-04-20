@@ -9,7 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import CreateTabs from './commTabs';
 
 
-export default function BasicSelect({ lead_id,from,app_id ,refresh}) {
+export default function BasicSelect({ lead_id, from, app_id, refresh }) {
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(false)
@@ -20,6 +20,9 @@ export default function BasicSelect({ lead_id,from,app_id ,refresh}) {
     const [activeTab, setActiveTab] = useState(0);
 
     const [emailLimit, setEmailLimit] = useState(15)
+    const [whatsappLimit, setwhatsappLimit] = useState(15)
+
+    const [whatsappList, setwhatsappList] = useState([])
 
     const handleChange = (event) => {
         setAge(event.target.value);
@@ -50,9 +53,9 @@ export default function BasicSelect({ lead_id,from,app_id ,refresh}) {
     const fetchList = async () => {
         setLoading(true)
         let params = {
-            lead_id:lead_id,
-            limit:emailLimit,
-            // type:'whatsapp'
+            lead_id: lead_id,
+            limit: emailLimit,
+            type:'Email Send'
             // page: page + 1
         }
         if (from == 'app') {
@@ -64,14 +67,41 @@ export default function BasicSelect({ lead_id,from,app_id ,refresh}) {
         setLoading(false)
     }
 
-
-    const handleEmailLimit=()=>{
-        setEmailLimit(emailLimit+5)
+    const fetchWhatsappList = async () => {
+        setLoading(true)
+        let params = {
+            lead_id: lead_id,
+            limit: whatsappLimit,
+            type:'Whatsapp Send'
+            // page: page + 1
+        }
+        if (from == 'app') {
+            params['application_id'] = app_id
+        }
+        const response = await CommunicationLogApi.list(params)
+        // console.log(response);
+        setwhatsappList(response?.data)
+        setLoading(false)
     }
+
+    console.log(whatsappList);
+
+
+    const handleEmailLimit = () => {
+        setEmailLimit(emailLimit + 5)
+    }
+
+    const handleWhatsappLimit = () => {
+        setwhatsappLimit(whatsappLimit + 5)
+    }
+
 
     useEffect(() => {
         fetchList()
-    }, [emailLimit,refresh])
+    }, [emailLimit, refresh])
+    useEffect(() => {
+        fetchWhatsappList()
+    }, [whatsappLimit, refresh])
 
     return (
 
@@ -97,7 +127,7 @@ export default function BasicSelect({ lead_id,from,app_id ,refresh}) {
                         <div className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
                             <div className='lead-score-block'>
                                 <h3>0</h3>
-                                <h4>Email Bounced</h4>
+                                <h4>Email received</h4>
                             </div>
                         </div>
 
@@ -116,7 +146,7 @@ export default function BasicSelect({ lead_id,from,app_id ,refresh}) {
                         <div className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
                             <div className='lead-score-block'>
                                 <h3>0</h3>
-                                <h4>Whatsapp Delivered</h4>
+                                <h4>Whatsapp received</h4>
                             </div>
                         </div>
 
@@ -129,13 +159,13 @@ export default function BasicSelect({ lead_id,from,app_id ,refresh}) {
 
             <div className=' md:w-6/12 lg:w-6/12 mt-3'>
                 <div className='flex mar-10 communication-log-block'>
-                    <div onClick={()=>setActiveTab(0)} className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
+                    <div onClick={() => setActiveTab(0)} className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
                         <div className='lead-score-block-tab flex '>
                             <h4>Email</h4>
                             <h4>({list?.meta?.total})</h4>
                         </div>
                     </div>
-                    <div onClick={()=>setActiveTab(1)} className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
+                    <div onClick={() => setActiveTab(1)} className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
                         <div className='lead-score-block-tab tab flex'>
                             <h4>Whatsapp</h4>
                             <h4>(0)</h4>
@@ -144,7 +174,7 @@ export default function BasicSelect({ lead_id,from,app_id ,refresh}) {
                 </div>
             </div>
 
-            <CreateTabs list={list} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} loading={loading} />
+            <CreateTabs list={list} whatsappList={whatsappList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} loading={loading} />
 
         </div>
 

@@ -74,7 +74,7 @@ export default function CommEmailDetailTab({ id, close }) {
 
     }
 
-    console.log(details);
+    // console.log(details);
 
     useEffect(() => {
         if (activeTab == 0) {

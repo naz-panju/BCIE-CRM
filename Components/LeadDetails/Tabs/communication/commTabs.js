@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TabPanel from '@/utils/TabPanel';
 import EmailTab from './tabs/email';
+import WhatsappTab from './tabs/whatsapp';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -38,7 +39,7 @@ function a11yProps(index) {
     };
 }
 
-export default function CreateTabs({ list,value,setValue,activeTab,setActiveTab,setEmailLimit,loading }) {
+export default function CreateTabs({ list,value,setValue,activeTab,setActiveTab,setEmailLimit,loading ,setwhatsappLimit,whatsappList}) {
     // const [value, setValue] = React.useState(0);
     // const [activeTab, setActiveTab] = useState(0);
     const handleChange = (event, newValue) => {
@@ -49,6 +50,10 @@ export default function CreateTabs({ list,value,setValue,activeTab,setActiveTab,
         {
             component: <EmailTab list={list} setEmailLimit={setEmailLimit} loading={loading} />,
             label: 'Email'
+        },
+        {
+            component: <WhatsappTab list={whatsappList} setwhatsappLimit={setwhatsappLimit} loading={loading} />,
+            label: 'Whatsapp'
         },
     ];
 
