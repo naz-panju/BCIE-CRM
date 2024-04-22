@@ -4,5 +4,6 @@ export const CommunicationLogApi = {
     // add: (data) => http.post(`events/store`, data),
     list: (data) => http.get(`communication-log`, {params:data}),
     view: (data) => http.get(`communication-log/view/${data?.id}`, {params:data}),
+    summary: (data) => http.get(`communication-log/summary`, {params:data}),
     // update: (data) => http.post(`events/update`, data),
 }

@@ -66,24 +66,6 @@ function Details({ data, loading }) {
                 </Grid>
                 <Divider sx={{ mb: 1 }} />
 
-                {
-                    data?.note &&
-                    <>
-                        <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                            <Grid item xs={12} sm={12}>
-                                <Typography variant="" style={{ fontWeight: 'bold' }}>
-                                    Note:
-                                </Typography>
-                                <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                                    {data?.note}
-                                </Typography>
-                            </Grid>
-                        </Grid >
-                        <Divider sx={{ mb: 1 }} />
-                    </>
-                }
-
-
                 <Grid container style={{ marginBottom: '10px' }}>
                     <Grid item xs={6} sm={6}>
                         <Typography variant="" style={{ fontWeight: 'bold' }}>
@@ -133,6 +115,22 @@ function Details({ data, loading }) {
                 </Grid>
                 <Divider sx={{ mb: 1 }} />
 
+                {
+                    data?.note &&
+                    <>
+                        <Grid container spacing={2} style={{ marginBottom: '10px' }}>
+                            <Grid item xs={12} sm={12}>
+                                <Typography variant="" style={{ fontWeight: 'bold' }}>
+                                    Remarks:
+                                </Typography>
+                                <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
+                                    {data?.note}
+                                </Typography>
+                            </Grid>
+                        </Grid >
+                        <Divider sx={{ mb: 1 }} />
+                    </>
+                }
 
                 <Grid container spacing={2} style={{ marginBottom: '10px' }}>
                     <Grid item xs={12} sm={12}>
@@ -141,12 +139,13 @@ function Details({ data, loading }) {
                         </Typography>
                         <Grid item xs={12} sm={12} md={12}>
                             <a href={data?.file} target='_blank' style={{ fontSize: '16px', color: 'blue' }}>
-                               {data?.file}
+                                {data?.file}
                             </a>
                         </Grid>
                     </Grid>
                 </Grid >
                 <Divider sx={{ mb: 1 }} />
+
 
             </Grid>
     )
@@ -175,7 +174,7 @@ const loadingDetail = () => (
             </Grid>
         </Grid>
         <Divider sx={{ mb: 1 }} />
-        
+
         <Grid container style={{ marginBottom: '10px' }}>
             <Grid item xs={6} sm={6}>
                 <Skeleton variant="rounded" width={100} height={20} />

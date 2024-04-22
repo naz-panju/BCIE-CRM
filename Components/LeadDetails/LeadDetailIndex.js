@@ -75,6 +75,8 @@ function LeadDetails() {
     setconfirmId(details?.id)
   }
 
+  // console.log(details)
+
   const handleCloseAdmission = () => {
     setconfirmLoading(true)
     let dataToSubmit = {

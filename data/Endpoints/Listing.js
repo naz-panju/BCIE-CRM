@@ -18,6 +18,7 @@ export const ListingApi = {
     subjectAreas:(data) => http.get(`listing/subject-areas`, { params: data }),
     office:(data) => http.get(`listing/offices`, { params: data }),
     events:(data) => http.get(`listing/events`, { params: data }),
+    archiveReason:(data) => http.get(`listing/lead-archive-reasons`, { params: data }),
 }
 
 

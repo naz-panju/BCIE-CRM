@@ -16,7 +16,8 @@ export const LeadApi = {
     viewDocuments: (data) => http.get(`documents/view/${data?.id}`, {params:data}),
     requestDocument: (data) => http.post(`documents/request`, data),  
     approveDocument: (data) => http.post(`documents/accept`, data),  
-    rejectDocument: (data) => http.post(`documents/reject`, data),   
+    rejectDocument: (data) => http.post(`documents/reject`, data),  
+    uploadDocument: (data) => http.post(`documents/upload`, data), 
 
     convertToStudent: (data) => http.post(`documents/request`, data),   
 

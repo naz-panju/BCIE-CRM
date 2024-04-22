@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
 import LeadDocumentRequest from './request'
-import { DeleteOutline, DownloadOutlined, Edit, UploadOutlined } from '@mui/icons-material'
+import { DeleteOutline, DownloadOutlined, Edit, Upload, UploadOutlined } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
 import LeadDocumentDetailModal from './Modal'
 import DocumentConfirmPopup from './confirmPopup'
@@ -21,15 +21,15 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import ApplicationDocumentUpload from './applicationDocUpload'
+import LeadRequestUploadDocumentModal from './UploadRequestedDoc'
 
 function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
-
-    console.log(app_details);
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(false)
     const [reqId, setReqId] = useState()
+    const [reqUploadId, setreqUploadId] = useState()
     const [refresh, setRefresh] = useState(false)
 
     const [page, setPage] = useState(0);
@@ -76,6 +76,12 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
         setrejectId(id)
     }
 
+    const handleUploadRejectedDoc = (id) => {
+        console.log(id);
+        setreqUploadId(id)
+    }
+
+
     const handleOpenAppDoc = (doc) => {
         app_details['from_doc'] = doc
         setAppDocId(0)
@@ -98,7 +104,6 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
         if (from == 'app') {
             params['application_id'] = app_id
         }
-        console.log(params);
         try {
             const response = await LeadApi.listDocuments(params)
             if (response?.status == 200 || response?.status == 201) {
@@ -148,6 +153,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
         <>
             <LeadDocumentModal lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
             <LeadDocumentRequest id={lead_id} reqId={reqId} setReqId={setReqId} />
+            <LeadRequestUploadDocumentModal datas={reqUploadId} lead_id={lead_id} from={from} app_id={app_id} editId={reqUploadId?.id} setEditId={setreqUploadId} handleRefresh={handleRefresh} />
 
             <ApplicationDocumentUpload appRefresh={appRefresh} datas={app_details} lead_id={lead_id} from={from} app_id={app_id} editId={appDocId} setEditId={setAppDocId} handleRefresh={handleRefresh} />
 
@@ -231,7 +237,17 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                                                 <TableCell>{obj?.status}</TableCell>
                                                                 <TableCell>
                                                                     {
-                                                                        from != 'app' || obj?.status!='request' &&
+                                                                        (from != 'app') &&
+                                                                        obj?.status == 'Requested' &&
+                                                                        <>
+                                                                            <Upload onClick={() => handleUploadRejectedDoc(obj)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
+                                                                        </>
+                                                                    }
+                                                                </TableCell>
+                                                                <TableCell>
+                                                                    {
+                                                                        (from != 'app') &&
+                                                                        obj?.status != 'Requested' &&
                                                                         <>
                                                                             <Button onClick={() => handleAccept(obj?.id)} sx={{ textTransform: 'none', mr: 1 }} size='small' className='bg-lime-300 text-black hover:bg-lime-400'>Approve</Button>
                                                                             <Button onClick={() => handleReject(obj?.id)} sx={{ textTransform: 'none', mr: 5 }} size='small' className='bg-red-500 text-white hover:bg-red-600'>Reject</Button>

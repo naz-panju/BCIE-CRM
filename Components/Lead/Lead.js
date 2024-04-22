@@ -70,6 +70,7 @@ export default function CustomizedMenus() {
     { name: 'Email' },
     { name: 'Name' },
     { name: 'Mobile' },
+    { name: 'Lead Id' }
   ]
 
 
@@ -87,10 +88,15 @@ export default function CustomizedMenus() {
   const [singleAssign, setsingleAssign] = useState(false)
   const [assignToUser, setassignToUser] = useState()
 
+  const [nameSearch, setnameSearch] = useState()
+  const [phoneSearch, setphoneSearch] = useState()
+  const [emailSearch, setemailSearch] = useState()
+  const [userIdSearch, setuserIdSearch] = useState()
+
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const handleClick = (event) => {
-    if(selected?.length>0){
+    if (selected?.length > 0) {
       setAnchorEl(event.currentTarget);
     }
   };
@@ -133,23 +139,62 @@ export default function CustomizedMenus() {
   const handleClearSearch = (from) => {
     if (from == 'email') {
       setValue('emailSearch', '')
+      setemailSearch('')
     } else if (from == 'name') {
       setValue('nameSearch', '')
-    } else if(from == 'mobile'){
+      setnameSearch('')
+      sessionStorage.removeItem('leadType')
+      sessionStorage.removeItem('leadSearch')
+    } else if (from == 'mobile') {
       setValue('mobileSearch', '')
+      setphoneSearch('')
     }
   }
 
   const handleTypeChange = (type) => {
     setValue('searchType', type)
-    setValue('emailSearch', '')
-    setValue('mobileSearch', '')
-    setValue('nameSearch', '')
+    sessionStorage.setItem('leadType',type)
+    // setValue('emailSearch', '')
+    // setValue('mobileSearch', '')
+    // setValue('nameSearch', '')
 
+    // setnameSearch('')
+    // setemailSearch('')
+    // setphoneSearch('')
+    // setuserIdSearch('')
+  }
+
+  const handleNameSearch = () => {
+    setnameSearch(watch('nameSearch'))
+    sessionStorage.setItem('leadSearch',watch('nameSearch'))
+  }
+  const handleEmailSearch = () => {
+    setemailSearch(watch('emailSearch'))
+  }
+  const handlePhoneSearch = () => {
+    setphoneSearch(watch('phoneSearch'))
+  }
+  const handleUserIdSearch = () => {
+    setuserIdSearch(watch('userIdSearch'))
+  }
+
+  const getInitialValue=()=>{
+    let getSearch=sessionStorage.getItem('leadSearch')
+    let getSearchType=sessionStorage.getItem('leadType')
+
+    if (getSearchType){
+      setValue('searchType', getSearchType)
+    }
+    if(getSearch){   
+      console.log(getSearchType);
+      setValue('nameSearch',getSearch)
+      // setnameSearch(getSearch)
+    }
   }
 
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
+    getInitialValue()
   }, [])
 
 
@@ -207,8 +252,6 @@ export default function CustomizedMenus() {
                     options={searchOptions}
                     getOptionLabel={option => option.name}
                     getOptionValue={option => option.name}
-
-                    // inputValue={inProject}
                     value={
                       searchOptions.find(options =>
                         options.name === watch('searchType')
@@ -220,7 +263,9 @@ export default function CustomizedMenus() {
                     onChange={(selectedOption) => handleTypeChange(selectedOption?.name)}
                   />
                 </Grid>
-                {
+
+                {/* command duw to easy method */}
+                {/* {
                   watch('searchType') == 'Email' &&
                   <TextField
                     {...register('emailSearch')}
@@ -232,19 +277,18 @@ export default function CustomizedMenus() {
                       endAdornment: (
                         <>
                           <InputAdornment position="end">
-                            <Search fontSize='small' />
+                            <Search onClick={handleEmailSearch} sx={{ cursor: 'pointer' }}  fontSize='small' />
                           </InputAdornment>
-                          <InputAdornment onClick={()=>handleClearSearch('email')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
+                          <InputAdornment onClick={() => handleClearSearch('email')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
                             <Close fontSize='small' />
                           </InputAdornment>
                         </>
                       ),
                     }}
 
-                  // label="Search Tasks"
                   />
-                }
-                {
+                } */}
+                {/* {
                   watch('searchType') == 'Mobile' &&
                   <TextField
                     {...register('mobileSearch')}
@@ -258,9 +302,9 @@ export default function CustomizedMenus() {
                       endAdornment: (
                         <>
                           <InputAdornment position="end">
-                            <Search fontSize='small' />
+                            <Search onClick={handlePhoneSearch} sx={{ cursor: 'pointer' }} fontSize='small' />
                           </InputAdornment>
-                          <InputAdornment onClick={()=>handleClearSearch('mobile')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
+                          <InputAdornment onClick={() => handleClearSearch('mobile')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
                             <Close fontSize='small' />
                           </InputAdornment>
                         </>
@@ -268,30 +312,31 @@ export default function CustomizedMenus() {
                     }}
                   // label="Search Tasks"
                   />
-                }
-                {
-                  watch('searchType') == 'Name' &&
+                } */}
+                {/* {
+                  watch('searchType') == 'Name' && */}
+                <form onSubmit={handleSubmit(handleNameSearch)}>
                   <TextField
                     {...register('nameSearch')}
                     style={{ width: 300, marginRight: 10 }}
                     size='small'
                     id="outlined-name"
-                    placeholder='search by name'
+                    placeholder={`search by ${watch('searchType')?.toLowerCase()}`}
                     InputProps={{
                       endAdornment: (
                         <>
                           <InputAdornment position="end">
-                            <Search fontSize='small' />
+                            <Search onClick={handleNameSearch} sx={{ cursor: 'pointer' }} fontSize='small' />
                           </InputAdornment>
-                          <InputAdornment onClick={()=>handleClearSearch('name')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
+                          <InputAdornment onClick={() => handleClearSearch('name')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
                             <Close fontSize='small' />
                           </InputAdornment>
                         </>
                       ),
                     }}
-                  // label="Search Tasks"
                   />
-                }
+                </form>
+                {/* } */}
 
                 <Tooltip title={'Add Lead'}>
                   <IconButton onClick={handleCreateNew}>
@@ -302,11 +347,11 @@ export default function CustomizedMenus() {
 
               </Grid>
               {/* disabled={selected?.length == 0} */}
-             <Tooltip title={selected?.length == 0 && 'Please Select a lead'}>
+              <Tooltip title={selected?.length == 0 && 'Please Select a lead'}>
                 <IconButton onClick={handleClick}>
                   <MoreVert fontSize='small' sx={{ color: 'grey', cursor: 'pointer' }} />
                 </IconButton>
-             </Tooltip>
+              </Tooltip>
               <Popover
                 id={id}
                 open={open}
@@ -330,7 +375,7 @@ export default function CustomizedMenus() {
         </div>
 
         <div className='content-block'>
-          <LeadTable handleEditAssign={handleEditAssign} openAssign={handleSigleAssign} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} selected={selected} setSelected={setSelected} />
+          <LeadTable handleEditAssign={handleEditAssign} openAssign={handleSigleAssign} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} selected={selected} setSelected={setSelected} searchType={watch('searchType')} nameSearch={nameSearch} emailSearch={emailSearch} phoneSearch={phoneSearch} userIdSearch={userIdSearch} />
         </div>
       </section>
     </>

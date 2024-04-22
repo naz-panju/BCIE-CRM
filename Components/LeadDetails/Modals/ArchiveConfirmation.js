@@ -14,6 +14,7 @@ import { Grid, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { StudentApi } from '@/data/Endpoints/Student';
 import SelectX from '@/Form/SelectX';
+import { ListingApi } from '@/data/Endpoints/Listing';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -30,9 +31,9 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
         disabled: false,
     });
 
-    const fetchStudents = (e) => {
-        return StudentApi.list({ keyword: e }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
+    const fetchReasons = (e) => {
+        return ListingApi.archiveReason({ keyword: e }).then(response => {
+            if (response?.status == 200 || response?.status == 201) {
                 return response?.data?.data
             } else {
                 return [];
@@ -56,6 +57,9 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
         if (details?.closed == 1) {
             action = LeadApi.reOpenLead(dataToSubmit)
         } else {
+            dataToSubmit['archive_note']=watch('note')
+            dataToSubmit['archive_reason']=watch('reason')?.reason
+            console.log(dataToSubmit);
             action = LeadApi.closeLead(dataToSubmit)
         }
         action.then((response) => {
@@ -126,12 +130,12 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
                                 <Grid item xs={12} md={12}>
                                     <SelectX
                                         menuPlacement='top'
-                                        loadOptions={fetchStudents}
+                                        loadOptions={fetchReasons}
                                         control={control}
                                         // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
                                         // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'student'}
-                                        defaultValue={watch('student')}
+                                        name={'reason'}
+                                        defaultValue={watch('reason')}
                                     />
                                 </Grid>
                             </Grid>

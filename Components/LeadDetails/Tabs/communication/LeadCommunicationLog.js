@@ -13,7 +13,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(false)
-
+    const [details, setdetails] = useState()
     const [selected, setSelected] = useState([])
 
     const [tabValue, setTabValue] = useState(0)
@@ -55,7 +55,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
         let params = {
             lead_id: lead_id,
             limit: emailLimit,
-            type:'Email Send'
+            type: ['Send', 'Receive']
             // page: page + 1
         }
         if (from == 'app') {
@@ -67,12 +67,14 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
         setLoading(false)
     }
 
+    // console.log(list);
+
     const fetchWhatsappList = async () => {
         setLoading(true)
         let params = {
             lead_id: lead_id,
             limit: whatsappLimit,
-            type:'Whatsapp Send'
+            type: ['Whatsapp Send', 'Whatsapp Receive']
             // page: page + 1
         }
         if (from == 'app') {
@@ -84,9 +86,6 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
         setLoading(false)
     }
 
-    console.log(whatsappList);
-
-
     const handleEmailLimit = () => {
         setEmailLimit(emailLimit + 5)
     }
@@ -94,6 +93,22 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
     const handleWhatsappLimit = () => {
         setwhatsappLimit(whatsappLimit + 5)
     }
+
+    const getSummary = async () => {
+        let params = {
+            lead_id: lead_id,
+        }
+        if (from == 'app') {
+            params['application_id'] = app_id
+        }
+        const response = await CommunicationLogApi.summary(params)
+        // console.log(response);
+        setdetails(response?.data?.data)
+    }
+
+    useEffect(() => {
+        getSummary()
+    }, [emailLimit, whatsappLimit])
 
 
     useEffect(() => {
@@ -119,14 +134,14 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
                     <div className='flex mar-10 communication-log-block'>
                         <div className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
                             <div className='lead-score-block'>
-                                <h3>5</h3>
+                                <h3>{details?.email_send_summary}</h3>
                                 <h4>Email Sent</h4>
                             </div>
                         </div>
 
                         <div className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
                             <div className='lead-score-block'>
-                                <h3>0</h3>
+                                <h3>{details?.email_receive_summary}</h3>
                                 <h4>Email received</h4>
                             </div>
                         </div>
@@ -139,13 +154,13 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
                     <div className='flex mar-10 communication-log-block'>
                         <div className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
                             <div className='lead-score-block'>
-                                <h3>0</h3>
+                                <h3>{details?.whatsapp_send_summary}</h3>
                                 <h4>Whatsapp Sent</h4>
                             </div>
                         </div>
                         <div className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
                             <div className='lead-score-block'>
-                                <h3>0</h3>
+                                <h3>{details?.whatsapp_receive_summary}</h3>
                                 <h4>Whatsapp received</h4>
                             </div>
                         </div>
@@ -159,16 +174,16 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
 
             <div className=' md:w-6/12 lg:w-6/12 mt-3'>
                 <div className='flex mar-10 communication-log-block'>
-                    <div onClick={() => setActiveTab(0)} className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
-                        <div className='lead-score-block-tab flex '>
+                    <div onClick={() => setActiveTab(0)} className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item '>
+                        <div className={`lead-score-block-tab flex  bg-sky-200 ${activeTab == 0 ? 'bg-sky-300' : 'bg-sky-200'}`}>
                             <h4>Email</h4>
                             <h4>({list?.meta?.total})</h4>
                         </div>
                     </div>
                     <div onClick={() => setActiveTab(1)} className='w-full md:w-6/12 lg:w-4/12 pad-10 communication-log-item'>
-                        <div className='lead-score-block-tab tab flex'>
+                        <div className={`lead-score-block-tab tab flex ${activeTab == 1 ? 'bg-sky-300' : 'bg-sky-200'}`} >
                             <h4>Whatsapp</h4>
-                            <h4>(0)</h4>
+                            <h4>({whatsappList?.meta?.total})</h4>
                         </div>
                     </div>
                 </div>

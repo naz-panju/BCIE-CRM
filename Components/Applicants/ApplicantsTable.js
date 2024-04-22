@@ -87,7 +87,7 @@ const headCells = [
         id: 'email',
         numeric: false,
         disablePadding: false,
-        label: 'email ',
+        label: 'Email ',
     },
     {
         id: 'phone',
@@ -215,7 +215,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ApplicantTable({ refresh, editId, setEditId, page, setPage }) {
+export default function ApplicantTable({ refresh, editId, setEditId, page, setPage,searchType, nameSearch }) {
 
     const router = useRouter();
 
@@ -315,6 +315,23 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
 
     const fetchTable = () => {
         setLoading(true)
+
+        let params = {
+            limit: limit,
+            page: page + 1
+        }
+
+
+        if (searchType == 'Name') {
+            params['name'] = nameSearch
+        } else if (searchType == 'Email') {
+            params['email'] = nameSearch
+        } else if (searchType == 'Mobile') {
+            params['phone_number'] = nameSearch
+        } else if (searchType == 'Lead Id') {
+            params['lead_id'] = nameSearch
+        }
+
         StudentApi.list({ limit: limit, page: page + 1 }).then((response) => {
             // console.log(response);
             setList(response?.data)
@@ -395,7 +412,7 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                               <Link href={`lead/${row?.lead_id}`}> {row?.first_name  } {row?.last_name  }</Link>
+                                                               <a target='_blank' href={`lead/${row?.lead_id}`}> {row?.first_name  } {row?.last_name  }</a>
                                                                {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.email}</TableCell>

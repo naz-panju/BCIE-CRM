@@ -55,23 +55,23 @@ function LeadDetail({ data, handleEdit, loading }) {
                     <div className='lead-tabpanel-content-item'>
 
                         <div className="lead-details-list">
-                            <label>Name </label>: {data?.name}
+                            <label style={{ fontWeight: 'bold' }}>Name </label>: {data?.name}
                         </div>
 
                         <div className="lead-details-list">
-                            <label>Preferred Course </label>: {data?.preferred_course}
+                            <label style={{ fontWeight: 'bold' }}>Preferred Course </label>: {data?.preferred_course}
                         </div>
 
                         <div className="lead-details-list">
-                            <label>Email Address </label>: {data?.email}
+                            <label style={{ fontWeight: 'bold' }}>Email Address </label>: {data?.email}
                         </div>
 
                         <div className="lead-details-list">
-                            <label>Mobile Number  </label>: +{data?.phone_country_code} {data?.phone_number}
+                            <label style={{ fontWeight: 'bold' }}>Mobile Number  </label>: +{data?.phone_country_code} {data?.phone_number}
                         </div>
 
                         <div className="lead-details-list">
-                            <label>Alternate Mobile Number </label>:
+                            <label style={{ fontWeight: 'bold' }}>Alternate Mobile Number </label>:
                             {
                                 data?.alternate_phone_number ?
                                     ` +${data?.alternate_phone_country_code} ${data?.alternate_phone_number}`
@@ -79,7 +79,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                             }
                         </div>
                         <div className="lead-details-list">
-                            <label>WhatsApp Number </label>:
+                            <label style={{ fontWeight: 'bold' }}>WhatsApp Number </label>:
                             {
                                 data?.whatsapp_number ?
                                     ` +${data?.whatsapp_country_code} ${data?.whatsapp_number}`
@@ -90,34 +90,34 @@ function LeadDetail({ data, handleEdit, loading }) {
                         {
                             data?.note &&
                             <div className="lead-details-list">
-                                <label>Note </label>: {data?.note}
+                                <label style={{ fontWeight: 'bold' }}>Note </label>: {data?.note}
                             </div>
                         }
 
                         {
                             data?.country &&
                             <div className="lead-details-list">
-                                <label>Country From </label>: {data?.country?.name}
+                                <label style={{ fontWeight: 'bold' }}>Country From </label>: {data?.country?.name}
                             </div>
                         }
 
                         {
                             data?.state &&
                             <div className="lead-details-list">
-                                <label>State </label>: {data?.state}
+                                <label style={{ fontWeight: 'bold' }}>State </label>: {data?.state}
                             </div>
                         }
 
                         {
                             data?.stage &&
                             <div className="lead-details-list">
-                                <label>Lead Stage </label>: {data?.stage?.name}
+                                <label style={{ fontWeight: 'bold' }}>Lead Stage </label>: {data?.stage?.name}
                             </div>
                         }
                         {
                             data?.substage &&
                             <div className="lead-details-list">
-                                <label>Lead Sub Stage </label>: {data?.substage?.name}
+                                <label style={{ fontWeight: 'bold' }}>Lead Sub Stage </label>: {data?.substage?.name}
                             </div>
                         }
 

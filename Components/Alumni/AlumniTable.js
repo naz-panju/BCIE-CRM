@@ -209,7 +209,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function AlumniTable({ refresh, editId, setEditId, page, setPage }) {
+export default function AlumniTable({ refresh, editId, setEditId, page, setPage, searchType, nameSearch, }) {
 
     const router = useRouter();
 
@@ -364,7 +364,25 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
 
     const fetchTable = () => {
         setLoading(true)
-        ApplicationApi.list({ limit: limit, status: 'Admission Completed', country_id: selectedCountry, university_id: selectedUniversity, intake_id: selectedIntake, page: page + 1 }).then((response) => {
+        let params = {
+            limit: limit,
+            status: 'Admission Completed',
+            country_id: selectedCountry,
+            university_id: selectedUniversity,
+            intake_id: selectedIntake,
+            page: page + 1
+        }
+
+        if (searchType == 'Name') {
+            params['name'] = nameSearch
+        } else if (searchType == 'Email') {
+            params['email'] = nameSearch
+        } else if (searchType == 'Mobile') {
+            params['phone_number'] = nameSearch
+        } else if (searchType == 'Lead Id') {
+            params['lead_id'] = nameSearch
+        }
+        ApplicationApi.list(params).then((response) => {
             console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -375,7 +393,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit, selectedCountry, selectedUniversity, selectedIntake, selectedStream])
+    }, [page, refresh, limit, selectedCountry, selectedUniversity, selectedIntake, selectedStream,nameSearch])
 
     return (
 
@@ -495,7 +513,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage 
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                                <Link href={`lead/${row?.lead_id}`}> {row?.student?.first_name} {row?.student?.last_name}</Link>
+                                                                <a target='_blank' href={`lead/${row?.lead_id}`}> {row?.student?.first_name} {row?.student?.last_name}</a>
                                                                 {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.student?.email}</TableCell>

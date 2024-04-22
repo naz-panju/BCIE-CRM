@@ -38,6 +38,8 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import DownloadDocumentModal from './Modals/downloadDocument';
 import ApplicationStageChangeModal from './Modals/stageChange';
+import { ListingApi } from '@/data/Endpoints/Listing';
+import AsyncSelect from "react-select/async";
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -266,6 +268,52 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
     const [details, setDetails] = useState()
 
+    const [selectedCountry, setselectedCountry] = useState()
+    const [selectedUniversity, setselectedUniversity] = useState()
+    const [selectedIntake, setselectedIntake] = useState()
+    const [selectedStream, setselectedStream] = useState()
+
+
+    const fetchCountry = (e) => {
+        return ListingApi.country({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchUniversity = (e) => {
+        return ListingApi.universities({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchIntakes = (e) => {
+        return ListingApi.intakes({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchSubjectAreas = (e) => {
+        return ListingApi.subjectAreas({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -351,10 +399,36 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setDetails(row)
     }
 
+    const handleCountryChange = (data) => {
+        setselectedCountry(data?.id)
+    }
+
+    const handleUniversityChange = (data) => {
+        setselectedUniversity(data?.id)
+    }
+
+    const handleIntakeChange = (data) => {
+        setselectedIntake(data?.id)
+    }
+
+    const handleStreamChange = (data) => {
+        setselectedStream(data?.id)
+    }
+
 
     const fetchTable = () => {
         setLoading(true)
-        ApplicationApi.list({ limit: limit, page: page + 1 }).then((response) => {
+
+        let params = {
+            limit: limit,
+            // status: 'Admission Completed',
+            country_id: selectedCountry,
+            university_id: selectedUniversity,
+            intake_id: selectedIntake,
+            page: page + 1
+        }
+
+        ApplicationApi.list(params).then((response) => {
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {
@@ -364,7 +438,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit])
+    }, [page, refresh, limit,selectedCountry, selectedUniversity, selectedIntake, selectedStream])
 
 
     return (
@@ -373,6 +447,57 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             {/* <EmailTemplateDetailModal id={detailId} setId={setDetailId} /> */}
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
+
+            <Grid p={1} pl={0} mb={1} container display={'flex'} >
+                <Grid mr={1} item md={2}>
+                    <AsyncSelect
+                        isClearable
+                        defaultOptions
+                        loadOptions={fetchCountry}
+                        getOptionLabel={(e) => e.name}
+                        getOptionValue={(e) => e.id}
+                        placeholder={<div>Country</div>}
+                        onChange={handleCountryChange}
+                    />
+                </Grid>
+
+                <Grid mr={1} item md={2}>
+                    <AsyncSelect
+                        isClearable
+                        defaultOptions
+                        loadOptions={fetchUniversity}
+                        getOptionLabel={(e) => e.name}
+                        getOptionValue={(e) => e.id}
+                        placeholder={<div>University</div>}
+                        onChange={handleUniversityChange}
+                    />
+                </Grid>
+
+                <Grid mr={1} item md={2}>
+                    <AsyncSelect
+                        isClearable
+                        defaultOptions
+                        loadOptions={fetchIntakes}
+                        getOptionLabel={(e) => e.name}
+                        getOptionValue={(e) => e.id}
+                        placeholder={<div>Intake</div>}
+                        onChange={handleIntakeChange}
+                    />
+                </Grid>
+
+                <Grid mr={1} item md={2}>
+                    <AsyncSelect
+                        isClearable
+                        defaultOptions
+                        loadOptions={fetchSubjectAreas}
+                        getOptionLabel={(e) => e.name}
+                        getOptionValue={(e) => e.id}
+                        placeholder={<div> subject Area</div>}
+                        onChange={handleStreamChange}
+                    />
+                </Grid>
+
+            </Grid>
 
             {
 

@@ -213,7 +213,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh, page, setPage, selected, setSelected,openAssign,handleEditAssign }) {
+export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchType, nameSearch, emailSearch, phoneSearch, userIdSearch }) {
 
   const router = useRouter();
 
@@ -345,7 +345,27 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
   const fetchTable = () => {
     setLoading(true)
-    LeadApi.list({ limit: limit, assigned_to: selectedAssignedTo, stage: selectedStage, page: page + 1 }).then((response) => {
+    let params = {
+      limit: limit,
+      assigned_to: selectedAssignedTo,
+      stage: selectedStage,
+      // name: nameSearch,
+      // email: emailSearch,
+      // phone_number: phoneSearch,
+      // lead_id: userIdSearch,
+      page: page + 1
+    }
+    if (searchType == 'Name') {
+      params['name'] = nameSearch
+    } else if (searchType == 'Email') {
+      params['email'] = nameSearch
+    } else if (searchType == 'Mobile') {
+      params['phone_number'] = nameSearch
+    } else if (searchType == 'Lead Id') {
+      params['lead_id'] = nameSearch
+    }
+    
+    LeadApi.list(params).then((response) => {
       // console.log(response);
       setList(response?.data)
       setLoading(false)
@@ -358,7 +378,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
   useEffect(() => {
     fetchTable()
-  }, [page, refresh, limit, selectedAssignedTo, selectedStage])
+  }, [page, refresh, limit, selectedAssignedTo, selectedStage, nameSearch, emailSearch, phoneSearch, userIdSearch])
 
   return (
     <>
@@ -445,16 +465,16 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 padding="none"
                                 className='reg-name'
                               >
-                                <Link href={`/lead/${row?.id}`}>{row.name}</Link>
+                                <Link target='_blank' href={`/lead/${row?.id}`}>{row.name}</Link>
                               </TableCell>
                               <TableCell align="left">{row?.email}</TableCell>
                               <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
                               <TableCell align="left">
-                                {  
+                                {
                                   row?.assignedToUser ?
-                                   <Button onClick={()=>handleEditAssign(row)} style={{color:'blue',textTransform:'none'}} >{ row?.assignedToUser?.name}</Button>
+                                    <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToUser?.name}</Button>
                                     :
-                                    <Button onClick={()=>openAssign(row?.id)}><PersonOutline  sx={{ color: 'blue', cursor: 'pointer' }} /></Button>
+                                    <Button onClick={() => openAssign(row?.id)}><PersonOutline sx={{ color: 'blue', cursor: 'pointer' }} /></Button>
                                 }
                                 {/* {row?.assignedToUser?.name} */}
                               </TableCell>

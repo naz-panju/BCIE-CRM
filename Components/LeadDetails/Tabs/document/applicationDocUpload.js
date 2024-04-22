@@ -32,9 +32,6 @@ const style = {
 
 export default function ApplicationDocumentUpload({ lead_id, editId, setEditId, appRefresh, datas }) {
 
-
-    console.log(datas);
-
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
     const [open, setOpen] = React.useState(false);

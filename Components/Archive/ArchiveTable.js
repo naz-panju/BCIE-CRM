@@ -207,7 +207,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ArchiveTable({ refresh, editId, setEditId, page, setPage }) {
+export default function ArchiveTable({ refresh, editId, setEditId, page, setPage,searchType, nameSearch }) {
 
     const router = useRouter();
 
@@ -331,7 +331,7 @@ export default function ArchiveTable({ refresh, editId, setEditId, page, setPage
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit,selectedCountry])
+    }, [page, refresh, limit,selectedCountry,nameSearch])
 
     return (
 

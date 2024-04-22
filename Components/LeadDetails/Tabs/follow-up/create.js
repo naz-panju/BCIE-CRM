@@ -2,7 +2,7 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Close, Refresh, ThumbUpOffAlt } from '@mui/icons-material';
+import { Close, Delete, Edit, Refresh, ThumbUpOffAlt } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import { useState } from 'react';
 
@@ -28,6 +28,7 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import TimelineOppositeContent, {
     timelineOppositeContentClasses,
 } from '@mui/lab/TimelineOppositeContent';
+import DeletePopup from '@/Components/Common/Popup/delete';
 
 const scheme = yup.object().shape({
     assigned_to: yup.object().required("Please Choose an User").typeError("Please choose an User"),
@@ -48,6 +49,14 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
     const [loading, setLoading] = useState(false)
 
     const [laoding, setLaoding] = useState(false)
+
+    const [editID, setEditID] = useState(0)
+
+    const [buttonText, setbuttonText] = useState('Save')
+
+    const [deleteID, setDeleteID] = useState(false)
+
+
 
 
     const [list, setList] = useState([])
@@ -142,7 +151,34 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
     }
 
 
+    const handleEdit = (data) => {
+        console.log(data);
+        setEditID(data?.id)
+        // setValue('assigned_to', data || '')
+        setValue('assigned_to', data?.assigned_to_user)
+        setValue('date', data.follow_up_date)
+        setValue('note', data.note)
+        setbuttonText('Edit');
+    }
 
+    // console.log(watch('assigned_to'));
+
+    const handleCancelEdit = () => {
+        setEditID(0)
+        setValue('assigned_to', '')
+        setValue('date', '')
+        setValue('note', '')
+        setbuttonText('Save');
+    }
+
+    const deleteFollowUp = (id) => {
+        setDeleteID(id)
+    }
+
+    const deleteFunction = () => {
+        getData()
+        setRefresh(!refresh)
+    }
 
     const handleDrawerClose = (event) => {
         if (
@@ -158,6 +194,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
     };
 
     const handleAssignedToChange = (data) => {
+        console.log(data);
         setValue('assigned_to', data || '')
     }
 
@@ -177,8 +214,6 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
         setLaoding(false)
     }
 
-    console.log(list);
-
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
@@ -191,6 +226,19 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
 
     return (
         <div>
+
+            {
+                deleteID &&
+                <DeletePopup
+                    type={'post'}
+                    ID={deleteID}
+                    setID={setDeleteID}
+                    setDeletePopup={setDeleteID}
+                    Callfunc={() => deleteFunction()}
+                    api={FollowupApi.delete}
+                    title="Followup"
+                />
+            }
             <Drawer
                 anchor={anchor}
                 open={open}
@@ -216,13 +264,20 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                                     :
                                     <>
 
+                                        {/* {
+                                            editID ? <Grid p={1} pb={0} mb={1}><a style={{ fontSize: '14px', color: 'blue' }}>You are editing a Followup, <span onClick={handleCancelEdit} style={{ textDecoration: 'underline', color: 'red', cursor: 'pointer', fontSize: '14px' }}>Click</span> to cancel</a></Grid>
+                                                : ''
+                                        } */}
+
                                         <Grid p={1} container >
+
                                             <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
                                                 <a className='form-text'>Assigned To</a>
                                             </Grid>
 
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <AsyncSelect
+                                                    // key={watch('assigned_to')}
                                                     name='assigned_to'
                                                     defaultValue={watch('assigned_to')}
                                                     // isClearable
@@ -287,7 +342,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
 
                             <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                                 <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
+                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>{buttonText}</LoadingButton>
                             </Grid>
 
                         </form>
@@ -301,7 +356,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                             <Timeline sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
                                 {
                                     list?.data?.map((obj, index) => (
-                                       
+
                                         <TimelineItem key={index} className='TimelineItemClass'>
                                             <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
                                                 {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')}
@@ -312,8 +367,13 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                                             </TimelineSeparator>
                                             <TimelineContent>
                                                 <div className='timeline-content-content'>
-                                                    <Grid display={'flex'}>
-                                                        <p><b>Follow Up</b> -</p> <p> with {data?.name?.toUpperCase()}</p>
+                                                    <Grid display={'flex'} alignItems={'center'} container>
+                                                        <Grid item md={11} >
+                                                            <p><b>Follow Up</b> -</p> <p> with {data?.name?.toUpperCase()}</p>
+                                                        </Grid>
+                                                        {/* <Grid item md={1}>
+                                                            <Edit onClick={() => handleEdit(obj)} fontSize='small' sx={{ color: 'blue', cursor: 'pointer' }} />
+                                                        </Grid> */}
                                                     </Grid>
                                                     <Grid display={'flex'}>
                                                         <p><b>Assigned To</b>: </p>
@@ -331,6 +391,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                                                             {/* {obj?.status !== 'Completed' && <React.Fragment> | <Button onClick={() => handleConfirmOpen(obj?.id)} sx={{ textTransform: 'none' }} variant='contained' className='h-4 text-black hover:bg-lime-600 hover:text-white' size='small'>Mark as Completed</Button></React.Fragment>} */}
                                                         </p>
                                                     </Grid>
+
                                                     {
                                                         obj?.note &&
                                                         <Grid display={'flex'}>
@@ -338,6 +399,9 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                                                             <p> {obj?.note}</p>
                                                         </Grid>
                                                     }
+                                                    <Grid display={'flex'} justifyContent={'end'}>
+                                                        <Delete onClick={()=>deleteFollowUp(obj?.id)} sx={{ color: 'red', cursor: 'pointer' }} fontSize='small' />
+                                                    </Grid>
                                                 </div>
 
 
@@ -353,7 +417,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                             </div>
                     }
 
-                  
+
                 </Grid>
             </Drawer>
         </div >
