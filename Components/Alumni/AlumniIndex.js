@@ -101,8 +101,8 @@ export default function AlumniIndex() {
     } else if (from == 'name') {
       setValue('nameSearch', '')
       setnameSearch('')
-      sessionStorage.removeItem('leadType')
-      sessionStorage.removeItem('leadSearch')
+      sessionStorage.removeItem('alumniType')
+      sessionStorage.removeItem('alumniSearch')
     } else if (from == 'mobile') {
       // setValue('mobileSearch', '')
       // setphoneSearch('')
@@ -111,18 +111,18 @@ export default function AlumniIndex() {
 
   const handleTypeChange = (type) => {
     setValue('searchType', type)
-    sessionStorage.setItem('leadType',type)
+    sessionStorage.setItem('alumniType',type)
   }
 
   const handleNameSearch = () => {
     setnameSearch(watch('nameSearch'))
-    sessionStorage.setItem('leadSearch',watch('nameSearch'))
+    sessionStorage.setItem('alumniSearch',watch('nameSearch'))
   }
 
   const getInitialValue=()=>{
-    let getSearch=sessionStorage.getItem('leadSearch')
+    let getSearch=sessionStorage.getItem('alumniSearch')
     if(getSearch){
-      let getSearchType=sessionStorage.getItem('leadType')
+      let getSearchType=sessionStorage.getItem('alumniType')
       setValue('searchType', getSearchType)
       setValue('nameSearch',getSearch)
       // setnameSearch(getSearch)

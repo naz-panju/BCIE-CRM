@@ -102,8 +102,8 @@ export default function ArchiveIndex() {
     } else if (from == 'name') {
       setValue('nameSearch', '')
       setnameSearch('')
-      sessionStorage.removeItem('leadType')
-      sessionStorage.removeItem('leadSearch')
+      sessionStorage.removeItem('archiveType')
+      sessionStorage.removeItem('archiveSearch')
     } else if (from == 'mobile') {
       // setValue('mobileSearch', '')
       // setphoneSearch('')
@@ -112,18 +112,18 @@ export default function ArchiveIndex() {
 
   const handleTypeChange = (type) => {
     setValue('searchType', type)
-    sessionStorage.setItem('leadType', type)
+    sessionStorage.setItem('archiveType', type)
   }
 
   const handleNameSearch = () => {
     setnameSearch(watch('nameSearch'))
-    sessionStorage.setItem('leadSearch', watch('nameSearch'))
+    sessionStorage.setItem('archiveSearch', watch('nameSearch'))
   }
 
   const getInitialValue = () => {
-    let getSearch = sessionStorage.getItem('leadSearch')
+    let getSearch = sessionStorage.getItem('archiveSearch')
     if (getSearch) {
-      let getSearchType = sessionStorage.getItem('leadType')
+      let getSearchType = sessionStorage.getItem('archiveType')
       setValue('searchType', getSearchType)
       setValue('nameSearch', getSearch)
       // setnameSearch(getSearch)
@@ -177,7 +177,7 @@ export default function ArchiveIndex() {
                       endAdornment: (
                         <>
                           <InputAdornment position="end">
-                            <SearchInput onClick={handleNameSearch} sx={{ cursor: 'pointer' }} fontSize='small' />
+                            <Search onClick={handleNameSearch} sx={{ cursor: 'pointer' }} fontSize='small' />
                           </InputAdornment>
                           <InputAdornment onClick={() => handleClearSearch('name')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
                             <Close fontSize='small' />

@@ -103,8 +103,8 @@ export default function ApplicantsIndex() {
     } else if (from == 'name') {
       setValue('nameSearch', '')
       setnameSearch('')
-      sessionStorage.removeItem('leadType')
-      sessionStorage.removeItem('leadSearch')
+      sessionStorage.removeItem('applicantType')
+      sessionStorage.removeItem('applicantSearch')
     } else if (from == 'mobile') {
       // setValue('mobileSearch', '')
       // setphoneSearch('')
@@ -113,18 +113,18 @@ export default function ApplicantsIndex() {
 
   const handleTypeChange = (type) => {
     setValue('searchType', type)
-    sessionStorage.setItem('leadType', type)
+    sessionStorage.setItem('applicantType', type)
   }
 
   const handleNameSearch = () => {
     setnameSearch(watch('nameSearch'))
-    sessionStorage.setItem('leadSearch', watch('nameSearch'))
+    sessionStorage.setItem('applicantSearch', watch('nameSearch'))
   }
 
   const getInitialValue = () => {
-    let getSearch = sessionStorage.getItem('leadSearch')
+    let getSearch = sessionStorage.getItem('applicantSearch')
     if (getSearch) {
-      let getSearchType = sessionStorage.getItem('leadType')
+      let getSearchType = sessionStorage.getItem('applicantType')
       setValue('searchType', getSearchType)
       setValue('nameSearch', getSearch)
       // setnameSearch(getSearch)

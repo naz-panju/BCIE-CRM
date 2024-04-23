@@ -242,7 +242,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ApplicationTable({ refresh, editId, setEditId, page, setPage, setRefresh }) {
+export default function ApplicationTable({ refresh, editId, setEditId, page, setPage, setRefresh,searchType, nameSearch }) {
 
     const router = useRouter();
 
@@ -428,6 +428,16 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             page: page + 1
         }
 
+        if (searchType == 'Name') {
+            params['name'] = nameSearch
+        } else if (searchType == 'Email') {
+            params['email'] = nameSearch
+        } else if (searchType == 'Mobile') {
+            params['phone_number'] = nameSearch
+        } else if (searchType == 'Lead Id') {
+            params['lead_id'] = nameSearch
+        }
+
         ApplicationApi.list(params).then((response) => {
             setList(response?.data)
             setLoading(false)
@@ -438,7 +448,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit,selectedCountry, selectedUniversity, selectedIntake, selectedStream])
+    }, [page, refresh, limit,selectedCountry, selectedUniversity, selectedIntake, selectedStream,nameSearch])
 
 
     return (

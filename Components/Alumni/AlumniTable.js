@@ -382,6 +382,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
         } else if (searchType == 'Lead Id') {
             params['lead_id'] = nameSearch
         }
+        
         ApplicationApi.list(params).then((response) => {
             console.log(response);
             setList(response?.data)
