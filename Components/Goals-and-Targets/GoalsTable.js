@@ -98,7 +98,7 @@ function GoalsTable() {
                 <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', paddingLeft: 2 }}>
                     Target
                 </Typography>
-                <Paper sx={{ width: '100%', mb: 2, border: '1px solid grey' }}>
+                <Grid sx={{ width: '100%', mb: 2, }}>
                     <Grid container spacing={2} justifyContent="center">
                         <Grid item xs={3}>
                             <Paper elevation={3} sx={{ p: 2 }}>
@@ -128,7 +128,7 @@ function GoalsTable() {
                         </Grid>
 
                     </Grid>
-                </Paper>
+                </Grid>
             </Grid>
 
 
@@ -136,7 +136,7 @@ function GoalsTable() {
                 <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', paddingLeft: 2 }}>
                     Goals
                 </Typography>
-                <Paper sx={{ width: '100%', mb: 2, border: '1px solid grey' }}>
+                <Grid sx={{ width: '100%', mb: 2}}>
                     <Grid container spacing={2} justifyContent="center">
                         <Grid item xs={3}>
                             <Paper elevation={3} sx={{ p: 2 }}>
@@ -166,7 +166,7 @@ function GoalsTable() {
                         </Grid>
 
                     </Grid>
-                </Paper>
+                </Grid>
             </Grid>
         </>
     )
