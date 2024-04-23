@@ -207,7 +207,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ArchiveTable({ refresh, editId, setEditId, page, setPage,searchType, nameSearch }) {
+export default function ArchiveTable({ refresh, editId, setEditId, page, setPage, searchType, nameSearch }) {
 
     const router = useRouter();
 
@@ -234,13 +234,13 @@ export default function ArchiveTable({ refresh, editId, setEditId, page, setPage
 
     const fetchCountry = (e) => {
         return ListingApi.country({ keyword: e }).then(response => {
-          if (typeof response?.data?.data !== "undefined") {
-            return response.data.data;
-          } else {
-            return [];
-          }
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
         })
-      }
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -314,13 +314,30 @@ export default function ArchiveTable({ refresh, editId, setEditId, page, setPage
 
     const handleCountryChange = (data) => {
         setselectedCountry(data?.id)
-      }
-    
+    }
+
 
 
     const fetchTable = () => {
         setLoading(true)
-        LeadApi.list({ limit: limit, closed: 1,applying_for_country:selectedCountry, page: page + 1 }).then((response) => {
+        let params = {
+            limit: limit,
+            closed: 1,
+            applying_for_country: selectedCountry,
+            page: page + 1
+        }
+
+        if (searchType == 'Name') {
+            params['name'] = nameSearch
+        } else if (searchType == 'Email') {
+            params['email'] = nameSearch
+        } else if (searchType == 'Mobile') {
+            params['phone_number'] = nameSearch
+        } else if (searchType == 'Lead Id') {
+            params['lead_id'] = nameSearch
+        }
+
+        LeadApi.list(params).then((response) => {
             console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -331,7 +348,7 @@ export default function ArchiveTable({ refresh, editId, setEditId, page, setPage
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit,selectedCountry,nameSearch])
+    }, [page, refresh, limit, selectedCountry, nameSearch])
 
     return (
 
@@ -451,7 +468,7 @@ export default function ArchiveTable({ refresh, editId, setEditId, page, setPage
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                                <Link href={`lead/${row?.id}`}> {row?.name}</Link>
+                                                                <a target='_blank' href={`lead/${row?.id}`}> {row?.name}</a>
                                                                 {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.email}</TableCell>

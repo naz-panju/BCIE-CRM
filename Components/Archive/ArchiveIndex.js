@@ -113,6 +113,7 @@ export default function ArchiveIndex() {
   const handleTypeChange = (type) => {
     setValue('searchType', type)
     sessionStorage.setItem('archiveType', type)
+    setnameSearch('')
   }
 
   const handleNameSearch = () => {
@@ -132,7 +133,7 @@ export default function ArchiveIndex() {
 
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
-    getInitialValue()
+    // getInitialValue()
   }, [])
 
   return (

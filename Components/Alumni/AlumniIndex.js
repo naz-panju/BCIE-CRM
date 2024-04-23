@@ -112,6 +112,7 @@ export default function AlumniIndex() {
   const handleTypeChange = (type) => {
     setValue('searchType', type)
     sessionStorage.setItem('alumniType',type)
+    setnameSearch('')
   }
 
   const handleNameSearch = () => {
@@ -123,7 +124,11 @@ export default function AlumniIndex() {
     let getSearch=sessionStorage.getItem('alumniSearch')
     if(getSearch){
       let getSearchType=sessionStorage.getItem('alumniType')
-      setValue('searchType', getSearchType)
+      if(getSearchType){
+        setValue('searchType', getSearchType)
+      }else{
+        setValue('searchType', searchOptions[0]?.name)
+      }
       setValue('nameSearch',getSearch)
       // setnameSearch(getSearch)
     }
@@ -131,7 +136,7 @@ export default function AlumniIndex() {
 
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
-    getInitialValue()
+    // getInitialValue()
   }, [])
 
 

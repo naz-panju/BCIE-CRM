@@ -154,6 +154,7 @@ export default function CustomizedMenus() {
   const handleTypeChange = (type) => {
     setValue('searchType', type)
     sessionStorage.setItem('leadType',type)
+    setnameSearch('')
     // setValue('emailSearch', '')
     // setValue('mobileSearch', '')
     // setValue('nameSearch', '')
@@ -167,6 +168,7 @@ export default function CustomizedMenus() {
   const handleNameSearch = () => {
     setnameSearch(watch('nameSearch'))
     sessionStorage.setItem('leadSearch',watch('nameSearch'))
+    
   }
   const handleEmailSearch = () => {
     setemailSearch(watch('emailSearch'))
@@ -194,7 +196,7 @@ export default function CustomizedMenus() {
 
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
-    getInitialValue()
+    // getInitialValue()
   }, [])
 
 

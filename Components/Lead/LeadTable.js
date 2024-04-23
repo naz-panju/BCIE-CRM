@@ -364,7 +364,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     } else if (searchType == 'Lead Id') {
       params['lead_id'] = nameSearch
     }
-    
+
     LeadApi.list(params).then((response) => {
       // console.log(response);
       setList(response?.data)
@@ -465,7 +465,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 padding="none"
                                 className='reg-name'
                               >
-                                <Link target='_blank' href={`/lead/${row?.id}`}>{row.name}</Link>
+                                <a target='_blank' href={`/lead/${row?.id}`}>{row.name}</a>
                               </TableCell>
                               <TableCell align="left">{row?.email}</TableCell>
                               <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>

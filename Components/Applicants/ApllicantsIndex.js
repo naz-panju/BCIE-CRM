@@ -114,6 +114,7 @@ export default function ApplicantsIndex() {
   const handleTypeChange = (type) => {
     setValue('searchType', type)
     sessionStorage.setItem('applicantType', type)
+    setnameSearch('')
   }
 
   const handleNameSearch = () => {
@@ -133,7 +134,7 @@ export default function ApplicantsIndex() {
 
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
-    getInitialValue()
+    // getInitialValue()
   }, [])
 
 

@@ -18,6 +18,12 @@ function Details({ data, loading }) {
 
     const currentURL = window?.location?.origin;
 
+    function trimUrlAndNumbers(url) {
+        const lastSlashIndex = url?.lastIndexOf('/');
+        let trimmedString = url?.substring(lastSlashIndex + 1);
+        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
+    }
 
     const handleCopy = async () => {
         setcopied(true)
@@ -139,7 +145,7 @@ function Details({ data, loading }) {
                         </Typography>
                         <Grid item xs={12} sm={12} md={12}>
                             <a href={data?.file} target='_blank' style={{ fontSize: '16px', color: 'blue' }}>
-                                {data?.file}
+                                {trimUrlAndNumbers(data?.file)}
                             </a>
                         </Grid>
                     </Grid>

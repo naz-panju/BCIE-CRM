@@ -111,6 +111,7 @@ export default function ApplicationIndex() {
   const handleTypeChange = (type) => {
     setValue('searchType', type)
     sessionStorage.setItem('applicationType', type)
+    setnameSearch('')
   }
 
   const handleNameSearch = () => {
@@ -130,7 +131,7 @@ export default function ApplicationIndex() {
 
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
-    getInitialValue()
+    // getInitialValue()
   }, [])
 
   return (
