@@ -52,6 +52,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
     const handleClose = () => {
         setValue('counsellor', '')
+        setValue('counsellors', '')
         handlePopClose()
         setsingle(false)
         setassignToUser()
@@ -225,7 +226,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                             <Grid item mt={2} mb={2} md={12}>
                                 <AsyncSelect
                                     isMulti
-                                    placeholder='Select Counsellor'
+                                    placeholder='Select Counsellors'
                                     name={'counsellors'}
                                     defaultValue={watch('counsellors')}
                                     isClearable

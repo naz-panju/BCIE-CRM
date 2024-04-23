@@ -242,7 +242,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ApplicationTable({ refresh, editId, setEditId, page, setPage, setRefresh,searchType, nameSearch }) {
+export default function ApplicationTable({ refresh, editId, setEditId, page, setPage, setRefresh, searchType, nameSearch }) {
 
     const router = useRouter();
 
@@ -439,6 +439,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         }
 
         ApplicationApi.list(params).then((response) => {
+            console.log(response);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {
@@ -446,9 +447,12 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             setLoading(false)
         })
     }
+
+    console.log(list);
+
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit,selectedCountry, selectedUniversity, selectedIntake, selectedStream,nameSearch])
+    }, [page, refresh, limit, selectedCountry, selectedUniversity, selectedIntake, selectedStream, nameSearch])
 
 
     return (
@@ -571,7 +575,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                                <a target='_blank' href={`applications/${row?.id}`}> {row?.student?.first_name} {row?.student?.last_name}</a>
+                                                                <a target='_blank' href={`applications/${row?.id}`}> {row?.student?.first_name} {row?.student?.middle_name} {row?.student?.last_name}</a>
                                                                 {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.student?.email}</TableCell>

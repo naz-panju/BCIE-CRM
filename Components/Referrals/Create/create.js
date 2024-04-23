@@ -149,9 +149,9 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
             formData.append('image', attachment)
         }
 
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]); // Iterate through form data and log key-value pairs
-        }
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0] + ': ' + pair[1]); // Iterate through form data and log key-value pairs
+        // }
 
         let action;
 
@@ -188,6 +188,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         setEditId()
         reset()
         setValue('title', '')
+        setAttachment()
         setValue('validity_date', '')
         setOpen(false)
     }

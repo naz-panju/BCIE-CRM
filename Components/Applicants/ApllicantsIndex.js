@@ -122,6 +122,7 @@ export default function ApplicantsIndex() {
     sessionStorage.setItem('applicantSearch', watch('nameSearch'))
   }
 
+
   const getInitialValue = () => {
     let getSearch = sessionStorage.getItem('applicantSearch')
     if (getSearch) {

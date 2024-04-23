@@ -332,7 +332,9 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
             params['lead_id'] = nameSearch
         }
 
-        StudentApi.list({ limit: limit, page: page + 1 }).then((response) => {
+        console.log(params);
+
+        StudentApi.list(params).then((response) => {
             // console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -343,7 +345,7 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit])
+    }, [page, refresh, limit,nameSearch])
 
     return (
 

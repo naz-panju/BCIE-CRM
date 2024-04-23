@@ -1,18 +1,20 @@
 import { ListingApi } from '@/data/Endpoints/Listing';
-import { Box, Grid, Paper } from '@mui/material';
-import React from 'react'
+import { Box, Grid, Paper, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import AsyncSelect from "react-select/async";
 import ReactSelector from 'react-select';
+import { GoalsApi } from '@/data/Endpoints/GoalsAndTargets';
 
 
 function GoalsTable() {
 
     const { watch, setValue } = useForm()
 
+    const [datas, setdatas] = useState()
 
     const fetchUser = (e) => {
-        return ListingApi.users({ keyword: e }).then(response => {
+        return ListingApi.users({ keyword: e,role_id:5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -28,6 +30,19 @@ function GoalsTable() {
         { name: 'This Year' },
         { name: 'Last Year' },
     ]
+
+    const fetchDatas = () => {
+        GoalsApi.list().then((response) => {
+            setdatas(response?.data?.data)
+        })
+    }
+
+    // console.log(datas);
+
+    useEffect(() => {
+        fetchDatas()
+    }, [])
+
 
 
     return (
@@ -46,7 +61,7 @@ function GoalsTable() {
                 </Grid>
 
                 <Grid mr={1} item md={2.5}>
-                <ReactSelector
+                    <ReactSelector
                         placeholder={'Periods'}
                         onInputChange={Periods}
                         styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}
@@ -71,28 +86,80 @@ function GoalsTable() {
                     :
             } */}
 
-            <Box mt={3} sx={{ width: '100%' }}>
-                <a style={{fontSize:'18px'}}>Target</a>
+            <Grid mt={3} sx={{ width: '100%', textAlign: 'center' }}>
+                <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', paddingLeft: 2 }}>
+                    Target
+                </Typography>
                 <Paper sx={{ width: '100%', mb: 2, border: '1px solid grey' }}>
+                    <Grid container spacing={2} justifyContent="center">
+                        <Grid item xs={3}>
+                            <Paper elevation={3} sx={{ p: 2 }}>
+                                <Typography variant="h6">Leads</Typography>
+                                <Typography variant="body1">{datas?.target_leads || 0}</Typography>
+                            </Paper>
+                        </Grid>
 
-                    <Grid height={150} width={'100%'}>
+                        <Grid item xs={3}>
+                            <Paper elevation={3} sx={{ p: 2 }}>
+                                <Typography variant="h6">Students</Typography>
+                                <Typography variant="body1">{datas?.target_students || 0}</Typography>
+                            </Paper>
+                        </Grid>
 
-                    </Grid>
-                </Paper>
-            </Box>
-            <Box mt={3} sx={{ width: '100%' }}>
-                <a style={{fontSize:'18px'}}>Current Status </a>
-                <Paper sx={{ width: '100%', mb: 2, border: '1px solid grey' }}>
-
-                    <Grid height={150} width={'100%'} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                        <Grid display={'flex'} flexDirection={'column'}>
-                            {/* <a style={{fontSize:'17px'}}>Lead</a>
-                            <a style={{fontSize:'17px'}}>100</a> */}
+                        <Grid item xs={3}>
+                            <Paper elevation={3} sx={{ p: 2 }}>
+                                <Typography variant="h6">Application</Typography>
+                                <Typography variant="body1">{datas?.target_applications || 0}</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Paper elevation={3} sx={{ p: 2 }}>
+                                <Typography variant="h6">Payments</Typography>
+                                <Typography variant="body1">{datas?.target_payments || 0}</Typography>
+                            </Paper>
                         </Grid>
 
                     </Grid>
                 </Paper>
-            </Box>
+            </Grid>
+
+
+             <Grid mt={3} sx={{ width: '100%', textAlign: 'center' }}>
+                <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', paddingLeft: 2 }}>
+                    Goals
+                </Typography>
+                <Paper sx={{ width: '100%', mb: 2, border: '1px solid grey' }}>
+                    <Grid container spacing={2} justifyContent="center">
+                        <Grid item xs={3}>
+                            <Paper elevation={3} sx={{ p: 2 }}>
+                                <Typography variant="h6">Leads</Typography>
+                                <Typography variant="body1">{datas?.achived_leads || 0}</Typography>
+                            </Paper>
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <Paper elevation={3} sx={{ p: 2 }}>
+                                <Typography variant="h6">Students</Typography>
+                                <Typography variant="body1">{datas?.achived_students || 0}</Typography>
+                            </Paper>
+                        </Grid>
+
+                        <Grid item xs={3}>
+                            <Paper elevation={3} sx={{ p: 2 }}>
+                                <Typography variant="h6">Application</Typography>
+                                <Typography variant="body1">{datas?.achived_applications || 0}</Typography>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <Paper elevation={3} sx={{ p: 2 }}>
+                                <Typography variant="h6">Payments</Typography>
+                                <Typography variant="body1">{datas?.achived_payments || 0}</Typography>
+                            </Paper>
+                        </Grid>
+
+                    </Grid>
+                </Paper>
+            </Grid>
         </>
     )
 }

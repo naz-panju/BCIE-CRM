@@ -19,10 +19,12 @@ import CreateLead from '../Lead/Create/Create';
 import LeadDocuments from '../LeadDetails/Tabs/document/LeadDocuments';
 import { Skeleton } from '@mui/material';
 import LeadDetail from './Tabs/AppDetails';
-import { Apps, Payment, TaskSharp } from '@mui/icons-material';
+import { Apps, Payment, SchoolOutlined, TaskSharp } from '@mui/icons-material';
 import FollowUp from '../LeadDetails/Tabs/follow-up/LeadFollowup';
 import LeadTask from '../LeadDetails/Tabs/LeadTask';
 import LeadPayments from '../LeadDetails/Tabs/payments/LeadPayments';
+import StudentDetail from '../LeadDetails/Tabs/StudentDetail';
+import ConvertLeadToStudent from '../LeadDetails/Modals/ConvertToStudent';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,12 +68,18 @@ export default function ApplicationVerticalTabs({ data, refresh, setRefresh, loa
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
+  const [studentEditId, setstudentEditId] = useState()
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const handleEdit = () => {
     setEditId(data?.id)
+  }
+
+  const handleStudentEdit = () => {
+    setstudentEditId(data?.student?.id)
   }
 
   const [isClient, setIsClient] = useState(false);
@@ -84,7 +92,11 @@ export default function ApplicationVerticalTabs({ data, refresh, setRefresh, loa
       ),
       icon: <PermIdentityIcon />
     },
-
+    {
+      label: 'Student Details',
+      component: isClient && <StudentDetail handleEdit={handleStudentEdit} data={data} loading={loading} handleRefresh={handleRefresh} />,
+      icon: <SchoolOutlined />
+    },
     {
       label: 'Timeline',
       component: <LeadTimeline from={'app'} lead_id={data?.lead_id} app_id={data?.id} />,
@@ -134,6 +146,8 @@ export default function ApplicationVerticalTabs({ data, refresh, setRefresh, loa
   return (
     <>
       <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
+      <ConvertLeadToStudent lead_id={data?.id} editId={studentEditId} setEditId={setstudentEditId} leadId={data?.id} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
+
       <Box
         sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
       >

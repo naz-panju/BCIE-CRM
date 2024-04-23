@@ -56,7 +56,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
 
     const [deleteID, setDeleteID] = useState(false)
 
-
+    const [selectKey, setselectKey] = useState(Math.random)
 
 
     const [list, setList] = useState([])
@@ -95,6 +95,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
 
     const handleClose = () => {
         setEditId()
+        setEditID(0)
         reset()
         setOpen(false)
 
@@ -124,17 +125,17 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
 
         let action;
 
-        if (editId > 0) {
-            // dataToSubmit['id'] = editId
-            // action = TaskApi.update(dataToSubmit)
+        if (editID > 0) {
+            dataToSubmit['id'] = editID
+            action = FollowupApi.update(dataToSubmit)
         } else {
             action = FollowupApi.add(dataToSubmit)
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || 201) {
-                toast.success('Follow-up has been created successfully')
+                toast.success(editID>0?'Follow-up has been updated successfully':'Follow-up has been created successfully')
                 handleClose()
                 setRefresh(!refresh)
                 setLoading(false)
@@ -152,10 +153,11 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
 
 
     const handleEdit = (data) => {
-        console.log(data);
+        // console.log(data);
         setEditID(data?.id)
         // setValue('assigned_to', data || '')
         setValue('assigned_to', data?.assigned_to_user)
+        setselectKey(Math.random()*0.02)
         setValue('date', data.follow_up_date)
         setValue('note', data.note)
         setbuttonText('Edit');
@@ -168,6 +170,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
         setValue('assigned_to', '')
         setValue('date', '')
         setValue('note', '')
+        setselectKey(Math.random()*0.02)
         setbuttonText('Save');
     }
 
@@ -264,10 +267,10 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                                     :
                                     <>
 
-                                        {/* {
+                                        {
                                             editID ? <Grid p={1} pb={0} mb={1}><a style={{ fontSize: '14px', color: 'blue' }}>You are editing a Followup, <span onClick={handleCancelEdit} style={{ textDecoration: 'underline', color: 'red', cursor: 'pointer', fontSize: '14px' }}>Click</span> to cancel</a></Grid>
                                                 : ''
-                                        } */}
+                                        }
 
                                         <Grid p={1} container >
 
@@ -277,24 +280,20 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
 
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <AsyncSelect
-                                                    // key={watch('assigned_to')}
-                                                    name='assigned_to'
-                                                    defaultValue={watch('assigned_to')}
-                                                    // isClearable
-                                                    defaultOptions
+                                                    key={selectKey}
                                                     loadOptions={fetchUser}
+                                                    onInputChange={fetchUser}
+                                                    defaultOptions
                                                     getOptionLabel={(e) => e.name}
                                                     getOptionValue={(e) => e.id}
-                                                    onChange={handleAssignedToChange}
-                                                />
-                                                {/* <SelectX
-                                                    loadOptions={fetchCounty}
                                                     control={control}
-                                                    name={'country'}
-                                                    defaultValue={watch('country')}
-                                                /> */}
-                                                {errors.assigned_to && <span className='form-validation'>{errors.assigned_to.message}</span>}
+                                                    name='assigned_to'
+                                                    defaultValue={watch('assigned_to')}
+                                                    onChange={handleAssignedToChange}
+                                                // isClearable
+                                                />
 
+                                                {errors.assigned_to && <span className='form-validation'>{errors.assigned_to.message}</span>}
                                             </Grid>
 
                                         </Grid>
@@ -371,9 +370,9 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                                                         <Grid item md={11} >
                                                             <p><b>Follow Up</b> -</p> <p> with {data?.name?.toUpperCase()}</p>
                                                         </Grid>
-                                                        {/* <Grid item md={1}>
+                                                        <Grid item md={1}>
                                                             <Edit onClick={() => handleEdit(obj)} fontSize='small' sx={{ color: 'blue', cursor: 'pointer' }} />
-                                                        </Grid> */}
+                                                        </Grid>
                                                     </Grid>
                                                     <Grid display={'flex'}>
                                                         <p><b>Assigned To</b>: </p>
@@ -400,7 +399,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                                                         </Grid>
                                                     }
                                                     <Grid display={'flex'} justifyContent={'end'}>
-                                                        <Delete onClick={()=>deleteFollowUp(obj?.id)} sx={{ color: 'red', cursor: 'pointer' }} fontSize='small' />
+                                                        <Delete onClick={() => deleteFollowUp(obj?.id)} sx={{ color: 'red', cursor: 'pointer' }} fontSize='small' />
                                                     </Grid>
                                                 </div>
 
