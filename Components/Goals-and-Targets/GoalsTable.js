@@ -12,9 +12,10 @@ function GoalsTable() {
     const { watch, setValue } = useForm()
 
     const [datas, setdatas] = useState()
+    const [councellorId, setcouncellorId] = useState()
 
     const fetchUser = (e) => {
-        return ListingApi.users({ keyword: e,role_id:5 }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -32,16 +33,21 @@ function GoalsTable() {
     ]
 
     const fetchDatas = () => {
-        GoalsApi.list().then((response) => {
+        GoalsApi.list({counselor:councellorId}).then((response) => {
             setdatas(response?.data?.data)
         })
+    }
+
+    const handleCouncellor = (data) => {
+        setValue('councellor', data)
+        setcouncellorId(data?.id)
     }
 
     // console.log(datas);
 
     useEffect(() => {
         fetchDatas()
-    }, [])
+    }, [councellorId])
 
 
 
@@ -50,13 +56,15 @@ function GoalsTable() {
             <Grid p={1} pl={0} mb={1} container display={'flex'}>
                 <Grid width={300} mr={1} item md={2.5}>
                     <AsyncSelect
+                        name='councellor'
+                        defaultValue={watch('councellor')}
                         isClearable
                         defaultOptions
                         loadOptions={fetchUser}
                         getOptionLabel={(e) => e.name}
                         getOptionValue={(e) => e.id}
                         placeholder={<div>Counseller</div>}
-                    // onChange={handleAssignedTo}
+                        onChange={handleCouncellor}
                     />
                 </Grid>
 
@@ -124,7 +132,7 @@ function GoalsTable() {
             </Grid>
 
 
-             <Grid mt={3} sx={{ width: '100%', textAlign: 'center' }}>
+            <Grid mt={3} sx={{ width: '100%', textAlign: 'center' }}>
                 <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', paddingLeft: 2 }}>
                     Goals
                 </Typography>
