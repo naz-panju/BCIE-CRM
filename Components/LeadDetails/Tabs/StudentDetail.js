@@ -18,7 +18,7 @@ function StudentDetail({ data, handleEdit, loading }) {
         <div className='lead-tabpanel-content-block'>
             <div className='lead-tabpanel-content-block-title'>
                 <h2>Student Details</h2>
-                {/* <a onClick={handleEdit} className='edit-btn' style={{ cursor: 'pointer' }}><EditNoteIcon /></a> */}
+                <a onClick={handleEdit} className='edit-btn' style={{ cursor: 'pointer' }}><EditNoteIcon /></a>
             </div>
             {
                 loading ?
