@@ -70,6 +70,7 @@ const Editor = (props) => {
     return (
 
         <EditorDraft
+             key={props?.key}
             editorClassName="custom-editor-container"
             editorState={editorState}
             onEditorStateChange={(e) => {

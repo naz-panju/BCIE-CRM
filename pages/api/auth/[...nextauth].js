@@ -24,7 +24,8 @@ export default NextAuth({
               email: response?.data?.data?.email,
               phone: response?.data?.data?.phone_number,
               token: response?.data?.data?._token,
-              user_id: response.data?.data?.user?.user_id
+              user_id: response.data?.data?.user?.user_id,
+              role:response?.data?.data?.role,
             };
             return Promise.resolve(user);
           } else {

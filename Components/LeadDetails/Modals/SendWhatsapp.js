@@ -23,6 +23,7 @@ import dynamic from 'next/dynamic';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import PhoneInput from 'react-phone-input-2';
 import { WhatsAppTemplateApi } from '@/data/Endpoints/WhatsAppTemplate';
+import Editor from '@/Form/Editor';
 
 
 
@@ -32,7 +33,7 @@ const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
 
 
 const scheme = yup.object().shape({
-    subject: yup.string().required("Subject is Required"),
+    // subject: yup.string().required("Subject is Required"),
     body: yup.string().required("Body is Required"),
     // default_cc: yup.array().required("Mail CC is Required"),
     // dob: yup.string().required("Date Of Birth is Required"),
@@ -63,6 +64,9 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
     const [fileInputKey, setFileInputKey] = useState(0);
     const [attachmentFiles, setattachmentFiles] = useState([])
 
+    const [editorKey, seteditorKey] = useState(1)
+
+    const [textBoxLoading, setTextBoxLoading] = useState(false)
 
     const [file, setFile] = useState([])
 
@@ -111,7 +115,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
 
     const fetchTemplates = (e) => {
         return WhatsAppTemplateApi.list({ keyword: e }).then(response => {
-            console.log(response);
+            // console.log(response);
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -132,7 +136,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
         // formData.append('to', data?.whatsapp)
         formData.append('template_id', data?.template?.id)
         formData.append('message', data?.body || '')
-        formData.append('lead_id',lead_id || '')
+        formData.append('lead_id', lead_id || '')
 
         if (from == 'app') {
             formData.append('application_id', app_id || '')
@@ -216,34 +220,25 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
 
 
     const handleTemplateChange = (data) => {
-        // console.log(data);.
+        // console.log(data);
+        setTextBoxLoading(true)
         setValue('template', data || '')
-
-        TemplateApi.mailTemplate({ template_id: data?.id, lead_id: lead_id }).then((response) => {
-
+        WhatsAppTemplateApi.getTemplate({ template_id: data?.id, lead_id: lead_id }).then((response) => {
             console.log(response);
 
             if (response?.status == 200 || response?.status == 201) {
-                // let cc = 
-                // cc = response?.data?.data?.template?.default_cc?.map((obj) => {
-                //     cc.
-                // })
-                let cc = response?.data?.data?.template?.default_cc?.join(',');
-
-
-                // setValue('default_cc', cc)
-
-                setValue('default_cc', response?.data?.data?.template?.default_cc || '')
-                // setValue('to', details?.email || '')
-                setValue('subject', response?.data?.data?.template?.subject || '')
-                setValue('body', response?.data?.data?.template?.body || '')
-                setattachmentFiles(response?.data?.data?.attchments)
+                setValue('body', response?.data?.data?.content || '')
+                seteditorKey(Math.random() * 0.23)
+                setTextBoxLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
+                setTextBoxLoading(false)
             }
 
+        }).catch((error) => {
+            console.log(error);
+            setTextBoxLoading(false)
         })
-
 
     }
 
@@ -280,7 +275,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                 open={open}
                 onClose={handleDrawerClose}
             >
-                <Grid width={650}>
+                <Grid width={750}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <a style={{ fontWeight: 500, fontSize: '19px' }}>Send Whatsapp Message</a>
                         <IconButton
@@ -313,7 +308,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                                                     // isClearable
                                                     defaultOptions
                                                     loadOptions={fetchTemplates}
-                                                    getOptionLabel={(e) => e.title}
+                                                    getOptionLabel={(e) => e.template_name}
                                                     getOptionValue={(e) => e.id}
                                                     onChange={handleTemplateChange}
                                                     styles={{
@@ -367,12 +362,19 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                                             </Grid>
                                         </Grid>
 
-                                        <Grid display={'flex'} container p={1.5} item xs={12}>
+                                        <Grid display={'flex'} container p={1} item xs={12}>
                                             <Grid item display={'flex'} xs={3} md={3}>
                                                 <Typography sx={{ fontWeight: '500' }}>Messsage</Typography>
                                             </Grid>
                                             <Grid item xs={9} md={9}>
-                                                <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
+                                                {
+                                                    textBoxLoading ?
+                                                        <Skeleton variant='rounded' width={'100%'} height={400} />
+                                                        :
+                                                        <Editor key={editorKey} emoji={false} val={watch('body')}
+                                                            onValueChange={e => setValue('body', e)} />
+                                                }
+                                                {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
                                             </Grid>
                                         </Grid>
 

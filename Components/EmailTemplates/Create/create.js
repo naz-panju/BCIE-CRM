@@ -23,6 +23,7 @@ import ConfirmPopup from '@/Components/Common/Popup/confirm';
 import { TemplateApi } from '@/data/Endpoints/Template';
 import Editor from '@/Form/Editor';
 import dynamic from 'next/dynamic';
+import { files } from 'jszip';
 
 // import MyEditor from '@/Form/MyEditor';
 
@@ -79,16 +80,21 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     ]
 
+    console.log(file);
+
     const anchor = 'right'; // Set anchor to 'right'
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
     const handleFileChange = (e) => {
         const newFile = e?.target?.files[0];
+  
         setFile([...file, newFile]); // Add the new file to the state
     };
 
     const onSubmit = async (data) => {
+
+        console.log(editId);
 
         setLoading(true)
 
@@ -237,7 +243,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         }
     }, [editId])
 
-    // console.log(watch('body'));
+    console.log(watch('body'));
 
 
     return (
@@ -335,10 +341,10 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                 {errors.body && <span className='form-validation'>{errors.body.message}</span>}
                                                 */}
 
-                                                <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
-                                                {/* <Editor emoji={false} val={watch('body')}
+                                                {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
+                                                <Editor emoji={false} val={watch('body')}
                                                     onValueChange={e => setValue('body', e)}
-                                                /> */}
+                                                />   
                                             </Grid>
                                         </Grid>
 

@@ -14,6 +14,7 @@ import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import Tooltip from '@mui/material/Tooltip';
+import { useSession } from 'next-auth/react';
 
 
 
@@ -61,6 +62,10 @@ const StyledMenu = styled((props) => (
 export default function CustomizedMenus() {
 
   const router = useRouter();
+
+  // const session=useSession()
+
+  // console.log(session?.data?.user)
 
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 

@@ -21,6 +21,7 @@ import toast from 'react-hot-toast';
 import { TemplateApi } from '@/data/Endpoints/Template';
 import dynamic from 'next/dynamic';
 import { LeadApi } from '@/data/Endpoints/Lead';
+import Editor from '@/Form/Editor';
 
 
 
@@ -39,7 +40,7 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function SendMail({ details, editId, setEditId, lead_id, refresh, setRefresh,from,app_id }) {
+export default function SendMail({ details, editId, setEditId, lead_id, refresh, setRefresh, from, app_id }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -60,6 +61,10 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
     const [attachment, setAttachment] = useState(null);
     const [fileInputKey, setFileInputKey] = useState(0);
     const [attachmentFiles, setattachmentFiles] = useState([])
+
+    const [textBoxLoading, setTextBoxLoading] = useState(false)
+
+    const [editorKey, seteditorKey] = useState(1)
 
 
     const [file, setFile] = useState([])
@@ -213,6 +218,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
     const handleTemplateChange = (data) => {
         // console.log(data);.
+        setTextBoxLoading(true)
         setValue('template', data || '')
 
         TemplateApi.mailTemplate({ template_id: data?.id, lead_id: lead_id }).then((response) => {
@@ -234,8 +240,12 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                 setValue('subject', response?.data?.data?.template?.subject || '')
                 setValue('body', response?.data?.data?.template?.body || '')
                 setattachmentFiles(response?.data?.data?.attchments)
+
+                seteditorKey(Math.random() * 0.23)
+                setTextBoxLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
+                setTextBoxLoading(false)
             }
 
         })
@@ -247,7 +257,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
     const getInitialValue = () => {
         if (from == 'app') {
             setValue('to', details?.student?.email)
-        } else if(from=='lead'){
+        } else if (from == 'lead') {
             setValue('to', details?.email)
         }
 
@@ -275,7 +285,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                 open={open}
                 onClose={handleDrawerClose}
             >
-                <Grid width={650}>
+                <Grid width={750}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <a style={{ fontWeight: 500, fontSize: '19px' }}>Send Mail</a>
                         <IconButton
@@ -342,8 +352,13 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                 <a className='form-text'>Mail CC </a>
                                             </Grid>
                                             <Grid item pr={1} xs={9} md={9}>
-                                                <TextInput control={control} name="default_cc"
-                                                    value={watch('default_cc')} />
+                                                {
+                                                    textBoxLoading ?
+                                                        <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                        :
+                                                        <TextInput control={control} name="default_cc"
+                                                            value={watch('default_cc')} />
+                                                }
                                                 {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
                                             </Grid>
                                         </Grid>
@@ -353,8 +368,13 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                 <a className='form-text'>Subject </a>
                                             </Grid>
                                             <Grid item pr={1} xs={9} md={9}>
-                                                <TextInput control={control} name="subject"
-                                                    value={watch('subject')} />
+                                                {
+                                                    textBoxLoading ?
+                                                        <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                        :
+                                                        <TextInput control={control} name="subject"
+                                                            value={watch('subject')} />
+                                                }
                                                 {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
                                             </Grid>
                                         </Grid>
@@ -364,7 +384,14 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                 <Typography sx={{ fontWeight: '500' }}>Body</Typography>
                                             </Grid>
                                             <Grid item xs={9} md={9}>
-                                                <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
+                                                {
+                                                    textBoxLoading ?
+                                                        <Skeleton variant='rounded' width={'100%'} height={400} />
+                                                        :
+                                                        <Editor key={editorKey} emoji={false} val={watch('body')}
+                                                            onValueChange={e => setValue('body', e)} />
+                                                }
+                                                {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
                                             </Grid>
                                         </Grid>
 

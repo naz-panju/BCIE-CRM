@@ -5,12 +5,15 @@ import { useForm } from 'react-hook-form';
 import AsyncSelect from "react-select/async";
 import ReactSelector from 'react-select';
 import { GoalsApi } from '@/data/Endpoints/GoalsAndTargets';
+import { useSession } from 'next-auth/react';
 
 
 function GoalsTable() {
 
     const { watch, setValue } = useForm()
 
+    const session = useSession()
+    console.log(session);
     const [datas, setdatas] = useState()
     const [councellorId, setcouncellorId] = useState()
 
@@ -33,7 +36,7 @@ function GoalsTable() {
     ]
 
     const fetchDatas = () => {
-        GoalsApi.list({counselor:councellorId}).then((response) => {
+        GoalsApi.list({ counselor: councellorId }).then((response) => {
             setdatas(response?.data?.data)
         })
     }
@@ -136,7 +139,7 @@ function GoalsTable() {
                 <Typography variant="h6" gutterBottom sx={{ textAlign: 'start', paddingLeft: 2 }}>
                     Goals
                 </Typography>
-                <Grid sx={{ width: '100%', mb: 2}}>
+                <Grid sx={{ width: '100%', mb: 2 }}>
                     <Grid container spacing={2} justifyContent="center">
                         <Grid item xs={3}>
                             <Paper elevation={3} sx={{ p: 2 }}>

@@ -32,7 +32,7 @@ const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
 });
 
 const scheme = yup.object().shape({
-
+    template_name:yup.string().required('This field is required')
 })
 
 export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh }) {
@@ -93,6 +93,7 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
 
         let dataToSubmit = {
             title: data?.title,
+            template_name:data?.template_name,
             content: data?.content,
             approved: isChecked
         }
@@ -185,6 +186,7 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
 
                 setValue('title', data?.title)
                 setValue('content', data?.content)
+                setValue('template_name', data?.template_name)
                 setIsChecked(data?.approved == 1 ? true : false)
 
                 setDataLoading(false)
@@ -276,7 +278,16 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
                                             </Grid>
                                         </Grid>
 
-
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={2.5}>
+                                                <Typography sx={{ fontWeight: '500' }}>Template Name</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={9.5}>
+                                                <TextInput disabled={isSysytemTemplate} control={control} name="template_name"
+                                                    value={watch('template_name')} />
+                                                {errors.template_name && <span className='form-validation'>{errors.template_name.message}</span>}
+                                            </Grid>
+                                        </Grid>
 
                                         <Grid display={'flex'} container p={1.5} item xs={12}>
                                             <Grid item display={'flex'} xs={12} md={2.5}>
@@ -284,8 +295,9 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
                                             </Grid>
                                             <Grid item xs={12} md={9.5}>
 
-
-                                                <MyEditor name={'content'} onValueChange={e => setValue('content', e)} value={watch('content')} />
+                                                <Editor emoji={false} val={watch('content')}
+                                                    onValueChange={e => setValue('content', e)} />
+                                                {/* <MyEditor name={'content'} onValueChange={e => setValue('content', e)} value={watch('content')} /> */}
 
                                             </Grid>
                                         </Grid>

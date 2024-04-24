@@ -328,6 +328,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
             getDetails()
         }
         fetchReference()
+        // setValue('alt_phone','234')
     }, [editId])
 
     const items = [
