@@ -158,7 +158,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
         action.then((response) => {
             // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
-                toast.success(`Student Has Been Successfully ${editId > 0 ? 'Updated' : 'Created'} `)
+                toast.success(`Applicant Has Been Successfully ${editId > 0 ? 'Updated' : 'Created'} `)
                 reset()
                 handleClose()
                 // setRefresh(!refresh)
