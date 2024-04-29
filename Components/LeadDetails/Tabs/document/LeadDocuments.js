@@ -120,21 +120,33 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
 
     }
 
-    function downloadFile(url, fileName) {
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', ''); // Force download by setting download attribute to empty string
-
-        // Append the anchor to the body
-        document.body.appendChild(link);
-
-        // Trigger the click event on the anchor
-        link.click();
-
-        // Remove the anchor from the body
-        document.body.removeChild(link);
+    async function downloadFile(url, fileName) {
+        try {
+            // Fetch the file content
+            const response = await fetch(url);
+            const blob = await response.blob();
+    
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.setAttribute('download', fileName);
+    
+            // Append the link to the body
+            document.body.appendChild(link);
+    
+            // Trigger the click event on the link
+            link.click();
+    
+            // Remove the link from the body
+            document.body.removeChild(link);
+    
+            // Release the object URL
+            window.URL.revokeObjectURL(link.href);
+        } catch (error) {
+            console.error('Error downloading file:', error);
+        }
     }
-
+    
 
     // console.log(list?.data);
 

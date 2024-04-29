@@ -237,7 +237,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
             note: data?.note
         }
 
-        // console.log(dataToSubmit);
+        console.log(dataToSubmit);
 
         let action;
 

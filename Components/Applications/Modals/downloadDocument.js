@@ -111,7 +111,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
                 .then(() => {
                     zip.generateAsync({ type: "blob" }).then((content) => {
                         // give the zip file a name
-                        saveAs(content, `${details?.student?.first_name} ${details?.student?.middle_name} ${details?.student?.last_name} Application Documents .zip`);
+                        saveAs(content, `${details?.student?.name}  Application Documents .zip`);
                     });
                     setLoading(false);
                 })

@@ -77,16 +77,16 @@ function StudentDetail({ data, handleEdit, loading }) {
                     <div className='lead-tabpanel-content-item'>
 
                         <div className="lead-details-list">
-                            <label className='title'>First Name </label>: {student?.first_name}
+                            <label className='title'> Name </label>: {student?.name}
                         </div>
 
-                        <div className="lead-details-list">
+                        {/* <div className="lead-details-list">
                             <label className='title'>Middle Name </label>: {student?.middle_name}
                         </div>
 
                         <div className="lead-details-list">
                             <label className='title'>Last Name </label>: {student?.last_name}
-                        </div>
+                        </div> */}
 
 
 

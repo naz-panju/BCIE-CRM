@@ -377,7 +377,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         setEditId()
         reset()
         setValue('stage', '')
-        if(setDetails){
+        if (setDetails) {
             setDetails()
         }
         setAcceptFile()
@@ -666,21 +666,22 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                             </Grid>
                                         }
 
-                                        {/* <Grid p={1} container >
+                                        <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Lead Sub Stage </a>
+                                                <a className='form-text'>Note </a>
                                             </Grid>
                                             <Grid item pr={1} xs={8} md={8}>
-                                                <SelectX
-                                                    menuPlacement='top'
-                                                    loadOptions={fetchSubStages}
-                                                    control={control}
-                                                    name={'substage'}
-                                                    defaultValue={watch('substage')}
+                                                <TextField
+                                                    {...register('note')}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    multiline
+                                                    rows={2}
+                                                    sx={{ width: '100%', }}
                                                 />
-                                                {errors.substage && <span className='form-validation'>{errors.substage.message}</span>}
+                                                {errors.note && <span className='form-validation'>{errors.note.message}</span>}
                                             </Grid>
-                                        </Grid> */}
+                                        </Grid>
                                     </>
                             }
 

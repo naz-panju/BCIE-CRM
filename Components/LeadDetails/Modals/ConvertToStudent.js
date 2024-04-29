@@ -20,16 +20,16 @@ import { StudentApi } from '@/data/Endpoints/Student';
 import toast from 'react-hot-toast';
 
 const scheme = yup.object().shape({
-    first_name: yup.string().required("First Name is Required"),
+    name: yup.string().required("Name is Required"),
     email: yup.string().required("Email is Required"),
     phone: yup.string().required("Phone Number is Required"),
     dob: yup.string().required("Date Of Birth is Required"),
     zip: yup.string().required("Zip Code is Required"),
-    country: yup.object().required("Please Choose a Country").typeError("Please choose a Country"),
+    // country: yup.object().required("Please Choose a Country").typeError("Please choose a Country"),
     state: yup.string().required("State is Required"),
 })
 
-export default function ConvertLeadToStudent({ lead_id, details, editId, setEditId, refresh, setRefresh,handleRefresh }) {
+export default function ConvertLeadToStudent({ lead_id, details, editId, setEditId, refresh, setRefresh, handleRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -83,9 +83,30 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
     }
 
     const fetchNameTitles = (e, title) => {
-        return ListingApi.nameTitle({ keyword: e ,limit:30}).then(response => {
+        return ListingApi.nameTitle({ keyword: e, limit: 30 }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 settitles(response.data.data)
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchCourseLevel = (e) => {
+        return ListingApi.courseLevel({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchIntakes = (e) => {
+        return ListingApi.intakes({ keyword: e, }).then(response => {
+            console.log(response);
+            if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
                 return [];
@@ -108,16 +129,17 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
         let dataToSubmit = {
             lead_id: lead_id,
             title: data?.title?.name,
-            first_name: data?.first_name,
-            middle_name: data?.middle_name,
-            last_name: data?.last_name,
+            name: data?.name,
+            // middle_name: data?.middle_name,
+            // last_name: data?.last_name,
             email: data?.email,
             phone_number: data?.phone,
             date_of_birth: dob,
             address: data?.address,
             zipcode: data?.zip,
             state: data?.state,
-            country_id: data?.country?.id,
+            // temproary
+            country_id: data?.country_of_birth?.id,
             alternate_phone_number: data?.alt_phone,
             whatsapp_number: data?.whatsapp
         }
@@ -135,8 +157,8 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
         action.then((response) => {
             // console.log(response);
-            if (response?.status==200 || response?.status==201 ) {
-                toast.success(`Student Has Been Successfully ${editId>0?'Updated':'Created'} `)
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(`Student Has Been Successfully ${editId > 0 ? 'Updated' : 'Created'} `)
                 reset()
                 handleClose()
                 // setRefresh(!refresh)
@@ -235,15 +257,22 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
     const initialValues = () => {
 
         if (details) {
+            setValue('name', details?.name)
             setValue('email', details?.email)
             setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
             setValue('alt_phone', `${details?.alternate_phone_country_code}${details?.alternate_phone_number}`)
             setValue('whatsapp', `+${details?.whatsapp_country_code}${details?.whatsapp_number}`)
-            setValue('country', details?.country)
-            setValue('state', details?.state)
+
+            setValue('country_of_residence', details?.country)
+            setValue('country_of_birth', details?.country)
+            // setValue('state', details?.state)
+
+            setValue('preffered_country', details?.preferred_countries)
+            setValue('preffered_course_level', details?.course_level)
+            setValue('preffered_course', details?.preferred_course)
         }
 
-        // console.log(details);
+        console.log(details);
     }
 
     const setTitleValue = () => {
@@ -262,9 +291,9 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
             setcurrentTitle(data?.title)
 
-            setValue('first_name', data?.first_name)
-            setValue('middle_name', data?.middle_name)
-            setValue('last_name', data?.last_name)
+            setValue('name', data?.name)
+            // setValue('middle_name', data?.middle_name)
+            // setValue('last_name', data?.last_name)
             setValue('email', data?.email)
 
             setValue('phone', `+${data?.phone_number}`)
@@ -314,9 +343,9 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                 open={open}
                 onClose={handleDrawerClose}
             >
-                <Grid width={550}>
+                <Grid width={650}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId == 0 ? 'Convert To Student' : 'Edit Student'}</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId == 0 ? 'Convert To Applicant' : 'Edit Applicant'}</a>
                         <IconButton
                             onClick={handleClose}
                         >
@@ -336,6 +365,22 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>Intakes</a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <SelectX
+                                                    // menuPlacement='top'
+                                                    loadOptions={fetchIntakes}
+                                                    control={control}
+                                                    name={'intake'}
+                                                    defaultValue={watch('intake')}
+                                                />
+                                                {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Title</a>
                                             </Grid>
                                             <Grid item pr={1} xs={6} md={3}>
@@ -350,7 +395,9 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                             </Grid>
                                         </Grid>
 
-                                        <Grid p={1} container >
+                                        {/* All 3 names */}
+                                        {/* doc update */}
+                                        {/* <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>First Name </a>
                                             </Grid>
@@ -380,6 +427,17 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                                 <TextInput control={control} name="last_name"
                                                     value={watch('last_name')} />
                                                 {errors.last_name && <span className='form-validation'>{errors.last_name.message}</span>}
+                                            </Grid>
+                                        </Grid> */}
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>Full Name</a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <TextInput control={control} name="name"
+                                                    value={watch('name')} />
+                                                {errors.name && <span className='form-validation'>{errors.name.message}</span>}
                                             </Grid>
                                         </Grid>
 
@@ -500,6 +558,50 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                             </Grid>
                                         </Grid>
 
+                                        {/* doc update */}
+
+
+
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Preferred Countries</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                <TextInput control={control} {...register('preffered_country')}
+                                                    value={watch('preffered_country')} />
+                                                {errors.preffered_country && <span className='form-validation'>{errors.preffered_country.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Preferred Course Level</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                <SelectX
+                                                    menuPlacement='top'
+                                                    loadOptions={fetchCourseLevel}
+                                                    control={control}
+                                                    // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                    // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                    name={'preffered_course_level'}
+                                                    defaultValue={watch('preffered_course_level')}
+                                                />
+                                                {errors.preffered_course_level && <span className='form-validation'>{errors.preffered_course_level.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                            <Grid item xs={12} md={4}>
+                                                <Typography sx={{ fontWeight: '500' }}>Preferred courses</Typography>
+                                            </Grid>
+                                            <Grid item xs={12} md={8}>
+                                                <TextInput control={control} {...register('preffered_course')}
+                                                    value={watch('preffered_course')} />
+                                                {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Date Of Birth </a>
@@ -531,7 +633,8 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                             </Grid>
                                         </Grid>
 
-                                        <Grid p={1} container >
+                                        {/* doc update */}
+                                        {/* <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Country </a>
                                             </Grid>
@@ -545,6 +648,38 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                                 />
                                                 {errors.country && <span className='form-validation'>{errors.country.message}</span>}
                                             </Grid>
+                                        </Grid> */}
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>Country of Birth</a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <SelectX
+                                                    menuPlacement='top'
+                                                    loadOptions={fetchGlobalCountry}
+                                                    control={control}
+                                                    name={'country_of_birth'}
+                                                    defaultValue={watch('country_of_birth')}
+                                                />
+                                                {errors.country_of_birth && <span className='form-validation'>{errors.country_of_birth.message}</span>}
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>Country of Residence</a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <SelectX
+                                                    menuPlacement='top'
+                                                    loadOptions={fetchGlobalCountry}
+                                                    control={control}
+                                                    name={'country_of_residence'}
+                                                    defaultValue={watch('country_of_residence')}
+                                                />
+                                                {errors.country_of_residence && <span className='form-validation'>{errors.country_of_residence.message}</span>}
+                                            </Grid>
                                         </Grid>
 
                                         <Grid p={1} container >
@@ -552,7 +687,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                                 <a className='form-text'>State / Province</a>
                                             </Grid>
                                             <Grid item pr={1} xs={8} md={8}>
-                                                <TextInput disabled={!watch('country')} control={control} name="state"
+                                                <TextInput disabled={(!watch('country_of_residence'))} control={control} name="state"
                                                     value={watch('state')} />
                                                 {errors.state && <span className='form-validation'>{errors.state.message}</span>}
                                             </Grid>

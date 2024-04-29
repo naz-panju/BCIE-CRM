@@ -170,7 +170,7 @@ function ApplicationDetails() {
                               loading ?
                                 <Skeleton variant="circular" width={30} height={30} />
                                 :
-                                details?.student?.first_name && details?.student?.first_name[0]
+                                details?.student?.name && details?.student?.name[0]
                             }
                           </div>
                         </div>
@@ -180,7 +180,7 @@ function ApplicationDetails() {
                             loading ?
                               <Skeleton variant="rectangular" width={150} height={30} />
                               :
-                              <h4>{details?.student?.first_name}</h4>
+                              <h4>{details?.student?.name}</h4>
                           }
                           {/* <div className="leadStageBox">  
                             {
@@ -209,6 +209,13 @@ function ApplicationDetails() {
                     </div>
 
                     <div className='lead-top-contact-details'>
+                    {
+                        loading ?
+                          <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
+                          :
+                          details?.student?.email &&
+                          <p>University: {details?.university?.name}</p>
+                      }
                       {
                         loading ?
                           <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
@@ -275,13 +282,13 @@ function ApplicationDetails() {
                     </ul>
                   </div>
 
-                  <div className='lead-communication-status'>
+                  {/* <div className='lead-communication-status'>
                     <h4>Telephony Status</h4>
                     <ul>
                       <li>Inbound Call - <span>0</span></li>
                       <li>Outbound Call - <span>0</span></li>
                     </ul>
-                  </div>
+                  </div> */}
 
                   <div className='lead-communication-status'>
                     <h4>Lead Source</h4>

@@ -414,7 +414,7 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                               <a target='_blank' href={`lead/${row?.lead_id}`}> {row?.first_name  } {row?.last_name  }</a>
+                                                               <a target='_blank' href={`lead/${row?.lead_id}`}> {row?.name  } </a>
                                                                {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.email}</TableCell>

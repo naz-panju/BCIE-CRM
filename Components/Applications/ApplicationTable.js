@@ -575,7 +575,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                                <a target='_blank' href={`applications/${row?.id}`}> {row?.student?.first_name} {row?.student?.middle_name} {row?.student?.last_name}</a>
+                                                                <a target='_blank' href={`applications/${row?.id}`}> {row?.student?.name}</a>
                                                                 {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.student?.email}</TableCell>

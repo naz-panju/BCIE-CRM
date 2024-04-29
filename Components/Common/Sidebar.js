@@ -7,8 +7,14 @@ import Logo from '@/styles/logo65cc655649912.png';
 import { ArchiveOutlined, CrisisAlertOutlined, DescriptionOutlined, Email, EmailOutlined, EventOutlined, GroupOutlined, Groups2, Groups2Outlined, LinkOutlined, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications, WhatsApp } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 const Sidebar = () => {
+
+    const session =useSession()
+
+    const {data}=session
+
     const [isExpanded, setIsExpanded] = useState(false);
 
     const router = useRouter()
@@ -21,7 +27,7 @@ const Sidebar = () => {
         setIsExpanded(false);
     };
 
-    const SideBarOptions = [
+    let SideBarOptions = [
         {
             title: 'Lead Manager',
             icon: PersonOutline,
@@ -74,11 +80,15 @@ const Sidebar = () => {
         },
         {
             title: 'Referral Links',
-            icon: LinkOutlined,
+            icon: LinkOutlined,  
             href: '/referral-links'
-        },
+        },  
     ]
 
+    // if (data?.user?.role?.id === 3) {
+    //     SideBarOptions = SideBarOptions.filter(option => option.title !== 'WhatsApp Templates' && option.title !== 'Email Templates');
+    // }
+    
 
     // const filterUrl = (url) => {
     //     const urls = url.split("/").filter(Boolean); // Split the string by "/", then remove empty strings from the resulting array

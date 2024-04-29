@@ -100,6 +100,12 @@ const headCells = [
     disablePadding: false,
     label: 'Assigned To',
   },
+  {
+    id: 'stage',
+    numeric: false,
+    disablePadding: false,
+    label: 'Stage',
+  },
 ];
 
 function EnhancedTableHead(props) {
@@ -478,7 +484,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 }
                                 {/* {row?.assignedToUser?.name} */}
                               </TableCell>
-
+                              <TableCell align="left">{row?.stage?.name}</TableCell>
                             </TableRow>
                           );
                         })

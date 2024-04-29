@@ -514,7 +514,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                                <a target='_blank' href={`lead/${row?.lead_id}`}> {row?.student?.first_name} {row?.student?.last_name}</a>
+                                                                <a target='_blank' href={`lead/${row?.lead_id}`}> {row?.student?.name} </a>
                                                                 {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
                                                             <TableCell align="left">{row?.student?.email}</TableCell>
