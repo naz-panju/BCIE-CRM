@@ -90,20 +90,20 @@ const headCells = [
         id: 'name',
         numeric: false,
         disablePadding: true,
-        label: 'Name',
+        label: 'Student Name',
     },
-    {
-        id: 'email',
-        numeric: false,
-        disablePadding: false,
-        label: 'email ',
-    },
-    {
-        id: 'phone',
-        numeric: true,
-        disablePadding: false,
-        label: 'Phone Number ',
-    },
+    // {
+    //     id: 'email',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: 'email ',
+    // },
+    // {
+    //     id: 'phone',
+    //     numeric: true,
+    //     disablePadding: false,
+    //     label: 'Phone Number ',
+    // },
     {
         id: 'country',
         numeric: false,
@@ -549,6 +549,10 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                     return (
                                                         <TableRow className='table-custom-tr'
                                                             hover
+                                                            onClick={(event) => {
+                                                                // handle the click event here
+                                                                window.open(`lead/${row?.lead_id}?app_id=${row?.id}`, '_blank');
+                                                            }}
                                                             // onClick={(event) => handleClick(event, row.id)}
                                                             role="checkbox"
                                                             aria-checked={isItemSelected}
@@ -578,8 +582,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 <a target='_blank' href={`applications/${row?.id}`}> {row?.student?.name}</a>
                                                                 {/* {row?.first_name  } {row?.last_name} */}
                                                             </TableCell>
-                                                            <TableCell align="left">{row?.student?.email}</TableCell>
-                                                            <TableCell align="left">{row?.student?.phone_number}</TableCell>
+                                                            {/* <TableCell align="left">{row?.student?.email}</TableCell>
+                                                            <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
                                                             <TableCell align="left"> {row?.country?.name}</TableCell>
                                                             <TableCell align="left"> {row?.university?.name}</TableCell>
                                                             <TableCell align="left"> {row?.course_level?.name}</TableCell>

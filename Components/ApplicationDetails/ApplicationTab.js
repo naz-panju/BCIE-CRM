@@ -85,21 +85,21 @@ export default function ApplicationVerticalTabs({ data, refresh, setRefresh, loa
   const [isClient, setIsClient] = useState(false);
 
   const TabData = [
-    {
-      label: 'Lead Details',
-      component: isClient && (
-        <LeadDetail handleEdit={handleEdit} data={leadDetails} appDetails={data} loading={loading} />
-      ),
-      icon: <PermIdentityIcon />
-    },
-    {
-      label: 'Student Details',
-      component: isClient && <StudentDetail handleEdit={handleStudentEdit} data={data} loading={loading} handleRefresh={handleRefresh} />,
-      icon: <SchoolOutlined />
-    },
+    // {
+    //   label: 'Lead Details',
+    //   component: isClient && (
+    //     <LeadDetail handleEdit={handleEdit} data={leadDetails} appDetails={data} loading={loading} />
+    //   ),
+    //   icon: <PermIdentityIcon />
+    // },
+    // {
+    //   label: 'Student Details',
+    //   component: isClient && <StudentDetail handleEdit={handleStudentEdit} data={data} loading={loading} handleRefresh={handleRefresh} />,
+    //   icon: <SchoolOutlined />
+    // },
     {
       label: 'Timeline',
-      component: <LeadTimeline from={'app'} lead_id={data?.lead_id} app_id={data?.id} />,
+      component: isClient && <LeadTimeline from={'app'} lead_id={data?.lead_id} app_id={data?.id} />,
       icon: <AccessTimeIcon />
     },
     {

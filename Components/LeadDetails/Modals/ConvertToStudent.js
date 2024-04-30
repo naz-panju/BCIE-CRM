@@ -365,22 +365,6 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Intakes</a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={8} md={8}>
-                                                <SelectX
-                                                    // menuPlacement='top'
-                                                    loadOptions={fetchIntakes}
-                                                    control={control}
-                                                    name={'intake'}
-                                                    defaultValue={watch('intake')}
-                                                />
-                                                {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
-                                            </Grid>
-                                        </Grid>
-
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Title</a>
                                             </Grid>
                                             <Grid item pr={1} xs={6} md={3}>
@@ -559,10 +543,8 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                         </Grid>
 
                                         {/* doc update */}
-
-
-
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                        {/* no need this, only from doc */}
+                                        {/* <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                             <Grid item xs={12} md={4}>
                                                 <Typography sx={{ fontWeight: '500' }}>Preferred Countries</Typography>
                                             </Grid>
@@ -600,7 +582,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                                     value={watch('preffered_course')} />
                                                 {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
                                             </Grid>
-                                        </Grid>
+                                        </Grid> */}
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
@@ -682,7 +664,9 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                             </Grid>
                                         </Grid>
 
-                                        <Grid p={1} container >
+                                        {/* doc update */}
+
+                                        {/* <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>State / Province</a>
                                             </Grid>
@@ -702,7 +686,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                                     value={watch('zip')} />
                                                 {errors.zip && <span className='form-validation'>{errors.zip.message}</span>}
                                             </Grid>
-                                        </Grid>
+                                        </Grid> */}
 
 
                                     </>

@@ -33,11 +33,11 @@ const Sidebar = () => {
             icon: PersonOutline,
             href: '/lead'
         },
-        {
-            title: 'Applicants',
-            icon: Groups2Outlined,
-            href: '/applicants'
-        },
+        // {
+        //     title: 'Applicants',
+        //     icon: Groups2Outlined,
+        //     href: '/applicants'
+        // },
         {
             title: 'Archives',
             icon: ArchiveOutlined,
@@ -49,7 +49,7 @@ const Sidebar = () => {
             href: '/alumni'
         },
         {
-            title: 'Application Manager',
+            title: 'Applications',
             icon: DescriptionOutlined,
             href: '/applications'
         },

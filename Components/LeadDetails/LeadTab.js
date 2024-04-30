@@ -27,6 +27,7 @@ import LeadTask from './Tabs/LeadTask';
 import LeadPayments from './Tabs/payments/LeadPayments';
 import StudentDetail from './Tabs/StudentDetail';
 import ConvertLeadToStudent from './Modals/ConvertToStudent';
+import { useRouter } from 'next/router';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,13 +67,14 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh, loading,handleRefresh }) {
+export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh,handleStudentModalOpen,setFollowRefresh,followRefresh }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
   const [studentEditId, setstudentEditId] = useState()
 
-  // console.log(data);
+  const router = useRouter()
+
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -107,7 +109,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading,handle
     },
     {
       label: 'Follow up & Notes',
-      component: <FollowUp from='lead' data={data} lead_id={data?.id} />,
+      component: <FollowUp from='lead' data={data} lead_id={data?.id} refresh={followRefresh} setRefresh={setFollowRefresh} />,
       icon: <ChecklistIcon />
     },
     {
@@ -132,24 +134,30 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading,handle
     },
     {
       label: 'Applications',
-      component: <LeadApplication from='lead' data={data} lead_id={data?.id} />,
+      component: <LeadApplication from='lead' data={data} lead_id={data?.id} handleStudentModalOpen={handleStudentModalOpen} />,
       icon: <Apps />
     },
   ]
 
   if (data?.student) {
     const newTab = {
-      label: 'Student Details',
+      label: 'Applicant Details',
       component: isClient && <StudentDetail handleEdit={handleStudentEdit} data={data} loading={loading} handleRefresh={handleRefresh} />,
       icon: <SchoolOutlined />
     };
     TabData.splice(1, 0, newTab);
   }
 
-  
+
 
   useEffect(() => {
     setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (router?.query?.app_id) {
+      setValue(8)
+    }
   }, []);
 
   return (

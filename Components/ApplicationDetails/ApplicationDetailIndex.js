@@ -290,7 +290,7 @@ function ApplicationDetails() {
                     </ul>
                   </div> */}
 
-                  <div className='lead-communication-status'>
+                  {/* <div className='lead-communication-status'>
                     <h4>Lead Source</h4>
                     <ul>
                       <li>{leaddetails?.lead_source?.name || 'NA'}</li>
@@ -302,7 +302,7 @@ function ApplicationDetails() {
                     <ul>
                       <li>{leaddetails?.assignedToUser?.name || 'NA'}</li>
                     </ul>
-                  </div>
+                  </div> */}
 
                 </div>
               </div>
@@ -313,7 +313,7 @@ function ApplicationDetails() {
           <div className='lead-details-stepper-block'>
 
 
-            <div className="arrow-steps clearfix fadeIn">
+            {/* <div className="arrow-steps clearfix fadeIn">
               <div className="step unverified filled">
                 <span className="stepTitle">Unverified</span>
                 <a tabIndex="0" className="stepsOpt" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-container="body" data-content="Manipal Academy of Higher Education, India">1</a>
@@ -334,7 +334,7 @@ function ApplicationDetails() {
               <div className="step app-submitted ">
                 <span className="stepTitle">Application Submitted</span>
               </div>
-            </div>
+            </div> */} 
 
 
           </div>

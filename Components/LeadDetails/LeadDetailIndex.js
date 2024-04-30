@@ -15,6 +15,8 @@ import toast from 'react-hot-toast';
 import ArchiveConfirmPopup from './Modals/ArchiveConfirmation';
 import StageChangeModal from './Modals/StageChange';
 import SendWhatsApp from './Modals/SendWhatsapp';
+import FollowUpModal from './Tabs/follow-up/create';
+import LeadNoteModal from './Tabs/follow-up/noteCreate';
 
 
 function LeadDetails() {
@@ -23,6 +25,7 @@ function LeadDetails() {
   const [refresh, setRefresh] = useState(false)
   const [loading, setLoading] = useState(false)
   const [disabled, setdisabled] = useState(false)
+  const [followRefresh, setFollowRefresh] = useState(false)
 
   const [editId, setEditId] = useState()
 
@@ -31,6 +34,10 @@ function LeadDetails() {
   const [stageId, setStageId] = useState()
 
   const [whatsappId, setWhatsappId] = useState()
+
+  const [followupId, setfollowupId] = useState()
+
+  const [noteId, setNoteId] = useState()
 
 
   const [confirmId, setconfirmId] = useState()
@@ -75,6 +82,14 @@ function LeadDetails() {
     setconfirmId(details?.id)
   }
 
+  const handleFollowupOpen = () => {
+    setfollowupId(0)
+  }
+
+  const handleNoteOpen = () => {
+    setNoteId(0)
+  }
+
   // console.log(details)
 
   const handleCloseAdmission = () => {
@@ -99,7 +114,7 @@ function LeadDetails() {
     })
   }
 
-  const handleRefresh=()=>{
+  const handleRefresh = () => {
     setRefresh(!refresh)
   }
 
@@ -118,6 +133,8 @@ function LeadDetails() {
       <SendMail from={'lead'} details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
       <SendWhatsApp details={details} lead_id={details?.id} editId={whatsappId} setEditId={setWhatsappId} refresh={refresh} setRefresh={handleRefresh} from={'lead'} />
 
+      <FollowUpModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={followupId} setEditId={setfollowupId} data={details} />
+      <LeadNoteModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={noteId} setEditId={setNoteId} />
 
       <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
 
@@ -144,7 +161,8 @@ function LeadDetails() {
                   </Tooltip>
               }
               <Button sx={{ mr: 2 }} onClick={details && handleOpenStageModal} variant='contained' className='bg-sky-500 text-white hover:bg-sky-600 text-white'>Change Stage</Button>
-              <Button sx={{ mr: 2 }} disabled={details?.verification_status == 'Yes'} onClick={details && handleStudentModalOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Convert To Applicants</Button>
+              <Button sx={{ mr: 2 }} onClick={details && handleNoteOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Add Note</Button>
+              <Button sx={{ mr: 2 }} onClick={details && handleFollowupOpen} variant='contained' className='bg-sky-700 text-white hover:bg-sky-800 text-white'>Add Followup</Button>
               <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed == 1 ? 'UnArchive' : 'Archive'}</Button>
             </Grid>
           </div>
@@ -338,7 +356,7 @@ function LeadDetails() {
 
           </div>
 
-          <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} />
+          <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} />
 
         </div>
       </section>

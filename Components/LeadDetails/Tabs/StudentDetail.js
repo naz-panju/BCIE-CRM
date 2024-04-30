@@ -97,6 +97,9 @@ function StudentDetail({ data, handleEdit, loading }) {
                         <div className="lead-details-list">
                             <label className='title'>Mobile Number  </label>: +{student?.phone_number}
                         </div>
+                        {
+                            console.log(student)
+                        }
                         <div className="lead-details-list">
                             <label className='title'>Alternate Mobile Number </label>:
                             {

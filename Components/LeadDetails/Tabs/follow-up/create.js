@@ -135,7 +135,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
         action.then((response) => {
             // console.log(response);
             if (response?.status == 200 || 201) {
-                toast.success(editID>0?'Follow-up has been updated successfully':'Follow-up has been created successfully')
+                toast.success(editID > 0 ? 'Follow-up has been updated successfully' : 'Follow-up has been created successfully')
                 handleClose()
                 setRefresh(!refresh)
                 setLoading(false)
@@ -157,7 +157,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
         setEditID(data?.id)
         // setValue('assigned_to', data || '')
         setValue('assigned_to', data?.assigned_to_user)
-        setselectKey(Math.random()*0.02)
+        setselectKey(Math.random() * 0.02)
         setValue('date', data.follow_up_date)
         setValue('note', data.note)
         setbuttonText('Edit');
@@ -170,7 +170,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
         setValue('assigned_to', '')
         setValue('date', '')
         setValue('note', '')
-        setselectKey(Math.random()*0.02)
+        setselectKey(Math.random() * 0.02)
         setbuttonText('Save');
     }
 

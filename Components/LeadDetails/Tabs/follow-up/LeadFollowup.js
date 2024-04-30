@@ -21,7 +21,7 @@ import toast from 'react-hot-toast';
 import LeadNoteModal from './noteCreate';
 import { LocalPhoneOutlined, NotesOutlined } from '@mui/icons-material';
 
-export default function FollowUp({ lead_id, data, from, app_id }) {
+export default function FollowUp({ lead_id, data, from, app_id ,refresh,setRefresh}) {
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [limit, setLimit] = useState(10)
@@ -31,7 +31,7 @@ export default function FollowUp({ lead_id, data, from, app_id }) {
     const [total, setTotal] = useState(5)
 
     const [editId, setEditId] = useState()
-    const [refresh, setRefresh] = useState(false)
+    // const [refresh, setRefresh] = useState(false)
 
     const [noteId, setNoteId] = useState()
 
