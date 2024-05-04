@@ -16,20 +16,21 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import toast from 'react-hot-toast';
 import TextInput from '@/Form/TextInput';
 import AsyncSelect from "react-select/async";
+import { ApplicationApi } from '@/data/Endpoints/Application';
 
 const style = {
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 750,
+    width: 500,
     bgcolor: 'background.paper',
     borderRadius: 2,
     boxShadow: 24,
     p: 4,
 };
 
-export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRefresh, from, app_id }) {
+export default function UniversityDocumentModal({ app_id, setapp_id, editId, setEditId, handleRefresh }) {
     const scheme = yup.object().shape({
 
         template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -47,11 +48,10 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
     const [dataLoading, setDataLoading] = useState(false)
 
     const handleClose = () => {
+        setapp_id()
         setValue('template', '')
-        setValue('title', '')
         setSelectedFile(null)
         setDetails()
-        setValue('remarks', '')
         setEditId()
         setOpen(false);
     }
@@ -65,11 +65,6 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
         setSelectedFile(event.target.files[0]);
     };
 
-    const handleUpload = () => {
-        // Handle file upload logic here
-        console.log("Selected File:", selectedFile);
-        // You can send the file to the server using fetch or any other method
-    };
 
     const handleDrop = (event) => {
         event.preventDefault();
@@ -80,12 +75,13 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
     const handleDragOver = (event) => {
         event.preventDefault();
     };
+
     const handleDelete = () => {
         setSelectedFile(null); // Clear selected file
     };
 
     const fetchTemplates = (e) => {
-        return ListingApi.documentTemplate({ keyword: e ,type:'student'}).then(response => {
+        return ListingApi.documentTemplate({ keyword: e, type: 'university' }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data;
             } else {
@@ -97,35 +93,30 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
     const onSubmit = (data) => {
         setLoading(true)
         console.log(data);
-        console.log(selectedFile)
 
         const formData = new FormData()
 
+        // application:id
+        formData.append('id', 25)
         formData.append('document_template_id', data?.template?.id)
-        formData.append('lead_id', lead_id)
-        // if (from == 'app') {
-        //     formData.append('application_id', app_id)
-        // }
-        formData.append('title', data?.title)
-        formData.append('note', data?.remarks || '')
         if (selectedFile) {
-            formData.append('file', selectedFile)
+            formData.append('document', selectedFile)
         }
 
         let action;
 
         if (editId > 0) {
-            formData.append('id', editId)
-            action = LeadApi.updateDocument(formData)
+            // formData.append('id', editId)
+            action = ApplicationApi.uploadUniversityDocument(formData)
         } else {
-            action = LeadApi.addDocument(formData)
+            action = ApplicationApi.uploadUniversityDocument(formData)
         }
 
         action.then((response) => {
             console.log(response);
-            if (response?.data?.data) {
+            if (response?.status == 200 || response?.status == 201) {
                 handleClose()
-                toast.success(editId > 0 ? 'Document has been successfully updated' : 'Document has been successfully added')
+                toast.success(response?.data?.message)
                 handleRefresh()
                 setLoading(false)
             } else {
@@ -141,39 +132,8 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
 
     }
 
-    const requestDocument = () => {
-        setReqLoading(true)
-
-        if (watch('template')) {
-            let dataToSubmit = {
-                lead_id: lead_id,
-                document_template_ids: [watch('template')?.id]
-            }
-
-            LeadApi.requestDocument(dataToSubmit).then((response) => {
-                if (response?.status == 200 || 201) {
-                    toast.success(response?.data?.message)
-                    handleClose()
-                    setReqLoading(false)
-                } else {
-                    toast.error(response?.response?.data?.message)
-                    setReqLoading(false)
-                }
-            }).catch((error) => {
-                console.log(error);
-                toast.error(error?.response?.data?.message)
-                setReqLoading(false)
-            })
-        } else {
-            toast.error('Please choose a Template')
-            setReqLoading(false)
-        }
-
-    }
-
     const handleTemplateSelect = (e) => {
         setValue('template', e || '');
-        setValue('title', e?.name || '')
     }
 
     function trimUrlAndNumbers(url) {
@@ -190,8 +150,6 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
             let data = response?.data?.data
             setDetails(data)
             setValue('template', data?.document_template)
-            setValue('title', data?.title)
-            setValue('remarks', data?.note || '')
         }
         setDataLoading(false)
     }
@@ -224,7 +182,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                 <Box sx={style}>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                            {editId > 0 ? 'Edit Document' : 'Add Document'}
+                            {editId > 0 ? 'Edit University Document' : 'Add University Document'}
                         </Typography>
                         <IconButton
                             onClick={handleClose}
@@ -239,16 +197,8 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                             :
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <Grid container>
-                                    <Grid pr={1} mt={2} md={6}>
+                                    <Grid pr={1} mt={2} md={12}>
                                         <a>Select Template</a>
-                                        {/* <SelectX
-                                    required={true}
-                                    loadOptions={fetchTemplates}
-                                    control={control}
-                                    rules={{ required: 'Template is required' }}
-                                    name={'template'}
-                                    defaultValue={watch('template')}
-                                /> */}
                                         <AsyncSelect
                                             key={watch('template')}
                                             name={'template'}
@@ -263,22 +213,6 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                         {errors.template && <span className='form-validation'>{errors.template.message}</span>}
 
                                     </Grid>
-                                    <Grid mt={2} md={6}>
-                                        <a>Title</a>
-                                        <TextInput control={control} name="title"
-                                            value={watch('title')} />
-                                    </Grid>
-                                </Grid>
-                                <Grid mt={2}>
-                                    <a>Remarks</a>
-                                    <TextField
-                                        {...register('remarks')}
-                                        variant="outlined"
-                                        fullWidth
-                                        multiline
-                                        rows={2}
-                                        sx={{ width: '100%', }}
-                                    />
                                 </Grid>
 
                                 <div
@@ -332,18 +266,8 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                         </Grid>
                                     )}
                                 </div>
-                                <Grid mt={2} display={'flex'} justifyContent={'space-between'}>
-                                    <LoadingButton
-                                        variant='contained'
-                                        onClick={requestDocument}
-                                        loading={reqLoading}
-                                        disabled={reqLoading || loading || dataLoading}
-                                        size='small'
-                                        sx={{ textTransform: 'none', height: 30 }}
-                                        className=" bg-sky-500 hover:bg-sky-700 text-white font-bold  rounded"
-                                    >
-                                        Request Document
-                                    </LoadingButton>
+                                <Grid mt={2} display={'flex'} justifyContent={'end'}>
+
                                     <LoadingButton
                                         type='submit'
                                         variant='contained'
@@ -370,44 +294,16 @@ const loadingFields = () => {
     return (
         <Grid>
             <Grid container>
-                <Grid pr={1} mt={2} md={6}>
+                <Grid pr={1} mt={2} md={12}>
                     <a>Select Template</a>
-                    {/* <SelectX
-                    required={true}
-                    loadOptions={fetchTemplates}
-                    control={control}
-                    rules={{ required: 'Template is required' }}
-                    name={'template'}
-                    defaultValue={watch('template')}
-                /> */}
                     <Skeleton variant="rounded" width={'100%'} height={40} />
                 </Grid>
-                <Grid mt={2} md={6}>
-                    <a>Title</a>
-                    <Skeleton variant="rounded" width={'100%'} height={40} />
-                </Grid>
-            </Grid>
-            <Grid mt={2}>
-                <a>Remarks</a>
-                <Skeleton variant="rounded" width={'100%'} height={70} />
+
             </Grid>
 
             <Grid mt={2}>
-
                 <Skeleton variant="rounded" width={'100%'} height={100} />
             </Grid>
-
-
-
-
-            <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
-                <Grid mr={1}>
-                    <Skeleton variant="rounded" width={'100%'} height={60} />
-                </Grid>
-            </Grid>
-
-
-
         </Grid>
     )
 }

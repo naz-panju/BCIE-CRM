@@ -3,12 +3,15 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
-import { Edit, ExpandLess, ExpandMore } from '@mui/icons-material'
+import { Download, Edit, ExpandLess, ExpandMore } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
 import LeadApplicationModal from './create'
 import { ApplicationApi } from '@/data/Endpoints/Application'
 import { useRouter } from 'next/router'
-import ApplicationStageChangeModal from '@/Components/Applications/Modals/stageChange'
+import UniversityDocumentModal from './modals/universityDocument'
+import DownloadDocumentModal from '@/Components/Applications/Modals/downloadDocument'
+import SendUniversityMail from './modals/mailToUniversity'
+import ApplicationStageChangeModal from './modals/stageChange'
 
 function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
@@ -16,10 +19,16 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
+
     const [loading, setLoading] = useState(false)
+    const [uniLoading, setuniLoading] = useState(false)
+    const [studentLoading, setstudentLoading] = useState(false)
+
     const [reqId, setReqId] = useState()
     const [refresh, setRefresh] = useState(false)
     const [details, setDetails] = useState()
+    const [uniDocuments, setUniDocuments] = useState([])
+    const [studentDocument, setstudentDocument] = useState([])
 
 
     const [stageId, setStageId] = useState()
@@ -30,10 +39,22 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const [expandedRowId, setExpandedRowId] = useState(null);
 
 
+    const [uniDocId, setuniDocId] = useState()
+    const [applicationId, setapplicationId] = useState()
+    const [downloadId, setDownloadId] = useState()
+    const [mailId, setMailId] = useState()
+
+    const handleUniDocOpen = (id) => {
+        setuniDocId(0)
+        setapplicationId(id)
+    }
+
+
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
+
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
         setPage(0);
@@ -41,7 +62,14 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
 
     const handleExpand = (id) => {
-        setExpandedRowId(id === expandedRowId ? null : id);
+        if (id === expandedRowId) {
+            setExpandedRowId(null)
+        } else {
+            setExpandedRowId(id)
+            fetchUniversityDocument()
+            fetchStudentDocument()
+        }
+
     };
 
     const isRowExpanded = (id) => {
@@ -60,6 +88,11 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const handleEditDocument = (id) => {
         setEditId(id)
     }
+
+    const handleDownloadOpen = (id) => {
+        setDownloadId(id)
+    }
+
     const handleRefresh = () => {
         if (page != 0) {
             setPage(0)
@@ -68,38 +101,59 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     }
 
     const handleStageOpen = (row) => {
-        setStageId(row?.id)
+        setStageId(0)
         setDetails(row)
+    }
+
+    const handleMailOpen = () => {
+        setMailId(0)
     }
 
     const fetchList = async () => {
         setLoading(true)
         const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
-        console.log(response);
+        // console.log(response);
         setList(response?.data)
         setLoading(false)
-        handleExpand(router?.query?.app_id)
+        // setTimeout(() => {
+        //     handleExpand(router?.query?.app_id)
+        // }, 1000);
     }
 
-    // console.log(list?.data);
+    const fetchUniversityDocument = async () => {
+        setuniLoading(true)
+        // application:id
+        const response = await LeadApi.listDocuments({ limit: 20, lead_id: lead_id, type: 'application', application_id: 25 })
+        console.log(response);
+        setUniDocuments(response?.data)
+        setuniLoading(false)
+    }
+
+    const fetchStudentDocument = async () => {
+        setstudentLoading(true)
+        // application:id
+        const response = await LeadApi.listDocuments({ limit: 20, lead_id: lead_id, app_id: 25, status: 'Accepted' })
+        console.log(response);
+        setstudentDocument(response?.data)
+        setstudentLoading(false)
+    }
+
+    // console.log(expandedRowId);
 
     useEffect(() => {
         fetchList()
     }, [refresh, page])
 
 
-    // useEffect(() => {
-    //     handleExpand(router?.query?.app_id)
-    // }, [list])
-
-    console.log(expandedRowId);
-
-
-
     return (
         <>
             <LeadApplicationModal details={data} lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
+            <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={uniDocId} setEditId={setuniDocId} handleRefresh={fetchUniversityDocument} />
+
+            <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
+
+            <SendUniversityMail from={'lead'} details={details} lead_id={lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
 
 
             <div className='lead-tabpanel-content-block timeline'>
@@ -114,7 +168,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                 data?.student?.id ?
                                     <Button variant='contained' disabled={data?.verification_status != 'Yes'} onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
                                     :
-                                    <Tooltip title="Only for Students" >
+                                    <Tooltip title="Only for Applicants" >
                                         <a>
                                             <Button variant='contained' disabled={true} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
                                         </a>
@@ -176,7 +230,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                 <TableCell>{obj?.subject_area?.name}</TableCell>
                                                                 <TableCell>{obj?.course}</TableCell>
                                                                 <TableCell>{obj?.intake?.name}</TableCell>
-                                                                {/* <TableCell>{obj?.stage?.name}</TableCell> */}
+                                                                <TableCell>{obj?.stage?.name}</TableCell>
 
                                                                 <TableCell >
                                                                     {isRowExpanded(obj?.id) ? (
@@ -196,25 +250,87 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                             </TableRow>
                                                             {isRowExpanded(obj.id) && (
                                                                 // <TableRow>
-                                                                <TableCell colSpan={4} style={{ padding: 0, border: 'none' }} >
-                                                                    <Grid container p={1}  style={{ width: '100%', height: 250 }}>
-                                                                        <Grid p={1} item sx={{border:'1px solid grey',marginRight:1}} md={3.8}>
-                                                                            University Deposit
+                                                                <TableCell colSpan={4} style={{ padding: 0, borderTop: 'none' }} >
+                                                                    <Grid container p={1} style={{ width: '100%', height: 250 }}>
+                                                                        <Grid item p={1} sx={{ border: '1px solid grey', marginRight: 1 }} md={3.8} style={{ display: 'flex', flexDirection: 'column' }}>
+                                                                            <Grid sx={{ borderBottom: '1px solid grey', marginRight: 1 }}>
+                                                                                <Typography variant="body1" style={{ color: blue[400], fontSize: '1.2em', textAlign: 'center' }}>
+                                                                                    University Deposit
+                                                                                </Typography>
+                                                                            </Grid>
+                                                                            <Grid mt={2}>
+                                                                                <Typography style={{ color: blue[400], fontSize: '14px' }}>
+                                                                                    Amt. Paid :
+                                                                                </Typography>
+                                                                                <Typography style={{ color: blue[400], fontSize: '14px', marginTop: 5 }}>
+                                                                                    Date Paid :
+                                                                                </Typography>
+                                                                            </Grid>
+                                                                            <Grid container style={{ marginTop: 'auto' }}>
+                                                                                <Grid item xs={12} display="flex" justifyContent="flex-end">
+                                                                                    <Button variant='outlined' size='small'>Add</Button>
+                                                                                </Grid>
+                                                                            </Grid>
                                                                         </Grid>
-                                                                        <Grid p={1} item sx={{border:'1px solid grey',marginRight:1}}  md={3.8}>
-                                                                            Student Documents
+                                                                        <Grid p={1} item sx={{ border: '1px solid grey', marginRight: 1 }} md={3.8}>
+                                                                            <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'} sx={{ borderBottom: '1px solid grey', marginRight: 1 }} >
+                                                                                <Typography variant="body1" style={{ color: blue[400], fontSize: '1.2em', textAlign: 'center' }}>
+                                                                                    Student Documents
+                                                                                </Typography>
+                                                                                <Download onClick={() => handleDownloadOpen(obj?.id)} sx={{ cursor: 'pointer' }} fontSize='small' />
+                                                                            </Grid>
+
+                                                                            {
+                                                                                studentLoading ?
+                                                                                    loadInnerTable()
+                                                                                    :
+                                                                                    studentDocument?.data?.length > 0 ?
+                                                                                        <Grid>
+                                                                                            {studentDocument?.data?.map((obj, index) => (
+                                                                                                <a key={index}>{obj?.document}</a>
+                                                                                            ))}
+
+                                                                                        </Grid>
+                                                                                        :
+                                                                                        <Grid height={'90%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                                                                                            <a>No Document Found</a>
+                                                                                        </Grid>
+
+                                                                            }
                                                                         </Grid>
-                                                                        <Grid p={1} item sx={{border:'1px solid grey'}}  md={3.8}>
-                                                                            University Documents
+                                                                        <Grid p={1} item sx={{ border: '1px solid grey' }} md={3.8}>
+                                                                            <Grid sx={{ borderBottom: '1px solid grey', marginRight: 1 }} >
+                                                                                <Typography variant="body1" style={{ color: blue[400], fontSize: '1.2em', textAlign: 'center' }}>
+                                                                                    University Documents
+                                                                                </Typography>
+                                                                            </Grid>
+
+                                                                            {
+                                                                                uniLoading ?
+                                                                                    loadInnerTable()
+                                                                                    :
+                                                                                    uniDocuments?.data?.length > 0 ?
+                                                                                        <Grid>
+                                                                                            {uniDocuments?.data?.map((obj, index) => (
+                                                                                                <a key={index} >{obj?.document}</a>
+                                                                                            ))}
+
+                                                                                        </Grid>
+                                                                                        :
+                                                                                        <Grid height={'90%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                                                                                            <a>No Document Found</a>
+                                                                                        </Grid>
+
+                                                                            }
                                                                         </Grid>
                                                                     </Grid>
                                                                     <Grid pl={1} pb={0.5}>
-                                                                        <Button size='small' variant='contained' onClick={()=>handleStageOpen(obj)} className='bg-sky-500 text-white hover:bg-sky-600 text-white' >Change Stage</Button>
-                                                                        <Button size='small' variant='outlined' sx={{ml:1}}>Defer Intake</Button>
-                                                                        <Button size='small' variant='outlined' sx={{ml:1}}>Mail to University</Button>
-                                                                        <Button size='small' variant='outlined' sx={{ml:1}}>Add Univer. Document</Button>
+                                                                        <Button size='small' variant='contained' onClick={() => handleStageOpen(obj)} className='bg-sky-500 text-white hover:bg-sky-600 text-white' >Change Stage</Button>
+                                                                        <Button size='small' variant='outlined' sx={{ ml: 1 }}>Defer Intake</Button>
+                                                                        <Button size='small' variant='outlined' onClick={handleMailOpen} sx={{ ml: 1 }}>Mail to University</Button>
+                                                                        <Button size='small' variant='outlined' onClick={() => handleUniDocOpen(obj?.id)} sx={{ ml: 1 }}>Add Univer. Document</Button>
                                                                     </Grid>
-                                                                   
+
                                                                 </TableCell>
                                                                 // </TableRow>
                                                             )}
@@ -276,6 +392,22 @@ const loadTable = () => {
 
             </TableBody>
         </Table>
+    )
+
+}
+
+const loadInnerTable = () => {
+    return (
+
+        <Grid mt={1}>
+            {[...Array(5)].map((_, index) => (
+                <Grid p={1} key={index} align="left">
+                    <Skeleton variant='rounded' width={'100%'} height={20} />
+                </Grid>
+            ))}
+        </Grid>
+
+
     )
 
 }

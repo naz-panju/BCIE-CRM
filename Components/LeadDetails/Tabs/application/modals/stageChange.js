@@ -15,6 +15,7 @@ import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import toast from 'react-hot-toast';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import ReactSelector from 'react-select';
+import { ApplicationApi } from '@/data/Endpoints/Application';
 
 
 const scheme = yup.object().shape({
@@ -27,7 +28,9 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function StageChangeModal({ details, editId, setEditId, refresh, setRefresh }) {
+export default function ApplicationStageChangeModal({ details, editId, setEditId, refresh, setRefresh }) {
+
+    // console.log(details);
 
     const [state, setState] = React.useState({
         right: false,
@@ -59,7 +62,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
 
 
     const fetchStages = (e) => {
-        return ListingApi.stages({ keyword: e,type:'student' }).then(response => {
+        return ListingApi.stages({ keyword: e,type:'application' }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 setstages(response.data.data)
                 return response.data.data;
@@ -68,18 +71,6 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
             }
         })
     }
-
-    const fetchSubStages = (e) => {
-        return ListingApi.substages({ keyword: e }).then(response => {
-            if (typeof response.data.data !== "undefined") {
-                return response.data.data;
-            } else {
-                return [];
-            }
-        })
-    }
-
-
 
     const onSubmit = async (data) => {
         console.log(data);
@@ -91,8 +82,8 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
         // }
 
         let dataToSubmit = {
-            lead_id: details.id,
-            stage_id: data?.stage?.id,
+            id: details.id,
+            stage: data?.stage?.id,
             // substage_id: data?.substage?.id,
         }
 
@@ -108,7 +99,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
             // dataToSubmit['id'] = editId
             // action = TaskApi.update(dataToSubmit)
         } else {
-            action = LeadApi.stageChange(dataToSubmit)
+            action = ApplicationApi.stageChange(dataToSubmit)
         }
 
         action.then((response) => {
@@ -194,15 +185,8 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
             setOpen(true)
         } else if (editId == 0) {
             setOpen(true)
-            initialValues()
         }
     }, [editId])
-
-    useEffect(() => {
-        if (editId == 0) {
-            initialValues()
-        }
-    }, [stages])
 
 
     return (
@@ -234,7 +218,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Lead Stage </a>
+                                                <a className='form-text'>Application Stage </a>
                                             </Grid>
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <AsyncSelect

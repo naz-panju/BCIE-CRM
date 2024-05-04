@@ -448,7 +448,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         })
     }
 
-    console.log(list);
 
     useEffect(() => {
         fetchTable()
@@ -589,7 +588,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                             <TableCell align="left"> {row?.course_level?.name}</TableCell>
                                                             <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                             {/* <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell> */}
-                                                            <Popup trigger={<TableCell align="left"><IconButton style={{ textTransform: 'none' }} ><MoreHorizOutlined fontSize='small' /></IconButton></TableCell>}
+                                                            {/* <Popup trigger={<TableCell align="left"><IconButton style={{ textTransform: 'none' }} ><MoreHorizOutlined fontSize='small' /></IconButton></TableCell>}
                                                                 position="left center">
                                                                 <div className='app-table-container'>
                                                                     <ul className='app-table-options'>
@@ -598,25 +597,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                     </ul>
 
                                                                 </div>
-
-                                                            </Popup>
-                                                            {/* <PopupState variant="popper" popupId="demo-popup-popper">
-                                                                {(popupState) => (
-                                                                    <div>
-                                                                        <TableCell align="left"><IconButton style={{ textTransform: 'none' }} {...bindToggle(popupState)}><MoreHorizOutlined fontSize='small' /></IconButton></TableCell>
-                                                                        <Popper {...bindPopper(popupState)} transition>
-                                                                            {({ TransitionProps }) => (
-                                                                                <Fade {...TransitionProps} timeout={350}>
-                                                                                    <Paper>
-                                                                                        <Typography sx={{ p: 2 }}>The content of the Popper.</Typography>
-                                                                                    </Paper>
-                                                                                </Fade>
-                                                                            )}
-                                                                        </Popper>
-                                                                    </div>
-                                                                )}
-                                                            </PopupState> */}
-
+                                                            </Popup> */}
                                                         </TableRow>
                                                     );
                                                 })

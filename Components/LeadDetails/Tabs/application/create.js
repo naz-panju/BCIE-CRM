@@ -114,7 +114,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     }
 
     const fetchDocuments = (e) => {
-        return LeadApi.listDocuments({ keyword: e, lead_id: lead_id,limit:50,status:'Accepted' }).then(response => {
+        return LeadApi.listDocuments({ keyword: e, lead_id: lead_id, limit: 50, status: 'Accepted' }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -141,7 +141,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             course_level_id: data?.course_level?.id,
             subject_area_id: data?.course?.id,
             intake_id: data?.intake?.id,
-            documents:docs,
+            documents: docs,
 
             // courses: data?.add_course,
             course: data?.coursetext,
@@ -258,7 +258,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             setValue('intake', data?.intake)
             setValue('remarks', data?.remarks)
             setValue('coursetext', data?.course)
-            setValue('documents',data?.documents)
+            setValue('documents', data?.documents)
 
         }
         setDataLoading(false)
@@ -296,7 +296,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             >
                 <Grid width={650}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Apply</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? 'Edit Application' : 'Apply'}</a>
                         <IconButton
                             onClick={handleClose}
                         >

@@ -44,6 +44,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
 
     const [appDocId, setAppDocId] = useState()
 
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -77,11 +78,10 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
     }
 
     const handleUploadRejectedDoc = (id) => {
-        console.log(id);
         setreqUploadId(id)
     }
 
-
+ 
     const handleOpenAppDoc = (doc) => {
         app_details['from_doc'] = doc
         setAppDocId(0)

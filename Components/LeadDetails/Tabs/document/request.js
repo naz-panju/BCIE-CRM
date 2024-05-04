@@ -83,7 +83,7 @@ export default function LeadDocumentRequest({ id, reqId, setReqId }) {
 
     const fetchTemplates = () => {
         setdatLoading(true)
-        ListingApi.documentTemplate().then((response) => {
+        ListingApi.documentTemplate({type:'student'}).then((response) => {
             setTemplates(response?.data?.data)
             setdatLoading(false)
         }).catch((error) => {
@@ -173,7 +173,7 @@ const loadingGrid = () => (
     <Grid container>
 
         {
-            [...Array(4)].map((_, index) => (
+            [...Array(8)].map((_, index) => (
                 <Grid mt={1} key={index} item xs={12} sm={6}>
                     <Skeleton variant='rounded' height={20} width={150} />
                 </Grid>

@@ -57,10 +57,10 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
     function getLastExtension(url) {
         // Split the URL by '.' to get an array of parts
         const parts = url.split('.');
-        
+
         // Extract the last part from the array
         const lastPart = parts[parts.length - 1];
-        
+
         // Return the last part as the last extension
         return lastPart.toLowerCase(); // Optional: Convert to lowercase
     }
@@ -69,15 +69,17 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
     const getFiles = async () => {
         let downloadables = []
         selectedDocuments?.map((obj) => {
-            let fileType=getLastExtension(obj?.file)
+            let fileType = getLastExtension(obj?.file)
             let object = {
-                name: obj?.title,
+                name: obj?.title || obj?.document_template?.name,
                 url: obj?.file,
                 type: fileType
                 // type:obj?.file_type
             }
             downloadables.push(object)
         })
+
+        console.log(downloadables);
         const res = await fetch("/api/files", {
             method: 'POST',
             headers: {
@@ -89,7 +91,6 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
 
         setFiles(files);
     };
-
     useEffect(() => {
         getFiles();
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -100,10 +101,9 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
         try {
             const zip = new JSZip();
             const remoteZips = files.map(async (file) => {
-                const response = await fetch(file.url);
+                const response = await fetch(file?.url);
                 const data = await response.blob();
                 zip.file(`${file.name}.${file.type}`, data);
-
                 return data;
             });
 
@@ -129,14 +129,17 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
 
     const getDetails = async () => {
         setDataLoading(true)
-        const response = await ApplicationApi.view({ id: editId })
-        // console.log(response?.data?.data?.documents);
+        const response = await ApplicationApi.view({ id: editId, status: 'Accepted' })
+        console.log(response?.data?.data);
         if (response?.status == 200 || response?.status == 201) {
             setDetails(response?.data?.data)
             // setdocuments(response?.data?.data?.documents)
-            const filteredDocuments = response?.data?.data?.documents.filter(document => document?.status === 'Accepted');
-            setdocuments(filteredDocuments);
-            setselectedDocuments(filteredDocuments)
+            // const filteredDocuments = response?.data?.data?.documents.filter(document => document?.status === 'Accepted');
+            // setdocuments(filteredDocuments);
+            // setselectedDocuments(filteredDocuments)
+
+            setdocuments(response?.data?.data?.documents);
+            setselectedDocuments(response?.data?.data?.documents)
             setDataLoading(false)
         } else {
             // toast.
@@ -145,6 +148,8 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
         // console.log(response);
     }
 
+
+    // console.log(documents);
 
 
 
@@ -198,7 +203,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
 
                                             <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'} key={index} onClick={() => handleSelectDocs(obj)} item md={5.5} mr={1} mt={1} style={{ border: selectedDocuments.includes(obj) ? '1px solid blue' : '1px solid grey', padding: '10px', cursor: 'pointer' }}>
                                                 <Grid>
-                                                    {obj?.title}
+                                                    {obj?.title || obj?.document_template?.name}
                                                 </Grid>
                                                 {
                                                     selectedDocuments?.includes(obj) &&

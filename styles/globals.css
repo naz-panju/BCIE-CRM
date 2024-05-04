@@ -587,6 +587,10 @@ button#UserPop span {
   color: #4285f4 !important;
 }
 
+.reg-name a:hover{
+  text-decoration: underline;
+}
+
 .checkbox-tb {
   width: 70px;
 }
