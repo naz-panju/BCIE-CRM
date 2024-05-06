@@ -111,7 +111,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
+        const response = await LeadApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
         // console.log(response);
         setList(response?.data)
         setLoading(false)

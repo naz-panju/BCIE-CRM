@@ -124,6 +124,7 @@ function LeadDetails() {
 
 
 
+
   return (
 
     <>
@@ -140,7 +141,7 @@ function LeadDetails() {
 
 
       <section>
-        <div className='page-title-block'>
+        <div className={`page-title-block`}>
           <div className='page-title-block-content justify-between'>
             <h1>Lead Details</h1>
 

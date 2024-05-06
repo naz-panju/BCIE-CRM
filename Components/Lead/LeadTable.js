@@ -24,11 +24,14 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, InputAdornment, TextField } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
-import { PersonAdd, PersonAddAlt, PersonOutline } from '@mui/icons-material';
+import { Close, PersonAdd, PersonAddAlt, PersonOutline, Search } from '@mui/icons-material';
+import ReactSelector from 'react-select';
+import { useForm } from 'react-hook-form';
+
 
 
 
@@ -219,9 +222,11 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchType, nameSearch, emailSearch, phoneSearch, userIdSearch }) {
+export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign }) {
 
   const router = useRouter();
+  const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
+
 
   // const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
 
@@ -241,6 +246,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
   const [selectedAssignedTo, setSelectedAssignedTo] = useState()
   const [selectedStage, setSelectedStage] = useState()
+  // const [searchType, setsearchType] = useState(second)
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -342,11 +348,20 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     })
   }
 
+  const searchOptions = [
+    { name: 'Email' },
+    { name: 'Name' },
+    { name: 'Mobile' },
+    { name: 'Lead Id' }
+  ]
+
   const handleAssignedTo = (e) => {
     setSelectedAssignedTo(e?.id || '');
+    setValue('assignedTo', e || '')
   }
   const handleSelectStage = (e) => {
     setSelectedStage(e?.id || '');
+    setValue('stage', e || '')
   }
 
   const fetchTable = () => {
@@ -355,21 +370,21 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       limit: limit,
       assigned_to: selectedAssignedTo,
       stage: selectedStage,
-      // name: nameSearch,
-      // email: emailSearch,
-      // phone_number: phoneSearch,
-      // lead_id: userIdSearch,
+      name: watch('nameSearch'),
+      email: watch('emailSearch'),
+      phone_number: watch('numberSearch'),
+      lead_id: watch('lead_id_search'),
       page: page + 1
     }
-    if (searchType == 'Name') {
-      params['name'] = nameSearch
-    } else if (searchType == 'Email') {
-      params['email'] = nameSearch
-    } else if (searchType == 'Mobile') {
-      params['phone_number'] = nameSearch
-    } else if (searchType == 'Lead Id') {
-      params['lead_id'] = nameSearch
-    }
+    // if (watch('searchType') == 'Name') {
+    //   params['name'] = nameSearch
+    // } else if (watch('searchType') == 'Email') {
+    //   params['email'] = nameSearch
+    // } else if (watch('searchType') == 'Mobile') {
+    //   params['phone_number'] = nameSearch
+    // } else if (watch('searchType') == 'Lead Id') {
+    //   params['lead_id'] = nameSearch
+    // }
 
     LeadApi.list(params).then((response) => {
       // console.log(response);
@@ -381,18 +396,75 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     })
   }
 
+  const [nameSearch, setnameSearch] = useState()
+  const [phoneSearch, setphoneSearch] = useState()
+  const [emailSearch, setemailSearch] = useState()
+  const [userIdSearch, setuserIdSearch] = useState()
+
+  const handleClearSearch = (from) => {
+    setValue('nameSearch', '')
+    setValue('emailSearch', '')
+    setValue('numberSearch', '')
+    setValue('lead_id_search', '')
+
+    setValue('assignedTo',null)
+    setValue('stage', '')
+
+    setSelectedAssignedTo()
+    setSelectedStage()
+
+    setsearchRefresh(!searchRefresh)
+
+    // if (from == 'email') {
+    //   setValue('emailSearch', '')
+    //   setemailSearch('')
+    // } else if (from == 'name') {
+    //   setValue('nameSearch', '')
+    //   setnameSearch('')
+    //   sessionStorage.removeItem('leadType')
+    //   sessionStorage.removeItem('leadSearch')
+    // } else if (from == 'mobile') {
+    //   setValue('mobileSearch', '')
+    //   setphoneSearch('')
+    // }
+  }
+
+  const handleTypeChange = (type) => {
+    setValue('searchType', type)
+    sessionStorage.setItem('leadType', type)
+    setnameSearch('')
+  }
+
+  const handleNameSearch = () => {
+    setnameSearch(watch('nameSearch'))
+    sessionStorage.setItem('leadSearch', watch('nameSearch'))
+
+  }
+
+  const [searchRefresh, setsearchRefresh] = useState(false)
+  const onSearch = () => {
+    setsearchRefresh(!searchRefresh)
+  }
+
+  useEffect(() => {
+    setValue('searchType', searchOptions[0]?.name)
+    // getInitialValue()
+  }, [])
 
   useEffect(() => {
     fetchTable()
-  }, [page, refresh, limit, selectedAssignedTo, selectedStage, nameSearch, emailSearch, phoneSearch, userIdSearch])
+  }, [page, refresh, limit, searchRefresh])
 
   return (
     <>
       <Grid p={1} pl={0} mb={1} container display={'flex'}>
-        <Grid width={300} mr={1} item md={2.5}>
+        <Grid mr={1} item md={2.8}>
           <AsyncSelect
             isClearable
             defaultOptions
+            name='assignedTo'
+            value={watch('assignedTo')}
+            defaultValue={watch('assignedTo')}
             loadOptions={fetchUser}
             getOptionLabel={(e) => e.name}
             getOptionValue={(e) => e.id}
@@ -401,10 +473,13 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
           />
         </Grid>
 
-        <Grid mr={1} item md={2.5}>
+        <Grid mr={1} item md={2.8}>
           <AsyncSelect
             isClearable
             defaultOptions
+            name='stage'
+            value={watch('stage')}
+            defaultValue={watch('stage')}
             loadOptions={fetchStage}
             getOptionLabel={(e) => e.name}
             getOptionValue={(e) => e.id}
@@ -412,7 +487,65 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
             onChange={handleSelectStage}
           />
         </Grid>
+
+        <Grid mr={1} item md={2.8}>
+          <TextField
+            fullWidth
+            {...register('nameSearch')}
+            size='small'
+            id="outlined-name"
+            placeholder={`search by Name`}
+          />
+        </Grid>
+
+        <Grid mr={1} item md={2.8}>
+          <TextField
+            fullWidth
+            {...register('emailSearch')}
+            size='small'
+            id="outlined-name"
+            placeholder={`search by Email`}
+          />
+        </Grid>
+
+
       </Grid>
+
+      <Grid p={1} pl={0} mb={1} container display={'flex'}>
+
+        <Grid mr={1} item md={2.8}>
+          <TextField
+            fullWidth
+            type='number'
+            {...register('numberSearch')}
+            size='small'
+            id="outlined-name"
+            placeholder={`search by Mobile`}
+          />
+        </Grid>
+
+        <Grid mr={1} item md={2.8}>
+          <TextField
+            fullWidth
+            type='number'
+            {...register('lead_id_search')}
+            size='small'
+            id="outlined-name"
+            placeholder={`search by Lead Id`}
+          />
+        </Grid>
+
+        <Grid mr={1} item md={2.8}>
+
+        </Grid>
+
+        <Grid mr={1} item md={2.8} display={'flex'} justifyContent={'end'} alignItems={'center'}>
+          <Button onClick={onSearch} variant='contained' size='small' className='bg-sky-500' sx={{ height: '30px', textTransform: 'none', mr: 2 }}>Filter</Button>
+          <Button onClick={handleClearSearch} variant='contained' size='small' className='bg-sky-300' sx={{ height: '30px', textTransform: 'none' }}>Clear</Button>
+        </Grid>
+      </Grid>
+
+
       {
         loading ?
           <LoadingTable columns={3} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
