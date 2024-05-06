@@ -108,12 +108,12 @@ const Sidebar = () => {
         >
             <div className="sidebar__inner scrollCustom">
                 <div className="site-logo onlyDesktop">
-                    <a href="#" className="inbl valigntop logo">
+                   {/* <a href="#" className="inbl valigntop logo">
                         <Image src={LogoIcon} alt='LogoIcon' width={30} className='tiny-sidebar' />
                         <Image src={Logo} alt='LogoIcon' width={145} className='max-sidebar' />
-                    </a>
+                    </a>*/} 
 
-                    <div>
+                    <div className='logo-text-wrap'>
 
                     <svg xmlns="http://www.w3.org/2000/svg" width="49" height="15" viewBox="0 0 49 15" fill="none">
   <path d="M37.125 14.6921V0.30835H49.0018V2.95906H40.0017V6.16458H48.6731V8.81529H40.0017V12.0208H49.0018V14.6921H37.125Z" fill="white"/>
@@ -123,6 +123,12 @@ const Sidebar = () => {
 </svg>
 <div className='logo_sub'>Students Management Portal</div>
 </div>
+
+<div className='logo-text-small'>
+BCIE
+    </div>
+
+
                     
                 </div>
 
