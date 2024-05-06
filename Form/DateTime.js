@@ -1,9 +1,10 @@
 import React from 'react';
-import {TextField} from "@mui/material";
-import {Controller} from "react-hook-form";
-import {alpha} from "@mui/material/styles";
-import {DateTimePicker} from "@mui/x-date-pickers";
-import {IcecreamOutlined} from "@mui/icons-material";
+import { TextField } from "@mui/material";
+import { Controller } from "react-hook-form";
+import { alpha } from "@mui/material/styles";
+import { DateTimePicker } from "@mui/x-date-pickers";
+import { IcecreamOutlined } from "@mui/icons-material";
+import moment from 'moment';
 
 const DateTime = (props) => {
     let textFiledStyles = {
@@ -74,10 +75,10 @@ const DateTime = (props) => {
                 control={props.control}
                 defaultValue={props.value}
                 render={({
-                             field: { onChange, value },
-                             fieldState: { error },
-                             formState,
-                         }) => (
+                    field: { onChange, value },
+                    fieldState: { error },
+                    formState,
+                }) => (
                     <DateTimePicker
                         label={props.label}
                         value={value}
@@ -85,15 +86,16 @@ const DateTime = (props) => {
                         onChange={onChange}
                         renderInput={(params) =>
                             <TextField {...params}
-                                       sx={textFiledStyles}
-                                       InputLabelProps={InputLabelProps}
-                                       variant="filled"
-                                       value={value || ''}
-                                       helperText={error ? error.message : null}
-                                       error={!!error}
-                                       inputProps={inputProps}
+                                style={{ width: '100%' }}
+                                sx={textFiledStyles}
+                                InputLabelProps={InputLabelProps}
+                                variant="filled"
+                                value={value ? moment(value).format('YYYY-MM-DD HH:mm:ss') : ''}
+                                //    helperText={error ? error.message : null}
+                                //    error={!!error}
+                                inputProps={inputProps}
                             />
-                            }
+                        }
 
                     />
                 )}

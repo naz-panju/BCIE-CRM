@@ -26,78 +26,20 @@ function Details({ data, loading }) {
                 <Grid container spacing={2} style={{ marginBottom: '10px' }}>
                     <Grid item xs={12} sm={12}>
                         <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Lead Name:
+                            Call Summary:
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.lead?.name}
+                            {data?.call_summary}
                         </Typography>
                     </Grid>
                 </Grid >
                 <Divider sx={{ mb: 1 }} />
 
-
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Subject:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.subject}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
-
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Body:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.body}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
-
-                {/* <Grid container style={{ marginBottom: '10px' }}>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            From:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.from}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            To:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.to}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ mb: 1 }} /> */}
-
-
-
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            CC:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.cc}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
 
                 <Grid container style={{ marginBottom: '10px' }}>
                 <Grid item xs={6} sm={6}>
                     <Typography variant="" style={{ fontWeight: 'bold' }}>
-                        Email Type:
+                        Call Type:
                     </Typography>
                     <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
                         {data?.type}
@@ -105,12 +47,12 @@ function Details({ data, loading }) {
                 </Grid>
                 <Grid item xs={6} sm={6}>
                     <Typography variant="" style={{ fontWeight: 'bold' }}>
-                        Message Date:
+                       Date and Time Of Call:
                     </Typography>
                     <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
                         {
                             data?.updated_at &&
-                            moment(data?.message_date).format("DD-MM-YYYY HH:mm")
+                            moment(data?.date_time_of_call).format("DD-MM-YYYY HH:mm:ss")
                         }
                     </Typography>
                 </Grid>
@@ -200,24 +142,6 @@ const loadingDetail = () => (
                 <Skeleton variant="rounded" width={100} height={20} />
                 <Skeleton sx={{ mt: 1 }} variant="rounded" width={200} height={20} />
             </Grid>
-        </Grid>
-        <Divider sx={{ mb: 1 }} />
-
-        <Grid container style={{ marginBottom: '10px' }}>
-            <Grid item xs={6} sm={6}>
-                <Skeleton variant="rounded" width={100} height={20} />
-                <Skeleton sx={{ mt: 1 }} variant="rounded" width={200} height={20} />
-            </Grid>
-            <Grid item xs={6} sm={6}>
-                <Skeleton variant="rounded" width={100} height={20} />
-                <Skeleton sx={{ mt: 1 }} variant="rounded" width={200} height={20} />
-            </Grid>
-        </Grid>
-        <Divider sx={{ mb: 1 }} />
-
-        <Grid item xs={12} sm={12}>
-            <Skeleton variant="rounded" width={100} height={20} />
-            <Skeleton sx={{ mt: 1 }} variant="rounded" width={200} height={20} />
         </Grid>
         <Divider sx={{ mb: 1 }} />
 

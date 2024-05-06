@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import TabPanel from '@/utils/TabPanel';
 import EmailTab from './tabs/email';
 import WhatsappTab from './tabs/whatsapp';
+import CallTab from './tabs/call';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -39,7 +40,7 @@ function a11yProps(index) {
     };
 }
 
-export default function CreateTabs({ list,value,setValue,activeTab,setActiveTab,setEmailLimit,loading ,setwhatsappLimit,whatsappList}) {
+export default function CreateTabs({ list, value, setValue, activeTab, setActiveTab, setEmailLimit, loading, setwhatsappLimit, whatsappList, callList, setCallLimit, handleCallEdit, handlePhoneRefresh }) {
     // const [value, setValue] = React.useState(0);
     // const [activeTab, setActiveTab] = useState(0);
     const handleChange = (event, newValue) => {
@@ -54,6 +55,10 @@ export default function CreateTabs({ list,value,setValue,activeTab,setActiveTab,
         {
             component: <WhatsappTab list={whatsappList} setwhatsappLimit={setwhatsappLimit} loading={loading} />,
             label: 'Whatsapp'
+        },
+        {
+            component: <CallTab list={callList} setCallLimit={setCallLimit} loading={loading} handleEdit={handleCallEdit} handleRefresh={handlePhoneRefresh} />,
+            label: 'Call Summary'
         },
     ];
 

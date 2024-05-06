@@ -250,130 +250,19 @@ export default function CustomizedMenus() {
             <Grid display={'flex'} >
 
               <Grid display={'flex'}>
-                <Grid width={200}>
-                  <ReactSelector
-                    onInputChange={searchOptions}
-                    styles={{
-                      menu: provided => ({ ...provided, zIndex: 9999 })
-                    }}
-                    options={searchOptions}
-                    getOptionLabel={option => option.name}
-                    getOptionValue={option => option.name}
-                    value={
-                      searchOptions.find(options =>
-                        options.name === watch('searchType')
-                      )
-                    }
-                    name='searchType'
-
-                    defaultValue={(watch('searchType'))}
-                    onChange={(selectedOption) => handleTypeChange(selectedOption?.name)}
-                  />
-                </Grid>
-
-                {/* command duw to easy method */}
-                {/* {
-                  watch('searchType') == 'Email' &&
-                  <TextField
-                    {...register('emailSearch')}
-                    style={{ width: 300, marginRight: 10 }}
-                    size='small'
-                    id="outlined-name"
-                    placeholder='search by email'
-                    InputProps={{
-                      endAdornment: (
-                        <>
-                          <InputAdornment position="end">
-                            <Search onClick={handleEmailSearch} sx={{ cursor: 'pointer' }}  fontSize='small' />
-                          </InputAdornment>
-                          <InputAdornment onClick={() => handleClearSearch('email')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
-                            <Close fontSize='small' />
-                          </InputAdornment>
-                        </>
-                      ),
-                    }}
-
-                  />
-                } */}
-                {/* {
-                  watch('searchType') == 'Mobile' &&
-                  <TextField
-                    {...register('mobileSearch')}
-                    style={{ width: 300, marginRight: 10 }}
-                    className="no-spinners"
-                    type='number'
-                    size='small'
-                    id="outlined-name"
-                    placeholder='search by mobile'
-                    InputProps={{
-                      endAdornment: (
-                        <>
-                          <InputAdornment position="end">
-                            <Search onClick={handlePhoneSearch} sx={{ cursor: 'pointer' }} fontSize='small' />
-                          </InputAdornment>
-                          <InputAdornment onClick={() => handleClearSearch('mobile')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
-                            <Close fontSize='small' />
-                          </InputAdornment>
-                        </>
-                      ),
-                    }}
-                  // label="Search Tasks"
-                  />
-                } */}
-                {/* {
-                  watch('searchType') == 'Name' && */}
-                <form onSubmit={handleSubmit(handleNameSearch)}>
-                  <TextField
-                    {...register('nameSearch')}
-                    style={{ width: 300, marginRight: 10 }}
-                    size='small'
-                    id="outlined-name"
-                    placeholder={`search by ${watch('searchType')?.toLowerCase()}`}
-                    InputProps={{
-                      endAdornment: (
-                        <>
-                          <InputAdornment position="end">
-                            <Search onClick={handleNameSearch} sx={{ cursor: 'pointer' }} fontSize='small' />
-                          </InputAdornment>
-                          <InputAdornment onClick={() => handleClearSearch('name')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
-                            <Close fontSize='small' />
-                          </InputAdornment>
-                        </>
-                      ),
-                    }}
-                  />
-                </form>
-                {/* } */}
-
-                <Tooltip title={'Add Lead'}>
-                  <IconButton onClick={handleCreateNew}>
-                    <PersonAddAlt1Outlined fontSize='small' sx={{ color: 'grey', cursor: 'pointer' }} />
-                  </IconButton>
-                </Tooltip>
+           
+                {/* <Tooltip title={'Add Lead'}> */}
+                  <Button sx={{mr:2}} variant='outlined' onClick={handleCreateNew}>
+                    <PersonAddAlt1Outlined fontSize='small' /> Add Lead
+                  </Button>
+                  <Button disabled={selected?.length == 0} variant='outlined' onClick={handleCreateassign} >
+                     Assign
+                  </Button>
+                {/* </Tooltip> */}
                 {/* <Button sx={{ textTransform: 'none', mr: 1 }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button> */}
 
               </Grid>
               {/* disabled={selected?.length == 0} */}
-              <Tooltip title={selected?.length == 0 && 'Please Select a lead'}>
-                <IconButton onClick={handleClick}>
-                  <MoreVert fontSize='small' sx={{ color: 'grey', cursor: 'pointer' }} />
-                </IconButton>
-              </Tooltip>
-              <Popover
-                id={id}
-                open={open}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-              >
-                {
-                  selected?.length > 0 &&
-                  <Typography onClick={handleCreateassign} sx={{ p: 1, pl: 2, pr: 2, cursor: 'pointer' }}>Assign</Typography>
-                }
-              </Popover>
 
               {/* <Button className='bg-sky-500' disabled={selected?.length == 0} sx={{ textTransform: 'none' }} onClick={handleCreateassign} size='small' variant='contained'>Assign</Button> */}
             </Grid>
