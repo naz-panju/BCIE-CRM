@@ -17,6 +17,8 @@ import StageChangeModal from './Modals/StageChange';
 import SendWhatsApp from './Modals/SendWhatsapp';
 import FollowUpModal from './Tabs/follow-up/create';
 import LeadNoteModal from './Tabs/follow-up/noteCreate';
+import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
+import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 
 
 function LeadDetails() {
@@ -38,6 +40,9 @@ function LeadDetails() {
   const [followupId, setfollowupId] = useState()
 
   const [noteId, setNoteId] = useState()
+
+  const [callDetails, setcallDetails] = useState()
+  const [commDetails, setcommDetails] = useState()
 
 
   const [confirmId, setconfirmId] = useState()
@@ -117,6 +122,39 @@ function LeadDetails() {
   const handleRefresh = () => {
     setRefresh(!refresh)
   }
+
+
+  const ID = router?.query?.slug
+
+
+  const getSummary = async () => {
+    let params = {
+      lead_id: ID,
+    }
+    
+    const response = await CommunicationLogApi.summary(params)
+    // console.log(response);
+    setcommDetails(response?.data?.data)
+  }
+
+  const getCallSummary = async () => {
+    let params = {
+      lead_id: ID,
+    }
+    
+    const response = await PhoneCallApi.summmary(params)
+    // console.log(response);
+    setcallDetails(response?.data?.data)
+  }
+
+  useEffect(() => {
+    getSummary()
+    getCallSummary()
+  }, [refresh])
+  // useEffect(() => {
+  //     getCallSummary()
+  // }, [phoneCallRefresh])
+
 
   useEffect(() => {
     getDetails()

@@ -153,7 +153,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
 
     useEffect(() => {
         getSummary()
-        getCallSummary()
+        // getCallSummary()
     }, [emailLimit, whatsappLimit])
     useEffect(() => {
         getCallSummary()
