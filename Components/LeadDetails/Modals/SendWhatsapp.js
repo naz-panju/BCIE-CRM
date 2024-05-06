@@ -177,7 +177,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                 toast.success('Whatsapp Message Sent Successfully');
                 reset()
                 handleClose()
-                // setRefresh(!refresh)
+                setRefresh(!refresh)
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)

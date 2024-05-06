@@ -17,6 +17,8 @@ import StageChangeModal from './Modals/StageChange';
 import SendWhatsApp from './Modals/SendWhatsapp';
 import FollowUpModal from './Tabs/follow-up/create';
 import LeadNoteModal from './Tabs/follow-up/noteCreate';
+import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
+import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 
 
 function LeadDetails() {
@@ -38,6 +40,9 @@ function LeadDetails() {
   const [followupId, setfollowupId] = useState()
 
   const [noteId, setNoteId] = useState()
+
+  const [callDetails, setcallDetails] = useState()
+  const [commDetails, setcommDetails] = useState()
 
 
   const [confirmId, setconfirmId] = useState()
@@ -118,6 +123,39 @@ function LeadDetails() {
     setRefresh(!refresh)
   }
 
+
+  const ID = router?.query?.slug
+
+
+  const getSummary = async () => {
+    let params = {
+      lead_id: ID,
+    }
+    
+    const response = await CommunicationLogApi.summary(params)
+    // console.log(response);
+    setcommDetails(response?.data?.data)
+  }
+
+  const getCallSummary = async () => {
+    let params = {
+      lead_id: ID,
+    }
+    
+    const response = await PhoneCallApi.summmary(params)
+    // console.log(response);
+    setcallDetails(response?.data?.data)
+  }
+
+  useEffect(() => {
+    getSummary()
+    getCallSummary()
+  }, [refresh])
+  // useEffect(() => {
+  //     getCallSummary()
+  // }, [phoneCallRefresh])
+
+
   useEffect(() => {
     getDetails()
   }, [refresh])
@@ -171,7 +209,7 @@ function LeadDetails() {
         <div className='content-block-details'>
           <div className='content-block-top'>
             <div className='flex mar-10'>
-              <div className='w-full md:w-4/12 lg:w-4/12 pad-10 '>
+              <div className='w-full md:w-6/12 lg:w-6/12 pad-10 '>
 
                 <div className='lead-top-details-block'>
                   {/* {
@@ -267,29 +305,18 @@ function LeadDetails() {
 
               </div>
 
-              <div className='w-full md:w-3/12 lg:w-2/12 pad-10 '>
-                <div className='lead-score-block'>
-                  <h3>30</h3>
-                  <h4>Lead Score </h4>
-                </div>
 
-                <div className='generate-lead-block'>
-                  {/* <Grid display={'flex'} justifyContent={'center'} alignItems={'center'}><BasicPie /></Grid> */}
-                  <div className='lead-percent-icon'>
-                    <PieChart color='success' />
-                  </div>
-                  <h4>Generate Lead Strength</h4>
-                </div>
-              </div>
 
               <div className='w-full md:w-5/12 lg:w-6/12 pad-10 '>
                 <div className='lead-status-block'>
                   <div className='lead-communication-status'>
                     <h4>Communication Status</h4>
                     <ul>
-                      <li>Email Sent - <span>5</span></li>
+                      <li>Email Sent - <span>{commDetails?.email_send_summary}</span></li>
                       {/* <li>SMS Sent - <span>1</span></li> */}
-                      <li>Whatsapp Sent - <span>0</span></li>
+                      <li>Whatsapp Sent - <span>{commDetails?.whatsapp_send_summary}</span></li>
+                      <li>Call Inbound - <span>{callDetails?.calls_inbound}</span></li>
+
                     </ul>
                   </div>
 
