@@ -111,7 +111,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await LeadApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
+        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
         // console.log(response);
         setList(response?.data)
         setLoading(false)
@@ -132,7 +132,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const fetchStudentDocument = async () => {
         setstudentLoading(true)
         // application:id
-        const response = await ApplicationApi.listDocuments({ limit: 20, lead_id: lead_id, app_id: 25, status: 'Accepted' })
+        const response = await LeadApi.listDocuments({ limit: 20, lead_id: lead_id, app_id: 25, status: 'Accepted' })
         console.log(response);
         setstudentDocument(response?.data)
         setstudentLoading(false)
