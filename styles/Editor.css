@@ -94,7 +94,9 @@ display: block;
 .mainList li:hover i {  
     color: #122AFF  ;
 }
-
+.lead-table-cntr thead svg  {
+    opacity: 1;
+}
 .lead-table-cntr thead svg path{
     fill: #fff;
 }
@@ -299,9 +301,11 @@ margin-right: 10px;
     width: 45px;
 height: 45px;
 color: #fff;
-line-height: 45px;
+line-height: 39px;
 }
-
+.nameInitials svg{
+    display: inline-block;
+}
 .lead-top-details-block-name .tileCellDiv h4 { 
     line-height: 45px;
 }

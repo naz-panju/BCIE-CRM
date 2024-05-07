@@ -198,7 +198,22 @@ button[type="submit"]:hover {
   position: absolute;
   top: 10px;
 }
+.sidebar .mainList>li a svg {
+  display: inline-block;
 
+}
+.sidebar .mainList>li a svg path { 
+  fill: white;
+
+}
+
+.sidebar .mainList>li.sidebar-selected a svg path{
+  fill: url(#paint0_linear_1041_304);  
+}
+ 
+.sidebar .mainList>li:hover a svg path{
+  fill: url(#paint0_linear_1041_304);  
+}
 .sidebar.active .mainList>li a {
   min-width: 276px;
   white-space: nowrap;
@@ -591,6 +606,13 @@ color: #fff;
 .content-block thead th { 
 color: #fff;
 }
+.content-block thead th span:hover { 
+  color: #fff;
+  }
+
+  .content-block thead th span { 
+    color: #fff !important;
+    }
 .reg-name {
   color: #4285f4 !important;
 }
