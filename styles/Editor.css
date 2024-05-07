@@ -94,35 +94,7 @@ display: block;
 .mainList li:hover i {  
     color: #122AFF  ;
 }
-.add_lead_btn{
-    border-radius: 3px;
-background: #0B0D23;
-color: #FFF; 
-font-size: 15px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-letter-spacing: -0.15px;
-text-transform: capitalize;
-}
 
-.add_lead_btn svg{
-  margin-right: 5px;
-}
-.assign_btn{
-    border-radius: 4px;
-    background: #0047CD;
-    color: #FFF  !important; 
-    font-size: 15px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: -0.15px;
-    text-transform: capitalize;
-}
-.assign_btn svg{
-    margin-right: 5px;
-  }
 .lead-table-cntr thead svg path{
     fill: #fff;
 }
@@ -549,7 +521,35 @@ background: #0043CE;
     position: relative;
     top: -5px;
 }
+.add_lead_btn{
+    border-radius: 3px;
+background: #0B0D23;
+color: #FFF; 
+font-size: 15px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+letter-spacing: -0.15px;
+text-transform: capitalize;
+}
 
+.add_lead_btn svg{
+  margin-right: 5px;
+}
+.page-title-block-content .assign_btn{
+    border-radius: 4px;
+    background: #0047CD !important;
+    color: #FFF  !important; 
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.15px;
+    text-transform: capitalize;
+}
+.page-title-block-content .assign_btn svg{
+    margin-right: 5px;
+  }
 
 @media (max-width: 1400px) {
 
