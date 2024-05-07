@@ -24,9 +24,9 @@ const scheme = yup.object().shape({
     email: yup.string().required("Email is Required"),
     phone: yup.string().required("Phone Number is Required"),
     dob: yup.string().required("Date Of Birth is Required"),
-    zip: yup.string().required("Zip Code is Required"),
+    // zip: yup.string().required("Zip Code is Required"),
     // country: yup.object().required("Please Choose a Country").typeError("Please choose a Country"),
-    state: yup.string().required("State is Required"),
+    // state: yup.string().required("State is Required"),
 })
 
 export default function ConvertLeadToStudent({ lead_id, details, editId, setEditId, refresh, setRefresh, handleRefresh }) {
@@ -156,7 +156,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
         }
 
         action.then((response) => {
-            // console.log(response);
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(`Applicant Has Been Successfully ${editId > 0 ? 'Updated' : 'Created'} `)
                 reset()

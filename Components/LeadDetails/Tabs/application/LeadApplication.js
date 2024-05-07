@@ -141,6 +141,8 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
         setMailId(0)
     }
 
+    console.log(data);
+
     const fetchList = async () => {
         setLoading(true)
         const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
@@ -155,10 +157,11 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
         setdocLoading(false)
     }
 
-    console.log(list)
-
     useEffect(() => {
-        fetchList()
+        {
+            data?.student &&
+                fetchList()
+        }
     }, [refresh, page])
 
 

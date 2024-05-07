@@ -93,9 +93,9 @@ const Header = ({ }) => {
       <div className='container-fluid '>
         <div className='row flex items-center'>
           <div className="w-full md:w-6/12 lg:w-6/12 pad-15 clg_header clg_header_">
-            <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse">
+            {/* <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse">
               {sideBarActive ? <MenuOpen /> :  <Menu />}
-            </button>
+            </button> */}
           </div>
 
           <div className='w-full md:w-6/12 lg:w-6/12 pad-15 '>

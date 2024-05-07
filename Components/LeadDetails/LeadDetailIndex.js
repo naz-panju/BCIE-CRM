@@ -188,11 +188,11 @@ function LeadDetails() {
 
             {/* disabled={details?.verification_status == 'Yes'} */}
             <Grid>
-              <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-300 text-white hover:bg-sky-500 text-white'>Send Mail</Button>
+              {/* <Button sx={{ mr: 2 }} onClick={details && handleOpenMailModal} variant='contained' className='bg-sky-300 text-white hover:bg-sky-500 text-white'>Send Mail</Button> */}
               {/* <Tooltip title={!details?.whatsapp_number && 'Whatsapp Number not Found'}>
                 <Button sx={{ mr: 2 }} onClick={details && handleOpenWhatsappModal} disabled={!details?.whatsapp_number} variant='contained' className='bg-sky-400 text-white hover:bg-sky-600 text-white'>Send Whatsapp</Button>
               </Tooltip> */}
-              {
+              {/* {
                 details?.whatsapp_number ?
                   <Button variant='contained' disabled={!details?.whatsapp_number} onClick={handleOpenWhatsappModal} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Send Whatsapp</Button>
                   :
@@ -201,10 +201,10 @@ function LeadDetails() {
                       <Button variant='contained' disabled={true} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Send Whatsapp</Button>
                     </a>
                   </Tooltip>
-              }
-              <Button sx={{ mr: 2 }} onClick={details && handleOpenStageModal} variant='contained' className='bg-sky-500 text-white hover:bg-sky-600 text-white'>Change Stage</Button>
-              <Button sx={{ mr: 2 }} onClick={details && handleNoteOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Add Note</Button>
-              <Button sx={{ mr: 2 }} onClick={details && handleFollowupOpen} variant='contained' className='bg-sky-700 text-white hover:bg-sky-800 text-white'>Add Followup</Button>
+              } */}
+              {/* <Button sx={{ mr: 2 }} onClick={details && handleOpenStageModal} variant='contained' className='bg-sky-500 text-white hover:bg-sky-600 text-white'>Change Stage</Button> */}
+              {/* <Button sx={{ mr: 2 }} onClick={details && handleNoteOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Add Note</Button>
+              <Button sx={{ mr: 2 }} onClick={details && handleFollowupOpen} variant='contained' className='bg-sky-700 text-white hover:bg-sky-800 text-white'>Add Followup</Button> */}
               <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>{details?.closed == 1 ? 'UnArchive' : 'Archive'}</Button>
             </Grid>
           </div>
@@ -384,32 +384,32 @@ function LeadDetails() {
 
 
                     <div className='vari-right'>
-                      <a>Change Status</a>
+                      <a onClick={details && handleOpenStageModal}>Change Status</a>
                     </div>
 
 
                   </div>
 
-                  <div className='stage_track_cntr'>  
-<div className='stage_track'>  
-    <ul>
-      <li className='opened'> </li>
-      <li> </li>
-      <li> </li>
-      <li>   </li>
-      <li> </li>
-    </ul>
-  <div className='track-range'></div> 
-</div>
-<ul className='tract-names'>
-      <li>Unverified</li>
-      <li>Verified</li>
-      <li>Started</li>
-      <li>Payment Approved</li>
-      <li>Submitted</li>
-    </ul>
-</div>
-                  
+                  <div className='stage_track_cntr'>
+                    <div className='stage_track'>
+                      <ul>
+                        <li className='opened'> </li>
+                        <li> </li>
+                        <li> </li>
+                        <li>   </li>
+                        <li> </li>
+                      </ul>
+                      <div className='track-range'></div>
+                    </div>
+                    <ul className='tract-names'>
+                      <li>Unverified</li>
+                      <li>Verified</li>
+                      <li>Started</li>
+                      <li>Payment Approved</li>
+                      <li>Submitted</li>
+                    </ul>
+                  </div>
+
                 </div>
 
 
@@ -460,9 +460,9 @@ function LeadDetails() {
                   <div className='lead-communication-status-bg'>
 
                     <ul>
-                      <li><span>5</span> <p> Email Sent  </p> <a className='btn'>Send Mail</a></li>
+                      <li><span>5</span> <p> Email Sent  </p> <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a></li>
                       {/* <li>SMS Sent - <span>1</span></li> */}
-                      <li><span>0</span> <p> Whatsapp Sent  </p> <a className='btn'>  Send Whatsapp </a></li>
+                      <li><span>0</span> <p> Whatsapp Sent  </p> <a className='btn' disabled={!details?.whatsapp_number} onClick={handleOpenWhatsappModal} >  Send Whatsapp </a></li>
                     </ul>
                   </div>
                 </div>
@@ -478,8 +478,8 @@ function LeadDetails() {
                     <ul>
                       <li>NA</li>
                     </ul>
-                    <p><a className='btn'>Add Followup</a>
-                      <a className='btn'>  Add Note </a>
+                    <p><a className='btn' onClick={details && handleFollowupOpen} >Add Followup</a>
+                      <a className='btn' onClick={details && handleNoteOpen}>  Add Note </a>
                     </p>
                   </div>
                 </div>

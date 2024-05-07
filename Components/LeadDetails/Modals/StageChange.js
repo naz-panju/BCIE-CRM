@@ -38,6 +38,8 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
 
     const [dataLoading, setDataLoading] = useState(false)
 
+    const [refreshKey, setrefreshKey] = useState(1)
+
     const [stages, setstages] = useState([])
 
     const [subStages, setsubStages] = useState([])
@@ -59,7 +61,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
 
 
     const fetchStages = (e) => {
-        return ListingApi.stages({ keyword: e,type:'student' }).then(response => {
+        return ListingApi.stages({ keyword: e, type: 'student' }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 setstages(response.data.data)
                 return response.data.data;
@@ -162,13 +164,22 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
             // Check if details.sub_stages is a sub stage of the current item
             if (item.sub_stages.some(subStage => subStage?.id === detailsSubStages?.id)) {
                 console.log(item); // If found, return true
-                setValue('stage', item)
-                setsubStages(item?.sub_stages)
-                setValue('subStage', details?.stage)
+                setValue('stage', item);
+                setsubStages(item?.sub_stages);
+                setValue('subStage', details?.stage);
+                setrefreshKey(Math.random() * 0.12);
+                // If found, perform necessary operations and return
+                return true;
             }
         }
-        return null; // If not found in any item, return false
+
+        // If not found, perform necessary operations and return false
+        setValue('stage', detailsSubStages);
+        setrefreshKey(Math.random() * 0.12);
+        return false;
     }
+
+
 
     const initialValues = () => {
         isSubStage(details?.stage)
@@ -178,13 +189,9 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
     }
 
     const handleStageChange = (data) => {
+        setValue('subStage', '')
         setValue('stage', data)
         setsubStages(data?.sub_stages)
-        if (data?.sub_stages?.includes(watch('subStage'))) {
-            setValue('subStage', '')
-        } else {
-
-        }
     }
 
 
@@ -202,7 +209,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
         if (editId == 0) {
             initialValues()
         }
-    }, [stages])
+    }, [])
 
 
     return (
@@ -239,7 +246,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <AsyncSelect
                                                     // isDisabled={!selectedUniversityId}
-                                                    // key={selectedUniversityId}
+                                                    key={refreshKey}
                                                     name={'stage'}
                                                     defaultValue={watch('stage')}
                                                     isClearable
@@ -262,6 +269,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
                                                 </Grid>
                                                 <Grid item pr={1} xs={8} md={8}>
                                                     <ReactSelector
+                                                        // key={watch('stage')}
                                                         onInputChange={subStages}
                                                         styles={{
                                                             menu: provided => ({ ...provided, zIndex: 9999 })
@@ -271,7 +279,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
                                                         getOptionValue={option => option}
                                                         value={
                                                             subStages.find(options =>
-                                                                options.name === watch('subStage')
+                                                                options?.name === watch('subStage')
                                                             )
                                                         }
                                                         name='subStage'
