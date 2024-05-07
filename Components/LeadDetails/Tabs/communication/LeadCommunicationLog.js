@@ -11,7 +11,7 @@ import PhoneCallModal from './Modals/SummaryModal';
 import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 
 
-export default function BasicSelect({ lead_id, from, app_id, refresh }) {
+export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallRefresh, setphoneCallRefresh}) {
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(false)
@@ -31,7 +31,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
     const [callList, setcallList] = useState([])
 
     const [phonecallId, setphonecallId] = useState()
-    const [phoneCallRefresh, setphoneCallRefresh] = useState(false)
+    // const [phoneCallRefresh, setphoneCallRefresh] = useState(false)
 
     const handlePhoneCallOpen = () => {
         setphonecallId(0)

@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Image from "next/image";
 import LogoIcon from '@/styles/logo65cc654bac92a.png';
 import Logo from '@/styles/logo65cc655649912.png';
 
-import { ArchiveOutlined, CrisisAlertOutlined, DescriptionOutlined, Email, EmailOutlined, EventOutlined, GroupOutlined, Groups2, Groups2Outlined, LinkOutlined, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications, WhatsApp } from '@mui/icons-material';
+import { ArchiveOutlined, CrisisAlertOutlined, DescriptionOutlined, Email, EmailOutlined, EventOutlined, GroupOutlined, Groups2, Groups2Outlined, LinkOutlined, MenuOpen, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications, WhatsApp } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
+import { Menu } from '@mui/material';
 
 const Sidebar = () => {
 
-    const session =useSession()
+    const session = useSession()
 
-    const {data}=session
+    const { data } = session
 
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -80,15 +81,15 @@ const Sidebar = () => {
         },
         {
             title: 'Referral Links',
-            icon: LinkOutlined,  
+            icon: LinkOutlined,
             href: '/referral-links'
-        },  
+        },
     ]
 
     // if (data?.user?.role?.id === 3) {
     //     SideBarOptions = SideBarOptions.filter(option => option.title !== 'WhatsApp Templates' && option.title !== 'Email Templates');
     // }
-    
+
 
     // const filterUrl = (url) => {
     //     const urls = url.split("/").filter(Boolean); // Split the string by "/", then remove empty strings from the resulting array
@@ -96,6 +97,36 @@ const Sidebar = () => {
 
     //     return firstUrl;
     // }
+
+    const [isBodyClassAdded, setIsBodyClassAdded] = useState(false);
+
+    const [sideBarActive, setSideBarActive] = useState(() => {
+        if (typeof window !== 'undefined') {
+            const storedSettings = localStorage.getItem('settings');
+            return storedSettings ? JSON.parse(storedSettings).sidebar : false;
+        }
+        return false;
+    });
+
+    const handleButtonClick = () => {
+        // Toggle the state to add or remove the class
+        setSideBarActive(!sideBarActive)
+        localStorage.setItem('settings', JSON.stringify({ sidebar: !sideBarActive }));
+        setIsBodyClassAdded((prev) => !prev);
+    };
+
+    useEffect(() => {
+        if (sideBarActive) {
+            document.body.classList.add('body-active');
+        } else {
+            document.body.classList.remove('body-active');
+        }
+
+        // Cleanup: remove the class when the component is unmounted
+        return () => {
+            document.body.classList.remove('body-active');
+        };
+    }, [sideBarActive]);
 
     return (
 
