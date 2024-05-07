@@ -13,6 +13,7 @@ export const ApplicationApi = {
     // casDocument: (data) => http.post(`applications/upload-cas-document`, data),
 
     uploadUniversityDocument: (data) => http.post(`applications/upload-university-document`, data),
+    deleteUniversityDocument: (data) => http.post(`applications/delete-university-document`, data), 
 
     stageChange:(data) => http.post(`applications/change-stage`, data)
 
