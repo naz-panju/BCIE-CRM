@@ -591,6 +591,13 @@ color: #fff;
 .content-block thead th { 
 color: #fff;
 }
+.content-block thead th span:hover { 
+  color: #fff;
+  }
+
+  .content-block thead th span { 
+    color: #fff !important;
+    }
 .reg-name {
   color: #4285f4 !important;
 }

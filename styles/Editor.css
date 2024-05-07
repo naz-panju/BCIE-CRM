@@ -94,7 +94,9 @@ display: block;
 .mainList li:hover i {  
     color: #122AFF  ;
 }
-
+.lead-table-cntr thead svg  {
+    opacity: 1;
+}
 .lead-table-cntr thead svg path{
     fill: #fff;
 }
