@@ -297,7 +297,8 @@ margin-right: 10px;
 }
 
 .nameInitials{
-    background: linear-gradient(to right, #122AFF 0%, #EA68FF 50%, #BE2FB8 100%);
+    background: rgb(18,42,255);
+    background: linear-gradient(151deg, rgba(18,42,255,1) 0%, rgba(190,47,184,1) 75%);
     width: 45px;
 height: 45px;
 color: #fff;
