@@ -212,34 +212,27 @@ const Sidebar = () => {
                         </svg>
 
                         <div className='logo_sub'>Students Management Portal</div>
-
-                    </div>
-
-                    {
-                        sideBarActive &&
+                        
                         <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse">
                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
                                 <path d="M3.5 3.5H17.5M11.375 10.5H17.5M3.5 17.5H17.5M11.375 7H17.5M11.375 14H17.5M3.5 10.5L7 7.875V13.125L3.5 10.5Z" stroke="#F0F0F0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
                         </button>
-                    }
+
+                    </div>
+
+
+
+
                     <div className='logo-text-small'>
                         BCIE
                         <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse">
                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
                                 <path d="M17.5 17.5L3.5 17.5M9.625 10.5L3.5 10.5M17.5 3.5L3.5 3.5M9.625 14L3.5 14M9.625 7L3.5 7M17.5 10.5L14 13.125L14 7.875L17.5 10.5Z" stroke="#F0F0F0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                        <a style={{ fontSize: '10px' }}>Expand</a>
+                            <a style={{ fontSize: '10px' }}>Expand</a>
                         </button>
                     </div>
-                    {
-                        !sideBarActive &&
-                        <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse">
-                            <Menu />
-                        </button>
-                    }
-
-
 
                 </div>
 
