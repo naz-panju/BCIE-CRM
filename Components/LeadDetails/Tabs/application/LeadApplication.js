@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
-import { Download, Edit, ExpandLess, ExpandMore } from '@mui/icons-material'
+import { Delete, Download, Edit, ExpandLess, ExpandMore } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
 import LeadApplicationModal from './create'
 import { ApplicationApi } from '@/data/Endpoints/Application'
@@ -12,6 +12,8 @@ import UniversityDocumentModal from './modals/universityDocument'
 import DownloadDocumentModal from '@/Components/Applications/Modals/downloadDocument'
 import SendUniversityMail from './modals/mailToUniversity'
 import ApplicationStageChangeModal from './modals/stageChange'
+import toast from 'react-hot-toast'
+import ConfirmPopup from '@/Components/Common/Popup/confirm'
 
 function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
@@ -27,9 +29,10 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const [reqId, setReqId] = useState()
     const [refresh, setRefresh] = useState(false)
     const [details, setDetails] = useState()
-    const [uniDocuments, setUniDocuments] = useState([])
-    const [studentDocument, setstudentDocument] = useState([])
 
+    const [docLoading, setdocLoading] = useState(false)
+    const [deleteId, setdeleteId] = useState()
+    const [deleteLoading, setdeleteLoading] = useState(false)
 
     const [stageId, setStageId] = useState()
 
@@ -66,11 +69,22 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
             setExpandedRowId(null)
         } else {
             setExpandedRowId(id)
-            fetchUniversityDocument()
-            fetchStudentDocument()
+            // fetchUniversityDocument()
+            // fetchStudentDocument()
         }
 
     };
+    const handleDeleteOpen = (id) => {
+        setdeleteId(id)
+    }
+
+
+    function trimUrlAndNumbers(url) {
+        const lastSlashIndex = url?.lastIndexOf('/');
+        let trimmedString = url?.substring(lastSlashIndex + 1);
+        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
+    }
 
     const isRowExpanded = (id) => {
         return expandedRowId === id;
@@ -93,6 +107,24 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
         setDownloadId(id)
     }
 
+    const handleDelete = () => {
+        setdeleteLoading(true)
+        ApplicationApi.deleteUniversityDocument({ id: deleteId }).then((response) => {
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                setdeleteLoading(false)
+                setdeleteId()
+                fetchLoadingList()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setdeleteLoading(false)
+            }
+        }).catch((error) => {
+            toast.error(error?.response?.data?.message)
+            setdeleteLoading(false)
+        })
+    }
+
     const handleRefresh = () => {
         if (page != 0) {
             setPage(0)
@@ -112,33 +144,18 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const fetchList = async () => {
         setLoading(true)
         const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
-        // console.log(response);
         setList(response?.data)
         setLoading(false)
-        // setTimeout(() => {
-        //     handleExpand(router?.query?.app_id)
-        // }, 1000);
     }
 
-    const fetchUniversityDocument = async () => {
-        setuniLoading(true)
-        // application:id
-        const response = await LeadApi.listDocuments({ limit: 20, lead_id: lead_id, type: 'application', application_id: 25 })
-        console.log(response);
-        setUniDocuments(response?.data)
-        setuniLoading(false)
+    const fetchLoadingList = async () => {
+        setdocLoading(true)
+        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
+        setList(response?.data)
+        setdocLoading(false)
     }
 
-    const fetchStudentDocument = async () => {
-        setstudentLoading(true)
-        // application:id
-        const response = await LeadApi.listDocuments({ limit: 20, lead_id: lead_id, app_id: 25, status: 'Accepted' })
-        console.log(response);
-        setstudentDocument(response?.data)
-        setstudentLoading(false)
-    }
-
-    // console.log(expandedRowId);
+    console.log(list)
 
     useEffect(() => {
         fetchList()
@@ -149,12 +166,13 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
         <>
             <LeadApplicationModal details={data} lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
-            <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={uniDocId} setEditId={setuniDocId} handleRefresh={fetchUniversityDocument} />
+            <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={uniDocId} setEditId={setuniDocId} handleRefresh={fetchLoadingList} />
+
+            <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />
 
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 
             <SendUniversityMail from={'lead'} details={details} lead_id={lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
-
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
@@ -281,13 +299,17 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                             </Grid>
 
                                                                             {
-                                                                                studentLoading ?
+                                                                                loading ?
                                                                                     loadInnerTable()
                                                                                     :
-                                                                                    studentDocument?.data?.length > 0 ?
-                                                                                        <Grid>
-                                                                                            {studentDocument?.data?.map((obj, index) => (
-                                                                                                <a key={index}>{obj?.document}</a>
+                                                                                    obj?.documents.length > 0 ?
+                                                                                        <Grid sx={{ overflowY: 'auto', maxHeight: 180 }} mt={1}>
+                                                                                            {obj?.documents?.map((obj, index) => (
+                                                                                                <Grid display={'flex'} justifyContent={'space-between'} sx={{ mt: index !== 0 ? 1 : '' }}>
+                                                                                                    <a target='_blank' href={obj?.document} style={{ color: 'blue', cursor: 'pointer' }} key={index} >{trimUrlAndNumbers(obj?.title || obj?.document_template?.name)}</a>
+                                                                                                    {/* <Delete onClick={() => handleDeleteOpen(obj?.id)} fontSize='small' style={{ color: 'red', cursor: 'pointer' }} /> */}
+                                                                                                </Grid>
+                                                                                                // <a key={index}>{obj?.title || obj?.document_template?.name}</a>
                                                                                             ))}
 
                                                                                         </Grid>
@@ -306,13 +328,16 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                             </Grid>
 
                                                                             {
-                                                                                uniLoading ?
+                                                                                docLoading ?
                                                                                     loadInnerTable()
                                                                                     :
-                                                                                    uniDocuments?.data?.length > 0 ?
-                                                                                        <Grid>
-                                                                                            {uniDocuments?.data?.map((obj, index) => (
-                                                                                                <a key={index} >{obj?.document}</a>
+                                                                                    obj?.university_documents?.length > 0 ?
+                                                                                        <Grid sx={{ overflowY: 'auto', maxHeight: 180 }} mt={1}>
+                                                                                            {obj?.university_documents?.map((obj, index) => (
+                                                                                                <Grid display={'flex'} justifyContent={'space-between'} sx={{ mt: index !== 0 ? 1 : '' }}>
+                                                                                                    <a target='_blank' href={obj?.document} style={{ color: 'blue', cursor: 'pointer' }} key={index} >{trimUrlAndNumbers(obj?.document_template?.name)}</a>
+                                                                                                    <Delete onClick={() => handleDeleteOpen(obj?.id)} fontSize='small' style={{ color: 'red', cursor: 'pointer' }} />
+                                                                                                </Grid>
                                                                                             ))}
 
                                                                                         </Grid>

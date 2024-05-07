@@ -31,6 +31,9 @@ const style = {
 };
 
 export default function UniversityDocumentModal({ app_id, setapp_id, editId, setEditId, handleRefresh }) {
+
+    // console.log(app_id);
+
     const scheme = yup.object().shape({
 
         template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -90,6 +93,8 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
         })
     }
 
+    console.log(app_id);
+
     const onSubmit = (data) => {
         setLoading(true)
         console.log(data);
@@ -97,7 +102,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
         const formData = new FormData()
 
         // application:id
-        formData.append('id', 25)
+        formData.append('id', app_id)
         formData.append('document_template_id', data?.template?.id)
         if (selectedFile) {
             formData.append('document', selectedFile)
