@@ -211,6 +211,8 @@ function LeadDetails() {
         </div>
         <div className='content-block-details'>
           <div className='content-block-top'>
+
+
             <div className='flex mar-10'>
               <div className='w-full md:w-6/12 lg:w-6/12 pad-10 '>
 
@@ -267,37 +269,70 @@ function LeadDetails() {
                     </div>
 
                     <div className='lead-top-contact-details'>
-                      {
+
+
+                      <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-50'>
+
+                        <div>
+                        {
                         loading ?
                           <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
                           :
                           details?.email &&
-                          <p>Email: {details?.email}</p>
+                          <p><label>Email:</label> <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
+                          <path d="M2.875 7.66675L10.3906 12.6771C11.0624 13.125 11.9376 13.125 12.6094 12.6771L20.125 7.66675M4.875 18.2084H18.125C19.2296 18.2084 20.125 17.313 20.125 16.2084V6.79175C20.125 5.68718 19.2296 4.79175 18.125 4.79175H4.875C3.77043 4.79175 2.875 5.68718 2.875 6.79175V16.2084C2.875 17.313 3.77043 18.2084 4.875 18.2084Z" stroke="#0B0D23" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg> {details?.email}</p>
                       }
+                           </div>
 
-                      {
+                        <div> 
+                        {
                         loading ?
                           <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
                           :
                           details?.phone_number &&
-                          <p>Mobile: +{details?.phone_country_code} {details?.phone_number}</p>
+                          <p><label>Mobile:</label>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+  <path d="M3.44487 4.96848C4.2382 10.8128 9.18786 15.7625 15.0322 16.5558C15.9769 16.684 16.8019 15.9937 16.9889 15.0589L17.2011 13.9979C17.3779 13.1135 16.941 12.2202 16.1343 11.8168L15.3326 11.416C14.6578 11.0786 13.8383 11.272 13.3856 11.8756C13.0908 12.2687 12.6173 12.5083 12.1641 12.3184C10.6066 11.6655 8.33517 9.394 7.68229 7.83651C7.49233 7.38336 7.73199 6.90983 8.12507 6.61502C8.72861 6.16236 8.92208 5.34285 8.58468 4.66807L8.18381 3.86632C7.78047 3.05963 6.88711 2.62271 6.00272 2.79959L4.94175 3.01178C4.0069 3.19875 3.31663 4.02378 3.44487 4.96848Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>  +{details?.phone_country_code} {details?.phone_number}</p>
                       }
+                        </div>
 
-                      {
+                      </div>
+
+
+                    
+
+                   
+
+
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+
+                          <div> 
+                          {
                         loading ?
                           <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
                           :
                           details?.created_at &&
-                          <p>Added On: {moment(details?.created_at).format('DD MMM YYYY hh:mm A')}</p>
+                          <p><span className='add-on'>Added On</span>  {moment(details?.created_at).format('DD MMM YYYY hh:mm A')}</p>
                       }
+                          </div>
 
-                      {
+                          <div>
+                          {
                         loading ?
                           <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
                           :
                           details?.updated_at &&
-                          <p>Last Active: {moment(details?.updated_at).format('DD MMM YYYY hh:mm A')}</p>
+                          <p> <span className='last-on'> Last Active  </span>   {moment(details?.updated_at).format('DD MMM YYYY hh:mm A')}</p>
                       }
+                            </div>
+
+                  </div>
+
+                    
+
+                     
 
                     </div>
                   </>
@@ -308,53 +343,176 @@ function LeadDetails() {
 
               </div>
 
+              <div className='w-full md:w-6/12 lg:w-6/12 pad-10 '>
+                <div className='student-vari-block'>
 
 
-              <div className='w-full md:w-5/12 lg:w-6/12 pad-10 '>
-                <div className='lead-status-block'>
-                  <div className='lead-communication-status'>
-                    <h4>Communication Status</h4>
-                    <ul>
-                      <li>Email Sent - <span>{commDetails?.email_send_summary}</span></li>
-                      {/* <li>SMS Sent - <span>1</span></li> */}
-                      <li>Whatsapp Sent - <span>{commDetails?.whatsapp_send_summary}</span></li>
-                      <li>Call Inbound - <span>{callDetails?.calls_inbound}</span></li>
+                  <div className='flex align-items-center justify-content-between'> 
 
-                    </ul>
+                    <div className='vari-left'>
+                      <div className='vari-left-cap'>
+                        <h5>10%</h5>
+                        <label>Complete</label> 
+                      </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="129" height="129" viewBox="0 0 129 129" fill="none">
+                      <g filter="url(#filter0_d_1041_732)">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M64.5 10.05C75.2692 10.05 85.7965 13.2434 94.7508 19.2265C103.705 25.2095 110.684 33.7134 114.805 43.6629C118.926 53.6123 120.005 64.5604 117.904 75.1227C115.803 85.6849 110.617 95.387 103.002 103.002C95.387 110.617 85.6849 115.803 75.1227 117.904C64.5604 120.005 53.6123 118.926 43.6629 114.805C33.7134 110.684 25.2095 103.705 19.2265 94.7508C13.2434 85.7965 10.05 75.2692 10.05 64.5H4C4 66.6155 4.1109 68.7225 4.33023 70.813C5.3515 80.5471 8.72355 89.9218 14.1961 98.112C20.8439 108.061 30.2927 115.816 41.3476 120.395C52.4026 124.974 64.5671 126.172 76.3029 123.837C88.0388 121.503 98.8189 115.741 107.28 107.28C115.741 98.8189 121.503 88.0388 123.837 76.3029C126.172 64.5671 124.974 52.4026 120.395 41.3476C115.816 30.2927 108.061 20.8439 98.112 14.1961C89.9218 8.72355 80.5471 5.3515 70.813 4.33023C68.7225 4.1109 66.6155 4 64.5 4V10.05Z" fill="url(#paint0_linear_1041_732)"/>
+                      </g>
+                      <defs>
+                        <filter id="filter0_d_1041_732" x="0" y="0" width="129" height="129" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                          <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                          <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                          <feOffset/>
+                          <feGaussianBlur stdDeviation="2"/>
+                          <feComposite in2="hardAlpha" operator="out"/>
+                          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0"/>
+                          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1041_732"/>
+                          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1041_732" result="shape"/>
+                        </filter>
+                        <linearGradient id="paint0_linear_1041_732" x1="125" y1="13.7326" x2="9.78696" y2="130.787" gradientUnits="userSpaceOnUse">
+                          <stop stop-color="#04FFFF"/>
+                          <stop offset="1" stop-color="#0029FF"/>
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    </div>
+
+                    <div className='vari-center'>
+                      <span>Application Status</span>
+                      <h4>Verifying Student Details..</h4>
+                    </div>
+
+                    
+                    <div className='vari-right'>
+                      <a>Change Status</a>
+                    </div>
+
+
                   </div>
 
-                  <div className='lead-communication-status'>
+
+
+
+                  
+                </div>
+
+                 
+              </div>
+
+
+
+             
+
+{/*            
+
+              <div className='w-full md:w-3/12 lg:w-3/12 pad-10 '>
+                <div className='lead-score-block'>
+                  <h3>30</h3>
+                  <h4>Lead Score </h4>
+                </div>
+
+                 
+              </div>
+
+
+
+              <div className='w-full md:w-3/12 lg:w-3/12 pad-10 '>
+                 
+
+                <div className='generate-lead-block'>
+                 
+                  <div className='lead-percent-icon'>
+                    <PieChart color='success' />
+                  </div>
+                  <h4>Generate Lead Strength</h4>
+                </div>
+              </div>  
+            */}
+
+            
+            </div>
+
+
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+
+                <div>
+
+                <div className='lead-communication-status'>
+                <h4>Communication Status</h4>
+                <div className='lead-communication-status-bg'>
+                    
+                    <ul>
+                      <li><span>5</span> <p> Email Sent  </p> <a className='btn'>Send Mail</a></li>
+                      {/* <li>SMS Sent - <span>1</span></li> */}
+                      <li><span>0</span> <p> Whatsapp Sent  </p> <a className='btn'>  Send Whatsapp </a></li>
+                    </ul>
+                  </div>
+                  </div>
+                    
+
+                </div>
+
+
+                <div>
+                <div className='lead-communication-status'>
                     <h4>Upcoming Followup</h4>
+                    <div className='lead-communication-status-bg'>
                     <ul>
                       <li>NA</li>
                     </ul>
+                    <p><a className='btn'>Add Followup</a>
+                    <a className='btn'>  Add Note </a>
+                    </p>
+                    </div>
                   </div>
+                </div>
 
-                  {/* <div className='lead-communication-status'>
-                    <h4>Telephony Status</h4>
-                    <ul>
-                      <li>Inbound Call - <span>0</span></li>
-                      <li>Outbound Call - <span>0</span></li>
-                    </ul>
-                  </div> */}
 
-                  <div className='lead-communication-status'>
+                <div>
+
+
+                  
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+
+                      <div>
+                      <div className='lead-communication-status'>
                     <h4>Lead Source</h4>
+                    <div className='lead-communication-status-bg'>
                     <ul>
                       <li>{details?.lead_source?.name || 'NA'}</li>
                     </ul>
+                    </div>
                   </div>
+                      </div>
 
-                  <div className='lead-communication-status'>
+
+                      <div>
+                      <div className='lead-communication-status'>
                     <h4>Assigned Counsellor</h4>
+                    <div className='lead-communication-status-bg'>
                     <ul>
                       <li>{details?.assignedToUser?.name || 'NA'}</li>
                     </ul>
                   </div>
+                  </div>
+                      </div>
 
-                </div>
+                      </div>
+                  
+                  </div>
+
+
+
               </div>
-            </div>
+
+
+
+           
+            
+
           </div>
 
 
@@ -387,8 +545,10 @@ function LeadDetails() {
 
           </div>
 
-          <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} />
+          <div className='lead-det-cnt'>
 
+          <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} />
+          </div>
         </div>
       </section>
     </>
