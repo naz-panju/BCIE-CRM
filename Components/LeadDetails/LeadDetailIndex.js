@@ -387,9 +387,25 @@ function LeadDetails() {
 
                   </div>
 
-
-
-
+                  <div className='stage_track_cntr'>  
+<div className='stage_track'>  
+    <ul>
+      <li className='opened'> </li>
+      <li> </li>
+      <li> </li>
+      <li>   </li>
+      <li> </li>
+    </ul>
+  <div className='track-range'></div> 
+</div>
+<ul className='tract-names'>
+      <li>Unverified</li>
+      <li>Verified</li>
+      <li>Started</li>
+      <li>Payment Approved</li>
+      <li>Submitted</li>
+    </ul>
+</div>
                   
                 </div>
 
