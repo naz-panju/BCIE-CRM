@@ -1,4 +1,6 @@
-
+.w-100{
+    width: 100%;
+}
 /***** flex *****/
 
 .justify-content-between {
@@ -38,6 +40,21 @@
 .flex-wrap {
 	flex-wrap: wrap !important;
 }
+
+.body-active .sidebar.active .mainList>li a svg {
+    display: inline-block; 
+    margin-left: 0px;
+    transition: all .3s;
+}
+ .sidebar.active .mainList>li a svg { 
+    margin-left: 23px;
+    transition: all .3s;
+}
+
+.sidebar.sidebar-mask.active:hover .mainList>li a svg{
+    margin-left: 0px;
+}
+
 .custom-editor-container {
     max-height: 300px !important;
     border: 1px solid gray !important;
@@ -49,8 +66,7 @@
     border: 1px solid gray !important;
     overflow: hidden !important
 }
-.logo-text-wrap{
-    padding-left: 10px;
+.logo-text-wrap{ 
     display: none;
 }
 .logo_sub{
@@ -76,7 +92,9 @@ display: block;
   .logo-text-small{
     display: block;
     font-weight: 600;
-    font-size: 14px;
+    font-size: 21px;
+    text-align: left;
+    line-height: 21px;
     }
 
 .body-active .logo-text-small{
