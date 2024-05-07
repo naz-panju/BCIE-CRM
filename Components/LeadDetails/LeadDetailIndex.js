@@ -48,6 +48,9 @@ function LeadDetails() {
   const [confirmId, setconfirmId] = useState()
   const [confirmLoading, setconfirmLoading] = useState(false)
 
+  const [phoneCallRefresh, setphoneCallRefresh] = useState(false)
+
+
 
   const router = useRouter()
   const urlID = router?.query?.slug
@@ -384,7 +387,7 @@ function LeadDetails() {
 
           </div>
 
-          <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} />
+          <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} />
 
         </div>
       </section>
