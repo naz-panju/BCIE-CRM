@@ -24,7 +24,7 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Grid, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Grid, InputAdornment, MenuItem, Pagination, Select, Stack, TextField } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
@@ -120,7 +120,7 @@ function EnhancedTableHead(props) {
 
   return (
     <TableHead>
-      
+
       <TableRow>
         <TableCell padding="checkbox">
           <input
@@ -128,7 +128,7 @@ function EnhancedTableHead(props) {
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             // checked={rowCount > 0 && numSelected === rowCount}
-            checked={numSelected > 0 }
+            checked={numSelected > 0}
             onChange={onSelectAllClick}
             inputProps={{
               'aria-label': 'select all desserts',
@@ -323,13 +323,14 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     // console.log(newPage);
-    router.replace(`/lead?page=${newPage + 1}`);
+    //for tablepagination
     // router.push(`/lead?page=${newPage + 1}`);
+    router.replace(`/lead?page=${newPage}`);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setLimit(parseInt(event.target.value));
-    setPage(0);
+    setPage(1);
   };
 
   const handleChangeDense = (event) => {
@@ -398,7 +399,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       email: watch('emailSearch'),
       phone_number: watch('numberSearch'),
       lead_id: watch('lead_id_search'),
-      page: page + 1
+      page: page
     }
     // if (watch('searchType') == 'Name') {
     //   params['name'] = nameSearch
@@ -664,15 +665,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                   </TableBody>
                 </Table>
               </TableContainer>
-              {/* <TablePagination>
-                <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
-                  <MenuItem value={10}>10</MenuItem>
-                  <MenuItem value={15}>15</MenuItem>
-                  <MenuItem value={25}>25</MenuItem>
-                </Select>
 
-              </TablePagination> */}
-              <TablePagination
+              {/* <TablePagination
                 rowsPerPageOptions={[10, 15, 25]}
                 component="div"
                 count={list?.meta?.total || 0}
@@ -680,7 +674,17 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+              /> */}
+              <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={15}>15</MenuItem>
+                <MenuItem value={25}>25</MenuItem>
+              </Select>
+              <label>Rows per page</label>
+              <Stack spacing={2}>
+                <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+              </Stack>
+
             </Paper>
           </Box>
       }
