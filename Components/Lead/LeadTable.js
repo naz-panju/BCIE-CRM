@@ -688,12 +688,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 /> */}
               </Paper>
             </Box>
-            <div className='tyable-pagination'>
+            <div className='table-pagination d-flex justify-content-between align-items-center'>
               <div>
                 <UserProfile />
               </div>
-              <div>
-                <div>
+              <div className='d-flex justify-content-between align-items-center'>
+                <div className='select-row-box'>
                   <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
                     <MenuItem value={10}>10</MenuItem>
                     <MenuItem value={15}>15</MenuItem>

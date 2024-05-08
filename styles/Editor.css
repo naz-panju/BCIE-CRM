@@ -632,6 +632,101 @@ text-transform: capitalize;
     margin-right: 5px;
   }
 
+
+.navbar-left ul li{
+    color: #0B0D23; 
+font-size: 15px;
+font-style: normal;
+font-weight: 400;
+line-height: 38px; /* 66.667% */
+}
+.navbar-left ul li button{
+    margin-right: 10px;
+}
+
+
+.navbar-left ul li button#UserPop span {
+    width: 38px;
+    height: 38px; 
+    line-height: 38px; 
+    background-color: #D9BCFF; 
+
+    color: #51426F;
+text-align: center; 
+font-size: 15px;
+font-style: normal;
+font-weight: 700;
+line-height: 38px; /* 53.333% */
+}
+.table-pagination{
+    background: rgba(255, 255, 255, 0.61);
+backdrop-filter: blur(13.100000381469727px);
+padding: 15px;
+position: sticky;
+    bottom: 0;
+}
+
+.select-row-box{
+    border-radius: 3px;
+    background: #FFF;
+    padding: 5px;
+    margin-right: 15px;
+    color: #0B0D23; 
+font-size: 15px;
+font-style: normal;
+font-weight: 400;
+line-height: 10px; /* 66.667% */
+}
+
+
+.table-pagination .MuiInputBase-input {
+    border-radius: 3px;
+background: #0B0D23;
+color: #F9F9F9;
+text-align: center; 
+font-size: 12px;
+font-style: normal;
+font-weight: 600; 
+padding: 10.5px 14px;
+}
+
+
+.table-pagination .MuiInputBase-root .MuiSvgIcon-root{
+    color: #fff;
+    opacity: 1;
+}
+
+.table-pagination .MuiInputBase-root{
+    border: 0;
+    border-radius: unset;
+    margin-right: 5px;
+}
+
+
+.table-pagination .MuiPagination-ul li button{
+    color:   #212B36 ;
+text-align: center; 
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: 20px; /* 166.667% */
+}
+
+
+
+.table-pagination .MuiPagination-ul li button.Mui-selected{
+    color:   #fff ;
+    background-color: #212B36;
+}
+
+.table-pagination .MuiPagination-ul li button.MuiPaginationItem-previousNext.Mui-disabled{ 
+    background-color: #C5CCD3;
+}
+.lead-table-cntr{
+    overflow: unset;
+}
+
+
 @media (max-width: 1400px) {
 
     .vari-center span { 
