@@ -123,7 +123,8 @@ function EnhancedTableHead(props) {
       
       <TableRow>
         <TableCell padding="checkbox">
-          <input
+        <div className="form-group"> 
+          <input id='html2'
             type='checkbox'
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -134,6 +135,8 @@ function EnhancedTableHead(props) {
               'aria-label': 'select all desserts',
             }}
           />
+          <label for="html2"> </label> 
+          </div>
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -612,8 +615,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                               sx={{ cursor: 'pointer' }}
                             >
                               <TableCell className='checkbox-tb' padding="checkbox">
+                              <div className="form-group"> 
                                 <input
                                   type='checkbox'
+                                  id='html'
                                   onClick={(event) => handleClick(event, row.id)}
                                   color="primary"
                                   checked={isItemSelected}
@@ -621,6 +626,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                     'aria-labelledby': labelId,
                                   }}
                                 />
+                                <label for="html"> </label> 
+                                </div>
+
+                                
                               </TableCell>
                               <TableCell
                                 component="th"

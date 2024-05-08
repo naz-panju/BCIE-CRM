@@ -123,6 +123,11 @@ display: block;
     border-radius: 3px;
     background: #F0F0F0; 
 }
+.lead-table-cntr thead th{  
+font-weight: 400;
+padding:15px 10px ;
+line-height: 18px; /* 66.667% */
+}
 .lead-table-cntr tbody th{ 
     color: #0B0D23; 
 font-size: 15px;
@@ -174,6 +179,59 @@ background: #F0F0F0;
 .lead-table-cntr .css-1mxz8qt-MuiPaper-root{
     background: #F0F0F0; 
 }
+
+
+
+
+.lead-table-cntr .form-group {
+    display: block; 
+  }
+  
+  .lead-table-cntr .form-group input {
+    padding: 0;
+    height: initial;
+    width: initial;
+    margin-bottom: 0;
+    display: none;
+    cursor: pointer;
+  }
+  
+  .lead-table-cntr .form-group label {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .lead-table-cntr .form-group label:before {
+    content:'';
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: 1px solid #8C8E90;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    padding: 8px;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer; 
+    background: #fff;
+  }
+  
+  .lead-table-cntr .form-group input:checked + label:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 4px;
+    left: 7px;
+    width: 5px;
+    height: 10px;
+    border: solid #4D4AEA;
+    border-width: 0 1px 1px 0;
+    transform: rotate(45deg);
+  }
+
+  .lead-table-cntr .form-group input:checked + label:before { 
+    border: 1px solid #4D4AEA; 
+  }
 
 .lead-det-cnt .MuiBox-root{
     border-radius: 3px;
