@@ -14,6 +14,8 @@ import SendUniversityMail from './modals/mailToUniversity'
 import ApplicationStageChangeModal from './modals/stageChange'
 import toast from 'react-hot-toast'
 import ConfirmPopup from '@/Components/Common/Popup/confirm'
+import UniversityDeposit from './modals/universityDepost'
+import DeferIntake from './modals/deferIntake'
 
 function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
@@ -46,13 +48,22 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const [applicationId, setapplicationId] = useState()
     const [downloadId, setDownloadId] = useState()
     const [mailId, setMailId] = useState()
+    const [depositId, setdepositId] = useState()
+    const [deferId, setdeferId] = useState()
 
     const handleUniDocOpen = (id) => {
         setuniDocId(0)
         setapplicationId(id)
     }
-
-
+    const handleDeferOpen = () => {
+        setdeferId(0)
+    }
+    const handleDepositOpen = () => {
+        setdepositId(0)
+    }
+    const handleDepositEdit = (id) => {
+        setdepositId(id)
+    }
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -65,10 +76,12 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
 
     const handleExpand = (id) => {
-        if (id === expandedRowId) {
+        if (id?.id === expandedRowId) {
             setExpandedRowId(null)
+            setDetails()
         } else {
-            setExpandedRowId(id)
+            setExpandedRowId(id?.id)
+            setDetails(id)
             // fetchUniversityDocument()
             // fetchStudentDocument()
         }
@@ -107,8 +120,6 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
         setDownloadId(id)
     }
 
-    console.log(list);
-
     const handleDelete = () => {
         setdeleteLoading(true)
         ApplicationApi.deleteUniversityDocument({ id: deleteId }).then((response) => {
@@ -136,7 +147,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     const handleStageOpen = (row) => {
         setStageId(0)
-        setDetails(row)
+        // setDetails(row) 
     }
 
     const handleMailOpen = () => {
@@ -165,11 +176,16 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     }, [refresh, page])
 
 
+
     return (
         <>
             <LeadApplicationModal details={data} lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={uniDocId} setEditId={setuniDocId} handleRefresh={fetchLoadingList} />
+
+            <UniversityDeposit editId={depositId} setEditId={setdepositId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
+            <DeferIntake editId={deferId} setEditId={setdeferId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
+
 
             <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />
 
@@ -256,13 +272,13 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                 <TableCell >
                                                                     {isRowExpanded(obj?.id) ? (
                                                                         <ExpandLess
-                                                                            onClick={() => handleExpand(obj?.id)}
+                                                                            onClick={() => handleExpand(obj)}
                                                                             sx={{ color: blue[400], cursor: 'pointer' }}
                                                                             fontSize='small'
                                                                         />
                                                                     ) : (
                                                                         <ExpandMore
-                                                                            onClick={() => handleExpand(obj?.id)}
+                                                                            onClick={() => handleExpand(obj)}
                                                                             sx={{ color: blue[400], cursor: 'pointer' }}
                                                                             fontSize='small'
                                                                         />
@@ -281,15 +297,15 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                             </Grid>
                                                                             <Grid mt={2}>
                                                                                 <Typography style={{ color: blue[400], fontSize: '14px' }}>
-                                                                                    Amt. Paid :
+                                                                                    Amt. Paid : <a style={{ color: 'black' }}> {obj?.deposit_amount_paid}</a>
                                                                                 </Typography>
                                                                                 <Typography style={{ color: blue[400], fontSize: '14px', marginTop: 5 }}>
-                                                                                    Date Paid :
+                                                                                    Date Paid : <a style={{ color: 'black' }}> {moment(obj?.deposit_paid_on).format('DD-MM-YYYY')}</a>
                                                                                 </Typography>
                                                                             </Grid>
                                                                             <Grid container style={{ marginTop: 'auto' }}>
                                                                                 <Grid item xs={12} display="flex" justifyContent="flex-end">
-                                                                                    <Button variant='outlined' size='small'>Add</Button>
+                                                                                    <Button onClick={() => obj?.deposit_amount_paid ? handleDepositEdit(obj?.id) : handleDepositOpen} variant='outlined' size='small'>{obj?.deposit_amount_paid ? 'Edit' : 'Add'}</Button>
                                                                                 </Grid>
                                                                             </Grid>
                                                                         </Grid>
@@ -354,7 +370,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                     </Grid>
                                                                     <Grid pl={1} pb={0.5}>
                                                                         <Button size='small' variant='contained' onClick={() => handleStageOpen(obj)} className='bg-sky-500 text-white hover:bg-sky-600 text-white' >Change Stage</Button>
-                                                                        <Button size='small' variant='outlined' sx={{ ml: 1 }}>Defer Intake</Button>
+                                                                        <Button size='small' variant='outlined' onClick={handleDeferOpen} sx={{ ml: 1 }}>Defer Intake</Button>
                                                                         <Button size='small' variant='outlined' onClick={handleMailOpen} sx={{ ml: 1 }}>Mail to University</Button>
                                                                         <Button size='small' variant='outlined' onClick={() => handleUniDocOpen(obj?.id)} sx={{ ml: 1 }}>Add Univer. Document</Button>
                                                                     </Grid>
