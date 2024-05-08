@@ -15,6 +15,9 @@ export const ApplicationApi = {
     uploadUniversityDocument: (data) => http.post(`applications/upload-university-document`, data),
     deleteUniversityDocument: (data) => http.post(`applications/delete-university-document`, data), 
 
+    addDeposit: (data) => http.post(`applications/deposit/store`, data),
+    deferIntake: (data) => http.post(`applications/differ-intake`, data),
+
     stageChange:(data) => http.post(`applications/change-stage`, data)
 
 }

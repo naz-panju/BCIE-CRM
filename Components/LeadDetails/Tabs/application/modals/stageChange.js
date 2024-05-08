@@ -162,10 +162,10 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     }
 
     const initialValues = () => {
-        isSubStage(details?.stage)
-        // setValue('stage', details?.stage)
+        // isSubStage(details?.stage)
+        setValue('stage', details?.stage)
         // setValue('subStage', details?.substage)
-        console.log(details);
+        
     }
 
     const handleStageChange = (data) => {
@@ -183,8 +183,10 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
+            setValue('stage', details?.stage)
         } else if (editId == 0) {
             setOpen(true)
+            setValue('stage', details?.stage || '')
         }
     }, [editId])
 
@@ -219,7 +221,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Application Stage </a>
-                                            </Grid>
+                                            </Grid> 
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <AsyncSelect
                                                     // isDisabled={!selectedUniversityId}

@@ -161,11 +161,11 @@ function LeadDetails() {
     setsummaryLoading(false)
   }
   const getStageList = () => {
-    ListingApi.stages({type:'student'}).then((response) => {
+    ListingApi.stages({ type: 'student' }).then((response) => {
       setstages(response?.data?.data)
-      
+
     })
-  } 
+  }
 
   const [openedPercentage, setopenedPercentage] = useState(stages.filter(obj => obj?.name === details?.stage?.name).length / stages.length * 100)
   // const openedPercentage = stages.filter(obj => obj?.name === details?.stage?.name).length / stages.length * 100;
@@ -189,7 +189,6 @@ function LeadDetails() {
   }, [])
 
  
-
 
   return (
 
@@ -426,7 +425,7 @@ function LeadDetails() {
                   {/* {
                     console.log(details)
                   } */}
-                  
+
 
                   <div className='stage_track_cntr'>
                     <div className='stage_track'>
@@ -442,7 +441,7 @@ function LeadDetails() {
                         <li >   </li>
                         <li > </li> */}
                       </ul>
-                      <div style={{ width:`${4/stages.length *100}%` }} className='track-range'>
+                      <div style={{ width: `${4 / stages.length * 100}%` }} className='track-range'>
 
                       </div>
                     </div>

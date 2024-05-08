@@ -148,10 +148,6 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
             remarks: data.remarks,
         }
-
-
-        console.log(dataToSubmit);
-
         let action;
 
         if (editId > 0) {
@@ -162,7 +158,6 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         }
 
         action.then((response) => {
-            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Application has been Updated Successfully' : 'Applied Successfully')
                 reset()
