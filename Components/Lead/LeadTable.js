@@ -123,19 +123,19 @@ function EnhancedTableHead(props) {
 
       <TableRow>
         <TableCell padding="checkbox">
-        <div className="form-group"> 
-          <input id='html2'
-            type='checkbox'
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            // checked={rowCount > 0 && numSelected === rowCount}
-            checked={numSelected > 0}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-          <label for="html2"> </label> 
+          <div className="form-group">
+            <input id='html2'
+              type='checkbox'
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              // checked={rowCount > 0 && numSelected === rowCount}
+              checked={numSelected > 0}
+              onChange={onSelectAllClick}
+              inputProps={{
+                'aria-label': 'select all desserts',
+              }}
+            />
+            <label for="html2"> </label>
           </div>
         </TableCell>
         {headCells.map((headCell) => (
@@ -578,132 +578,134 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
         loading ?
           <LoadingTable columns={3} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
           :
-          <Box sx={{ width: '100%' }}>
-            <Paper sx={{ width: '100%', mb: 2 }}>
-              {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-              <TableContainer>
-                <Table
-                  sx={{ minWidth: 750 }}
-                  aria-labelledby="tableTitle"
-                  size={dense ? 'small' : 'medium'}
-                >
-                  <EnhancedTableHead
-                    numSelected={selected.length}
-                    order={order}
-                    orderBy={orderBy}
-                    onSelectAllClick={handleSelectAllClick}
-                    onRequestSort={handleRequestSort}
-                    rowCount={list?.meta?.total || 0}
-                  />
-                  <TableBody>
-                    {
-                      list?.data?.length > 0 ?
-                        list?.data?.map((row, index) => {
-                          const isItemSelected = isSelected(row.id);
-                          const labelId = `enhanced-table-checkbox-${index}`;
+          <>
+            <Box sx={{ width: '100%' }}>
+              <Paper sx={{ width: '100%', mb: 2 }}>
+                {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+                <TableContainer>
+                  <Table
+                    sx={{ minWidth: 750 }}
+                    aria-labelledby="tableTitle"
+                    size={dense ? 'small' : 'medium'}
+                  >
+                    <EnhancedTableHead
+                      numSelected={selected.length}
+                      order={order}
+                      orderBy={orderBy}
+                      onSelectAllClick={handleSelectAllClick}
+                      onRequestSort={handleRequestSort}
+                      rowCount={list?.meta?.total || 0}
+                    />
+                    <TableBody>
+                      {
+                        list?.data?.length > 0 ?
+                          list?.data?.map((row, index) => {
+                            const isItemSelected = isSelected(row.id);
+                            const labelId = `enhanced-table-checkbox-${index}`;
 
-                          // console.log(row);
+                            // console.log(row);
 
-                          return (
-                            <TableRow className='table-custom-tr'
-                              hover
-                              // onClick={(event) => handleClick(event, row.id)}
-                              role="checkbox"
-                              aria-checked={isItemSelected}
-                              tabIndex={-1}
-                              key={row.id}
-                              selected={isItemSelected}
-                              sx={{ cursor: 'pointer' }}
-                            >
-                              <TableCell className='checkbox-tb' padding="checkbox">
-                              <div className="form-group"> 
-                                <input
-                                  type='checkbox'
-                                  id='html'
-                                  onClick={(event) => handleClick(event, row.id)}
-                                  color="primary"
-                                  checked={isItemSelected}
-                                  inputProps={{
-                                    'aria-labelledby': labelId,
-                                  }}
-                                />
-                                <label for="html"> </label> 
-                                </div>
-
-                                
-                              </TableCell>
-                              <TableCell
-                                component="th"
-                                id={labelId}
-                                scope="row"
-                                padding="none"
-                                className='reg-name'
+                            return (
+                              <TableRow className='table-custom-tr'
+                                hover
+                                // onClick={(event) => handleClick(event, row.id)}
+                                role="checkbox"
+                                aria-checked={isItemSelected}
+                                tabIndex={-1}
+                                key={row.id}
+                                selected={isItemSelected}
+                                sx={{ cursor: 'pointer' }}
                               >
-                                <a target='_blank' href={`/lead/${row?.id}`}>{row.name}</a>
-                              </TableCell>
-                              <TableCell align="left">{row?.email}</TableCell>
-                              <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
-                              <TableCell align="left">
-                                {
-                                  row?.assignedToUser ?
-                                    <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToUser?.name}</Button>
-                                    :
-                                    <Button onClick={() => openAssign(row?.id)}><PersonOutline sx={{ color: 'blue', cursor: 'pointer' }} /></Button>
-                                }
-                                {/* {row?.assignedToUser?.name} */}
-                              </TableCell>
-                              <TableCell align="left">{row?.stage?.name}</TableCell>
-                            </TableRow>
-                          );
-                        })
-                        : (
-                          <TableRow
-                            style={{
-                              height: (dense ? 33 : 53) * emptyRows,
-                              width: '100%',
-                            }}
-                          >
-                            <TableCell colSpan={8} align="center">
-                              <div className='no-table-ask-block'>
-                                <h4 style={{ color: 'grey' }}>No Lead Found</h4>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        )
-                    }
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                                <TableCell className='checkbox-tb' padding="checkbox">
+                                  <div className="form-group">
+                                    <input
+                                      type='checkbox'
+                                      id='html'
+                                      onClick={(event) => handleClick(event, row.id)}
+                                      color="primary"
+                                      checked={isItemSelected}
+                                      inputProps={{
+                                        'aria-labelledby': labelId,
+                                      }}
+                                    />
+                                    <label for="html"> </label>
+                                  </div>
 
-              {/* <TablePagination
-                rowsPerPageOptions={[10, 15, 25]}
-                component="div"
-                count={list?.meta?.total || 0}
-                rowsPerPage={list?.meta?.per_page || 0}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              /> */}
-              <div className='tyable-pagination'>
-                <div>Tony John</div>
+
+                                </TableCell>
+                                <TableCell
+                                  component="th"
+                                  id={labelId}
+                                  scope="row"
+                                  padding="none"
+                                  className='reg-name'
+                                >
+                                  <a target='_blank' href={`/lead/${row?.id}`}>{row.name}</a>
+                                </TableCell>
+                                <TableCell align="left">{row?.email}</TableCell>
+                                <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
+                                <TableCell align="left">
+                                  {
+                                    row?.assignedToUser ?
+                                      <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToUser?.name}</Button>
+                                      :
+                                      <Button onClick={() => openAssign(row?.id)}><PersonOutline sx={{ color: 'blue', cursor: 'pointer' }} /></Button>
+                                  }
+                                  {/* {row?.assignedToUser?.name} */}
+                                </TableCell>
+                                <TableCell align="left">{row?.stage?.name}</TableCell>
+                              </TableRow>
+                            );
+                          })
+                          : (
+                            <TableRow
+                              style={{
+                                height: (dense ? 33 : 53) * emptyRows,
+                                width: '100%',
+                              }}
+                            >
+                              <TableCell colSpan={8} align="center">
+                                <div className='no-table-ask-block'>
+                                  <h4 style={{ color: 'grey' }}>No Lead Found</h4>
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )
+                      }
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+
+                {/* <TablePagination
+                  rowsPerPageOptions={[10, 15, 25]}
+                  component="div"
+                  count={list?.meta?.total || 0}
+                  rowsPerPage={list?.meta?.per_page || 0}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                /> */}
+              </Paper>
+            </Box>
+            <div className='tyable-pagination'>
+              <div>Tony John</div>
+              <div>
                 <div>
-                  <div>
-                    <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
-                      <MenuItem value={10}>10</MenuItem>
-                      <MenuItem value={15}>15</MenuItem>
-                      <MenuItem value={25}>25</MenuItem>
-                    </Select>
-                    <label>Rows per page</label>
+                  <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
+                    <MenuItem value={10}>10</MenuItem>
+                    <MenuItem value={15}>15</MenuItem>
+                    <MenuItem value={25}>25</MenuItem>
+                  </Select>
+                  <label>Rows per page</label>
                 </div>
                 <div>
-                <Stack spacing={2}>
-                  <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
-                </Stack>
+                  <Stack spacing={2}>
+                    <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                  </Stack>
                 </div>
               </div>
-              </div>
-            </Paper>
-          </Box>
+            </div>
+          </>
       }
     </>
   );
