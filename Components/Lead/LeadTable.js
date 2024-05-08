@@ -31,6 +31,7 @@ import AsyncSelect from "react-select/async";
 import { Close, PersonAdd, PersonAddAlt, PersonOutline, Search } from '@mui/icons-material';
 import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
+import UserProfile from '../Common/Profile';
 
 
 
@@ -620,7 +621,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                   <div className="form-group">
                                     <input
                                       type='checkbox'
-                                      id='html'
+                                      id={row?.id}
                                       onClick={(event) => handleClick(event, row.id)}
                                       color="primary"
                                       checked={isItemSelected}
@@ -628,7 +629,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                         'aria-labelledby': labelId,
                                       }}
                                     />
-                                    <label for="html"> </label>
+                                    <label for={row?.id}> </label>
                                   </div>
 
 
@@ -688,7 +689,9 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
               </Paper>
             </Box>
             <div className='tyable-pagination'>
-              <div>Tony John</div>
+              <div>
+                <UserProfile />
+              </div>
               <div>
                 <div>
                   <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
