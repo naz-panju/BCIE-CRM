@@ -684,16 +684,24 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
               /> */}
-              <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={15}>15</MenuItem>
-                <MenuItem value={25}>25</MenuItem>
-              </Select>
-              <label>Rows per page</label>
-              <Stack spacing={2}>
-                <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
-              </Stack>
-
+              <div className='tyable-pagination'>
+                <div>Tony John</div>
+                <div>
+                  <div>
+                    <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
+                      <MenuItem value={10}>10</MenuItem>
+                      <MenuItem value={15}>15</MenuItem>
+                      <MenuItem value={25}>25</MenuItem>
+                    </Select>
+                    <label>Rows per page</label>
+                </div>
+                <div>
+                <Stack spacing={2}>
+                  <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                </Stack>
+                </div>
+              </div>
+              </div>
             </Paper>
           </Box>
       }
