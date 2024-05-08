@@ -326,7 +326,11 @@ line-height: 10px; /* 66.667% */
 background: #F0F0F0;
 padding: 20px;
 width: 100%;
-min-height: 150px;
+min-height: 170px;
+}
+.lead-communication-status-bg.lead-hit-auto{ 
+min-height: unset;
+padding: 10px 20px;
 }
 
 .lead-communication-status ul li{
@@ -373,13 +377,21 @@ line-height: 18px; /* 66.667% */
 padding: 9px 25px;
 margin-right: 10px;
 }
-.lead-communication-status p {
+.lead-communication-status h5 {
     color: #0B0D23;
     font-size: 15px;
     font-style: normal;
     font-weight: 500;
     line-height: 20px;
-    margin: 13px 0 20px;
+    text-align: center; 
+    margin: 10px 0;
+}
+.lead-communication-status p {
+    color: #0B0D23;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; 
 }
 .lead-communication-status p span {
     width: 38px;

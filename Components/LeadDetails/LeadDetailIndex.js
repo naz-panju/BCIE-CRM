@@ -580,7 +580,7 @@ function LeadDetails() {
 </svg> Lead Source</h4>
                       <div className='lead-communication-status-bg lead-hit-auto'>
                          
-                          <p>{details?.lead_source?.name || 'NA'}</p>
+                          <h5>{details?.lead_source?.name || 'NA'}</h5>
                          
                       </div>
                     </div>
