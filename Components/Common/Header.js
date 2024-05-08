@@ -101,46 +101,6 @@ const Header = ({ }) => {
           <div className='w-full md:w-6/12 lg:w-6/12 pad-15 '>
             <div className='navbar-right'>
               <ul>
-                {/* <li>
-                  <div className="tooltip-container">
-                    <div className="tooltip">
-                      <Tooltip title={'test'}><span className="tooltiptext">Tooltip</span></Tooltip>
-                    </div>
-                  </div>
-                </li> */}
-
-                {/* <li>
-                  <div className="tooltip-container">
-                    <div className="tooltip"><i><FontAwesomeIcon icon={faGear} /></i>
-                      <span className="tooltiptext">Service</span>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="tooltip-container">
-                    <div className="tooltip"><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i>
-                      <span className="tooltiptext">Service</span>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="tooltip-container">
-                    <div className="tooltip"><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i>
-                      <span className="tooltiptext">Service</span>
-                    </div>
-                  </div>
-                </li>
-
-                <li>
-                  <div className="tooltip-container">
-                    <div className="tooltip"><i><FontAwesomeIcon icon={faMagnifyingGlass} /></i>
-                      <span className="tooltiptext">Service</span>
-                    </div>
-                  </div>
-                </li> */}
-
                 <li>
                   <div className='dropdown headerDropDown userDropDown'>
                     <button onClick={togglePopup} id="UserPop"><span>{getFirstLettersOfTwoWords(session?.user?.name)}</span></button>
@@ -167,8 +127,6 @@ const Header = ({ }) => {
                           </div>
                         </div>
 
-
-                        {/* Add more signout options here if needed */}
                       </div>
                     )}
                   </div>

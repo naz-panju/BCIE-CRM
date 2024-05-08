@@ -31,6 +31,7 @@ import AsyncSelect from "react-select/async";
 import { Close, PersonAdd, PersonAddAlt, PersonOutline, Search } from '@mui/icons-material';
 import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
+import UserProfile from '../Common/Profile';
 
 
 
@@ -689,7 +690,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
             </Box>
             <div className='tyable-pagination'>
               <div>
-                Tony John
+                <UserProfile />
               </div>
               <div>
                 <div>
