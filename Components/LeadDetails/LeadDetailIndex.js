@@ -19,6 +19,7 @@ import FollowUpModal from './Tabs/follow-up/create';
 import LeadNoteModal from './Tabs/follow-up/noteCreate';
 import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
 import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
+import { ListingApi } from '@/data/Endpoints/Listing';
 
 
 function LeadDetails() {
@@ -45,6 +46,8 @@ function LeadDetails() {
   const [commDetails, setcommDetails] = useState()
 
   const [summaryLoading, setsummaryLoading] = useState(false)
+
+  const [stages, setstages] = useState([])
 
 
   const [confirmId, setconfirmId] = useState()
@@ -157,6 +160,15 @@ function LeadDetails() {
     setcallDetails(response?.data?.data)
     setsummaryLoading(false)
   }
+  const getStageList = () => {
+    ListingApi.stages({type:'student'}).then((response) => {
+      setstages(response?.data?.data)
+      
+    })
+  } 
+
+  const [openedPercentage, setopenedPercentage] = useState(stages.filter(obj => obj?.name === details?.stage?.name).length / stages.length * 100)
+  // const openedPercentage = stages.filter(obj => obj?.name === details?.stage?.name).length / stages.length * 100;
 
   useEffect(() => {
     getSummary()
@@ -169,7 +181,12 @@ function LeadDetails() {
 
   useEffect(() => {
     getDetails()
+    getStageList()
   }, [refresh])
+
+  useEffect(() => {
+    getStageList()
+  }, [])
 
 
 
@@ -402,23 +419,40 @@ function LeadDetails() {
 
                   </div>
 
+                  {/* {
+                    console.log(details)
+                  } */}
+                  
+
                   <div className='stage_track_cntr'>
                     <div className='stage_track'>
                       <ul>
+                        {
+                          stages?.map((obj, index) => (
+                            <li key={index} className={obj?.name == details?.stage?.name ? 'opened' : ''}></li>
+                          ))
+                        }
+                        {/* <li> </li>
+                        <li> </li>
                         <li className='opened'> </li>
-                        <li> </li>
-                        <li> </li>
-                        <li>   </li>
-                        <li> </li>
+                        <li >   </li>
+                        <li > </li> */}
                       </ul>
-                      <div className='track-range'></div>
+                      <div style={{ width:`${4/stages.length *100}%` }} className='track-range'>
+
+                      </div>
                     </div>
                     <ul className='tract-names'>
-                      <li>Unverified</li>
-                      <li>Verified</li>
+                      {
+                        stages?.map((obj, index) => (
+                          <li key={index}>{obj?.name}</li>
+                        ))
+                      }
+                      {/* <li>Unverified</li> */}
+                      {/* <li>Verified</li>
                       <li>Started</li>
                       <li>Payment Approved</li>
-                      <li>Submitted</li>
+                      <li>Submitted</li> */}
                     </ul>
                   </div>
 
