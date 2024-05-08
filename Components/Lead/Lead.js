@@ -69,7 +69,7 @@ export default function CustomizedMenus() {
 
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
-  const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
+  const pageNumber = parseInt(router?.asPath?.split("=")[1] || 1);
 
   const searchOptions = [
     { name: 'Email' },
@@ -131,8 +131,8 @@ export default function CustomizedMenus() {
   }
 
   const handleRefresh = () => {
-    if (page != 0) {
-      setPage(0)
+    if (page != 1) {
+      setPage(1)
     }
     setRefresh(!refresh)
   }
