@@ -633,19 +633,19 @@ text-transform: capitalize;
   }
 
 
-.navbar-left ul li{
+  .table-pagination .navbar-left ul li{
     color: #0B0D23; 
 font-size: 15px;
 font-style: normal;
 font-weight: 400;
 line-height: 38px; /* 66.667% */
 }
-.navbar-left ul li button{
+.table-pagination .navbar-left ul li button{
     margin-right: 10px;
 }
 
 
-.navbar-left ul li button#UserPop span {
+.table-pagination .navbar-left ul li button#UserPop span {
     width: 38px;
     height: 38px; 
     line-height: 38px; 
@@ -658,6 +658,19 @@ font-style: normal;
 font-weight: 700;
 line-height: 38px; /* 53.333% */
 }
+
+.table-pagination .navbar-left{
+position: relative;
+}
+
+.table-pagination .navbar-left .popup-content {
+    /* display: none; */ 
+    right: unset; 
+    min-width: 250px;  
+    left: 0;
+    bottom: 100%;
+}
+
 .table-pagination{
     background: rgba(255, 255, 255, 0.61);
 backdrop-filter: blur(13.100000381469727px);
@@ -724,6 +737,10 @@ line-height: 20px; /* 166.667% */
 }
 .lead-table-cntr{
     overflow: unset;
+}
+
+.lead-det-cnt{
+    margin-top: 25px;
 }
 
 
