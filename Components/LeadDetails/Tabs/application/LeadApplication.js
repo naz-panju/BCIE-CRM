@@ -107,6 +107,8 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
         setDownloadId(id)
     }
 
+    console.log(list);
+
     const handleDelete = () => {
         setdeleteLoading(true)
         ApplicationApi.deleteUniversityDocument({ id: deleteId }).then((response) => {
@@ -140,8 +142,6 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const handleMailOpen = () => {
         setMailId(0)
     }
-
-    console.log(data);
 
     const fetchList = async () => {
         setLoading(true)
@@ -308,7 +308,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                                     obj?.documents.length > 0 ?
                                                                                         <Grid sx={{ overflowY: 'auto', maxHeight: 180 }} mt={1}>
                                                                                             {obj?.documents?.map((obj, index) => (
-                                                                                                <Grid display={'flex'} justifyContent={'space-between'} sx={{ mt: index !== 0 ? 1 : '' }}>
+                                                                                                <Grid key={index} display={'flex'} justifyContent={'space-between'} sx={{ mt: index !== 0 ? 1 : '' }}>
                                                                                                     <a target='_blank' href={obj?.document} style={{ color: 'blue', cursor: 'pointer' }} key={index} >{trimUrlAndNumbers(obj?.title || obj?.document_template?.name)}</a>
                                                                                                     {/* <Delete onClick={() => handleDeleteOpen(obj?.id)} fontSize='small' style={{ color: 'red', cursor: 'pointer' }} /> */}
                                                                                                 </Grid>
@@ -337,7 +337,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                                     obj?.university_documents?.length > 0 ?
                                                                                         <Grid sx={{ overflowY: 'auto', maxHeight: 180 }} mt={1}>
                                                                                             {obj?.university_documents?.map((obj, index) => (
-                                                                                                <Grid display={'flex'} justifyContent={'space-between'} sx={{ mt: index !== 0 ? 1 : '' }}>
+                                                                                                <Grid key={index} display={'flex'} justifyContent={'space-between'} sx={{ mt: index !== 0 ? 1 : '' }}>
                                                                                                     <a target='_blank' href={obj?.document} style={{ color: 'blue', cursor: 'pointer' }} key={index} >{trimUrlAndNumbers(obj?.document_template?.name)}</a>
                                                                                                     <Delete onClick={() => handleDeleteOpen(obj?.id)} fontSize='small' style={{ color: 'red', cursor: 'pointer' }} />
                                                                                                 </Grid>
