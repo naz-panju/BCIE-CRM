@@ -44,6 +44,8 @@ function LeadDetails() {
   const [callDetails, setcallDetails] = useState()
   const [commDetails, setcommDetails] = useState()
 
+  const [summaryLoading, setsummaryLoading] = useState(false)
+
 
   const [confirmId, setconfirmId] = useState()
   const [confirmLoading, setconfirmLoading] = useState(false)
@@ -131,6 +133,9 @@ function LeadDetails() {
 
 
   const getSummary = async () => {
+
+    setsummaryLoading(true)
+
     let params = {
       lead_id: ID,
     }
@@ -138,9 +143,11 @@ function LeadDetails() {
     const response = await CommunicationLogApi.summary(params)
     // console.log(response);
     setcommDetails(response?.data?.data)
+    setsummaryLoading(false)
   }
 
   const getCallSummary = async () => {
+    setsummaryLoading(true)
     let params = {
       lead_id: ID,
     }
@@ -148,6 +155,7 @@ function LeadDetails() {
     const response = await PhoneCallApi.summmary(params)
     // console.log(response);
     setcallDetails(response?.data?.data)
+    setsummaryLoading(false)
   }
 
   useEffect(() => {
@@ -225,10 +233,10 @@ function LeadDetails() {
                     <div className='lead-top-details-block-name'>
                       <div>
                         <div className="nameInitialsDiv">
-                          <div className="nameInitials">  
-                          <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M18.5 19.3264C17.8971 16.6041 15.6249 15 11.5001 15C7.37535 15 5.10289 16.6041 4.5 19.3264M11.5 22C17.299 22 22 17.299 22 11.5C22 5.70101 17.299 1 11.5 1C5.70101 1 1 5.70101 1 11.5C1 17.299 5.70101 22 11.5 22ZM11.5 11.5C13.0556 11.5 13.8333 10.6667 13.8333 8.58333C13.8333 6.5 13.0556 5.66667 11.5 5.66667C9.94444 5.66667 9.16667 6.5 9.16667 8.58333C9.16667 10.6667 9.94444 11.5 11.5 11.5Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+                          <div className="nameInitials">
+                            <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M18.5 19.3264C17.8971 16.6041 15.6249 15 11.5001 15C7.37535 15 5.10289 16.6041 4.5 19.3264M11.5 22C17.299 22 22 17.299 22 11.5C22 5.70101 17.299 1 11.5 1C5.70101 1 1 5.70101 1 11.5C1 17.299 5.70101 22 11.5 22ZM11.5 11.5C13.0556 11.5 13.8333 10.6667 13.8333 8.58333C13.8333 6.5 13.0556 5.66667 11.5 5.66667C9.94444 5.66667 9.16667 6.5 9.16667 8.58333C9.16667 10.6667 9.94444 11.5 11.5 11.5Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
 
                             {/*
                               loading ?
@@ -464,9 +472,20 @@ function LeadDetails() {
                   <div className='lead-communication-status-bg'>
 
                     <ul>
-                      <li><span>5</span> <p> Email Sent  </p> <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a></li>
+
+                      {
+                        summaryLoading ?
+                          <li>
+                            <span><Skeleton width={'100%'} height={'100%'} variant='rounded' /></span> <p> Email Sent  </p> <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
+                          </li>
+                          :
+                          <li>
+                            <span>{commDetails?.email_send_summary}</span> <p> Email Sent  </p> <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
+                          </li>
+                      }
+
                       {/* <li>SMS Sent - <span>1</span></li> */}
-                      <li><span>0</span> <p> Whatsapp Sent  </p> <a className='btn' disabled={!details?.whatsapp_number} onClick={handleOpenWhatsappModal} >  Send Whatsapp </a></li>
+                      <li><span>{commDetails?.whatsapp_send_summary}</span> <p> Whatsapp Sent  </p> <a className='btn' disabled={!details?.whatsapp_number} onClick={handleOpenWhatsappModal} >  Send Whatsapp </a></li>
                     </ul>
                   </div>
                 </div>
@@ -524,45 +543,7 @@ function LeadDetails() {
 
               </div>
 
-
-
             </div>
-
-
-
-
-
-
-          </div>
-
-
-          <div className='lead-details-stepper-block'>
-
-
-            <div className="arrow-steps clearfix fadeIn">
-              <div className="step unverified filled">
-                <span className="stepTitle">Unverified</span>
-                <a tabIndex="0" className="stepsOpt" role="button" data-toggle="popover" data-trigger="focus" data-placement="top" data-container="body" data-content="Manipal Academy of Higher Education, India">1</a>
-              </div>
-
-              <div className="step verified prl10 pr0 filled">
-                <span className="stepTitle">Verified</span>
-              </div>
-
-              <div className="step app-started active">
-                <span className="stepTitle">Application Started</span>
-              </div>
-
-              <div className="step app-complete ">
-                <span className="stepTitle">Payment Approved</span>
-              </div>
-
-              <div className="step app-submitted ">
-                <span className="stepTitle">Application Submitted</span>
-              </div>
-            </div>
-
-
           </div>
 
           <div className='lead-det-cnt'>

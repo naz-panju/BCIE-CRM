@@ -24,7 +24,7 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Grid, InputAdornment, TextField } from '@mui/material';
+import { Button, Grid, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
@@ -120,12 +120,15 @@ function EnhancedTableHead(props) {
 
   return (
     <TableHead>
+      
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
+          <input
+            type='checkbox'
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
+            // checked={rowCount > 0 && numSelected === rowCount}
+            checked={numSelected > 0 }
             onChange={onSelectAllClick}
             inputProps={{
               'aria-label': 'select all desserts',
@@ -241,6 +244,27 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const [dense, setDense] = React.useState(false);
   const [limit, setLimit] = React.useState(10);
   const [list, setList] = useState([])
+  const [lastPage, setlastPage] = useState()
+  const [current_page, setCurrent_page] = useState()
+
+  const pageNumber = parseInt(router?.asPath?.split("=")[1] || 1);
+  // console.log(pageNumber); 
+
+  const handlePreviousPage = () => {
+    router.push(`/lead?page=${current_page - 1}`)
+    setPage(current_page - 1)
+  }
+  const handleNextPage = () => {
+    router.push(`/lead?page=${current_page + 1}`)
+    setPage(current_page + 1)
+  }
+
+  const handleByPageNumber = (index) => {
+    router.push(`/lead?page=${index + 1}`)
+    setPage(index + 1)
+  }
+
+
 
   const [loading, setLoading] = useState(false)
 
@@ -407,7 +431,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setValue('numberSearch', '')
     setValue('lead_id_search', '')
 
-    setValue('assignedTo',null)
+    setValue('assignedTo', null)
     setValue('stage', '')
 
     setSelectedAssignedTo()
@@ -588,7 +612,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                               sx={{ cursor: 'pointer' }}
                             >
                               <TableCell className='checkbox-tb' padding="checkbox">
-                                <Checkbox
+                                <input
+                                  type='checkbox'
                                   onClick={(event) => handleClick(event, row.id)}
                                   color="primary"
                                   checked={isItemSelected}
@@ -639,6 +664,14 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                   </TableBody>
                 </Table>
               </TableContainer>
+              {/* <TablePagination>
+                <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
+                  <MenuItem value={10}>10</MenuItem>
+                  <MenuItem value={15}>15</MenuItem>
+                  <MenuItem value={25}>25</MenuItem>
+                </Select>
+
+              </TablePagination> */}
               <TablePagination
                 rowsPerPageOptions={[10, 15, 25]}
                 component="div"
