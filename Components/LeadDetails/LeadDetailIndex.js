@@ -20,6 +20,7 @@ import LeadNoteModal from './Tabs/follow-up/noteCreate';
 import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
 import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 import { ListingApi } from '@/data/Endpoints/Listing';
+import PhoneCallModal from './Tabs/communication/Modals/SummaryModal';
 
 
 function LeadDetails() {
@@ -53,9 +54,20 @@ function LeadDetails() {
   const [confirmId, setconfirmId] = useState()
   const [confirmLoading, setconfirmLoading] = useState(false)
 
+  const [phonecallId, setphonecallId] = useState()
+
+
   const [phoneCallRefresh, setphoneCallRefresh] = useState(false)
 
+  const [stageLength, setstageLength] = useState()
 
+  const handlePhoneRefresh = () => {
+    setphoneCallRefresh(!phoneCallRefresh)
+  }
+
+  const handlePhoneCallOpen = () => {
+    setphonecallId(0)
+  }
 
   const router = useRouter()
   const urlID = router?.query?.slug
@@ -67,6 +79,7 @@ function LeadDetails() {
       const response = await LeadApi.view({ id: urlID })
       // console.log(response);
       setDetails(response?.data?.data)
+
       setLoading(false)
     } catch (error) {
       console.log(error);
@@ -163,17 +176,28 @@ function LeadDetails() {
   const getStageList = () => {
     ListingApi.stages({ type: 'student' }).then((response) => {
       setstages(response?.data?.data)
-
     })
   }
 
-  const [openedPercentage, setopenedPercentage] = useState(stages?.filter(obj => obj?.name === details?.stage?.name).length / stages?.length * 100)
-  // const openedPercentage = stages.filter(obj => obj?.name === details?.stage?.name).length / stages.length * 100;
+
+  const getFirstLettersOfTwoWords = (name) => {
+    if (name) {
+      const words = name.split(" "); // Split the name into an array of words
+      if (words.length >= 2) {
+        // Extract the first letter of the first two words and concatenate them
+        return words[0].charAt(0) + words[1].charAt(0);
+      } else if (words.length === 1) {
+        // If there's only one word, return its first letter
+        return words[0].charAt(0);
+      }
+    }
+    return ""; // Return an empty string if name is not provided
+  };
 
   useEffect(() => {
     getSummary()
     getCallSummary()
-  }, [refresh])
+  }, [refresh, phoneCallRefresh])
   // useEffect(() => {
   //     getCallSummary()
   // }, [phoneCallRefresh])
@@ -181,14 +205,13 @@ function LeadDetails() {
 
   useEffect(() => {
     getDetails()
-    getStageList()
-  }, [refresh])
+  }, [refresh, followRefresh])
 
   useEffect(() => {
     getStageList()
   }, [])
 
- 
+
 
   return (
 
@@ -198,6 +221,9 @@ function LeadDetails() {
 
       <SendMail from={'lead'} details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
       <SendWhatsApp details={details} lead_id={details?.id} editId={whatsappId} setEditId={setWhatsappId} refresh={refresh} setRefresh={handleRefresh} from={'lead'} />
+
+      <PhoneCallModal lead_id={details?.id} editId={phonecallId} setEditId={setphonecallId} handleRefresh={handlePhoneRefresh} />
+
 
       <FollowUpModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={followupId} setEditId={setfollowupId} data={details} />
       <LeadNoteModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={noteId} setEditId={setNoteId} />
@@ -230,10 +256,10 @@ function LeadDetails() {
               {/* <Button sx={{ mr: 2 }} onClick={details && handleNoteOpen} variant='contained' className='bg-sky-600 text-white hover:bg-sky-700 text-white'>Add Note</Button>
               <Button sx={{ mr: 2 }} onClick={details && handleFollowupOpen} variant='contained' className='bg-sky-700 text-white hover:bg-sky-800 text-white'>Add Followup</Button> */}
               <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M6.59937 9H17.3994M6.59937 9C6.03932 9 5.75859 9 5.54468 9.10899C5.35652 9.20487 5.20365 9.35774 5.10778 9.5459C4.99878 9.75981 4.99878 10.04 4.99878 10.6001V15.8001C4.99878 16.9202 4.99878 17.4804 5.21677 17.9082C5.40852 18.2845 5.71426 18.5905 6.09058 18.7822C6.51798 19 7.07778 19 8.19569 19H15.8015C16.9194 19 17.4784 19 17.9058 18.7822C18.2821 18.5905 18.5893 18.2844 18.781 17.9081C18.9988 17.4807 18.9988 16.9216 18.9988 15.8037V10.591C18.9988 10.037 18.9988 9.75865 18.8904 9.5459C18.7945 9.35774 18.6409 9.20487 18.4528 9.10899C18.2389 9 17.9594 9 17.3994 9M6.59937 9H4.97409C4.125 9 3.7007 9 3.45972 8.85156C3.13813 8.65347 2.9558 8.29079 2.98804 7.91447C3.01222 7.63223 3.26495 7.29089 3.77124 6.60739C3.91768 6.40971 3.99092 6.31084 4.08055 6.23535C4.20006 6.1347 4.34188 6.06322 4.4939 6.02709C4.60791 6 4.73029 6 4.97632 6H19.0207C19.2667 6 19.3894 6 19.5034 6.02709C19.6555 6.06322 19.7972 6.1347 19.9168 6.23535C20.0064 6.31084 20.0799 6.40924 20.2263 6.60693C20.7326 7.29042 20.9858 7.63218 21.0099 7.91442C21.0422 8.29074 20.8592 8.65347 20.5376 8.85156C20.2966 9 19.8713 9 19.0222 9H17.3994M9.99878 14H13.9988" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-{details?.closed == 1 ? 'UnArchive' : 'Archive'}</Button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M6.59937 9H17.3994M6.59937 9C6.03932 9 5.75859 9 5.54468 9.10899C5.35652 9.20487 5.20365 9.35774 5.10778 9.5459C4.99878 9.75981 4.99878 10.04 4.99878 10.6001V15.8001C4.99878 16.9202 4.99878 17.4804 5.21677 17.9082C5.40852 18.2845 5.71426 18.5905 6.09058 18.7822C6.51798 19 7.07778 19 8.19569 19H15.8015C16.9194 19 17.4784 19 17.9058 18.7822C18.2821 18.5905 18.5893 18.2844 18.781 17.9081C18.9988 17.4807 18.9988 16.9216 18.9988 15.8037V10.591C18.9988 10.037 18.9988 9.75865 18.8904 9.5459C18.7945 9.35774 18.6409 9.20487 18.4528 9.10899C18.2389 9 17.9594 9 17.3994 9M6.59937 9H4.97409C4.125 9 3.7007 9 3.45972 8.85156C3.13813 8.65347 2.9558 8.29079 2.98804 7.91447C3.01222 7.63223 3.26495 7.29089 3.77124 6.60739C3.91768 6.40971 3.99092 6.31084 4.08055 6.23535C4.20006 6.1347 4.34188 6.06322 4.4939 6.02709C4.60791 6 4.73029 6 4.97632 6H19.0207C19.2667 6 19.3894 6 19.5034 6.02709C19.6555 6.06322 19.7972 6.1347 19.9168 6.23535C20.0064 6.31084 20.0799 6.40924 20.2263 6.60693C20.7326 7.29042 20.9858 7.63218 21.0099 7.91442C21.0422 8.29074 20.8592 8.65347 20.5376 8.85156C20.2966 9 19.8713 9 19.0222 9H17.3994M9.99878 14H13.9988" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                {details?.closed == 1 ? 'UnArchive' : 'Archive'}</Button>
             </Grid>
           </div>
         </div>
@@ -431,9 +457,14 @@ function LeadDetails() {
                     <div className='stage_track'>
                       <ul>
                         {
-                          stages?.map((obj, index) => (
-                            <li key={index} className={obj?.name == details?.stage?.name ? 'opened' : ''}></li>
-                          ))
+                          stages?.map((obj, index) => {
+                            const isSubStage = obj?.sub_stages?.some(stage =>
+                              stage?.name === details?.stage?.name
+                            );
+                            return (
+                              <li key={index} className={isSubStage ? 'opened' : ''}></li>
+                            )
+                          })
                         }
                         {/* <li> </li>
                         <li> </li>
@@ -441,9 +472,46 @@ function LeadDetails() {
                         <li >   </li>
                         <li > </li> */}
                       </ul>
-                      <div style={{ width: `${4 / stages.length * 100}%` }} className='track-range'>
+                      {
+                        console.log(stageLength)
+                      }
+                      {
+                        stages?.map((obj, index) => {
+                          let ind;
+                          ind = stages.findIndex(obj =>
+                            obj.sub_stages.some(subStage =>
+                              subStage.name === details?.stage.name
+                            ) || obj.name === details?.stage.name
+                          );
+                          let finalIndex;
+                          if (ind >= 0) {
+                            finalIndex = ind + 1
+                          } else {
+                            ind=stages.findIndex(obj=>obj?.name==details?.stage?.name)
+                            finalIndex = ind + 1
+                          }
 
-                      </div>
+                          return (
+
+                            ind == index &&
+
+
+                            <div key={index} style={{ width: `${finalIndex / stages?.length * 100}%` }} className='track-range'>{console.log(ind + 1, stages?.length)}
+                            </div>
+                          )
+                        })
+                      }
+                      {/* {
+                        stages?.map((obj, index) => {
+                          return (
+
+                            <div key={index} style={{ width: `${stageLength + 1 / stages?.length * 100}%` }} className='track-range'>
+                              )
+                        
+                        )
+                      } */}
+
+
                     </div>
                     <ul className='tract-names'>
                       {
@@ -507,16 +575,16 @@ function LeadDetails() {
                 <div className='lead-communication-status'>
                   <h4>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className='lead-ic'>
-  <path d="M5.59961 19.9203L7.12357 18.7012L7.13478 18.6926C7.45249 18.4384 7.61281 18.3101 7.79168 18.2188C7.95216 18.1368 8.12328 18.0771 8.2998 18.0408C8.49877 18 8.70603 18 9.12207 18H17.8031C18.921 18 19.4806 18 19.908 17.7822C20.2843 17.5905 20.5905 17.2842 20.7822 16.9079C21 16.4805 21 15.9215 21 14.8036V7.19691C21 6.07899 21 5.5192 20.7822 5.0918C20.5905 4.71547 20.2837 4.40973 19.9074 4.21799C19.4796 4 18.9203 4 17.8002 4H6.2002C5.08009 4 4.51962 4 4.0918 4.21799C3.71547 4.40973 3.40973 4.71547 3.21799 5.0918C3 5.51962 3 6.08009 3 7.2002V18.6712C3 19.7369 3 20.2696 3.21846 20.5433C3.40845 20.7813 3.69644 20.9198 4.00098 20.9195C4.35115 20.9191 4.76744 20.5861 5.59961 19.9203Z" stroke="#232648" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg> Communication Status
+                      <path d="M5.59961 19.9203L7.12357 18.7012L7.13478 18.6926C7.45249 18.4384 7.61281 18.3101 7.79168 18.2188C7.95216 18.1368 8.12328 18.0771 8.2998 18.0408C8.49877 18 8.70603 18 9.12207 18H17.8031C18.921 18 19.4806 18 19.908 17.7822C20.2843 17.5905 20.5905 17.2842 20.7822 16.9079C21 16.4805 21 15.9215 21 14.8036V7.19691C21 6.07899 21 5.5192 20.7822 5.0918C20.5905 4.71547 20.2837 4.40973 19.9074 4.21799C19.4796 4 18.9203 4 17.8002 4H6.2002C5.08009 4 4.51962 4 4.0918 4.21799C3.71547 4.40973 3.40973 4.71547 3.21799 5.0918C3 5.51962 3 6.08009 3 7.2002V18.6712C3 19.7369 3 20.2696 3.21846 20.5433C3.40845 20.7813 3.69644 20.9198 4.00098 20.9195C4.35115 20.9191 4.76744 20.5861 5.59961 19.9203Z" stroke="#232648" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg> Communication Status
 
-<a className='hide-sec' >
-<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
-  <path d="M8.5 16.7C3.97127 16.7 0.299999 13.0287 0.299999 8.5C0.299999 3.97126 3.97127 0.299999 8.5 0.3C13.0287 0.3 16.7 3.97127 16.7 8.5C16.7 13.0287 13.0287 16.7 8.5 16.7Z" stroke="#898989" stroke-width="0.6"/>
-  <path d="M11.0007 8.00016L8.66732 10.3335L6.33398 8.00016" stroke="#898989" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</a>
-</h4>
+                    <a className='hide-sec' >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                        <path d="M8.5 16.7C3.97127 16.7 0.299999 13.0287 0.299999 8.5C0.299999 3.97126 3.97127 0.299999 8.5 0.3C13.0287 0.3 16.7 3.97127 16.7 8.5C16.7 13.0287 13.0287 16.7 8.5 16.7Z" stroke="#898989" stroke-width="0.6" />
+                        <path d="M11.0007 8.00016L8.66732 10.3335L6.33398 8.00016" stroke="#898989" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </a>
+                  </h4>
                   <div className='lead-communication-status-bg commu-txt'>
 
                     <ul>
@@ -524,35 +592,35 @@ function LeadDetails() {
                       {
                         summaryLoading ?
                           <li>
-                            <h3>Emails</h3> 
+                            <h3>Emails</h3>
                             <div>
-                              <span> <b>10</b> Received</span>
-                              <span> <b>5</b> Send</span> 
+                              <span> <b>{commDetails?.email_receive_summary}</b> Received</span>
+                              <span> <b>{commDetails?.email_send_summary}</b> Send</span>
                             </div>
-                           {/*  <p><span><Skeleton width={'100%'} height={'100%'} variant='rounded' /></span>  Email Sent  </p>  */}
+                            {/*  <p><span><Skeleton width={'100%'} height={'100%'} variant='rounded' /></span>  Email Sent  </p>  */}
                             <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
                           </li>
                           :
                           <li>
-                            <h3>Emails </h3> 
+                            <h3>Emails </h3>
                             <div>
-                              <span> <b>10</b> Received</span>
-                              <span> <b>5</b> Send</span> 
+                              <span> <b>{commDetails?.email_receive_summary}</b> Received</span>
+                              <span> <b>{commDetails?.email_send_summary}</b> Send</span>
                             </div>
-                           {/*  <p><span>{commDetails?.email_send_summary}</span>    Sent  </p> */}
+                            {/*  <p><span>{commDetails?.email_send_summary}</span>    Sent  </p> */}
                             <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
                           </li>
                       }
 
                       {/* <li>SMS Sent - <span>1</span></li> */}
                       <li>
-                        <h3>Whatsapp </h3> 
+                        <h3>Calls </h3>
                         <div>
-                              <span> <b>10</b> Received</span>
-                              <span> <b>5</b> Send</span> 
-                            </div> 
+                          <span> <b>{callDetails?.calls_inbound}</b> Inbound</span>
+                          <span> <b>{callDetails?.calls_outbound}</b> Outbound</span>
+                        </div>
                         {/*<p> <span>{commDetails?.whatsapp_send_summary}</span> Whatsapp Sent  </p> */}
-                        <a className='btn' disabled={!details?.whatsapp_number} onClick={handleOpenWhatsappModal} >  Send Whatsapp </a></li>
+                        <a className='btn' onClick={handlePhoneCallOpen} > Add Call Log </a></li>
                     </ul>
                   </div>
                 </div>
@@ -564,36 +632,36 @@ function LeadDetails() {
               <div>
                 <div className='lead-communication-status'>
                   <h4><svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none" className='lead-ic'>
-  <path d="M1 7H17M1 7V15.8002C1 16.9203 1 17.4801 1.21799 17.9079C1.40973 18.2842 1.71547 18.5905 2.0918 18.7822C2.5192 19 3.07899 19 4.19691 19H13.8031C14.921 19 15.48 19 15.9074 18.7822C16.2837 18.5905 16.5905 18.2842 16.7822 17.9079C17 17.4805 17 16.9215 17 15.8036V7M1 7V6.2002C1 5.08009 1 4.51962 1.21799 4.0918C1.40973 3.71547 1.71547 3.40973 2.0918 3.21799C2.51962 3 3.08009 3 4.2002 3H5M17 7V6.19691C17 5.07899 17 4.5192 16.7822 4.0918C16.5905 3.71547 16.2837 3.40973 15.9074 3.21799C15.4796 3 14.9203 3 13.8002 3H13M13 1V3M13 3H5M5 1V3" stroke="#232648" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg> Upcoming Followup
-<a className='hide-sec'>
-<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
-  <path d="M8.5 16.7C3.97127 16.7 0.299999 13.0287 0.299999 8.5C0.299999 3.97126 3.97127 0.299999 8.5 0.3C13.0287 0.3 16.7 3.97127 16.7 8.5C16.7 13.0287 13.0287 16.7 8.5 16.7Z" stroke="#898989" stroke-width="0.6"/>
-  <path d="M11.0007 8.00016L8.66732 10.3335L6.33398 8.00016" stroke="#898989" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-</a>
-</h4>
+                    <path d="M1 7H17M1 7V15.8002C1 16.9203 1 17.4801 1.21799 17.9079C1.40973 18.2842 1.71547 18.5905 2.0918 18.7822C2.5192 19 3.07899 19 4.19691 19H13.8031C14.921 19 15.48 19 15.9074 18.7822C16.2837 18.5905 16.5905 18.2842 16.7822 17.9079C17 17.4805 17 16.9215 17 15.8036V7M1 7V6.2002C1 5.08009 1 4.51962 1.21799 4.0918C1.40973 3.71547 1.71547 3.40973 2.0918 3.21799C2.51962 3 3.08009 3 4.2002 3H5M17 7V6.19691C17 5.07899 17 4.5192 16.7822 4.0918C16.5905 3.71547 16.2837 3.40973 15.9074 3.21799C15.4796 3 14.9203 3 13.8002 3H13M13 1V3M13 3H5M5 1V3" stroke="#232648" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg> Upcoming Followup
+                    <a className='hide-sec'>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                        <path d="M8.5 16.7C3.97127 16.7 0.299999 13.0287 0.299999 8.5C0.299999 3.97126 3.97127 0.299999 8.5 0.3C13.0287 0.3 16.7 3.97127 16.7 8.5C16.7 13.0287 13.0287 16.7 8.5 16.7Z" stroke="#898989" stroke-width="0.6" />
+                        <path d="M11.0007 8.00016L8.66732 10.3335L6.33398 8.00016" stroke="#898989" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </a>
+                  </h4>
                   <div className='lead-communication-status-bg followup'>
-                     
-
-                     <div className='d-flex align-items-center justify-content-between mb-30'> 
-                        <div>
-                          <span>Date</span>
-                          <h5>02/11/2024</h5>
-                        </div> 
-                        <div><a className='btn' onClick={details && handleFollowupOpen} >Add Followup</a></div> 
-                     </div>
 
 
-                     <div className='d-flex align-items-center justify-content-between'> 
-                        <div>
-                          <span>Note</span>
-                          <h5>It is still in process..</h5>
-                        </div> 
-                        <div>  <a className='btn' onClick={details && handleNoteOpen}>  Add Note </a> </div> 
-                     </div>
+                    <div className='d-flex align-items-center justify-content-between mb-30'>
+                      <div>
+                        <span>Date</span>
+                        <h5>{details?.next_follow_up_date || 'NA'}</h5>
+                      </div>
+                      <div><a className='btn' onClick={details && handleFollowupOpen} >Add Followup</a></div>
+                    </div>
 
-                    
+
+                    <div className='d-flex align-items-center justify-content-between'>
+                      <div>
+                        <span>Note</span>
+                        <h5>{details?.next_follow_up_note || 'NA'}</h5>
+                      </div>
+                      <div>  <a className='btn' onClick={details && handleNoteOpen}>  Add Note </a> </div>
+                    </div>
+
+
                   </div>
                 </div>
               </div>
@@ -609,12 +677,12 @@ function LeadDetails() {
                   <div>
                     <div className='lead-communication-status'>
                       <h4><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className='lead-ic'>
-  <path d="M7.5 11.25L12.5 13.75M12.5 6.25L7.5 8.75M15 17.5C13.6193 17.5 12.5 16.3807 12.5 15C12.5 13.6193 13.6193 12.5 15 12.5C16.3807 12.5 17.5 13.6193 17.5 15C17.5 16.3807 16.3807 17.5 15 17.5ZM5 12.5C3.61929 12.5 2.5 11.3807 2.5 10C2.5 8.61929 3.61929 7.5 5 7.5C6.38071 7.5 7.5 8.61929 7.5 10C7.5 11.3807 6.38071 12.5 5 12.5ZM15 7.5C13.6193 7.5 12.5 6.38071 12.5 5C12.5 3.61929 13.6193 2.5 15 2.5C16.3807 2.5 17.5 3.61929 17.5 5C17.5 6.38071 16.3807 7.5 15 7.5Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg> Lead Source</h4>
+                        <path d="M7.5 11.25L12.5 13.75M12.5 6.25L7.5 8.75M15 17.5C13.6193 17.5 12.5 16.3807 12.5 15C12.5 13.6193 13.6193 12.5 15 12.5C16.3807 12.5 17.5 13.6193 17.5 15C17.5 16.3807 16.3807 17.5 15 17.5ZM5 12.5C3.61929 12.5 2.5 11.3807 2.5 10C2.5 8.61929 3.61929 7.5 5 7.5C6.38071 7.5 7.5 8.61929 7.5 10C7.5 11.3807 6.38071 12.5 5 12.5ZM15 7.5C13.6193 7.5 12.5 6.38071 12.5 5C12.5 3.61929 13.6193 2.5 15 2.5C16.3807 2.5 17.5 3.61929 17.5 5C17.5 6.38071 16.3807 7.5 15 7.5Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg> Lead Source</h4>
                       <div className='lead-communication-status-bg lead-hit-auto lead_source'>
-                         
-                          <h5>{details?.lead_source?.name || 'NA'}</h5>
-                         
+
+                        <h5>{details?.lead_source?.name || 'NA'}</h5>
+
                       </div>
                     </div>
                   </div>
@@ -623,12 +691,12 @@ function LeadDetails() {
                   <div>
                     <div className='lead-communication-status'>
                       <h4><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" className='lead-ic'>
-  <path d="M2.75 10.0834H7.33333M5.04167 12.3751V7.79175M13.2917 12.8334C16.694 12.8334 18.4644 14.0051 19.0377 16.3484C19.3002 17.4214 18.3546 18.3334 17.25 18.3334H9.33334C8.22877 18.3334 7.28316 17.4214 7.54565 16.3484C8.11894 14.0051 9.88932 12.8334 13.2917 12.8334ZM13.2917 9.16675C14.8194 9.16675 15.5833 8.38103 15.5833 6.41675C15.5833 4.45246 14.8194 3.66675 13.2917 3.66675C11.7639 3.66675 11 4.45246 11 6.41675C11 8.38103 11.7639 9.16675 13.2917 9.16675Z" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</svg> Assigned Counsellor</h4>
+                        <path d="M2.75 10.0834H7.33333M5.04167 12.3751V7.79175M13.2917 12.8334C16.694 12.8334 18.4644 14.0051 19.0377 16.3484C19.3002 17.4214 18.3546 18.3334 17.25 18.3334H9.33334C8.22877 18.3334 7.28316 17.4214 7.54565 16.3484C8.11894 14.0051 9.88932 12.8334 13.2917 12.8334ZM13.2917 9.16675C14.8194 9.16675 15.5833 8.38103 15.5833 6.41675C15.5833 4.45246 14.8194 3.66675 13.2917 3.66675C11.7639 3.66675 11 4.45246 11 6.41675C11 8.38103 11.7639 9.16675 13.2917 9.16675Z" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg> Assigned Counsellor</h4>
                       <div className='lead-communication-status-bg lead-hit-auto assigned'>
-                         
-                          <p> <span>NM</span> {details?.assignedToUser?.name || 'NA'}</p>
-                        
+
+                        <p> {details?.assignedToUser?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToUser?.name)}</span>} {details?.assignedToUser?.name || 'NA'}</p>
+
                       </div>
                     </div>
                   </div>
@@ -642,7 +710,7 @@ function LeadDetails() {
 
           <div className='lead-det-cnt'>
 
-            <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} />
+            <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} />
           </div>
         </div>
       </section>

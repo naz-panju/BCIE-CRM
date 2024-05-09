@@ -106,7 +106,6 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e, }).then(response => {
-            console.log(response);
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -137,15 +136,15 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             phone_number: data?.phone,
             date_of_birth: dob,
             address: data?.address,
-            zipcode: data?.zip,
-            state: data?.state,
-            // temproary
-            country_id: data?.country_of_birth?.id,
+            
+            intake_id:data?.intake?.id,
+            country_of_birth_id: data?.country_of_birth?.id,
+            country_of_residence_id:data?.country_of_residence?.id,
             alternate_phone_number: data?.alt_phone,
             whatsapp_number: data?.whatsapp
         }
 
-        // console.log(dataToSubmit);
+        console.log(dataToSubmit);
 
         let action;
 
@@ -157,7 +156,6 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
         }
 
         action.then((response) => {
-            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(`Applicant Has Been Successfully ${editId > 0 ? 'Updated' : 'Created'} `)
                 reset()
@@ -262,7 +260,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             setValue('email', details?.email)
             setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
             setValue('alt_phone', `${details?.alternate_phone_country_code}${details?.alternate_phone_number}`)
-            setValue('whatsapp', `+${details?.whatsapp_country_code}${details?.whatsapp_number}`)
+            setValue('whatsapp', `${details?.whatsapp_country_code}${details?.whatsapp_number}`)
 
             setValue('country_of_residence', details?.country)
             setValue('country_of_birth', details?.country)
@@ -297,7 +295,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             // setValue('last_name', data?.last_name)
             setValue('email', data?.email)
 
-            setValue('phone', `+${data?.phone_number}`)
+            setValue('phone', `${data?.phone_number}`)
             // setPhone(data?.phone_number)
             // setCode(data?.phone_country_code)
 
@@ -313,10 +311,12 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
             setValue('address', data?.address)
             setValue('country', data?.country)
-            setValue('state', data?.state)
 
-            setValue('zip', data?.zipcode)
+            setValue('intake',data?.intake)
 
+            setValue('country_of_birth', data?.country_of_birth)
+            setValue('country_of_residence', data?.country_of_residence)
+           
         }
         setDataLoading(false)
     }

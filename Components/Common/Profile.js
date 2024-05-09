@@ -69,10 +69,10 @@ const UserProfile = () => {
                                             </div>
                                         </div>
 
-                                        <div className='login-dropdown-list-item'>
+                                        {/* <div className='login-dropdown-list-item'>
 
                                             <a><LockOpen sx={{ color: blue[300] }} fontSize='small' /> Change Password</a>
-                                        </div>
+                                        </div> */}
 
                                         <div className='login-dropdown-list-item'>
 
