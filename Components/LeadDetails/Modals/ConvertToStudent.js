@@ -8,6 +8,7 @@ import DateInput from '@/Form/DateInput';
 import SelectX from '@/Form/SelectX';
 import TextInput from '@/Form/TextInput';
 import { useState } from 'react';
+import AsyncSelect from "react-select/async";
 
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -320,6 +321,11 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
         setDataLoading(false)
     }
 
+    const handleinTakeChange = (data) => {
+        setValue('intake', data || '')
+
+    }
+
 
 
     useEffect(() => {
@@ -438,7 +444,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Phone Number </a>
+                                                <a className='form-text'>Phone Number</a>
                                             </Grid>
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <PhoneInput
@@ -472,7 +478,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                             <Grid item xs={12} md={4}>
-                                                <Typography sx={{ fontWeight: '500' }}>Alternate Mobile Number</Typography>
+                                                <a className='form-text'>Alternate Mobile Number</a>
                                             </Grid>
                                             <Grid item xs={12} md={8}>
                                                 <PhoneInput
@@ -508,7 +514,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                             <Grid item xs={12} md={4}>
-                                                <Typography sx={{ fontWeight: '500' }}>Whatsapp Number</Typography>
+                                                <a className='form-text'>Whatsapp Number</a>
                                             </Grid>
                                             <Grid item xs={12} md={8}>
                                                 <PhoneInput
@@ -539,6 +545,25 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                                 />
                                                 {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
 
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>Intake</a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <AsyncSelect
+                                                    name={'intake'}
+                                                    defaultValue={watch('intake')}
+                                                    // isClearable
+                                                    defaultOptions
+                                                    loadOptions={fetchIntakes}
+                                                    getOptionLabel={(e) => e.name}
+                                                    getOptionValue={(e) => e.id}
+                                                    onChange={handleinTakeChange}
+                                                />
+                                                {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
                                             </Grid>
                                         </Grid>
 
@@ -586,7 +611,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Date Of Birth </a>
+                                                <a className='form-text'>Date of Birth </a>
                                             </Grid>
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <DateInput

@@ -132,11 +132,11 @@ function EnhancedTableHead(props) {
               // checked={rowCount > 0 && numSelected === rowCount}
               checked={numSelected > 0}
               onChange={onSelectAllClick}
-              inputProps={{
+              inputprops={{
                 'aria-label': 'select all desserts',
               }}
             />
-            <label for="html2"> </label>
+            <label htmlFor="html2"> </label>
           </div>
         </TableCell>
         {headCells.map((headCell) => (
@@ -327,7 +327,6 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     // console.log(newPage);
-    //for tablepagination
     // router.push(`/lead?page=${newPage + 1}`);
     router.replace(`/lead?page=${newPage}`);
   };
@@ -625,11 +624,11 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                       onClick={(event) => handleClick(event, row.id)}
                                       color="primary"
                                       checked={isItemSelected}
-                                      inputProps={{
+                                      inputprops={{
                                         'aria-labelledby': labelId,
                                       }}
                                     />
-                                    <label for={row?.id}> </label>
+                                    <label htmlFor={row?.id}> </label>
                                   </div>
 
 
@@ -694,7 +693,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
               </div>
               <div className='d-flex justify-content-between align-items-center'>
                 <div className='select-row-box'>
-                  <Select value={limit} onChange={handleChangeRowsPerPage} inputProps={{ 'aria-label': 'Rows per page' }}>
+                  <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
                     <MenuItem value={10}>10</MenuItem>
                     <MenuItem value={15}>15</MenuItem>
                     <MenuItem value={25}>25</MenuItem>
