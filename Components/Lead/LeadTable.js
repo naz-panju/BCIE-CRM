@@ -688,8 +688,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
               </Paper>
             </Box>
             <div className='table-pagination d-flex justify-content-between align-items-center'>
-              <div>
+              <div className='d-flex  align-items-center'>
                 <UserProfile />
+
+               <button className='log-out-cntr'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(0,0,0,1)"><path d="M4 18H6V20H18V4H6V6H4V3C4 2.44772 4.44772 2 5 2H19C19.5523 2 20 2.44772 20 3V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V18ZM6 11H13V13H6V16L1 12L6 8V11Z"></path></svg></button> 
               </div>
               <div className='d-flex justify-content-between align-items-center'>
                 <div className='select-row-box'>
