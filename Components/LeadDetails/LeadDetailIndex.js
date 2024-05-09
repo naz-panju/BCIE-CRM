@@ -505,7 +505,8 @@ function LeadDetails() {
               <div>
 
                 <div className='lead-communication-status'>
-                  <h4><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className='lead-ic'>
   <path d="M5.59961 19.9203L7.12357 18.7012L7.13478 18.6926C7.45249 18.4384 7.61281 18.3101 7.79168 18.2188C7.95216 18.1368 8.12328 18.0771 8.2998 18.0408C8.49877 18 8.70603 18 9.12207 18H17.8031C18.921 18 19.4806 18 19.908 17.7822C20.2843 17.5905 20.5905 17.2842 20.7822 16.9079C21 16.4805 21 15.9215 21 14.8036V7.19691C21 6.07899 21 5.5192 20.7822 5.0918C20.5905 4.71547 20.2837 4.40973 19.9074 4.21799C19.4796 4 18.9203 4 17.8002 4H6.2002C5.08009 4 4.51962 4 4.0918 4.21799C3.71547 4.40973 3.40973 4.71547 3.21799 5.0918C3 5.51962 3 6.08009 3 7.2002V18.6712C3 19.7369 3 20.2696 3.21846 20.5433C3.40845 20.7813 3.69644 20.9198 4.00098 20.9195C4.35115 20.9191 4.76744 20.5861 5.59961 19.9203Z" stroke="#232648" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
 </svg> Communication Status
 
@@ -516,23 +517,42 @@ function LeadDetails() {
 </svg>
 </a>
 </h4>
-                  <div className='lead-communication-status-bg'>
+                  <div className='lead-communication-status-bg commu-txt'>
 
                     <ul>
 
                       {
                         summaryLoading ?
                           <li>
-                            <span><Skeleton width={'100%'} height={'100%'} variant='rounded' /></span> <p> Email Sent  </p> <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
+                            <h3>Emails</h3> 
+                            <div>
+                              <span> <b>10</b> Received</span>
+                              <span> <b>5</b> Send</span> 
+                            </div>
+                           {/*  <p><span><Skeleton width={'100%'} height={'100%'} variant='rounded' /></span>  Email Sent  </p>  */}
+                            <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
                           </li>
                           :
                           <li>
-                            <span>{commDetails?.email_send_summary}</span> <p> Email Sent  </p> <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
+                            <h3>Emails </h3> 
+                            <div>
+                              <span> <b>10</b> Received</span>
+                              <span> <b>5</b> Send</span> 
+                            </div>
+                           {/*  <p><span>{commDetails?.email_send_summary}</span>    Sent  </p> */}
+                            <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
                           </li>
                       }
 
                       {/* <li>SMS Sent - <span>1</span></li> */}
-                      <li><span>{commDetails?.whatsapp_send_summary}</span> <p> Whatsapp Sent  </p> <a className='btn' disabled={!details?.whatsapp_number} onClick={handleOpenWhatsappModal} >  Send Whatsapp </a></li>
+                      <li>
+                        <h3>Whatsapp </h3> 
+                        <div>
+                              <span> <b>10</b> Received</span>
+                              <span> <b>5</b> Send</span> 
+                            </div> 
+                        {/*<p> <span>{commDetails?.whatsapp_send_summary}</span> Whatsapp Sent  </p> */}
+                        <a className='btn' disabled={!details?.whatsapp_number} onClick={handleOpenWhatsappModal} >  Send Whatsapp </a></li>
                     </ul>
                   </div>
                 </div>
@@ -543,7 +563,7 @@ function LeadDetails() {
 
               <div>
                 <div className='lead-communication-status'>
-                  <h4><svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none">
+                  <h4><svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none" className='lead-ic'>
   <path d="M1 7H17M1 7V15.8002C1 16.9203 1 17.4801 1.21799 17.9079C1.40973 18.2842 1.71547 18.5905 2.0918 18.7822C2.5192 19 3.07899 19 4.19691 19H13.8031C14.921 19 15.48 19 15.9074 18.7822C16.2837 18.5905 16.5905 18.2842 16.7822 17.9079C17 17.4805 17 16.9215 17 15.8036V7M1 7V6.2002C1 5.08009 1 4.51962 1.21799 4.0918C1.40973 3.71547 1.71547 3.40973 2.0918 3.21799C2.51962 3 3.08009 3 4.2002 3H5M17 7V6.19691C17 5.07899 17 4.5192 16.7822 4.0918C16.5905 3.71547 16.2837 3.40973 15.9074 3.21799C15.4796 3 14.9203 3 13.8002 3H13M13 1V3M13 3H5M5 1V3" stroke="#232648" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
 </svg> Upcoming Followup
 <a className='hide-sec'>
@@ -553,13 +573,27 @@ function LeadDetails() {
 </svg>
 </a>
 </h4>
-                  <div className='lead-communication-status-bg'>
-                    <ul>
-                      <li>NA</li>
-                    </ul>
-                    <p><a className='btn' onClick={details && handleFollowupOpen} >Add Followup</a>
-                      <a className='btn' onClick={details && handleNoteOpen}>  Add Note </a>
-                    </p>
+                  <div className='lead-communication-status-bg followup'>
+                     
+
+                     <div className='d-flex align-items-center justify-content-between mb-30'> 
+                        <div>
+                          <span>Date</span>
+                          <h5>02/11/2024</h5>
+                        </div> 
+                        <div><a className='btn' onClick={details && handleFollowupOpen} >Add Followup</a></div> 
+                     </div>
+
+
+                     <div className='d-flex align-items-center justify-content-between'> 
+                        <div>
+                          <span>Note</span>
+                          <h5>It is still in process..</h5>
+                        </div> 
+                        <div>  <a className='btn' onClick={details && handleNoteOpen}>  Add Note </a> </div> 
+                     </div>
+
+                    
                   </div>
                 </div>
               </div>
@@ -574,10 +608,10 @@ function LeadDetails() {
 
                   <div>
                     <div className='lead-communication-status'>
-                      <h4><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <h4><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" className='lead-ic'>
   <path d="M7.5 11.25L12.5 13.75M12.5 6.25L7.5 8.75M15 17.5C13.6193 17.5 12.5 16.3807 12.5 15C12.5 13.6193 13.6193 12.5 15 12.5C16.3807 12.5 17.5 13.6193 17.5 15C17.5 16.3807 16.3807 17.5 15 17.5ZM5 12.5C3.61929 12.5 2.5 11.3807 2.5 10C2.5 8.61929 3.61929 7.5 5 7.5C6.38071 7.5 7.5 8.61929 7.5 10C7.5 11.3807 6.38071 12.5 5 12.5ZM15 7.5C13.6193 7.5 12.5 6.38071 12.5 5C12.5 3.61929 13.6193 2.5 15 2.5C16.3807 2.5 17.5 3.61929 17.5 5C17.5 6.38071 16.3807 7.5 15 7.5Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg> Lead Source</h4>
-                      <div className='lead-communication-status-bg lead-hit-auto'>
+                      <div className='lead-communication-status-bg lead-hit-auto lead_source'>
                          
                           <h5>{details?.lead_source?.name || 'NA'}</h5>
                          
@@ -588,10 +622,10 @@ function LeadDetails() {
 
                   <div>
                     <div className='lead-communication-status'>
-                      <h4><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                      <h4><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" className='lead-ic'>
   <path d="M2.75 10.0834H7.33333M5.04167 12.3751V7.79175M13.2917 12.8334C16.694 12.8334 18.4644 14.0051 19.0377 16.3484C19.3002 17.4214 18.3546 18.3334 17.25 18.3334H9.33334C8.22877 18.3334 7.28316 17.4214 7.54565 16.3484C8.11894 14.0051 9.88932 12.8334 13.2917 12.8334ZM13.2917 9.16675C14.8194 9.16675 15.5833 8.38103 15.5833 6.41675C15.5833 4.45246 14.8194 3.66675 13.2917 3.66675C11.7639 3.66675 11 4.45246 11 6.41675C11 8.38103 11.7639 9.16675 13.2917 9.16675Z" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
 </svg> Assigned Counsellor</h4>
-                      <div className='lead-communication-status-bg lead-hit-auto'>
+                      <div className='lead-communication-status-bg lead-hit-auto assigned'>
                          
                           <p> <span>NM</span> {details?.assignedToUser?.name || 'NA'}</p>
                         

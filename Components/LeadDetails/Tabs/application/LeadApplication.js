@@ -220,7 +220,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                     loading ?
                         loadTable()
                         :
-                        <div className='no-follw-up-block'>
+                        <div className='no-follw-up-block app_tab_cntr'>
                             {
                                 list?.data?.length > 0 ?
 
@@ -252,7 +252,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Stage
+                                                            Stage v
                                                         </Typography>
                                                     </TableCell>
                                                 </TableRow>
@@ -268,7 +268,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                 <TableCell>{obj?.course}</TableCell>
                                                                 <TableCell>{obj?.intake?.name}</TableCell>
                                                                 <TableCell>{obj?.stage?.name}</TableCell>
-
+                                                                <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
                                                                 <TableCell >
                                                                     {isRowExpanded(obj?.id) ? (
                                                                         <ExpandLess
@@ -283,7 +283,8 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                             fontSize='small'
                                                                         />
                                                                     )}
-                                                                </TableCell>                                                                <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
+                                                                </TableCell>                                                                
+                                                              
                                                             </TableRow>
                                                             {isRowExpanded(obj.id) && (
                                                                 // <TableRow>
