@@ -230,29 +230,47 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                 <TableRow>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            University
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="18" viewBox="0 0 22 18" fill="none">
+  <path d="M1 17H3M3 17H14M3 17V11.3682C3 10.8428 3 10.58 3.063 10.335C3.11883 10.1178 3.21073 9.91184 3.33496 9.72518C3.47505 9.51468 3.67114 9.33842 4.06152 8.9877L6.3631 6.91997C7.11784 6.24192 7.49549 5.90264 7.92249 5.77393C8.29894 5.66045 8.7007 5.66045 9.07715 5.77393C9.50451 5.90275 9.88267 6.2422 10.6387 6.92139L12.9387 8.9877C13.3295 9.33881 13.5245 9.51456 13.6647 9.72518C13.7889 9.91184 13.8807 10.1178 13.9365 10.335C13.9995 10.58 14 10.8428 14 11.3682V17M14 17H19M19 17H21M19 17V4.19691C19 3.07899 19 2.5192 18.7822 2.0918C18.5905 1.71547 18.2837 1.40973 17.9074 1.21799C17.4796 1 16.9203 1 15.8002 1H9.2002C8.08009 1 7.51962 1 7.0918 1.21799C6.71547 1.40973 6.40973 1.71547 6.21799 2.0918C6 2.51962 6 3.08009 6 4.2002V7.0002" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> University
                                                         </Typography>
                                                     </TableCell>
 
                                                     <TableCell>
 
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Subject Area
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="23" viewBox="0 0 22 23" fill="none">
+  <path d="M2.75 5.74992H2.76759M2.76759 5.74992H19.2325M2.76759 5.74992C2.75 6.05119 2.75 6.42258 2.75 6.90011V16.1001C2.75 17.1735 2.75 17.7095 2.94982 18.1195C3.12559 18.4801 3.40585 18.7741 3.75081 18.9579C4.14261 19.1666 4.65575 19.1666 5.68053 19.1666L16.3195 19.1666C17.3443 19.1666 17.8567 19.1666 18.2484 18.9579C18.5934 18.7741 18.8746 18.4801 19.0504 18.1195C19.25 17.7099 19.25 17.1742 19.25 16.1028L19.25 6.89695C19.25 6.42095 19.25 6.05053 19.2325 5.74992M2.76759 5.74992C2.78954 5.37395 2.83889 5.10717 2.94982 4.87956C3.12559 4.51891 3.40585 4.22591 3.75081 4.04216C4.14299 3.83325 4.65675 3.83325 5.68351 3.83325H16.3168C17.3436 3.83325 17.8563 3.83325 18.2484 4.04216C18.5934 4.22591 18.8746 4.51891 19.0504 4.87956C19.1613 5.10717 19.2106 5.37395 19.2325 5.74992M19.2325 5.74992H19.25M13.75 10.5416L10.0833 14.3749L8.25 12.4583" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>  Subject Area
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Course
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M12 9.7998V19.9998M12 9.7998C12 8.11965 12 7.27992 12.327 6.63818C12.6146 6.0737 13.0732 5.6146 13.6377 5.32698C14.2794 5 15.1196 5 16.7998 5H19.3998C19.9599 5 20.2401 5 20.454 5.10899C20.6422 5.20487 20.7948 5.35774 20.8906 5.5459C20.9996 5.75981 21 6.04004 21 6.6001V15.4001C21 15.9601 20.9996 16.2398 20.8906 16.4537C20.7948 16.6419 20.6425 16.7952 20.4543 16.8911C20.2406 17 19.961 17 19.402 17H16.5693C15.6301 17 15.1597 17 14.7334 17.1295C14.356 17.2441 14.0057 17.4317 13.701 17.6821C13.3568 17.965 13.096 18.3557 12.575 19.1372L12 19.9998M12 9.7998C12 8.11965 11.9998 7.27992 11.6729 6.63818C11.3852 6.0737 10.9263 5.6146 10.3618 5.32698C9.72004 5 8.87977 5 7.19961 5H4.59961C4.03956 5 3.75981 5 3.5459 5.10899C3.35774 5.20487 3.20487 5.35774 3.10899 5.5459C3 5.75981 3 6.04004 3 6.6001V15.4001C3 15.9601 3 16.2398 3.10899 16.4537C3.20487 16.6419 3.35774 16.7952 3.5459 16.8911C3.7596 17 4.03901 17 4.59797 17H7.43073C8.36994 17 8.83942 17 9.26569 17.1295C9.64306 17.2441 9.99512 17.4317 10.2998 17.6821C10.6426 17.9638 10.9017 18.3526 11.4185 19.1277L12 19.9998" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>    Course
                                                         </Typography>
                                                     </TableCell>
+
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Intake
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
+  <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>   Intake
                                                         </Typography>
                                                     </TableCell>
-                                                    <TableCell>
+
+
+                                                 {/*    <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Stage v
+                                                            Stage 
+                                                        </Typography>
+                                                    </TableCell>
+*/}
+
+                                                    <TableCell>
+                                                        <Typography sx={{ color: 'black' }} fontWeight="bold">
+                                                           
                                                         </Typography>
                                                     </TableCell>
                                                 </TableRow>
@@ -267,28 +285,32 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                 <TableCell>{obj?.subject_area?.name}</TableCell>
                                                                 <TableCell>{obj?.course}</TableCell>
                                                                 <TableCell>{obj?.intake?.name}</TableCell>
-                                                                <TableCell>{obj?.stage?.name}</TableCell>
-                                                                <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell>
+                                                                {/* <TableCell>{obj?.stage?.name}</TableCell>*/}
+                                                        
                                                                 <TableCell >
-                                                                    {isRowExpanded(obj?.id) ? (
-                                                                        <ExpandLess
-                                                                            onClick={() => handleExpand(obj)}
-                                                                            sx={{ color: blue[400], cursor: 'pointer' }}
-                                                                            fontSize='small'
-                                                                        />
-                                                                    ) : (
-                                                                        <ExpandMore
-                                                                            onClick={() => handleExpand(obj)}
-                                                                            sx={{ color: blue[400], cursor: 'pointer' }}
-                                                                            fontSize='small'
-                                                                        />
+
+                                                                {/* <Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />*/}
+
+                                                                <svg onClick={() => handleEditDocument(obj?.id)} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+
+                                                                    {isRowExpanded(obj?.id) ? ( 
+                                                                        <><svg onClick={() => handleExpand(obj)} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+  <path d="M9 18C4.02944 18 -6.10673e-07 13.9706 -3.93402e-07 9C-1.76132e-07 4.02944 4.02944 -6.10673e-07 9 -3.93402e-07C13.9706 -1.76132e-07 18 4.02944 18 9C18 13.9706 13.9706 18 9 18Z" fill="#BF70CC"/>
+  <path d="M12 8L9.5 11L7 8" stroke="white" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/></svg></>
+                                                                    ) : ( 
+                                                                        <><svg onClick={() => handleExpand(obj)} xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                                                        <path d="M9 18C4.02944 18 -6.10673e-07 13.9706 -3.93402e-07 9C-1.76132e-07 4.02944 4.02944 -6.10673e-07 9 -3.93402e-07C13.9706 -1.76132e-07 18 4.02944 18 9C18 13.9706 13.9706 18 9 18Z" fill="#0047CD"/>
+                                                                        <path d="M12 8L9.5 11L7 8" stroke="white" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round"/></svg></>
                                                                     )}
                                                                 </TableCell>                                                                
                                                               
                                                             </TableRow>
                                                             {isRowExpanded(obj.id) && (
                                                                 // <TableRow>
-                                                                <TableCell colSpan={4} style={{ padding: 0, borderTop: 'none' }} >
+                                                                <TableCell colSpan={5} style={{ padding: 0, borderTop: 'none' }} >
                                                                     <Grid container p={1} style={{ width: '100%', height: 250 }}>
                                                                         <Grid item p={1} sx={{ border: '1px solid grey', marginRight: 1 }} md={3.8} style={{ display: 'flex', flexDirection: 'column' }}>
                                                                             <Grid sx={{ borderBottom: '1px solid grey', marginRight: 1 }}>
