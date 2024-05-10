@@ -8,6 +8,7 @@ import DateInput from '@/Form/DateInput';
 import SelectX from '@/Form/SelectX';
 import TextInput from '@/Form/TextInput';
 import { useState } from 'react';
+import AsyncSelect from "react-select/async";
 
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -105,7 +106,6 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e, }).then(response => {
-            console.log(response);
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -136,15 +136,15 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             phone_number: data?.phone,
             date_of_birth: dob,
             address: data?.address,
-            zipcode: data?.zip,
-            state: data?.state,
-            // temproary
-            country_id: data?.country_of_birth?.id,
+            
+            intake_id:data?.intake?.id,
+            country_of_birth_id: data?.country_of_birth?.id,
+            country_of_residence_id:data?.country_of_residence?.id,
             alternate_phone_number: data?.alt_phone,
             whatsapp_number: data?.whatsapp
         }
 
-        // console.log(dataToSubmit);
+        console.log(dataToSubmit);
 
         let action;
 
@@ -156,7 +156,6 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
         }
 
         action.then((response) => {
-            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(`Applicant Has Been Successfully ${editId > 0 ? 'Updated' : 'Created'} `)
                 reset()
@@ -261,7 +260,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             setValue('email', details?.email)
             setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
             setValue('alt_phone', `${details?.alternate_phone_country_code}${details?.alternate_phone_number}`)
-            setValue('whatsapp', `+${details?.whatsapp_country_code}${details?.whatsapp_number}`)
+            setValue('whatsapp', `${details?.whatsapp_country_code}${details?.whatsapp_number}`)
 
             setValue('country_of_residence', details?.country)
             setValue('country_of_birth', details?.country)
@@ -296,7 +295,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             // setValue('last_name', data?.last_name)
             setValue('email', data?.email)
 
-            setValue('phone', `+${data?.phone_number}`)
+            setValue('phone', `${data?.phone_number}`)
             // setPhone(data?.phone_number)
             // setCode(data?.phone_country_code)
 
@@ -312,12 +311,19 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
             setValue('address', data?.address)
             setValue('country', data?.country)
-            setValue('state', data?.state)
 
-            setValue('zip', data?.zipcode)
+            setValue('intake',data?.intake)
 
+            setValue('country_of_birth', data?.country_of_birth)
+            setValue('country_of_residence', data?.country_of_residence)
+           
         }
         setDataLoading(false)
+    }
+
+    const handleinTakeChange = (data) => {
+        setValue('intake', data || '')
+
     }
 
 
@@ -438,7 +444,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Phone Number </a>
+                                                <a className='form-text'>Phone Number</a>
                                             </Grid>
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <PhoneInput
@@ -472,7 +478,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                             <Grid item xs={12} md={4}>
-                                                <Typography sx={{ fontWeight: '500' }}>Alternate Mobile Number</Typography>
+                                                <a className='form-text'>Alternate Mobile Number</a>
                                             </Grid>
                                             <Grid item xs={12} md={8}>
                                                 <PhoneInput
@@ -508,7 +514,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                             <Grid item xs={12} md={4}>
-                                                <Typography sx={{ fontWeight: '500' }}>Whatsapp Number</Typography>
+                                                <a className='form-text'>Whatsapp Number</a>
                                             </Grid>
                                             <Grid item xs={12} md={8}>
                                                 <PhoneInput
@@ -539,6 +545,25 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
                                                 />
                                                 {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
 
+                                            </Grid>
+                                        </Grid>
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>Intake</a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <AsyncSelect
+                                                    name={'intake'}
+                                                    defaultValue={watch('intake')}
+                                                    // isClearable
+                                                    defaultOptions
+                                                    loadOptions={fetchIntakes}
+                                                    getOptionLabel={(e) => e.name}
+                                                    getOptionValue={(e) => e.id}
+                                                    onChange={handleinTakeChange}
+                                                />
+                                                {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
                                             </Grid>
                                         </Grid>
 
@@ -586,7 +611,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Date Of Birth </a>
+                                                <a className='form-text'>Date of Birth </a>
                                             </Grid>
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <DateInput

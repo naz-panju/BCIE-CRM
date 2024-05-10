@@ -178,9 +178,9 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
                     <h2>Communication Log</h2>
-                    <div className='timeline-top-right-block'>
+                    {/* <div className='timeline-top-right-block'>
                         <Button onClick={handlePhoneCallOpen} variant='outlined'>Add Phone Call Summary</Button>
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className='timeline-content-block-item flex'>

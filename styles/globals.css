@@ -151,7 +151,7 @@ button[type="submit"]:hover {
 .sidebar {
   min-width: 276px;
   max-width: 276px;
-  background: #0d1c40;
+  background: #0B0D23;
   color: #fff;
   transition: all 0.3s;
   position: fixed;
@@ -461,7 +461,7 @@ ul#menuList li {
   position: absolute;
   height: 1.5px;
   width: 50%;
-  background: #0d1c40;
+  background: #0B0D23;
   border-radius: 6px;
   opacity: 1;
   left: 20%;
