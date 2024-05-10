@@ -138,17 +138,23 @@ function StudentDetail({ data, handleEdit, loading }) {
                                 }
                             </div>
 
-                            <div className="lead-details-list">
-                                <label className='title'>Intake </label> {student?.intake?.name}
-                            </div>
+                            {
+                                student?.intake &&
+                                <div className="lead-details-list">
+                                    <label className='title'>Intake </label> {student?.intake?.name}
+                                </div>
+                            }
 
                             <div className="lead-details-list">
                                 <label className='title'>Date Of Birth </label> {moment(student?.date_of_birth).format('DD-MM-YYYY')}
                             </div>
 
-                            <div className="lead-details-list">
-                                <label className='title'>Address</label> {student?.address}
-                            </div>
+                            {
+                                student?.address &&
+                                <div className="lead-details-list">
+                                    <label className='title'>Address</label> {student?.address}
+                                </div>
+                            }
 
                             {
                                 student?.country_of_birth &&

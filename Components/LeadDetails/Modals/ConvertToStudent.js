@@ -266,6 +266,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             setValue('country_of_birth', details?.country)
             // setValue('state', details?.state)
 
+
             setValue('preffered_country', details?.preferred_countries)
             setValue('preffered_course_level', details?.course_level)
             setValue('preffered_course', details?.preferred_course)

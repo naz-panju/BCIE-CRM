@@ -116,8 +116,6 @@ function LeadDetails() {
     setNoteId(0)
   }
 
-  console.log(details)
-
   const handleCloseAdmission = () => {
     setconfirmLoading(true)
     let dataToSubmit = {
@@ -409,7 +407,30 @@ function LeadDetails() {
 
                     <div className='vari-left'>
                       <div className='vari-left-cap'>
-                        <h5>10%</h5>
+                        {
+                          stages?.map((obj, index) => {
+                            let ind;
+                            ind = stages.findIndex(obj =>
+                              obj.sub_stages.some(subStage =>
+                                subStage.name === details?.stage.name
+                              ) || obj.name === details?.stage.name
+                            );
+                            let finalIndex;
+                            if (ind >= 0) {
+                              finalIndex = ind + 1
+                            } else {
+                              ind = stages.findIndex(obj => obj?.name == details?.stage?.name)
+                              finalIndex = ind + 1
+                            }
+
+                            return (
+
+                              ind == index &&
+                              <h5 key={index}>{finalIndex / stages?.length * 100}%</h5>
+                            )
+                          })
+                        }
+
                         <label>Complete</label>
                       </div>
                       <svg xmlns="http://www.w3.org/2000/svg" width="129" height="129" viewBox="0 0 129 129" fill="none">
@@ -472,9 +493,7 @@ function LeadDetails() {
                         <li >   </li>
                         <li > </li> */}
                       </ul>
-                      {
-                        console.log(stageLength)
-                      }
+
                       {
                         stages?.map((obj, index) => {
                           let ind;
@@ -487,7 +506,7 @@ function LeadDetails() {
                           if (ind >= 0) {
                             finalIndex = ind + 1
                           } else {
-                            ind=stages.findIndex(obj=>obj?.name==details?.stage?.name)
+                            ind = stages.findIndex(obj => obj?.name == details?.stage?.name)
                             finalIndex = ind + 1
                           }
 
@@ -496,7 +515,7 @@ function LeadDetails() {
                             ind == index &&
 
 
-                            <div key={index} style={{ width: `${finalIndex / stages?.length * 100}%` }} className='track-range'>{console.log(ind + 1, stages?.length)}
+                            <div key={index} style={{ width: `${finalIndex / stages?.length * 100}%` }} className='track-range'>
                             </div>
                           )
                         })

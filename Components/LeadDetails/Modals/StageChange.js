@@ -47,11 +47,6 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
     const items = [
         { label: 'Title' },
         { label: 'Due Date' },
-        { label: 'Assigned To' },
-        { label: 'Reviewer' },
-        { label: 'Priority' },
-        { label: 'Description', multi: true },
-
     ]
 
     const anchor = 'right'; // Set anchor to 'right'
@@ -59,22 +54,27 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
 
+    const [optionLoading, setoptionLoading] = useState(false)
 
     const fetchStages = (e) => {
+        // setoptionLoading(true)
         return ListingApi.stages({ keyword: e, type: 'student' }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 setstages(response.data.data)
+                // setoptionLoading(false)
                 return response.data.data;
             } else {
                 return [];
             }
         })
+        // setoptionLoading(false)
     }
 
     const fetchSubStages = (e) => {
-        return ListingApi.substages({ keyword: e }).then(response => {
+        return ListingApi.stages({ keyword: watch('stage')?.name }).then(response => {
+            console.log(response?.data?.data[0]?.sub_stages);
             if (typeof response.data.data !== "undefined") {
-                return response.data.data;
+                return response.data.data[0]?.sub_stages;
             } else {
                 return [];
             }
@@ -163,29 +163,24 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
         for (const item of stages) {
             // Check if details.sub_stages is a sub stage of the current item
             if (item.sub_stages.some(subStage => subStage?.id === detailsSubStages?.id)) {
-                console.log(item); // If found, return true
                 setValue('stage', item);
                 setsubStages(item?.sub_stages);
                 setValue('subStage', details?.stage);
                 setrefreshKey(Math.random() * 0.12);
-                // If found, perform necessary operations and return
-                return true;
+                
             }
         }
 
         // If not found, perform necessary operations and return false
-        setValue('stage', detailsSubStages);
-        setrefreshKey(Math.random() * 0.12);
-        return false;
+        // setValue('stage', detailsSubStages);
+        // setrefreshKey(Math.random() * 0.12);
+        // return false;
     }
 
 
 
     const initialValues = () => {
         isSubStage(details?.stage)
-        // setValue('stage', details?.stage)
-        // setValue('subStage', details?.substage)
-        console.log(details);
     }
 
     const handleStageChange = (data) => {
@@ -201,15 +196,14 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
             setOpen(true)
         } else if (editId == 0) {
             setOpen(true)
-            initialValues()
         }
     }, [editId])
 
     useEffect(() => {
-        if (editId == 0) {
+        if (editId === 0 && !watch('stage')) {
             initialValues()
         }
-    }, [])
+    }, [stages])
 
 
     return (
@@ -234,7 +228,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
                             {
-                                dataLoading ?
+                                optionLoading ?
                                     <LoadingEdit item={items} />
                                     :
                                     <>

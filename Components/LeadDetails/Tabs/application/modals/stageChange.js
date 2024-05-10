@@ -183,10 +183,12 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
-            setValue('stage', details?.stage)
+            isSubStage()
+            // setValue('stage', details?.stage)
         } else if (editId == 0) {
             setOpen(true)
-            setValue('stage', details?.stage || '')
+            isSubStage()
+            // setValue('stage', details?.stage || '')
         }
     }, [editId])
 

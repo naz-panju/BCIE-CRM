@@ -149,16 +149,6 @@ function LeadDetail({ data, handleEdit, loading }) {
                             </div>
 
 
-
-                            {
-                                data?.note &&
-                                <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Note </label>: {data?.note}
-                                </div>
-                            }
-
-
-
                             {
                                 data?.country &&
                                 <div className="lead-details-list">
@@ -166,39 +156,30 @@ function LeadDetail({ data, handleEdit, loading }) {
                                 </div>
                             }
 
-
-
-
                             {
                                 data?.state &&
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>State </label> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
-                                        <path d="M9 4.71826L3 7.68575V20.5449L9 17.5774M9 4.71826V17.5774M9 4.71826L15 7.68575M9 17.5774L15 20.5449M15 20.5449L21 18.5666V5.70743L15 7.68575M15 20.5449V7.68575" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg> {data?.state}
+                                    <label style={{ fontWeight: 'bold' }}>State </label> {data?.state}
                                 </div>
                             }
 
                             <div>
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Preferred Courses </label> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
-                                        <path d="M12 8.00461C10.4414 5.95078 5.80377 5.85119 2 6.84283V20.3579C4.69417 19.1105 9.5481 18.7094 12 20.7913M12 8.00461V20.7913M12 8.00461C13.5586 5.95078 18.1962 5.85119 22 6.84283V20.3579C19.3058 19.1105 14.4519 18.7094 12 20.7913" stroke="#0B0D23" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg> {data?.preferred_course}
+                                    <label style={{ fontWeight: 'bold' }}>Preferred Course Level </label>  {data?.course_level?.name}
                                 </div>
                             </div>
 
                             <div>
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Preferred Course Level </label> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
-                                        <path d="M12 8.00461C10.4414 5.95078 5.80377 5.85119 2 6.84283V20.3579C4.69417 19.1105 9.5481 18.7094 12 20.7913M12 8.00461V20.7913M12 8.00461C13.5586 5.95078 18.1962 5.85119 22 6.84283V20.3579C19.3058 19.1105 14.4519 18.7094 12 20.7913" stroke="#0B0D23" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg> {data?.course_level?.name}
+                                    <label style={{ fontWeight: 'bold' }}>Preferred Courses </label> {data?.preferred_course}
                                 </div>
                             </div>
 
+
+
                             <div>
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Preferred Countries </label> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
-                                        <path d="M12 8.00461C10.4414 5.95078 5.80377 5.85119 2 6.84283V20.3579C4.69417 19.1105 9.5481 18.7094 12 20.7913M12 8.00461V20.7913M12 8.00461C13.5586 5.95078 18.1962 5.85119 22 6.84283V20.3579C19.3058 19.1105 14.4519 18.7094 12 20.7913" stroke="#0B0D23" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg> {data?.preferred_countries}
+                                    <label style={{ fontWeight: 'bold' }}>Preferred Countries </label> {data?.preferred_countries}
                                 </div>
                             </div>
 
@@ -240,7 +221,12 @@ function LeadDetail({ data, handleEdit, loading }) {
                                 </div>
                             }
 
-
+                            {
+                                data?.note &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Note </label> {data?.note}
+                                </div>
+                            }
 
 
 

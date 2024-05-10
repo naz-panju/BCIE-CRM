@@ -67,7 +67,7 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh,handleStudentModalOpen,setFollowRefresh,followRefresh,phoneCallRefresh, setphoneCallRefresh }) {
+export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
@@ -113,7 +113,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
       icon: <ChecklistIcon />
     },
     {
-      label: 'Communication Logs', 
+      label: 'Communication Logs',
       component: <LeadCommunicationLog refresh={refresh} from='lead' lead_id={data?.id} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} />,
       icon: <ChatBubbleOutlineIcon />
     },
@@ -178,9 +178,12 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
         >
           {
             TabData?.map((obj, index) => (
-              <Tab key={index} className='lead-tab-item' icon={obj?.icon} label={obj?.label} {...a11yProps(index)} />
+              <Tab key={index} className='lead-tab-item' label={obj?.label} {...a11yProps(index)} />
+
             ))
           }
+
+          {/* icon={obj?.icon} */}
         </Tabs>
         {
           TabData?.map((obj, index) => (
