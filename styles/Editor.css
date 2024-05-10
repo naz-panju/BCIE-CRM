@@ -112,6 +112,9 @@
 .w-100{
     width: 100%;
 }
+button, a{
+    cursor: pointer;
+}
 /***** flex *****/
 
 .justify-content-between {
@@ -736,7 +739,7 @@ font-weight: 400;
 line-height: 30px; /* 125% */
 }
 .vari-right{
-    min-width: 130px;
+    min-width: 134px;
 }
 
 .vari-right a{
@@ -1006,6 +1009,7 @@ line-height: 20px; /* 66.667% */
   .app_tab_cntr tbody td:last-child svg {
     display: inline-block;
     margin-left: 10px;
+    cursor: pointer;
   }
 
 .app_tab_cntr tbody tr{
@@ -1013,6 +1017,96 @@ line-height: 20px; /* 66.667% */
 background:  #FFF;
 margin:10px 0;
 }
+.appl_act_cntr{
+    padding: 20px;
+    background:  #FFF;
+    border-radius: 0 0 3px 3px;
+    position: relative;
+    top: -10px;
+    border-top: 1px solid rgba(224, 224, 224, 1);
+}
+
+.app_list{
+    border-radius: 3px;
+background: #EEF6FF;
+padding: 18px;
+}
+.app_list h3{
+    color: #0B0D23;
+    font-family: Inter;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 10px; /* 76.923% */
+    margin-bottom: 20px;
+}
+.app_list h3 svg{
+    display: inline-block;
+}
+.app_list ul li{  
+    display: inline-block;
+    width: 50%;
+    margin-bottom: 10px;
+    color: #0B0D23;
+font-family: Inter;
+font-size: 13px;
+font-style: normal;
+font-weight: 500;
+line-height: 10px; /* 76.923% */
+}
+.app_list ul li span{  
+    border-radius: 4px;
+    background: #0B0D23;
+    color: var(--icon-color, #FFF);
+font-family: Inter;
+font-size: 13px;
+font-style: normal;
+font-weight: 400;
+line-height: 10px; /* 76.923% */
+padding: 10px;
+width: 92px;
+text-align: center;
+display: inline-block;
+}
+.app_list ul li span.spn2{   
+    background: #A6E9A9;
+    color: var(--icon-color, #0B0D23); 
+}
+.app_list button{   
+    display: inline-block;
+    margin-top: 50px;
+    color: #0B0D23;
+font-family: Inter;
+font-size: 11px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+border: 0;
+}
+.app_list button svg{   
+    display: inline-block;
+    
+}
+
+
+.app_list p{  
+    display:  block;
+ 
+    margin-bottom: 10px;
+    color: #0B0D23;
+font-family: Inter;
+font-size: 13px;
+font-style: normal;
+font-weight: 500;
+line-height: 10px; /* 76.923% */
+}
+
+
+
+
+
+
+
 
 
 

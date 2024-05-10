@@ -311,41 +311,50 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                             {isRowExpanded(obj.id) && (
                                                                 // <TableRow>
                                                                 <TableCell colSpan={5} style={{ padding: 0, borderTop: 'none' }} >
-                                                                    <Grid container p={1} style={{ width: '100%', height: 250 }}>
-                                                                        <Grid item p={1} sx={{ border: '1px solid grey', marginRight: 1 }} md={3.8} style={{ display: 'flex', flexDirection: 'column' }}>
-                                                                            <Grid sx={{ borderBottom: '1px solid grey', marginRight: 1 }}>
-                                                                                <Typography variant="body1" style={{ color: blue[400], fontSize: '1.2em', textAlign: 'center' }}>
-                                                                                    University Deposit
-                                                                                </Typography>
-                                                                            </Grid>
-                                                                            <Grid mt={2}>
-                                                                                <Typography style={{ color: blue[400], fontSize: '14px' }}>
-                                                                                    Amt. Paid : <a style={{ color: 'black' }}> {obj?.deposit_amount_paid}</a>
-                                                                                </Typography>
-                                                                                <Typography style={{ color: blue[400], fontSize: '14px', marginTop: 5 }}>
-                                                                                    Date Paid : <a style={{ color: 'black' }}> {moment(obj?.deposit_paid_on).format('DD-MM-YYYY')}</a>
-                                                                                </Typography>
-                                                                            </Grid>
-                                                                            <Grid container style={{ marginTop: 'auto' }}>
-                                                                                <Grid item xs={12} display="flex" justifyContent="flex-end">
-                                                                                    <Button onClick={() => obj?.deposit_amount_paid ? handleDepositEdit(obj?.id) : handleDepositOpen} variant='outlined' size='small'>{obj?.deposit_amount_paid ? 'Edit' : 'Add'}</Button>
-                                                                                </Grid>
-                                                                            </Grid>
-                                                                        </Grid>
-                                                                        <Grid p={1} item sx={{ border: '1px solid grey', marginRight: 1 }} md={3.8}>
-                                                                            <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'} sx={{ borderBottom: '1px solid grey', marginRight: 1 }} >
-                                                                                <Typography variant="body1" style={{ color: blue[400], fontSize: '1.2em', textAlign: 'center' }}>
-                                                                                    Student Documents
-                                                                                </Typography>
-                                                                                <Download onClick={() => handleDownloadOpen(obj?.id)} sx={{ cursor: 'pointer' }} fontSize='small' />
-                                                                            </Grid>
+                                                                    <div className='appl_act_cntr' >
+                                                                    <div className='grid grid-cols-1 md:grid-cols-3 gap-6' > 
+
+
+
+                                                                        <div className='app_list'> 
+                                                                                <h3>  University Deposit </h3> 
+                                                                                <ul>
+                                                                                    <li >
+                                                                                        <span className='spn1'> Amt. Paid </span> 
+                                                                                    </li>
+                                                                                    <li  > 
+                                                                                    <a style={{ color: 'black' }}> {obj?.deposit_amount_paid}</a>
+                                                                                    </li> 
+                                                                                </ul> 
+
+                                                                                <ul>
+                                                                                    <li >
+                                                                                    <span  className='spn2'> Date Paid </span>
+                                                                                    </li>
+                                                                                    <li  > 
+                                                                                         <a style={{ color: 'black' }}> {moment(obj?.deposit_paid_on).format('DD-MM-YYYY')}</a>
+                                                                                    </li> 
+                                                                                </ul> 
+                                                                                <Button onClick={() => obj?.deposit_amount_paid ? handleDepositEdit(obj?.id) : handleDepositOpen}  >{obj?.deposit_amount_paid ? 'Edit' : 'Add'} <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+  <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></Button>   
+                                                                        </div>
+
+
+                                                                       <div className='app_list'> 
+                                                                       
+                                                                             <h3 className='d-flex align-items-center justify-content-between'>  <font>Student Documents </ font>
+                                                                             <Download onClick={() => handleDownloadOpen(obj?.id)} sx={{ cursor: 'pointer' }} fontSize='small' /> </h3> 
+                                                                       
+                                                                               
+                                                                             
 
                                                                             {
                                                                                 loading ?
                                                                                     loadInnerTable()
                                                                                     :
                                                                                     obj?.documents.length > 0 ?
-                                                                                        <Grid sx={{ overflowY: 'auto', maxHeight: 180 }} mt={1}>
+                                                                                        <p  >
                                                                                             {obj?.documents?.map((obj, index) => (
                                                                                                 <Grid key={index} display={'flex'} justifyContent={'space-between'} sx={{ mt: index !== 0 ? 1 : '' }}>
                                                                                                     <a target='_blank' href={obj?.document} style={{ color: 'blue', cursor: 'pointer' }} key={index} >{trimUrlAndNumbers(obj?.title || obj?.document_template?.name)}</a>
@@ -354,14 +363,19 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                                                 // <a key={index}>{obj?.title || obj?.document_template?.name}</a>
                                                                                             ))}
 
-                                                                                        </Grid>
+                                                                                        </p>
                                                                                         :
                                                                                         <Grid height={'90%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
                                                                                             <a>No Document Found</a>
                                                                                         </Grid>
 
                                                                             }
-                                                                        </Grid>
+                                                                        </div>
+
+
+
+
+
                                                                         <Grid p={1} item sx={{ border: '1px solid grey' }} md={3.8}>
                                                                             <Grid sx={{ borderBottom: '1px solid grey', marginRight: 1 }} >
                                                                                 <Typography variant="body1" style={{ color: blue[400], fontSize: '1.2em', textAlign: 'center' }}>
@@ -390,13 +404,15 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
                                                                             }
                                                                         </Grid>
-                                                                    </Grid>
-                                                                    <Grid pl={1} pb={0.5}>
+                                                                    </div>
+                                                                   
+                                                                    <div >
                                                                         <Button size='small' variant='contained' onClick={() => handleStageOpen(obj)} className='bg-sky-500 text-white hover:bg-sky-600 text-white' >Change Stage</Button>
                                                                         <Button size='small' variant='outlined' onClick={handleDeferOpen} sx={{ ml: 1 }}>Defer Intake</Button>
                                                                         <Button size='small' variant='outlined' onClick={handleMailOpen} sx={{ ml: 1 }}>Mail to University</Button>
                                                                         <Button size='small' variant='outlined' onClick={() => handleUniDocOpen(obj?.id)} sx={{ ml: 1 }}>Add Univer. Document</Button>
-                                                                    </Grid>
+                                                                    </div>
+                                                                     </div>
 
                                                                 </TableCell>
                                                                 // </TableRow>

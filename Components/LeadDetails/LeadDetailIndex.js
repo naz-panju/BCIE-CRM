@@ -167,7 +167,7 @@ function LeadDetails() {
     })
   }
 
-  const [openedPercentage, setopenedPercentage] = useState(stages.filter(obj => obj?.name === details?.stage?.name).length / stages.length * 100)
+ // const [openedPercentage, setopenedPercentage] = useState(stages.filter(obj => obj?.name === details?.stage?.name).length / stages.length * 100)
   // const openedPercentage = stages.filter(obj => obj?.name === details?.stage?.name).length / stages.length * 100;
 
   useEffect(() => {
@@ -441,9 +441,9 @@ function LeadDetails() {
                         <li >   </li>
                         <li > </li> */}
                       </ul>
-                      <div style={{ width: `${4 / stages.length * 100}%` }} className='track-range'>
+                    {/*  <div style={{ width: `${4 / stages.length * 100}%` }} className='track-range'>
 
-                      </div>
+                      </div> */}
                     </div>
                     <ul className='tract-names'>
                       {
