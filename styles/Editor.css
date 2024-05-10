@@ -601,7 +601,7 @@ display: inline-block;
 
 .nameInitials{
     background: rgb(18,42,255);
-    background: linear-gradient(151deg, rgba(18,42,255,1) 0%, rgba(190,47,184,1) 75%);
+    background: linear-gradient(145deg, #122AFF 20.62%, #EA68FF 93.46%, #BE2FB8 167.78%);
     width: 45px;
 height: 45px;
 color: #fff;
@@ -1081,7 +1081,7 @@ font-size: 11px;
 font-style: normal;
 font-weight: 400;
 line-height: normal;
-border: 0;
+border: 0 !important;
 }
 .app_list button svg{   
     display: inline-block;
@@ -1089,7 +1089,7 @@ border: 0;
 }
 
 
-.app_list p{  
+.app_list .stu-doc-item{  
     display:  block;
  
     margin-bottom: 10px;
@@ -1099,14 +1099,42 @@ font-size: 13px;
 font-style: normal;
 font-weight: 500;
 line-height: 10px; /* 76.923% */
+padding: 10px;
+border-radius: 3px;
+background: var(--icon-color, #FFF);
 }
 
+.app_list .stu-doc-item a{  
+     cursor: pointer;
+     color: #0B0D23;
+}
+.no-data-app{
+    padding: 50px 0 16px;
+    color: #6d6d6d;
+font-family: Inter;
+font-size: 13px;
+text-align: center;
+}
+.all_act_cntr{
+    margin-top: 20px;
+}
+.all_act_cntr button{
+    margin-right: 20px;
+    border-radius: 4px;
+background: #EAEBFA;
+padding: 8px 10px;
+color: #0B0D23;
+font-family: Inter;
+font-size: 11px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
 
-
-
-
-
-
+.all_act_cntr button svg{
+    display: inline-block;
+    margin-right: 5px;
+}
 
 
 

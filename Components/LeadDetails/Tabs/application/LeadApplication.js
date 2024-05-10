@@ -354,20 +354,24 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                                     loadInnerTable()
                                                                                     :
                                                                                     obj?.documents.length > 0 ?
-                                                                                        <p  >
+                                                                                        <div className='stu-doc-item'  >
                                                                                             {obj?.documents?.map((obj, index) => (
                                                                                                 <Grid key={index} display={'flex'} justifyContent={'space-between'} sx={{ mt: index !== 0 ? 1 : '' }}>
-                                                                                                    <a target='_blank' href={obj?.document} style={{ color: 'blue', cursor: 'pointer' }} key={index} >{trimUrlAndNumbers(obj?.title || obj?.document_template?.name)}</a>
-                                                                                                    {/* <Delete onClick={() => handleDeleteOpen(obj?.id)} fontSize='small' style={{ color: 'red', cursor: 'pointer' }} /> */}
+                                                                                                    <a target='_blank' href={obj?.document}  key={index} >{trimUrlAndNumbers(obj?.title || obj?.document_template?.name)}</a>
+                                                                                                      
+
+                                                                                                      <svg onClick={() => handleDeleteOpen(obj?.id)} xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15" fill="none">
+  <path d="M2.5 3.16667V11.6889C2.5 12.4979 2.5 12.9021 2.66349 13.211C2.8073 13.4828 3.0366 13.7042 3.31885 13.8427C3.6394 14 4.05925 14 4.89768 14H9.10232C9.94075 14 10.36 14 10.6805 13.8427C10.9628 13.7042 11.1929 13.4828 11.3367 13.211C11.5 12.9024 11.5 12.4985 11.5 11.6911V3.16667M2.5 3.16667H4M2.5 3.16667H1M4 3.16667H10M4 3.16667C4 2.49364 4 2.15729 4.11418 1.89185C4.26642 1.53792 4.55824 1.25655 4.92578 1.10995C5.20144 1 5.55109 1 6.25 1H7.75C8.44891 1 8.79837 1 9.07402 1.10995C9.44157 1.25655 9.7335 1.53792 9.88574 1.89185C9.99992 2.15729 10 2.49364 10 3.16667M10 3.16667H11.5M11.5 3.16667H13" stroke="#0B0D23" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
                                                                                                 </Grid>
                                                                                                 // <a key={index}>{obj?.title || obj?.document_template?.name}</a>
                                                                                             ))}
 
-                                                                                        </p>
+                                                                                        </div>
                                                                                         :
-                                                                                        <Grid height={'90%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
-                                                                                            <a>No Document Found</a>
-                                                                                        </Grid>
+                                                                                        <div className='no-data-app'>
+                                                                                        <a>No Document Found</a>
+                                                                                    </div>
 
                                                                             }
                                                                         </div>
@@ -376,41 +380,54 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
 
 
-                                                                        <Grid p={1} item sx={{ border: '1px solid grey' }} md={3.8}>
-                                                                            <Grid sx={{ borderBottom: '1px solid grey', marginRight: 1 }} >
-                                                                                <Typography variant="body1" style={{ color: blue[400], fontSize: '1.2em', textAlign: 'center' }}>
-                                                                                    University Documents
-                                                                                </Typography>
-                                                                            </Grid>
+                                                                        <div className='app_list'> 
+                                                                       
+                                                                             <h3 className='d-flex align-items-center justify-content-between'>  University Documents  </h3> 
+
+
+                                                                           
 
                                                                             {
                                                                                 docLoading ?
                                                                                     loadInnerTable()
                                                                                     :
                                                                                     obj?.university_documents?.length > 0 ?
-                                                                                        <Grid sx={{ overflowY: 'auto', maxHeight: 180 }} mt={1}>
+                                                                                    <div className='stu-doc-item'  >
                                                                                             {obj?.university_documents?.map((obj, index) => (
                                                                                                 <Grid key={index} display={'flex'} justifyContent={'space-between'} sx={{ mt: index !== 0 ? 1 : '' }}>
                                                                                                     <a target='_blank' href={obj?.document} style={{ color: 'blue', cursor: 'pointer' }} key={index} >{trimUrlAndNumbers(obj?.document_template?.name)}</a>
-                                                                                                    <Delete onClick={() => handleDeleteOpen(obj?.id)} fontSize='small' style={{ color: 'red', cursor: 'pointer' }} />
+                                                                                                     <svg onClick={() => handleDeleteOpen(obj?.id)} xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15" fill="none">
+  <path d="M2.5 3.16667V11.6889C2.5 12.4979 2.5 12.9021 2.66349 13.211C2.8073 13.4828 3.0366 13.7042 3.31885 13.8427C3.6394 14 4.05925 14 4.89768 14H9.10232C9.94075 14 10.36 14 10.6805 13.8427C10.9628 13.7042 11.1929 13.4828 11.3367 13.211C11.5 12.9024 11.5 12.4985 11.5 11.6911V3.16667M2.5 3.16667H4M2.5 3.16667H1M4 3.16667H10M4 3.16667C4 2.49364 4 2.15729 4.11418 1.89185C4.26642 1.53792 4.55824 1.25655 4.92578 1.10995C5.20144 1 5.55109 1 6.25 1H7.75C8.44891 1 8.79837 1 9.07402 1.10995C9.44157 1.25655 9.7335 1.53792 9.88574 1.89185C9.99992 2.15729 10 2.49364 10 3.16667M10 3.16667H11.5M11.5 3.16667H13" stroke="#0B0D23" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
                                                                                                 </Grid>
                                                                                             ))}
 
-                                                                                        </Grid>
+                                                                                        </div>
                                                                                         :
-                                                                                        <Grid height={'90%'} display={'flex'} alignItems={'center'} justifyContent={'center'}>
+                                                                                        <div className='no-data-app'>
                                                                                             <a>No Document Found</a>
-                                                                                        </Grid>
+                                                                                        </div>
 
                                                                             }
-                                                                        </Grid>
+
+<Button size='small' variant='outlined' onClick={() => handleUniDocOpen(obj?.id)} sx={{ ml: 1 }}> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+  <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> Add Univer. Document</Button>
+
+                                                                        </div>
                                                                     </div>
                                                                    
-                                                                    <div >
-                                                                        <Button size='small' variant='contained' onClick={() => handleStageOpen(obj)} className='bg-sky-500 text-white hover:bg-sky-600 text-white' >Change Stage</Button>
-                                                                        <Button size='small' variant='outlined' onClick={handleDeferOpen} sx={{ ml: 1 }}>Defer Intake</Button>
-                                                                        <Button size='small' variant='outlined' onClick={handleMailOpen} sx={{ ml: 1 }}>Mail to University</Button>
-                                                                        <Button size='small' variant='outlined' onClick={() => handleUniDocOpen(obj?.id)} sx={{ ml: 1 }}>Add Univer. Document</Button>
+                                                                    <div className='all_act_cntr'>
+                                                                        <Button  onClick={() => handleStageOpen(obj)}  ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+  <path d="M5 6.00008V13.9044C5 15.0386 5 15.6056 5.1701 15.9526C5.48537 16.5959 6.17631 16.9656 6.88639 16.8711C7.2695 16.8201 7.74136 16.5055 8.68508 15.8764L8.68735 15.8749C9.0614 15.6255 9.24846 15.5008 9.44413 15.4316C9.80351 15.3046 10.1956 15.3046 10.555 15.4316C10.7511 15.5009 10.9389 15.6261 11.3144 15.8765C12.2582 16.5057 12.7305 16.82 13.1137 16.871C13.8237 16.9654 14.5146 16.5959 14.8299 15.9526C15 15.6056 15 15.0384 15 13.9044V5.99734C15 5.06575 15 4.59925 14.8185 4.24308C14.6587 3.92948 14.4031 3.6747 14.0895 3.51491C13.733 3.33325 13.2669 3.33325 12.3335 3.33325H7.66683C6.73341 3.33325 6.26635 3.33325 5.90983 3.51491C5.59623 3.6747 5.34144 3.92948 5.18166 4.24308C5 4.5996 5 5.06666 5 6.00008Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> Change Stage</Button>
+                                                                        <Button   onClick={handleDeferOpen}  > <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+  <path d="M1 5.66667H13M1 5.66667V12.5113C1 13.3825 1 13.8178 1.16349 14.1506C1.3073 14.4433 1.5366 14.6815 1.81885 14.8306C2.1394 15 2.55925 15 3.39768 15H10.6023C11.4408 15 11.86 15 12.1805 14.8306C12.4628 14.6815 12.6929 14.4433 12.8367 14.1506C13 13.8182 13 13.3834 13 12.5139V5.66667M1 5.66667V5.0446C1 4.1734 1 3.73748 1.16349 3.40473C1.3073 3.11203 1.5366 2.87424 1.81885 2.7251C2.13972 2.55556 2.56007 2.55556 3.40015 2.55556H4M13 5.66667V5.04204C13 4.17255 13 3.73716 12.8367 3.40473C12.6929 3.11203 12.4628 2.87424 12.1805 2.7251C11.8597 2.55556 11.4402 2.55556 10.6001 2.55556H10M10 1V2.55556M10 2.55556H4M4 1V2.55556" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> Defer Intake</Button>
+                                                                        <Button   onClick={handleMailOpen}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
+  <path d="M1 3.57143L7.91849 8.01903C8.5773 8.44255 9.4227 8.44255 10.0815 8.01903L17 3.57143M3 13H15C16.1046 13 17 12.1046 17 11V3C17 1.89543 16.1046 1 15 1H3C1.89543 1 1 1.89543 1 3V11C1 12.1046 1.89543 13 3 13Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg> Mail to University</Button>
+                                                                       
                                                                     </div>
                                                                      </div>
 
