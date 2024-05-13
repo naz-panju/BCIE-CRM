@@ -714,7 +714,7 @@ function LeadDetails() {
                       </svg> Assigned Counsellor</h4>
                       <div className='lead-communication-status-bg lead-hit-auto assigned'>
 
-                        <p> {details?.assignedToUser?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToUser?.name)}</span>} {details?.assignedToUser?.name || 'NA'}</p>
+                        <p> {details?.assignedToCounsellor?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToCounsellor?.name)}</span>} {details?.assignedToCounsellor?.name || 'NA'}</p>
 
                       </div>
                     </div>
