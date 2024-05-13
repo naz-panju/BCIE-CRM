@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from 'react';
-import { Grid, IconButton, TextField, Tooltip } from '@mui/material';
+import { Drawer, Grid, IconButton, TextField, Tooltip } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Close, Delete } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
@@ -33,7 +33,7 @@ const style = {
 };
 
 
-export default function AssignLeadModal({ selected, setSelected, editId, setEditId, handleRefresh, handlePopClose, setsingle, single ,assignToUser, setassignToUser}) {
+export default function AssignLeadModal({ selected, setSelected, editId, setEditId, handleRefresh, handlePopClose, setsingle, single, assignToUser, setassignToUser }) {
     const scheme = yup.object().shape({
 
         // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -50,9 +50,26 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
     const [selectedoption, setseletctedoption] = useState()
 
+    const anchor = 'right'; // Set anchor to 'right'
+
+
+    const handleDrawerClose = (event) => {
+        if (
+            event.type === 'keydown' &&
+            (event.key === 'Tab' || event.key === 'Shift')
+        ) {
+            return;
+        }
+        // Check if the close icon was clicked
+        if (event.target.tagName === 'svg') {
+            setOpen(false);
+        }
+    };
+
     const handleClose = () => {
         setValue('counsellor', '')
         setValue('counsellors', '')
+        setValue('branch', '')
         handlePopClose()
         setsingle(false)
         setassignToUser()
@@ -64,7 +81,17 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
 
     const fetchCounsellor = (e) => {
-        return ListingApi.users({ keyword: e }).then(response => {
+        return ListingApi.users({ keyword: e, branch_id: watch('branch')?.id }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchBranches = (e) => {
+        return ListingApi.office({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data;
             } else {
@@ -78,7 +105,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
         let dataToSubmit;
         if (selectedoption == 1) {
-            console.log(watch('counsellors'));
+            // console.log(watch('counsellors'));
             if (!watch('counsellors')) {
                 toast.error('Please Select Counsellors')
                 setLoading(false)
@@ -91,12 +118,12 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
                 dataToSubmit = {
                     users: counsellorIds,
-                    leads: selected
+                    leads: selected,
+                    assign_to_office_id: watch('branch')?.id
                 }
 
-                // console.log(dataToSubmit);
                 LeadApi.roundRobin(dataToSubmit).then((response) => {
-                    console.log(response);
+                    // console.log(response);
                     if (response?.status == 200 || response?.status == 201) {
                         toast.success(response?.data?.message)
                         handleClose()
@@ -124,10 +151,12 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
             } else {
                 dataToSubmit = {
                     user_id: watch('counsellor')?.id,
-                    leads: selected
+                    leads: selected,
+                    assign_to_office_id: watch('branch')?.id
                 }
+                // console.log(dataToSubmit)
                 LeadApi.bulkAssign(dataToSubmit).then((response) => {
-                    // console.log(response);
+                    console.log(response);
                     if (response?.status == 200 || response?.status == 201) {
                         toast.success(response?.data?.message)
                         handleClose()
@@ -152,6 +181,10 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
     const handleCouncsellorChange = (e) => {
         setValue('counsellor', e || '');
+    }
+
+    const handleBranchChange = (e) => {
+        setValue('branch', e || '');
     }
 
     const handleBulkCouncsellorChange = (e) => {
@@ -180,7 +213,8 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
         if (editId > 0) {
             setOpen(true)
             setseletctedoption(2)
-            setValue('counsellor',assignToUser)
+            setValue('branch', assignToUser?.assignedToOffice)
+            setValue('counsellor', assignToUser?.assignedToCounsellor)
         } else if (editId == 0) {
             setOpen(true)
             if (single) {
@@ -193,16 +227,12 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
     return (
         <div>
 
-            <Modal
+            <Drawer
+                anchor={anchor}
                 open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                BackdropProps={{
-                    onClick: null, // Prevent closing when clicking outside
-                }}
+                onClose={handleDrawerClose}
             >
-                <Box sx={style}>
+                <Grid p={1} width={550}>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             Assign
@@ -219,11 +249,31 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                             return <DynamicChip color='primary' key={obj.id} name={obj.name} id={obj.id} active={selectedoption} onChipCLick={handleOptionChange} />
                         })}
                     </Grid>
+                    {
+                        selectedoption &&
+                        <Grid container>
+                            <Grid item mt={2} mb={1} md={12}>
+                                <AsyncSelect
+                                    placeholder='Select Branch'
+                                    name={'branch'}
+                                    defaultValue={watch('branch')}
+                                    isClearable
+                                    defaultOptions
+                                    loadOptions={fetchBranches}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    onChange={handleBranchChange}
+                                />
+                                {errors.branch && <span className='form-validation'>{errors.branch.message}</span>}
+
+                            </Grid>
+                        </Grid>
+                    }
 
                     {
-                        selectedoption == 1 &&
+                        (selectedoption == 1 && watch('branch')) &&
                         <Grid container>
-                            <Grid item mt={2} mb={2} md={12}>
+                            <Grid item mt={1} mb={2} md={12}>
                                 <AsyncSelect
                                     isMulti
                                     placeholder='Select Counsellors'
@@ -244,9 +294,9 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
 
                     {
-                        selectedoption == 2 &&
+                        (selectedoption == 2 && watch('branch')) &&
                         <Grid container>
-                            <Grid item mt={2} mb={2} md={12}>
+                            <Grid item mt={1} mb={2} md={12}>
                                 <AsyncSelect
                                     placeholder='Select Counsellor'
                                     name={'counsellor'}
@@ -288,8 +338,8 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                             Submit
                         </LoadingButton>
                     </Grid>
-                </Box>
-            </Modal>
+                </Grid>
+            </Drawer>
         </div>
     );
 }

@@ -534,6 +534,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                         onRequestSort={handleRequestSort}
                                         rowCount={list?.meta?.total || 0}
                                     />
+                                 
                                     <TableBody>
                                         {
                                             list?.data?.length > 0 ?
@@ -587,6 +588,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                             <TableCell align="left"> {row?.university?.name}</TableCell>
                                                             <TableCell align="left"> {row?.course_level?.name}</TableCell>
                                                             <TableCell align="left"> {row?.subject_area?.name}</TableCell>
+                                                            <TableCell align="left"> {row?.stage?.name}</TableCell>
                                                             {/* <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell> */}
                                                             {/* <Popup trigger={<TableCell align="left"><IconButton style={{ textTransform: 'none' }} ><MoreHorizOutlined fontSize='small' /></IconButton></TableCell>}
                                                                 position="left center">

@@ -93,8 +93,6 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
         })
     }
 
-    console.log(app_id);
-
     const onSubmit = (data) => {
         setLoading(true)
         console.log(data);

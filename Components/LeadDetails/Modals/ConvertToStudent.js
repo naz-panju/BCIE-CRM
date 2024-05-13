@@ -272,7 +272,6 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             setValue('preffered_course', details?.preferred_course)
         }
 
-        console.log(details);
     }
 
     const setTitleValue = () => {
@@ -352,7 +351,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             >
                 <Grid width={650}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId == 0 ? 'Convert To Applicant' : 'Edit Applicant'}</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId == 0 ? 'Submit Applicant Data' : 'Edit Applicant Data'}</a>
                         <IconButton
                             onClick={handleClose}
                         >

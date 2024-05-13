@@ -62,7 +62,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
 
 
     const fetchStages = (e) => {
-        return ListingApi.stages({ keyword: e,type:'application' }).then(response => {
+        return ListingApi.stages({ keyword: e, type: 'application' }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 setstages(response.data.data)
                 return response.data.data;
@@ -162,10 +162,11 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     }
 
     const initialValues = () => {
+        console.log(details);
         // isSubStage(details?.stage)
         setValue('stage', details?.stage)
         // setValue('subStage', details?.substage)
-        
+
     }
 
     const handleStageChange = (data) => {
@@ -178,17 +179,24 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         }
     }
 
+    const getDetails = () => {
+        ApplicationApi.view({ id: details?.id }).then((response) => {
+            setValue('stage', response?.data?.data?.stage)
+        })
+    }
+
+
 
 
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
-            isSubStage()
-            // setValue('stage', details?.stage)
+            initialValues()
+            // isSubStage()
         } else if (editId == 0) {
             setOpen(true)
-            isSubStage()
-            // setValue('stage', details?.stage || '')
+            initialValues()
+            // isSubStage()
         }
     }, [editId])
 
@@ -223,7 +231,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                         <Grid p={1} container >
                                             <Grid item pr={1} xs={4} md={4}>
                                                 <a className='form-text'>Application Stage </a>
-                                            </Grid> 
+                                            </Grid>
                                             <Grid item pr={1} xs={8} md={8}>
                                                 <AsyncSelect
                                                     // isDisabled={!selectedUniversityId}

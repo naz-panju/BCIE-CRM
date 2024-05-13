@@ -122,6 +122,28 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
         })
     }
 
+
+    const fetchNameTitles = (e, title) => {
+        return ListingApi.nameTitle({ keyword: e, limit: 30 }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+                // settitles(response.data.data)
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchIntakes = (e) => {
+        return ListingApi.intakes({ keyword: e, }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
     const handlePhoneNumber = (value, country) => {
         if (!value) {
             setPhone('');
@@ -201,6 +223,10 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
         setValue('agency', '')
     }
 
+    const handleinTakeChange = (data) => {
+        setValue('intake', data || '')
+
+    }   
 
 
     const onSubmit = async (data) => {
@@ -353,6 +379,24 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                     <LoadingEdit leftMD={5} rightMD={7} item={items} />
                     :
                     <form onSubmit={handleSubmit(onSubmit)}>
+
+                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                            <Grid item xs={12} md={5}>
+                                <a className='form-text'>Title</a>
+                            </Grid>
+                            <Grid item xs={12} md={2.5}>
+                                <SelectX
+                                    // menuPlacement='top'
+                                    loadOptions={fetchNameTitles}
+                                    control={control}
+                                    name={'title'}
+                                    defaultValue={watch('title')}
+                                />
+                                {errors.title && <span className='form-validation'>{errors.title.message}</span>}
+                            </Grid>
+                        </Grid>
+
+
                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                             <Grid item xs={12} md={5}>
                                 <Typography sx={{ fontWeight: '500' }}>Name</Typography>
@@ -492,7 +536,6 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             </Grid>
                         </Grid>
 
-
                         <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                             <Grid item xs={12} md={5}>
                                 <Typography sx={{ fontWeight: '500' }}>Preferred Countries</Typography>
@@ -533,7 +576,42 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             </Grid>
                         </Grid>
 
-                        <Grid p={1} container >
+                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                            <Grid item xs={12} md={5}>
+                                <a className='form-text'>Intake</a>
+                            </Grid>
+                            <Grid item xs={12} md={7}>
+                                <AsyncSelect
+                                    name={'intake'}
+                                    defaultValue={watch('intake')}
+                                    // isClearable
+                                    defaultOptions
+                                    loadOptions={fetchIntakes}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    onChange={handleinTakeChange}
+                                />
+                                {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
+                            </Grid>
+                        </Grid>
+
+
+                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                            <Grid item xs={12} md={5}>
+                                <a className='form-text'>Date of Birth </a>
+                            </Grid>
+                            <Grid item xs={12} md={7}>
+                                <DateInput
+                                    control={control}
+                                    name="dob"
+                                    value={watch('dob')}
+                                />
+                                {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
+                            </Grid>
+                        </Grid>
+
+
+                        <Grid p={1.5} container >
                             <Grid item xs={12} md={5}>
                                 <a className='form-text'>Country From</a>
                             </Grid>
@@ -554,7 +632,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             </Grid>
                         </Grid>
 
-                        <Grid p={1} container >
+                        <Grid p={1.5} container >
                             <Grid item xs={12} md={5}>
                                 <a className='form-text'>State / Province</a>
                             </Grid>

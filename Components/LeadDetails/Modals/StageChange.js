@@ -263,7 +263,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
                                                 </Grid>
                                                 <Grid item pr={1} xs={8} md={8}>
                                                     <ReactSelector
-                                                        // key={watch('stage')}
+                                                        key={watch('stage')}
                                                         onInputChange={subStages}
                                                         styles={{
                                                             menu: provided => ({ ...provided, zIndex: 9999 })

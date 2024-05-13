@@ -126,7 +126,7 @@ export default function CustomizedMenus() {
   const handleEditAssign = (detail) => {
     setAssignId(2)
     setSelected([detail?.id])
-    setassignToUser(detail?.assignedToUser)
+    setassignToUser(detail)
     setsingleAssign(true)
   }
 

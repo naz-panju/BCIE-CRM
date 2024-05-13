@@ -572,8 +572,6 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
           <Button onClick={handleClearSearch} variant='contained' size='small' className='bg-sky-300' sx={{ height: '30px', textTransform: 'none' }}>Clear</Button>
         </Grid>
       </Grid>
-
-
       {
         loading ?
           <LoadingTable columns={3} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
@@ -646,8 +644,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
                                 <TableCell align="left">
                                   {
-                                    row?.assignedToUser ?
-                                      <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToUser?.name}</Button>
+                                    row?.assignedToCounsellor ?
+                                      <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToCounsellor?.name}</Button>
                                       :
                                       <Button onClick={() => openAssign(row?.id)}><PersonOutline sx={{ color: 'blue', cursor: 'pointer' }} /></Button>
                                   }
@@ -691,23 +689,25 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
               <div className='d-flex  align-items-center'>
                 <UserProfile />
 
-               <button className='log-out-cntr'><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="rgba(0,0,0,1)"><path d="M4 18H6V20H18V4H6V6H4V3C4 2.44772 4.44772 2 5 2H19C19.5523 2 20 2.44772 20 3V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V18ZM6 11H13V13H6V16L1 12L6 8V11Z"></path></svg></button> 
               </div>
-              <div className='d-flex justify-content-between align-items-center'>
-                <div className='select-row-box'>
-                  <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
-                    <MenuItem value={10}>10</MenuItem>
-                    <MenuItem value={15}>15</MenuItem>
-                    <MenuItem value={25}>25</MenuItem>
-                  </Select>
-                  <label>Rows per page</label>
+              {
+                list?.data?.length > 0 &&
+                <div className='d-flex justify-content-between align-items-center'>
+                  <div className='select-row-box'>
+                    <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                      <MenuItem value={10}>10</MenuItem>
+                      <MenuItem value={15}>15</MenuItem>
+                      <MenuItem value={25}>25</MenuItem>
+                    </Select>
+                    <label>Rows per page</label>
+                  </div>
+                  <div>
+                    <Stack spacing={2}>
+                      <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                    </Stack>
+                  </div>
                 </div>
-                <div>
-                  <Stack spacing={2}>
-                    <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
-                  </Stack>
-                </div>
-              </div>
+              }
             </div>
           </>
       }
