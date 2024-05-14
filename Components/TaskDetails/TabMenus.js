@@ -128,10 +128,10 @@ export default function TaskDetailTabs({ id, close ,archiveRefresh}) {
         //     component: <Details />,
         //     label: 'Document'
         // },
-        {
-            component: <CheckListTab id={id} />,
-            label: 'Checklist'
-        },
+        // {
+        //     component: <CheckListTab id={id} />,
+        //     label: 'Checklist'
+        // },
         {
             component: <TaskNotes id={id} />,
             label: 'Notes'

@@ -21,6 +21,7 @@ import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
 import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import PhoneCallModal from './Tabs/communication/Modals/SummaryModal';
+import CreateTask from '../Task/Create/Create';
 
 
 function LeadDetails() {
@@ -59,10 +60,21 @@ function LeadDetails() {
 
   const [phoneCallRefresh, setphoneCallRefresh] = useState(false)
 
+  const [taskRefresh, settaskRefresh] = useState(false)
+  const [taskId, settaskId] = useState()
+
   const [stageLength, setstageLength] = useState()
 
   const handlePhoneRefresh = () => {
     setphoneCallRefresh(!phoneCallRefresh)
+  }
+
+  const handleTaskRefresh = () => {
+    settaskRefresh(!taskRefresh)
+  }
+
+  const handleTaskOpen = () => {
+    settaskId(0)
   }
 
   const handlePhoneCallOpen = () => {
@@ -222,8 +234,10 @@ function LeadDetails() {
 
       <PhoneCallModal lead_id={details?.id} editId={phonecallId} setEditId={setphonecallId} handleRefresh={handlePhoneRefresh} />
 
+      <CreateTask lead_id={details?.id} from={'lead'} editId={taskId} setEditId={settaskId} refresh={refresh} setRefresh={settaskRefresh} handleRefresh={handleTaskRefresh} />
 
-      <FollowUpModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={followupId} setEditId={setfollowupId} data={details} />
+
+      {/* <FollowUpModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={followupId} setEditId={setfollowupId} data={details} /> */}
       <LeadNoteModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={noteId} setEditId={setNoteId} />
 
       <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
@@ -652,7 +666,7 @@ function LeadDetails() {
                 <div className='lead-communication-status'>
                   <h4><svg xmlns="http://www.w3.org/2000/svg" width="18" height="20" viewBox="0 0 18 20" fill="none" className='lead-ic'>
                     <path d="M1 7H17M1 7V15.8002C1 16.9203 1 17.4801 1.21799 17.9079C1.40973 18.2842 1.71547 18.5905 2.0918 18.7822C2.5192 19 3.07899 19 4.19691 19H13.8031C14.921 19 15.48 19 15.9074 18.7822C16.2837 18.5905 16.5905 18.2842 16.7822 17.9079C17 17.4805 17 16.9215 17 15.8036V7M1 7V6.2002C1 5.08009 1 4.51962 1.21799 4.0918C1.40973 3.71547 1.71547 3.40973 2.0918 3.21799C2.51962 3 3.08009 3 4.2002 3H5M17 7V6.19691C17 5.07899 17 4.5192 16.7822 4.0918C16.5905 3.71547 16.2837 3.40973 15.9074 3.21799C15.4796 3 14.9203 3 13.8002 3H13M13 1V3M13 3H5M5 1V3" stroke="#232648" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg> Upcoming Followup
+                  </svg> Upcoming Task
                     <a className='hide-sec'>
                       <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
                         <path d="M8.5 16.7C3.97127 16.7 0.299999 13.0287 0.299999 8.5C0.299999 3.97126 3.97127 0.299999 8.5 0.3C13.0287 0.3 16.7 3.97127 16.7 8.5C16.7 13.0287 13.0287 16.7 8.5 16.7Z" stroke="#898989" stroke-width="0.6" />
@@ -668,7 +682,7 @@ function LeadDetails() {
                         <span>Date</span>
                         <h5>{details?.next_follow_up_date || 'NA'}</h5>
                       </div>
-                      <div><a className='btn' onClick={details && handleFollowupOpen} >Add Followup</a></div>
+                      <div><a className='btn' onClick={details && handleTaskOpen} >Add Task</a></div>
                     </div>
 
 
@@ -729,7 +743,7 @@ function LeadDetails() {
 
           <div className='lead-det-cnt'>
 
-            <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} />
+            <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} />
           </div>
         </div>
       </section>

@@ -67,7 +67,7 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh }) {
+export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh ,taskRefresh, handleTaskRefresh}) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
@@ -108,7 +108,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
       icon: <AccessTimeIcon />
     },
     {
-      label: 'Follow up & Notes',
+      label: 'Notes',
       component: <FollowUp from='lead' data={data} lead_id={data?.id} refresh={followRefresh} setRefresh={setFollowRefresh} />,
       icon: <ChecklistIcon />
     },
@@ -129,7 +129,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
     },
     {
       label: 'Task',
-      component: <LeadTask from='lead' lead_id={data?.id} />,
+      component: <LeadTask from='lead' lead_id={data?.id} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} />,
       icon: <TaskSharp />
     },
     {

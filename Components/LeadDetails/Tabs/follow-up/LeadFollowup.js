@@ -117,11 +117,11 @@ export default function FollowUp({ lead_id, data, from, app_id ,refresh,setRefre
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
-                    <h2>Follow Up & Notes</h2>
+                    <h2>Notes</h2>
                     <div className='timeline-top-right-block'>
 
                         <Button size='small' onClick={handleNoteCreate} variant='outlined' >Add Note</Button>
-                        <Button size='small' onClick={handleCreate} variant='contained' className='bg-sky-500'>Add Follow Up</Button>
+                        {/* <Button size='small' onClick={handleCreate} variant='contained' className='bg-sky-500'>Add Follow Up</Button> */}
                         {/* <div className='add-note'>
                             Add Follow Up
                         </div> */}

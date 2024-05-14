@@ -3,15 +3,16 @@ import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
-import { Edit } from '@mui/icons-material'
+import { CheckCircle, CheckCircleOutline, Edit } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
 import { ApplicationApi } from '@/data/Endpoints/Application'
 import { TaskApi } from '@/data/Endpoints/Task'
 import CreateTask from '@/Components/Task/Create/Create'
 import TaskDetailModal from '@/Components/TaskDetails/Modal'
 import StatusModal from '@/Components/Task/StatusModal'
+import TaskCompletePopup from '../Modals/TaskCompleteModal'
 
-function LeadTask({ lead_id, from, app_id }) {
+function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
@@ -25,7 +26,6 @@ function LeadTask({ lead_id, from, app_id }) {
     const [taskDetails, setTaskDetails] = useState()
     const [statusOpen, setStatusOpen] = useState(false)
     const [detailId, setDetailId] = useState()
-
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -59,7 +59,7 @@ function LeadTask({ lead_id, from, app_id }) {
         if (page != 0) {
             setPage(0)
         }
-        setRefresh(!refresh)
+        handleTaskRefresh()
     }
 
     const fetchList = async () => {
@@ -77,16 +77,23 @@ function LeadTask({ lead_id, from, app_id }) {
         setLoading(false)
     }
 
+    const [completeId, setcompleteId] = useState()
+    const [completeLoading, setcompleteLoading] = useState(false)
+
+    const completeOpen = (id) => {
+        setcompleteId(id)
+    }
+
 
     useEffect(() => {
         fetchList()
-    }, [refresh, page])
+    }, [taskRefresh, page])
 
     return (
         <>
 
-            <CreateTask lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh}/>
-
+            <CreateTask lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
+            <TaskCompletePopup ID={completeId} setID={setcompleteId} loading={completeLoading} setLoading={setcompleteLoading} title={'Mark as Complete'} />
             <TaskDetailModal id={detailId} setId={setDetailId} />
 
             {
@@ -124,11 +131,11 @@ function LeadTask({ lead_id, from, app_id }) {
                                                             Assigned To
                                                         </Typography>
                                                     </TableCell>
-                                                    <TableCell>
+                                                    {/* <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Reviewer
                                                         </Typography>
-                                                    </TableCell>
+                                                    </TableCell> */}
                                                     <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Due Date
@@ -152,10 +159,15 @@ function LeadTask({ lead_id, from, app_id }) {
                                                         <TableRow key={obj?.id}>
                                                             <TableCell onClick={() => handleDetailOpen(obj?.id)} sx={{ cursor: 'pointer' }}>{obj?.title}</TableCell>
                                                             <TableCell>{obj?.assignedToUser?.name}</TableCell>
-                                                            <TableCell >{obj?.reviewer?.name}</TableCell>
+                                                            {/* <TableCell >{obj?.reviewer?.name}</TableCell> */}
                                                             <TableCell >{moment(obj?.due_date).format('DD-MM-YYYY')}</TableCell>
                                                             <TableCell >{obj.priority}</TableCell>
                                                             <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleStatusChange(obj)}>{obj.status}</TableCell>
+                                                            <TableCell >
+                                                                <Tooltip title={'Mark Task as Complete'}>
+                                                                    <CheckCircleOutline style={{cursor:'pointer'}} onClick={() => completeOpen(obj?.id)} />
+                                                                </Tooltip>
+                                                            </TableCell>
                                                             <TableCell ><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button></TableCell>    </TableRow>
                                                     ))
                                                 }
