@@ -229,7 +229,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign }) {
+export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive }) {
 
   const router = useRouter();
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
@@ -485,7 +485,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
   return (
     <>
-      <Grid p={1} pl={0} mb={1} container display={'flex'}>
+      <Grid className={searchactive ? 'active' : ''} p={1} pl={0} mb={1} container display={'flex'}>
         <Grid mr={1} item md={2.8}>
           <AsyncSelect
             isClearable
@@ -537,9 +537,6 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
         </Grid>
 
 
-      </Grid>
-
-      <Grid p={1} pl={0} mb={1} container display={'flex'}>
 
         <Grid mr={1} item md={2.8}>
           <TextField

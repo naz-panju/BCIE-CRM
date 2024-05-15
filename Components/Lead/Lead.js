@@ -9,7 +9,7 @@ import CreateLead from './Create/Create';
 import { useRouter } from 'next/router';
 import { Grid, IconButton, Popover, Typography, TextField, InputAdornment } from '@mui/material';
 import AssignLeadModal from './Modal/AssignModal';
-import { Close, MoreVert, PersonAddAlt1Outlined, Search } from '@mui/icons-material';
+import { Close, MoreVert, PersonAddAlt1Outlined, Search, SearchOff } from '@mui/icons-material';
 import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
@@ -97,6 +97,8 @@ export default function CustomizedMenus() {
   const [phoneSearch, setphoneSearch] = useState()
   const [emailSearch, setemailSearch] = useState()
   const [userIdSearch, setuserIdSearch] = useState()
+
+  const [searchActive, setsearchActive] = useState(false)
 
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -252,6 +254,9 @@ export default function CustomizedMenus() {
               <Grid display={'flex'}>
 
                 {/* <Tooltip title={'Add Lead'}> */}
+                <Button sx={{ mr: 2 }} variant='outlined' onClick={()=>(setsearchActive(!searchActive))} className='add_lead_btn'>
+                  <SearchOff fontSize='small' /> 
+                </Button>
                 <Button sx={{ mr: 2 }} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
                   <PersonAddAlt1Outlined fontSize='small' /> Add Lead
                 </Button>
@@ -273,7 +278,7 @@ export default function CustomizedMenus() {
         </div>
 
         <div className='content-block lead-table-cntr'>
-          <LeadTable handleEditAssign={handleEditAssign} openAssign={handleSigleAssign} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} selected={selected} setSelected={setSelected} searchType={watch('searchType')} nameSearch={nameSearch} emailSearch={emailSearch} phoneSearch={phoneSearch} userIdSearch={userIdSearch} />
+          <LeadTable handleEditAssign={handleEditAssign} openAssign={handleSigleAssign} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} selected={selected} setSelected={setSelected} searchType={watch('searchType')} nameSearch={nameSearch} emailSearch={emailSearch} phoneSearch={phoneSearch} userIdSearch={userIdSearch} searchActive={searchActive} />
         </div>
       </section>
     </>
