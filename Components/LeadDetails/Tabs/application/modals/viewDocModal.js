@@ -31,7 +31,7 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function ViewDocumentModal({ details, editId, setEditId, refresh, setRefresh ,handleDeleteOpen}) {
+export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleDeleteOpen,handleUniDocOpen }) {
 
     const [open, setOpen] = useState(false)
 
@@ -53,6 +53,7 @@ export default function ViewDocumentModal({ details, editId, setEditId, refresh,
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
+    const [details, setdetails] = useState()
 
     const onSubmit = async (data) => {
 
@@ -139,11 +140,17 @@ export default function ViewDocumentModal({ details, editId, setEditId, refresh,
         return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
     }
 
+    const getDetails = () => {
+        ApplicationApi.view({ id: editId }).then((response) => {
+            setdetails(response?.data?.data)
+        })
+    }
+
 
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
-            setInitialValue()
+            getDetails()
         } else if (editId == 0) {
             setOpen(true)
         }
@@ -198,7 +205,7 @@ export default function ViewDocumentModal({ details, editId, setEditId, refresh,
                         <Grid sx={{ width: '100%', m: 1, }}>
                             <Grid display={'flex'} justifyContent={'space-between'}>
                                 University Document
-                                <Button>Add </Button>
+                                <Button onClick={()=>handleUniDocOpen(details?.id)}>Add </Button>
                             </Grid>
 
                             {
@@ -210,7 +217,7 @@ export default function ViewDocumentModal({ details, editId, setEditId, refresh,
                                                     <a target='_blank' href={obj?.document} key={index} >{trimUrlAndNumbers(obj?.title || obj?.document_template?.name)}</a>
 
 
-                                                    <svg onClick={()=>handleDeleteOpen(obj?.id)} xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15" fill="none">
+                                                    <svg onClick={() => handleDeleteOpen(obj?.id)} xmlns="http://www.w3.org/2000/svg" width="14" height="15" viewBox="0 0 14 15" fill="none">
                                                         <path d="M2.5 3.16667V11.6889C2.5 12.4979 2.5 12.9021 2.66349 13.211C2.8073 13.4828 3.0366 13.7042 3.31885 13.8427C3.6394 14 4.05925 14 4.89768 14H9.10232C9.94075 14 10.36 14 10.6805 13.8427C10.9628 13.7042 11.1929 13.4828 11.3367 13.211C11.5 12.9024 11.5 12.4985 11.5 11.6911V3.16667M2.5 3.16667H4M2.5 3.16667H1M4 3.16667H10M4 3.16667C4 2.49364 4 2.15729 4.11418 1.89185C4.26642 1.53792 4.55824 1.25655 4.92578 1.10995C5.20144 1 5.55109 1 6.25 1H7.75C8.44891 1 8.79837 1 9.07402 1.10995C9.44157 1.25655 9.7335 1.53792 9.88574 1.89185C9.99992 2.15729 10 2.49364 10 3.16667M10 3.16667H11.5M11.5 3.16667H13" stroke="#0B0D23" stroke-linecap="round" stroke-linejoin="round" />
                                                     </svg>
                                                 </Grid>

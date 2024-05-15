@@ -14,7 +14,7 @@ body {
   padding: 0;
   font-family: "Inter", sans-serif;
 }
- 
+
 .header {
   background-color: #fff;
   z-index: 10000;
@@ -151,7 +151,7 @@ button[type="submit"]:hover {
 .sidebar {
   min-width: 276px;
   max-width: 276px;
-  background: #0B0D23;
+  background: #0047CD;
   color: #fff;
   transition: all 0.3s;
   position: fixed;
@@ -198,22 +198,25 @@ button[type="submit"]:hover {
   position: absolute;
   top: 10px;
 }
+
 .sidebar .mainList>li a svg {
   display: inline-block;
 
 }
-.sidebar .mainList>li a svg path { 
+
+.sidebar .mainList>li a svg path {
   fill: white;
 
 }
 
-.sidebar .mainList>li.sidebar-selected a svg path{
-  fill: url(#paint0_linear_1041_304);  
+.sidebar .mainList>li.sidebar-selected a svg path {
+  fill: url(#paint0_linear_1041_304);
 }
- 
-.sidebar .mainList>li:hover a svg path{
-  fill: url(#paint0_linear_1041_304);  
+
+.sidebar .mainList>li:hover a svg path {
+  fill: url(#paint0_linear_1041_304);
 }
+
 .sidebar.active .mainList>li a {
   min-width: 276px;
   white-space: nowrap;
@@ -296,7 +299,7 @@ button[type="submit"]:hover {
 .body-active .sidebar {
   min-width: 276px !important;
   max-width: 276px !important;
-  background: #0B0D23;
+  background: #0047CD;
   color: #fff;
   transition: all 0.3s;
   position: fixed;
@@ -385,7 +388,7 @@ button[type="submit"]:hover {
   border-bottom: thin solid rgba(255, 255, 255, 0.05);
   /*background-color: rgba(255, 255, 255, 0.075);*/
   line-height: 42px;
- /* display: flex;*/
+  /* display: flex;*/
   /* height: 49px; */
   align-items: center;
 }
@@ -526,7 +529,7 @@ ul#menuList li {
 }
 
 
-.body-active .page-title-block { 
+.body-active .page-title-block {
   margin-left: 0px;
 }
 
@@ -536,7 +539,7 @@ ul#menuList li {
   padding: 25px 25px 20px 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
 }
 
 
@@ -550,11 +553,12 @@ ul#menuList li {
 /* table heading width change */
 
 .page-title-block-content h1 {
-  color: #0B0D23; 
+  color: #0B0D23;
   font-size: 20px;
   font-style: normal;
   font-weight: 600;
-  line-height: 20px; /* 100% */
+  line-height: 20px;
+  /* 100% */
   letter-spacing: -0.2px;
 }
 
@@ -604,25 +608,28 @@ button#UserPop span {
   overflow: hidden;
 }
 
-.body-active .content-block { 
+.body-active .content-block {
   margin-left: 0px;
 }
 
 .content-block thead {
   border-radius: 3px 3px 0px 0px;
-background: #0B0D23;
-color: #fff;
-}
-.content-block thead th { 
-color: #fff;
-}
-.content-block thead th span:hover { 
+  background: #0B0D23;
   color: #fff;
-  }
+}
 
-  .content-block thead th span { 
-    color: #fff !important;
-    }
+.content-block thead th {
+  color: #fff;
+}
+
+.content-block thead th span:hover {
+  color: #fff;
+}
+
+.content-block thead th span {
+  color: #fff !important;
+}
+
 .reg-name {
   color: #4285f4 !important;
 }
@@ -842,7 +849,7 @@ color: #fff;
 .content-block-details {
   background: #fff;
   margin-left: 90px;
-  padding:  10px 20px 40px 20px;
+  padding: 10px 20px 40px 20px;
   flex: 1;
   z-index: 1;
   min-height: 100vh;
@@ -851,7 +858,7 @@ color: #fff;
   overflow: hidden;
 }
 
-.body-active .content-block-details { 
+.body-active .content-block-details {
   margin-left: 0px;
 }
 
@@ -1032,16 +1039,17 @@ svg.svg-inline--fa.fa-qrcode {
   border-bottom: unset !important;
 
   color: #0B0D23;
-font-size: 15px;
-font-style: normal;
-font-weight: 400;
-line-height: 10px; /* 66.667% */
-text-transform: capitalize;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 10px;
+  /* 66.667% */
+  text-transform: capitalize;
 
-margin: 8px 0;
+  margin: 8px 0;
 
-border-radius: 3px;
-background: #FFF;
+  border-radius: 3px;
+  background: #FFF;
 }
 
 .lead-tabpanel {
@@ -1055,10 +1063,10 @@ background: #FFF;
   color: #fff !important;
   font-weight: 500 !important;
   background-color: #f8f8f8;
-  border: none; 
+  border: none;
   margin-right: 0 !important;
   border-radius: 3px;
-background: #0B0D23;
+  background: #0B0D23;
 }
 
 .lead-details-list {
@@ -1309,7 +1317,7 @@ button.loadmore-btn {
 }
 
 .sidebar-selected {
- /* background-color: #4285f4;*/
+  /* background-color: #4285f4;*/
 }
 
 .no-table-ask-block h4 {
@@ -1442,7 +1450,6 @@ input[type="number"] {
 }
 
 
-.a_hover:hover{
+.a_hover:hover {
   text-decoration: underline;
 }
-

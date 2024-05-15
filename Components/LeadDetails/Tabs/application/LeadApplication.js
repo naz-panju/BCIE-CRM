@@ -62,7 +62,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     }
     const handleDocOpen = (data) => {
         setDetails(data)
-        setdocumentId(0)
+        setdocumentId(data?.id)
     }
     const handleDepositOpen = (data) => {
         setDetails(data)

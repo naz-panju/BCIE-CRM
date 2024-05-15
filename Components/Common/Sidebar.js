@@ -186,7 +186,8 @@ const Sidebar = () => {
     }, [sideBarActive]);
 
     return (
-
+        // 0047CD
+        // 0B0D23
         <nav id="sidebar" className={`sidebar sidebar-mask active `}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
