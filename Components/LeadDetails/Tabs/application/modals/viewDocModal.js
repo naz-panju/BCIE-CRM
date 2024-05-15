@@ -19,6 +19,7 @@ import { ApplicationApi } from '@/data/Endpoints/Application';
 import TextInput from '@/Form/TextInput';
 import DateInput from '@/Form/DateInput';
 import moment from 'moment';
+import UniversityDocumentModal from './universityDocument';
 
 
 const scheme = yup.object().shape({
@@ -31,13 +32,20 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleDeleteOpen,handleUniDocOpen }) {
+export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleDeleteOpen, handleUniDocOpen }) {
 
     const [open, setOpen] = useState(false)
 
     const [loading, setLoading] = useState(false)
 
     const [dataLoading, setDataLoading] = useState(false)
+
+    const [docId, setdocId] = useState()
+
+    const handleDocumentOpen=()=>{
+        setdocId(0)
+    }
+    
 
     const items = [
         { label: 'Title' },
@@ -159,6 +167,8 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
     return (
         <div>
+            <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={uniDocId} setEditId={setuniDocId} handleRefresh={getDetails} />
+
             <Drawer
                 anchor={anchor}
                 open={open}
@@ -205,7 +215,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                         <Grid sx={{ width: '100%', m: 1, }}>
                             <Grid display={'flex'} justifyContent={'space-between'}>
                                 University Document
-                                <Button onClick={()=>handleUniDocOpen(details?.id)}>Add </Button>
+                                <Button onClick={() => handleUniDocOpen(details?.id)}>Add </Button>
                             </Grid>
 
                             {

@@ -255,7 +255,7 @@ export default function CustomizedMenus() {
 
                 {/* <Tooltip title={'Add Lead'}> */}
                 <Button sx={{ mr: 2 }} variant='outlined' onClick={()=>(setsearchActive(!searchActive))} className='add_lead_btn'>
-                  <SearchOff fontSize='small' /> 
+                  <Search fontSize='small' /> 
                 </Button>
                 <Button sx={{ mr: 2 }} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
                   <PersonAddAlt1Outlined fontSize='small' /> Add Lead
