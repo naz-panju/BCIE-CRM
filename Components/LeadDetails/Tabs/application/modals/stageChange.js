@@ -84,6 +84,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         let dataToSubmit = {
             id: details.id,
             stage: data?.stage?.id,
+            note: data?.note
             // substage_id: data?.substage?.id,
         }
 
@@ -98,6 +99,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         if (editId > 0) {
             // dataToSubmit['id'] = editId
             // action = TaskApi.update(dataToSubmit)
+            action = ApplicationApi.stageChange(dataToSubmit)
         } else {
             action = ApplicationApi.stageChange(dataToSubmit)
         }
@@ -165,6 +167,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         console.log(details);
         // isSubStage(details?.stage)
         setValue('stage', details?.stage)
+        setValue('note', details?.stage_note)
         // setValue('subStage', details?.substage)
 
     }
@@ -182,6 +185,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     const getDetails = () => {
         ApplicationApi.view({ id: details?.id }).then((response) => {
             setValue('stage', response?.data?.data?.stage)
+            // setValue('note', details?.stage_note)
         })
     }
 
@@ -210,7 +214,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
             >
                 <Grid width={550}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Change Stage</a>
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Change Application Stage</a>
                         <IconButton
                             onClick={handleClose}
                         >
@@ -287,6 +291,23 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                                 </Grid>
                                             </Grid>
                                         }
+
+                                        <Grid p={1} container >
+                                            <Grid item pr={1} xs={4} md={4}>
+                                                <a className='form-text'>Note </a>
+                                            </Grid>
+                                            <Grid item pr={1} xs={8} md={8}>
+                                                <TextField
+                                                    {...register('note')}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    multiline
+                                                    rows={2}
+                                                    sx={{ width: '100%', }}
+                                                />
+                                                {errors.note && <span className='form-validation'>{errors.note.message}</span>}
+                                            </Grid>
+                                        </Grid>
                                     </>
                             }
 

@@ -1,10 +1,7 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
-import { Delete, Download, Edit, ExpandLess, ExpandMore } from '@mui/icons-material'
-import { blue } from '@mui/material/colors'
 import LeadApplicationModal from './create'
 import { ApplicationApi } from '@/data/Endpoints/Application'
 import { useRouter } from 'next/router'
@@ -37,14 +34,14 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const [deleteId, setdeleteId] = useState()
     const [deleteLoading, setdeleteLoading] = useState(false)
 
-    const [stageId, setStageId] = useState()
-
+    
     const [page, setPage] = useState(0);
     const [limit, setLimit] = useState(10);
-
+    
     const [expandedRowId, setExpandedRowId] = useState(null);
-
-
+    
+    
+    const [stageId, setStageId] = useState()
     const [uniDocId, setuniDocId] = useState()
     const [applicationId, setapplicationId] = useState()
     const [downloadId, setDownloadId] = useState()
@@ -196,12 +193,12 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
             <DeferIntake editId={deferId} setEditId={setdeferId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
             <ViewDocumentModal editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} handleDeleteOpen={handleDeleteOpen} handleUniDocOpen={handleUniDocOpen} />
+            <SendUniversityMail from={'lead'} details={details} lead_id={lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
 
             <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />
 
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 
-            <SendUniversityMail from={'lead'} details={details} lead_id={lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
@@ -322,7 +319,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                 <TableCell>{obj?.subject_area?.name}</TableCell>
                                                                 <TableCell>{obj?.course}</TableCell>
                                                                 <TableCell>{obj?.intake?.name}</TableCell>
-                                                                <TableCell>{obj?.stage?.name}</TableCell>
+                                                                <TableCell><Tooltip title={obj?.stage_note}>{obj?.stage?.name}</Tooltip></TableCell>
                                                                 <TableCell>
                                                                     {
                                                                         obj?.deposit_amount_paid ?
@@ -362,10 +359,6 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                         <svg style={{ cursor: 'pointer' }} onClick={() => handleDocOpen(obj)} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                                             <path d="M12 9.7998V19.9998M12 9.7998C12 8.11965 12 7.27992 12.327 6.63818C12.6146 6.0737 13.0732 5.6146 13.6377 5.32698C14.2794 5 15.1196 5 16.7998 5H19.3998C19.9599 5 20.2401 5 20.454 5.10899C20.6422 5.20487 20.7948 5.35774 20.8906 5.5459C20.9996 5.75981 21 6.04004 21 6.6001V15.4001C21 15.9601 20.9996 16.2398 20.8906 16.4537C20.7948 16.6419 20.6425 16.7952 20.4543 16.8911C20.2406 17 19.961 17 19.402 17H16.5693C15.6301 17 15.1597 17 14.7334 17.1295C14.356 17.2441 14.0057 17.4317 13.701 17.6821C13.3568 17.965 13.096 18.3557 12.575 19.1372L12 19.9998M12 9.7998C12 8.11965 11.9998 7.27992 11.6729 6.63818C11.3852 6.0737 10.9263 5.6146 10.3618 5.32698C9.72004 5 8.87977 5 7.19961 5H4.59961C4.03956 5 3.75981 5 3.5459 5.10899C3.35774 5.20487 3.20487 5.35774 3.10899 5.5459C3 5.75981 3 6.04004 3 6.6001V15.4001C3 15.9601 3 16.2398 3.10899 16.4537C3.20487 16.6419 3.35774 16.7952 3.5459 16.8911C3.7596 17 4.03901 17 4.59797 17H7.43073C8.36994 17 8.83942 17 9.26569 17.1295C9.64306 17.2441 9.99512 17.4317 10.2998 17.6821C10.6426 17.9638 10.9017 18.3526 11.4185 19.1277L12 19.9998" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                                         </svg>
-
-                                                                        {/* <svg style={{ cursor: 'pointer' }} onClick={() => handleDocOpen(obj)} xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
-                                                                            <path d="M1 3.57143L7.91849 8.01903C8.5773 8.44255 9.4227 8.44255 10.0815 8.01903L17 3.57143M3 13H15C16.1046 13 17 12.1046 17 11V3C17 1.89543 16.1046 1 15 1H3C1.89543 1 1 1.89543 1 3V11C1 12.1046 1.89543 13 3 13Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                        </svg> */}
                                                                     </Tooltip>
                                                                 </TableCell>
 
@@ -466,9 +459,6 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                             <div className='app_list'>
 
                                                                                 <h3 className='d-flex align-items-center justify-content-between'>  University Documents  </h3>
-
-
-
 
                                                                                 {
                                                                                     docLoading ?
