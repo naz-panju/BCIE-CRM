@@ -1258,6 +1258,47 @@ body.body-active .footer  {
     transition: .5s;
 }
 
+.form-data-cntr{
+    padding: 20px;
+}
+
+.form-data-cntr .form_group{
+    border-radius: 3px;
+background: #F0F0F0;
+position: relative;
+padding: 7px 9px;
+margin-bottom: 15px;
+}
+
+.frm-nam-fild input{
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+    background: unset; 
+    width: 100%;
+    margin-left: 15px;
+}
+.frm-nam-fild .frm-nam-select{
+    width: 130px;
+}
+
+.frm-conn-stl svg{
+    position: absolute;
+    top: 19px;
+}
+.frm-conn-stl input{
+   padding-left: 30px;
+   line-height: 36px;
+}
+
+.form_group input{
+    border-radius: 0;
+    border: 0;
+    box-shadow: none;
+    background: unset; 
+    width: 100%; 
+}
+
 
 @media (max-width: 1400px) {
 

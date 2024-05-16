@@ -371,7 +371,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
     ]
 
     return (
-        <div>
+        <div className='form-data-cntr'>
 
             {/* <button type='reset' onClick={() => setLoading(false)}>click</button> */}
             {
@@ -380,11 +380,9 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                     :
                     <form onSubmit={handleSubmit(onSubmit)}>
 
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <a className='form-text'>Title</a>
-                            </Grid>
-                            <Grid item xs={12} md={2.5}>
+                        <div className='form_group d-flex align-items-center frm-nam-fild '>
+                            
+                            <div className='frm-nam-select' >
                                 <SelectX
                                     // menuPlacement='top'
                                     loadOptions={fetchNameTitles}
@@ -393,27 +391,26 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     defaultValue={watch('title')}
                                 />
                                 {errors.title && <span className='form-validation'>{errors.title.message}</span>}
-                            </Grid>
-                        </Grid>
+                            </div>
 
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Name</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <TextInput control={control} {...register('name', { required: 'The Name field is required' })}
+                           
+                                <input  placeholder='Your Name' control={control} {...register('name', { required: 'The Name field is required' })}
                                     value={watch('name')} />
                                 {errors.name && <span className='form-validation'>{errors.name.message}</span>}
-                            </Grid>
-                        </Grid>
+                           
 
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Email Address</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <TextInput control={control} {...register('email', {
+
+                        </div>
+
+
+                      
+
+                        <div className='form_group frm-conn-stl  '>
+                         
+                        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="14" viewBox="0 0 17 14" fill="none">
+  <path d="M1 3.5L7.3906 7.7604C8.0624 8.20827 8.9376 8.20827 9.6094 7.7604L16 3.5M3 12.6667H14C15.1046 12.6667 16 11.7712 16 10.6667V3C16 1.89543 15.1046 1 14 1H3C1.89543 1 1 1.89543 1 3V10.6667C1 11.7712 1.89543 12.6667 3 12.6667Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                                <input placeholder='Type your email here' control={control} {...register('email', {
                                     required: 'Please enter your email',
                                     pattern: {
                                         value: /^\S+@\S+$/i,
@@ -423,18 +420,13 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     value={watch('email')} />
                                 {errors.email && <span className='form-validation'>{errors.email.message}</span>}
 
-                            </Grid>
-                        </Grid>
+                             
+                        </div>
 
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Mobile Number</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                {/* <TextInput control={control} name="mobile"
-                                value={watch('mobile')} /> */}
 
-                                <PhoneInput
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <div className='form_group'>
+                            <PhoneInput 
                                     {...register('phone', { required: 'Please enter your mobile number' })}
                                     international
                                     // autoFormat
@@ -460,16 +452,9 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     }}
                                 />
                                 {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
-
-                            </Grid>
-                        </Grid>
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Alternate Mobile Number</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <PhoneInput
+                            </div>
+                            <div className='form_group'>
+                            <PhoneInput
                                     {...register('alt_phone')}
 
                                     international
@@ -496,16 +481,13 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     }}
                                 />
                                 {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
+                            </div>
+                        </div>
 
-                            </Grid>
-                        </Grid>
 
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Whatsapp Number</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <PhoneInput
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <div className='form_group'>
+                            <PhoneInput
                                     {...register('whatsapp')}
 
                                     international
@@ -533,26 +515,20 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                 />
                                 {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
 
-                            </Grid>
-                        </Grid>
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Preferred Countries</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <TextInput control={control} {...register('preffered_country')}
+                            </div>
+                            <div className='form_group'>
+                            <input control={control} {...register('preffered_country')}
                                     value={watch('preffered_country')} />
                                 {errors.preffered_country && <span className='form-validation'>{errors.preffered_country.message}</span>}
-                            </Grid>
-                        </Grid>
+                            
+                            </div>
+                        </div>
 
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Preferred Course Level</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <SelectX
+
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <div className='form_group'>
+                            <SelectX
                                     menuPlacement='top'
                                     loadOptions={fetchCourseLevel}
                                     control={control}
@@ -562,26 +538,20 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     defaultValue={watch('preffered_course_level')}
                                 />
                                 {errors.preffered_course_level && <span className='form-validation'>{errors.preffered_course_level.message}</span>}
-                            </Grid>
-                        </Grid>
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Preferred courses</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <TextInput control={control} {...register('preffered_course')}
+                            
+                            </div>
+                            <div className='form_group'>
+                            <input control={control} {...register('preffered_course')}
                                     value={watch('preffered_course')} />
                                 {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
-                            </Grid>
-                        </Grid>
+                         
+                            </div>
+                        </div>
 
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <a className='form-text'>Intake</a>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <AsyncSelect
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <div className='form_group'>
+                            <AsyncSelect
                                     name={'intake'}
                                     defaultValue={watch('intake')}
                                     // isClearable
@@ -592,31 +562,24 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     onChange={handleinTakeChange}
                                 />
                                 {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
-                            </Grid>
-                        </Grid>
-
-
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <a className='form-text'>Date of Birth </a>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <DateInput
+                            
+                            </div>
+                            <div className='form_group'>
+                            <DateInput
                                     control={control}
                                     name="dob"
                                     value={watch('dob')}
                                 />
                                 {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
-                            </Grid>
-                        </Grid>
+                            </div>
+                        </div>
 
-
-                        <Grid p={1.5} container >
-                            <Grid item xs={12} md={5}>
-                                <a className='form-text'>Country From</a>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <AsyncSelect
+                    
+                            
+                          
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <div className='form_group'>
+                            <AsyncSelect
                                     menuPlacement='top'
                                     loadOptions={fetchGlobalCountry}
                                     onInputChange={fetchGlobalCountry}
@@ -629,27 +592,22 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     onChange={(data) => setValue('country', data)}
                                 />
                                 {errors.country && <span className='form-validation'>{errors.country.message}</span>}
-                            </Grid>
-                        </Grid>
-
-                        <Grid p={1.5} container >
-                            <Grid item xs={12} md={5}>
-                                <a className='form-text'>State / Province</a>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <TextInput control={control} name="state"
+                             
+                            </div>
+                            <div className='form_group'>
+                            <input control={control} name="state"
                                     // disabled={!watch('country')}
                                     value={watch('state')} />
                                 {errors.state && <span className='form-validation'>{errors.state.message}</span>}
-                            </Grid>
-                        </Grid>
+                             
+                            </div>
+                        </div>
+                                
+  
 
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Lead Source</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <AsyncSelect
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <div className='form_group'>
+                            <AsyncSelect
                                     // isDisabled={!selectedUniversityId}
                                     // key={selectedUniversityId}
                                     name={'source'}
@@ -661,18 +619,9 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     getOptionValue={(e) => e.id}
                                     onChange={handleSourseChange}
                                 />
-                            </Grid>
-
-                        </Grid>
-
-                        {
-                            watch('source')?.name == 'Referral' &&
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item xs={12} md={5}>
-                                    <Typography sx={{ fontWeight: '500' }}>Referred Student</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={7}>
-                                    <SelectX
+                            </div>
+                            <div className='form_group'>
+                            <SelectX
                                         menuPlacement='top'
                                         loadOptions={fetchStudents}
                                         control={control}
@@ -682,7 +631,28 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                         defaultValue={watch('student')}
                                     />
                                     {/* {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>} */}
+                                
+                            </div>
+                        </div>
+ 
+
+                      
+
+                         
+ 
+
+
+                       
+ 
+
+                        {
+                            watch('source')?.name == 'Referral' &&
+                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                <Grid item xs={12} md={5}>
+                                    <Typography sx={{ fontWeight: '500' }}>Referred Student</Typography>
                                 </Grid>
+                                <Grid item xs={12} md={7}>
+                                    </Grid>
                             </Grid>
                         }
 
@@ -708,11 +678,9 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             </Grid>
                         }
 
-                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>How did you know about us? </Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
+                       
+                            
+<div className='form_group'>
                                 <ReactSelector
                                     menuPlacement='auto'
                                     onInputChange={fetchReference}
@@ -730,19 +698,17 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                     defaultValue={(watch('reference'))}
                                     onChange={(selectedOption) => setValue('reference', selectedOption?.name || '')}
                                 />
-                            </Grid>
+                            </div>
 
-                        </Grid>
+                       
 
-                        <Grid display={'flex'} container p={1.5} item xs={12}>
-                            <Grid item xs={12} md={5}>
-                                <Typography sx={{ fontWeight: '500' }}>Note</Typography>
-                            </Grid>
-                            <Grid item xs={12} md={7}>
-                                <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
+                       
+                           
+                            <div className='form_group'>
+                                <textarea multiline rows={2} fullWidth control={control}  {...register('note')}
                                     value={watch('note') || ''} />
-                            </Grid>
-                        </Grid>
+                            </div>
+                       
 
                         <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                             <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2, height: 30 }} variant='outlined'>Cancel</Button>
