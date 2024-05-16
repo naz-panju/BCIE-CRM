@@ -1227,13 +1227,32 @@ line-height: normal;
     border-radius: 3px;
 background: #4A4D6E;
 padding: 3px;
+margin-right: 13px;
 display: inline-block;
 }
 
 
+.modal_title .back_modal_head{
+    color: var(--icon-color, #FFF);
+font-family: Inter;
+font-size: 15px;
+font-style: normal;
+font-weight: 400;
+line-height: 28px; /* 186.667% */
+display: inline-block;
+}
 
-
-
+.modal_title .back_modal_head svg{
+    display: inline-block;
+}
+.modal_title p{
+    color: rgba(255, 255, 255, 0.62);
+font-family: Inter;
+font-size: 11px;
+font-style: normal;
+font-weight: 300;
+line-height: 20px; /* 181.818% */
+}
 
 
 
