@@ -165,7 +165,10 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                 toast.success('Email Sent Successfully');
                 reset()
                 handleClose()
-                setRefresh()
+                if(setRefresh){
+                    setRefresh()
+                }
+                // setRefresh()
                 // setRefresh(!refresh)
                 setLoading(false)
             } else {

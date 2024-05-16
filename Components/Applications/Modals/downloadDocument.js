@@ -79,7 +79,6 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
             downloadables.push(object)
         })
 
-        console.log(downloadables);
         const res = await fetch("/api/files", {
             method: 'POST',
             headers: {
@@ -248,7 +247,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
 
 
                     <Grid mt={3} display={'flex'} justifyContent={'end'}>
-                        <LoadingButton onClick={downloadDocument} disabled={documents?.length == 0} variant='outlined' sx={{ textTransform: 'none' }}>Download</LoadingButton>
+                        <LoadingButton loading={loading} onClick={downloadDocument} disabled={documents?.length == 0} variant='outlined' sx={{ textTransform: 'none' }}>Download</LoadingButton>
                     </Grid>
 
                 </Box>

@@ -259,10 +259,15 @@ export default function CustomizedMenus() {
               <Grid display={'flex'}>
 
                 {/* <Tooltip title={'Add Lead'}> */}
+<<<<<<< HEAD
                 <Button  onClick={toggleActive} className='search_btn'>
                 <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg"> 
                   <path d="M20 20L15.6569 15.6569M15.6569 15.6569C17.1046 14.2091 18 12.2091 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C12.2091 18 14.2091 17.1046 15.6569 15.6569Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg> 
+=======
+                <Button sx={{ mr: 2 }} variant='outlined' onClick={()=>(setsearchActive(!searchActive))} className='add_lead_btn'>
+                  <Search fontSize='small' /> 
+>>>>>>> c642feb19184cb2694453ea7b4c87a5ce2ebc6bf
                 </Button>
                 <Button sx={{ mr: 2 }} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
                   <PersonAddAlt1Outlined fontSize='small' /> Add Lead

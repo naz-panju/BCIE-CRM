@@ -139,10 +139,9 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
 
     const setInitialValue = () => {
         // console.log(details)
-        setValue('amount', details?.deposit_amount_paid)
-        setValue('date', details?.deposit_paid_on)
+        setValue('intake', details?.intake)
+        setValue('note', details?.differ_intake_note)
     }
-
 
     useEffect(() => {
         if (editId > 0) {
@@ -150,6 +149,7 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
             setInitialValue()
         } else if (editId == 0) {
             setOpen(true)
+            setInitialValue()
         }
     }, [editId])
 
