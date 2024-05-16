@@ -318,7 +318,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                 <TableCell>{obj?.university?.name}</TableCell>
                                                                 <TableCell>{obj?.subject_area?.name}</TableCell>
                                                                 <TableCell>{obj?.course}</TableCell>
-                                                                <TableCell>{obj?.intake?.name}</TableCell>
+                                                                <TableCell><Tooltip title={obj?.differ_intake_note}>{obj?.intake?.name}</Tooltip></TableCell>
                                                                 <TableCell><Tooltip title={obj?.stage_note}>{obj?.stage?.name}</Tooltip></TableCell>
                                                                 <TableCell>
                                                                     {

@@ -122,6 +122,12 @@ const headCells = [
         label: 'Subject Area',
     },
     {
+        id: 'intake',
+        numeric: false,
+        disablePadding: false,
+        label: 'Intake',
+    },
+    {
         id: 'stage',
         numeric: false,
         disablePadding: false,
@@ -632,6 +638,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                             <TableCell align="left"> {row?.university?.name}</TableCell>
                                                             <TableCell align="left"> {row?.course_level?.name}</TableCell>
                                                             <TableCell align="left"> {row?.subject_area?.name}</TableCell>
+                                                            <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                             <TableCell align="left"><Tooltip title={row?.stage_note}>{row?.stage?.name}</Tooltip></TableCell>
 
 
