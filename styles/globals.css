@@ -410,7 +410,7 @@ ul#menuList li {
 
 .sidebar ul li a {
   text-align: left;
-  padding: 17.5px 13px;
+  padding: 15px 13px;
   font-size: 14px;
   display: block;
   color: #f2f2f2;
@@ -536,7 +536,7 @@ ul#menuList li {
 .page-title-block {
   margin-left: 90px;
   background: #fff;
-  padding: 25px 25px 20px 20px;
+  padding: 18px 25px 20px 20px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
   display: flex;
   justify-content: space-between;
@@ -599,7 +599,7 @@ button#UserPop span {
   background: #fff;
   margin-left: 90px;
   /* padding: 40px 30px 40px; to   */
-  padding: 10px 25px 40px;
+  padding: 18px 25px 40px;
   flex: 1;
   z-index: 1;
   min-height: 100vh;
@@ -614,7 +614,7 @@ button#UserPop span {
 
 .content-block thead {
   border-radius: 3px 3px 0px 0px;
-  background: #0B0D23;
+  background: #0047CD;
   color: #fff;
 }
 

@@ -53,8 +53,15 @@ export default function CreateLead({ editId, setEditId, refresh, setRefresh,hand
                 onClose={handleDrawerClose}
             >
                 <Grid width={650}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? `Edit Lead ` : `Add Quick Lead`}</a>
+                    <Grid className='modal_title'>
+                        <a className='back_modal'>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                        <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        </a>
+                    
+
+                        <a>{editId > 0 ? `Edit Lead ` : `Add Quick Lead`}</a>
                         <IconButton
                             onClick={handleClose}
                         >
