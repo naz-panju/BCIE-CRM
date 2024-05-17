@@ -39,7 +39,7 @@ function Footer() {
   };
 
   return (
-    <div className='w-full'>
+    <div className='footer'>
       <div className='navbar-left'>
         <ul>
           <li>
