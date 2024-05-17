@@ -15,7 +15,7 @@ const Layout = ({ title, children }) => {
                 <div style={{width:'100%'}}>
                     {/* <Header /> */}
                     {children}
-                    {/* <Footer /> */}
+                    <Footer />
                 </div>
             </Grid>
         </SessionLoader>
