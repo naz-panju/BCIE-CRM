@@ -886,7 +886,7 @@ text-transform: capitalize;
     text-transform: capitalize;
 }
 .page-title-block-content .assign_btn svg{
-    margin-right: 5px;
+    margin: 0 5px;
   }
 
 
@@ -931,7 +931,7 @@ position: relative;
 .table-pagination{
     background: rgba(255, 255, 255, 0.61);
 backdrop-filter: blur(13.100000381469727px);
-padding: 15px; 
+padding: 15px 0; 
 }
 
 .select-row-box{
@@ -1254,7 +1254,7 @@ line-height: 20px; /* 181.818% */
 
 
 body.body-active .footer  {
-    margin-left: 276px;
+    padding-left: 295px;
     transition: .5s;
 }
 
@@ -1585,6 +1585,23 @@ top: 13px;
 .log-rht-cntr input {
     padding-left: 50px;
 }
+
+
+.footer .userDropDown  {
+    line-height: 35px;
+}
+.footer .userDropDown button  {
+    margin-right: 5px;
+}
+
+.footer .userDropDown svg  {
+    fill: #fff;
+}
+
+.footer .userDropDown .log-out-cntr{
+    border-left: 1px solid #fff;
+}
+
 
 @media (max-width: 1400px) {
 
