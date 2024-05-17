@@ -22,7 +22,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import 'reactjs-popup/dist/index.css';
@@ -33,6 +33,7 @@ import ApplicationStageChangeModal from '../LeadDetails/Tabs/application/modals/
 import DeferIntake from '../LeadDetails/Tabs/application/modals/deferIntake';
 import ViewDocumentModal from '../LeadDetails/Tabs/application/modals/viewDocModal';
 import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUniversity';
+import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -132,6 +133,12 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'Stage',
+    },
+    {
+        id: 'deposit',
+        numeric: false,
+        disablePadding: false,
+        label: 'Uni.Deposit',
     },
     {
         id: 'icons',
@@ -510,6 +517,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             <DeferIntake editId={deferId} setEditId={setdeferId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <ViewDocumentModal editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} handleUniDocOpen={handleUniDocOpen} />
             <SendUniversityMail from={'lead'} details={details} lead_id={details?.lead_id} editId={mailId} setEditId={setMailId} />
+            <UniversityDeposit editId={depositId} setEditId={setdepositId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
             <Grid p={1} pl={0} mb={1} container display={'flex'} >
                 <Grid mr={1} item md={2}>
@@ -640,6 +648,14 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                             <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                             <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                             <TableCell align="left"><Tooltip title={row?.stage_note}>{row?.stage?.name}</Tooltip></TableCell>
+                                                            <TableCell align="left"> {
+                                                                row?.deposit_amount_paid ?
+                                                                    <a className='a_hover' style={{ cursor: 'pointer', }} onClick={() => handleDepositEdit(row)}> {row?.deposit_amount_paid} </a>
+                                                                    :
+                                                                    <Button onClick={() => handleDepositOpen(row)}> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                                                        <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" stroke-linecap="round" stroke-linejoin="round" />
+                                                                    </svg> Add</Button>
+                                                            }</TableCell>
 
 
                                                             <TableCell align="left">
