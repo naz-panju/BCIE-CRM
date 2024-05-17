@@ -516,8 +516,11 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                 {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
 
                             </div>
-                            <div className='form_group'>
-                            <input control={control} {...register('preffered_country')}
+                            <div className='form_group frm-conn-stl '>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M3 12H8M3 12C3 16.9706 7.02944 21 12 21M3 12C3 7.02944 7.02944 3 12 3M8 12H16M8 12C8 16.9706 9.79086 21 12 21M8 12C8 7.02944 9.79086 3 12 3M16 12H21M16 12C16 7.02944 14.2091 3 12 3M16 12C16 16.9706 14.2091 21 12 21M21 12C21 7.02944 16.9706 3 12 3M21 12C21 16.9706 16.9706 21 12 21" stroke="#0B0D23" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                            <input placeholder='Preferred Countries' control={control} {...register('preffered_country')}
                                     value={watch('preffered_country')} />
                                 {errors.preffered_country && <span className='form-validation'>{errors.preffered_country.message}</span>}
                             
@@ -531,7 +534,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             <SelectX
                                     menuPlacement='top'
                                     loadOptions={fetchCourseLevel}
-                                    control={control}
+                                    control={control} 
                                     // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
                                     // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
                                     name={'preffered_course_level'}
@@ -540,8 +543,11 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                 {errors.preffered_course_level && <span className='form-validation'>{errors.preffered_course_level.message}</span>}
                             
                             </div>
-                            <div className='form_group'>
-                            <input control={control} {...register('preffered_course')}
+                            <div className='form_group frm-conn-stl '>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M3 15.0002V16.8C3 17.9201 3 18.4798 3.21799 18.9076C3.40973 19.2839 3.71547 19.5905 4.0918 19.7822C4.5192 20 5.07899 20 6.19691 20H21.0002M3 15.0002V5M3 15.0002L6.8534 11.7891L6.85658 11.7865C7.55366 11.2056 7.90288 10.9146 8.28154 10.7964C8.72887 10.6567 9.21071 10.6788 9.64355 10.8584C10.0105 11.0106 10.3323 11.3324 10.9758 11.9759L10.9822 11.9823C11.6357 12.6358 11.9633 12.9635 12.3362 13.1153C12.7774 13.2951 13.2685 13.3106 13.7207 13.1606C14.1041 13.0334 14.4542 12.7275 15.1543 12.115L21 7" stroke="#0B0D23" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+                            <input placeholder='Preferred Course level' control={control} {...register('preffered_course')}
                                     value={watch('preffered_course')} />
                                 {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
                          
@@ -710,9 +716,13 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             </div>
                        
 
-                        <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                            <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2, height: 30 }} variant='outlined'>Cancel</Button>
-                            <LoadingButton loading={loading} disabled={loading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
+                        <Grid p={1} pb={3}  >
+                            <Button onClick={handleClose} className='cancel-btn'>Cancel <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+  <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></Button>
+                            <LoadingButton loading={loading} disabled={loading}  className='save-btn'>Save <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg></LoadingButton>
                         </Grid>
                     </form>
             }
