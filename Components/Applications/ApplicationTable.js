@@ -15,14 +15,14 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, styled } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import 'reactjs-popup/dist/index.css';
@@ -34,6 +34,7 @@ import DeferIntake from '../LeadDetails/Tabs/application/modals/deferIntake';
 import ViewDocumentModal from '../LeadDetails/Tabs/application/modals/viewDocModal';
 import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUniversity';
 import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
+import { InfoOutlined } from '@mui/icons-material';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -115,6 +116,12 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'Course Level',
+    },
+    {
+        id: 'course',
+        numeric: false,
+        disablePadding: false,
+        label: 'Course',
     },
     {
         id: 'subject_area',
@@ -259,6 +266,18 @@ function EnhancedTableToolbar(props) {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
+
+const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip placement="right" {...props} classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: '#f5f5f9',
+      color: 'rgba(0, 0, 0, 0.87)',
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+      border: '1px solid #dadde9',
+    },
+  }));
 
 export default function ApplicationTable({ refresh, editId, setEditId, page, setPage, setRefresh, searchType, nameSearch }) {
 
@@ -637,14 +656,31 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 padding="none"
                                                                 className='reg-name'
                                                             >
-                                                                <a target='_blank' href={`lead/${row?.lead_id}?app_id=${row?.id}`}> {row?.student?.name}</a>
-                                                                {/* {row?.first_name  } {row?.last_name} */}
+                                                                {/* <a target='_blank' href={`lead/${row?.lead_id}?app_id=${row?.id}`}> {row?.student?.name}</a> */}
+                                                                {row?.student?.name}
                                                             </TableCell>
                                                             {/* <TableCell align="left">{row?.student?.email}</TableCell>
                                                             <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
                                                             <TableCell align="left"> {row?.country?.name}</TableCell>
-                                                            <TableCell align="left"> {row?.university?.name}</TableCell>
+                                                            <TableCell align="left">
+                                                                <div className='d-flex justify-between items-center'>
+                                                                    {row?.university?.name}
+                                                                    <HtmlTooltip
+                                                                        title={
+                                                                            <React.Fragment>
+                                                                                <Typography color="inherit">{row?.university?.name}</Typography>
+                                                                                <em>{"University Details"}</em> <u>{'Detail Content'}</u>.{' '}
+                                                                                {"Display University Details"}
+                                                                            </React.Fragment>
+                                                                        }
+                                                                    >
+                                                                        <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
+                                                                    </HtmlTooltip>
+
+                                                                </div>
+                                                            </TableCell>
                                                             <TableCell align="left"> {row?.course_level?.name}</TableCell>
+                                                            <TableCell align="left"> {row?.course}</TableCell>
                                                             <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                             <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                             <TableCell align="left"><Tooltip title={row?.stage_note}>{row?.stage?.name}</Tooltip></TableCell>
@@ -652,9 +688,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 row?.deposit_amount_paid ?
                                                                     <a className='a_hover' style={{ cursor: 'pointer', }} onClick={() => handleDepositEdit(row)}> {row?.deposit_amount_paid} </a>
                                                                     :
-                                                                    <Button onClick={() => handleDepositOpen(row)}> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-                                                                        <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" stroke-linecap="round" stroke-linejoin="round" />
-                                                                    </svg> Add</Button>
+                                                                    <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
                                                             }</TableCell>
 
 

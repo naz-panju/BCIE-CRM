@@ -60,6 +60,7 @@ const SelectX = (props) => {
                 render={({ field }) => (
                     <AsyncSelect
                         {...field}
+                        placeholder={props?.placeholder}
                         required={props?.required || false}
                         isClearable={true}
                         defaultOptions

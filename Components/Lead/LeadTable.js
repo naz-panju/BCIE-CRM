@@ -755,7 +755,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 /> */}
               </Paper>
             </Box>
-            <div className='table-pagination d-flex justify-content-between align-items-center'>
+            <div className='table-pagination d-flex justify-content-end align-items-center'>
              
               {
                 list?.data?.length > 0 &&

@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material'
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Pagination, Paper, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography, styled, tooltipClasses } from '@mui/material'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import moment from 'moment'
@@ -14,6 +14,21 @@ import ConfirmPopup from '@/Components/Common/Popup/confirm'
 import UniversityDeposit from './modals/universityDepost'
 import DeferIntake from './modals/deferIntake'
 import ViewDocumentModal from './modals/viewDocModal'
+import { InfoOutlined } from '@mui/icons-material'
+
+
+const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip placement="right" {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: '#f5f5f9',
+        color: 'rgba(0, 0, 0, 0.87)',
+        maxWidth: 220,
+        fontSize: theme.typography.pxToRem(12),
+        border: '1px solid #dadde9',
+    },
+}));
+
 
 function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
@@ -34,13 +49,13 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const [deleteId, setdeleteId] = useState()
     const [deleteLoading, setdeleteLoading] = useState(false)
 
-    
-    const [page, setPage] = useState(0);
+
+    const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
-    
+
     const [expandedRowId, setExpandedRowId] = useState(null);
-    
-    
+
+
     const [stageId, setStageId] = useState()
     const [uniDocId, setuniDocId] = useState()
     const [applicationId, setapplicationId] = useState()
@@ -76,7 +91,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
-        setPage(0);
+        setPage(1);
     };
 
 
@@ -144,8 +159,8 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     }
 
     const handleRefresh = () => {
-        if (page != 0) {
-            setPage(0)
+        if (page != 1) {
+            setPage(1)
         }
         setRefresh(!refresh)
     }
@@ -162,7 +177,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
+        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page, })
         setList(response?.data)
         setLoading(false)
     }
@@ -315,7 +330,22 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                         <React.Fragment key={obj?.id}>
                                                             {/* sx={{ height: isRowExpanded(obj.id) ? 300 : null }} */}
                                                             <TableRow >
-                                                                <TableCell>{obj?.university?.name}</TableCell>
+                                                                <TableCell>
+                                                                    <div className='d-flex justify-between items-center'>
+                                                                        {obj?.university?.name}
+                                                                        <HtmlTooltip
+                                                                            title={
+                                                                                <React.Fragment>
+                                                                                    <Typography color="inherit">{obj?.university?.name}</Typography>
+                                                                                    <em>{"University Details"}</em> <u>{'Detail Content'}</u>.{' '}
+                                                                                    {"Display University Details"}
+                                                                                </React.Fragment>
+                                                                            }
+                                                                        >
+                                                                            <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
+                                                                        </HtmlTooltip>
+                                                                    </div>
+                                                                </TableCell>
                                                                 <TableCell>{obj?.subject_area?.name}</TableCell>
                                                                 <TableCell>{obj?.course}</TableCell>
                                                                 <TableCell><Tooltip title={obj?.differ_intake_note}>{obj?.intake?.name}</Tooltip></TableCell>
@@ -514,7 +544,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
                                             </TableBody>
                                         </Table>
-                                        <TablePagination
+                                        {/* <TablePagination
                                             rowsPerPageOptions={[10, 15, 25]}
                                             component="div"
                                             count={list?.meta?.total || 0}
@@ -522,11 +552,32 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                             page={page}
                                             onPageChange={handleChangePage}
                                             onRowsPerPageChange={handleChangeRowsPerPage}
-                                        />
+                                        /> */}
 
                                     </TableContainer>
                                     :
                                     <h4>No Application Found</h4>
+                            }
+
+                            {
+                                list?.data?.length > 0 &&
+                                <div className='table-pagination d-flex justify-content-end align-items-center'>
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <div className='select-row-box'>
+                                            <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                                                <MenuItem value={10}>10</MenuItem>
+                                                <MenuItem value={15}>15</MenuItem>
+                                                <MenuItem value={25}>25</MenuItem>
+                                            </Select>
+                                            <label>Rows per page</label>
+                                        </div>
+                                        <div>
+                                            <Stack spacing={2}>
+                                                <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                                            </Stack>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                         </div>
                 }
