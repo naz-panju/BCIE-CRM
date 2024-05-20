@@ -93,7 +93,7 @@ const LoginForm = () => {
                     loading ?
                         <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
                         :
-                        'SignIn'
+                        'Sign in'
                 } <svg xmlns="http://www.w3.org/2000/svg" width="39" height="39" viewBox="0 0 39 39" fill="none">
                     <path d="M11.375 19.5H27.625M27.625 19.5L21.125 13M27.625 19.5L21.125 26" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>

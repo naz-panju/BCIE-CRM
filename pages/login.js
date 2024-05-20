@@ -43,7 +43,7 @@ function Login() {
 
 
           <h1 className="brand-name">Welcome Back</h1>
-          <p>To continue enter your email & password </p>
+          <p>To continue, please enter your email and password </p>
           <LoginForm />
 
           <h5><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

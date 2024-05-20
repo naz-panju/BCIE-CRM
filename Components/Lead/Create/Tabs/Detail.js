@@ -22,8 +22,7 @@ import AsyncSelect from "react-select/async";
 
 
 
-function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
-
+function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh, from }) {
 
 
     const [phone, setPhone] = useState()
@@ -34,19 +33,53 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
 
     const [whatsapp, setWhatsapp] = useState()
     const [whatsappCode, setWhatsappCode] = useState()
-    const scheme = yup.object().shape({
-        name: yup.string().required("Name is Required"),
-        email: yup.string().email("Invalid email format").required("Email is Required"),
-        // phone: yup.string().required('Phone Number is Required'),
-        // alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
-        //     return value !== this.parent.phone;
-        // }),
-        preffered_course: yup.string().required("Preffered Course is Required"),
-        // assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
-        // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
-        // institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
-        // course: yup.object().required("Please Choose a Country").typeError("Please choose a Course"),
-    })
+
+
+    let scheme
+
+    if (from == 'app') {
+        scheme = yup.object().shape({
+            name: yup.string().required("Name is Required"),
+            email: yup.string().email("Invalid email format").required("Email is Required"),
+            dob: yup.string().required('Date of Birth is Required'),
+            address: yup.string().required('Address is Required'),
+            reference: yup.string().required('Reference is Required'),
+            phone:yup.string().required('Phone number is Required'),
+            alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
+                return value !== this.parent.phone;
+            }),
+            preffered_course: yup.string().required("Preffered Course is Required"),
+            preferred_country: yup.string().required("Preffered Country is Required"),
+            // assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
+            // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
+            // institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
+            preffered_course_level: yup.object().required("Course Level is required").typeError("Please choose a Course"),
+            intake: yup.object().required("Intake is required").typeError("Please choose a Course"),
+            country_of_birth: yup.object().required("Country of Birth is required").typeError("Please choose a Course"),
+            country_of_residence: yup.object().required("Country of Residence is required").typeError("Please choose a Course"),
+            source: yup.object().required("Lead Source is required").typeError("Please choose a Course"),
+
+        })
+    } else {
+        scheme = yup.object().shape({
+            name: yup.string().required("Name is Required"),
+            email: yup.string().email("Invalid email format").required("Email is Required"),
+            alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
+                return value !== this.parent.phone;
+            }),
+            // phone: yup.string().required('Phone Number is Required'),
+            // alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
+            //     return value !== this.parent.phone;
+            // }),
+            preffered_course: yup.string().required("Preffered Course is Required"),
+            // assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
+            // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
+            // institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
+            // course: yup.object().required("Please Choose a Country").typeError("Please choose a Course"),
+        })
+    }
+
+
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
     const phoneValue = watch('phone');
@@ -232,8 +265,14 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
     const onSubmit = async (data) => {
 
         setLoading(true)
+        let dob = ''
+        if (data?.dob) {
+            dob = moment(data?.dob).format('YYYY-MM-DD')
+        }
+
 
         let dataToSubmit = {
+            title: data?.title?.name,
             name: data?.name,
             email: data?.email,
 
@@ -249,16 +288,22 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
             preferred_course: data?.preffered_course,
             preferred_countries: data?.preffered_country,
 
-            course_level_id: data?.preffered_course_level?.id,
+            course_level_id: data?.preffered_course_level?.id || null,
+            intake_id: data?.intake?.id,
+
+            date_of_birth: dob,
+            address: data?.address,
+            // zipcode: data?.zipcode,
+            // state: data?.state,
+            country_of_birth_id: data?.country_of_birth?.id || null,
+            country_of_residence_id: data?.country_of_residence?.id || null,
 
             referrance_from: data?.reference,
 
-            source_id: data?.source?.id,
-            agency_id: data?.agency?.id,
-            referred_student_id: data?.student?.id,
-
-            state: data?.state,
-            country_id: data?.country?.id,
+            source_id: data?.source?.id || null,
+            agency_id: data?.agency?.id || null,
+            referred_student_id: data?.student?.id || null,
+            // country_id: data?.country?.id,
 
             note: data?.note
         }
@@ -302,10 +347,8 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
         const response = await LeadApi.view({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
-            console.log(data);
-
+            // console.log(data);
             // console.log(`+${data?.phone_country_code}${data?.phone_number}`);
-
             setValue('name', data?.name)
             setValue('email', data?.email)
 
@@ -325,14 +368,19 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
             setValue('preffered_course_level', data?.course_level)
             setValue('preffered_course', data?.preferred_course)
 
+            setValue('intake', data?.intake)
+            setValue('dob', data?.date_of_birth)
+
             setValue('source', data?.lead_source)
             setValue('student', data?.referredStudent)
             setValue('agency', data?.agency)
             setValue('reference', data?.referrance_from)
 
-            setValue('country', data?.country)
-            setValue('state', data?.state)
+            setValue('country_of_birth', data?.country_of_birth)
+            setValue('country_of_residence', data?.country_of_residence)
 
+            // setValue('state', data?.state)
+            setValue('address', data?.address)
             setValue('note', data?.note)
 
         }
@@ -525,7 +573,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                 </svg>
                                 <input placeholder='Preferred Countries' control={control} {...register('preffered_country')}
                                     value={watch('preffered_country')} />
-                                {errors.preffered_country && <span className='form-validation'>{errors.preffered_country.message}</span>}
+                                {errors.preferred_country && <span className='form-validation'>{errors.preferred_country.message}</span>}
 
                             </div>
                         </div>
@@ -555,10 +603,10 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M3 15.0002V16.8C3 17.9201 3 18.4798 3.21799 18.9076C3.40973 19.2839 3.71547 19.5905 4.0918 19.7822C4.5192 20 5.07899 20 6.19691 20H21.0002M3 15.0002V5M3 15.0002L6.8534 11.7891L6.85658 11.7865C7.55366 11.2056 7.90288 10.9146 8.28154 10.7964C8.72887 10.6567 9.21071 10.6788 9.64355 10.8584C10.0105 11.0106 10.3323 11.3324 10.9758 11.9759L10.9822 11.9823C11.6357 12.6358 11.9633 12.9635 12.3362 13.1153C12.7774 13.2951 13.2685 13.3106 13.7207 13.1606C14.1041 13.0334 14.4542 12.7275 15.1543 12.115L21 7" stroke="#0B0D23" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <input placeholder='Preferred Course level' control={control} {...register('preffered_course')}
+                                <input placeholder='Preferred Courses' control={control} {...register('preffered_course')}
                                     value={watch('preffered_course')} />
-                                {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
 
+                                {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
                             </div>
                         </div>
 
@@ -593,43 +641,57 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             </div>
                         </div>
 
-
-
-
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                             <div className='form_group frm-sel-icon-stl'>
                                 <svg className='sel-icon' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M5 9.92285C5 14.7747 9.24448 18.7869 11.1232 20.3252C11.3921 20.5454 11.5281 20.6568 11.7287 20.7132C11.8849 20.7572 12.1148 20.7572 12.271 20.7132C12.472 20.6567 12.6071 20.5463 12.877 20.3254C14.7557 18.7871 18.9999 14.7751 18.9999 9.9233C18.9999 8.08718 18.2625 6.32605 16.9497 5.02772C15.637 3.72939 13.8566 3 12.0001 3C10.1436 3 8.36301 3.7295 7.05025 5.02783C5.7375 6.32616 5 8.08674 5 9.92285Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                     <path d="M10 9C10 10.1046 10.8954 11 12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <AsyncSelect
-                                    placeholder='Country From'
+                                <SelectX
+                                    placeholder='Country of Birth'
                                     menuPlacement='top'
                                     loadOptions={fetchGlobalCountry}
-                                    onInputChange={fetchGlobalCountry}
-                                    defaultOptions
-                                    getOptionLabel={(e) => e.name}
-                                    getOptionValue={(e) => e.id}
                                     control={control}
-                                    name={'country'}
-                                    defaultValue={watch('country')}
-                                    onChange={(data) => setValue('country', data)}
+                                    name={'country_of_birth'}
+                                    defaultValue={watch('country_of_birth')}
                                 />
-                                {errors.country && <span className='form-validation'>{errors.country.message}</span>}
+                                {errors.country_of_birth && <span className='form-validation'>{errors.country_of_birth.message}</span>}
 
                             </div>
                             <div className='form_group frm-conn-stl'>
+                                <SelectX
+                                    placeholder='Country of Residence'
+                                    menuPlacement='top'
+                                    loadOptions={fetchGlobalCountry}
+                                    control={control}
+                                    name={'country_of_residence'}
+                                    defaultValue={watch('country_of_residence')}
+                                />
+                                {errors.country_of_residence && <span className='form-validation'>{errors.country_of_residence.message}</span>}
 
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M9 3.95665L3 6.92414V19.7833L9 16.8158M9 3.95665V16.8158M9 3.95665L15 6.92414M9 16.8158L15 19.7833M15 19.7833L21 17.8049V4.94581L15 6.92414M15 19.7833V6.92414" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
+                            </div>
+                        </div>
+
+
+                        {/* 
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <div className='form_group frm-conn-stl'>
+
                                 <input placeholder='State/Province' control={control} name="state"
                                     // disabled={!watch('country')}
                                     value={watch('state')} />
                                 {errors.state && <span className='form-validation'>{errors.state.message}</span>}
 
                             </div>
-                        </div>
+                            <div className='form_group frm-conn-stl'>
+
+                                <input placeholder='Zipcode' control={control} name="zipcode"
+                                    // disabled={!watch('country')}
+                                    value={watch('zipcode')} />
+                                {errors.zipcode && <span className='form-validation'>{errors.zipcode.message}</span>}
+
+                            </div>
+                        </div> */}
 
                         <div className='form_group frm-text-conn-stl '>
 
@@ -638,6 +700,8 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             </svg>
                             <textarea placeholder='Address' multiline rows={2} fullWidth control={control}  {...register('address')}
                                 value={watch('address') || ''} />
+                            {errors.address && <span className='form-validation'>{errors.address.message}</span>}
+
                         </div>
 
 
@@ -663,6 +727,8 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                 onChange={handleSourseChange}
                             />
                             {/* </div> */}
+                            {errors.source && <span className='form-validation'>{errors.source.message}</span>}
+
 
                         </div>
 
@@ -734,6 +800,8 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                                 defaultValue={(watch('reference'))}
                                 onChange={(selectedOption) => setValue('reference', selectedOption?.name || '')}
                             />
+                            {errors.reference && <span className='form-validation'>{errors.reference.message}</span>}
+
                         </div>
 
 
@@ -754,7 +822,7 @@ function Detail({ handleClose, setRefresh, refresh, editId, handleRefresh }) {
                             <Button onClick={handleClose} className='cancel-btn'>Cancel <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
                                 <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg></Button>
-                            <LoadingButton loading={loading} disabled={loading} className='save-btn'>Save <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <LoadingButton loading={loading} disabled={loading} type='submit' className='save-btn'>Save <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg></LoadingButton>
                         </Grid>

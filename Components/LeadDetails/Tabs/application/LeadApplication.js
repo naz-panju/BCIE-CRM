@@ -15,6 +15,7 @@ import UniversityDeposit from './modals/universityDepost'
 import DeferIntake from './modals/deferIntake'
 import ViewDocumentModal from './modals/viewDocModal'
 import { InfoOutlined } from '@mui/icons-material'
+import CreateLead from '@/Components/Lead/Create/Create'
 
 
 const HtmlTooltip = styled(({ className, ...props }) => (
@@ -111,6 +112,12 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
         setdeleteId(id)
     }
 
+    const [leadEditId, setleadEditId] = useState()
+
+    const handleLeadEditOpen = () => {
+        setleadEditId(lead_id)
+    }
+
 
     function trimUrlAndNumbers(url) {
         const lastSlashIndex = url?.lastIndexOf('/');
@@ -200,6 +207,8 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     return (
         <>
+            <CreateLead from='app' editId={leadEditId} setEditId={setleadEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
+
             <LeadApplicationModal details={data} lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={uniDocId} setEditId={setuniDocId} handleRefresh={fetchLoadingList} />
@@ -229,7 +238,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                     <Button
                                         sx={{ mr: 2 }}
                                         disabled={data?.verification_status === 'Yes' || (data?.stage?.name !== 'Hot' && data?.assignedToCounsellor == null)}
-                                        onClick={data && handleStudentModalOpen}
+                                        onClick={handleLeadEditOpen}
                                         variant='contained'
                                         className='bg-sky-600 text-white hover:bg-sky-700 text-white'
                                     >

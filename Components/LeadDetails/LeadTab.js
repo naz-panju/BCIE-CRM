@@ -162,7 +162,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
 
   return (
     <>
-      <CreateLead editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
+      <CreateLead from='lead' editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} />
       <ConvertLeadToStudent lead_id={data?.id} editId={studentEditId} setEditId={setstudentEditId} leadId={data?.id} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <Box
         sx={{ flexGrow: 1, bgcolor: 'background.paper', display: 'flex' }}
