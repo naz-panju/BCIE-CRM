@@ -149,12 +149,6 @@ const headCells = [
         label: 'Uni.Deposit',
     },
     {
-        id: 'return',
-        numeric: false,
-        disablePadding: false,
-        label: '',
-    },
-    {
         id: 'icons',
         numeric: false,
         disablePadding: false,
