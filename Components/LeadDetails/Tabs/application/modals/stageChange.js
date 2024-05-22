@@ -62,7 +62,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
 
 
     const fetchStages = (e) => {
-        return ListingApi.stages({ keyword: e, type: 'application' }).then(response => {
+        return ListingApi.stages({ keyword: e, type: 'application',changable:1 }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 setstages(response.data.data)
                 return response.data.data;
