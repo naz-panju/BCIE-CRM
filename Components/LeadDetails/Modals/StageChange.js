@@ -58,7 +58,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
 
     const fetchStages = (e) => {
         // setoptionLoading(true)
-        return ListingApi.stages({ keyword: e, type: 'student' }).then(response => {
+        return ListingApi.stages({ keyword: e, type: 'student',changable:1 }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 setstages(response.data.data)
                 // setoptionLoading(false)

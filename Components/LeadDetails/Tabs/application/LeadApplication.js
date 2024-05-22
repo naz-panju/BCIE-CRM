@@ -31,7 +31,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 }));
 
 
-function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
+function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
     const router = useRouter()
 
@@ -50,6 +50,11 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const [deleteId, setdeleteId] = useState()
     const [deleteLoading, setdeleteLoading] = useState(false)
 
+    const [submitId, setsubmitId] = useState()
+    const handleSubmitOpen = (id) => {
+        console.log(id);
+        setsubmitId(id)
+    }
 
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
@@ -165,6 +170,25 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
         })
     }
 
+    const handleSubmit = () => {
+        setdeleteLoading(true)
+        ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
+            console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                setdeleteLoading(false)
+                setdeleteId()
+                fetchLoadingList()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setdeleteLoading(false)
+            }
+        }).catch((error) => {
+            toast.error(error?.response?.data?.message)
+            setdeleteLoading(false)
+        })
+    }
+
     const handleRefresh = () => {
         if (page != 1) {
             setPage(1)
@@ -184,30 +208,31 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page, })
+        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, })
         setList(response?.data)
         setLoading(false)
     }
 
     const fetchLoadingList = async () => {
         setdocLoading(true)
-        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
+        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, })
         setList(response?.data)
         setdocLoading(false)
     }
 
+    console.log(list);
+
     useEffect(() => {
-        {
-            data?.student &&
-                fetchList()
-        }
+
+        fetchList()
+
     }, [refresh, page])
 
 
 
     return (
         <>
-            <CreateLead from='app' editId={leadEditId} setEditId={setleadEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
+            <CreateLead from='app' editId={leadEditId} setEditId={setleadEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} handleLeadRefresh={handleLeadRefresh} />
 
             <LeadApplicationModal details={data} lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
@@ -221,6 +246,9 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
             <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />
 
+            <ConfirmPopup loading={deleteLoading} ID={submitId} setID={setsubmitId} clickFunc={handleSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
+
+
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 
 
@@ -228,30 +256,32 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                 <div className='lead-tabpanel-content-block-title'>
                     <h2>Applications</h2>
                     <Grid display={'flex'} alignItems={'end'}>
+                        {
+                            !data?.user &&
+                            <Grid>
+                                <Tooltip
+                                    title={(data?.action_type !== 'Hot Lead' && data?.assignedToCounsellor === null) && 'This button will be enabled if student is Hot and Counsellor is assigned'}
+                                >
+                                    <a>
 
-                        <Grid>
-                            <Tooltip
-                                title={(data?.verification_status === 'Yes' && data?.stage?.name !== 'Hot') ? 'This button will be enabled if student is Hot' : (data?.assignedToCounsellor === null ? 'This button will be enabled if counsellor is assigned' : '')}
-                            >
-                                <a>
+                                        <Button
+                                            sx={{ mr: 2 }}
+                                            disabled={(data?.stage?.action_type !== 'Hot Lead' || data?.assignedToCounsellor == null)}
+                                            onClick={handleLeadEditOpen}
+                                            variant='contained'
+                                            className='bg-sky-600 text-white hover:bg-sky-700 text-white'
+                                        >
+                                            Submit Applicant Data
+                                        </Button>
+                                    </a>
+                                </Tooltip>
 
-                                    <Button
-                                        sx={{ mr: 2 }}
-                                        disabled={data?.verification_status === 'Yes' || (data?.stage?.name !== 'Hot' && data?.assignedToCounsellor == null)}
-                                        onClick={handleLeadEditOpen}
-                                        variant='contained'
-                                        className='bg-sky-600 text-white hover:bg-sky-700 text-white'
-                                    >
-                                        Submit Applicant Data
-                                    </Button>
-                                </a>
-                            </Tooltip>
-
-                        </Grid>
+                            </Grid>
+                        }
                         <Grid>
                             {
-                                data?.student?.id ?
-                                    <Button variant='contained' disabled={data?.verification_status != 'Yes'} onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
+                                data?.user ?
+                                    <Button variant='contained' onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
                                     :
                                     <Tooltip title="Only for Applicants" >
                                         <a>
@@ -331,9 +361,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {
-                                                    console.log(list?.data)
-                                                }
+
                                                 {
                                                     list?.data?.map((obj, index) => (
                                                         <React.Fragment key={obj?.id}>
@@ -370,7 +398,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                     }
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <Button variant='outlined' size='small'>Submit</Button>
+                                                                    <Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <Tooltip title={'Change Stage'}>

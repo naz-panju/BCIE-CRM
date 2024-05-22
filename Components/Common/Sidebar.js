@@ -44,7 +44,7 @@ const Sidebar = () => {
             href: '/lead'
         },
         {
-            title: 'Applications',
+            title: 'Applications Unsubmitted',
             icon: (
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
                     <mask id="mask0_1041_318" mask-type="luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="15" height="18">
@@ -56,7 +56,37 @@ const Sidebar = () => {
                     </g>
                 </svg>
             ),
-            href: '/applications'
+            href: '/applications-unsubmitted'
+        },
+        {
+            title: 'Applications Submitted',
+            icon: (
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
+                    <mask id="mask0_1041_318" mask-type="luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="15" height="18">
+                        <path d="M13.2692 5.4075L7.13461 1.81494L1 5.4075V12.5926L7.13461 16.1852L13.2692 12.5926V5.4075Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+                        <path d="M4.24805 7.20312L7.1324 9.00012L10.02 7.20312M7.13492 9.00012V12.2334" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </mask>
+                    <g mask="url(#mask0_1041_318)">
+                        <path d="M-1.52539 0.37793H15.7959V17.6222H-1.52539V0.37793Z" fill="white" />
+                    </g>
+                </svg>
+            ),
+            href: '/applications-submitted'
+        },
+        {
+            title: 'Applications Returned',
+            icon: (
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
+                    <mask id="mask0_1041_318" mask-type="luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="15" height="18">
+                        <path d="M13.2692 5.4075L7.13461 1.81494L1 5.4075V12.5926L7.13461 16.1852L13.2692 12.5926V5.4075Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+                        <path d="M4.24805 7.20312L7.1324 9.00012L10.02 7.20312M7.13492 9.00012V12.2334" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </mask>
+                    <g mask="url(#mask0_1041_318)">
+                        <path d="M-1.52539 0.37793H15.7959V17.6222H-1.52539V0.37793Z" fill="white" />
+                    </g>
+                </svg>
+            ),
+            href: '/applications-returned'
         },
         // {
         //     title: 'Applicants',

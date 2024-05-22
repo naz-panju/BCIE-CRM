@@ -429,37 +429,6 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const [emailSearch, setemailSearch] = useState()
   const [userIdSearch, setuserIdSearch] = useState()
 
-  const handleClearSearch = (from) => {
-
-    // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
-    setValue('nameSearch', '')
-    setValue('emailSearch', '')
-    setValue('numberSearch', '')
-    setValue('lead_id_search', '')
-
-    setValue('assignedTo', null)
-    setValue('stage', '')
-
-    setSelectedAssignedTo()
-    setSelectedStage()
-
-    setsearchRefresh(!searchRefresh)
-    // }
-
-
-    // if (from == 'email') {
-    //   setValue('emailSearch', '')
-    //   setemailSearch('')
-    // } else if (from == 'name') {
-    //   setValue('nameSearch', '')
-    //   setnameSearch('')
-    //   sessionStorage.removeItem('leadType')
-    //   sessionStorage.removeItem('leadSearch')
-    // } else if (from == 'mobile') {
-    //   setValue('mobileSearch', '')
-    //   setphoneSearch('')
-    // }
-  }
 
   const handleTypeChange = (type) => {
     setValue('searchType', type)
@@ -476,6 +445,21 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const [searchRefresh, setsearchRefresh] = useState(false)
 
   const onSearch = () => {
+    setsearchRefresh(!searchRefresh)
+  }
+  const handleClearSearch = (from) => {
+    // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
+    setValue('nameSearch', '')
+    setValue('emailSearch', '')
+    setValue('numberSearch', '')
+    setValue('lead_id_search', '')
+
+    setValue('assignedTo', null)
+    setValue('stage', '')
+
+    setSelectedAssignedTo()
+    setSelectedStage()
+
     setsearchRefresh(!searchRefresh)
   }
 
@@ -548,7 +532,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 {...register('nameSearch')}
                 size='small'
                 id="outlined-name"
-                placeholder={`search by Name`}
+                placeholder={`Name`}
               />
             </div>
           </div>
@@ -563,7 +547,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 {...register('emailSearch')}
                 size='small'
                 id="outlined-name"
-                placeholder={`search by Email`}
+                placeholder={`Email`}
               />
             </div>
           </div>
@@ -579,7 +563,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 {...register('numberSearch')}
                 size='small'
                 id="outlined-name"
-                placeholder={`search by Mobile`}
+                placeholder={`Mobile`}
               />
             </div>
           </div>
@@ -597,7 +581,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 {...register('lead_id_search')}
                 size='small'
                 id="outlined-name"
-                placeholder={`search by Lead Id`}
+                placeholder={`Lead Id`}
               />
             </div>
           </div>

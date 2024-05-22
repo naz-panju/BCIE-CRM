@@ -134,19 +134,19 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
     },
     {
       label: 'Applications',
-      component: <LeadApplication from='lead' data={data} lead_id={data?.id} handleStudentModalOpen={handleStudentModalOpen} />,
+      component: <LeadApplication from='lead' data={data} lead_id={data?.id} handleStudentModalOpen={handleStudentModalOpen} handleLeadRefresh={handleRefresh} />,
       icon: <Apps />
     },
   ]
 
-  if (data?.student) {
-    const newTab = {
-      label: 'Applicant Details',
-      component: isClient && <StudentDetail handleEdit={handleStudentEdit} data={data} loading={loading} handleRefresh={handleRefresh} />,
-      icon: <SchoolOutlined />
-    };
-    TabData.splice(1, 0, newTab);
-  }
+  // if (data?.student) {
+  //   const newTab = {
+  //     label: 'Applicant Details',
+  //     component: isClient && <StudentDetail handleEdit={handleStudentEdit} data={data} loading={loading} handleRefresh={handleRefresh} />,
+  //     icon: <SchoolOutlined />
+  //   };
+  //   TabData.splice(1, 0, newTab);
+  // }
 
 
 

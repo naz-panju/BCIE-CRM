@@ -36,8 +36,6 @@ import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUni
 import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
 import { AssignmentReturn, Autorenew, InfoOutlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
-import ReturnPopup from './Modals/returnModal';
-import ApplicationDetail from './Modals/Details';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -288,7 +286,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     },
 }));
 
-export default function ApplicationTable({ refresh, editId, setEditId, page, setPage, setRefresh, searchType, nameSearch, searchActive }) {
+export default function ApplicationReturnedTable({ refresh, editId, setEditId, page, setPage, setRefresh, searchType, nameSearch, searchActive }) {
 
     const router = useRouter();
 
@@ -309,6 +307,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     const [list, setList] = useState([])
 
     const [loading, setLoading] = useState(false)
+
+    const [detailId, setDetailId] = useState()
 
     const [details, setDetails] = useState()
 
@@ -460,7 +460,9 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         [order, orderBy, page, limit],
     );
 
-   
+    const handleDetailOpen = (id) => {
+        setDetailId(id)
+    }
 
     const handleDownloadOpen = (id) => {
         setDownloadId(id)
@@ -528,8 +530,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
         let params = {
             limit: limit,
-            // application statuses:unsubmitted,
-            unsubmitted: 1,
+            returned: 1,
             // status: 'Admission Completed',
             country_id: selectedCountry,
             university_id: selectedUniversity,
@@ -540,7 +541,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             lead_id: watch('lead_id_search'),
             page: page
         }
-        params['application statuses'] = 'unsubmitted'
         ApplicationApi.list(params).then((response) => {
             console.log(response);
             setList(response?.data)
@@ -554,22 +554,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     const handleRefresh = () => {
         setRefresh(!refresh)
     }
-
-    const [confirmLoading, setconfirmLoading] = useState(false)
-    const [returnId, setreturnId] = useState()
-    const handleReturnPopupOpen = (id) => {
-        setreturnId(id)
-    }
-    const handleFirstPage = () => {
-        setPage(0)
-    }
-
-    const [detailId, setDetailId] = useState()
-    const handleDetailOpen = (id) => {
-        setDetailId(id)
-    }
-
-    
 
 
     useEffect(() => {
@@ -588,9 +572,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             <SendUniversityMail from={'lead'} details={details} lead_id={details?.lead_id} editId={mailId} setEditId={setMailId} />
             <UniversityDeposit editId={depositId} setEditId={setdepositId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
-            <ReturnPopup getDetails={handleFirstPage} loading={confirmLoading} ID={returnId} setID={setreturnId} setLoading={setconfirmLoading} title={`Do you want to return this Application to the Counsellor?`} />
-
-            <ApplicationDetail id={detailId} setId={setDetailId} />
 
             <div className="filter_sec">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -764,7 +745,24 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                 </div>
 
             </div>
+            <Grid p={1} pl={0} mb={1} container display={'flex'} >
+                <Grid mr={1} item md={2}>
 
+                </Grid>
+
+                <Grid mr={1} item md={2}>
+
+                </Grid>
+
+                <Grid mr={1} item md={2}>
+
+                </Grid>
+
+                <Grid mr={1} item md={2}>
+
+                </Grid>
+
+            </Grid>
 
             {
 
@@ -868,8 +866,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                         :
                                                                         <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
                                                                 }</TableCell>
-
-                                                                <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell>
 
                                                                 <TableCell align="left">
                                                                     <Grid display={'flex'} alignItems={'center'}>

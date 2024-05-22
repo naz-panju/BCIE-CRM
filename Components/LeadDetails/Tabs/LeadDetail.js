@@ -4,6 +4,8 @@ import { Skeleton } from '@mui/material';
 import moment from 'moment';
 
 function LeadDetail({ data, handleEdit, loading }) {
+
+
     return (
         <div className='lead-tabpanel-content-block'>
             <div className='lead-tabpanel-content-block-title'>

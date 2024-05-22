@@ -8,6 +8,8 @@ import { useForm } from 'react-hook-form';
 import { Grid, InputAdornment, TextField } from '@mui/material';
 import { Close, Search } from '@mui/icons-material';
 import ReactSelector from 'react-select';
+import ApplicationSubmittedTable from './ApplicationTable';
+import ApplicationReturnedTable from './ApplicationTable';
 
 
 const StyledMenu = styled((props) => (
@@ -51,7 +53,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function ApplicationIndex() {
+export default function ApplicationReturned() {
 
   const router = useRouter();
 
@@ -147,7 +149,7 @@ export default function ApplicationIndex() {
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>
-            <h1>Applications Unsubmitted</h1>
+            <h1>Applications Returned</h1>
             <Grid display={'flex'} >
 
               <Grid display={'flex'}>
@@ -171,7 +173,7 @@ export default function ApplicationIndex() {
 
 
         <div className={`content-block lead-table-cntr ${isActive ? 'active' : ''}`}>
-          <ApplicationTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} searchType={watch('searchType')} nameSearch={nameSearch} searchActive={searchActive} />
+          <ApplicationReturnedTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} searchType={watch('searchType')} nameSearch={nameSearch} searchActive={searchActive} />
         </div>
       </section>
     </>
