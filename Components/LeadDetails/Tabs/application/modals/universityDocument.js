@@ -43,7 +43,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
-    if(watch('template?.stage?.action_type')=='Deposit Paid'){
+    if(watch('template')?.stage?.action_type=='Deposit Paid'){
          scheme = yup.object().shape({
 
             template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -52,7 +52,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
            
         })
     }
-    if(watch('template?.stage?.action_type')=='Get Application Id'){
+    if(watch('template')?.stage?.action_type=='Get Application Id'){
         scheme = yup.object().shape({
 
            template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
