@@ -561,7 +561,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setreturnId(id)
     }
     const handleFirstPage = () => {
-        setPage(0)
+        setPage(1)
     }
 
     const [detailId, setDetailId] = useState()

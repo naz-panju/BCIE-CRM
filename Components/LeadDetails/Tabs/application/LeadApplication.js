@@ -405,13 +405,13 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                     }
                                                                     {
                                                                         obj?.app_coordinator_status == 'Returned' &&
-                                                                        <>
+                                                                        <div className='d-flex align-center'>
                                                                             <Button Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Returned</Button>
                                                                             {
                                                                                 obj?.app_coordinator_retun_status_note &&
-                                                                                <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '13px' }} /></Tooltip>
+                                                                                <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '14px',ml:1 }} /></Tooltip>
                                                                             }
-                                                                        </>
+                                                                        </div>
                                                                     }
                                                                 </TableCell>
                                                                 <TableCell>
