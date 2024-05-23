@@ -398,7 +398,15 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                     }
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
+                                                                    {
+                                                                        obj?.app_coordinator_status == null &&
+                                                                        <Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
+
+                                                                    }
+                                                                    {
+                                                                        obj?.app_coordinator_status == 'Returned' &&
+                                                                        <Button Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Returned</Button>
+                                                                    }
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <Tooltip title={'Change Stage'}>
@@ -619,7 +627,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                         </div>
                 }
 
-            </div>
+            </div >
         </>
     )
 }
