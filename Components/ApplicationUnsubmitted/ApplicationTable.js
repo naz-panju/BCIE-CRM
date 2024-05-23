@@ -288,7 +288,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
     },
 }));
 
-export default function DepositPaidTable({ refresh, editId, setEditId, page, setPage, setRefresh, searchType, nameSearch, searchActive }) {
+export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId, page, setPage, setRefresh, searchType, nameSearch, searchActive }) {
 
     const router = useRouter();
 

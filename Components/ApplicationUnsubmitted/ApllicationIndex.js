@@ -3,11 +3,9 @@ import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
-import ApplicationTable from './ApplicationTable';
 import { useForm } from 'react-hook-form';
 import { Grid, InputAdornment, TextField } from '@mui/material';
-import { Close, Search } from '@mui/icons-material';
-import ReactSelector from 'react-select';
+import ApplicationUnsubmittedTable from './ApplicationTable';
 
 
 const StyledMenu = styled((props) => (
@@ -51,7 +49,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function ApplicationIndex() {
+export default function ApplicationUnsubmittedIndex() {
 
   const router = useRouter();
 
@@ -147,7 +145,7 @@ export default function ApplicationIndex() {
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>
-            <h1>Applications</h1>
+            <h1>Applications Unsubmitted</h1>
             <Grid display={'flex'} >
 
               <Grid display={'flex'}>
@@ -171,7 +169,7 @@ export default function ApplicationIndex() {
 
 
         <div className={`content-block lead-table-cntr ${isActive ? 'active' : ''}`}>
-          <ApplicationTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} searchType={watch('searchType')} nameSearch={nameSearch} searchActive={searchActive} />
+          <ApplicationUnsubmittedTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} searchType={watch('searchType')} nameSearch={nameSearch} searchActive={searchActive} />
         </div>
       </section>
     </>

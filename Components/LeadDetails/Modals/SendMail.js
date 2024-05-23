@@ -113,7 +113,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
 
     const fetchTemplates = (e) => {
-        return TemplateApi.list({ keyword: e }).then(response => {
+        return ListingApi.emailTemplate({ keyword: e }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
