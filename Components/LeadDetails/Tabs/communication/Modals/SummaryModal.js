@@ -157,16 +157,17 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
                 onClose={handleDrawerClose}
             >
                 <Grid width={650}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId == 0 ? 'Add Phone Call Summary' : 'Edit Phone Call Summary'}</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
+                    <Grid className='modal_title d-flex align-items-center  '>
+                <a className='back_modal' onClick={handleClose}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                    <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                        <a  className='back_modal_head'>{editId == 0 ? 'Add Phone Call Summary' : 'Edit Phone Call Summary'}</a>
+                         
                     </Grid>
                     <hr />
-                    <div>
+                    <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -176,11 +177,9 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
                                     :
                                     <>
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Type </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={8} md={8}>
+                                        
+                                            
+                                            <Grid className='form_group  '>
                                                 <ReactSelector
                                                     onInputChange={searchOptions}
                                                     styles={{
@@ -201,29 +200,27 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
                                                 />
                                                 {errors.type && <span className='form-validation'>{errors.type.message}</span>}
                                             </Grid>
-                                        </Grid>
+                                      
 
 
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Date and Time </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={8} md={8}>
+                                        
+                                             
+                                            <Grid   className='form_group  '>
                                                 <DateTime
                                                     control={control}
                                                     name="date_and_time"
                                                     value={watch('date_and_time')}
+                                                    
                                                 />
                                                 {errors.date_and_time && <span className='form-validation'>{errors.date_and_time.message}</span>}
                                             </Grid>
-                                        </Grid>
+                                         
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'> Call Summary </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={8} md={8}>
+                                            <Grid  className='form_group frm-text-conn-stl '>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                            
+                                            
                                                 <TextField
                                                     {...register('summary')}
                                                     variant="outlined"
@@ -233,7 +230,7 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
                                                     sx={{ width: '100%', }}
                                                 />
                                                 {errors.summary && <span className='form-validation'>{errors.summary.message}</span>}
-                                            </Grid>
+                                            
                                         </Grid>
 
 
@@ -241,8 +238,12 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
                             }
 
                             <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                                <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
+                                <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg></Button>
+                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg></LoadingButton>
                             </Grid>
 
                         </form>

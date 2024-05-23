@@ -697,6 +697,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 <TableCell align="left">{row?.email}</TableCell>
                                 <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
                                 <TableCell align="left">
+                                  <span>SA</span>
                                   {
                                     row?.assignedToCounsellor ?
                                       <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToCounsellor?.name}</Button>
