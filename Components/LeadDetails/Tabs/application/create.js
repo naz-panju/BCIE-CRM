@@ -124,6 +124,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     }
 
 
+
     const onSubmit = async (data) => {
         // console.log(data);
 
@@ -135,7 +136,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         })
 
         let dataToSubmit = {
-            student_id: details?.student?.id,
+            lead_id: lead_id,
             country_id: data?.country?.id,
             university_id: data?.university?.id,
             course_level_id: data?.course_level?.id,
@@ -158,6 +159,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         }
 
         action.then((response) => {
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Application has been Updated Successfully' : 'Applied Successfully')
                 reset()

@@ -71,7 +71,8 @@
 
 // export { http, setToken }
 import axios from 'axios';
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+// const session=useSession() 
 
 const http = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_PATH,
@@ -121,8 +122,9 @@ http.interceptors.response.use(
         // console.log(response);
         // Check if the response contains a specific message
         if (response?.response?.status === 401 || response?.response?.statusText === 'Unauthorized') {
+            console.log(response);
             console.log("Sign out now");
-            signOut();
+            // signOut();
         }
         return response;
     },

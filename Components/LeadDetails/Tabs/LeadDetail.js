@@ -1,8 +1,11 @@
 import React from 'react'
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import { Skeleton } from '@mui/material';
+import moment from 'moment';
 
 function LeadDetail({ data, handleEdit, loading }) {
+
+
     return (
         <div className='lead-tabpanel-content-block'>
             <div className='lead-tabpanel-content-block-title'>
@@ -150,24 +153,47 @@ function LeadDetail({ data, handleEdit, loading }) {
 
 
                             {
-                                data?.country &&
+                                data?.country_of_birth &&
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Country From </label> {data?.country?.name}
+                                    <label style={{ fontWeight: 'bold' }}>Country of Birth </label> {data?.country_of_birth?.name}
+                                </div>
+                            }
+                            {
+                                data?.country_of_residence &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Country of Residence </label> {data?.country_of_residence?.name}
                                 </div>
                             }
 
                             {
+                                data?.date_of_birth &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Date od Birth </label> {moment(data?.date_of_birth).format('DD-MM-YYYY')}
+                                </div>
+                            }
+
+                            {
+                                data?.intake &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Intake </label> {data?.intake?.name}
+                                </div>
+                            }
+
+                            {/* {
                                 data?.state &&
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>State </label> {data?.state}
                                 </div>
-                            }
+                            } */}
 
-                            <div>
-                                <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Preferred Course Level </label>  {data?.course_level?.name}
+                            {
+                                data?.course_level &&
+                                <div>
+                                    <div className="lead-details-list">
+                                        <label style={{ fontWeight: 'bold' }}>Preferred Course Level </label>  {data?.course_level?.name}
+                                    </div>
                                 </div>
-                            </div>
+                            }
 
                             <div>
                                 <div className="lead-details-list">
@@ -176,12 +202,14 @@ function LeadDetail({ data, handleEdit, loading }) {
                             </div>
 
 
-
-                            <div>
-                                <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Preferred Countries </label> {data?.preferred_countries}
+                            {
+                                data?.preferred_countries &&
+                                <div>
+                                    <div className="lead-details-list">
+                                        <label style={{ fontWeight: 'bold' }}>Preferred Countries </label> {data?.preferred_countries}
+                                    </div>
                                 </div>
-                            </div>
+                            }
 
                             {
                                 data?.lead_source &&

@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material'
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Pagination, Paper, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography, styled, tooltipClasses } from '@mui/material'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import moment from 'moment'
@@ -14,8 +14,24 @@ import ConfirmPopup from '@/Components/Common/Popup/confirm'
 import UniversityDeposit from './modals/universityDepost'
 import DeferIntake from './modals/deferIntake'
 import ViewDocumentModal from './modals/viewDocModal'
+import { InfoOutlined, Note } from '@mui/icons-material'
+import CreateLead from '@/Components/Lead/Create/Create'
 
-function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
+
+const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip placement="right" {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: '#f5f5f9',
+        color: 'rgba(0, 0, 0, 0.87)',
+        maxWidth: 220,
+        fontSize: theme.typography.pxToRem(12),
+        border: '1px solid #dadde9',
+    },
+}));
+
+
+function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
     const router = useRouter()
 
@@ -34,13 +50,18 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     const [deleteId, setdeleteId] = useState()
     const [deleteLoading, setdeleteLoading] = useState(false)
 
-    
-    const [page, setPage] = useState(0);
+    const [submitId, setsubmitId] = useState()
+    const handleSubmitOpen = (id) => {
+        console.log(id);
+        setsubmitId(id)
+    }
+
+    const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
-    
+
     const [expandedRowId, setExpandedRowId] = useState(null);
-    
-    
+
+
     const [stageId, setStageId] = useState()
     const [uniDocId, setuniDocId] = useState()
     const [applicationId, setapplicationId] = useState()
@@ -76,7 +97,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
-        setPage(0);
+        setPage(1);
     };
 
 
@@ -94,6 +115,12 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
     };
     const handleDeleteOpen = (id) => {
         setdeleteId(id)
+    }
+
+    const [leadEditId, setleadEditId] = useState()
+
+    const handleLeadEditOpen = () => {
+        setleadEditId(lead_id)
     }
 
 
@@ -143,9 +170,28 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
         })
     }
 
+    const handleSubmit = () => {
+        setdeleteLoading(true)
+        ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
+            console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                setdeleteLoading(false)
+                setsubmitId()
+                fetchLoadingList()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setdeleteLoading(false)
+            }
+        }).catch((error) => {
+            toast.error(error?.response?.data?.message)
+            setdeleteLoading(false)
+        })
+    }
+
     const handleRefresh = () => {
-        if (page != 0) {
-            setPage(0)
+        if (page != 1) {
+            setPage(1)
         }
         setRefresh(!refresh)
     }
@@ -162,29 +208,32 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
     const fetchList = async () => {
         setLoading(true)
-        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
+        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, })
         setList(response?.data)
         setLoading(false)
     }
 
     const fetchLoadingList = async () => {
         setdocLoading(true)
-        const response = await ApplicationApi.list({ limit: limit, student_id: data?.student?.id, page: page + 1, })
+        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, })
         setList(response?.data)
         setdocLoading(false)
     }
 
+    console.log(list);
+
     useEffect(() => {
-        {
-            data?.student &&
-                fetchList()
-        }
+
+        fetchList()
+
     }, [refresh, page])
 
 
 
     return (
         <>
+            <CreateLead from='app' editId={leadEditId} setEditId={setleadEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} handleLeadRefresh={handleLeadRefresh} />
+
             <LeadApplicationModal details={data} lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={uniDocId} setEditId={setuniDocId} handleRefresh={fetchLoadingList} />
@@ -197,6 +246,9 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
             <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />
 
+            <ConfirmPopup loading={deleteLoading} ID={submitId} setID={setsubmitId} clickFunc={handleSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
+
+
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 
 
@@ -204,30 +256,32 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                 <div className='lead-tabpanel-content-block-title'>
                     <h2>Applications</h2>
                     <Grid display={'flex'} alignItems={'end'}>
+                        {
+                            !data?.user &&
+                            <Grid>
+                                <Tooltip
+                                    title={(data?.action_type !== 'Hot Lead' && data?.assignedToCounsellor === null) && 'This button will be enabled if student is Hot and Counsellor is assigned'}
+                                >
+                                    <a>
 
-                        <Grid>
-                            <Tooltip
-                                title={(data?.verification_status === 'Yes' && data?.stage?.name !== 'Hot') ? 'This button will be enabled if student is Hot' : (data?.assignedToCounsellor === null ? 'This button will be enabled if counsellor is assigned' : '')}
-                            >
-                                <a>
+                                        <Button
+                                            sx={{ mr: 2 }}
+                                            disabled={(data?.stage?.action_type !== 'Hot Lead' || data?.assignedToCounsellor == null)}
+                                            onClick={handleLeadEditOpen}
+                                            variant='contained'
+                                            className='bg-sky-600 text-white hover:bg-sky-700 text-white'
+                                        >
+                                            Submit Applicant Data
+                                        </Button>
+                                    </a>
+                                </Tooltip>
 
-                                    <Button
-                                        sx={{ mr: 2 }}
-                                        disabled={data?.verification_status === 'Yes' || (data?.stage?.name !== 'Hot' && data?.assignedToCounsellor == null)}
-                                        onClick={data && handleStudentModalOpen}
-                                        variant='contained'
-                                        className='bg-sky-600 text-white hover:bg-sky-700 text-white'
-                                    >
-                                        Submit Applicant Data
-                                    </Button>
-                                </a>
-                            </Tooltip>
-
-                        </Grid>
+                            </Grid>
+                        }
                         <Grid>
                             {
-                                data?.student?.id ?
-                                    <Button variant='contained' disabled={data?.verification_status != 'Yes'} onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
+                                data?.user ?
+                                    <Button variant='contained' onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Apply</Button>
                                     :
                                     <Tooltip title="Only for Applicants" >
                                         <a>
@@ -307,15 +361,28 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {
-                                                    console.log(list?.data)
-                                                }
+
                                                 {
                                                     list?.data?.map((obj, index) => (
                                                         <React.Fragment key={obj?.id}>
                                                             {/* sx={{ height: isRowExpanded(obj.id) ? 300 : null }} */}
                                                             <TableRow >
-                                                                <TableCell>{obj?.university?.name}</TableCell>
+                                                                <TableCell>
+                                                                    <div className='d-flex justify-between items-center'>
+                                                                        {obj?.university?.name}
+                                                                        <HtmlTooltip
+                                                                            title={
+                                                                                <React.Fragment>
+                                                                                    <Typography color="inherit">{obj?.university?.name}</Typography>
+                                                                                    <em>{"University Details"}</em> <u>{'Detail Content'}</u>.{' '}
+                                                                                    {"Display University Details"}
+                                                                                </React.Fragment>
+                                                                            }
+                                                                        >
+                                                                            <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
+                                                                        </HtmlTooltip>
+                                                                    </div>
+                                                                </TableCell>
                                                                 <TableCell>{obj?.subject_area?.name}</TableCell>
                                                                 <TableCell>{obj?.course}</TableCell>
                                                                 <TableCell><Tooltip title={obj?.differ_intake_note}>{obj?.intake?.name}</Tooltip></TableCell>
@@ -331,7 +398,21 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                                                     }
                                                                 </TableCell>
                                                                 <TableCell>
-                                                                    <Button variant='outlined' size='small'>Submit</Button>
+                                                                    {
+                                                                        obj?.app_coordinator_status == null &&
+                                                                        <Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
+
+                                                                    }
+                                                                    {
+                                                                        obj?.app_coordinator_status == 'Returned' &&
+                                                                        <div className='d-flex align-center'>
+                                                                            <Button Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Returned</Button>
+                                                                            {
+                                                                                obj?.app_coordinator_retun_status_note &&
+                                                                                <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '14px',ml:1 }} /></Tooltip>
+                                                                            }
+                                                                        </div>
+                                                                    }
                                                                 </TableCell>
                                                                 <TableCell>
                                                                     <Tooltip title={'Change Stage'}>
@@ -514,7 +595,7 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
 
                                             </TableBody>
                                         </Table>
-                                        <TablePagination
+                                        {/* <TablePagination
                                             rowsPerPageOptions={[10, 15, 25]}
                                             component="div"
                                             count={list?.meta?.total || 0}
@@ -522,16 +603,37 @@ function LeadApplication({ data, lead_id, handleStudentModalOpen }) {
                                             page={page}
                                             onPageChange={handleChangePage}
                                             onRowsPerPageChange={handleChangeRowsPerPage}
-                                        />
+                                        /> */}
 
                                     </TableContainer>
                                     :
                                     <h4>No Application Found</h4>
                             }
+
+                            {
+                                list?.data?.length > 0 &&
+                                <div className='table-pagination d-flex justify-content-end align-items-center'>
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <div className='select-row-box'>
+                                            <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                                                <MenuItem value={10}>10</MenuItem>
+                                                <MenuItem value={15}>15</MenuItem>
+                                                <MenuItem value={25}>25</MenuItem>
+                                            </Select>
+                                            <label>Rows per page</label>
+                                        </div>
+                                        <div>
+                                            <Stack spacing={2}>
+                                                <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                                            </Stack>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
                 }
 
-            </div>
+            </div >
         </>
     )
 }

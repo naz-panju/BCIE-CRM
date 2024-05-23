@@ -80,7 +80,6 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     ]
 
-    console.log(file);
 
     const anchor = 'right'; // Set anchor to 'right'
 
@@ -242,8 +241,6 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
             setOpen(true)
         }
     }, [editId])
-
-    console.log(watch('body'));
 
 
     return (

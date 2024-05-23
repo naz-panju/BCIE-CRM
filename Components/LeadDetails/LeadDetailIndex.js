@@ -222,6 +222,9 @@ function LeadDetails() {
   }, [])
 
 
+  console.log(details);
+
+
 
   return (
 
@@ -482,7 +485,7 @@ function LeadDetails() {
 
                     <div className='vari-center'>
                       <span>Application Status</span>
-                      <h4>Verifying Student Details..</h4>
+                      <h4>{details?.stage?.description}</h4>
                     </div>
 
 

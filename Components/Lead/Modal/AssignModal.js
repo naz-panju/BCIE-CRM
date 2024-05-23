@@ -92,6 +92,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
     const fetchBranches = (e) => {
         return ListingApi.office({ keyword: e }).then(response => {
+            console.log(response);
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data;
             } else {

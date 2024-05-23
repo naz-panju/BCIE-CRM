@@ -18,6 +18,9 @@ export const ApplicationApi = {
     addDeposit: (data) => http.post(`applications/deposit/store`, data),
     deferIntake: (data) => http.post(`applications/differ-intake`, data),
 
-    stageChange:(data) => http.post(`applications/change-stage`, data)
+    stageChange:(data) => http.post(`applications/change-stage`, data),
+
+    submitToCordinator:(data) => http.post(`applications/submit-to-coordinator`, data),
+    returnToCounsellor:(data) => http.post(`applications/back-to-counsellor`, data)
 
 }
