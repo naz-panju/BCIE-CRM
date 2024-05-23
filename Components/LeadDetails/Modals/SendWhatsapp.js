@@ -114,7 +114,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
 
 
     const fetchTemplates = (e) => {
-        return WhatsAppTemplateApi.list({ keyword: e }).then(response => {
+        return ListingApi.whatsappTemplate({ keyword: e }).then(response => {
             // console.log(response);
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;

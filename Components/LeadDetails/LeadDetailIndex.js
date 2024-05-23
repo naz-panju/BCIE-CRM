@@ -89,7 +89,7 @@ function LeadDetails() {
     try {
       // console.log(urlID);
       const response = await LeadApi.view({ id: urlID })
-      // console.log(response);
+      console.log(response);
       setDetails(response?.data?.data)
 
       setLoading(false)
@@ -452,7 +452,7 @@ function LeadDetails() {
                       </div>
 
 
-                  
+                      {/* <RadialBarChartComponent /> */}
                     
                     
                       <svg xmlns="http://www.w3.org/2000/svg" width="129" height="129" viewBox="0 0 129 129" fill="none">

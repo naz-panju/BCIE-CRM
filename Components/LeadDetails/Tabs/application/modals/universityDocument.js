@@ -17,6 +17,7 @@ import toast from 'react-hot-toast';
 import TextInput from '@/Form/TextInput';
 import AsyncSelect from "react-select/async";
 import { ApplicationApi } from '@/data/Endpoints/Application';
+import DateInput from '@/Form/DateInput';
 
 const style = {
     position: 'absolute',
@@ -30,7 +31,7 @@ const style = {
     p: 4,
 };
 
-export default function UniversityDocumentModal({ app_id, setapp_id, editId, setEditId, handleRefresh }) {
+export default function UniversityDocumentModal({ app_id, setapp_id, editId, setEditId, handleRefresh, fetchTable }) {
 
     // console.log(app_id);
 
@@ -106,6 +107,23 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
             formData.append('document', selectedFile)
         }
 
+        if (data?.template?.stage?.id) {
+            formData.append('stage', data?.template?.stage?.id)
+        }
+
+        if (data?.template?.stage?.action_type == 'Get Application Id') {
+            formData.append('application_number', data?.application_id)
+        }
+
+        if (data?.template?.stage?.action_type == 'Deposit Paid') {
+            let date = ''
+            if (data?.date) {
+                date = moment(data?.date).format('YYYY-MM-DD')
+            }
+            formData.append('deposit_paid_on', date)
+            formData.append('deposit_amount', data?.amount)
+        }
+
         let action;
 
         if (editId > 0) {
@@ -121,6 +139,9 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                 handleClose()
                 toast.success(response?.data?.message)
                 handleRefresh()
+                if (fetchTable) {
+                    fetchTable()
+                }
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
@@ -217,6 +238,41 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
 
                                     </Grid>
                                 </Grid>
+                                {
+                                    console.log(watch('template'))
+                                }
+                                {
+                                    watch('template')?.stage?.action_type == "Get Application Id" &&
+                                    <Grid container>
+                                        <Grid pr={1} mt={2} md={12}>
+                                            <a>Application ID</a>
+                                            <TextInput control={control} name="application_id"
+                                                value={watch('application_id')} />
+                                            {errors.application_id && <span className='form-validation'>{errors.application_id.message}</span>}
+
+                                        </Grid>
+                                    </Grid>
+                                }
+                                {
+                                    watch('template')?.stage?.action_type == "Deposit Paid" &&
+                                    <Grid container>
+                                        <Grid pr={1} mt={2} md={6}>
+                                            <a>Deposit Amount</a>
+                                            <TextInput control={control} name="amount"
+                                                value={watch('amount')} />
+                                            {errors.amount && <span className='form-validation'>{errors.amount.message}</span>}
+                                        </Grid>
+                                        <Grid pr={1} mt={2} md={6}>
+                                            <a>Deposit Paid Date</a>
+                                            <DateInput
+                                                control={control}
+                                                name="paid_date"
+                                                value={watch('paid_date')}
+                                            />
+                                            {errors.paid_date && <span className='form-validation'>{errors.paid_date.message}</span>}
+                                        </Grid>
+                                    </Grid>
+                                }
 
                                 <div
                                     className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "

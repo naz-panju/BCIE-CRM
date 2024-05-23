@@ -1,5 +1,4 @@
-import ApplicantsIndex from '@/Components/Applicants/ApllicantsIndex'
-import ApplicationIndex from '@/Components/Applications/ApllicationIndex'
+import ApplicationUnsubmittedIndex from '@/Components/ApplicationUnsubmitted/ApllicationIndex'
 import Layout from '@/Components/Common/Layout'
 import { getSession } from 'next-auth/react'
 import React from 'react'
@@ -7,7 +6,7 @@ import React from 'react'
 function Application() {
     return (
         <Layout>
-            <ApplicationIndex />
+            <ApplicationUnsubmittedIndex />
         </Layout>
     )
 }

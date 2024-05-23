@@ -150,12 +150,12 @@ const headCells = [
         disablePadding: false,
         label: 'Uni.Deposit',
     },
-    {
-        id: 'return',
-        numeric: false,
-        disablePadding: false,
-        label: '',
-    },
+    // {
+    //     id: 'return',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: '',
+    // },
     {
         id: 'icons',
         numeric: false,
@@ -529,7 +529,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         let params = {
             limit: limit,
             // application statuses:unsubmitted,
-            unsubmitted: 1,
             // status: 'Admission Completed',
             country_id: selectedCountry,
             university_id: selectedUniversity,
@@ -584,7 +583,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <DeferIntake editId={deferId} setEditId={setdeferId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
-            <ViewDocumentModal editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} handleUniDocOpen={handleUniDocOpen} />
+            <ViewDocumentModal editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} handleUniDocOpen={handleUniDocOpen} fetchTable={fetchTable} />
             <SendUniversityMail from={'lead'} details={details} lead_id={details?.lead_id} editId={mailId} setEditId={setMailId} />
             <UniversityDeposit editId={depositId} setEditId={setdepositId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
@@ -869,7 +868,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                         <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
                                                                 }</TableCell>
 
-                                                                <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell>
+                                                                {/* <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell> */}
 
                                                                 <TableCell align="left">
                                                                     <Grid display={'flex'} alignItems={'center'}>

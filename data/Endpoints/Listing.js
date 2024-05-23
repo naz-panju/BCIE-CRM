@@ -19,6 +19,8 @@ export const ListingApi = {
     office:(data) => http.get(`listing/offices`, { params: data }),
     events:(data) => http.get(`listing/events`, { params: data }),
     archiveReason:(data) => http.get(`listing/lead-archive-reasons`, { params: data }),
+    emailTemplate:(data) => http.get(`listing/email-templates`, { params: data }),
+    whatsappTemplate:(data) => http.get(`listing/whatsapp-templates`, { params: data }),
 }
 
 

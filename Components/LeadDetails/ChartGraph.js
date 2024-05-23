@@ -23,7 +23,7 @@ const RadialBarChartComponent = () => {
       data={data}
     >
       <RadialBar
-        minAngle={15}
+        minAngle={15} 
         label={{ position: 'insideStart', fill: '#fff' }}
         background
         clockWise
