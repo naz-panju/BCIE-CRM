@@ -35,14 +35,32 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
 
     // console.log(app_id);
 
-    const scheme = yup.object().shape({
+    let scheme = yup.object().shape({
 
         template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
-        // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
-
+       
     })
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
+
+    if(watch('template?.stage?.action_type')=='Deposit Paid'){
+         scheme = yup.object().shape({
+
+            template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
+            date: yup.string().required("Please select Date").typeError("Please select Date"),
+            amount:yup.string().required("Please enter Amount").typeError("Please enter Amount"),
+           
+        })
+    }
+    if(watch('template?.stage?.action_type')=='Get Application Id'){
+        scheme = yup.object().shape({
+
+           template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
+           application_id: yup.string().required("Please enter Application Id").typeError("Please enter Application Id"),
+
+          
+       })
+   }
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -258,7 +276,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                                     <Grid container>
                                         <Grid pr={1} mt={2} md={6}>
                                             <a>Deposit Amount</a>
-                                            <TextInput control={control} name="amount"
+                                            <TextInput type={'number'} control={control} name="amount"
                                                 value={watch('amount')} />
                                             {errors.amount && <span className='form-validation'>{errors.amount.message}</span>}
                                         </Grid>
