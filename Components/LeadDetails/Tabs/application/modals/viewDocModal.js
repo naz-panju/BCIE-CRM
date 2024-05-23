@@ -34,7 +34,7 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleUniDocOpen }) {
+export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleUniDocOpen ,fetchTable}) {
 
     const [open, setOpen] = useState(false)
 
@@ -192,7 +192,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
     return (
         <div>
-            <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={docId} setEditId={setdocId} handleRefresh={NoLoadDetails} />
+            <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={docId} setEditId={setdocId} handleRefresh={NoLoadDetails} fetchTable={fetchTable} />
             <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 

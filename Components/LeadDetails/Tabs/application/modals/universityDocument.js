@@ -31,7 +31,7 @@ const style = {
     p: 4,
 };
 
-export default function UniversityDocumentModal({ app_id, setapp_id, editId, setEditId, handleRefresh }) {
+export default function UniversityDocumentModal({ app_id, setapp_id, editId, setEditId, handleRefresh, fetchTable }) {
 
     // console.log(app_id);
 
@@ -107,6 +107,14 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
             formData.append('document', selectedFile)
         }
 
+        if (data?.template?.stage?.id) {
+            formData.append('stage', data?.template?.stage?.id)
+        }
+
+        if (data?.template?.stage?.action_type == 'Get Application Id') {
+            formData.append('application_number', data?.application_id)
+        }
+
         if (data?.template?.stage?.action_type == 'Deposit Paid') {
             let date = ''
             if (data?.date) {
@@ -131,6 +139,9 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                 handleClose()
                 toast.success(response?.data?.message)
                 handleRefresh()
+                if (fetchTable) {
+                    fetchTable()
+                }
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
