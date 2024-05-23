@@ -22,7 +22,7 @@ import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import PhoneCallModal from './Tabs/communication/Modals/SummaryModal';
 import CreateTask from '../Task/Create/Create';
-import RadialBarChartComponent from './ChartGraph';
+
 
 function LeadDetails() {
 
@@ -446,13 +446,13 @@ function LeadDetails() {
                               <h5 key={index}>{finalIndex / stages?.length * 100}%</h5>
                             )
                           })
-                        }
+                        }<h5>25%</h5>
 
                         <label>Complete</label>
                       </div>
 
 
-                      <RadialBarChartComponent />
+                  
                     
                     
                       <svg xmlns="http://www.w3.org/2000/svg" width="129" height="129" viewBox="0 0 129 129" fill="none">
@@ -490,7 +490,7 @@ function LeadDetails() {
 
 
                     <div className='vari-right'>
-                      <a onClick={details && handleOpenStageModal}>Change Status</a>
+                      <a onClick={handleOpenStageModal}>Change Status</a>
                     </div>
 
 

@@ -229,16 +229,21 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                 onClose={handleDrawerClose}
             >
                 <Grid width={650}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? "Edit Task" : 'Add Task'}</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
+
+
+                <Grid className='modal_title d-flex align-items-center  '>
+                <a className='back_modal' onClick={handleClose}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                    <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                        <a  className='back_modal_head'>{editId > 0 ? "Edit Task" : 'Add Task'}</a>
+                      
                     </Grid>
+
+
                     <hr />
-                    <div>
+                    <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -258,50 +263,41 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                 </Grid>
                             </Grid> */}
 
-                            <Grid display={'flex'} alignItems={'center'} container p={1.5} pb={0} item xs={12}>
-                                <Grid item md={4}>
-                                </Grid> 
-                            </Grid>
+                            
                             {
                                 dataLoading ?
                                     <LoadingEdit item={items} />
                                     :
                                     <>
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
-                                                <Typography sx={{ fontWeight: '500' }}>Title</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={8}>
-                                                <TextInput control={control} name="title"
+                                       
+                                            
+                                            <Grid className='form_group  '>
+                                                <input control={control} name="title" placeholder="title"
                                                     value={watch('title')} />
                                                 {errors.title && <span className='form-validation'>{errors.title.message}</span>}
                                             </Grid>
-                                        </Grid>
+                                        
 
                                         {/* date */}
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
-                                                <Typography sx={{ fontWeight: '500' }}>Due Date</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={8}>
+                                       
+                                            
+                                            <Grid  className='form_group  '>
                                                 {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
                                                 <DateInput
                                                     control={control}
                                                     name="date"
                                                     value={watch('date')}
-                                                // placeholder='Due Date'
+                                                  placeholder='Due Date'
                                                 />
                                                 {/* </LocalizationProvider> */}
 
                                             </Grid>
-                                        </Grid>
+                                       
 
                                         {/* assigned to */}
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
-                                                <Typography sx={{ fontWeight: '500' }}>Assigned To</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={8}>
+                                       
+                                          
+                                            <Grid   className='form_group  '>
                                                 <SelectX
                                                     loadOptions={fetchUser}
                                                     control={control}
@@ -311,13 +307,10 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                                     defaultValue={watch('assigned_to')}
                                                 />
                                             </Grid>
-                                        </Grid>
-
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
-                                                <Typography sx={{ fontWeight: '500' }}>Reviewer</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={8}>
+                                        
+ 
+                                            
+                                            <Grid   className='form_group  '>
                                                 <SelectX
                                                     loadOptions={fetchUser}
                                                     control={control}
@@ -327,9 +320,9 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                                     defaultValue={watch('reviewer')}
                                                 />
                                             </Grid>
-                                        </Grid>
+                                       
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}  className='form_group  '>
                                             <Grid item xs={12} md={4}>
                                                 <Typography sx={{ fontWeight: '500' }}>Priority</Typography>
                                             </Grid>
@@ -340,11 +333,9 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                             </Grid>
                                         </Grid>
 
-                                        <Grid display={'flex'}  container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={4}>
-                                                <Typography sx={{ fontWeight: '500' }}>Description</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={8}>
+                                        
+                                            <Grid  className='form_group frm-text-conn-stl '>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                                                 <TextField
                                                     {...register('description')}
                                                     variant="outlined"
@@ -359,13 +350,17 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                             onValueChange={e => setValue('description', e)}
                                         /> */}
                                             </Grid>
-                                        </Grid>
+                                        
                                     </>
                             }
 
                             <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                                <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
+                                <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg></Button>
+                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained' className='save-btn'>Save <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg></LoadingButton>
                             </Grid>
 
                         </form>

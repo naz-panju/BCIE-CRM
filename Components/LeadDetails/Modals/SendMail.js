@@ -285,17 +285,22 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                 open={open}
                 onClose={handleDrawerClose}
             >
-                <Grid width={750}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Send Mail</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
+                <Grid width={650}>
+                    <Grid className='modal_title d-flex align-items-center  '>
+
+                    <a className='back_modal' onClick={handleClose}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                    <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                        <a  className='back_modal_head'> Send Mail </a>
+                      
+
+                        
+                       
                     </Grid>
                     <hr />
-                    <div>
+                    <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -305,11 +310,9 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                     :
                                     <>
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={3} md={3}>
-                                                <a className='form-text'>Select Template</a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={9} md={9}>
+                                        
+                                            
+                                            <Grid  className='form_group  '>
                                                 <AsyncSelect
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 9999 })
@@ -334,56 +337,46 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                 /> */}
                                                 {errors.template && <span className='form-validation'>{errors.template.message}</span>}
                                             </Grid>
-                                        </Grid>
+                                       
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={3} md={3}>
-                                                <a className='form-text'>Mail To </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={9} md={9}>
-                                                <TextInput disabled control={control} name="to"
+                                        
+                                            
+                                            <Grid  className='form_group  '>
+                                                <input disabled control={control} name="to"
                                                     value={watch('to')} />
                                                 {errors.to && <span className='form-validation'>{errors.to.message}</span>}
                                             </Grid>
-                                        </Grid>
+                                       
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={3} md={3}>
-                                                <a className='form-text'>Mail CC </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={9} md={9}>
+                                        
+                                          
+                                            <Grid  className='form_group  '>
                                                 {
                                                     textBoxLoading ?
                                                         <Skeleton variant='rounded' width={'100%'} height={40} />
                                                         :
-                                                        <TextInput control={control} name="default_cc"
+                                                        <input control={control} name="default_cc"
                                                             value={watch('default_cc')} />
                                                 }
                                                 {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
                                             </Grid>
-                                        </Grid>
+                                      
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={3} md={3}>
-                                                <a className='form-text'>Subject </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={9} md={9}>
+                                       
+                                            
+                                            <Grid  className='form_group  '>
                                                 {
                                                     textBoxLoading ?
                                                         <Skeleton variant='rounded' width={'100%'} height={40} />
                                                         :
-                                                        <TextInput control={control} name="subject"
+                                                        <input control={control} name="subject" placeholder='subject'
                                                             value={watch('subject')} />
                                                 }
                                                 {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
                                             </Grid>
-                                        </Grid>
+                                       
 
-                                        <Grid display={'flex'} container p={1.5} item xs={12}>
-                                            <Grid item display={'flex'} xs={3} md={3}>
-                                                <Typography sx={{ fontWeight: '500' }}>Body</Typography>
-                                            </Grid>
-                                            <Grid item xs={9} md={9}>
+                                        <Grid className='form_group  '> 
                                                 {
                                                     textBoxLoading ?
                                                         <Skeleton variant='rounded' width={'100%'} height={400} />
@@ -393,7 +386,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                 }
                                                 {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
                                             </Grid>
-                                        </Grid>
+                                         
 
                                         {
                                             attachmentFiles?.length > 0 &&
@@ -460,8 +453,12 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                             }
 
                             <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                                <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Send</LoadingButton>
+                                <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg></Button>
+                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg></LoadingButton>
                             </Grid>
 
                         </form>

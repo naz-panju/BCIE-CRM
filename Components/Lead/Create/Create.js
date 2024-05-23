@@ -52,7 +52,7 @@ export default function CreateLead({ editId, setEditId, refresh, setRefresh, han
                 open={open}
                 onClose={handleDrawerClose}
             >
-                <Grid width={650}>
+                <Grid width={650}> 
                     <Grid className='modal_title d-flex align-items-center justify-content-between '>
                         <div className='d-flex align-items-center'>
                             <a className='back_modal' onClick={handleClose}>
