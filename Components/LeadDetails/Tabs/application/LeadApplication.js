@@ -177,7 +177,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setdeleteLoading(false)
-                setdeleteId()
+                setsubmitId()
                 fetchLoadingList()
             } else {
                 toast.error(response?.response?.data?.message)
