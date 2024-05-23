@@ -14,7 +14,7 @@ import ConfirmPopup from '@/Components/Common/Popup/confirm'
 import UniversityDeposit from './modals/universityDepost'
 import DeferIntake from './modals/deferIntake'
 import ViewDocumentModal from './modals/viewDocModal'
-import { InfoOutlined } from '@mui/icons-material'
+import { InfoOutlined, Note } from '@mui/icons-material'
 import CreateLead from '@/Components/Lead/Create/Create'
 
 
@@ -405,7 +405,13 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                     }
                                                                     {
                                                                         obj?.app_coordinator_status == 'Returned' &&
-                                                                        <Button Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Returned</Button>
+                                                                        <>
+                                                                            <Button Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Returned</Button>
+                                                                            {
+                                                                                obj?.app_coordinator_retun_status_note &&
+                                                                                <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '13px' }} /></Tooltip>
+                                                                            }
+                                                                        </>
                                                                     }
                                                                 </TableCell>
                                                                 <TableCell>
