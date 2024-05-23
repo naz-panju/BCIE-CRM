@@ -152,7 +152,8 @@ export default function UniversityDeposit({ details, editId, setEditId, refresh,
             >
                 <Grid width={550}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? 'Edit Deposit' : 'Add Deposit'}</a>
+                        {/* <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? 'Edit Deposit' : 'Add Deposit'}</a> */}
+                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Deposit Amount</a>
                         <IconButton
                             onClick={handleClose}
                         >
