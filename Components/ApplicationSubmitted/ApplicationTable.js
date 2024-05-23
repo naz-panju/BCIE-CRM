@@ -26,7 +26,6 @@ import { Button, Grid, MenuItem, Pagination, Select, Stack, TextField, styled } 
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import 'reactjs-popup/dist/index.css';
-import DownloadDocumentModal from './Modals/downloadDocument';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
 import ApplicationStageChangeModal from '../LeadDetails/Tabs/application/modals/stageChange';
@@ -36,6 +35,7 @@ import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUni
 import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
 import { AssignmentReturn, Autorenew, InfoOutlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
+import DownloadDocumentModal from '../Applications/Modals/downloadDocument';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -864,7 +864,8 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                     row?.deposit_amount_paid ?
                                                                         <a className='a_hover' style={{ cursor: 'pointer', }} onClick={() => handleDepositEdit(row)}> {row?.deposit_amount_paid} </a>
                                                                         :
-                                                                        <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
+                                                                        'NA'
+                                                                        // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
                                                                 }</TableCell>
 
                                                                 <TableCell align="left">

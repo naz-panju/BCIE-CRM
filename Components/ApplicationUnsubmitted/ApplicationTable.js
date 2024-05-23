@@ -26,7 +26,6 @@ import { Button, Grid, MenuItem, Pagination, Select, Stack, TextField, styled } 
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import 'reactjs-popup/dist/index.css';
-import DownloadDocumentModal from './Modals/downloadDocument';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
 import ApplicationStageChangeModal from '../LeadDetails/Tabs/application/modals/stageChange';
@@ -36,8 +35,9 @@ import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUni
 import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
 import { AssignmentReturn, Autorenew, InfoOutlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
-import ReturnPopup from './Modals/returnModal';
-import ApplicationDetail from './Modals/Details';
+import ApplicationDetail from '../Applications/Modals/Details';
+import DownloadDocumentModal from '../Applications/Modals/downloadDocument';
+import ReturnPopup from '../Applications/Modals/returnModal';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -144,12 +144,12 @@ const headCells = [
         disablePadding: false,
         label: 'Stage',
     },
-    {
-        id: 'deposit',
-        numeric: false,
-        disablePadding: false,
-        label: 'Uni.Deposit',
-    },
+    // {
+    //     id: 'deposit',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: 'Uni.Deposit',
+    // },
     {
         id: 'return',
         numeric: false,
@@ -862,12 +862,14 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                 <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                                 <TableCell align="left"><Tooltip title={row?.stage_note}>{row?.stage?.name}</Tooltip></TableCell>
-                                                                <TableCell align="left"> {
+                                                                {/* deposit paid */}
+                                                                {/* <TableCell align="left"> {
                                                                     row?.deposit_amount_paid ?
                                                                         <a className='a_hover' style={{ cursor: 'pointer', }} onClick={() => handleDepositEdit(row)}> {row?.deposit_amount_paid} </a>
                                                                         :
-                                                                        <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
-                                                                }</TableCell>
+                                                                        'NA'
+                                                                        // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
+                                                                }</TableCell> */}
 
                                                                 <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell>
 

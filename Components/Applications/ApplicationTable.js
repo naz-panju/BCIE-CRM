@@ -865,7 +865,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                     row?.deposit_amount_paid ?
                                                                         <a className='a_hover' style={{ cursor: 'pointer', }} onClick={() => handleDepositEdit(row)}> {row?.deposit_amount_paid} </a>
                                                                         :
-                                                                        <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
+                                                                        'NA'
+                                                                        // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
                                                                 }</TableCell>
 
                                                                 {/* <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell> */}

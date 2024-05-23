@@ -35,32 +35,29 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
 
     // console.log(app_id);
 
+    const [template, settemplate] = useState()
+
     let scheme = yup.object().shape({
 
         template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
-       
     })
 
-    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
-
-    if(watch('template')?.stage?.action_type=='Deposit Paid'){
-         scheme = yup.object().shape({
-
-            template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
-            date: yup.string().required("Please select Date").typeError("Please select Date"),
-            amount:yup.string().required("Please enter Amount").typeError("Please enter Amount"),
-           
+    if (template?.stage?.action_type == 'Deposit Paid') {
+        console.log('here');
+        scheme = yup.object().shape({
+            // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
+            paid_date: yup.string().required("Please select Date").typeError("Please select Date"),
+            amount: yup.string().required("Please enter Amount").typeError("Please enter Amount"),
         })
     }
-    if(watch('template')?.stage?.action_type=='Get Application Id'){
+    if (template?.stage?.action_type == 'Get Application Id') {
         scheme = yup.object().shape({
+            // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
+            application_id: yup.string().required("Please enter Application Id").typeError("Please enter Application Id"),
+        })
+    }
 
-           template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
-           application_id: yup.string().required("Please enter Application Id").typeError("Please enter Application Id"),
-
-          
-       })
-   }
+    const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
@@ -70,6 +67,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
     const [dataLoading, setDataLoading] = useState(false)
 
     const handleClose = () => {
+        settemplate()
         setapp_id()
         setValue('template', '')
         setSelectedFile(null)
@@ -113,68 +111,74 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
     }
 
     const onSubmit = (data) => {
-        setLoading(true)
-        console.log(data);
-
-        const formData = new FormData()
-
-        // application:id
-        formData.append('id', app_id)
-        formData.append('document_template_id', data?.template?.id)
-        if (selectedFile) {
-            formData.append('document', selectedFile)
-        }
-
-        if (data?.template?.stage?.id) {
-            formData.append('stage', data?.template?.stage?.id)
-        }
-
-        if (data?.template?.stage?.action_type == 'Get Application Id') {
-            formData.append('application_number', data?.application_id)
-        }
-
-        if (data?.template?.stage?.action_type == 'Deposit Paid') {
-            let date = ''
-            if (data?.date) {
-                date = moment(data?.date).format('YYYY-MM-DD')
-            }
-            formData.append('deposit_paid_on', date)
-            formData.append('deposit_amount', data?.amount)
-        }
-
-        let action;
-
-        if (editId > 0) {
-            // formData.append('id', editId)
-            action = ApplicationApi.uploadUniversityDocument(formData)
+        console.log(selectedFile);
+        if (!selectedFile) {
+            toast.error('Please select a File')
         } else {
-            action = ApplicationApi.uploadUniversityDocument(formData)
-        }
+            setLoading(true)
+            console.log(data);
 
-        action.then((response) => {
-            console.log(response);
-            if (response?.status == 200 || response?.status == 201) {
-                handleClose()
-                toast.success(response?.data?.message)
-                handleRefresh()
-                if (fetchTable) {
-                    fetchTable()
+            const formData = new FormData()
+
+            // application:id
+            formData.append('id', app_id)
+            formData.append('document_template_id', data?.template?.id)
+            if (selectedFile) {
+                formData.append('document', selectedFile)
+            }
+
+            if (data?.template?.stage?.id) {
+                formData.append('stage', data?.template?.stage?.id)
+            }
+
+            if (data?.template?.stage?.action_type == 'Get Application Id') {
+                formData.append('application_number', data?.application_id)
+            }
+
+            if (data?.template?.stage?.action_type == 'Deposit Paid') {
+                let date = ''
+                if (data?.paid_date) {
+                    date = moment(data?.paid_date).format('YYYY-MM-DD')
+                }
+                formData.append('deposit_paid_on', date)
+                formData.append('deposit_amount', data?.amount)
+            }
+
+            let action;
+
+            if (editId > 0) {
+                // formData.append('id', editId)
+                action = ApplicationApi.uploadUniversityDocument(formData)
+            } else {
+                action = ApplicationApi.uploadUniversityDocument(formData)
+            }
+
+            action.then((response) => {
+                console.log(response);
+                if (response?.status == 200 || response?.status == 201) {
+                    handleClose()
+                    toast.success(response?.data?.message)
+                    handleRefresh()
+                    if (fetchTable) {
+                        fetchTable()
+                    }
+                    setLoading(false)
+                } else {
+                    toast.error(response?.response?.data?.message)
+                    setLoading(false)
                 }
                 setLoading(false)
-            } else {
-                toast.error(response?.response?.data?.message)
+            }).catch((error) => {
+                console.log(error);
+                toast.error(error?.response?.data?.message)
                 setLoading(false)
-            }
-            setLoading(false)
-        }).catch((error) => {
-            console.log(error);
-            toast.error(error?.response?.data?.message)
-            setLoading(false)
-        })
+            })
+        }
 
     }
 
     const handleTemplateSelect = (e) => {
+        settemplate(e || '')
         setValue('template', e || '');
     }
 
