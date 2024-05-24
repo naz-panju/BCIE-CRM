@@ -404,6 +404,34 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         })
     }
 
+    const fetchCourseLevel = (e) => {
+        return ListingApi.courseLevel({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+    const fetchStage = (e) => {
+        return ListingApi.stages({ keyword: e, type: 'application', }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+    const fetchCoordinator = (e) => {
+        return ListingApi.courseLevel({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -514,6 +542,26 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setselectedStream(data?.id)
     }
 
+    const [selectedcourselevel, setselectedcourselevel] = useState()
+    const handleCourseChange = (data) => {
+        setValue('course_level_id', data || '')
+        setselectedcourselevel(data?.id)
+
+    }
+
+    const [selectedstage, setselectedstage] = useState()
+    const handleStageChange = (data) => {
+        setValue('stage', data || '')
+        setselectedstage(data?.id)
+
+    }
+
+
+    const [selectedcoordinator, setselectedcoordinator] = useState()
+    const handleAppCoordinatorChange = (data) => {
+        setValue('app_coordinator', data || '')
+        setselectedcoordinator(data?.id)
+    }
     const [searchRefresh, setsearchRefresh] = useState(false)
 
     const onSearch = () => {
@@ -521,21 +569,25 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     }
     const handleClearSearch = (from) => {
         // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
-        setValue('nameSearch', '')
-        setValue('emailSearch', '')
-        setValue('numberSearch', '')
-        setValue('lead_id_search', '')
 
-        setValue('assignedTo', null)
         setValue('country', '')
         setValue('university', '')
         setValue('subjectarea', '')
         setValue('intake', '')
+        setValue('course_level_id', '')
+        setValue('stage', '')
+        setValue('app_coordinator', '')
+        setValue('student_code', '')
+        setValue('application_number', '')
+        setValue('course', '')
 
         setselectedCountry()
         setselectedIntake()
         setselectedUniversity()
         setselectedStream()
+        setselectedcourselevel()
+        setselectedstage()
+        setselectedcoordinator()
 
         setsearchRefresh(!searchRefresh)
     }
@@ -552,10 +604,12 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             university_id: selectedUniversity,
             intake_id: selectedIntake,
             subject_area_id: selectedStream,
-            name: watch('nameSearch'),
-            email: watch('emailSearch'),
-            phone_number: watch('numberSearch'),
-            lead_id: watch('lead_id_search'),
+            course_level_id: selectedcourselevel,
+            app_coordinator_id: selectedcoordinator,
+            stage_id: selectedstage,
+            course: watch('course'),
+            application_number: watch('application_number'),
+            student_code: watch('student_code'),
             page: page
         }
         params['application statuses'] = 'unsubmitted'
@@ -742,12 +796,60 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
                                 <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <TextField
-                                fullWidth
-                                {...register('nameSearch')}
-                                size='small'
-                                id="outlined-name"
-                                placeholder={`Name`}
+                            <AsyncSelect
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                isClearable
+                                defaultOptions
+                                name='course_level_id'
+                                value={watch('course_level_id')}
+                                defaultValue={watch('course_level_id')}
+                                loadOptions={fetchCourseLevel}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>Course Level</div>}
+                                onChange={handleCourseChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <AsyncSelect
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                isClearable
+                                defaultOptions
+                                name='stage'
+                                value={watch('stage')}
+                                defaultValue={watch('stage')}
+                                loadOptions={fetchStage}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>Stage</div>}
+                                onChange={handleStageChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <AsyncSelect
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                isClearable
+                                defaultOptions
+                                name='app_coordinator'
+                                value={watch('app_coordinator')}
+                                defaultValue={watch('app_coordinator')}
+                                loadOptions={fetchCoordinator}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>App Coordinator</div>}
+                                onChange={handleAppCoordinatorChange}
                             />
                         </div>
                     </div>
@@ -759,10 +861,25 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                             </svg>
                             <TextField
                                 fullWidth
-                                {...register('emailSearch')}
+                                {...register('application_number')}
                                 size='small'
                                 id="outlined-name"
-                                placeholder={`Email`}
+                                placeholder={`Application Id`}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <TextField
+                                fullWidth
+                                {...register('student_code')}
+                                size='small'
+                                id="outlined-name"
+                                placeholder={`Student Id`}
                             />
                         </div>
                     </div>
@@ -774,11 +891,11 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                             </svg>
                             <TextField
                                 fullWidth
-                                type='number'
-                                {...register('numberSearch')}
+                                type='text'
+                                {...register('course')}
                                 size='small'
                                 id="outlined-name"
-                                placeholder={`Mobile`}
+                                placeholder={`Course`}
                             />
                         </div>
                     </div>
@@ -801,12 +918,12 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                         </div>
                     </div> */}
 
-                    {/* <div>
+                    <div>
                         <div >
 
 
                         </div>
-                    </div> */}
+                    </div>
 
 
                     <div>
@@ -832,8 +949,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                     <LoadingTable columns={7} columnWidth={80} columnHeight={20} rows={10} rowWidth={130} rowHeight={20} />
                     :
                     <>
-                        <Box sx={{ width: '100%' }}>
-                            <Paper sx={{ width: '100%', mb: 2 }}>
+                        <Grid zIndex={1} sx={{ width: '100%' }}>
+                            <Grid sx={{ width: '100%', mb: 2 }}>
                                 {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
                                 <TableContainer>
                                     <Table
@@ -1035,8 +1152,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                     </Table>
                                 </TableContainer>
 
-                            </Paper>
-                        </Box>
+                            </Grid>
+                        </Grid>
                         <div className='table-pagination d-flex justify-content-end align-items-center'>
 
                             {

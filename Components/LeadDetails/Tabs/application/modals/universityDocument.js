@@ -18,6 +18,7 @@ import TextInput from '@/Form/TextInput';
 import AsyncSelect from "react-select/async";
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import DateInput from '@/Form/DateInput';
+import moment from 'moment';
 
 const style = {
     position: 'absolute',
@@ -70,6 +71,9 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
         settemplate()
         setapp_id()
         setValue('template', '')
+        setValue('application_id', '')
+        setValue('amount', '')
+        setValue('paid_date', '')
         setSelectedFile(null)
         setDetails()
         setEditId()
