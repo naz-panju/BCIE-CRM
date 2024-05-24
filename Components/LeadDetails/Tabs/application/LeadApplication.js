@@ -52,7 +52,6 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
     const [submitId, setsubmitId] = useState()
     const handleSubmitOpen = (id) => {
-        console.log(id);
         setsubmitId(id)
     }
 
@@ -241,7 +240,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
             <UniversityDeposit editId={depositId} setEditId={setdepositId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <DeferIntake editId={deferId} setEditId={setdeferId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
-            <ViewDocumentModal editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} handleDeleteOpen={handleDeleteOpen} handleUniDocOpen={handleUniDocOpen} />
+            <ViewDocumentModal editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} handleDeleteOpen={handleDeleteOpen} handleUniDocOpen={handleUniDocOpen} fetchTable={fetchList} />
             <SendUniversityMail from={'lead'} details={details} lead_id={lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
 
             <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />
@@ -402,7 +401,6 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                     {
                                                                         obj?.app_coordinator_status == null &&
                                                                         <Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
-
                                                                     }
                                                                     {
                                                                         obj?.app_coordinator_status == 'Returned' &&
