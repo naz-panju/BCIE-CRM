@@ -70,9 +70,13 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
         setValue('counsellor', '')
         setValue('counsellors', '')
         setValue('branch', '')
-        handlePopClose()
+        if(handlePopClose){
+            handlePopClose()
+        }
         setsingle(false)
-        setassignToUser()
+        if(setassignToUser){
+            setassignToUser()
+        }
         setseletctedoption()
         setSelected([])
         setEditId()
@@ -129,7 +133,9 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                         toast.success(response?.data?.message)
                         handleClose()
                         setSelected([])
-                        handlePopClose()
+                        if(handlePopClose){
+                            handlePopClose()
+                        }
                         setLoading(false)
                         handleRefresh()
                     } else {
@@ -162,7 +168,9 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                         toast.success(response?.data?.message)
                         handleClose()
                         setSelected([])
-                        handlePopClose()
+                        if(handlePopClose){
+                            handlePopClose()
+                        }
                         setLoading(false)
                         handleRefresh()
                     } else {

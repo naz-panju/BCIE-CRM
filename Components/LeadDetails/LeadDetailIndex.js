@@ -22,6 +22,7 @@ import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import PhoneCallModal from './Tabs/communication/Modals/SummaryModal';
 import CreateTask from '../Task/Create/Create';
+import AssignLeadModal from '../Lead/Modal/AssignModal';
 
 
 function LeadDetails() {
@@ -204,6 +205,16 @@ function LeadDetails() {
     return ""; // Return an empty string if name is not provided
   };
 
+  const [assignId, setAssignId] = useState()
+  const [singleAssign, setsingleAssign] = useState(false)
+  const [selected, setSelected] = useState([]);
+
+  const handleSigleAssign = () => {
+    setAssignId(0)
+    setSelected([details?.id])
+    setsingleAssign(true)
+  }
+
   useEffect(() => {
     getSummary()
     getCallSummary()
@@ -244,6 +255,9 @@ function LeadDetails() {
       <LeadNoteModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={noteId} setEditId={setNoteId} />
 
       <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
+
+      <AssignLeadModal single={singleAssign} setsingle={setsingleAssign} selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} />
+
 
 
       <section>
@@ -446,15 +460,16 @@ function LeadDetails() {
                               <h5 key={index}>{finalIndex / stages?.length * 100}%</h5>
                             )
                           })
-                        }<h5>25%</h5>
+                        }
+                        {/* <h5>25%</h5> */}
 
                         <label>Complete</label>
                       </div>
 
 
                       {/* <RadialBarChartComponent /> */}
-                    
-                    
+
+
                       <svg xmlns="http://www.w3.org/2000/svg" width="129" height="129" viewBox="0 0 129 129" fill="none">
                         <g filter="url(#filter0_d_1041_732)">
                           <path fillRule="evenodd" clipRule="evenodd" d="M64.5 10.05C75.2692 10.05 85.7965 13.2434 94.7508 19.2265C103.705 25.2095 110.684 33.7134 114.805 43.6629C118.926 53.6123 120.005 64.5604 117.904 75.1227C115.803 85.6849 110.617 95.387 103.002 103.002C95.387 110.617 85.6849 115.803 75.1227 117.904C64.5604 120.005 53.6123 118.926 43.6629 114.805C33.7134 110.684 25.2095 103.705 19.2265 94.7508C13.2434 85.7965 10.05 75.2692 10.05 64.5H4C4 66.6155 4.1109 68.7225 4.33023 70.813C5.3515 80.5471 8.72355 89.9218 14.1961 98.112C20.8439 108.061 30.2927 115.816 41.3476 120.395C52.4026 124.974 64.5671 126.172 76.3029 123.837C88.0388 121.503 98.8189 115.741 107.28 107.28C115.741 98.8189 121.503 88.0388 123.837 76.3029C126.172 64.5671 124.974 52.4026 120.395 41.3476C115.816 30.2927 108.061 20.8439 98.112 14.1961C89.9218 8.72355 80.5471 5.3515 70.813 4.33023C68.7225 4.1109 66.6155 4 64.5 4V10.05Z" fill="url(#paint0_linear_1041_732)" />
@@ -740,8 +755,17 @@ function LeadDetails() {
                         <path d="M2.75 10.0834H7.33333M5.04167 12.3751V7.79175M13.2917 12.8334C16.694 12.8334 18.4644 14.0051 19.0377 16.3484C19.3002 17.4214 18.3546 18.3334 17.25 18.3334H9.33334C8.22877 18.3334 7.28316 17.4214 7.54565 16.3484C8.11894 14.0051 9.88932 12.8334 13.2917 12.8334ZM13.2917 9.16675C14.8194 9.16675 15.5833 8.38103 15.5833 6.41675C15.5833 4.45246 14.8194 3.66675 13.2917 3.66675C11.7639 3.66675 11 4.45246 11 6.41675C11 8.38103 11.7639 9.16675 13.2917 9.16675Z" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                       </svg> Assigned Counsellor</h4>
                       <div className='lead-communication-status-bg lead-hit-auto assigned'>
+                        {
+                          !details ?
+                            <p>NA</p>
+                            :
+                            details?.assignedToCounsellor ?
+                              <p> {details?.assignedToCounsellor?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToCounsellor?.name)}</span>} {details?.assignedToCounsellor?.name || 'NA'}</p>
+                              :
+                              <Button onClick={handleSigleAssign} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
+                        }
+                        
 
-                        <p> {details?.assignedToCounsellor?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToCounsellor?.name)}</span>} {details?.assignedToCounsellor?.name || 'NA'}</p>
 
                       </div>
                     </div>
