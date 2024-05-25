@@ -424,7 +424,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         })
     }
     const fetchCoordinator = (e) => {
-        return ListingApi.users({ keyword: e }).then(response => {
+        return ListingApi.users({ keyword: e,role_id:6 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -433,8 +433,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         })
     }
 
-    const fetchCreatedUsers = (e) => {
-        return ListingApi.users({ keyword: e }).then(response => {
+    const fetchCounsellors = (e) => {
+        return ListingApi.users({ keyword: e,role_id:5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -888,7 +888,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                 name='created_by'
                                 value={watch('created_by')}
                                 defaultValue={watch('created_by')}
-                                loadOptions={fetchCreatedUsers}
+                                loadOptions={fetchCounsellors}
                                 getOptionLabel={(e) => e.name}
                                 getOptionValue={(e) => e.id}
                                 placeholder={<div>Created By</div>}
@@ -1179,7 +1179,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 width: '100%',
                                                             }}
                                                         >
-                                                            <TableCell colSpan={8} align="center">
+                                                            <TableCell colSpan={11} align="center">
                                                                 <div className='no-table-ask-block'>
                                                                     <h4 style={{ color: 'grey' }}>No Application Found</h4>
                                                                 </div>
