@@ -40,6 +40,7 @@ import ReturnPopup from './Modals/returnModal';
 import ApplicationDetail from './Modals/Details';
 import ConfirmPopup from '../Common/Popup/confirm';
 import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -306,7 +307,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
-
+    const session = useSession()
     // const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
 
 
@@ -375,7 +376,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     }
 
     const fetchUniversity = (e) => {
-        return ListingApi.universities({ keyword: e }).then(response => {
+        return ListingApi.universities({ keyword: e, country: selectedCountry }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -423,7 +424,17 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         })
     }
     const fetchCoordinator = (e) => {
-        return ListingApi.courseLevel({ keyword: e }).then(response => {
+        return ListingApi.users({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchCreatedUsers = (e) => {
+        return ListingApi.users({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -556,12 +567,18 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
     }
 
-
     const [selectedcoordinator, setselectedcoordinator] = useState()
     const handleAppCoordinatorChange = (data) => {
         setValue('app_coordinator', data || '')
         setselectedcoordinator(data?.id)
     }
+
+    const [selectedCreatedBy, setselectedCreatedBy] = useState()
+    const handleCreatedByChangeChange = (data) => {
+        setValue('created_by', data || '')
+        setselectedCreatedBy(data?.id)
+    }
+
     const [searchRefresh, setsearchRefresh] = useState(false)
 
     const onSearch = () => {
@@ -577,6 +594,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setValue('course_level_id', '')
         setValue('stage', '')
         setValue('app_coordinator', '')
+        setValue('created_by', '')
         setValue('student_code', '')
         setValue('application_number', '')
         setValue('course', '')
@@ -588,6 +606,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setselectedcourselevel()
         setselectedstage()
         setselectedcoordinator()
+        setselectedCreatedBy()
 
         setsearchRefresh(!searchRefresh)
     }
@@ -607,6 +626,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             course_level_id: selectedcourselevel,
             app_coordinator_id: selectedcoordinator,
             stage_id: selectedstage,
+            created_by:selectedCreatedBy,
             course: watch('course'),
             application_number: watch('application_number'),
             student_code: watch('student_code'),
@@ -740,8 +760,10 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                 isClearable
                                 defaultOptions
                                 name='university'
+                                key={selectedCountry}
                                 value={watch('university')}
                                 defaultValue={watch('university')}
+                                isDisabled={!selectedCountry}
                                 loadOptions={fetchUniversity}
                                 getOptionLabel={(e) => e.name}
                                 getOptionValue={(e) => e.id}
@@ -785,7 +807,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                 loadOptions={fetchSubjectAreas}
                                 getOptionLabel={(e) => e.name}
                                 getOptionValue={(e) => e.id}
-                                placeholder={<div> subject Area</div>}
+                                placeholder={<div>Subject Area</div>}
                                 onChange={handleStreamChange}
                             />
                         </div>
@@ -856,6 +878,27 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
                     <div>
                         <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <AsyncSelect
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                isClearable
+                                defaultOptions
+                                name='created_by'
+                                value={watch('created_by')}
+                                defaultValue={watch('created_by')}
+                                loadOptions={fetchCreatedUsers}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>Created By</div>}
+                                onChange={handleCreatedByChangeChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none" className='sear-ic'>
                                 <path d="M2.625 7L9.3906 11.5104C10.0624 11.9583 10.9376 11.9583 11.6094 11.5104L18.375 7M4.625 16.625H16.375C17.4796 16.625 18.375 15.7296 18.375 14.625V6.375C18.375 5.27043 17.4796 4.375 16.375 4.375H4.625C3.52043 4.375 2.625 5.27043 2.625 6.375V14.625C2.625 15.7296 3.52043 16.625 4.625 16.625Z" stroke="#0B0D23" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
@@ -918,12 +961,12 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                         </div>
                     </div> */}
 
-                    <div>
+                    {/* <div>
                         <div >
 
 
                         </div>
-                    </div>
+                    </div> */}
 
 
                     <div>
@@ -966,10 +1009,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                             onRequestSort={handleRequestSort}
                                             rowCount={list?.meta?.total || 0}
                                         />
-
-                                        {
-                                            console.log(list)
-                                        }
 
                                         <TableBody>
                                             {
@@ -1072,13 +1111,13 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                         >
                                                                             <List>
                                                                                 {
-                                                                                    row?.app_coordinator_status == 'Submitted' &&
+                                                                                    (session?.data?.user?.role?.id == 6 && row?.app_coordinator_status == 'Submitted') &&
                                                                                     <ListItem button onClick={() => handleReturnPopupOpen(row?.id)}>
                                                                                         Return Application
                                                                                     </ListItem>
                                                                                 }
                                                                                 {
-                                                                                    row?.app_coordinator_status == null &&
+                                                                                    (session?.data?.user?.role?.id == 5 && row?.app_coordinator_status == null) &&
                                                                                     <ListItem button onClick={() => handleSubmitOpen(row?.id)}>
                                                                                         Submit Application
                                                                                     </ListItem>
