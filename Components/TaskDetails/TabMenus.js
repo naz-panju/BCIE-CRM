@@ -150,10 +150,10 @@ export default function TaskDetailTabs({ id, close ,archiveRefresh}) {
                         ))}
                     </Tabs>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'end'}>
-                        {
+                        {/* {
                             details?.status == 'Completed' &&
                             <Button onClick={handleConfirmArchive} size='small' sx={{ textTransform: 'none', mr: 2, height: '28px' }} className='bg-sky-500' variant='contained'><Archive sx={{ mr: 1 }} fontSize='small' /> Archive</Button>
-                        }
+                        } */}
 
                         <IconButton
                             onClick={close}

@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { StudentApi } from '@/data/Endpoints/Student';
 import SelectX from '@/Form/SelectX';
 import { ListingApi } from '@/data/Endpoints/Listing';
+import { TaskApi } from '@/data/Endpoints/Task';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -35,7 +36,32 @@ export default function TaskCompletePopup({ ID, setID, setLoading, title, loadin
     const handleClose = () => {
         setID();
         setOpen(false);
+        setValue('note')
+        setLoading(false)
     };
+
+    const handleComplete = async () => {
+        setLoading(true)
+        const response = await TaskApi.statusChange(
+            {
+                id: ID,
+                status: 'Completed',
+                status_note: watch('note')
+            });
+
+        console.log(response);
+
+        if (response?.status == 200 || response?.status == 201) {
+            toast.success(response.data.message)
+            getDetails()
+            handleClose()
+            setLoading(false)
+        } else {
+            setLoading(false)
+            toast.error(response.response?.data?.message)
+        }
+        setLoading(false)
+    }
 
 
     useEffect(() => {
@@ -85,7 +111,7 @@ export default function TaskCompletePopup({ ID, setID, setLoading, title, loadin
                     <Button size='small' onClick={handleClose} variant="outlined" color="inherit">
                         Cancel
                     </Button>
-                    <LoadingButton className='bg-sky-500 text-white hover:bg-sky-700' size='small' loading={loading} disabled={loading}
+                    <LoadingButton onClick={handleComplete} className='bg-sky-500 text-white hover:bg-sky-700' size='small' loading={loading} disabled={loading}
                         variant="contained" color='info' >Confirm</LoadingButton>
                 </DialogActions>
             </Dialog>

@@ -264,9 +264,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
 
                                     </Grid>
                                 </Grid>
-                                {
-                                    console.log(watch('template'))
-                                }
+                             
                                 {
                                     watch('template')?.stage?.action_type == "Get Application Id" &&
                                     <Grid container>

@@ -230,7 +230,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function TaskTable({ refresh, editId, setEditId, page, setPage,archiveRefresh }) {
+export default function TaskTable({ refresh, editId, setEditId, page, setPage, archiveRefresh }) {
 
   const { watch, setValue } = useForm()
 
@@ -507,7 +507,11 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage,ar
                               </TableCell>
                               <TableCell align="left">{row?.assignedToUser?.name}</TableCell>
                               <TableCell align="left">{row?.reviewer?.name}</TableCell>
-                              <TableCell align="left">{moment(row?.due_date).format('DD-MM-YYYY')}</TableCell>
+                              <TableCell align="left">{row?.due_date ?
+                                moment(row?.due_date).format('DD-MM-YYYY')
+                                :
+                                'NA'}
+                              </TableCell>
                               <TableCell align="left">{row.priority}</TableCell>
                               <TableCell align="left" onClick={() => handleStatusChange(row)}>{row.status}</TableCell>
                               <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>

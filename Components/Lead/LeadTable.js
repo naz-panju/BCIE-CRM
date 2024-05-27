@@ -32,6 +32,10 @@ import { Close, PersonAdd, PersonAddAlt, PersonOutline, Search } from '@mui/icon
 import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
 import UserProfile from '../Common/Profile';
+import 'rsuite/dist/rsuite.min.css';
+import { DateRangePicker } from 'rsuite';
+import moment from 'moment';
+import { format } from 'date-fns';
 
 
 
@@ -280,6 +284,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
   const [selectedAssignedTo, setSelectedAssignedTo] = useState()
   const [selectedStage, setSelectedStage] = useState()
+
+  const [range, setRange] = useState([null, null]);
   // const [searchType, setsearchType] = useState(second)
 
   const handleRequestSort = (event, property) => {
@@ -410,15 +416,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       lead_id: watch('lead_id_search'),
       page: page
     }
-    // if (watch('searchType') == 'Name') {
-    //   params['name'] = nameSearch
-    // } else if (watch('searchType') == 'Email') {
-    //   params['email'] = nameSearch
-    // } else if (watch('searchType') == 'Mobile') {
-    //   params['phone_number'] = nameSearch
-    // } else if (watch('searchType') == 'Lead Id') {
-    //   params['lead_id'] = nameSearch
-    // }
+
+    if (range[0]) {
+      params['from'] = moment(range[0]).format('YYYY-MM-DD')
+      params['to'] = moment(range[1]).format('YYYY-MM-DD')
+    }
+
 
     LeadApi.list(params).then((response) => {
       // console.log(response);
@@ -449,6 +452,9 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   }
 
   const [searchRefresh, setsearchRefresh] = useState(false)
+  const formatDate = (date) => {
+    return date ? moment(date).format('DD-MM-YYYY') : ''; // Format the date to 'dd-MM-yyyy' format
+  };
 
   const onSearch = () => {
     setsearchRefresh(!searchRefresh)
@@ -465,6 +471,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
     setSelectedAssignedTo()
     setSelectedStage()
+    setRange([null, null])
 
     setsearchRefresh(!searchRefresh)
   }
@@ -477,7 +484,6 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   useEffect(() => {
     fetchTable()
   }, [page, refresh, limit, searchRefresh])
-
 
 
   return (
@@ -592,9 +598,16 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
             </div>
           </div>
 
-          <div>
-            <div >
 
+          <div>
+            <div className='form-group' >
+              <DateRangePicker
+                value={range}
+                onChange={setRange}
+                placeholder="Select Date Range"
+                style={{ width: 280 }}
+                format='dd-MM-yyyy'
+              />
 
             </div>
           </div>
@@ -746,7 +759,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
               </Paper>
             </Box>
             <div className='table-pagination d-flex justify-content-end align-items-center'>
-             
+
               {
                 list?.data?.length > 0 &&
                 <div className='d-flex justify-content-between align-items-center'>

@@ -86,6 +86,7 @@ const DateTime = (props) => {
                         onChange={onChange}
                         renderInput={(params) =>
                             <TextField {...params}
+                                placeholder={props?.placeholder}
                                 style={{ width: '100%' }}
                                 sx={textFiledStyles}
                                 InputLabelProps={InputLabelProps}

@@ -93,13 +93,13 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
         <>
 
             <CreateTask lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
-            <TaskCompletePopup ID={completeId} setID={setcompleteId} loading={completeLoading} setLoading={setcompleteLoading} title={'Mark as Complete'} />
+            <TaskCompletePopup getDetails={fetchList} ID={completeId} setID={setcompleteId} loading={completeLoading} setLoading={setcompleteLoading} title={'Mark this Task as Completed'} />
             <TaskDetailModal id={detailId} setId={setDetailId} />
 
-            {
+            {/* {
                 taskDetails &&
                 <StatusModal onUpdate={fetchList} setDataSet={setTaskDetails} dataSet={taskDetails} setOpen={setStatusOpen} Open={statusOpen} />
-            }
+            } */}
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
@@ -141,16 +141,16 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
                                                             Due Date
                                                         </Typography>
                                                     </TableCell>
-                                                    <TableCell>
+                                                    {/* <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Priority
                                                         </Typography>
-                                                    </TableCell>
-                                                    <TableCell>
+                                                    </TableCell> */}
+                                                    {/* <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Status
                                                         </Typography>
-                                                    </TableCell>
+                                                    </TableCell> */}
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
@@ -161,14 +161,24 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
                                                             <TableCell>{obj?.assignedToUser?.name}</TableCell>
                                                             {/* <TableCell >{obj?.reviewer?.name}</TableCell> */}
                                                             <TableCell >{moment(obj?.due_date).format('DD-MM-YYYY')}</TableCell>
-                                                            <TableCell >{obj.priority}</TableCell>
-                                                            <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleStatusChange(obj)}>{obj.status}</TableCell>
-                                                            <TableCell >
-                                                                <Tooltip title={'Mark Task as Complete'}>
-                                                                    <CheckCircleOutline style={{cursor:'pointer'}} onClick={() => completeOpen(obj?.id)} />
-                                                                </Tooltip>
+                                                            {/* <TableCell >{obj.priority}</TableCell> */}
+                                                            {/* <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleStatusChange(obj)}>{obj.status}</TableCell> */}
+                                                            <TableCell  sx={{width:180}}>
+                                                                {
+                                                                    obj?.status == 'Completed' ?
+                                                                    <Tooltip title={obj?.status_note}>
+                                                                        Completed
+                                                                    </Tooltip>
+                                                                        :
+                                                                        <Button onClick={() => completeOpen(obj?.id)} size='small' variant='outlined' sx={{ textTransform: 'none' }}>Mark as Completed</Button>
+                                                                }
+                                                                
+                                                                {/* <Button sx={{ textTransform: 'none', }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button> */}
                                                             </TableCell>
-                                                            <TableCell ><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button></TableCell>    </TableRow>
+                                                            <TableCell >
+                                                                <Button sx={{ textTransform: 'none' }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button>
+                                                            </TableCell>
+                                                        </TableRow>
                                                     ))
                                                 }
 

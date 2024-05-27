@@ -99,14 +99,32 @@ function Details({ data, loading }) {
                     </Grid>
                     <Grid item xs={6} sm={6}>
                         <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Reviewer:
+                            Status:
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.reviewer?.name}
+                            {data?.status}
                         </Typography>
                     </Grid>
                 </Grid>
                 <Divider sx={{ mb: 1 }} />
+
+                {
+                    data?.status_note &&
+                    <>
+                        <Grid container spacing={2} style={{ marginBottom: '10px' }}>
+                            <Grid item xs={12} sm={12}>
+                                <Typography variant="" style={{ fontWeight: 'bold' }}>
+                                    Status Note:
+                                </Typography>
+                                <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
+                                    {data?.status_note}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                        <Divider sx={{ mb: 1 }} />
+                    </>
+                }
+
 
                 <Grid container style={{ marginBottom: '10px' }}>
                     <Grid item xs={6} sm={6}>
@@ -131,32 +149,13 @@ function Details({ data, loading }) {
                 <Grid container style={{ marginBottom: '10px' }}>
                     <Grid item xs={6} sm={6}>
                         <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Priority:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.priority}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Status:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.status}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ mb: 1 }} />
-
-                <Grid container style={{ marginBottom: '10px' }}>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
                             Due Date:
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
                             {
-                                data?.due_date &&
+                                data?.due_date ?
                                 moment(data?.due_date).format("DD-MM-YYYY")
+                                :'NA'
                             }
                         </Typography>
                     </Grid>

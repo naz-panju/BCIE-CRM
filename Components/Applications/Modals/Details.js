@@ -84,9 +84,6 @@ export default function ApplicationDetail({ id, setId }) {
         }
     }, [id])
 
-    console.log(data);
-
-
     return (
         <div>
             <Drawer
