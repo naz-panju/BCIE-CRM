@@ -164,7 +164,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
     return (
         <>
             <LeadDocumentModal lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
-            <LeadDocumentRequest id={lead_id} reqId={reqId} setReqId={setReqId} />
+            <LeadDocumentRequest id={lead_id} reqId={reqId} setReqId={setReqId} fetchList={fetchList} />
             <LeadRequestUploadDocumentModal datas={reqUploadId} lead_id={lead_id} from={from} app_id={app_id} editId={reqUploadId?.id} setEditId={setreqUploadId} handleRefresh={handleRefresh} />
 
             <ApplicationDocumentUpload appRefresh={appRefresh} datas={app_details} lead_id={lead_id} from={from} app_id={app_id} editId={appDocId} setEditId={setAppDocId} handleRefresh={handleRefresh} />

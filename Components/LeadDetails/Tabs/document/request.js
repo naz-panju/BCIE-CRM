@@ -24,7 +24,7 @@ const style = {
     p: 4,
 };
 
-export default function LeadDocumentRequest({ id, reqId, setReqId }) {
+export default function LeadDocumentRequest({ id, reqId, setReqId, fetchList }) {
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
@@ -67,6 +67,9 @@ export default function LeadDocumentRequest({ id, reqId, setReqId }) {
         LeadApi.requestDocument(dataToSubmit).then((response) => {
             if (response?.status == 200 || 201) {
                 toast.success(response?.data?.message)
+                if (fetchList) {
+                    fetchList()
+                }
                 handleClose()
                 setLoading(false)
             } else {
@@ -83,7 +86,7 @@ export default function LeadDocumentRequest({ id, reqId, setReqId }) {
 
     const fetchTemplates = () => {
         setdatLoading(true)
-        ListingApi.documentTemplate({type:'student'}).then((response) => {
+        ListingApi.documentTemplate({ type: 'student' }).then((response) => {
             setTemplates(response?.data?.data)
             setdatLoading(false)
         }).catch((error) => {
