@@ -81,6 +81,12 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
+    id: 'lead_id',
+    numeric: false,
+    disablePadding: true,
+    label: 'Lead Id',
+  },
+  {
     id: 'name',
     numeric: false,
     disablePadding: true,
@@ -682,9 +688,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                     />
                                     <label htmlFor={row?.id}> </label>
                                   </div>
-
-
                                 </TableCell>
+                                <TableCell align="left">{row?.id}</TableCell>
                                 <TableCell
                                   component="th"
                                   id={labelId}

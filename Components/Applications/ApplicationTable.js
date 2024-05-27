@@ -7,13 +7,10 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -41,6 +38,9 @@ import ApplicationDetail from './Modals/Details';
 import ConfirmPopup from '../Common/Popup/confirm';
 import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
+import moment from 'moment';
+import ReactSelector from 'react-select';
+
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -424,7 +424,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         })
     }
     const fetchCoordinator = (e) => {
-        return ListingApi.users({ keyword: e,role_id:6 }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 6 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -434,7 +434,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     }
 
     const fetchCounsellors = (e) => {
-        return ListingApi.users({ keyword: e,role_id:5 }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -579,13 +579,26 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setselectedCreatedBy(data?.id)
     }
 
+    const [selectedStatus, setselectedStatus] = useState()
+    const handleStatusChange = (data) => {
+        setValue('status', data || '')
+        setselectedStatus(data?.name)
+    }
+
+    const [selectedDeposit, setselectedDeposit] = useState()
+    const handleDepositChange = (data) => {
+        setValue('deposit', data || '')
+        setselectedDeposit(data?.name)
+    }
+
     const [searchRefresh, setsearchRefresh] = useState(false)
 
     const onSearch = () => {
         setsearchRefresh(!searchRefresh)
     }
     const handleClearSearch = (from) => {
-        // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
+
+        reset()
 
         setValue('country', '')
         setValue('university', '')
@@ -595,6 +608,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setValue('stage', '')
         setValue('app_coordinator', '')
         setValue('created_by', '')
+        setValue('status', '')
+        setValue('deposit', '')
         setValue('student_code', '')
         setValue('application_number', '')
         setValue('course', '')
@@ -607,10 +622,11 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setselectedstage()
         setselectedcoordinator()
         setselectedCreatedBy()
+        setselectedStatus()
+        setselectedDeposit()
 
         setsearchRefresh(!searchRefresh)
     }
-
 
     const fetchTable = () => {
         setLoading(true)
@@ -626,13 +642,28 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             course_level_id: selectedcourselevel,
             app_coordinator_id: selectedcoordinator,
             stage_id: selectedstage,
-            created_by:selectedCreatedBy,
+            created_by: selectedCreatedBy,
             course: watch('course'),
             application_number: watch('application_number'),
             student_code: watch('student_code'),
             page: page
         }
-        params['application statuses'] = 'unsubmitted'
+        if (selectedStatus == 'Submitted') {
+            params['submitted'] = 1
+        } else if (selectedStatus == 'Unsubmitted') {
+            params['unsubmitted'] = 1
+        } else if (selectedStatus == 'Returned') {
+            params['returned'] = 1
+        }
+
+        if (selectedDeposit == 'Yes') {
+            params['deposit_paid'] = 1
+        } else if (selectedDeposit == 'No') {
+            params['deposit_paid'] = 0
+        }
+
+
+
         ApplicationApi.list(params).then((response) => {
             console.log(response);
             setList(response?.data)
@@ -702,7 +733,15 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         })
     }
 
-
+    const Status = [
+        { name: 'Submitted' },
+        { name: 'Unsubmitted' },
+        { name: 'Returned' },
+    ]
+    const DepositOptions = [
+        { name: 'Yes' },
+        { name: 'No' }
+    ]
 
     useEffect(() => {
         fetchTable()
@@ -891,8 +930,64 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                 loadOptions={fetchCounsellors}
                                 getOptionLabel={(e) => e.name}
                                 getOptionValue={(e) => e.id}
-                                placeholder={<div>Created By</div>}
+                                placeholder={<div>Counsellors</div>}
                                 onChange={handleCreatedByChangeChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <ReactSelector
+                                key={searchRefresh}
+                                onInputChange={Status}
+                                styles={{
+                                    menu: provided => ({ ...provided, zIndex: 9999 })
+                                }}
+                                placeholder="Status"
+                                options={Status}
+                                getOptionLabel={option => option.name}
+                                getOptionValue={option => option.name}
+                                value={
+                                    Status.find(options =>
+                                        options.name === watch('status')
+                                    )
+                                }
+                                name='status'
+                                isClearable
+                                defaultValue={(watch('status'))}
+                                onChange={(selectedOption) => handleStatusChange(selectedOption)}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <ReactSelector
+                                key={searchRefresh}
+                                onInputChange={DepositOptions}
+                                styles={{
+                                    menu: provided => ({ ...provided, zIndex: 9999 })
+                                }}
+                                placeholder="Deposit Paid"
+                                options={DepositOptions}
+                                getOptionLabel={option => option.name}
+                                getOptionValue={option => option.name}
+                                value={
+                                    DepositOptions.find(options =>
+                                        options.name === watch('deposit')
+                                    )
+                                }
+                                name='deposit'
+                                isClearable
+                                defaultValue={(watch('deposit'))}
+                                onChange={(selectedOption) => handleDepositChange(selectedOption)}
                             />
                         </div>
                     </div>
@@ -1081,7 +1176,14 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 <TableCell align="left">{row?.app_coordinator?.name}</TableCell>
                                                                 <TableCell align="left"> {
                                                                     row?.deposit_amount_paid ?
-                                                                        <a className='a_hover' style={{ cursor: 'pointer', }} onClick={() => handleDepositEdit(row)}> {row?.deposit_amount_paid} </a>
+                                                                        <>
+                                                                            <a> {row?.deposit_amount_paid} </a>
+                                                                            <br />
+                                                                            {
+                                                                                row?.deposit_paid_on &&
+                                                                                <a style={{ fontSize: '13px', color: 'grey' }}>Date :{moment(row?.deposit_paid_on).format('DD-MM-YYYY')}</a>
+                                                                            }
+                                                                        </>
                                                                         :
                                                                         'NA'
                                                                     // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
