@@ -23,7 +23,7 @@ const TextInput = React.forwardRef((props, ref) => {   //new method from gpt
                         required={props.isRequired ? true : false}
                         rows={props.isMultiline ? 2 : null}
                         disabled={props?.disabled}
-
+                        placeholder={props?.placeholder}
                         inputProps={{
                             sx: {
                                 alignItems: 'center',

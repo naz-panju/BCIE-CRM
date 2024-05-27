@@ -7,13 +7,10 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -22,7 +19,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Grid, MenuItem, Pagination, Select, Stack, TextField, styled } from '@mui/material';
+import { Button, Grid, List, ListItem, ListItemText, MenuItem, Pagination, Popover, Select, Stack, TextField, styled } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import 'reactjs-popup/dist/index.css';
@@ -33,11 +30,19 @@ import DeferIntake from '../LeadDetails/Tabs/application/modals/deferIntake';
 import ViewDocumentModal from '../LeadDetails/Tabs/application/modals/viewDocModal';
 import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUniversity';
 import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
-import { AssignmentReturn, Autorenew, InfoOutlined } from '@mui/icons-material';
+import { AssignmentReturn, Autorenew, InfoOutlined, MoreHorizOutlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
-import ApplicationDetail from '../Applications/Modals/Details';
-import DownloadDocumentModal from '../Applications/Modals/downloadDocument';
+
+import ConfirmPopup from '../Common/Popup/confirm';
+import toast from 'react-hot-toast';
+import { useSession } from 'next-auth/react';
+import moment from 'moment';
+import ReactSelector from 'react-select';
 import ReturnPopup from '../Applications/Modals/returnModal';
+import DownloadDocumentModal from '../Applications/Modals/downloadDocument';
+import ApplicationDetail from '../Applications/Modals/Details';
+import { Divider } from 'rsuite';
+
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -85,10 +90,11 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'name',
+        id: 'id',
         numeric: false,
         disablePadding: true,
-        label: 'Name',
+        label: 'Student Id',
+        noSort: false
     },
     // {
     //     id: 'email',
@@ -107,60 +113,76 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'Country',
+        noSort: false
     },
     {
         id: 'university',
         numeric: false,
         disablePadding: false,
         label: 'University',
+        noSort: false
     },
     {
         id: 'course_level',
         numeric: false,
         disablePadding: false,
         label: 'Course Level',
+        noSort: false
     },
     {
         id: 'course',
         numeric: false,
         disablePadding: false,
         label: 'Course',
+        noSort: false
     },
     {
         id: 'subject_area',
         numeric: false,
         disablePadding: false,
         label: 'Subject Area',
+        noSort: false
     },
     {
         id: 'intake',
         numeric: false,
         disablePadding: false,
         label: 'Intake',
+        noSort: false
     },
     {
         id: 'stage',
         numeric: false,
         disablePadding: false,
         label: 'Stage',
+        noSort: false
     },
-    // {
-    //     id: 'deposit',
-    //     numeric: false,
-    //     disablePadding: false,
-    //     label: 'Uni.Deposit',
-    // },
     {
-        id: 'return',
+        id: 'cordinator',
         numeric: false,
         disablePadding: false,
-        label: '',
+        label: 'App Coordinator',
+        noSort: false
     },
+    {
+        id: 'deposit',
+        numeric: false,
+        disablePadding: false,
+        label: 'Uni.Deposit',
+        noSort: false
+    },
+    // {
+    //     id: 'return',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: '',
+    // },
     {
         id: 'icons',
         numeric: false,
         disablePadding: false,
         label: '',
+        noSort: true
     },
 ];
 
@@ -175,17 +197,7 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts',
-                        }}
-                    />
-                </TableCell>
+
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -193,18 +205,21 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
+                        {
+                            !headCell?.noSort &&
+                            <TableSortLabel
+                                active={orderBy === headCell.id}
+                                direction={orderBy === headCell.id ? order : 'asc'}
+                                onClick={createSortHandler(headCell.id)}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
+                                    <Box component="span" sx={visuallyHidden}>
+                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                    </Box>
+                                ) : null}
+                            </TableSortLabel>
+                        }
                     </TableCell>
                 ))}
             </TableRow>
@@ -294,7 +309,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
-
+    const session = useSession()
     // const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
 
 
@@ -329,14 +344,17 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const handleUniDocOpen = (id) => {
         setuniDocId(0)
         setapplicationId(id)
+        handlePopoverClose()
     }
     const handleDeferOpen = (data) => {
         setDetails(data)
         setdeferId(0)
+        handlePopoverClose()
     }
     const handleDocOpen = (data) => {
         setDetails(data)
         setdocumentId(data?.id)
+        handlePopoverClose()
     }
     const handleDepositOpen = (data) => {
         setDetails(data)
@@ -345,6 +363,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const handleDepositEdit = (data) => {
         setDetails(data)
         setdepositId(data?.id)
+        handlePopoverClose()
     }
 
 
@@ -359,7 +378,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     }
 
     const fetchUniversity = (e) => {
-        return ListingApi.universities({ keyword: e }).then(response => {
+        return ListingApi.universities({ keyword: e, country: selectedCountry }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -380,6 +399,44 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
     const fetchSubjectAreas = (e) => {
         return ListingApi.subjectAreas({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchCourseLevel = (e) => {
+        return ListingApi.courseLevel({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+    const fetchStage = (e) => {
+        return ListingApi.stages({ keyword: e, type: 'application', }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+    const fetchCoordinator = (e) => {
+        return ListingApi.users({ keyword: e, role_id: 6 }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchCounsellors = (e) => {
+        return ListingApi.users({ keyword: e, role_id: 5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -460,7 +517,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
         [order, orderBy, page, limit],
     );
 
-   
+
 
     const handleDownloadOpen = (id) => {
         setDownloadId(id)
@@ -470,10 +527,12 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const handleMailOpen = (data) => {
         setDetails(data)
         setMailId(0)
+        handlePopoverClose()
     }
     const handleStageOpen = (row) => {
         setDetails(row)
         setStageId(row?.id)
+        handlePopoverClose()
     }
 
     const handleCountryChange = (data) => {
@@ -496,32 +555,80 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
         setselectedStream(data?.id)
     }
 
+    const [selectedcourselevel, setselectedcourselevel] = useState()
+    const handleCourseChange = (data) => {
+        setValue('course_level_id', data || '')
+        setselectedcourselevel(data?.id)
+
+    }
+
+    const [selectedstage, setselectedstage] = useState()
+    const handleStageChange = (data) => {
+        setValue('stage', data || '')
+        setselectedstage(data?.id)
+
+    }
+
+    const [selectedcoordinator, setselectedcoordinator] = useState()
+    const handleAppCoordinatorChange = (data) => {
+        setValue('app_coordinator', data || '')
+        setselectedcoordinator(data?.id)
+    }
+
+    const [selectedCreatedBy, setselectedCreatedBy] = useState()
+    const handleCreatedByChangeChange = (data) => {
+        setValue('created_by', data || '')
+        setselectedCreatedBy(data?.id)
+    }
+
+    const [selectedStatus, setselectedStatus] = useState()
+    const handleStatusChange = (data) => {
+        setValue('status', data || '')
+        setselectedStatus(data?.name)
+    }
+
+    const [selectedDeposit, setselectedDeposit] = useState()
+    const handleDepositChange = (data) => {
+        setValue('deposit', data || '')
+        setselectedDeposit(data?.name)
+    }
+
     const [searchRefresh, setsearchRefresh] = useState(false)
 
     const onSearch = () => {
         setsearchRefresh(!searchRefresh)
     }
     const handleClearSearch = (from) => {
-        // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
-        setValue('nameSearch', '')
-        setValue('emailSearch', '')
-        setValue('numberSearch', '')
-        setValue('lead_id_search', '')
 
-        setValue('assignedTo', null)
+        reset()
+
         setValue('country', '')
         setValue('university', '')
         setValue('subjectarea', '')
         setValue('intake', '')
+        setValue('course_level_id', '')
+        setValue('stage', '')
+        setValue('app_coordinator', '')
+        setValue('created_by', '')
+        setValue('status', '')
+        setValue('deposit', '')
+        setValue('student_code', '')
+        setValue('application_number', '')
+        setValue('course', '')
 
         setselectedCountry()
         setselectedIntake()
         setselectedUniversity()
         setselectedStream()
+        setselectedcourselevel()
+        setselectedstage()
+        setselectedcoordinator()
+        setselectedCreatedBy()
+        setselectedStatus()
+        setselectedDeposit()
 
         setsearchRefresh(!searchRefresh)
     }
-
 
     const fetchTable = () => {
         setLoading(true)
@@ -529,18 +636,23 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
         let params = {
             limit: limit,
             // application statuses:unsubmitted,
-            unsubmitted: 1,
             // status: 'Admission Completed',
+            unsubmitted: 1,
             country_id: selectedCountry,
             university_id: selectedUniversity,
             intake_id: selectedIntake,
-            name: watch('nameSearch'),
-            email: watch('emailSearch'),
-            phone_number: watch('numberSearch'),
-            lead_id: watch('lead_id_search'),
+            subject_area_id: selectedStream,
+            course_level_id: selectedcourselevel,
+            app_coordinator_id: selectedcoordinator,
+            stage_id: selectedstage,
+            created_by: selectedCreatedBy,
+            course: watch('course'),
+            application_number: watch('application_number'),
+            student_code: watch('student_code'),
             page: page
         }
-        params['application statuses'] = 'unsubmitted'
+
+
         ApplicationApi.list(params).then((response) => {
             console.log(response);
             setList(response?.data)
@@ -569,8 +681,56 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
         setDetailId(id)
     }
 
-    
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [popoverRowId, setPopoverRowId] = useState(null);
 
+    const handlePopoverClick = (event, rowId) => {
+        setAnchorEl(event.currentTarget);
+        setPopoverRowId(rowId);
+    };
+
+    const handlePopoverClose = () => {
+        setAnchorEl(null);
+        setPopoverRowId(null);
+    };
+
+    const open = Boolean(anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+
+    const [submitId, setsubmitId] = useState()
+    const [submitLoading, setsubmitLoading] = useState(false)
+    const handleSubmitOpen = (id) => {
+        setsubmitId(id)
+        handlePopoverClose()
+    }
+    const handleClickSubmit = () => {
+        setsubmitLoading(true)
+        ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
+            console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                setsubmitLoading(false)
+                setsubmitId()
+                fetchTable()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setsubmitLoading(false)
+            }
+        }).catch((error) => {
+            toast.error(error?.response?.data?.message)
+            setdeleteLoading(false)
+        })
+    }
+
+    const Status = [
+        { name: 'Submitted' },
+        { name: 'Unsubmitted' },
+        { name: 'Returned' },
+    ]
+    const DepositOptions = [
+        { name: 'Yes' },
+        { name: 'No' }
+    ]
 
     useEffect(() => {
         fetchTable()
@@ -591,6 +751,8 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
             <ReturnPopup getDetails={handleFirstPage} loading={confirmLoading} ID={returnId} setID={setreturnId} setLoading={setconfirmLoading} title={`Do you want to return this Application to the Counsellor?`} />
 
             <ApplicationDetail id={detailId} setId={setDetailId} />
+            <ConfirmPopup loading={submitLoading} ID={submitId} setID={setsubmitId} clickFunc={handleClickSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
+
 
             <div className="filter_sec">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -626,8 +788,10 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                 isClearable
                                 defaultOptions
                                 name='university'
+                                key={selectedCountry}
                                 value={watch('university')}
                                 defaultValue={watch('university')}
+                                isDisabled={!selectedCountry}
                                 loadOptions={fetchUniversity}
                                 getOptionLabel={(e) => e.name}
                                 getOptionValue={(e) => e.id}
@@ -671,7 +835,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                 loadOptions={fetchSubjectAreas}
                                 getOptionLabel={(e) => e.name}
                                 getOptionValue={(e) => e.id}
-                                placeholder={<div> subject Area</div>}
+                                placeholder={<div>Subject Area</div>}
                                 onChange={handleStreamChange}
                             />
                         </div>
@@ -682,12 +846,81 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
                                 <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <TextField
-                                fullWidth
-                                {...register('nameSearch')}
-                                size='small'
-                                id="outlined-name"
-                                placeholder={`Name`}
+                            <AsyncSelect
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                isClearable
+                                defaultOptions
+                                name='course_level_id'
+                                value={watch('course_level_id')}
+                                defaultValue={watch('course_level_id')}
+                                loadOptions={fetchCourseLevel}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>Course Level</div>}
+                                onChange={handleCourseChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <AsyncSelect
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                isClearable
+                                defaultOptions
+                                name='stage'
+                                value={watch('stage')}
+                                defaultValue={watch('stage')}
+                                loadOptions={fetchStage}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>Stage</div>}
+                                onChange={handleStageChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <AsyncSelect
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                isClearable
+                                defaultOptions
+                                name='app_coordinator'
+                                value={watch('app_coordinator')}
+                                defaultValue={watch('app_coordinator')}
+                                loadOptions={fetchCoordinator}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>App Coordinator</div>}
+                                onChange={handleAppCoordinatorChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <AsyncSelect
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                isClearable
+                                defaultOptions
+                                name='created_by'
+                                value={watch('created_by')}
+                                defaultValue={watch('created_by')}
+                                loadOptions={fetchCounsellors}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>Counsellors</div>}
+                                onChange={handleCreatedByChangeChange}
                             />
                         </div>
                     </div>
@@ -699,10 +932,25 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                             </svg>
                             <TextField
                                 fullWidth
-                                {...register('emailSearch')}
+                                {...register('application_number')}
                                 size='small'
                                 id="outlined-name"
-                                placeholder={`Email`}
+                                placeholder={`Application Id`}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <TextField
+                                fullWidth
+                                {...register('student_code')}
+                                size='small'
+                                id="outlined-name"
+                                placeholder={`Student Id`}
                             />
                         </div>
                     </div>
@@ -714,11 +962,11 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                             </svg>
                             <TextField
                                 fullWidth
-                                type='number'
-                                {...register('numberSearch')}
+                                type='text'
+                                {...register('course')}
                                 size='small'
                                 id="outlined-name"
-                                placeholder={`Mobile`}
+                                placeholder={`Course`}
                             />
                         </div>
                     </div>
@@ -772,8 +1020,8 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                     <LoadingTable columns={7} columnWidth={80} columnHeight={20} rows={10} rowWidth={130} rowHeight={20} />
                     :
                     <>
-                        <Box sx={{ width: '100%' }}>
-                            <Paper sx={{ width: '100%', mb: 2 }}>
+                        <Grid zIndex={1} sx={{ width: '100%' }}>
+                            <Grid sx={{ width: '100%', mb: 2 }}>
                                 {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
                                 <TableContainer>
                                     <Table
@@ -816,16 +1064,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                 selected={isItemSelected}
                                                                 sx={{ cursor: 'pointer' }}
                                                             >
-                                                                <TableCell className='checkbox-tb' padding="checkbox">
-                                                                    <Checkbox
-                                                                        onClick={(event) => handleClick(event, row.id)}
-                                                                        color="primary"
-                                                                        checked={isItemSelected}
-                                                                        inputProps={{
-                                                                            'aria-labelledby': labelId,
-                                                                        }}
-                                                                    />
-                                                                </TableCell>
+
                                                                 <TableCell
                                                                     // onClick={() => handleDetailOpen(row?.id)}
                                                                     component="th"
@@ -834,8 +1073,12 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                     padding="none"
                                                                     className='reg-name'
                                                                 >
-                                                                    {/* <a target='_blank' href={`lead/${row?.lead_id}?app_id=${row?.id}`}> {row?.student?.name}</a> */}
-                                                                    {row?.lead?.name}
+                                                                    {row?.lead?.student_code}
+                                                                    <br />
+                                                                    {
+                                                                        row?.application_number && row?.application_number != 'undefined' &&
+                                                                        <a style={{ fontSize: '13px', color: 'grey' }}>App_id :{row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</a>
+                                                                    }
                                                                 </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
@@ -846,9 +1089,11 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                         <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
-                                                                                    <Typography color="inherit">{row?.university?.name}</Typography>
-                                                                                    <em>{"University Details"}</em> <u>{'Detail Content'}</u>.{' '}
-                                                                                    {"Display University Details"}
+                                                                                    <Typography mb={1} color="inherit">University Info</Typography>
+                                                                                    {row?.university?.extra_university_info}
+                                                                                    <Divider sx={{ mt: 1 }} />
+                                                                                    <Typography mt={1} color="inherit">Scholorship Info</Typography>
+                                                                                    {row?.university?.extra_scholarship_info}
                                                                                 </React.Fragment>
                                                                             }
                                                                         >
@@ -862,20 +1107,72 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                 <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                                 <TableCell align="left"><Tooltip title={row?.stage_note}>{row?.stage?.name}</Tooltip></TableCell>
-                                                                {/* deposit paid */}
-                                                                {/* <TableCell align="left"> {
+                                                                <TableCell align="left">{row?.app_coordinator?.name}</TableCell>
+                                                                <TableCell align="left"> {
                                                                     row?.deposit_amount_paid ?
-                                                                        <a className='a_hover' style={{ cursor: 'pointer', }} onClick={() => handleDepositEdit(row)}> {row?.deposit_amount_paid} </a>
+                                                                        <>
+                                                                            <a> {row?.deposit_amount_paid} </a>
+                                                                            <br />
+                                                                            {
+                                                                                row?.deposit_paid_on &&
+                                                                                <a style={{ fontSize: '13px', color: 'grey' }}>Date :{moment(row?.deposit_paid_on).format('DD-MM-YYYY')}</a>
+                                                                            }
+                                                                        </>
                                                                         :
                                                                         'NA'
-                                                                        // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
-                                                                }</TableCell> */}
+                                                                    // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
+                                                                }</TableCell>
 
-                                                                <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell>
+                                                                {/* <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell> */}
 
                                                                 <TableCell align="left">
                                                                     <Grid display={'flex'} alignItems={'center'}>
-                                                                        <Tooltip title={'Change Stage'}>
+                                                                        <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
+                                                                            <MoreHorizOutlined sx={{ color: 'blue' }} />
+                                                                        </IconButton>
+
+                                                                        <Popover
+                                                                            id={popoverRowId === row.id ? `popover-${row.id}` : undefined}
+                                                                            open={popoverRowId === row.id && open}
+                                                                            anchorEl={anchorEl}
+                                                                            onClose={handlePopoverClose}
+                                                                            anchorOrigin={{
+                                                                                vertical: 'bottom',
+                                                                                horizontal: 'center',
+                                                                            }}
+                                                                            transformOrigin={{
+                                                                                vertical: 'top',
+                                                                                horizontal: 'center',
+                                                                            }}
+                                                                        >
+                                                                            <List>
+                                                                                {
+                                                                                    (session?.data?.user?.role?.id == 6 && row?.app_coordinator_status == 'Submitted') &&
+                                                                                    <ListItem button onClick={() => handleReturnPopupOpen(row?.id)}>
+                                                                                        Return Application
+                                                                                    </ListItem>
+                                                                                }
+                                                                                {
+                                                                                    (session?.data?.user?.role?.id == 5 && row?.app_coordinator_status == null) &&
+                                                                                    <ListItem button onClick={() => handleSubmitOpen(row?.id)}>
+                                                                                        Submit Application
+                                                                                    </ListItem>
+                                                                                }
+                                                                                <ListItem button onClick={() => handleStageOpen(row)}>
+                                                                                    Change Stage
+                                                                                </ListItem>
+                                                                                <ListItem button onClick={() => handleDeferOpen(row)}>
+                                                                                    Defer Intake
+                                                                                </ListItem>
+                                                                                <ListItem button onClick={() => handleMailOpen(row)}>
+                                                                                    Mail to University
+                                                                                </ListItem>
+                                                                                <ListItem button onClick={() => handleDocOpen(row)}>
+                                                                                    Documents
+                                                                                </ListItem>
+                                                                            </List>
+                                                                        </Popover>
+                                                                        {/* <Tooltip title={'Change Stage'}>
                                                                             <svg style={{ cursor: 'pointer' }} onClick={() => handleStageOpen(row)} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                                                                 <path d="M5 6.00008V13.9044C5 15.0386 5 15.6056 5.1701 15.9526C5.48537 16.5959 6.17631 16.9656 6.88639 16.8711C7.2695 16.8201 7.74136 16.5055 8.68508 15.8764L8.68735 15.8749C9.0614 15.6255 9.24846 15.5008 9.44413 15.4316C9.80351 15.3046 10.1956 15.3046 10.555 15.4316C10.7511 15.5009 10.9389 15.6261 11.3144 15.8765C12.2582 16.5057 12.7305 16.82 13.1137 16.871C13.8237 16.9654 14.5146 16.5959 14.8299 15.9526C15 15.6056 15 15.0384 15 13.9044V5.99734C15 5.06575 15 4.59925 14.8185 4.24308C14.6587 3.92948 14.4031 3.6747 14.0895 3.51491C13.733 3.33325 13.2669 3.33325 12.3335 3.33325H7.66683C6.73341 3.33325 6.26635 3.33325 5.90983 3.51491C5.59623 3.6747 5.34144 3.92948 5.18166 4.24308C5 4.5996 5 5.06666 5 6.00008Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                                             </svg>
@@ -894,7 +1191,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                             <svg style={{ cursor: 'pointer', marginLeft: 8 }} onClick={() => handleDocOpen(row)} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                                                                 <path d="M12 9.7998V19.9998M12 9.7998C12 8.11965 12 7.27992 12.327 6.63818C12.6146 6.0737 13.0732 5.6146 13.6377 5.32698C14.2794 5 15.1196 5 16.7998 5H19.3998C19.9599 5 20.2401 5 20.454 5.10899C20.6422 5.20487 20.7948 5.35774 20.8906 5.5459C20.9996 5.75981 21 6.04004 21 6.6001V15.4001C21 15.9601 20.9996 16.2398 20.8906 16.4537C20.7948 16.6419 20.6425 16.7952 20.4543 16.8911C20.2406 17 19.961 17 19.402 17H16.5693C15.6301 17 15.1597 17 14.7334 17.1295C14.356 17.2441 14.0057 17.4317 13.701 17.6821C13.3568 17.965 13.096 18.3557 12.575 19.1372L12 19.9998M12 9.7998C12 8.11965 11.9998 7.27992 11.6729 6.63818C11.3852 6.0737 10.9263 5.6146 10.3618 5.32698C9.72004 5 8.87977 5 7.19961 5H4.59961C4.03956 5 3.75981 5 3.5459 5.10899C3.35774 5.20487 3.20487 5.35774 3.10899 5.5459C3 5.75981 3 6.04004 3 6.6001V15.4001C3 15.9601 3 16.2398 3.10899 16.4537C3.20487 16.6419 3.35774 16.7952 3.5459 16.8911C3.7596 17 4.03901 17 4.59797 17H7.43073C8.36994 17 8.83942 17 9.26569 17.1295C9.64306 17.2441 9.99512 17.4317 10.2998 17.6821C10.6426 17.9638 10.9017 18.3526 11.4185 19.1277L12 19.9998" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                                             </svg>
-                                                                        </Tooltip>
+                                                                        </Tooltip> */}
                                                                     </Grid>
                                                                 </TableCell>
                                                                 {/* <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell> */}
@@ -918,7 +1215,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                 width: '100%',
                                                             }}
                                                         >
-                                                            <TableCell colSpan={8} align="center">
+                                                            <TableCell colSpan={11} align="center">
                                                                 <div className='no-table-ask-block'>
                                                                     <h4 style={{ color: 'grey' }}>No Application Found</h4>
                                                                 </div>
@@ -930,8 +1227,8 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                     </Table>
                                 </TableContainer>
 
-                            </Paper>
-                        </Box>
+                            </Grid>
+                        </Grid>
                         <div className='table-pagination d-flex justify-content-end align-items-center'>
 
                             {

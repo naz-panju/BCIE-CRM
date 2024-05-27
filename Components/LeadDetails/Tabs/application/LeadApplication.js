@@ -16,6 +16,7 @@ import DeferIntake from './modals/deferIntake'
 import ViewDocumentModal from './modals/viewDocModal'
 import { InfoOutlined, Note } from '@mui/icons-material'
 import CreateLead from '@/Components/Lead/Create/Create'
+import { Divider } from 'rsuite'
 
 
 const HtmlTooltip = styled(({ className, ...props }) => (
@@ -373,9 +374,11 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                         <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
-                                                                                    <Typography color="inherit">{obj?.university?.name}</Typography>
-                                                                                    <em>{"University Details"}</em> <u>{'Detail Content'}</u>.{' '}
-                                                                                    {"Display University Details"}
+                                                                                    <Typography mb={1} color="inherit">University Info</Typography>
+                                                                                    {obj?.university?.extra_university_info}
+                                                                                    <Divider sx={{ mt: 1 }} />
+                                                                                    <Typography mt={1} color="inherit">Scholorship Info</Typography>
+                                                                                    {obj?.university?.extra_scholarship_info}
                                                                                 </React.Fragment>
                                                                             }
                                                                         >

@@ -1280,10 +1280,16 @@ a {
     margin-bottom: 30px;
 }
 
+.lead-table-cntr.app_type.active .filter_sec {
+    height: 190px;
+    margin-bottom: 30px;
+}
+
 .lead-table-cntr.app.active .filter_sec {
     height: 260px;
     margin-bottom: 30px;
 }
+
 
 .page-title-block {
     border-bottom: 1px solid rgba(40, 43, 77, 0.15);

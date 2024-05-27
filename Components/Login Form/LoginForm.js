@@ -35,17 +35,18 @@ const LoginForm = () => {
                 setEmail('');
                 setPassword('');
                 toast.success('Sign in Successfully')
+                console.log(session);
                 setLoading(false)
-                if (session?.data?.user?.role?.id == 3) {
-                    router.push('/');
-                } else if (session?.data?.user?.role?.id == 4) {
-                    router.push('/');
-                } else if (session?.data?.user?.role?.id == 5) {
-                    router.push('/');
-                } else if (session?.data?.user?.role?.id == 6) {
-                    router.push('/application-unsubmitted');
-                }
-                // router.push('/');
+                // if (session?.data?.user?.role?.id == 3) {
+                //     router.push('/');
+                // } else if (session?.data?.user?.role?.id == 4) {
+                //     router.push('/');
+                // } else if (session?.data?.user?.role?.id == 5) {
+                //     router.push('/');
+                // } else if (session?.data?.user?.role?.id == 6) {
+                //     router.push('/application-unsubmitted');
+                // }
+                router.push('/');
             } else {
                 toast.error(result?.error)
                 setLoading(false)

@@ -317,6 +317,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     styles={{
                                                         menu: provided => ({ ...provided, zIndex: 9999 })
                                                     }}
+                                                    placeholder='Select Template'
                                                     // isDisabled={!selectedUniversityId}
                                                     // key={selectedUniversityId}
                                                     name={'template'}
@@ -342,7 +343,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                         
                                             
                                             <Grid  className='form_group  '>
-                                                <input disabled control={control} name="to"
+                                                <TextInput placeholder={'To'} disabled control={control} name="to"
                                                     value={watch('to')} />
                                                 {errors.to && <span className='form-validation'>{errors.to.message}</span>}
                                             </Grid>
@@ -355,7 +356,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     textBoxLoading ?
                                                         <Skeleton variant='rounded' width={'100%'} height={40} />
                                                         :
-                                                        <input control={control} name="default_cc"
+                                                        <TextInput placeholder={'Default CC'} control={control} name="default_cc"
                                                             value={watch('default_cc')} />
                                                 }
                                                 {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
@@ -369,7 +370,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     textBoxLoading ?
                                                         <Skeleton variant='rounded' width={'100%'} height={40} />
                                                         :
-                                                        <input control={control} name="subject" placeholder='subject'
+                                                        <TextInput placeholder='Subject' control={control} name="subject"
                                                             value={watch('subject')} />
                                                 }
                                                 {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}

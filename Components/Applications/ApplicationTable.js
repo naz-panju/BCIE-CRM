@@ -19,7 +19,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Grid, List, ListItem, ListItemText, MenuItem, Pagination, Popover, Select, Stack, TextField, styled } from '@mui/material';
+import { Button, Divider, Grid, List, ListItem, ListItemText, MenuItem, Pagination, Popover, Select, Stack, TextField, styled } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import 'reactjs-popup/dist/index.css';
@@ -1158,7 +1158,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                                 <React.Fragment>
                                                                                     <Typography color="inherit">University Info</Typography>
                                                                                     {row?.university?.extra_university_info}
-                                                                                    <Typography color="inherit">Scholorship Info</Typography>
+                                                                                    <Divider sx={{ mt: 1 }} />
+                                                                                    <Typography mt={1} color="inherit">Scholorship Info</Typography>
                                                                                     {row?.university?.extra_scholarship_info}
                                                                                 </React.Fragment>
                                                                             }

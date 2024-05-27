@@ -717,7 +717,17 @@ function LeadDetails() {
                     <div className='d-flex align-items-center justify-content-between'>
                       <div>
                         <span>Note</span>
-                        <h5>{details?.next_follow_up_note || 'NA'}</h5>
+                        <h5>
+                          {details?.latest_lead_note?.note ?
+                            details.latest_lead_note.note.length > 20 ?
+                              <Tooltip title={details.latest_lead_note.note}>
+                                {
+                                  details.latest_lead_note.note.slice(0, 20) + '...'
+                                }
+                              </Tooltip>
+                              : details.latest_lead_note.note
+                            : 'NA'}
+                        </h5>
                       </div>
                       <div>  <a className='btn' onClick={details && handleNoteOpen}>  Add Note </a> </div>
                     </div>
@@ -764,7 +774,7 @@ function LeadDetails() {
                               :
                               <Button onClick={handleSigleAssign} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
                         }
-                        
+
 
 
                       </div>
