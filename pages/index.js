@@ -21,13 +21,13 @@ export default function Home() {
   useEffect(() => {
 
     if (session?.data?.user?.role?.id == 3) {
-      router.push('/lead');
+      window.location.href('/lead');
     } else if (session?.data?.user?.role?.id == 4) {
-      router.push('/lead');
+      window.location.href('/lead');
     } else if (session?.data?.user?.role?.id == 5) {
-      router.push('/lead');
+      window.location.href('/lead');
     } else if (session?.data?.user?.role?.id == 6) {
-      router.push('/applications-unsubmitted');
+      window.location.href('/applications-unsubmitted');
     }
     // Redirect to the new home page
   }, []);
