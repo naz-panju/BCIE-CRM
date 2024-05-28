@@ -63,7 +63,6 @@ export default function LeadDocumentRequest({ id, reqId, setReqId, fetchList }) 
             lead_id: id,
             document_template_ids: selectedTemplates
         }
-
         LeadApi.requestDocument(dataToSubmit).then((response) => {
             if (response?.status == 200 || 201) {
                 toast.success(response?.data?.message)

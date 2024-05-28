@@ -720,7 +720,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                     row?.assignedToCounsellor ?
                                       <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToCounsellor?.name}</Button>
                                       :
-                                      <Button onClick={() => openAssign(row?.id)}><PersonOutline sx={{ color: 'blue', cursor: 'pointer' }} /></Button>
+                                      <Button className='not_assigned' sx={{textTransform: 'none'}} onClick={() => openAssign(row?.id)}>Not Assigned</Button>
                                   }
                                   {/* {row?.assignedToUser?.name} */}
                                 </TableCell>

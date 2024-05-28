@@ -416,7 +416,6 @@ const Sidebar = () => {
 
                     {
                         SideBarOptions?.map((obj, index) => (
-
                             <li className={router?.route == obj?.href ? 'sidebar-selected' : ''} key={index}><Link href={obj?.href}>{obj?.icon}<span>{obj?.title}</span></Link></li>
                         ))
                     }
