@@ -272,7 +272,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
 
                                         <Grid className='form_group  '>
-                                            <TextInput control={control} name="title" placeholder="title"
+                                            <TextInput control={control} name="title" placeholder="Title"
                                                 value={watch('title')} />
                                             {errors.title && <span className='form-validation'>{errors.title.message}</span>}
                                         </Grid>

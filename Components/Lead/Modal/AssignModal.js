@@ -96,7 +96,6 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
     const fetchBranches = (e) => {
         return ListingApi.office({ keyword: e }).then(response => {
-            console.log(response);
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data;
             } else {
@@ -286,6 +285,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                             <Grid className='form_group'>
                                 <AsyncSelect
                                     isMulti
+                                    key={watch('branch')}
                                     placeholder='Select Counsellors'
                                     name={'counsellors'}
                                     defaultValue={watch('counsellors')}
@@ -306,6 +306,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                             (selectedoption == 2 && watch('branch')) &&
                             <Grid className='form_group'>
                                 <AsyncSelect
+                                    key={watch('branch')}
                                     placeholder='Select Counsellor'
                                     name={'counsellor'}
                                     defaultValue={watch('counsellor')}

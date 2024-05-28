@@ -19,7 +19,10 @@ import DateInput from '@/Form/DateInput';
 import { PaymentApi } from '@/data/Endpoints/Payments';
 import moment from 'moment';
 
-
+// amount: yup
+// .string()
+// .required('Amount is Required')
+// .matches(/^[\d\s,.₹€£¥₿$]*$/, 'Amount must be a valid number or currency symbol'),
 const scheme = yup.object().shape({
     amount: yup.string().required("Amount is Required"),
     payment_mode: yup.string().required("Payment Mode is Required"),
@@ -95,7 +98,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
         formData.forEach((value, key) => {
             formDataObject[key] = value;
         });
-    
+
         // Log the form data
         console.log('Form Data:', formDataObject);
 
@@ -210,17 +213,21 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                 open={open}
                 onClose={handleClose}
             >
-                <Grid width={500}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? 'Edit Payment' : 'Add Payment'}</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
+                <Grid width={550}>
+
+                    <Grid className='modal_title d-flex align-items-center'>
+
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <a className='back_modal_head'> {editId > 0 ? 'Edit Payment' : 'Add Payment'} </a>
+
                     </Grid>
                     <hr />
-                    <div>
+                    <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -230,69 +237,41 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                     :
                                     <>
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
-                                                <a className='form-text'>Amount</a>
-                                            </Grid>
-
-                                            <Grid item pr={1} xs={8} md={8}>
-                                                <TextInput type='number' control={control} name="amount"
-                                                    value={watch('amount')} />
-                                                {errors.amount && <span className='form-validation'>{errors.amount.message}</span>}
-                                            </Grid>
+                                        <Grid className='form_group' >
+                                            <TextInput placeholder={'Amount'} type='text' control={control} name="amount"
+                                                value={watch('amount')} />
+                                            {errors.amount && <span className='form-validation'>{errors.amount.message}</span>}
                                         </Grid>
 
+                                        <Grid className='form_group' >
+                                            <DateInput
+                                                control={control}
+                                                name="date"
+                                                value={watch('date')}
+                                                placeholder='Date'
+                                            />
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
-                                                <a className='form-text'>Date</a>
-                                            </Grid>
+                                            {errors.date && <span className='form-validation'>{errors.date.message}</span>}
 
-                                            <Grid item pr={1} xs={8} md={8}>
-                                                <DateInput
-                                                    control={control}
-                                                    name="date"
-                                                    value={watch('date')}
-                                                // placeholder='Due Date'
-                                                />
-
-                                                {errors.date && <span className='form-validation'>{errors.date.message}</span>}
-                                            </Grid>
                                         </Grid>
 
-
-
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} display={'flex'} alignItems={'center'} xs={4} md={4}>
-                                                <a className='form-text'>Mode of Payment</a>
-                                            </Grid>
-
-                                            <Grid item pr={1} xs={8} md={8}>
-                                                <TextInput control={control} name="payment_mode"
-                                                    value={watch('payment_mode')} />
-                                                {errors.payment_mode && <span className='form-validation'>{errors.payment_mode.message}</span>}
-                                            </Grid>
+                                        <Grid className='form_group' >
+                                            <TextInput placeholder='Mode of Payment' control={control} name="payment_mode"
+                                                value={watch('payment_mode')} />
+                                            {errors.payment_mode && <span className='form-validation'>{errors.payment_mode.message}</span>}
                                         </Grid>
 
-
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'> Details </a>
-                                            </Grid>
-
-                                            <Grid item pr={1} xs={8} md={8}>
-                                                <TextField
-                                                    {...register('details')}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    multiline
-                                                    rows={2}
-                                                    sx={{ width: '100%', }}
-                                                />
-                                                {errors.details && <span className='form-validation'>{errors.details.message}</span>}
-
-                                            </Grid>
-
+                                        <Grid className='form_group' >
+                                            <TextField
+                                                placeholder='Details'
+                                                {...register('details')}
+                                                variant="outlined"
+                                                fullWidth
+                                                multiline
+                                                rows={2}
+                                                sx={{ width: '100%', }}
+                                            />
+                                            {errors.details && <span className='form-validation'>{errors.details.message}</span>}
                                         </Grid>
 
                                         <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container className='bg-sky-100' height={80} >
@@ -345,9 +324,19 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                     </>
                             }
 
-                            <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                                <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
+                            <Grid pb={3} >
+                                <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'><svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                    <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg> Cancel</Button>                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>{
+                                    loading ?
+                                        <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                        :
+                                        <>
+                                            Save <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </>
+                                }</LoadingButton>
                             </Grid>
 
                         </form>

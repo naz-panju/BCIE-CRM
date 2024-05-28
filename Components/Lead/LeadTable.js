@@ -424,7 +424,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
 
     LeadApi.list(params).then((response) => {
-      // console.log(response);
+      console.log(response);
       setList(response?.data)
       setLoading(false)
     }).catch((error) => {
@@ -437,6 +437,21 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const [phoneSearch, setphoneSearch] = useState()
   const [emailSearch, setemailSearch] = useState()
   const [userIdSearch, setuserIdSearch] = useState()
+
+  const getFirstLettersOfTwoWords = (name) => {
+    if (name) {
+        const words = name.split(" "); // Split the name into an array of words
+        if (words.length >= 2) {
+            // Extract the first letter of the first two words and concatenate them
+            return words[0].charAt(0) + words[1].charAt(0);
+        } else if (words.length === 1) {
+            // If there's only one word, return its first letter
+            return words[0].charAt(0);
+        }
+    }
+    return ""; // Return an empty string if name is not provided
+};
+
 
 
   const handleTypeChange = (type) => {
@@ -715,16 +730,19 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 <TableCell align="left">{row?.email}</TableCell>
                                 <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
                                 <TableCell align="left" className='assigned-colm'>
-                                  <span className='assigned-span'>SA</span>
+                                  {
+                                    row?.assignedToCounsellor &&
+                                    <span className='assigned-span'>{getFirstLettersOfTwoWords(row?.assignedToCounsellor?.name)}</span>
+                                  }
                                   {
                                     row?.assignedToCounsellor ?
                                       <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToCounsellor?.name}</Button>
                                       :
-                                      <Button className='not_assigned' sx={{textTransform: 'none'}} onClick={() => openAssign(row?.id)}>Not Assigned</Button>
+                                      <Button className='not_assigned' sx={{ textTransform: 'none' }} onClick={() => openAssign(row?.id)}>Not Assigned</Button>
                                   }
                                   {/* {row?.assignedToUser?.name} */}
                                 </TableCell>
-                                <TableCell className='stage-colm' align="left"><span className='stage-span'>{row?.stage?.name}</span></TableCell>
+                                <TableCell className='stage-colm' align="left"><span style={{backgroundColor:row?.stage?.colour}} className='stage-span'>{row?.stage?.name}</span></TableCell>
                               </TableRow>
                             );
                           })
