@@ -154,6 +154,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                 if (response?.status == 200 || 201) {
                     toast.success(response?.data?.message)
                     handleClose()
+                    handleRefresh()
                     setReqLoading(false)
                 } else {
                     toast.error(response?.response?.data?.message)
@@ -330,13 +331,21 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                             loading={reqLoading}
                                             disabled={reqLoading || loading || dataLoading}
                                             size='small'
-                                            sx={{ textTransform: 'none', height: 30,mr:1 }}
-                                            className=" bg-sky-500 hover:bg-sky-700 text-white font-bold  rounded"
+                                            sx={{ textTransform: 'none', height: 30, mr: 1 }}
+                                            className='cancel-btn'
                                         >
-                                            Request Document
+                                            {
+                                                reqLoading ?
+                                                    <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                                    :
+                                                    <>
+                                                        Request
+                                                    </>
+                                            }
                                         </LoadingButton>
                                         <LoadingButton
                                             type='submit'
+                                            className='save-btn'
                                             variant='contained'
                                             disabled={loading || reqLoading || dataLoading}
                                             loading={loading}
@@ -344,7 +353,14 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                             sx={{ textTransform: 'none', height: 30 }}
                                         // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
                                         >
-                                            Upload
+                                            {
+                                                loading ?
+                                                    <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                                    :
+                                                    <>
+                                                        Upload
+                                                    </>
+                                            }
                                         </LoadingButton>
                                     </Grid>
                                 </form>

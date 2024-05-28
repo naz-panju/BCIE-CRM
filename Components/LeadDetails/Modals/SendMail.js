@@ -288,16 +288,16 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                 <Grid width={650}>
                     <Grid className='modal_title d-flex align-items-center  '>
 
-                    <a className='back_modal' onClick={handleClose}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
-                                    <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </a>
-                        <a  className='back_modal_head'> Send Mail </a>
-                      
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+                        <a className='back_modal_head'> Send Mail </a>
 
-                        
-                       
+
+
+
                     </Grid>
                     <hr />
                     <div className='form-data-cntr'>
@@ -310,84 +310,84 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                     :
                                     <>
 
-                                        
-                                            
-                                            <Grid  className='form_group  '>
-                                                <AsyncSelect
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 9999 })
-                                                    }}
-                                                    placeholder='Select Template'
-                                                    // isDisabled={!selectedUniversityId}
-                                                    // key={selectedUniversityId}
-                                                    name={'template'}
-                                                    defaultValue={watch('template')}
-                                                    // isClearable
-                                                    defaultOptions
-                                                    loadOptions={fetchTemplates}
-                                                    getOptionLabel={(e) => e.name}
-                                                    getOptionValue={(e) => e.id}
-                                                    onChange={handleTemplateChange}
-                                                />
-                                                {/* <SelectX
+
+
+                                        <Grid className='form_group  '>
+                                            <AsyncSelect
+                                                styles={{
+                                                    menu: provided => ({ ...provided, zIndex: 9999 })
+                                                }}
+                                                placeholder='Select Template'
+                                                // isDisabled={!selectedUniversityId}
+                                                // key={selectedUniversityId}
+                                                name={'template'}
+                                                defaultValue={watch('template')}
+                                                // isClearable
+                                                defaultOptions
+                                                loadOptions={fetchTemplates}
+                                                getOptionLabel={(e) => e.name}
+                                                getOptionValue={(e) => e.id}
+                                                onChange={handleTemplateChange}
+                                            />
+                                            {/* <SelectX
                                                     // menuPlacement='top'
                                                     loadOptions={fetchTemplates}
                                                     control={control}
                                                     name={'template'}
                                                     defaultValue={watch('template')}
                                                 /> */}
-                                                {errors.template && <span className='form-validation'>{errors.template.message}</span>}
-                                            </Grid>
-                                       
+                                            {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+                                        </Grid>
 
-                                        
-                                            
-                                            <Grid  className='form_group  '>
-                                                <TextInput placeholder={'To'} disabled control={control} name="to"
-                                                    value={watch('to')} />
-                                                {errors.to && <span className='form-validation'>{errors.to.message}</span>}
-                                            </Grid>
-                                       
 
-                                        
-                                          
-                                            <Grid  className='form_group  '>
-                                                {
-                                                    textBoxLoading ?
-                                                        <Skeleton variant='rounded' width={'100%'} height={40} />
-                                                        :
-                                                        <TextInput placeholder={'Default CC'} control={control} name="default_cc"
-                                                            value={watch('default_cc')} />
-                                                }
-                                                {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
-                                            </Grid>
-                                      
 
-                                       
-                                            
-                                            <Grid  className='form_group  '>
-                                                {
-                                                    textBoxLoading ?
-                                                        <Skeleton variant='rounded' width={'100%'} height={40} />
-                                                        :
-                                                        <TextInput placeholder='Subject' control={control} name="subject"
-                                                            value={watch('subject')} />
-                                                }
-                                                {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
-                                            </Grid>
-                                       
 
-                                        <Grid className='form_group  '> 
-                                                {
-                                                    textBoxLoading ?
-                                                        <Skeleton variant='rounded' width={'100%'} height={400} />
-                                                        :
-                                                        <Editor key={editorKey} emoji={false} val={watch('body')}
-                                                            onValueChange={e => setValue('body', e)} />
-                                                }
-                                                {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
-                                            </Grid>
-                                         
+                                        <Grid className='form_group  '>
+                                            <TextInput placeholder={'To'} disabled control={control} name="to"
+                                                value={watch('to')} />
+                                            {errors.to && <span className='form-validation'>{errors.to.message}</span>}
+                                        </Grid>
+
+
+
+
+                                        <Grid className='form_group  '>
+                                            {
+                                                textBoxLoading ?
+                                                    <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                    :
+                                                    <TextInput placeholder={'Default CC'} control={control} name="default_cc"
+                                                        value={watch('default_cc')} />
+                                            }
+                                            {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
+                                        </Grid>
+
+
+
+
+                                        <Grid className='form_group  '>
+                                            {
+                                                textBoxLoading ?
+                                                    <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                    :
+                                                    <TextInput placeholder='Subject' control={control} name="subject"
+                                                        value={watch('subject')} />
+                                            }
+                                            {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
+                                        </Grid>
+
+
+                                        <Grid className='form_group  '>
+                                            {
+                                                textBoxLoading ?
+                                                    <Skeleton variant='rounded' width={'100%'} height={400} />
+                                                    :
+                                                    <Editor key={editorKey} emoji={false} val={watch('body')}
+                                                        onValueChange={e => setValue('body', e)} />
+                                            }
+                                            {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
+                                        </Grid>
+
 
                                         {
                                             attachmentFiles?.length > 0 &&
@@ -455,11 +455,20 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
                             <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                                 <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
-                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg></Button>
-                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Send <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg></LoadingButton>
+                                    <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg></Button>
+                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>
+                                    {
+                                        loading ?
+                                            <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                            :
+                                            <>
+                                                Save <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </>
+                                    }
+                                </LoadingButton>
                             </Grid>
 
                         </form>

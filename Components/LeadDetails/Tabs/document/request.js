@@ -5,7 +5,7 @@ import Modal from '@mui/material/Modal';
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Checkbox, FormControlLabel, FormGroup, Grid, IconButton, Skeleton, TextField, Tooltip } from '@mui/material';
+import { Checkbox, Drawer, FormControlLabel, FormGroup, Grid, IconButton, Skeleton, TextField, Tooltip } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Close, Delete } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
@@ -37,6 +37,7 @@ export default function LeadDocumentRequest({ id, reqId, setReqId, fetchList }) 
 
     const handleClose = () => {
         setReqId()
+        setSelectedTemplates([])
         setOpen(false);
     }
 
@@ -94,6 +95,8 @@ export default function LeadDocumentRequest({ id, reqId, setReqId, fetchList }) 
         })
     }
 
+    const anchor = 'right'; // Set anchor to 'right'
+
 
     useEffect(() => {
         if (reqId > 0) {
@@ -108,65 +111,71 @@ export default function LeadDocumentRequest({ id, reqId, setReqId, fetchList }) 
     return (
         <div>
 
-            <Modal
+            <Drawer
+                anchor={anchor}
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                BackdropProps={{
-                    onClick: null, // Prevent closing when clicking outside
-                }}
             >
-                <Box sx={style}>
-                    <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Request Document
-                        </Typography>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
+                <Grid width={550}>
+                    <Grid className='modal_title d-flex align-items-center'>
+
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <a className='back_modal_head'>Request Document </a>
+
                     </Grid>
+                    <hr />
+                    <div className='form-data-cntr'>
+                        <form >
+                            {
+                                datLoading ?
+                                    loadingGrid()
+                                    :
+                                    <Grid mt={2}>
+                                        <a style={{ color: 'grey' }}>Select Templates</a>
+                                        <FormGroup style={{}}>
+                                            <Grid container sx={{ display: 'flex', }}>
+                                                {
+                                                    templates?.map((obj, index) => (
 
-                    <form >
-                        {
-                            datLoading ?
-                                loadingGrid()
-                                :
-                                <Grid mt={2}>
-                                    <a style={{ color: 'grey' }}>Select Templates</a>
-                                    <FormGroup style={{}}>
-                                        <Grid container sx={{ display: 'flex', }}>
-                                            {
-                                                templates?.map((obj, index) => (
+                                                        <Grid key={index} mb={2} item xs={12} sm={6}>
+                                                            <FormControlLabel control={<Checkbox onChange={() => handleTemplateChange(obj?.id)} value={obj?.id} checked={isTemplateChecked(obj?.id)} />} label={obj?.name} />
+                                                        </Grid>
+                                                    ))
+                                                }
+                                            </Grid>
+                                        </FormGroup>
+                                    </Grid>
+                            }
 
-                                                    <Grid key={index} item xs={12} sm={6}>
-                                                        <FormControlLabel control={<Checkbox onChange={() => handleTemplateChange(obj?.id)} value={obj?.id} checked={isTemplateChecked(obj?.id)} />} label={obj?.name} />
-                                                    </Grid>
-                                                ))
-                                            }
-                                        </Grid>
-                                    </FormGroup>
-                                </Grid>
-                        }
+                            <Grid mt={2} display={'flex'} justifyContent={'end'}>
+                                <LoadingButton
+                                    className='save-btn'
+                                    onClick={requestDocument}
+                                    loading={loading}
+                                    disabled={loading || datLoading}
+                                    size='small'
+                                    sx={{ textTransform: 'none', height: 30 }}
+                                >
+                                    {
+                                        loading ?
+                                            <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                            :
+                                            <>
+                                                Request
+                                            </>
+                                    }
+                                </LoadingButton>
 
-                        <Grid mt={2} display={'flex'} justifyContent={'end'}>
-                            <LoadingButton
-                                onClick={requestDocument}
-                                loading={loading}
-                                disabled={loading}
-                                size='small'
-                                sx={{ textTransform: 'none', height: 30 }}
-                                className=" bg-sky-500 hover:bg-sky-700 text-white font-bold  rounded"
-                            >
-                                Request
-                            </LoadingButton>
-
-                        </Grid>
-                    </form>
-                </Box>
-            </Modal>
+                            </Grid>
+                        </form>
+                    </div>
+                </Grid>
+            </Drawer>
         </div>
     );
 }
@@ -175,8 +184,8 @@ const loadingGrid = () => (
     <Grid container>
 
         {
-            [...Array(8)].map((_, index) => (
-                <Grid mt={1} key={index} item xs={12} sm={6}>
+            [...Array(16)].map((_, index) => (
+                <Grid mt={1} mb={2} key={index} item xs={12} sm={6}>
                     <Skeleton variant='rounded' height={20} width={150} />
                 </Grid>
             ))

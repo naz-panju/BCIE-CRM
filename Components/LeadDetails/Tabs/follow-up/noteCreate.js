@@ -82,7 +82,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                     setSubmitLoading(false)
                     fetchNotes()
                     // if(refresh){
-                        setRefresh(!refresh)
+                    setRefresh(!refresh)
                     // }
                     handleCancelEdit()
                 } else {
@@ -189,46 +189,53 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                 }
 
                 <Grid className='modal_title d-flex align-items-center  '>
-                <a className='back_modal' onClick={handleClose}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
-                                    <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                            </a>
-                    <a  className='back_modal_head'>Add Note </a>
-                    
+                    <a className='back_modal' onClick={handleClose}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                            <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                    <a className='back_modal_head'>Add Note </a>
+
                 </Grid>
                 <hr />
 
-<div className='form-data-cntr'>
+                <div className='form-data-cntr'>
 
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Grid  >
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <Grid  >
 
-                        {
-                            editID ? <Grid mb={1}><a style={{ fontSize: '14px', color: 'blue' }}>You are editing a Note, <span onClick={handleCancelEdit} style={{ textDecoration: 'underline', color: 'red', cursor: 'pointer', fontSize: '14px' }}>Click</span> to cancel</a></Grid>
-                                : ''
-                        }
+                            {
+                                editID ? <Grid mb={1}><a style={{ fontSize: '14px', color: 'blue' }}>You are editing a Note, <span onClick={handleCancelEdit} style={{ textDecoration: 'underline', color: 'red', cursor: 'pointer', fontSize: '14px' }}>Click</span> to cancel</a></Grid>
+                                    : ''
+                            }
 
-<Grid  className='form_group frm-text-conn-stl '>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                                                 <TextField
-                                placeholder='Add Note'
-                                {...register('note')}
-                                variant="outlined"
-                                fullWidth
-                                multiline
-                                rows={3}
-                                sx={{ width: '100%', }}
-                                required
-                            />
+                            <Grid className='form_group frm-text-conn-stl '>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <TextField
+                                    placeholder='Add Note'
+                                    {...register('note')}
+                                    variant="outlined"
+                                    fullWidth
+                                    multiline
+                                    rows={3}
+                                    sx={{ width: '100%', }}
+                                    required
+                                />
+                            </Grid>
+
+                            <Grid sx={{ pt: 2, pb: 2 }} item xs={12}>
+                                <LoadingButton className='save-btn' loading={submitLoading} disabled={submitLoading} size='small' sx={{ textTransform: 'none', height: 35 }} onClick={onSubmit} variant='outlined'>{
+                                        submitLoading ?
+                                            <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                            :
+                                            <>
+                                                {buttonText} 
+                                            </>
+                                    }</LoadingButton>
+                            </Grid>
                         </Grid>
-
-                        <Grid sx={{ pt: 2, pb: 2 }}  item xs={12}>
-                            <LoadingButton className='save-btn' loading={submitLoading} disabled={submitLoading} size='small' sx={{ textTransform: 'none', height: 35 }} onClick={onSubmit} variant='outlined'>{buttonText}</LoadingButton>
-                        </Grid>
-                    </Grid>
-                </form>
-</div>
+                    </form>
+                </div>
 
                 <Divider sx={{ mb: 1 }} />
                 <Grid container p={1} spacing={2}>
