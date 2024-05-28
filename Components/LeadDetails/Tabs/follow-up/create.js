@@ -365,7 +365,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
                                                 <TimelineConnector />
                                             </TimelineSeparator>
                                             <TimelineContent>
-                                                <div className='timeline-content-content'>
+                                                <div className='timeline-content-content notes'>
                                                     <Grid display={'flex'} alignItems={'center'} container>
                                                         <Grid item md={11} >
                                                             <p><b>Follow Up</b> -</p> <p> with {data?.name?.toUpperCase()}</p>

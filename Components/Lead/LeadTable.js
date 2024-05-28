@@ -714,8 +714,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 </TableCell>
                                 <TableCell align="left">{row?.email}</TableCell>
                                 <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
-                                <TableCell align="left">
-                                  <span>SA</span>
+                                <TableCell align="left" className='assigned-colm'>
+                                  <span className='assigned-span'>SA</span>
                                   {
                                     row?.assignedToCounsellor ?
                                       <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToCounsellor?.name}</Button>
@@ -724,7 +724,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                   }
                                   {/* {row?.assignedToUser?.name} */}
                                 </TableCell>
-                                <TableCell align="left">{row?.stage?.name}</TableCell>
+                                <TableCell className='stage-colm' align="left"><span className='stage-span'>{row?.stage?.name}</span></TableCell>
                               </TableRow>
                             );
                           })

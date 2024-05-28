@@ -7,6 +7,7 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
+import TimelineDotIcon from '@/img/TimelineDot.svg'
 import CachedIcon from '@mui/icons-material/Cached';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
@@ -19,6 +20,7 @@ import { useState } from 'react';
 import moment from 'moment';
 import { Skeleton } from '@mui/material';
 import { ApplicationApi } from '@/data/Endpoints/Application';
+import Image from 'next/image';
 
 export default function BasicSelect({ lead_id, from, app_id }) {
     const [select, setAge] = React.useState('');
@@ -59,10 +61,10 @@ export default function BasicSelect({ lead_id, from, app_id }) {
     return (
 
         <div className='lead-tabpanel-content-block timeline'>
-            <div className='lead-tabpanel-content-block-title'>
-                <h2>Timeline</h2>
+            {/* <div className='lead-tabpanel-content-block-title'>
+                
                 <div className='timeline-top-right-block'>
-                    {/* <Box className="" sx={{ minWidth: 120 }}>
+                    <Box className="" sx={{ minWidth: 120 }}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Age</InputLabel>
                             <Select className='tabpanel-select' labelId="demo-simple-select-label" id="demo-simple-select" value={select} label="Select" onChange={handleChange} >
@@ -71,9 +73,9 @@ export default function BasicSelect({ lead_id, from, app_id }) {
                                 <MenuItem value={30}>Thirty</MenuItem>
                             </Select>
                         </FormControl>
-                    </Box> */}
+                    </Box>
                 </div>
-            </div>
+            </div> */}
 
             {
                 laoding ?
@@ -82,21 +84,28 @@ export default function BasicSelect({ lead_id, from, app_id }) {
                     <div className='timeline-content-block-item'>
                         {
                             list?.data?.length > 0 ?
-                                <Timeline sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
+                                <Timeline className='timeline-content-block-item-block' sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
                                     {
                                         list?.data?.map((obj, index) => (
                                             <TimelineItem key={index} className='TimelineItemClass'>
                                                 <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
-                                                    {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')}
+                                                    <div className='TimelineOppositeContent-block'>
+                                                        {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')} 
+                                                    </div>
+                                                    
                                                 </TimelineOppositeContent>
                                                 <TimelineSeparator>
-                                                    <ThumbUpOffAltIcon className='timelineIcon' />
+                                                    <Image className='TimelineDotIcon' src={TimelineDotIcon} alt='TimelineDotIcon' width={18} height={18} />
                                                     <TimelineConnector />
                                                 </TimelineSeparator>
-                                                <TimelineContent>
+                                                <TimelineContent className='timeline-content-content-block'>
                                                     <div className='timeline-content-content'>
                                                         <p>{obj?.description}</p>
                                                         {/* <span>+10</span> */}
+
+                                                        <svg className='timeline-content-content-svg' xmlns="http://www.w3.org/2000/svg" width="9" height="12" viewBox="0 0 9 12" fill="none"><path d="M-2.62268e-07 6L9 0.803848L9 11.1962L-2.62268e-07 6Z" fill="white"/></svg>
+
+                                                        <span className='timeline-content-content-span'></span>
                                                     </div>
                                                 </TimelineContent>
                                             </TimelineItem>

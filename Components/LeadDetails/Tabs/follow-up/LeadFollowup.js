@@ -117,24 +117,17 @@ export default function FollowUp({ lead_id, data, from, app_id ,refresh,setRefre
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
-                    <h2>Notes</h2>
-                    <div className='timeline-top-right-block'>
+                    <div className='lead-tabpanel-content-block-title'>
+                        <div className='lead-detail-title notes'>
+                            Edit and Preview Details of Students
 
-                        <Button size='small' onClick={handleNoteCreate} variant='outlined' >Add Note</Button>
-                        {/* <Button size='small' onClick={handleCreate} variant='contained' className='bg-sky-500'>Add Follow Up</Button> */}
-                        {/* <div className='add-note'>
-                            Add Follow Up
-                        </div> */}
-                        {/* <Box className="" sx={{ minWidth: 120 }}>
-                            <FormControl fullWidth>
-                                <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                                <Select className='tabpanel-select' labelId="demo-simple-select-label" id="demo-simple-select" value={select} label="Select" onChange={handleChange} >
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Box> */}
+                            <div className='timeline-top-right-block'>
+                                <a className='edit-btn'  size='small' onClick={handleNoteCreate} variant='outlined' ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>  Edit Details </a>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -159,14 +152,21 @@ export default function FollowUp({ lead_id, data, from, app_id ,refresh,setRefre
                                                             <TimelineConnector />
                                                         </TimelineSeparator>
                                                         <TimelineContent>
-                                                            <div className='timeline-content-content'>
-                                                                <Grid display={'flex'}>
-                                                                    <p><b>Note</b> - </p> <p> {obj?.note}</p>
+                                                            <div className='timeline-content-content notes-block'>
+                                                                <Grid display={'flex'} className='notes-block-content'> 
+                                                                    <span className='note-span'>Note</span>
+                                                                    <p>{obj?.note}</p>
                                                                 </Grid>
                                                               
-                                                                <Grid display={'flex'}>
-                                                                    <p><b>Created By</b>: </p>
-                                                                    <p> {obj?.created_by?.name}</p>
+                                                                <Grid display={'flex'} className='note-createdby'>
+                                                                    <span className='profile-db'>
+                                                                        SS
+                                                                    </span>
+                                                                    <div>
+                                                                    <p>Created By</p>
+                                                                    <h4> {obj?.created_by?.name}</h4>
+                                                                    </div>
+                                                                    
                                                                    
                                                                 </Grid>
                                                                
@@ -185,7 +185,7 @@ export default function FollowUp({ lead_id, data, from, app_id ,refresh,setRefre
                                                             <TimelineConnector />
                                                         </TimelineSeparator>
                                                         <TimelineContent>
-                                                            <div className='timeline-content-content'>
+                                                            <div className='timeline-content-content notes'>
                                                                 <Grid display={'flex'}>
                                                                     <p><b>Follow Up</b> -</p> <p> with {data?.name?.toUpperCase()}</p>
                                                                 </Grid>
