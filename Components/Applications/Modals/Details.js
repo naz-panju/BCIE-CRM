@@ -89,13 +89,13 @@ export default function ApplicationDetail({ id, setId }) {
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={550}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <a style={{ fontWeight: 500, fontSize: '19px' }}>Application Detail</a>
                         <IconButton
-                            onClick={handleDrawerClose}
+                            onClick={handleClose}
                         >
                             <Close />
                         </IconButton>

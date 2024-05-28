@@ -283,7 +283,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={650}>
                     <Grid className='modal_title d-flex align-items-center  '>

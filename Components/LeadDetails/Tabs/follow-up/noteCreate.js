@@ -171,7 +171,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
         <Drawer
             anchor={anchor}
             open={open}
-            onClose={handleDrawerClose}
+            onClose={handleClose}
         >
             <Grid width={550}>
 

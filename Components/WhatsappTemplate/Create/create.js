@@ -220,7 +220,7 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={750}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>

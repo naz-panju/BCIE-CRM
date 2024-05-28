@@ -55,7 +55,7 @@ export default function LeadDocumentDetailModal({ id, setId }) {
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={650}>
                     

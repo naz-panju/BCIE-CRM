@@ -264,7 +264,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={550}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>

@@ -6,6 +6,7 @@ import { Toaster } from "react-hot-toast";
 // import { LocalizationProvider } from "@mui/x-date-pickers";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import 'react-phone-input-2/lib/style.css';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 
 

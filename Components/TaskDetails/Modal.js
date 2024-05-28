@@ -52,7 +52,7 @@ export default function TaskDetailModal({ id, setId,archiveRefresh }) {
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={650}>
                     

@@ -50,7 +50,7 @@ export default function CreateLead({ editId, setEditId, refresh, setRefresh, han
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={650}> 
                     <Grid className='modal_title d-flex align-items-center justify-content-between '>

@@ -239,7 +239,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid p={1} width={550}>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>

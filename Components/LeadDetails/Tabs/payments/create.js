@@ -208,7 +208,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={500}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>

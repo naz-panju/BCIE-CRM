@@ -10,11 +10,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
 import { LeadApi } from '@/data/Endpoints/Lead';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Drawer, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { StudentApi } from '@/data/Endpoints/Student';
 import SelectX from '@/Form/SelectX';
 import { ListingApi } from '@/data/Endpoints/Listing';
+import { Close } from '@mui/icons-material';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
@@ -57,8 +58,8 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
         if (details?.closed == 1) {
             action = LeadApi.reOpenLead(dataToSubmit)
         } else {
-            dataToSubmit['archive_note']=watch('note')
-            dataToSubmit['archive_reason']=watch('reason')?.reason
+            dataToSubmit['archive_note'] = watch('note')
+            dataToSubmit['archive_reason'] = watch('reason')?.reason
             console.log(dataToSubmit);
             action = LeadApi.closeLead(dataToSubmit)
         }
@@ -89,67 +90,73 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
 
 
     const memoizedOpen = useMemo(() => open, [open]);
+    const anchor = 'right'; // Set anchor to 'right'
 
     return (
         <div>
-            <Dialog
-                open={memoizedOpen}
-                TransitionComponent={Transition}
-                keepMounted
+            <Drawer
+                anchor={anchor}
+                open={open}
                 onClose={handleClose}
-                aria-describedby="alert-dialog-slide-description"
-                PaperProps={{
-                    style: {
-                        width: 400,
-                    },
-                }}
             >
-                <DialogTitle>{details?.closed == 1 ? 'Unarchive' : 'Archive'} {title}</DialogTitle>
-                <DialogContent>
-                    {/* <DialogContentText id="alert-dialog-slide-description">
+                <Grid width={550}>
+                    <Grid className='modal_title d-flex align-items-center'>
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+                        <a className='back_modal_head'>{details?.closed == 1 ? 'Unarchive' : 'Archive'} {title}</a>
+                       
+                    </Grid>
+                    <hr />
+                    <div className='form-data-ctr'>
+
+                        {/* <DialogContentText id="alert-dialog-slide-description">
                         {title}
                     </DialogContentText> */}
 
-                    {
-                        details?.closed != 1 &&
-                        <>
-                            <Grid display={'flex'} container item xs={12}>
-                                <Grid item xs={12} md={12}>
-                                    <Typography sx={{ fontWeight: '500' }}>Note</Typography>
+                        {
+                            details?.closed != 1 &&
+                            <div className='form-data-cntr'>
+                                <Grid display={'flex'} container item xs={12}>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography sx={{ fontWeight: '500' }}>Note</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
+                                            value={watch('note') || ''} />
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12} md={12}>
-                                    <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
-                                        value={watch('note') || ''} />
-                                </Grid>
-                            </Grid>
 
-                            <Grid display={'flex'} container item xs={12}>
-                                <Grid item xs={12} md={12}>
-                                    <Typography sx={{ fontWeight: '500' }}>Reason</Typography>
+                                <Grid display={'flex'} container item xs={12}>
+                                    <Grid item xs={12} md={12}>
+                                        <Typography sx={{ fontWeight: '500' }}>Reason</Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={12}>
+                                        <SelectX
+                                            menuPlacement='top'
+                                            loadOptions={fetchReasons}
+                                            control={control}
+                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                            name={'reason'}
+                                            defaultValue={watch('reason')}
+                                        />
+                                    </Grid>
                                 </Grid>
-                                <Grid item xs={12} md={12}>
-                                    <SelectX
-                                        menuPlacement='top'
-                                        loadOptions={fetchReasons}
-                                        control={control}
-                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'reason'}
-                                        defaultValue={watch('reason')}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </>
-                    }
-                </DialogContent>
-                <DialogActions>
-                    <Button size='small' onClick={handleClose} variant="outlined" color="inherit">
-                        Cancel
-                    </Button>
-                    <LoadingButton className='bg-sky-500 text-white hover:bg-sky-700' size='small' onClick={ArchiveLead} loading={loading} disabled={loading}
-                        variant="contained" color='info' >Confirm</LoadingButton>
-                </DialogActions>
-            </Dialog>
+                            </div>
+                        }
+                    </div>
+                    <DialogActions>
+                        <Button size='small' onClick={handleClose} variant="outlined" color="inherit">
+                            Cancel
+                        </Button>
+                        <LoadingButton className='bg-sky-500 text-white hover:bg-sky-700' size='small' onClick={ArchiveLead} loading={loading} disabled={loading}
+                            variant="contained" color='info' >Confirm</LoadingButton>
+                    </DialogActions>
+                </Grid>
+            </Drawer>
         </div>
     );
 }

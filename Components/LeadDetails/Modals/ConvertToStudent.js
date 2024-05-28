@@ -347,7 +347,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={650}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>

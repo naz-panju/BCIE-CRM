@@ -273,7 +273,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={750}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>

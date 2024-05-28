@@ -195,7 +195,7 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={550}>
                     <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>

@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from 'react';
-import { Grid, IconButton, TextField, Tooltip, Skeleton } from '@mui/material';
+import { Grid, IconButton, TextField, Tooltip, Skeleton, Drawer } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { Close, Delete } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
@@ -85,7 +85,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
     };
 
     const fetchTemplates = (e) => {
-        return ListingApi.documentTemplate({ keyword: e ,type:'student'}).then(response => {
+        return ListingApi.documentTemplate({ keyword: e, type: 'student' }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data;
             } else {
@@ -196,7 +196,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
         setDataLoading(false)
     }
 
-
+    const anchor = 'right'; // Set anchor to 'right'
 
 
     useEffect(() => {
@@ -212,44 +212,36 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
     return (
         <div>
 
-            <Modal
+            <Drawer
+                anchor={anchor}
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                BackdropProps={{
-                    onClick: null, // Prevent closing when clicking outside
-                }}
             >
-                <Box sx={style}>
-                    <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <Typography id="modal-modal-title" variant="h6" component="h2">
-                            {editId > 0 ? 'Edit Document' : 'Add Document'}
-                        </Typography>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
-                    </Grid>
+                <Grid width={550}>
+                    <Grid className='modal_title d-flex align-items-center'>
 
-                    {
-                        dataLoading ?
-                            loadingFields()
-                            :
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <Grid container>
-                                    <Grid pr={1} mt={2} md={6}>
-                                        <a>Select Template</a>
-                                        {/* <SelectX
-                                    required={true}
-                                    loadOptions={fetchTemplates}
-                                    control={control}
-                                    rules={{ required: 'Template is required' }}
-                                    name={'template'}
-                                    defaultValue={watch('template')}
-                                /> */}
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <a className='back_modal_head'> {editId > 0 ? 'Edit Document' : 'Add Document'} </a>
+
+                    </Grid>
+                    <hr />
+
+                    <div className='form-data-cntr'>
+
+                        {
+                            dataLoading ?
+                                loadingFields()
+                                :
+                                <form onSubmit={handleSubmit(onSubmit)}>
+                                    <Grid className='form_group  ' >
+
                                         <AsyncSelect
+                                            placeholder={'Select Template'}
                                             key={watch('template')}
                                             name={'template'}
                                             defaultValue={watch('template')}
@@ -263,104 +255,104 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                         {errors.template && <span className='form-validation'>{errors.template.message}</span>}
 
                                     </Grid>
-                                    <Grid mt={2} md={6}>
-                                        <a>Title</a>
-                                        <TextInput control={control} name="title"
+                                    <Grid className='form_group  ' >
+
+                                        <TextInput control={control} placeholder={'Title'} name="title"
                                             value={watch('title')} />
                                     </Grid>
-                                </Grid>
-                                <Grid mt={2}>
-                                    <a>Remarks</a>
-                                    <TextField
-                                        {...register('remarks')}
-                                        variant="outlined"
-                                        fullWidth
-                                        multiline
-                                        rows={2}
-                                        sx={{ width: '100%', }}
-                                    />
-                                </Grid>
+                                    <Grid className='form_group  ' >
+                                        <TextField
+                                            placeholder='Remarks'
+                                            {...register('remarks')}
+                                            variant="outlined"
+                                            fullWidth
+                                            multiline
+                                            rows={2}
+                                            sx={{ width: '100%', }}
+                                        />
+                                    </Grid>
 
-                                <div
-                                    className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
-                                    onDrop={handleDrop}
-                                    onDragOver={handleDragOver}
-                                >
-                                    <input
-                                        type="file"
-                                        onChange={handleFileChange}
-                                        className="hidden"
-                                        id="file-upload"
-                                        key={fileInputKey}
-                                    />
-                                    <label
-                                        htmlFor="file-upload"
-                                        className="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                    <div
+                                        className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
+                                        onDrop={handleDrop}
+                                        onDragOver={handleDragOver}
                                     >
-                                        Select File or Drag and Drop Here
-                                    </label>
-                                    {(selectedFile || details?.file) && (
-                                        <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
-                                            <Grid mr={1}>
+                                        <input
+                                            type="file"
+                                            onChange={handleFileChange}
+                                            className="hidden"
+                                            id="file-upload"
+                                            key={fileInputKey}
+                                        />
+                                        <label
+                                            htmlFor="file-upload"
+                                            className="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            Select File or Drag and Drop Here
+                                        </label>
+                                        {(selectedFile || details?.file) && (
+                                            <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
+                                                <Grid mr={1}>
+                                                    {
+                                                        selectedFile &&
+                                                        <Tooltip title={selectedFile?.name}>
+                                                            <p className="text-gray-700">
+                                                                {
+                                                                    selectedFile?.name?.length > 20
+                                                                        ? selectedFile?.name?.slice(0, 20) + '....'
+                                                                        : selectedFile?.name
+                                                                }
+                                                            </p>
+                                                        </Tooltip>
+                                                    }
+                                                    {
+                                                        !selectedFile &&
+                                                        <Tooltip title={details?.file}>
+                                                            <p className="text-gray-700">
+                                                                {trimUrlAndNumbers(details?.file)}
+                                                            </p>
+                                                        </Tooltip>
+                                                    }
+                                                </Grid>
                                                 {
                                                     selectedFile &&
-                                                    <Tooltip title={selectedFile?.name}>
-                                                        <p className="text-gray-700">
-                                                            {
-                                                                selectedFile?.name?.length > 20
-                                                                    ? selectedFile?.name?.slice(0, 20) + '....'
-                                                                    : selectedFile?.name
-                                                            }
-                                                        </p>
-                                                    </Tooltip>
-                                                }
-                                                {
-                                                    !selectedFile &&
-                                                    <Tooltip title={details?.file}>
-                                                        <p className="text-gray-700">
-                                                            {trimUrlAndNumbers(details?.file)}
-                                                        </p>
-                                                    </Tooltip>
+                                                    <Grid>
+                                                        <Delete sx={{ cursor: 'pointer' }} color='error' fontSize='small' onClick={handleDelete} />
+                                                    </Grid>
                                                 }
                                             </Grid>
-                                            {
-                                                selectedFile &&
-                                                <Grid>
-                                                    <Delete sx={{ cursor: 'pointer' }} color='error' fontSize='small' onClick={handleDelete} />
-                                                </Grid>
-                                            }
-                                        </Grid>
-                                    )}
-                                </div>
-                                <Grid mt={2} display={'flex'} justifyContent={'space-between'}>
-                                    <LoadingButton
-                                        variant='contained'
-                                        onClick={requestDocument}
-                                        loading={reqLoading}
-                                        disabled={reqLoading || loading || dataLoading}
-                                        size='small'
-                                        sx={{ textTransform: 'none', height: 30 }}
-                                        className=" bg-sky-500 hover:bg-sky-700 text-white font-bold  rounded"
-                                    >
-                                        Request Document
-                                    </LoadingButton>
-                                    <LoadingButton
-                                        type='submit'
-                                        variant='contained'
-                                        disabled={loading || reqLoading || dataLoading}
-                                        loading={loading}
-                                        size='small'
-                                        sx={{ textTransform: 'none', height: 30 }}
-                                    // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
-                                    >
-                                        Upload
-                                    </LoadingButton>
-                                </Grid>
-                            </form>
-                    }
+                                        )}
+                                    </div>
+                                    <Grid mt={2} display={'flex'} justifyContent={'end'}>
+                                        <LoadingButton
+                                            variant='contained'
+                                            onClick={requestDocument}
+                                            loading={reqLoading}
+                                            disabled={reqLoading || loading || dataLoading}
+                                            size='small'
+                                            sx={{ textTransform: 'none', height: 30,mr:1 }}
+                                            className=" bg-sky-500 hover:bg-sky-700 text-white font-bold  rounded"
+                                        >
+                                            Request Document
+                                        </LoadingButton>
+                                        <LoadingButton
+                                            type='submit'
+                                            variant='contained'
+                                            disabled={loading || reqLoading || dataLoading}
+                                            loading={loading}
+                                            size='small'
+                                            sx={{ textTransform: 'none', height: 30 }}
+                                        // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            Upload
+                                        </LoadingButton>
+                                    </Grid>
+                                </form>
+                        }
+                    </div>
 
-                </Box>
-            </Modal>
+                </Grid>
+            </Drawer>
         </div>
     );
 }

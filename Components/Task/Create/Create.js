@@ -226,7 +226,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
             <Drawer
                 anchor={anchor}
                 open={open}
-                onClose={handleDrawerClose}
+                onClose={handleClose}
             >
                 <Grid width={650}>
 
