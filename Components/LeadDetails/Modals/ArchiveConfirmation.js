@@ -107,54 +107,59 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
                             </svg>
                         </a>
                         <a className='back_modal_head'>{details?.closed == 1 ? 'Unarchive' : 'Archive'} {title}</a>
-                       
+
                     </Grid>
                     <hr />
-                    <div className='form-data-ctr'>
+                    <div className='form-data-cntr'>
 
-                        {/* <DialogContentText id="alert-dialog-slide-description">
-                        {title}
-                    </DialogContentText> */}
 
-                        {
-                            details?.closed != 1 &&
-                            <div className='form-data-cntr'>
-                                <Grid display={'flex'} container item xs={12}>
-                                    <Grid item xs={12} md={12}>
-                                        <Typography sx={{ fontWeight: '500' }}>Note</Typography>
-                                    </Grid>
-                                    <Grid item xs={12} md={12}>
-                                        <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
-                                            value={watch('note') || ''} />
-                                    </Grid>
-                                </Grid>
+                        <Grid className='form_group'>
 
-                                <Grid display={'flex'} container item xs={12}>
-                                    <Grid item xs={12} md={12}>
-                                        <Typography sx={{ fontWeight: '500' }}>Reason</Typography>
-                                    </Grid>
-                                    <Grid item xs={12} md={12}>
-                                        <SelectX
-                                            menuPlacement='top'
-                                            loadOptions={fetchReasons}
-                                            control={control}
-                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                            name={'reason'}
-                                            defaultValue={watch('reason')}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        }
+                            <TextField placeholder='Note' multiline rows={2} fullWidth control={control}  {...register('note')}
+                                value={watch('note') || ''} />
+
+                        </Grid>
+
+                        <Grid className='form_group'>
+                            <SelectX
+                                placeholder='Reasons'
+                                // menuPlacement='top'
+                                loadOptions={fetchReasons}
+                                control={control}
+                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                name={'reason'}
+                                defaultValue={watch('reason')}
+                            />
+
+                        </Grid>
+
+                        <Grid p={1} pb={3}  >
+                            <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'><svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg> Cancel</Button>
+                            <LoadingButton onClick={ArchiveLead} className='save-btn' loading={loading} disabled={loading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>
+                                {
+                                    loading ?
+                                        <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                        :
+                                        <>
+                                            Confirm <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </>
+                                }
+                            </LoadingButton>
+                        </Grid>
+
                     </div>
-                    <DialogActions>
+                    {/* <DialogActions>
                         <Button size='small' onClick={handleClose} variant="outlined" color="inherit">
                             Cancel
                         </Button>
                         <LoadingButton className='bg-sky-500 text-white hover:bg-sky-700' size='small' onClick={ArchiveLead} loading={loading} disabled={loading}
                             variant="contained" color='info' >Confirm</LoadingButton>
-                    </DialogActions>
+                    </DialogActions> */}
                 </Grid>
             </Drawer>
         </div>
