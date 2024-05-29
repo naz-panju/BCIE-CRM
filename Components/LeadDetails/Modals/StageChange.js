@@ -300,7 +300,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
                             }
 
 
-                            <Grid p={1} pb={3}  >
+                            <Grid pb={3}  >
                                 <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'><svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
                                     <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg> Cancel</Button>
