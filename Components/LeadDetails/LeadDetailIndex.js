@@ -23,6 +23,7 @@ import { ListingApi } from '@/data/Endpoints/Listing';
 import PhoneCallModal from './Tabs/communication/Modals/SummaryModal';
 import CreateTask from '../Task/Create/Create';
 import AssignLeadModal from '../Lead/Modal/AssignModal';
+import UnArchiveConfirmPopup from './Modals/UnarchiveConfirmation';
 
 
 function LeadDetails() {
@@ -117,8 +118,13 @@ function LeadDetails() {
     setStageId(0)
   }
 
+  const [unArchiveId, setunArchiveId] = useState()
   const handleConfirmOpen = () => {
-    setconfirmId(details?.id)
+    if(details?.closed != 1){
+      setconfirmId(details?.id)
+    }else{
+      setunArchiveId(details?.id)
+    }
   }
 
   const handleFollowupOpen = () => {
@@ -255,6 +261,7 @@ function LeadDetails() {
       <LeadNoteModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={noteId} setEditId={setNoteId} />
 
       <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
+      <UnArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={unArchiveId} setID={setunArchiveId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
 
       <AssignLeadModal single={singleAssign} setsingle={setsingleAssign} selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} />
 

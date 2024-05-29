@@ -85,6 +85,19 @@ export default function FollowUp({ lead_id, data, from, app_id ,refresh,setRefre
         })
     }
 
+    const getFirstLettersOfTwoWords = (name) => {
+        if (name) {
+            const words = name.split(" "); // Split the name into an array of words
+            if (words.length >= 2) {
+                // Extract the first letter of the first two words and concatenate them
+                return words[0].charAt(0) + words[1].charAt(0);
+            } else if (words.length === 1) {
+                // If there's only one word, return its first letter
+                return words[0].charAt(0);
+            }
+        }
+        return ""; // Return an empty string if name is not provided
+    };
 
     const getData = async () => {
         setLaoding(true)
@@ -119,12 +132,12 @@ export default function FollowUp({ lead_id, data, from, app_id ,refresh,setRefre
                 <div className='lead-tabpanel-content-block-title'>
                     <div className='lead-tabpanel-content-block-title'>
                         <div className='lead-detail-title notes'>
-                            Edit and Preview Details of Students
+                            Find Latest Notes
 
                             <div className='timeline-top-right-block'>
                                 <a className='edit-btn'  size='small' onClick={handleNoteCreate} variant='outlined' ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>  Edit Details </a>
+                                </svg>  Add Note </a>
                             </div>
 
                         </div>
@@ -160,7 +173,7 @@ export default function FollowUp({ lead_id, data, from, app_id ,refresh,setRefre
                                                               
                                                                 <Grid display={'flex'} className='note-createdby'>
                                                                     <span className='profile-db'>
-                                                                        SS
+                                                                        {getFirstLettersOfTwoWords(obj?.created_by?.name)}
                                                                     </span>
                                                                     <div>
                                                                     <p>Created By</p>

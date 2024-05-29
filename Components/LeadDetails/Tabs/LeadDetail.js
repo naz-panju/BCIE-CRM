@@ -171,7 +171,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                             {
                                 data?.date_of_birth &&
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Date od Birth </label> {moment(data?.date_of_birth).format('DD-MM-YYYY')}
+                                    <label style={{ fontWeight: 'bold' }}>Date of Birth </label> {moment(data?.date_of_birth).format('DD-MM-YYYY')}
                                 </div>
                             }
 

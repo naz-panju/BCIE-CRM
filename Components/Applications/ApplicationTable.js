@@ -1144,7 +1144,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' &&
-                                                                        <a style={{ fontSize: '13px', color: 'grey' }}>App_id :{row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</a>
+                                                                        <span style={{ fontSize: '13px', color: 'grey' }}>App_id :{row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span>
                                                                     }
                                                                 </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>

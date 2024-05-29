@@ -135,6 +135,12 @@ export default function CustomizedMenus() {
     setRefresh(!refresh)
   }
 
+  const [isActive, setIsActive] = useState(false); // State to manage whether the active class should be applied
+
+  const toggleActive = () => {
+    setIsActive(!isActive); // Toggle the state value
+  };
+
   const noPageRefresh = () => {
     setRefresh(!refresh)
   }
@@ -202,11 +208,7 @@ export default function CustomizedMenus() {
     // getInitialValue()
   }, [])
 
-  const [isActive, setIsActive] = useState(false); // State to manage whether the active class should be applied
-
-  const toggleActive = () => {
-    setIsActive(!isActive); // Toggle the state value
-  };
+ 
 
   return (
 

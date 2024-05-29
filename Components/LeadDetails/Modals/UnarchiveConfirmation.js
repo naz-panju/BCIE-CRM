@@ -110,37 +110,6 @@ export default function UnArchiveConfirmPopup({ ID, setID, setLoading, title, lo
                         {title}
                     </DialogContentText> */}
 
-                    {
-                        details?.closed != 1 &&
-                        <>
-                            <Grid display={'flex'} container item xs={12}>
-                                <Grid item xs={12} md={12}>
-                                    <Typography sx={{ fontWeight: '500' }}>Note</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={12}>
-                                    <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
-                                        value={watch('note') || ''} />
-                                </Grid>
-                            </Grid>
-
-                            <Grid display={'flex'} container item xs={12}>
-                                <Grid item xs={12} md={12}>
-                                    <Typography sx={{ fontWeight: '500' }}>Reason</Typography>
-                                </Grid>
-                                <Grid item xs={12} md={12}>
-                                    <SelectX
-                                        menuPlacement='top'
-                                        loadOptions={fetchReasons}
-                                        control={control}
-                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'reason'}
-                                        defaultValue={watch('reason')}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </>
-                    }
                 </DialogContent>
                 <DialogActions>
                     <Button size='small' onClick={handleClose} variant="outlined" color="inherit">

@@ -8,6 +8,7 @@ import { Grid, InputAdornment, TextField } from '@mui/material';
 import { Close, Search } from '@mui/icons-material';
 import SearchInput from '@/utils/SearchInput';
 import ReactSelector from 'react-select';
+import { Button } from 'rsuite';
 
 
 
@@ -56,7 +57,7 @@ export default function ArchiveIndex() {
 
   const router = useRouter();
 
-  const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
+  const pageNumber = parseInt(router?.asPath?.split("=")[1] || 1);
 
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
@@ -76,6 +77,8 @@ export default function ArchiveIndex() {
 
   const [page, setPage] = React.useState(pageNumber);
 
+  const [selected, setSelected] = React.useState([]);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -89,47 +92,18 @@ export default function ArchiveIndex() {
   }
 
   const handleRefresh = () => {
-    if (page != 0) {
-      setPage(0)
+    if (page != 1) {
+      setPage(1)
     }
     setRefresh(!refresh)
   }
 
-  const handleClearSearch = (from) => {
-    if (from == 'email') {
-      // setValue('emailSearch', '')
-      // setemailSearch('')
-    } else if (from == 'name') {
-      setValue('nameSearch', '')
-      setnameSearch('')
-      sessionStorage.removeItem('archiveType')
-      sessionStorage.removeItem('archiveSearch')
-    } else if (from == 'mobile') {
-      // setValue('mobileSearch', '')
-      // setphoneSearch('')
-    }
-  }
 
-  const handleTypeChange = (type) => {
-    setValue('searchType', type)
-    sessionStorage.setItem('archiveType', type)
-    setnameSearch('')
-  }
+  const [isActive, setIsActive] = useState(false); // State to manage whether the active class should be applied
 
-  const handleNameSearch = () => {
-    setnameSearch(watch('nameSearch'))
-    sessionStorage.setItem('archiveSearch', watch('nameSearch'))
-  }
-
-  const getInitialValue = () => {
-    let getSearch = sessionStorage.getItem('archiveSearch')
-    if (getSearch) {
-      let getSearchType = sessionStorage.getItem('archiveType')
-      setValue('searchType', getSearchType)
-      setValue('nameSearch', getSearch)
-      // setnameSearch(getSearch)
-    }
-  }
+  const toggleActive = () => {
+    setIsActive(!isActive); // Toggle the state value
+  };
 
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
@@ -145,62 +119,20 @@ export default function ArchiveIndex() {
             <h1>Archives</h1>
             <Grid display={'flex'} >
 
-              <Grid display={'flex'}>
-                <Grid width={200}>
-                  <ReactSelector
-                    onInputChange={searchOptions}
-                    styles={{
-                      menu: provided => ({ ...provided, zIndex: 9999 })
-                    }}
-                    options={searchOptions}
-                    getOptionLabel={option => option.name}
-                    getOptionValue={option => option.name}
-                    value={
-                      searchOptions.find(options =>
-                        options.name === watch('searchType')
-                      )
-                    }
-                    name='searchType'
 
-                    defaultValue={(watch('searchType'))}
-                    onChange={(selectedOption) => handleTypeChange(selectedOption?.name)}
-                  />
-                </Grid>
+              <Button onClick={toggleActive} className='search_btn'>
+                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M20 20L15.6569 15.6569M15.6569 15.6569C17.1046 14.2091 18 12.2091 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C12.2091 18 14.2091 17.1046 15.6569 15.6569Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </Button>
 
-                <form onSubmit={handleSubmit(handleNameSearch)}>
-                  <TextField
-                    {...register('nameSearch')}
-                    style={{ width: 300, marginRight: 10 }}
-                    size='small'
-                    id="outlined-name"
-                    placeholder={`search by ${watch('searchType')?.toLowerCase()}`}
-                    InputProps={{
-                      endAdornment: (
-                        <>
-                          <InputAdornment position="end">
-                            <Search onClick={handleNameSearch} sx={{ cursor: 'pointer' }} fontSize='small' />
-                          </InputAdornment>
-                          <InputAdornment onClick={() => handleClearSearch('name')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
-                            <Close fontSize='small' />
-                          </InputAdornment>
-                        </>
-                      ),
-                    }}
-                  />
-                </form>
-
-              </Grid>
             </Grid>
           </div>
-
-          {/* <div className='page-title-block-right'>
-            <Button sx={{ textTransform: 'none' }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
-          </div> */}
         </div>
 
 
-        <div className='content-block'>
-          <ArchiveTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} searchType={watch('searchType')} nameSearch={nameSearch} />
+        <div className={`content-block lead-table-cntr ${isActive ? 'active' : ''}`}>
+          <ArchiveTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} searchType={watch('searchType')} nameSearch={nameSearch} selected={selected} setSelected={setSelected} />
         </div>
       </section>
     </>
