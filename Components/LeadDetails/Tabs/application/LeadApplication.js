@@ -377,9 +377,9 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                     list?.data?.map((obj, index) => (
                                                         <React.Fragment key={obj?.id}>
                                                             {/* sx={{ height: isRowExpanded(obj.id) ? 300 : null }} */}
-                                                            <TableRow >
+                                                            <TableRow className='application-tr' >
                                                                 <TableCell>
-                                                                    <div className='d-flex justify-between items-center'>
+                                                                    <div className='d-flex justify-between items-center '>
                                                                         {obj?.university?.name}
                                                                         <HtmlTooltip
                                                                             title={
@@ -432,28 +432,33 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                 <div className='appl_act_cntr' >
 
 
-                                                                    <div className='all_act_cntr'>
-                                                                        <Button onClick={() => handleStageOpen(obj)}  ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                                    <div className='all_act_cntr application'>
+                                                                        <div className='application-btn-left'>
+                                                                        <Button className='application-btn change-stage' onClick={() => handleStageOpen(obj)}  ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                                                             <path d="M5 6.00008V13.9044C5 15.0386 5 15.6056 5.1701 15.9526C5.48537 16.5959 6.17631 16.9656 6.88639 16.8711C7.2695 16.8201 7.74136 16.5055 8.68508 15.8764L8.68735 15.8749C9.0614 15.6255 9.24846 15.5008 9.44413 15.4316C9.80351 15.3046 10.1956 15.3046 10.555 15.4316C10.7511 15.5009 10.9389 15.6261 11.3144 15.8765C12.2582 16.5057 12.7305 16.82 13.1137 16.871C13.8237 16.9654 14.5146 16.5959 14.8299 15.9526C15 15.6056 15 15.0384 15 13.9044V5.99734C15 5.06575 15 4.59925 14.8185 4.24308C14.6587 3.92948 14.4031 3.6747 14.0895 3.51491C13.733 3.33325 13.2669 3.33325 12.3335 3.33325H7.66683C6.73341 3.33325 6.26635 3.33325 5.90983 3.51491C5.59623 3.6747 5.34144 3.92948 5.18166 4.24308C5 4.5996 5 5.06666 5 6.00008Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                                         </svg> Change Stage</Button>
-                                                                        <Button onClick={handleDeferOpen}  > <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+                                                                        <Button className='application-btn Defer-Intake' onClick={handleDeferOpen}  > <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
                                                                             <path d="M1 5.66667H13M1 5.66667V12.5113C1 13.3825 1 13.8178 1.16349 14.1506C1.3073 14.4433 1.5366 14.6815 1.81885 14.8306C2.1394 15 2.55925 15 3.39768 15H10.6023C11.4408 15 11.86 15 12.1805 14.8306C12.4628 14.6815 12.6929 14.4433 12.8367 14.1506C13 13.8182 13 13.3834 13 12.5139V5.66667M1 5.66667V5.0446C1 4.1734 1 3.73748 1.16349 3.40473C1.3073 3.11203 1.5366 2.87424 1.81885 2.7251C2.13972 2.55556 2.56007 2.55556 3.40015 2.55556H4M13 5.66667V5.04204C13 4.17255 13 3.73716 12.8367 3.40473C12.6929 3.11203 12.4628 2.87424 12.1805 2.7251C11.8597 2.55556 11.4402 2.55556 10.6001 2.55556H10M10 1V2.55556M10 2.55556H4M4 1V2.55556" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                                         </svg> Defer Intake</Button>
-                                                                        <Button onClick={() => handleMailOpen(obj)}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
+                                                                        <Button className='application-btn Mail-University' onClick={() => handleMailOpen(obj)}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
                                                                             <path d="M1 3.57143L7.91849 8.01903C8.5773 8.44255 9.4227 8.44255 10.0815 8.01903L17 3.57143M3 13H15C16.1046 13 17 12.1046 17 11V3C17 1.89543 16.1046 1 15 1H3C1.89543 1 1 1.89543 1 3V11C1 12.1046 1.89543 13 3 13Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                                         </svg> Mail to University</Button>
-                                                                        <Button onClick={() => handleDocOpen(obj)}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
+                                                                        <Button className='application-btn documents' onClick={() => handleDocOpen(obj)}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
                                                                             <path d="M1 3.57143L7.91849 8.01903C8.5773 8.44255 9.4227 8.44255 10.0815 8.01903L17 3.57143M3 13H15C16.1046 13 17 12.1046 17 11V3C17 1.89543 16.1046 1 15 1H3C1.89543 1 1 1.89543 1 3V11C1 12.1046 1.89543 13 3 13Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                                         </svg> Documents</Button>
 
+                                                                        </div>
+
+                                                                        <div className='application-btn-right'>
+
                                                                         {
                                                                             obj?.app_coordinator_status == null &&
-                                                                            <Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
+                                                                            <Button className='edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
                                                                         }
                                                                         {
                                                                             obj?.app_coordinator_status == 'Returned' &&
                                                                             <div className='d-flex align-center'>
-                                                                                <Button Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Returned</Button>
+                                                                                <Button className='edit-btn-outline' Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Returned</Button>
                                                                                 {
                                                                                     obj?.app_coordinator_retun_status_note &&
                                                                                     <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '14px', ml: 1 }} /></Tooltip>
@@ -462,10 +467,10 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                         }
 
                                                                         {/* edit application */}
-                                                                        <Button onClick={() => handleEditDocument(obj?.id)}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
+                                                                        <Button className='edit-btn-outline' onClick={() => handleEditDocument(obj?.id)}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
                                                                             <path d="M1 3.57143L7.91849 8.01903C8.5773 8.44255 9.4227 8.44255 10.0815 8.01903L17 3.57143M3 13H15C16.1046 13 17 12.1046 17 11V3C17 1.89543 16.1046 1 15 1H3C1.89543 1 1 1.89543 1 3V11C1 12.1046 1.89543 13 3 13Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                                         </svg> Edit</Button>
-
+                                                                        </div>
 
                                                                     </div>
                                                                 </div>
