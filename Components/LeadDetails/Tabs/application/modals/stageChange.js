@@ -62,7 +62,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
 
 
     const fetchStages = (e) => {
-        return ListingApi.stages({ keyword: e, type: 'application',changable:1 }).then(response => {
+        return ListingApi.stages({ keyword: e, type: 'application', changable: 1 }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 setstages(response.data.data)
                 return response.data.data;
@@ -213,17 +213,19 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                 onClose={handleClose}
             >
                 <Grid width={550}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Change Application Stage</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
+                    <Grid className='modal_title d-flex align-items-center'>
+
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <a className='back_modal_head'> Change Application Stage </a>
+
                     </Grid>
                     <hr />
-                    <div>
-
+                    <div className='form-data-cntr'>
                         <form onSubmit={handleSubmit(onSubmit)}>
 
                             {
@@ -232,26 +234,25 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                     :
                                     <>
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Application Stage </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={8} md={8}>
-                                                <AsyncSelect
-                                                    // isDisabled={!selectedUniversityId}
-                                                    // key={selectedUniversityId}
-                                                    name={'stage'}
-                                                    defaultValue={watch('stage')}
-                                                    isClearable
-                                                    defaultOptions
-                                                    loadOptions={fetchStages}
-                                                    getOptionLabel={(e) => e.name}
-                                                    getOptionValue={(e) => e.id}
-                                                    onChange={handleStageChange}
-                                                />
-                                                {errors.stage && <span className='form-validation'>{errors.stage.message}</span>}
-                                            </Grid>
+                                        <Grid className='form_group' >
+                                            <AsyncSelect
+                                                // isDisabled={!selectedUniversityId}
+                                                // key={selectedUniversityId}
+                                                placeholder='Select Stage'
+                                                name={'stage'}
+                                                defaultValue={watch('stage')}
+                                                isClearable
+                                                defaultOptions
+                                                loadOptions={fetchStages}
+                                                getOptionLabel={(e) => e.name}
+                                                getOptionValue={(e) => e.id}
+                                                onChange={handleStageChange}
+                                            />
+                                            {errors.stage && <span className='form-validation'>{errors.stage.message}</span>}
+
                                         </Grid>
+
+
 
                                         {
                                             watch('stage')?.sub_stages?.length > 0 &&
@@ -292,22 +293,19 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                             </Grid>
                                         }
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Note </a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={8} md={8}>
-                                                <TextField
-                                                    {...register('note')}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    multiline
-                                                    rows={2}
-                                                    sx={{ width: '100%', }}
-                                                />
-                                                {errors.note && <span className='form-validation'>{errors.note.message}</span>}
-                                            </Grid>
+                                        <Grid className='form_group' >
+                                            <TextField
+                                                placeholder='Note'
+                                                {...register('note')}
+                                                variant="outlined"
+                                                fullWidth
+                                                multiline
+                                                rows={2}
+                                                sx={{ width: '100%', }}
+                                            />
+                                            {errors.note && <span className='form-validation'>{errors.note.message}</span>}
                                         </Grid>
+
                                     </>
                             }
 

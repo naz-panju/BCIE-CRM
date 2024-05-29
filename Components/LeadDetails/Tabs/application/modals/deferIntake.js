@@ -162,16 +162,19 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
                 onClose={handleClose}
             >
                 <Grid width={550}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? 'Defer Intake' : 'Defer Intake'}</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
+                    <Grid className='modal_title d-flex align-items-center'>
+
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <a className='back_modal_head'> Defer Intake </a>
+
                     </Grid>
                     <hr />
-                    <div>
+                    <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -180,45 +183,35 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
                                     <LoadingEdit item={items} />
                                     :
                                     <>
+                                        <Grid className='form_group' >
+                                            <AsyncSelect
+                                                placeholder='Intake'
+                                                // isDisabled={!selectedUniversityId}
+                                                // key={selectedUniversityId}
+                                                name={'intake'}
+                                                defaultValue={watch('intake')}
+                                                // isClearable
+                                                defaultOptions
+                                                loadOptions={fetchIntakes}
+                                                getOptionLabel={(e) => e.name}
+                                                getOptionValue={(e) => e.id}
+                                                onChange={(e) => setValue('intake', e)}
+                                            />
+                                            {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Intake</a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={8} md={8}>
-                                                <AsyncSelect
-                                                    // isDisabled={!selectedUniversityId}
-                                                    // key={selectedUniversityId}
-                                                    name={'intake'}
-                                                    defaultValue={watch('intake')}
-                                                    // isClearable
-                                                    defaultOptions
-                                                    loadOptions={fetchIntakes}
-                                                    getOptionLabel={(e) => e.name}
-                                                    getOptionValue={(e) => e.id}
-                                                    onChange={(e) => setValue('intake', e)}
-                                                />
-                                                {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
-                                            </Grid>
                                         </Grid>
 
-
-
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={4} md={4}>
-                                                <a className='form-text'>Note</a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={8} md={8}>
-                                                <TextField
-                                                    {...register('note')}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    multiline
-                                                    rows={2}
-                                                    sx={{ width: '100%', }}
-                                                />
-                                                {errors.note && <span className='form-validation'>{errors.note.message}</span>}
-                                            </Grid>
+                                        <Grid className='form_group' >
+                                            <TextField
+                                                placeholder='Note'
+                                                {...register('note')}
+                                                variant="outlined"
+                                                fullWidth
+                                                multiline
+                                                rows={2}
+                                                sx={{ width: '100%', }}
+                                            />
+                                            {errors.note && <span className='form-validation'>{errors.note.message}</span>}
                                         </Grid>
 
                                     </>
