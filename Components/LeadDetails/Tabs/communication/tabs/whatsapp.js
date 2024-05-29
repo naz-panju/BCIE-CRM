@@ -33,7 +33,7 @@ function WhatsappTab({ list, setwhatsappLimit, loading }) {
                                             
                                             <TableCell>
                                                 <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                    Whatsapp Type
+                                                     Type
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
