@@ -1048,6 +1048,15 @@ ul.search-document-block-pred li div span {
     gap: 15px;
     margin-top: 20px;
 }
+.app-tab-title {
+    color: #0B0D23;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+}
+
 
 ul.search-document-block-pred li:hover{
     border-radius: 3px;
