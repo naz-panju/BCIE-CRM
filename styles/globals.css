@@ -62,8 +62,6 @@ body {
   color: #fff;
   padding: 10px;
   text-align: center;
-  position: sticky;
-  bottom: 0;
   padding-left: 110px;
   z-index: 10;
 }
@@ -613,7 +611,6 @@ button#UserPop span {
   padding: 18px 25px 40px;
   flex: 1;
   z-index: 1;
-  min-height: 85vh;
   transition: all 0.3s;
   position: relative;
   overflow: hidden;
@@ -1254,6 +1251,7 @@ button.loadmore-btn {
   margin-bottom: 10px;
 }
 
+
 .communication-log-item:nth-child(1) .lead-score-block {
   border-top: 2px solid #00a65a;
 }
@@ -1286,17 +1284,39 @@ button.loadmore-btn {
   border-top: 2px solid #dd4b39;
 }
 
+.communication-log-item {
+  border-right: 1px solid rgba(148, 145, 145, 0.16);
+}
+.communication-log-item .lead-score-block{
+  border: 0px solid #eaeaea;
+  border-top: 0px solid #ea4537;
+  margin-right: 0px;
+  border-top: 0px !important;
+}
+
 .communication-log-item .lead-score-block h3 {
-  font-size: 18px;
   margin-bottom: 5px;
+  color: #0B0D23;
+  text-align: center;
+  font-family: Inter;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 15px;
 }
 
 .communication-log-item .lead-score-block h4 {
-  font-weight: 500;
-  font-size: 14px;
+  color: rgba(82, 82, 82, 0.70);
+  font-family: Inter;
+  font-size: 11px;
+  font-style: normal;
   font-weight: 400;
-  margin-bottom: 0;
+  margin-bottom: 0px !important;
+  line-height: normal;
+  margin-top: 15px !important;
 }
+
+
 
 .react-tel-input .form-control {
   position: relative;
