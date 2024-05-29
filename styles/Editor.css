@@ -1056,7 +1056,17 @@ ul.search-document-block-pred li div span {
     font-weight: 500;
     line-height: normal;
 }
-
+.all_act_cntr.application {
+    margin-top: 0;
+}
+.application-tr div {
+    color: #0B0D23;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 10px;
+}
 
 ul.search-document-block-pred li:hover{
     border-radius: 3px;
@@ -1783,6 +1793,22 @@ span.profile-db {
     display: inline-block;
     margin-left: 10px;
     cursor: pointer;
+}
+.all_act_cntr.application {
+    justify-content: space-between;
+}
+.Defer-Intake {
+    border-radius: 4px;
+    background: #EEF6FF !important;
+}
+.application-btn.Mail-University{
+    border-radius: 4px;
+    background: #CEF7D0;
+}
+.edit-btn-outline {
+    border-radius: 3px;
+    border: 1px solid #E4E4E4;
+    background: transparent !important;
 }
 
 .app_tab_cntr tbody tr {
