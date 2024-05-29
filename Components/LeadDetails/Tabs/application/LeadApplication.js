@@ -423,13 +423,6 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                         // </svg> Add</Button>
                                                                     }
                                                                 </TableCell>
-                                                                
-                                                              
-
-                                                            </TableRow>
-
-                                                            <div className='application-table-inner-head'>
-                                                                <TableRow>
                                                                 <TableCell>
                                                                     {
                                                                         obj?.app_coordinator_status == null &&
@@ -494,8 +487,8 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                             <path d="M12 8L9.5 11L7 8" stroke="white" stroke-width="0.8" stroke-linecap="round" stroke-linejoin="round" /></svg></>
                                                                     )} */}
                                                                 </TableCell>
-                                                                </TableRow>
-                                                                </div>
+
+                                                            </TableRow>
                                                             {isRowExpanded(obj.id) && (
                                                                 // <TableRow>
                                                                 <TableCell colSpan={7} style={{ padding: 0, borderTop: 'none' }} >
