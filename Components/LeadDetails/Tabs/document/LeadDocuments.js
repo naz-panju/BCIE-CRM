@@ -25,6 +25,7 @@ import LeadRequestUploadDocumentModal from './UploadRequestedDoc'
 import Doc from '@/img/doc.png';
 import DocPreview from '@/img/doc-preview.jpg';
 import Image from 'next/image'
+import PdfViewer from '@/Form/PdfViewer'
 
 function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
 
@@ -97,11 +98,20 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
         setRefresh(!refresh)
     }
 
+    const [first, setfirst] = useState(0)
+    const [imageLoading, setimageLoading] = useState(0)
+
     const fetchList = async () => {
         setLoading(true)
+
+        if (first == 0) {
+            setimageLoading(true)
+        }
+
         let params = {
             lead_id: lead_id,
             limit: limit,
+            keyword: searchKey,
             page: page + 1
         }
         if (from == 'app') {
@@ -111,14 +121,24 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
             const response = await LeadApi.listDocuments(params)
             if (response?.status == 200 || response?.status == 201) {
                 setList(response?.data)
+                if (first == 0) {
+                    setdocumentSelected(response?.data?.data[0])
+                }
+                setfirst(first + 1)
                 setLoading(false)
+                setimageLoading(false)
+
             } else {
                 toast.error(response?.response?.data?.message)
+                setimageLoading(false)
                 setLoading(false)
+
             }
         } catch (error) {
             toast.error(error?.response?.data?.message)
+            setimageLoading(false)
             setLoading(false)
+
         }
 
     }
@@ -165,11 +185,11 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
         setdocumentSelected(obj)
     }
 
-    console.log(documentSelected);
+    const [searchKey, setsearchKey] = useState()
 
     useEffect(() => {
         fetchList()
-    }, [refresh, page])
+    }, [refresh, page, searchKey])
 
     return (
         <>
@@ -181,8 +201,8 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
 
             <LeadDocumentDetailModal id={detailId} setId={setDetailId} />
 
-            <DocumentConfirmPopup ID={confirmId} setID={setconfirmId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Are your want to Approve this Document?'} getDetails={handleRefresh} />
-            <DocumentRejectPopup ID={rejectId} setID={setrejectId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Are your want to Reject this Document?'} getDetails={handleRefresh} />
+            <DocumentConfirmPopup ID={confirmId} setID={setconfirmId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Are you want to Approve this Document?'} getDetails={handleRefresh} />
+            <DocumentRejectPopup ID={rejectId} setID={setrejectId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Are you want to Reject this Document?'} getDetails={handleRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
@@ -196,68 +216,91 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                     </Grid>
 
                 </div>
-                {
-                    loading ?
-                        loadTable()
-                        :
-                        <div className='no-follw-up-block document-block'>
 
-                            <div className='flex mar-25'>
-                                <div className='md:w-5/12 lg:w-5/12 pad-25'>
-                                    <div className='search-document-block'>
-                                        <div className='search-document-block-input'>
-                                            <input placeholder='Search Documents' />
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">  <path d="M12.5 12.5L17.5 17.5M8.33333 14.1667C5.11167 14.1667 2.5 11.555 2.5 8.33333C2.5 5.11167 5.11167 2.5 8.33333 2.5C11.555 2.5 14.1667 5.11167 14.1667 8.33333C14.1667 11.555 11.555 14.1667 8.33333 14.1667Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                                        </div>
+                <div className='no-follw-up-block document-block'>
 
-                                        <ul className='search-document-block-pred'>
-                                            {
-                                                list?.data?.length > 0 ?
-                                                    list?.data?.map((obj, index) => (
-                                                        <li className={documentSelected?.id == obj?.id ? 'Active' : ''} onClick={() => handleSelectDocument(obj)} key={index}>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 13.5V9M9 9L6.75 10.5M9 9L11.25 10.5M9.75 2.25065C9.67838 2.25 9.59796 2.25 9.50604 2.25H6.15015C5.31007 2.25 4.88972 2.25 4.56885 2.41349C4.2866 2.5573 4.0573 2.7866 3.91349 3.06885C3.75 3.38972 3.75 3.81007 3.75 4.65015V13.3501C3.75 14.1902 3.75 14.61 3.91349 14.9309C4.0573 15.2132 4.2866 15.4429 4.56885 15.5867C4.8894 15.75 5.30925 15.75 6.14771 15.75L11.8523 15.75C12.6908 15.75 13.11 15.75 13.4305 15.5867C13.7128 15.4429 13.9429 15.2132 14.0867 14.9309C14.25 14.6104 14.25 14.1911 14.25 13.3527V6.99426C14.25 6.90222 14.25 6.82171 14.2493 6.75M9.75 2.25065C9.96423 2.2526 10.0998 2.26038 10.2291 2.29145C10.3822 2.32819 10.5284 2.38895 10.6626 2.47119C10.8139 2.56392 10.9439 2.69386 11.2031 2.95312L13.5472 5.29724C13.8067 5.55667 13.9357 5.68602 14.0284 5.8374C14.1107 5.9716 14.1715 6.11794 14.2083 6.271C14.2393 6.40032 14.2473 6.53588 14.2493 6.75M9.75 2.25065V4.35C9.75 5.19008 9.75 5.60983 9.91349 5.93069C10.0573 6.21294 10.2866 6.44286 10.5688 6.58667C10.8894 6.75 11.3092 6.75 12.1477 6.75H14.2493M14.2493 6.75H14.2501" stroke="#232648" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                                                            {obj?.title || obj?.document_template?.name}
-                                                        </li>
-                                                    ))
-                                                    :
-                                                    'No Documents Found'
-                                            }
-                                        </ul>
-
-                                    </div>
-
-
-                                    <div className='add-document-block'>
-                                        <Image src={Doc} alt='Doc' width={200} height={200} />
-
-                                        <h3 onClick={handleCreate}>Add<span>Document</span></h3>
-                                        <h4>Max 10 MB files are allowed</h4>
-
-                                    </div>
+                    <div className='flex mar-25'>
+                        <div className='md:w-5/12 lg:w-5/12 pad-25'>
+                            <div className='search-document-block'>
+                                <div className='search-document-block-input'>
+                                    <input onChange={(e) => setsearchKey(e.target.value)} placeholder='Search Documents' />
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">  <path d="M12.5 12.5L17.5 17.5M8.33333 14.1667C5.11167 14.1667 2.5 11.555 2.5 8.33333C2.5 5.11167 5.11167 2.5 8.33333 2.5C11.555 2.5 14.1667 5.11167 14.1667 8.33333C14.1667 11.555 11.555 14.1667 8.33333 14.1667Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
                                 </div>
 
-                                <div className='md:w-7/12 lg:w-7/12 pad-25'>
-                                    <div className='doc-preview-block'>
-                                        <Image src={DocPreview} alt='DocPreview' width={340} height={300} />
-                                    </div>
+                                <ul className='search-document-block-pred'>
+                                    {
+                                        loading ?
+                                            loadTable()
+                                            :
+                                            list?.data?.length > 0 ?
+                                                list?.data?.map((obj, index) => (
+                                                    <li className={documentSelected?.id == obj?.id ? 'Active' : ''} onClick={() => handleSelectDocument(obj)} key={index}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 13.5V9M9 9L6.75 10.5M9 9L11.25 10.5M9.75 2.25065C9.67838 2.25 9.59796 2.25 9.50604 2.25H6.15015C5.31007 2.25 4.88972 2.25 4.56885 2.41349C4.2866 2.5573 4.0573 2.7866 3.91349 3.06885C3.75 3.38972 3.75 3.81007 3.75 4.65015V13.3501C3.75 14.1902 3.75 14.61 3.91349 14.9309C4.0573 15.2132 4.2866 15.4429 4.56885 15.5867C4.8894 15.75 5.30925 15.75 6.14771 15.75L11.8523 15.75C12.6908 15.75 13.11 15.75 13.4305 15.5867C13.7128 15.4429 13.9429 15.2132 14.0867 14.9309C14.25 14.6104 14.25 14.1911 14.25 13.3527V6.99426C14.25 6.90222 14.25 6.82171 14.2493 6.75M9.75 2.25065C9.96423 2.2526 10.0998 2.26038 10.2291 2.29145C10.3822 2.32819 10.5284 2.38895 10.6626 2.47119C10.8139 2.56392 10.9439 2.69386 11.2031 2.95312L13.5472 5.29724C13.8067 5.55667 13.9357 5.68602 14.0284 5.8374C14.1107 5.9716 14.1715 6.11794 14.2083 6.271C14.2393 6.40032 14.2473 6.53588 14.2493 6.75M9.75 2.25065V4.35C9.75 5.19008 9.75 5.60983 9.91349 5.93069C10.0573 6.21294 10.2866 6.44286 10.5688 6.58667C10.8894 6.75 11.3092 6.75 12.1477 6.75H14.2493M14.2493 6.75H14.2501" stroke="#232648" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                                                        {obj?.title || obj?.document_template?.name}
+                                                    </li>
+                                                ))
+                                                :
+                                                'No Documents Found'
+                                    }
+                                </ul>
 
-                                    <div className='degree-block'>
-                                        <h2>Degree Certificate</h2>
-                                        <div className='degree-btn-block'>
-                                            <Button className='degree-btn'>Approve <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none"><path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
-
-                                            <Button className='Reject-btn'>Approve <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
-                                        </div>
-                                    </div>
-
-                                </div>
                             </div>
 
 
+                            <div className='add-document-block'>
+                                <Image src={Doc} alt='Doc' width={200} height={200} />
 
+                                <h3 onClick={handleCreate}>Add<span>Document</span></h3>
+                                <h4>Max 10 MB files are allowed</h4>
+
+                            </div>
+                        </div>
+
+                        <div className='md:w-7/12 lg:w-7/12 pad-25'>
                             {
-                                list?.data?.length > 0 ?
+                                imageLoading ?
+                                    <div className='doc-preview-block'>
+                                        <Skeleton variant='rounded' width={340} height={300} />
+                                    </div>
+                                    :
+                                    <>
+                                        {(documentSelected?.file && documentSelected?.status !== "Requested") &&
+                                            <div className='doc-preview-block'>
+                                                {(
+                                                    documentSelected.file.endsWith('.pdf') ? (
+                                                        <PdfViewer fileUrl={documentSelected?.file} />
+                                                    ) :
+                                                        <Image src={documentSelected?.file} alt='DocPreview' width={340} height={300} />
+                                                )}
+                                            </div>
+                                        }
+                                        {(!documentSelected?.file && documentSelected?.status == "Requested") &&
+                                            <div className='doc-preview-block'>
+                                                <h2>This Document has been Requested</h2>
+                                                <span onClick={() => handleUploadRejectedDoc(documentSelected)} style={{ textDecoration: 'underLine' }}>Click here to Upload</span>
+                                            </div>}
+                                    </>
+                            }
 
+
+                            <div className='degree-block'>
+                                <div className='d-flex justify-between align-center'>
+                                    <h2>{documentSelected?.title || documentSelected?.document_template?.name}</h2>
+                                    <Edit onClick={() => handleEditDocument(documentSelected?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
+                                </div>
+                                <div className='degree-btn-block'>
+                                    <Button disabled={!documentSelected?.file && documentSelected?.status == "Requested"} onClick={() => handleAccept(documentSelected?.id)} className='degree-btn'>Approve <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none"><path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
+                                    <Button disabled={!documentSelected?.file && documentSelected?.status == "Requested"} onClick={() => handleReject(documentSelected?.id)} className='Reject-btn'>Reject <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    {/* {
+                                list?.data?.length > 0 ?
                                     <>
                                         <TableContainer>
                                             <Table>
@@ -274,26 +317,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                                                 Document
                                                             </Typography>
                                                         </TableCell>
-                                                        {/* <TableCell>
-                                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                    Created By
-                                                                </Typography>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                    Created Date
-                                                                </Typography>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                    Uploaded By
-                                                                </Typography>
-                                                            </TableCell>
-                                                            <TableCell>
-                                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                    Uploaded Date
-                                                                </Typography>
-                                                            </TableCell> */}
+                                                      
                                                         <TableCell>
                                                             <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                                 Status
@@ -307,10 +331,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                                             <TableRow key={obj?.id}>
                                                                 <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleDetailOpen(obj?.id)}><Tooltip title={obj?.note}>{obj?.title || obj?.document_template?.name}</Tooltip></TableCell>
                                                                 <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell>
-                                                                {/* <TableCell>{obj?.created_by?.name}</TableCell>
-                                                                    <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell>
-                                                                    <TableCell>{obj?.uploaded_by?.name}</TableCell>
-                                                                    <TableCell>{moment(obj?.created_at).format('DD-MM-YYYY')}</TableCell> */}
+                                                              
                                                                 <TableCell>{obj?.status}</TableCell>
                                                                 <TableCell>
                                                                     {
@@ -332,7 +353,6 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                                                         </>
                                                                     }
                                                                 </TableCell>
-                                                                {/* <TableCell><Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell> */}
                                                             </TableRow>
                                                         ))
                                                     }
@@ -340,23 +360,14 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                                 </TableBody>
                                             </Table>
 
-                                            {/* <TablePagination
-                                                rowsPerPageOptions={[10, 15, 25]}
-                                                component="div"
-                                                count={list?.meta?.total || 0}
-                                                rowsPerPage={list?.meta?.per_page || 0}
-                                                page={page}
-                                                onPageChange={handleChangePage}
-                                                onRowsPerPageChange={handleChangeRowsPerPage}
-                                            /> */}
+                                           
                                         </TableContainer>
                                     </>
-
                                     :
                                     <h4>You have no Documents</h4>
-                            }
-                        </div>
-                }
+                            } */}
+                </div>
+
 
             </div>
 
@@ -368,31 +379,18 @@ export default LeadDocuments
 
 const loadTable = () => {
     return (
-        <Table>
-            <TableHead>
-                <TableRow>
-                    {[...Array(5)].map((_, index) => (
-                        <TableCell key={index} align="left">
-                            <Skeleton variant='rounded' width={60} height={20} />
-                        </TableCell>
-                    ))}
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {
-                    [...Array(5)]?.map((_, index) => (
-                        <TableRow key={index} className='table-custom-tr'>
-                            {
-                                [...Array(5)]?.map((_, colindex) => (
-                                    <TableCell key={colindex} align="left"><Skeleton variant='rounded' width={120} height={20} /></TableCell>
-                                ))
-                            }
-                        </TableRow>
-                    ))
-                }
 
-            </TableBody>
-        </Table>
+        <>
+            {
+                [...Array(4)]?.map((_, index) => (
+                    <li key={index}>
+                        <Skeleton variant='rounded' width={'90%'} height={20} />
+                    </li>
+                ))
+            }
+
+        </>
+
     )
 
 }
