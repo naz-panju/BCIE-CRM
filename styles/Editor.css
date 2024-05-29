@@ -1816,6 +1816,9 @@ span.profile-db {
     background: #FFF;
     margin: 10px 0;
 }
+.all_act_cntr.application {
+    display: flex;
+}
 
 .appl_act_cntr {
     padding: 20px;
