@@ -72,7 +72,7 @@ export default function CreateTabs({ list, value, setValue, activeTab, setActive
                 </Tabs>
             </Box> */}
             {tabs.map((obj, index) => {
-                return <TabPanel value={activeTab} index={index} key={index}>
+                return <TabPanel  value={activeTab} index={index} key={index}>
                     {obj.component}
                 </TabPanel>
             })}
