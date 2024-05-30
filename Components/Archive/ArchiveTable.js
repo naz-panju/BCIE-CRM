@@ -716,7 +716,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
                                   padding="none"
                                   className='reg-name'
                                 >
-                                  <a style={{ textDecoration: 'none' }}>{row.name}</a>
+                                  <a target='_blank' href={`/lead/${row?.id}`}>{row.name}</a>
                                 </TableCell>
                                 <TableCell align="left">{row?.email}</TableCell>
                                 <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>

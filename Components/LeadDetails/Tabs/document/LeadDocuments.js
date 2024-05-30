@@ -104,9 +104,9 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
     const fetchList = async () => {
         setLoading(true)
 
-        if (first == 0) {
-            setimageLoading(true)
-        }
+        // if (first == 0) {
+        //     setimageLoading(true)
+        // }
 
         let params = {
             lead_id: lead_id,
@@ -121,10 +121,10 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
             const response = await LeadApi.listDocuments(params)
             if (response?.status == 200 || response?.status == 201) {
                 setList(response?.data)
-                if (first == 0) {
-                    setdocumentSelected(response?.data?.data[0])
-                }
-                setfirst(first + 1)
+                // if (first == 0) {
+                //     setdocumentSelected(response?.data?.data[0])
+                // }
+                // setfirst(first + 1)
                 setLoading(false)
                 setimageLoading(false)
 
@@ -257,14 +257,17 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                         </div>
 
                         <div className='md:w-7/12 lg:w-7/12 pad-25'>
+
                             {
-                                imageLoading ?
+                                !documentSelected ?
                                     <div className='doc-preview-block'>
-                                        <Skeleton variant='rounded' width={340} height={300} />
+                                        <h2>Select Document to Preview it.</h2>
+
                                     </div>
                                     :
                                     <>
-                                        {(documentSelected?.file && documentSelected?.status !== "Requested") &&
+                                        {
+                                            (documentSelected?.file && documentSelected?.status !== "Requested") &&
                                             <div className='doc-preview-block'>
                                                 {(
                                                     documentSelected.file.endsWith('.pdf') ? (
@@ -274,20 +277,31 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                                 )}
                                             </div>
                                         }
-                                        {(!documentSelected?.file && documentSelected?.status == "Requested") &&
+
+                                        {
+                                            (!documentSelected?.file && documentSelected?.status == "Requested") &&
                                             <div className='doc-preview-block'>
                                                 <h2>This Document has been Requested</h2>
                                                 <span onClick={() => handleUploadRejectedDoc(documentSelected)} style={{ textDecoration: 'underLine' }}>Click here to Upload</span>
-                                            </div>}
+                                            </div>
+                                        }
                                     </>
                             }
 
 
+
+
+
+
+
                             <div className='degree-block'>
-                                <div className='d-flex justify-between align-center'>
-                                    <h2>{documentSelected?.title || documentSelected?.document_template?.name}</h2>
-                                    <Edit onClick={() => handleEditDocument(documentSelected?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
-                                </div>
+                                {
+                                    documentSelected &&
+                                    <div className='d-flex justify-between align-center'>
+                                        <h2>{documentSelected?.title || documentSelected?.document_template?.name}</h2>
+                                        <Edit onClick={() => handleEditDocument(documentSelected?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
+                                    </div>
+                                }
                                 <div className='degree-btn-block'>
                                     <Button disabled={!documentSelected?.file && documentSelected?.status == "Requested"} onClick={() => handleAccept(documentSelected?.id)} className='degree-btn'>Approve <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none"><path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
                                     <Button disabled={!documentSelected?.file && documentSelected?.status == "Requested"} onClick={() => handleReject(documentSelected?.id)} className='Reject-btn'>Reject <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
