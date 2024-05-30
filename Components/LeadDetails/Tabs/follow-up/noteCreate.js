@@ -225,13 +225,15 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
 
                             <Grid sx={{ pt: 2, pb: 2 }} item xs={12}>
                                 <LoadingButton className='save-btn' loading={submitLoading} disabled={submitLoading} size='small' sx={{ textTransform: 'none', height: 35 }} onClick={onSubmit} variant='outlined'>{
-                                        submitLoading ?
-                                            <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
-                                            :
-                                            <>
-                                                {buttonText} 
-                                            </>
-                                    }</LoadingButton>
+                                    submitLoading ?
+                                        <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                        :
+                                        <>
+                                            {buttonText} <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </>
+                                }</LoadingButton>
                             </Grid>
                         </Grid>
                     </form>

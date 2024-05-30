@@ -463,9 +463,10 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                             }
 
                                                                             {/* edit application */}
-                                                                            <Button className='edit-btn-outline' onClick={() => handleEditDocument(obj?.id)}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
-                                                                                <path d="M1 3.57143L7.91849 8.01903C8.5773 8.44255 9.4227 8.44255 10.0815 8.01903L17 3.57143M3 13H15C16.1046 13 17 12.1046 17 11V3C17 1.89543 16.1046 1 15 1H3C1.89543 1 1 1.89543 1 3V11C1 12.1046 1.89543 13 3 13Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                            </svg> Edit</Button>
+                                                                            <Button className='edit-btn-outline' onClick={() => handleEditDocument(obj?.id)}  > <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                <path d="M8.50065 2.83333H4.83398C3.72941 2.83333 2.83398 3.72876 2.83398 4.83333V12.1667C2.83398 13.2712 3.72941 14.1667 4.83398 14.1667H12.1673C13.2719 14.1667 14.1673 13.2712 14.1673 12.1667V8.5M6.37565 10.625V8.85416L12.5736 2.65625C13.0626 2.16724 13.8554 2.16724 14.3444 2.65624V2.65624C14.8334 3.14525 14.8334 3.93808 14.3444 4.42708L10.9798 7.79166L8.14648 10.625H6.37565Z" stroke="black" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                                                                            </svg>
+                                                                                Edit</Button>
                                                                         </div>
 
                                                                     </div>

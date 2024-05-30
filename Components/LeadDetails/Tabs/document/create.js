@@ -324,7 +324,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                             </Grid>
                                         )}
                                     </div>
-                                    <Grid mt={2} display={'flex'} justifyContent={'end'}>
+                                    <Grid mt={2} display={'flex'} >
                                         <LoadingButton
                                             variant='contained'
                                             onClick={requestDocument}
@@ -339,7 +339,9 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                                     <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
                                                     :
                                                     <>
-                                                        Request
+                                                        Request <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                            <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
                                                     </>
                                             }
                                         </LoadingButton>
@@ -358,7 +360,9 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                                     <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
                                                     :
                                                     <>
-                                                        Upload
+                                                        Upload <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                            <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
                                                     </>
                                             }
                                         </LoadingButton>
