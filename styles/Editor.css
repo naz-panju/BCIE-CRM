@@ -965,6 +965,7 @@ ul.search-document-block-pred li div span {
     font-style: normal;
     font-weight: 400;
     line-height: 20px;
+    cursor: pointer;
 }
 .add-document-block h3 span{
     color: #1849D6;
@@ -1012,7 +1013,7 @@ ul.search-document-block-pred li div span {
 .degree-btn {
     border-radius: 3px;
     background: #0047CD;
-    color: #FFF;
+    color: #FFF !important;
     font-family: Inter;
     font-size: 15px;
     font-style: normal;
@@ -1029,7 +1030,7 @@ ul.search-document-block-pred li div span {
 .Reject-btn{
     border-radius: 4px;
     background: #0B0D23;
-    color: #FFF;
+    color: #FFF !important;
     font-family: Inter;
     font-size: 15px;
     font-style: normal;
@@ -1042,6 +1043,62 @@ ul.search-document-block-pred li div span {
     justify-content: space-between;
     gap: 10px;
 }
+.degree-btn:hover{
+    background-color:#0B0D23!important; 
+}
+.Reject-btn:hover{
+    background-color:#0047CD!important; 
+}
+.doc-req-icon.doc-request {
+    border-radius: var(--radi-mlg, 8px);
+    border: 1px solid #FFF;
+    background: linear-gradient(180deg, #FFD9C3 0%, #FFF 100%);
+    width: 107px;
+    height: 106px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0px auto;
+    margin-bottom: 20px;
+}
+.doc-preview-block h2 {
+    color: #0B0D23;
+    text-align: center;
+    font-family: Inter;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.24px;
+    margin-top: 32px;
+}
+.doc-preview-block span {
+    color: var(--neutral-nr07, #6D6D6D);
+    font-family: Inter;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    text-decoration: none !important;
+}
+.Mui-disabled {
+    border-radius: 4px;
+    background: #ECECEC;
+    color: var(--neutral-nr07, #6D6D6D) !important;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 10px;
+    letter-spacing: -0.15px;
+}
+.Mui-disabled svg path{
+    stroke: #9A9A9A;
+}
+
 .degree-btn-block {
     display: flex;
     align-items: center;
@@ -1075,10 +1132,17 @@ ul.search-document-block-pred li:hover{
     transition: .25s;
     color: #FFF;
 }
+ul.search-document-block-pred li.Active{
+    background-color: #232648 !important;
+    transition: .25s;
+    color: #fff !important;
+}
 ul.search-document-block-pred li:hover svg path{
     stroke: #fff;
 }
-
+ul.search-document-block-pred li.Active  svg path{
+    stroke: #fff;
+}
 
 .communication-log-attachments h3 {
     color: #DADDFF;
