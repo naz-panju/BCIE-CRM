@@ -379,7 +379,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   }
 
   const fetchStage = (e) => {
-    return ListingApi.stages({ keyword: e }).then(response => {
+    return ListingApi.stages({ keyword: e,type: 'student', }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response.data.data;
       } else {

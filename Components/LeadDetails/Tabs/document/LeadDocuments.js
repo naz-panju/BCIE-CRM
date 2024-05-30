@@ -185,6 +185,10 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
         setdocumentSelected(obj)
     }
 
+    const handleDeselectDocument=()=>{
+        setdocumentSelected()
+    }
+
     const [searchKey, setsearchKey] = useState()
 
     useEffect(() => {
@@ -194,8 +198,8 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
     return (
         <>
             <LeadDocumentModal lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
-            <LeadDocumentRequest id={lead_id} reqId={reqId} setReqId={setReqId} fetchList={fetchList} />
-            <LeadRequestUploadDocumentModal datas={reqUploadId} lead_id={lead_id} from={from} app_id={app_id} editId={reqUploadId?.id} setEditId={setreqUploadId} handleRefresh={handleRefresh} />
+            <LeadDocumentRequest id={lead_id} reqId={reqId} setReqId={setReqId} fetchList={fetchList} handleDeselectDocument={handleDeselectDocument} />
+            <LeadRequestUploadDocumentModal datas={reqUploadId} lead_id={lead_id} from={from} app_id={app_id} editId={reqUploadId?.id} setEditId={setreqUploadId} handleRefresh={handleRefresh} setdocumentSelected={setdocumentSelected} />
 
             <ApplicationDocumentUpload appRefresh={appRefresh} datas={app_details} lead_id={lead_id} from={from} app_id={app_id} editId={appDocId} setEditId={setAppDocId} handleRefresh={handleRefresh} />
 
@@ -212,7 +216,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
 
                     <Grid display={'flex'} alignItems={'end'}>
                         {/* <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Add</Button> */}
-                        <Button onClick={handleRequest} className='bg-sky-400 Request-Document-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">  <path d="M19 19L16 16M10.0002 20H7.19692C6.07901 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4796 4 18.9074 4.21799C19.2837 4.40973 19.5905 4.71547 19.7822 5.0918C20 5.5192 20 6.07899 20 7.19691V10.0002M13.5 17C11.567 17 10 15.433 10 13.5C10 11.567 11.567 10 13.5 10C15.433 10 17 11.567 17 13.5C17 15.433 15.433 17 13.5 17Z" stroke="#232648" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg> Request Document</Button>
+                        <Button onClick={handleRequest} className='bg-sky-400 Request-Document-btn' ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">  <path d="M19 19L16 16M10.0002 20H7.19692C6.07901 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4796 4 18.9074 4.21799C19.2837 4.40973 19.5905 4.71547 19.7822 5.0918C20 5.5192 20 6.07899 20 7.19691V10.0002M13.5 17C11.567 17 10 15.433 10 13.5C10 11.567 11.567 10 13.5 10C15.433 10 17 11.567 17 13.5C17 15.433 15.433 17 13.5 17Z" stroke="#232648" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg> Request Document</Button>
                     </Grid>
 
                 </div>
@@ -247,10 +251,10 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                             </div>
 
 
-                            <div className='add-document-block'>
+                            <div onClick={handleCreate} style={{cursor:'pointer'}} className='add-document-block'>
                                 <Image src={Doc} alt='Doc' width={200} height={200} />
 
-                                <h3 onClick={handleCreate}>Add<span>Document</span></h3>
+                                <h3>Add<span>Document</span></h3>
                                 <h4>Max 10 MB files are allowed</h4>
 
                             </div>
@@ -261,7 +265,21 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                             {
                                 !documentSelected ?
                                     <div className='doc-preview-block'>
-                                        <h2>Select Document to Preview it.</h2>
+                                        <div className='doc-preview-block'>
+                                            <div className='doc-req-icon doc-request'>
+                                                <svg width="107" height="106" viewBox="0 0 107 106" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect x="0.5" y="0.5" width="106" height="105" rx="7.5" fill="url(#paint0_linear_330_7252)" stroke="white" />
+                                                    <defs>
+                                                        <linearGradient id="paint0_linear_330_7252" x1="53.5" y1="0" x2="53.5" y2="106" gradientUnits="userSpaceOnUse">
+                                                            <stop stop-color="#C0E4C1" />
+                                                            <stop offset="1" stop-color="white" />
+                                                        </linearGradient>
+                                                    </defs>
+                                                </svg>
+
+                                            </div>
+                                            <h2>Select Document to <br />Preview It.</h2>
+                                        </div>
 
                                     </div>
                                     :
@@ -282,10 +300,10 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                             (!documentSelected?.file && documentSelected?.status == "Requested") &&
                                             <div className='doc-preview-block'>
                                                 <div className='doc-req-icon doc-request'>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="41" height="41" viewBox="0 0 41 41" fill="none"><path d="M20.5 11.9583V20.5H29.0417M20.5 35.875C12.0086 35.875 5.125 28.9914 5.125 20.5C5.125 12.0086 12.0086 5.125 20.5 5.125C28.9914 5.125 35.875 12.0086 35.875 20.5C35.875 28.9914 28.9914 35.875 20.5 35.875Z" stroke="#FEA878" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="41" height="41" viewBox="0 0 41 41" fill="none"><path d="M20.5 11.9583V20.5H29.0417M20.5 35.875C12.0086 35.875 5.125 28.9914 5.125 20.5C5.125 12.0086 12.0086 5.125 20.5 5.125C28.9914 5.125 35.875 12.0086 35.875 20.5C35.875 28.9914 28.9914 35.875 20.5 35.875Z" stroke="#FEA878" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
                                                 </div>
-                                                <h2>This Document has been Requested</h2>
-                                                <span onClick={() => handleUploadRejectedDoc(documentSelected)} style={{ textDecoration: 'underLine' }}>Please upload if we received it and approve it.</span>
+                                                <h2>This Document has been <br /> Requested</h2>
+                                                <span onClick={() => handleUploadRejectedDoc(documentSelected)} style={{ textDecoration: 'underLine',cursor:'pointer' }}>Click here to upload the Document</span>
                                             </div>
                                         }
                                     </>
@@ -306,8 +324,8 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                     </div>
                                 }
                                 <div className='degree-btn-block'>
-                                    <Button disabled={!documentSelected?.file && documentSelected?.status == "Requested"} onClick={() => handleAccept(documentSelected?.id)} className='degree-btn'>Approve <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none"><path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
-                                    <Button disabled={!documentSelected?.file && documentSelected?.status == "Requested"} onClick={() => handleReject(documentSelected?.id)} className='Reject-btn'>Reject <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
+                                    <Button disabled={!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested")} onClick={() => handleAccept(documentSelected?.id)} className='degree-btn'>Approve <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none"><path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
+                                    <Button disabled={!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested")} onClick={() => handleReject(documentSelected?.id)} className='Reject-btn'>Reject <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
                                 </div>
                             </div>
 

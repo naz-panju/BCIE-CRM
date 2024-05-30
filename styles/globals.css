@@ -110,10 +110,12 @@ body {
   border: 1px solid #000;
   background-color: #fff !important;
 }
-.rs-input-group.rs-input-group-inside{
+
+.rs-input-group.rs-input-group-inside {
   background-color: transparent !important;
   border: 0px !important;
 }
+
 input#rs-\:R7dmkm\: {
   background: transparent;
 }
@@ -308,7 +310,7 @@ button[type="submit"]:hover {
 .body-active .sidebar {
   min-width: 276px !important;
   max-width: 276px !important;
-  background: #0047CD;
+  background: #213d79;
   color: #fff;
   transition: all 0.3s;
   position: fixed;
@@ -605,6 +607,7 @@ button#UserPop span {
   padding: 0 !important;
   border-bottom: 1px solid #4285f4 !important;
 }
+
 .content-block {
   background: #fff;
   margin-left: 90px;
@@ -1287,7 +1290,8 @@ button.loadmore-btn {
 .communication-log-item {
   border-right: 1px solid rgba(148, 145, 145, 0.16);
 }
-.communication-log-item .lead-score-block{
+
+.communication-log-item .lead-score-block {
   border: 0px solid #eaeaea;
   border-top: 0px solid #ea4537;
   margin-right: 0px;
@@ -1496,5 +1500,3 @@ input[type="number"] {
 .a_hover:hover {
   text-decoration: underline;
 }
-
-

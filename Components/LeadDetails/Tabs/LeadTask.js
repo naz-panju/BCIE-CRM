@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material'
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Pagination, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
 import { LeadApi } from '@/data/Endpoints/Lead'
@@ -11,6 +11,7 @@ import CreateTask from '@/Components/Task/Create/Create'
 import TaskDetailModal from '@/Components/TaskDetails/Modal'
 import StatusModal from '@/Components/Task/StatusModal'
 import TaskCompletePopup from '../Modals/TaskCompleteModal'
+import { Stack } from 'rsuite'
 
 function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
 
@@ -20,7 +21,7 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
     const [reqId, setReqId] = useState()
     const [refresh, setRefresh] = useState(false)
 
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
 
     const [taskDetails, setTaskDetails] = useState()
@@ -56,8 +57,8 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
     }
 
     const handleRefresh = () => {
-        if (page != 0) {
-            setPage(0)
+        if (page != 1) {
+            setPage(1)
         }
         handleTaskRefresh()
     }
@@ -67,7 +68,7 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
         let params = {
             lead_id: lead_id,
             limit,
-            page: page + 1
+            page: page
         }
         if (from == 'app') {
             params['application_id'] = app_id
@@ -103,16 +104,20 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
-                    <h2>Task</h2>
+                    <div className='lead-detail-title'>
+                        Find Tasks
+                    </div>
                     <Grid display={'flex'} alignItems={'end'}>
-                        <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Add</Button>
+                        <Button className='Request-Document-btn' onClick={handleCreate}><svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 10.5H10.5M10.5 10.5H14M10.5 10.5V14M10.5 10.5V7M3.5 14.7002V6.30017C3.5 5.32008 3.5 4.82967 3.69074 4.45532C3.85852 4.12604 4.12604 3.85852 4.45532 3.69074C4.82967 3.5 5.32008 3.5 6.30017 3.5H14.7002C15.6803 3.5 16.1701 3.5 16.5444 3.69074C16.8737 3.85852 17.1417 4.12604 17.3094 4.45532C17.5002 4.82967 17.5002 5.31971 17.5002 6.29981V14.6998C17.5002 15.6799 17.5002 16.17 17.3094 16.5443C17.1417 16.8736 16.8737 17.1417 16.5444 17.3094C16.1704 17.5 15.6813 17.5 14.7031 17.5H6.29729C5.31912 17.5 4.8293 17.5 4.45532 17.3094C4.12604 17.1417 3.85852 16.8737 3.69074 16.5444C3.5 16.1701 3.5 15.6803 3.5 14.7002Z" stroke="#3D405D" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg> Add Task</Button>
                     </Grid>
                 </div>
                 {
                     loading ?
                         loadTable()
                         :
-                        <div className='no-follw-up-block'>
+                        <div className='no-follw-up-block app_tab_cntr'>
                             {
                                 list?.data?.length > 0 ?
 
@@ -122,12 +127,12 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
                                                 <TableRow>
                                                     <TableCell>
 
-                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                        <Typography className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Title
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>
-                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                        <Typography className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Assigned To
                                                         </Typography>
                                                     </TableCell>
@@ -137,15 +142,15 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
                                                         </Typography>
                                                     </TableCell> */}
                                                     <TableCell>
-                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                        <Typography className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Due Date
                                                         </Typography>
                                                     </TableCell>
-                                                    {/* <TableCell>
-                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Priority
+                                                    <TableCell>
+                                                        <Typography className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                            Status
                                                         </Typography>
-                                                    </TableCell> */}
+                                                    </TableCell>
                                                     {/* <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Status
@@ -160,19 +165,25 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
                                                             <TableCell onClick={() => handleDetailOpen(obj?.id)} sx={{ cursor: 'pointer' }}>{obj?.title}</TableCell>
                                                             <TableCell>{obj?.assignedToUser?.name}</TableCell>
                                                             {/* <TableCell >{obj?.reviewer?.name}</TableCell> */}
-                                                            <TableCell >{moment(obj?.due_date).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell >
+                                                                {
+                                                                    obj?.due_date ?
+                                                                        moment(obj?.due_date).format('DD-MM-YYYY')
+                                                                        : 'NA'
+                                                                }
+                                                            </TableCell>
                                                             {/* <TableCell >{obj.priority}</TableCell> */}
                                                             {/* <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleStatusChange(obj)}>{obj.status}</TableCell> */}
-                                                            <TableCell  sx={{width:180}}>
+                                                            <TableCell sx={{ width: 180 }}>
                                                                 {
                                                                     obj?.status == 'Completed' ?
-                                                                    <Tooltip title={obj?.status_note}>
-                                                                        Completed
-                                                                    </Tooltip>
+                                                                        <Tooltip title={obj?.status_note}>
+                                                                            Completed
+                                                                        </Tooltip>
                                                                         :
                                                                         <Button onClick={() => completeOpen(obj?.id)} size='small' variant='outlined' sx={{ textTransform: 'none' }}>Mark as Completed</Button>
                                                                 }
-                                                                
+
                                                                 {/* <Button sx={{ textTransform: 'none', }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button> */}
                                                             </TableCell>
                                                             <TableCell >
@@ -184,19 +195,30 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
 
                                             </TableBody>
                                         </Table>
-                                        <TablePagination
-                                            rowsPerPageOptions={[10, 15, 25]}
-                                            component="div"
-                                            count={list?.meta?.total || 0}
-                                            rowsPerPage={list?.meta?.per_page || 0}
-                                            page={page}
-                                            onPageChange={handleChangePage}
-                                            onRowsPerPageChange={handleChangeRowsPerPage}
-                                        />
-
                                     </TableContainer>
                                     :
                                     <h4>No Task Found</h4>
+                            }
+
+                            {
+                                list?.data?.length > 0 &&
+                                <div className='table-pagination d-flex justify-content-end align-items-center'>
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <div className='select-row-box'>
+                                            <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                                                <MenuItem value={10}>10</MenuItem>
+                                                <MenuItem value={15}>15</MenuItem>
+                                                <MenuItem value={25}>25</MenuItem>
+                                            </Select>
+                                            <label>Rows per page</label>
+                                        </div>
+                                        <div>
+                                            <Stack spacing={2}>
+                                                <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                                            </Stack>
+                                        </div>
+                                    </div>
+                                </div>
                             }
                         </div>
                 }

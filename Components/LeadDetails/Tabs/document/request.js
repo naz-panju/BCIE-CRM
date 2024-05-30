@@ -24,7 +24,7 @@ const style = {
     p: 4,
 };
 
-export default function LeadDocumentRequest({ id, reqId, setReqId, fetchList }) {
+export default function LeadDocumentRequest({ id, reqId, setReqId, fetchList, handleDeselectDocument }) {
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
@@ -69,6 +69,9 @@ export default function LeadDocumentRequest({ id, reqId, setReqId, fetchList }) 
                 toast.success(response?.data?.message)
                 if (fetchList) {
                     fetchList()
+                }
+                if (handleDeselectDocument) {
+                    handleDeselectDocument()
                 }
                 handleClose()
                 setLoading(false)

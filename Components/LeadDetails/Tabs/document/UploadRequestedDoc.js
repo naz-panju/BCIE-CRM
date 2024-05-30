@@ -29,7 +29,7 @@ const style = {
     p: 4,
 };
 
-export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEditId, handleRefresh, from, app_id, datas }) {
+export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEditId, handleRefresh, from, app_id, datas,setdocumentSelected }) {
     const scheme = yup.object().shape({
 
         // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -119,8 +119,9 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
         // }
 
         action.then((response) => {
-            console.log(response);
-            if (response?.data?.data) {
+            // console.log(response);
+            if (response?.status==200 || response?.status==201) {
+                setdocumentSelected(response?.data?.data)
                 handleClose()
                 toast.success(editId > 0 ? 'Document has been successfully uploaded' : 'Document has been successfully uploaded')
                 handleRefresh()
