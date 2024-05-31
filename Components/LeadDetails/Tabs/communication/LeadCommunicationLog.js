@@ -206,7 +206,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                                                 :
                                                 <>
                                                     <h3>{details?.email_send_summary}</h3>
-                                                    <h4>Email Sent</h4>
+                                                    <h4> Sent</h4>
                                                 </>
                                         }
                                     </div>
@@ -227,7 +227,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                                                 :
                                                 <>
                                                     <h3>{details?.email_receive_summary}</h3>
-                                                    <h4>Email received</h4>
+                                                    <h4> received</h4>
                                                 </>
                                         }
                                     </div>
@@ -259,7 +259,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                                                 :
                                                 <>
                                                     <h3>{details?.whatsapp_send_summary}</h3>
-                                                    <h4>Whatsapp Sent</h4>
+                                                    <h4> Sent</h4>
                                                 </>
                                         }
                                     </div>
@@ -279,7 +279,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                                                 :
                                                 <>
                                                     <h3>{details?.whatsapp_receive_summary}</h3>
-                                                    <h4>Whatsapp received</h4>
+                                                    <h4> received</h4>
                                                 </>
                                         }
                                     </div>
@@ -309,7 +309,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                                                 :
                                                 <>
                                                     <h3>{callDetails?.calls_inbound}</h3>
-                                                    <h4>Calls Inbound</h4>
+                                                    <h4> Inbound</h4>
                                                 </>
                                         }
                                     </div>
@@ -330,7 +330,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                                                 :
                                                 <>
                                                     <h3>{callDetails?.calls_outbound}</h3>
-                                                    <h4>Calls Outbound</h4>
+                                                    <h4> Outbound</h4>
                                                 </>
                                         }
                                     </div>

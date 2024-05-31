@@ -54,6 +54,7 @@ function Details({ data, loading }) {
                             Body:
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
+                            {/* <dangerou */}
                             {data?.body}
                         </Typography>
                     </Grid>

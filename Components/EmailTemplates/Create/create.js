@@ -251,7 +251,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
 
     return (
-        <div style={{overflow:'hidden'}}>
+        <div style={{ overflow: 'hidden' }}>
 
             <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleDeleteFiles} title={`Do you want to Delete this Attachment?`} />
 
@@ -281,10 +281,11 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                         </Grid>
                         <hr />
 
-                        <Button onClick={handleToggleTable}>
-                            click
-                        </Button>
+
                         <div className='form-data-cntr'>
+                            <Button sx={{ mb: 1, textTransform: 'none' }} variant='outlined' onClick={handleToggleTable}>
+                                Open Template Data
+                            </Button>
 
                             <form onSubmit={handleSubmit(onSubmit)}>
 
