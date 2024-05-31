@@ -379,9 +379,19 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   }
 
   const fetchStage = (e) => {
-    return ListingApi.stages({ keyword: e,type: 'student', }).then(response => {
-      if (typeof response?.data?.data !== "undefined") {
-        return response.data.data;
+    return ListingApi.stages({ keyword: e, type: 'student', }).then(response => {
+      let returnOptions = []
+      if (response?.status == 200 || response?.status == 201) {
+        let options = response?.data?.data?.map((obj) => {
+          if (obj?.sub_stages?.length > 0) {
+            obj?.sub_stages?.map((sub) => {
+              returnOptions?.push(sub)
+            })
+          } else {
+            returnOptions?.push(obj)
+          }
+        })
+        return returnOptions;
       } else {
         return [];
       }
@@ -424,7 +434,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
 
     LeadApi.list(params).then((response) => {
-      console.log(response);
+      // console.log(response);
       setList(response?.data)
       setLoading(false)
     }).catch((error) => {
@@ -440,17 +450,17 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
   const getFirstLettersOfTwoWords = (name) => {
     if (name) {
-        const words = name.split(" "); // Split the name into an array of words
-        if (words.length >= 2) {
-            // Extract the first letter of the first two words and concatenate them
-            return words[0].charAt(0) + words[1].charAt(0);
-        } else if (words.length === 1) {
-            // If there's only one word, return its first letter
-            return words[0].charAt(0);
-        }
+      const words = name.split(" "); // Split the name into an array of words
+      if (words.length >= 2) {
+        // Extract the first letter of the first two words and concatenate them
+        return words[0].charAt(0) + words[1].charAt(0);
+      } else if (words.length === 1) {
+        // If there's only one word, return its first letter
+        return words[0].charAt(0);
+      }
     }
     return ""; // Return an empty string if name is not provided
-};
+  };
 
 
 
@@ -742,7 +752,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                   }
                                   {/* {row?.assignedToUser?.name} */}
                                 </TableCell>
-                                <TableCell className='stage-colm' align="left"><span style={{backgroundColor:row?.stage?.colour}} className='stage-span'>{row?.stage?.name}</span></TableCell>
+                                <TableCell className='stage-colm' align="left"><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span></TableCell>
                               </TableRow>
                             );
                           })

@@ -367,9 +367,19 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
   }
 
   const fetchStage = (e) => {
-    return ListingApi.stages({ keyword: e }).then(response => {
-      if (typeof response?.data?.data !== "undefined") {
-        return response.data.data;
+    return ListingApi.stages({ keyword: e, type: 'student', }).then(response => {
+      let returnOptions = []
+      if (response?.status == 200 || response?.status == 201) {
+        let options = response?.data?.data?.map((obj) => {
+          if (obj?.sub_stages?.length > 0) {
+            obj?.sub_stages?.map((sub) => {
+              returnOptions?.push(sub)
+            })
+          } else {
+            returnOptions?.push(obj)
+          }
+        })
+        return returnOptions;
       } else {
         return [];
       }

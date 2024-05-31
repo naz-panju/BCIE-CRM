@@ -312,7 +312,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
 
 
-                                        <Grid className='form_group  '>
+                                        <Grid className='form_group'>
                                             <AsyncSelect
                                                 styles={{
                                                     menu: provided => ({ ...provided, zIndex: 9999 })

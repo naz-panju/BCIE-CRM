@@ -24,6 +24,7 @@ import { TemplateApi } from '@/data/Endpoints/Template';
 import Editor from '@/Form/Editor';
 import dynamic from 'next/dynamic';
 import { files } from 'jszip';
+import TemplateData from '../TemplateData';
 
 // import MyEditor from '@/Form/MyEditor';
 
@@ -87,7 +88,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     const handleFileChange = (e) => {
         const newFile = e?.target?.files[0];
-  
+
         setFile([...file, newFile]); // Add the new file to the state
     };
 
@@ -158,6 +159,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     const handleClose = () => {
         setEditId()
+        settoggleTable(false)
         reset()
         setattachmentFiles([])
         setFile([])
@@ -231,6 +233,11 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         }
     }
 
+    const [toggleTable, settoggleTable] = useState(false)
+    const handleToggleTable = () => {
+        settoggleTable(!toggleTable)
+    }
+
 
 
     useEffect(() => {
@@ -244,7 +251,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
 
     return (
-        <div>
+        <div style={{overflow:'hidden'}}>
 
             <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleDeleteFiles} title={`Do you want to Delete this Attachment?`} />
 
@@ -254,187 +261,212 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                 open={open}
                 onClose={handleClose}
             >
-                <Grid width={750}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? "Edit Email Template" : 'Add Email Template'}</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
-                    </Grid>
-                    <hr />
-                    <div>
+                <Grid display={'flex'}>
+                    {
+                        toggleTable &&
+                        <Grid width={500}>
+                            <TemplateData handleToggleTable={handleToggleTable} />
+                        </Grid>
+                    }
+                    <Grid width={750} sx={{ borderLeft: toggleTable ? '1px solid' : '' }}>
+                        <Grid className='modal_title d-flex align-items-center  '>
 
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <a className='back_modal' onClick={handleClose}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                    <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </a>
+                            <a className='back_modal_head'> {editId > 0 ? "Edit Email Template" : 'Add Email Template'} </a>
 
-                            {/* <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item md={4}>
-                                    <Typography sx={{ fontWeight: '500' }}>Select Lead</Typography>
-                                </Grid>
-                                <Grid item md={8}>
-                                    <SelectX
-                                        options={fetchLead}
-                                        control={control}
-                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'lead'}
-                                        defaultValue={watch('lead')}
-                                    />
-                                </Grid>
-                            </Grid> */}
+                        </Grid>
+                        <hr />
 
-                            {
-                                dataLoading ?
-                                    <LoadingEdit item={items} />
-                                    :
-                                    <>
+                        <Button onClick={handleToggleTable}>
+                            click
+                        </Button>
+                        <div className='form-data-cntr'>
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={2.5}>
+                            <form onSubmit={handleSubmit(onSubmit)}>
+
+                                {/* <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
+                                    <Grid item md={4}>
+                                        <Typography sx={{ fontWeight: '500' }}>Select Lead</Typography>
+                                    </Grid>
+                                    <Grid item md={8}>
+                                        <SelectX
+                                            options={fetchLead}
+                                            control={control}
+                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                            name={'lead'}
+                                            defaultValue={watch('lead')}
+                                        />
+                                    </Grid>
+                                </Grid> */}
+
+                                {
+                                    dataLoading ?
+                                        <LoadingEdit item={items} />
+                                        :
+                                        <>
+
+                                            <Grid className='form_group'>
+
                                                 <Typography sx={{ fontWeight: '500' }}>System Template</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9.5}>
-                                                <Checkbox checked={isSysytemTemplate} disabled />
-                                            </Grid>
-                                        </Grid>
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={2.5}>
-                                                <Typography sx={{ fontWeight: '500' }}>Template Name</Typography>
+                                                <Checkbox checked={isSysytemTemplate} disabled />
+
                                             </Grid>
-                                            <Grid item xs={12} md={9.5}>
-                                                <TextInput disabled={isSysytemTemplate} control={control} name="name"
+
+                                            <Grid className='form_group'>
+
+                                                <TextInput placeholder='Template Name' disabled={isSysytemTemplate} control={control} name="name"
                                                     value={watch('name')} />
                                                 {errors.name && <span className='form-validation'>{errors.name.message}</span>}
-                                            </Grid>
-                                        </Grid>
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={2.5}>
-                                                <Typography sx={{ fontWeight: '500' }}> Subject</Typography>
                                             </Grid>
-                                            <Grid item xs={12} md={9.5}>
-                                                <TextInput control={control} name="subject"
+
+                                            <Grid className='form_group'>
+
+                                                <TextInput placeholder='Subject' control={control} name="subject"
                                                     value={watch('subject')} />
                                                 {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
+
                                             </Grid>
-                                        </Grid>
+
+                                            {/* <a>Body</a> */}
+                                            {/* <Grid className='form_group'>
+                                               
+                                                <MyEditor  name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
+                                            </Grid> */}
 
 
-                                        <Grid display={'flex'} container p={1.5} item xs={12}>
-                                            <Grid item display={'flex'} xs={12} md={2.5}>
-                                                <Typography sx={{ fontWeight: '500' }}>Body</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9.5}>
-                                                {/* <TextField
-                                                    {...register('body')}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    multiline
-                                                    rows={2}
-                                                    sx={{ width: '100%', }}
-                                                /> 
-                                                {errors.body && <span className='form-validation'>{errors.body.message}</span>}
-                                                */}
-
-                                                <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
-                                                {/* <Editor emoji={false} val={watch('body')}
-                                                    onValueChange={e => setValue('body', e)}
-                                                />    */}
-                                            </Grid>
-                                        </Grid>
-
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={2.5}>
-                                                <Typography sx={{ fontWeight: '500' }}> Body Footer</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9.5}>
-                                                <TextInput control={control} name="body_footer"
-                                                    value={watch('body_footer')} />
-                                                {errors.body_footer && <span className='form-validation'>{errors.body_footer.message}</span>}
-                                            </Grid>
-                                        </Grid>
-
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={2.5}>
-                                                <Typography sx={{ fontWeight: '500' }}> Default CC</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9.5}>
-                                                <TextInput control={control} name="default_cc"
-                                                    value={watch('default_cc')} />
-                                                {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
-                                            </Grid>
-                                        </Grid>
-
-                                        {
-                                            attachmentFiles?.length > 0 &&
                                             <Grid display={'flex'} container p={1.5} item xs={12}>
                                                 <Grid item display={'flex'} xs={12} md={2.5}>
-                                                    <Typography sx={{ fontWeight: '500' }}>Attachments</Typography>
+                                                    <Typography sx={{ fontWeight: '500' }}>Body</Typography>
                                                 </Grid>
-                                                <Grid item xs={12} md={9.5}>
-                                                    {
-                                                        attachmentFiles?.map((obj, index) => (
-                                                            <Grid key={index} display={'flex'} justifyContent={'space-between'}>
-                                                                <p style={{ textDecoration: 'underLine', color: 'blue', cursor: 'pointer' }} className="text-gray-700">
-                                                                    <a target='_blank' href={obj?.attachment}>{trimUrlAndNumbers(obj?.attachment)}</a>
-                                                                </p>
-                                                                <Delete onClick={() => handleDeleteConfirm(obj)} fontSize='small' style={{ color: 'red', cursor: 'pointer' }} />
-                                                            </Grid>
-                                                        ))
-                                                    }
-                                                </Grid>
-                                            </Grid>
-                                        }
+                                                <Grid item xs={12} md={12}>
+                                                    {/* <TextField
+                                                        {...register('body')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={2}
+                                                        sx={{ width: '100%', }}
+                                                    /> 
+                                                    {errors.body && <span className='form-validation'>{errors.body.message}</span>}
+                                                    */}
+                                                    <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
 
-                                        {/* Attachments */}
-                                        <Grid display={'flex'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={2.5}>
-                                                <label htmlFor="file-input">
-                                                    <input
-                                                        type="file"
-                                                        id="file-input"
-                                                        style={{ display: 'none' }}
-                                                        onChange={handleFileChange}
-                                                    />
-                                                    <Button sx={{ textTransform: 'none', height: 30 }}
-                                                        variant='contained'
-                                                        className='bg-sky-800' size='small' component="span">
-                                                        Attachments<AttachFile />
-                                                    </Button>
-                                                </label>
+                                                    {/* <Editor emoji={false} val={watch('body')}
+                                                        onValueChange={e => setValue('body', e)}
+                                                    />    */}
+                                                </Grid>
                                             </Grid>
-                                            <Grid item xs={12} md={9.5}>
-                                                {file?.map((obj, index) => (
-                                                    <Grid display={'flex'} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item xs={12}>
-                                                        <a style={{ color: 'grey', fontSize: '14px' }}>{obj?.name}</a>
-                                                        <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
-                                                            {/* You can use any icon for delete, for example, a delete icon */}
-                                                            <Delete fontSize='small' style={{ color: 'grey' }} />
-                                                        </a>
+
+                                            <Grid className='form_group'>
+
+                                                <TextInput placeholder='Body Footer' control={control} name="body_footer"
+                                                    value={watch('body_footer')} />
+                                                {errors.body_footer && <span className='form-validation'>{errors.body_footer.message}</span>}
+
+                                            </Grid>
+
+                                            <Grid className='form_group'>
+
+                                                <TextInput placeholder='Default CC' control={control} name="default_cc"
+                                                    value={watch('default_cc')} />
+                                                {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
+
+
+                                            </Grid>
+
+                                            <Grid className='form_group'>
+
+
+                                                {
+                                                    attachmentFiles?.length > 0 &&
+                                                    <Grid display={'flex'} container p={1.5} item xs={12}>
+                                                        <Grid item display={'flex'} xs={12} md={2.5}>
+                                                            <Typography sx={{ fontWeight: '500' }}>Attachments</Typography>
+                                                        </Grid>
+                                                        <Grid item xs={12} md={9.5}>
+                                                            {
+                                                                attachmentFiles?.map((obj, index) => (
+                                                                    <Grid key={index} display={'flex'} justifyContent={'space-between'}>
+                                                                        <p style={{ textDecoration: 'underLine', color: 'blue', cursor: 'pointer' }} className="text-gray-700">
+                                                                            <a target='_blank' href={obj?.attachment}>{trimUrlAndNumbers(obj?.attachment)}</a>
+                                                                        </p>
+                                                                        <Delete onClick={() => handleDeleteConfirm(obj)} fontSize='small' style={{ color: 'red', cursor: 'pointer' }} />
+                                                                    </Grid>
+                                                                ))
+                                                            }
+                                                        </Grid>
                                                     </Grid>
-                                                ))} </Grid>
-                                        </Grid>
+                                                }
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={2.5}>
+                                                {/* Attachments */}
+                                                <Grid display={'flex'} container p={1.5} item xs={12}>
+                                                    <Grid item xs={12} md={2.5}>
+                                                        <label htmlFor="file-input">
+                                                            <input
+                                                                type="file"
+                                                                id="file-input"
+                                                                style={{ display: 'none' }}
+                                                                onChange={handleFileChange}
+                                                            />
+                                                            <Button sx={{ textTransform: 'none', height: 30 }}
+                                                                variant='contained'
+                                                                className='bg-sky-800' size='small' component="span">
+                                                                Attachments<AttachFile />
+                                                            </Button>
+                                                        </label>
+                                                    </Grid>
+                                                    <Grid item xs={12} md={9.5}>
+                                                        {file?.map((obj, index) => (
+                                                            <Grid display={'flex'} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item xs={12}>
+                                                                <a style={{ color: 'grey', fontSize: '14px' }}>{obj?.name}</a>
+                                                                <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
+                                                                    {/* You can use any icon for delete, for example, a delete icon */}
+                                                                    <Delete fontSize='small' style={{ color: 'grey' }} />
+                                                                </a>
+                                                            </Grid>
+                                                        ))} </Grid>
+                                                </Grid>
+
+                                            </Grid>
+
+                                            <Grid className='form_group'>
+
                                                 <Typography sx={{ fontWeight: '500' }}>Is Public Template</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9.5}>
+
                                                 <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
+
                                             </Grid>
-                                        </Grid>
-                                    </>
-                            }
 
-                            <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                                <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
-                            </Grid>
 
-                        </form>
-                    </div>
+                                        </>
+                                }
+
+                                <Grid pb={3} display={'flex'} >
+                                    <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>  {
+                                        loading ?
+                                            <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                            :
+                                            <>
+                                                Save  <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                    <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </>
+                                    }</LoadingButton>
+                                    <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg></Button>
+                                </Grid>
+
+                            </form>
+                        </div>
+                    </Grid>
                 </Grid>
             </Drawer>
         </div>

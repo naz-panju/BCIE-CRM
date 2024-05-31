@@ -7,34 +7,35 @@ function MyEditor(props) {
 
 
     function MyCustomUploadAdapterPlugin(editor) {
-    editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-        return {
-            upload: async () => {
-                const data = new FormData();
-                data.append('file', await loader.file);
+        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+            return {
+                upload: async () => {
+                    const data = new FormData();
+                    data.append('file', await loader.file);
 
-                // Replace 'upload_url' with your server's upload endpoint
-                const response = await fetch('upload_url', {
-                    method: 'POST',
-                    body: data
-                });
+                    // Replace 'upload_url' with your server's upload endpoint
+                    const response = await fetch('upload_url', {
+                        method: 'POST',
+                        body: data
+                    });
 
-                return {
-                    default: response.url // assuming the server responds with the URL of the uploaded image
-                };
-            },  
-            abort: () => {}
+                    return {
+                        default: response.url // assuming the server responds with the URL of the uploaded image
+                    };
+                },
+                abort: () => { }
+            };
         };
-    };
-}
+    }
 
-  
+
     return (
         <div>
             <CKEditor
-                editor={ClassicEditor}  
-                data={props?.value}
                 
+                editor={ClassicEditor}
+                data={props?.value}
+
                 config={{
                     extraPlugins: [MyCustomUploadAdapterPlugin],
                 }}
