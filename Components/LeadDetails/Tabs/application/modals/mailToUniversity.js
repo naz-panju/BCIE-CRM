@@ -107,7 +107,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
 
 
     const fetchTemplates = (e) => {
-        return TemplateApi.list({ keyword: e }).then(response => {
+        return ListingApi.emailTemplate({ keyword: e }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -214,28 +214,28 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
 
 
     const handleTemplateChange = (data) => {
-        // console.log(data);.
+        // console.log(data);
         setTextBoxLoading(true)
         setValue('template', data || '')
 
         TemplateApi.mailTemplate({ template_id: data?.id, lead_id: lead_id }).then((response) => {
 
-            console.log(response);
+            // console.log(response);
 
             if (response?.status == 200 || response?.status == 201) {
                 // let cc = 
                 // cc = response?.data?.data?.template?.default_cc?.map((obj) => {
                 //     cc.
                 // })
-                let cc = response?.data?.data?.template?.default_cc?.join(',');
+                // let cc = response?.data?.data?.default_cc?.join(',');
 
 
                 // setValue('default_cc', cc)
 
-                setValue('default_cc', response?.data?.data?.template?.default_cc || '')
+                setValue('default_cc', response?.data?.data?.default_cc || '')
                 // setValue('to', details?.email || '')
                 setValue('subject', response?.data?.data?.template?.subject || '')
-                setValue('body', response?.data?.data?.template?.body || '')
+                setValue('body', response?.data?.data?.body || '')
                 setattachmentFiles(response?.data?.data?.attchments)
 
                 seteditorKey(Math.random() * 0.23)

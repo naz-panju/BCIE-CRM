@@ -308,7 +308,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
     const fetchTable = () => {
         setLoading(true)
         TemplateApi.list({ limit: limit, page: page + 1 }).then((response) => {
-            // console.log(response);
+            console.log(response?.data);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {
