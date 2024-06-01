@@ -54,8 +54,8 @@ function Details({ data, loading }) {
                             Body:
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {/* <dangerou */}
-                            {data?.body}
+                            <div dangerouslySetInnerHTML={{ __html: data?.body }} />
+                            {/* {data?.body} */}
                         </Typography>
                     </Grid>
                 </Grid >
@@ -96,29 +96,29 @@ function Details({ data, loading }) {
                 <Divider sx={{ mb: 1 }} />
 
                 <Grid container style={{ marginBottom: '10px' }}>
-                <Grid item xs={6} sm={6}>
-                    <Typography variant="" style={{ fontWeight: 'bold' }}>
-                        Email Type:
-                    </Typography>
-                    <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                        {data?.type}
-                    </Typography>
+                    <Grid item xs={6} sm={6}>
+                        <Typography variant="" style={{ fontWeight: 'bold' }}>
+                            Email Type:
+                        </Typography>
+                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
+                            {data?.type}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6} sm={6}>
+                        <Typography variant="" style={{ fontWeight: 'bold' }}>
+                            Message Date:
+                        </Typography>
+                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
+                            {
+                                data?.updated_at &&
+                                moment(data?.message_date).format("DD-MM-YYYY HH:mm")
+                            }
+                        </Typography>
+                    </Grid>
                 </Grid>
-                <Grid item xs={6} sm={6}>
-                    <Typography variant="" style={{ fontWeight: 'bold' }}>
-                        Message Date:
-                    </Typography>
-                    <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                        {
-                            data?.updated_at &&
-                            moment(data?.message_date).format("DD-MM-YYYY HH:mm")
-                        }
-                    </Typography>
-                </Grid>
-            </Grid>
-            <Divider sx={{ mb: 1 }} />
+                <Divider sx={{ mb: 1 }} />
 
-                
+
 
                 {
                     data?.attachments?.length > 0 &&

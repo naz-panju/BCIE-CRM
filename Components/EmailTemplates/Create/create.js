@@ -249,6 +249,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         }
     }, [editId])
 
+    console.log(watch('body'));
 
     return (
         <div style={{ overflow: 'hidden' }}>
@@ -357,11 +358,11 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                     /> 
                                                     {errors.body && <span className='form-validation'>{errors.body.message}</span>}
                                                     */}
-                                                    <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
+                                                    {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
 
-                                                    {/* <Editor emoji={false} val={watch('body')}
+                                                    <Editor emoji={false} val={watch('body')}
                                                         onValueChange={e => setValue('body', e)}
-                                                    />    */}
+                                                    />   
                                                 </Grid>
                                             </Grid>
 

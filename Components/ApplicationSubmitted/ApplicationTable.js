@@ -30,7 +30,7 @@ import DeferIntake from '../LeadDetails/Tabs/application/modals/deferIntake';
 import ViewDocumentModal from '../LeadDetails/Tabs/application/modals/viewDocModal';
 import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUniversity';
 import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
-import { AssignmentReturn, Autorenew, InfoOutlined, MoreHorizOutlined } from '@mui/icons-material';
+import { Add, AssignmentReturn, Autorenew, InfoOutlined, MoreHorizOutlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 
 import ConfirmPopup from '../Common/Popup/confirm';
@@ -42,6 +42,8 @@ import ReturnPopup from '../Applications/Modals/returnModal';
 import DownloadDocumentModal from '../Applications/Modals/downloadDocument';
 import ApplicationDetail from '../Applications/Modals/Details';
 import { Divider } from 'rsuite';
+import SubmitToUniversityModal from '../Applications/Modals/UniversitySubmit';
+import SaveApplicationSumber from '../Applications/Modals/ApplicationId';
 
 
 
@@ -158,10 +160,10 @@ const headCells = [
         noSort: false
     },
     {
-        id: 'cordinator',
+        id: 'counsellor',
         numeric: false,
         disablePadding: false,
-        label: 'App Coordinator',
+        label: 'Counsellor',
         noSort: false
     },
     {
@@ -171,12 +173,13 @@ const headCells = [
         label: 'Uni.Deposit',
         noSort: false
     },
-    // {
-    //     id: 'return',
-    //     numeric: false,
-    //     disablePadding: false,
-    //     label: '',
-    // },
+    {
+        id: 'submit',
+        numeric: false,
+        disablePadding: false,
+        label: '',
+        noSort: true
+    },
     {
         id: 'icons',
         numeric: false,
@@ -526,7 +529,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
 
     const handleMailOpen = (data) => {
         setDetails(data)
-        setMailId(0)
+         setMailId(data?.id)
         handlePopoverClose()
     }
     const handleStageOpen = (row) => {
@@ -722,15 +725,17 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         })
     }
 
-    const Status = [
-        { name: 'Submitted' },
-        { name: 'Unsubmitted' },
-        { name: 'Returned' },
-    ]
-    const DepositOptions = [
-        { name: 'Yes' },
-        { name: 'No' }
-    ]
+    const [uniSubmitId, setuniSubmitId] = useState()
+    const handleUniSubmitId = (row) => {
+        setDetails(row)
+        setuniSubmitId(row?.id)
+    }
+
+    const [unId, setUniId] = useState()
+    const handleUniId = (row) => {
+        setDetails(row)
+        setUniId(row?.id)
+    }
 
     useEffect(() => {
         fetchTable()
@@ -752,6 +757,9 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
 
             <ApplicationDetail id={detailId} setId={setDetailId} />
             <ConfirmPopup loading={submitLoading} ID={submitId} setID={setsubmitId} clickFunc={handleClickSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
+
+            <SubmitToUniversityModal editId={uniSubmitId} setEditId={setuniSubmitId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
+            <SaveApplicationSumber editId={unId} setEditId={setUniId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
 
             <div className="filter_sec">
@@ -1076,8 +1084,13 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                     {row?.lead?.student_code}
                                                                     <br />
                                                                     {
-                                                                        row?.application_number && row?.application_number != 'undefined' &&
-                                                                        <a style={{ fontSize: '13px', color: 'grey' }}>App_id :{row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</a>
+                                                                        row?.application_number && row?.application_number != 'undefined' ?
+                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID :{row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span>
+                                                                            :
+                                                                            <Button onClick={() => handleUniId(row)} size='small' variant='outlined'>
+                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                                                                    <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" stroke-linecap="round" stroke-linejoin="round" />
+                                                                                </svg> UNI ID</Button>
                                                                     }
                                                                 </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
@@ -1107,7 +1120,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                 <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                                 <TableCell align="left"><Tooltip title={row?.stage_note}>{row?.stage?.name}</Tooltip></TableCell>
-                                                                <TableCell align="left">{row?.app_coordinator?.name}</TableCell>
+                                                                <TableCell align="left">{row?.counsellor?.name}</TableCell>
                                                                 <TableCell align="left"> {
                                                                     row?.deposit_amount_paid ?
                                                                         <>
@@ -1123,7 +1136,11 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                     // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
                                                                 }</TableCell>
 
-                                                                {/* <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell> */}
+                                                                <TableCell align="left">
+                                                                    <Button sx={{ textTransform: 'none' }} onClick={() => handleUniSubmitId(row)} variant='outlined' size='small'>
+                                                                        Submit
+                                                                    </Button>
+                                                                </TableCell>
 
                                                                 <TableCell align="left">
                                                                     <Grid display={'flex'} alignItems={'center'}>
@@ -1146,18 +1163,18 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                             }}
                                                                         >
                                                                             <List>
-                                                                                {
+                                                                                {/* {
                                                                                     (session?.data?.user?.role?.id == 6 && row?.app_coordinator_status == 'Submitted') &&
                                                                                     <ListItem button onClick={() => handleReturnPopupOpen(row?.id)}>
                                                                                         Return Application
                                                                                     </ListItem>
-                                                                                }
-                                                                                {
+                                                                                } */}
+                                                                                {/* {
                                                                                     (session?.data?.user?.role?.id == 5 && row?.app_coordinator_status == null) &&
                                                                                     <ListItem button onClick={() => handleSubmitOpen(row?.id)}>
                                                                                         Submit Application
                                                                                     </ListItem>
-                                                                                }
+                                                                                } */}
                                                                                 <ListItem button onClick={() => handleStageOpen(row)}>
                                                                                     Change Stage
                                                                                 </ListItem>
@@ -1172,39 +1189,10 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                                 </ListItem>
                                                                             </List>
                                                                         </Popover>
-                                                                        {/* <Tooltip title={'Change Stage'}>
-                                                                            <svg style={{ cursor: 'pointer' }} onClick={() => handleStageOpen(row)} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                                                                <path d="M5 6.00008V13.9044C5 15.0386 5 15.6056 5.1701 15.9526C5.48537 16.5959 6.17631 16.9656 6.88639 16.8711C7.2695 16.8201 7.74136 16.5055 8.68508 15.8764L8.68735 15.8749C9.0614 15.6255 9.24846 15.5008 9.44413 15.4316C9.80351 15.3046 10.1956 15.3046 10.555 15.4316C10.7511 15.5009 10.9389 15.6261 11.3144 15.8765C12.2582 16.5057 12.7305 16.82 13.1137 16.871C13.8237 16.9654 14.5146 16.5959 14.8299 15.9526C15 15.6056 15 15.0384 15 13.9044V5.99734C15 5.06575 15 4.59925 14.8185 4.24308C14.6587 3.92948 14.4031 3.6747 14.0895 3.51491C13.733 3.33325 13.2669 3.33325 12.3335 3.33325H7.66683C6.73341 3.33325 6.26635 3.33325 5.90983 3.51491C5.59623 3.6747 5.34144 3.92948 5.18166 4.24308C5 4.5996 5 5.06666 5 6.00008Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                            </svg>
-                                                                        </Tooltip>
-                                                                        <Tooltip title={'Defer Intake'}>
-                                                                            <svg style={{ cursor: 'pointer', marginLeft: 8 }} onClick={() => handleDeferOpen(row)} xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
-                                                                                <path d="M1 5.66667H13M1 5.66667V12.5113C1 13.3825 1 13.8178 1.16349 14.1506C1.3073 14.4433 1.5366 14.6815 1.81885 14.8306C2.1394 15 2.55925 15 3.39768 15H10.6023C11.4408 15 11.86 15 12.1805 14.8306C12.4628 14.6815 12.6929 14.4433 12.8367 14.1506C13 13.8182 13 13.3834 13 12.5139V5.66667M1 5.66667V5.0446C1 4.1734 1 3.73748 1.16349 3.40473C1.3073 3.11203 1.5366 2.87424 1.81885 2.7251C2.13972 2.55556 2.56007 2.55556 3.40015 2.55556H4M13 5.66667V5.04204C13 4.17255 13 3.73716 12.8367 3.40473C12.6929 3.11203 12.4628 2.87424 12.1805 2.7251C11.8597 2.55556 11.4402 2.55556 10.6001 2.55556H10M10 1V2.55556M10 2.55556H4M4 1V2.55556" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                            </svg>
-                                                                        </Tooltip>
-                                                                        <Tooltip title={'Mail to University'}>
-                                                                            <svg style={{ cursor: 'pointer', marginLeft: 8 }} onClick={() => handleMailOpen(row)} xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
-                                                                                <path d="M1 3.57143L7.91849 8.01903C8.5773 8.44255 9.4227 8.44255 10.0815 8.01903L17 3.57143M3 13H15C16.1046 13 17 12.1046 17 11V3C17 1.89543 16.1046 1 15 1H3C1.89543 1 1 1.89543 1 3V11C1 12.1046 1.89543 13 3 13Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                            </svg>
-                                                                        </Tooltip>
-                                                                        <Tooltip title={'Documents'}>
-                                                                            <svg style={{ cursor: 'pointer', marginLeft: 8 }} onClick={() => handleDocOpen(row)} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                                                <path d="M12 9.7998V19.9998M12 9.7998C12 8.11965 12 7.27992 12.327 6.63818C12.6146 6.0737 13.0732 5.6146 13.6377 5.32698C14.2794 5 15.1196 5 16.7998 5H19.3998C19.9599 5 20.2401 5 20.454 5.10899C20.6422 5.20487 20.7948 5.35774 20.8906 5.5459C20.9996 5.75981 21 6.04004 21 6.6001V15.4001C21 15.9601 20.9996 16.2398 20.8906 16.4537C20.7948 16.6419 20.6425 16.7952 20.4543 16.8911C20.2406 17 19.961 17 19.402 17H16.5693C15.6301 17 15.1597 17 14.7334 17.1295C14.356 17.2441 14.0057 17.4317 13.701 17.6821C13.3568 17.965 13.096 18.3557 12.575 19.1372L12 19.9998M12 9.7998C12 8.11965 11.9998 7.27992 11.6729 6.63818C11.3852 6.0737 10.9263 5.6146 10.3618 5.32698C9.72004 5 8.87977 5 7.19961 5H4.59961C4.03956 5 3.75981 5 3.5459 5.10899C3.35774 5.20487 3.20487 5.35774 3.10899 5.5459C3 5.75981 3 6.04004 3 6.6001V15.4001C3 15.9601 3 16.2398 3.10899 16.4537C3.20487 16.6419 3.35774 16.7952 3.5459 16.8911C3.7596 17 4.03901 17 4.59797 17H7.43073C8.36994 17 8.83942 17 9.26569 17.1295C9.64306 17.2441 9.99512 17.4317 10.2998 17.6821C10.6426 17.9638 10.9017 18.3526 11.4185 19.1277L12 19.9998" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                                                            </svg>
-                                                                        </Tooltip> */}
+
                                                                     </Grid>
                                                                 </TableCell>
-                                                                {/* <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell> */}
-                                                                {/* <Popup trigger={<TableCell align="left"><IconButton style={{ textTransform: 'none' }} ><MoreHorizOutlined fontSize='small' /></IconButton></TableCell>}
-                                                                    position="left center">
-                                                                    <div className='app-table-container'>
-                                                                        <ul className='app-table-options'>
-                                                                            <li onClick={() => handleDownloadOpen(row?.id)}> Download Document</li>
-                                                                            <li onClick={() => handleStageOpen(row)}> Change Application Stage</li>
-                                                                        </ul>
-    
-                                                                    </div>
-                                                                </Popup> */}
+
                                                             </TableRow>
                                                         );
                                                     })

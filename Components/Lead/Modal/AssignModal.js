@@ -234,7 +234,6 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
         }
     }, [editId])
 
-
     return (
         <div>
 
@@ -327,7 +326,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                         }
 
                         {
-                            ((watch('counsellor') || watch('counsellors'))?.length > 0) &&
+                            ((watch('counsellor') || watch('counsellors')?.length > 0)) &&
                             <Grid p={1} pb={3}  >
 
                                 <LoadingButton onClick={onSubmit} loading={loading} disabled={loading} type='submit' className='save-btn'>

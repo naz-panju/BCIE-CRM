@@ -1,3 +1,4 @@
+import { ImageUploadApi } from '@/data/Endpoints/ImageUploader';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import React, { useState } from 'react';
@@ -8,16 +9,16 @@ function MyEditor(props) {
 
     function MyCustomUploadAdapterPlugin(editor) {
         editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+            console.log(loader);
             return {
                 upload: async () => {
                     const data = new FormData();
                     data.append('file', await loader.file);
+                    
 
                     // Replace 'upload_url' with your server's upload endpoint
-                    const response = await fetch('upload_url', {
-                        method: 'POST',
-                        body: data
-                    });
+                    const response = await ImageUploadApi.upload({ file: data })
+                    console.log(response);
 
                     return {
                         default: response.url // assuming the server responds with the URL of the uploaded image
@@ -32,7 +33,7 @@ function MyEditor(props) {
     return (
         <div>
             <CKEditor
-                
+
                 editor={ClassicEditor}
                 data={props?.value}
 

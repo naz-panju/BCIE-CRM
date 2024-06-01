@@ -32,7 +32,7 @@ const style = {
     p: 4,
 };
 
-export default function UniversityDocumentModal({ app_id, setapp_id, editId, setEditId, handleRefresh, fetchTable }) {
+export default function UniversityDocumentModal({ app_id, setapp_id, editId, setEditId, handleRefresh, fetchTable, details }) {
 
     // console.log(app_id);
 
@@ -51,12 +51,11 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
             amount: yup.string().required("Please enter Amount").typeError("Please enter Amount"),
         })
     }
-    if (template?.stage?.action_type == 'Get Application Id') {
-        scheme = yup.object().shape({
-            // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
-            application_id: yup.string().required("Please enter Application Id").typeError("Please enter Application Id"),
-        })
-    }
+    // if (template?.stage?.action_type == 'Get Application Id') {
+    //     scheme = yup.object().shape({
+    //         application_id: yup.string().required("Please enter Application Id").typeError("Please enter Application Id"),
+    //     })
+    // }
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
@@ -64,7 +63,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
     const handleOpen = () => setOpen(true);
     const [loading, setLoading] = useState(false)
     const [reqLoading, setReqLoading] = useState(false)
-    const [details, setDetails] = useState()
+    // const [details, setDetails] = useState()
     const [dataLoading, setDataLoading] = useState(false)
 
     const handleClose = () => {
@@ -75,7 +74,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
         setValue('amount', '')
         setValue('paid_date', '')
         setSelectedFile(null)
-        setDetails()
+        // setDetails()
         setEditId()
         setOpen(false);
     }
@@ -193,26 +192,15 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
         return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
     }
 
-    const getDetails = async () => {
-        setDataLoading(true)
-        const response = await LeadApi.viewDocuments({ id: editId })
-        if (response?.data?.data) {
-            let data = response?.data?.data
-            setDetails(data)
-            setValue('template', data?.document_template)
-        }
-        setDataLoading(false)
-    }
-
 
 
 
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
-            getDetails()
         } else if (editId == 0) {
             setOpen(true)
+            setValue('application_id', details?.application_number || '')
         }
     }, [editId])
 
@@ -264,19 +252,19 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
 
                                     </Grid>
                                 </Grid>
-                             
-                                {
-                                    watch('template')?.stage?.action_type == "Get Application Id" &&
-                                    <Grid container>
-                                        <Grid pr={1} mt={2} md={12}>
-                                            <a>Application ID</a>
-                                            <TextInput control={control} name="application_id"
-                                                value={watch('application_id')} />
-                                            {errors.application_id && <span className='form-validation'>{errors.application_id.message}</span>}
 
-                                        </Grid>
+                                {/* {
+                                    watch('template')?.stage?.action_type == "Get Application Id" && */}
+                                <Grid container>
+                                    <Grid pr={1} mt={2} md={12}>
+                                        <a>Application ID</a>
+                                        <TextInput control={control} name="application_id"
+                                            value={watch('application_id')} />
+                                        {errors.application_id && <span className='form-validation'>{errors.application_id.message}</span>}
+
                                     </Grid>
-                                }
+                                </Grid>
+                                {/* } */}
                                 {
                                     watch('template')?.stage?.action_type == "Deposit Paid" &&
                                     <Grid container>

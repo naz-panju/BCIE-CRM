@@ -203,7 +203,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
     const handleMailOpen = (data) => {
         setDetails(data)
-        setMailId(0)
+        setMailId(data?.id)
     }
 
     const fetchList = async () => {

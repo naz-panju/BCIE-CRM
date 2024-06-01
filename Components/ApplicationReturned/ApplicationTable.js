@@ -158,10 +158,10 @@ const headCells = [
         noSort: false
     },
     {
-        id: 'cordinator',
+        id: 'counsellor',
         numeric: false,
         disablePadding: false,
-        label: 'App Coordinator',
+        label: 'Counsellor',
         noSort: false
     },
     {
@@ -526,7 +526,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
 
     const handleMailOpen = (data) => {
         setDetails(data)
-        setMailId(0)
+         setMailId(data?.id)
         handlePopoverClose()
     }
     const handleStageOpen = (row) => {
@@ -1077,7 +1077,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' &&
-                                                                        <a style={{ fontSize: '13px', color: 'grey' }}>App_id :{row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</a>
+                                                                        <span style={{ fontSize: '13px', color: 'grey' }}>App_id :{row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span>
                                                                     }
                                                                 </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
@@ -1107,7 +1107,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                                                                 <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                                 <TableCell align="left"><Tooltip title={row?.stage_note}>{row?.stage?.name}</Tooltip></TableCell>
-                                                                <TableCell align="left">{row?.app_coordinator?.name}</TableCell>
+                                                                <TableCell align="left">{row?.counsellor?.name}</TableCell>
                                                                 <TableCell align="left"> {
                                                                     row?.deposit_amount_paid ?
                                                                         <>

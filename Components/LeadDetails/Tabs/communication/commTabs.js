@@ -40,7 +40,7 @@ function a11yProps(index) {
     };
 }
 
-export default function CreateTabs({ list, value, setValue, activeTab, setActiveTab, setEmailLimit, loading, setwhatsappLimit, whatsappList, callList, setCallLimit, handleCallEdit, handlePhoneRefresh }) {
+export default function CreateTabs({ list, value, setValue, activeTab, setActiveTab, setEmailLimit, loading, setwhatsappLimit, whatsappList, callList, setCallLimit, handleCallEdit, handlePhoneRefresh,emailLimit,whatsappLimit,callLimit,setEmailPage,emailPage,whatsappPage,setwhatsappPage,callPage,setcallPage,callLoading }) {
     // const [value, setValue] = React.useState(0);
     // const [activeTab, setActiveTab] = useState(0);
     const handleChange = (event, newValue) => {
@@ -49,15 +49,15 @@ export default function CreateTabs({ list, value, setValue, activeTab, setActive
 
     const tabs = [
         {
-            component: <EmailTab list={list} setEmailLimit={setEmailLimit} loading={loading} />,
+            component: <EmailTab page={emailPage} setPage={setEmailPage} list={list} setEmailLimit={setEmailLimit} loading={loading} emailLimit={emailLimit} />,
             label: 'Email'
         },
         {
-            component: <WhatsappTab list={whatsappList} setwhatsappLimit={setwhatsappLimit} loading={loading} />,
+            component: <WhatsappTab page={whatsappPage} setPage={setwhatsappPage} list={whatsappList} setwhatsappLimit={setwhatsappLimit} loading={loading} whatsappLimit={whatsappLimit} />,
             label: 'Whatsapp'
         },
         {
-            component: <CallTab list={callList} setCallLimit={setCallLimit} loading={loading} handleEdit={handleCallEdit} handleRefresh={handlePhoneRefresh} />,
+            component: <CallTab page={callPage} setPage={setcallPage} list={callList} setCallLimit={setCallLimit} loading={callLoading} handleEdit={handleCallEdit} handleRefresh={handlePhoneRefresh} callLimit={callLimit} />,
             label: 'Call Summary'
         },
     ];

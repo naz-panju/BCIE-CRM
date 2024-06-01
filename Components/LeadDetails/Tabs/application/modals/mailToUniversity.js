@@ -22,6 +22,7 @@ import { TemplateApi } from '@/data/Endpoints/Template';
 import dynamic from 'next/dynamic';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import Editor from '@/Form/Editor';
+import { ApplicationApi } from '@/data/Endpoints/Application';
 
 
 
@@ -41,6 +42,7 @@ const scheme = yup.object().shape({
 })
 
 export default function SendUniversityMail({ details, editId, setEditId, lead_id, refresh, setRefresh, from, app_id }) {
+
     const [state, setState] = React.useState({
         right: false,
     });
@@ -62,6 +64,21 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
 
 
     const [file, setFile] = useState([])
+
+
+    const fetchDocuments = (e) => {
+        return ApplicationApi.view({ id: editId }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+                return response?.data?.data?.university_documents;
+            } else {
+                return [];
+            }
+        })
+    }
+    const handleDocumentChange = (data) => {
+        setValue('documents', data || '')
+
+    }
 
 
     const handleFileUpload = (event) => {
@@ -251,13 +268,11 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     }
 
 
-    const getInitialValue = () => {
-        if (from == 'app') {
-            setValue('to', details?.student?.email)
-        } else if (from == 'lead') {
-            setValue('to', details?.email)
-        }
-
+    const [appDetails, setappDetails] = useState()
+    const getDetails = () => {
+        ApplicationApi.view({ id: editId }).then((response) => {
+            setappDetails(response?.data?.data)
+        })
     }
 
     const handleClick = () => {
@@ -271,8 +286,10 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         } else if (editId == 0) {
             setOpen(true)
         }
-        // getInitialValue()
+        getDetails()
     }, [editId])
+
+    console.log(appDetails);
 
 
     return (
@@ -362,6 +379,23 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                                         onValueChange={e => setValue('body', e)} />
                                             }
                                             {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
+
+                                        </Grid>
+
+                                        <Grid className='form_group' >
+                                            <AsyncSelect
+                                                isMulti
+                                                placeholder='Select Students Documents'
+                                                name={'documents'}
+                                                defaultValue={watch('documents')}
+                                                // isClearable
+                                                defaultOptions
+                                                loadOptions={fetchDocuments}
+                                                getOptionLabel={(e) => e.title || e.document_template?.name}
+                                                getOptionValue={(e) => e.id}
+                                                onChange={handleDocumentChange}
+                                            />
+                                            {errors.documents && <span className='form-validation'>{errors.documents.message}</span>}
 
                                         </Grid>
 

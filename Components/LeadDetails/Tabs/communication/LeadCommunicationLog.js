@@ -23,15 +23,35 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
     const [tabValue, setTabValue] = useState(0)
     const [activeTab, setActiveTab] = useState(0);
 
-    const [emailLimit, setEmailLimit] = useState(15)
-    const [whatsappLimit, setwhatsappLimit] = useState(15)
-    const [callLimit, setCallLimit] = useState(15)
+    const [emailLimit, setEmailLimit] = useState(10)
+    const [whatsappLimit, setwhatsappLimit] = useState(10)
+    const [callLimit, setCallLimit] = useState(10)
 
     const [whatsappList, setwhatsappList] = useState([])
     const [callList, setcallList] = useState([])
 
     const [phonecallId, setphonecallId] = useState()
+    const [callSummaryLoading, setcallSummaryLoading] = useState(false)
     // const [phoneCallRefresh, setphoneCallRefresh] = useState(false)
+
+    const [emailPage, setEmailPage] = useState(1)
+    const [whatsappPage, setwhatsappPage] = useState(1)
+    const [callPage, setcallPage] = useState(1)
+
+    const [allPages, setAllPages] = useState({
+        email:{
+            page:emailPage,
+            
+        },
+        whatsapp:{
+            page:whatsappPage,
+            setPage:setwhatsappPage
+        },
+        call:{
+            page:callPage,
+            setPage:setcallPage
+        },
+    })
 
     const handlePhoneCallOpen = () => {
         setphonecallId(0)
@@ -72,7 +92,8 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
         let params = {
             lead_id: lead_id,
             limit: emailLimit,
-            type: ['Send', 'Receive']
+            type: ['Send', 'Receive'],
+            page:emailPage,
             // page: page + 1
         }
         if (from == 'app') {
@@ -84,15 +105,13 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
         setLoading(false)
     }
 
-    // console.log(list);
-
     const fetchWhatsappList = async () => {
         setLoading(true)
         let params = {
             lead_id: lead_id,
             limit: whatsappLimit,
-            type: ['Whatsapp Send', 'Whatsapp Receive']
-            // page: page + 1
+            type: ['Whatsapp Send', 'Whatsapp Receive'],
+            page:whatsappPage,
         }
         if (from == 'app') {
             params['application_id'] = app_id
@@ -108,8 +127,8 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
         let params = {
             lead_id: lead_id,
             limit: callLimit,
-            type: ['Inbound', 'Outbound']
-            // page: page + 1
+            type: ['Inbound', 'Outbound'],
+            page:callPage,
         }
         if (from == 'app') {
             params['application_id'] = app_id
@@ -119,12 +138,16 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
         setcallLoading(false)
     }
 
-    const handleEmailLimit = () => {
-        setEmailLimit(emailLimit + 5)
+    const handleEmailLimit = (limit) => {
+        setEmailLimit(limit)
     }
 
-    const handleWhatsappLimit = () => {
-        setwhatsappLimit(whatsappLimit + 5)
+    const handleWhatsappLimit = (limit) => {
+        setwhatsappLimit(limit)
+    }
+
+    const handleCallLimit = (limit) => {
+        setCallLimit(limit)
     }
 
     const getSummary = async () => {
@@ -140,6 +163,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
     }
 
     const getCallSummary = async () => {
+        setcallSummaryLoading(true)
         let params = {
             lead_id: lead_id,
         }
@@ -149,12 +173,13 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
         const response = await PhoneCallApi.summmary(params)
         // console.log(response);
         setcallDetails(response?.data?.data)
+        setcallSummaryLoading(false)
     }
 
     useEffect(() => {
         getSummary()
         // getCallSummary()
-    }, [emailLimit, whatsappLimit])
+    }, [emailLimit, whatsappLimit,refresh])
     useEffect(() => {
         getCallSummary()
     }, [phoneCallRefresh])
@@ -162,13 +187,13 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
 
     useEffect(() => {
         fetchList()
-    }, [emailLimit, refresh])
+    }, [emailLimit, refresh,emailPage])
     useEffect(() => {
         fetchWhatsappList()
-    }, [whatsappLimit, refresh])
+    }, [whatsappLimit, refresh,whatsappPage])
     useEffect(() => {
         fetchCallList()
-    }, [callLimit, phoneCallRefresh])
+    }, [callLimit, phoneCallRefresh,callPage])
 
     return (
 
@@ -182,6 +207,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                         <Button onClick={handlePhoneCallOpen} variant='outlined'>Add Phone Call Summary</Button>
                     </div>
                 </div> */}
+                <button onClick={()=>setEmailPage(emailPage+1)}>djdd</button>
 
                 <div className='timeline-content-block-item'>
                     <div className='flex mar-25'>
@@ -297,7 +323,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                                 <div className='w-full md:w-6/12 lg:w-6/12 communication-log-item'>
                                     <div className='lead-score-block'>
                                         {
-                                            callLoading ?
+                                            callSummaryLoading ?
                                                 <>
                                                     <h3 className='text-center'>
                                                         <Skeleton width={'100%'} height={20} variant='rounded' />
@@ -318,7 +344,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                                 <div className='w-full md:w-6/12 lg:w-6/12 communication-log-item'>
                                     <div className='lead-score-block'>
                                         {
-                                            callLoading ?
+                                            callSummaryLoading ?
                                                 <>
                                                     <h3 className='text-center'>
                                                         <Skeleton width={'100%'} height={20} variant='rounded' />
@@ -376,7 +402,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                     </div>
                 </div>
 
-                <CreateTabs list={list} whatsappList={whatsappList} callList={callList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} setCallLimit={setCallLimit} loading={loading} handleCallEdit={setphonecallId} handlePhoneRefresh={handlePhoneRefresh} />
+                <CreateTabs callLoading={callLoading} setEmailPage={setEmailPage} emailPage={emailPage} callPage={callPage} whatsappPage={whatsappPage} setcallPage={setcallPage} setwhatsappPage={setwhatsappPage} list={list} whatsappList={whatsappList} callList={callList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} setCallLimit={setCallLimit} loading={loading} handleCallEdit={setphonecallId} handlePhoneRefresh={handlePhoneRefresh}emailLimit={emailLimit} whatsappLimit={whatsappLimit} callLimit={callLimit} />
 
             </div>
         </>

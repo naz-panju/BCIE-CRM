@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { EditorState, convertToRaw, ContentState } from "draft-js";
 import draftToHtml from 'draftjs-to-html';
+import { ImageUploadApi } from '@/data/Endpoints/ImageUploader';
 // import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 // import htmlToDraft from 'html-to-draftjs';
 let htmlToDraft;
@@ -43,18 +44,32 @@ const Editor = (props) => {
 
     // Define editor styles for multiline input
 
-    const uploadCallback = (file) => {
-        return new Promise(
-            (resolve, reject) => {
-                if (file) {
-                    let reader = new FileReader();
-                    reader.onload = (e) => {
-                        resolve({ data: { link: e.target.result } });
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        );
+    // const uploadCallback = (file) => {
+    //     return new Promise(
+    //         (resolve, reject) => {
+    //             if (file) {
+    //                 let reader = new FileReader();
+    //                 reader.onload = (e) => {
+    //                     resolve({ data: { link: e.target.result } });
+    //                 };
+    //                 reader.readAsDataURL(file);
+    //             }
+    //         }
+    //     );
+    // };
+
+    const uploadCallback = async (file) => {
+        console.log(file);
+        const data = new FormData();
+        data.append('file', file);
+        try {
+            const response = await ImageUploadApi.upload(data);
+            console.log(response);
+            return { data: { link: response.data.data.file_path } };
+        } catch (error) {
+            console.error('Image upload failed:', error);
+            return { data: { link: '' } };
+        }
     };
     
 

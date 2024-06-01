@@ -192,7 +192,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
     return (
         <div>
-            <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={docId} setEditId={setdocId} handleRefresh={NoLoadDetails} fetchTable={fetchTable} />
+            <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={docId} setEditId={setdocId} handleRefresh={NoLoadDetails} fetchTable={fetchTable} details={details} />
             <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 

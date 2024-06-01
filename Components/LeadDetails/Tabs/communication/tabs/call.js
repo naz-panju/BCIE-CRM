@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import moment from 'moment';
 import { AttachmentOutlined, CachedOutlined, Delete, Edit } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import CommCallDetailModal from '../details/email copy/detailModal';
 
 
-function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh }) {
+function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh,page,setPage,callLimit }) {
     const [detailId, setdetailId] = useState()
 
     const [deleteId, setdeleteId] = useState()
@@ -41,6 +41,19 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh }) {
     const handleDetailOpen = (id) => {
         setdetailId(id)
     }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setCallLimit(parseInt(event.target.value));
+        // setPage(1);
+    };
+
+    console.log(page);
+
+
 
     return (
 
@@ -112,10 +125,26 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh }) {
                             </TableContainer>
 
 
-                            {(list?.meta?.total != list?.meta?.to && list?.meta?.total != 0) &&
-                                <div className='loadmore-btn-block' style={{ marginTop: 15 }}>
-                                    <button className='loadmore-btn' onClick={setCallLimit} > <CachedOutlined />Load More </button>
-                                </div>}
+                            {
+                                            list?.data?.length > 0 &&
+                                            <div className='table-pagination d-flex justify-content-end align-items-center'>
+                                                <div className='d-flex justify-content-between align-items-center'>
+                                                    <div className='select-row-box'>
+                                                        <Select value={callLimit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                                                            <MenuItem value={10}>10</MenuItem>
+                                                            <MenuItem value={15}>15</MenuItem>
+                                                            <MenuItem value={25}>25</MenuItem>
+                                                        </Select>
+                                                        <label>Rows per page</label>
+                                                    </div>
+                                                    <div>
+                                                        <Stack spacing={2}>
+                                                            <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                                                        </Stack>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
                         </>
 
                 }

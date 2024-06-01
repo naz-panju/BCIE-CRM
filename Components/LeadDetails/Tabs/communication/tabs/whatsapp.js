@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import moment from 'moment';
 import { AttachmentOutlined, CachedOutlined } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
 
 
-function WhatsappTab({ list, setwhatsappLimit, loading }) {
+function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappLimit }) {
     const [detailId, setdetailId] = useState()
 
     // console.log(list);
@@ -13,6 +13,15 @@ function WhatsappTab({ list, setwhatsappLimit, loading }) {
     const handleDetailOpen = (id) => {
         setdetailId(id)
     }
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        whatsappLimit(parseInt(event.target.value));
+        // setPage(1);
+    };
 
     return (
 
@@ -30,10 +39,10 @@ function WhatsappTab({ list, setwhatsappLimit, loading }) {
                                 <Table>
                                     <TableHead>
                                         <TableRow>
-                                            
+
                                             <TableCell>
                                                 <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                     Type
+                                                    Type
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
@@ -89,10 +98,26 @@ function WhatsappTab({ list, setwhatsappLimit, loading }) {
                             </TableContainer>
 
 
-                            {(list?.meta?.total != list?.meta?.to && list?.meta?.total != 0) &&
-                                <div className='loadmore-btn-block' style={{ marginTop: 15 }}>
-                                    <button className='loadmore-btn' onClick={setwhatsappLimit} > <CachedOutlined />Load More </button>
-                                </div>}
+                            {
+                                list?.data?.length > 0 &&
+                                <div className='table-pagination d-flex justify-content-end align-items-center'>
+                                    <div className='d-flex justify-content-between align-items-center'>
+                                        <div className='select-row-box'>
+                                            <Select value={emailLimit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                                                <MenuItem value={10}>10</MenuItem>
+                                                <MenuItem value={15}>15</MenuItem>
+                                                <MenuItem value={25}>25</MenuItem>
+                                            </Select>
+                                            <label>Rows per page</label>
+                                        </div>
+                                        <div>
+                                            <Stack spacing={2}>
+                                                <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                                            </Stack>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </>
 
                 }
