@@ -1,8 +1,8 @@
-import { ContentCopyOutlined, CopyAllOutlined } from '@mui/icons-material';
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { AddCircleOutline, ContentCopyOutlined, CopyAllOutlined } from '@mui/icons-material';
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
-function TemplateData({ handleToggleTable }) {
+function TemplateData({ handleToggleTable, setValue, body }) {
 
     const Datas = [
         { title: 'Lead name', key: "{{1}}" },
@@ -45,6 +45,11 @@ function TemplateData({ handleToggleTable }) {
     );
 
     const [copied, setcopied] = useState()
+
+    const addToTextBox = (text) => {
+        setValue(text)
+    }
+
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text).then(() => {
             setcopied(text)
@@ -105,9 +110,9 @@ function TemplateData({ handleToggleTable }) {
                             {
                                 filteredData?.length == 0 &&
                                 <TableRow>
-                                    <TableCell sx={{border:'none'}} colSpan={3}>
+                                    <TableCell sx={{ border: 'none' }} colSpan={3}>
 
-                                    <Grid sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center',height:300}}>No Data Found</Grid>
+                                        <Grid sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 300 }}>No Data Found</Grid>
                                     </TableCell>
                                 </TableRow>
 
@@ -119,11 +124,12 @@ function TemplateData({ handleToggleTable }) {
                                         <TableCell>{obj?.title}</TableCell>
                                         <TableCell>{obj?.key}</TableCell>
                                         <TableCell>
+                                            <Tooltip title={'Add to the Textbox'}> <AddCircleOutline sx={{ cursor: 'pointer' ,mr:2}} color='primary' fontSize='small' onClick={()=>addToTextBox(obj?.key)} /></Tooltip>
                                             {
                                                 copied == obj?.key ?
-                                                    <>copied</>
+                                                    <a style={{ color: 'grey' }}>copied</a>
                                                     :
-                                                    <ContentCopyOutlined sx={{ cursor: 'pointer' }} onClick={() => copyToClipboard(obj?.key)} fontSize='small' color="primary" />
+                                                    <ContentCopyOutlined sx={{ cursor: 'pointer', color: 'grey' }} onClick={() => copyToClipboard(obj?.key)} fontSize='small' />
                                             }
                                         </TableCell>
                                     </TableRow>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { EditorState, convertToRaw, ContentState } from "draft-js";
+import { EditorState, convertToRaw, ContentState, Modifier, SelectionState } from "draft-js";
 import draftToHtml from 'draftjs-to-html';
 import { ImageUploadApi } from '@/data/Endpoints/ImageUploader';
 // import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
@@ -81,6 +81,33 @@ const Editor = (props) => {
             )
         ))
     }, [typeof props.val])
+
+    const insertText = (text) => {
+        const contentState = editorState.getCurrentContent();
+        const selectionState = editorState.getSelection();
+
+        if (selectionState.isCollapsed()) {
+            // Insert text at the cursor position
+            const newContentState = Modifier.insertText(contentState, selectionState, text);
+            const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
+            setEditorState(newEditorState);
+            props.onValueChange(draftToHtml(convertToRaw(newEditorState.getCurrentContent())));
+        } else {
+            // Replace the selected text with the new text
+            const newContentState = Modifier.replaceText(contentState, selectionState, text);
+            const newEditorState = EditorState.push(editorState, newContentState, 'replace-characters');
+            setEditorState(newEditorState);
+            props.onValueChange(draftToHtml(convertToRaw(newEditorState.getCurrentContent())));
+        }
+    };
+
+
+    useEffect(() => {
+        if(props?.copied){
+            insertText(props?.copied)
+        }
+    }, [props?.copied])
+    
 
     return (
 

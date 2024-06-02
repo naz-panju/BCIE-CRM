@@ -249,7 +249,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         }
     }, [editId])
 
-    console.log(watch('body'));
+    const [copied, setcopied] = useState()
 
     return (
         <div style={{ overflow: 'hidden' }}>
@@ -266,7 +266,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                     {
                         toggleTable &&
                         <Grid width={500}>
-                            <TemplateData handleToggleTable={handleToggleTable} />
+                            <TemplateData handleToggleTable={handleToggleTable} setValue={setcopied}  />
                         </Grid>
                     }
                     <Grid width={750} sx={{ borderLeft: toggleTable ? '1px solid' : '' }}>
@@ -361,7 +361,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                     {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
 
                                                     <Editor emoji={false} val={watch('body')}
-                                                        onValueChange={e => setValue('body', e)}
+                                                        onValueChange={e => setValue('body', e)} copied={copied}
                                                     />   
                                                 </Grid>
                                             </Grid>
