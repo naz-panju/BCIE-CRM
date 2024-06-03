@@ -21,6 +21,10 @@ export const ApplicationApi = {
     stageChange:(data) => http.post(`applications/change-stage`, data),
 
     submitToCordinator:(data) => http.post(`applications/submit-to-coordinator`, data),
-    returnToCounsellor:(data) => http.post(`applications/back-to-counsellor`, data)
+    returnToCounsellor:(data) => http.post(`applications/back-to-counsellor`, data),
+    submitToUniversity:(data) => http.post(`applications/submit-to-university`, data),
+
+    addUniversityId:(data) => http.post(`applications/save-university-id`, data),
+
 
 }

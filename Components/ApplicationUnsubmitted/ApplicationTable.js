@@ -42,6 +42,7 @@ import ReturnPopup from '../Applications/Modals/returnModal';
 import DownloadDocumentModal from '../Applications/Modals/downloadDocument';
 import ApplicationDetail from '../Applications/Modals/Details';
 import { Divider } from 'rsuite';
+import SubmitToUniversityModal from '../Applications/Modals/UniversitySubmit';
 
 
 
@@ -171,12 +172,13 @@ const headCells = [
         label: 'Uni.Deposit',
         noSort: false
     },
-    // {
-    //     id: 'return',
-    //     numeric: false,
-    //     disablePadding: false,
-    //     label: '',
-    // },
+    {
+        id: 'submit',
+        numeric: false,
+        disablePadding: false,
+        label: '',
+        noSort: true
+    },
     {
         id: 'icons',
         numeric: false,
@@ -526,7 +528,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
     const handleMailOpen = (data) => {
         setDetails(data)
-         setMailId(data?.id)
+        setMailId(data?.id)
         handlePopoverClose()
     }
     const handleStageOpen = (row) => {
@@ -703,6 +705,8 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
         setsubmitId(id)
         handlePopoverClose()
     }
+
+
     const handleClickSubmit = () => {
         setsubmitLoading(true)
         ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
@@ -718,19 +722,34 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
             }
         }).catch((error) => {
             toast.error(error?.response?.data?.message)
-            setdeleteLoading(false)
+            setsubmitLoading(false)
         })
     }
 
-    const Status = [
-        { name: 'Submitted' },
-        { name: 'Unsubmitted' },
-        { name: 'Returned' },
-    ]
-    const DepositOptions = [
-        { name: 'Yes' },
-        { name: 'No' }
-    ]
+    const handleUniversitySubmit = () => {
+        setsubmitLoading(true)
+        ApplicationApi.submitToUniversity({ id: uniSubmitId }).then((response) => {
+            console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                setsubmitLoading(false)
+                setuniSubmitId()
+                fetchTable()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setsubmitLoading(false)
+            }
+        }).catch((error) => {
+            toast.error(error?.response?.data?.message)
+            setsubmitLoading(false)
+        })
+    }
+
+    const [uniSubmitId, setuniSubmitId] = useState()
+    const handleUniSubmitId = (row) => {
+        setDetails(row)
+        setuniSubmitId(row?.id)
+    }
 
     useEffect(() => {
         fetchTable()
@@ -752,6 +771,9 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
             <ApplicationDetail id={detailId} setId={setDetailId} />
             <ConfirmPopup loading={submitLoading} ID={submitId} setID={setsubmitId} clickFunc={handleClickSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
+
+            <ConfirmPopup loading={submitLoading} ID={uniSubmitId} setID={setuniSubmitId} clickFunc={handleUniversitySubmit} title={`Do you want to Submit this Application to the University?`} />
+            {/* <SubmitToUniversityModal editId={uniSubmitId} setEditId={setuniSubmitId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} /> */}
 
 
             <div className="filter_sec">
@@ -1122,6 +1144,12 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                         'NA'
                                                                     // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
                                                                 }</TableCell>
+
+                                                                <TableCell align="left">
+                                                                    <Button sx={{ textTransform: 'none' }} onClick={() => handleUniSubmitId(row)} variant='outlined' size='small'>
+                                                                        Submit
+                                                                    </Button>
+                                                                </TableCell>
 
                                                                 {/* <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell> */}
 

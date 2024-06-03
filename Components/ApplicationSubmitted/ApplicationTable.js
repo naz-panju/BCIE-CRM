@@ -173,13 +173,13 @@ const headCells = [
         label: 'Uni.Deposit',
         noSort: false
     },
-    {
-        id: 'submit',
-        numeric: false,
-        disablePadding: false,
-        label: '',
-        noSort: true
-    },
+    // {
+    //     id: 'submit',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: '',
+    //     noSort: true
+    // },
     {
         id: 'icons',
         numeric: false,
@@ -758,7 +758,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
             <ApplicationDetail id={detailId} setId={setDetailId} />
             <ConfirmPopup loading={submitLoading} ID={submitId} setID={setsubmitId} clickFunc={handleClickSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
 
-            <SubmitToUniversityModal editId={uniSubmitId} setEditId={setuniSubmitId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
+            {/* <SubmitToUniversityModal editId={uniSubmitId} setEditId={setuniSubmitId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} /> */}
             <SaveApplicationSumber editId={unId} setEditId={setUniId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
 
@@ -1085,7 +1085,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' ?
-                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID :{row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span>
+                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{color:'black'}}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
                                                                             :
                                                                             <Button onClick={() => handleUniId(row)} size='small' variant='outlined'>
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
@@ -1136,11 +1136,6 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                     // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
                                                                 }</TableCell>
 
-                                                                <TableCell align="left">
-                                                                    <Button sx={{ textTransform: 'none' }} onClick={() => handleUniSubmitId(row)} variant='outlined' size='small'>
-                                                                        Submit
-                                                                    </Button>
-                                                                </TableCell>
 
                                                                 <TableCell align="left">
                                                                     <Grid display={'flex'} alignItems={'center'}>

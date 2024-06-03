@@ -52,7 +52,7 @@ export default function EmailTemplateIndex() {
 
   const router = useRouter();
 
-  const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
+  const pageNumber = parseInt(router?.asPath?.split("=")[1] || 1);
 
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -75,8 +75,8 @@ export default function EmailTemplateIndex() {
   }
 
   const handleRefresh = () => {
-    if (page != 0) {
-      setPage(0)
+    if (page != 1) {
+      setPage(1)
     }
     setRefresh(!refresh)
   }
@@ -97,7 +97,7 @@ export default function EmailTemplateIndex() {
         </div>
 
 
-        <div className='content-block'>
+        <div className='content-block lead-table-cntr'>
           <TemplateTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>

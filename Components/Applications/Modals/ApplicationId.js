@@ -74,43 +74,44 @@ export default function SaveApplicationSumber({ details, editId, setEditId, refr
 
     const onSubmit = async (data) => {
 
-        // setLoading(true)
+        setLoading(true)
 
 
         let dataToSubmit = {
             id: details.id,
-            stage: data?.stage?.id,
-            note: data?.note
+            university_id: data?.uni_id,
         }
 
+        console.log(dataToSubmit);
 
-        // let action;
 
-        // if (editId > 0) {
-        //     action = ApplicationApi.stageChange(dataToSubmit)
-        // } else {
-        //     action = ApplicationApi.stageChange(dataToSubmit)
-        // }
+        let action;
 
-        // action.then((response) => {
-        //     // console.log(response);
-        //     if (response?.status == 200 || response?.status == 201) {
-        //         toast.success(response?.data?.message)
-        //         reset()
-        //         handleClose()
-        //         setRefresh(!refresh)
-        //         setLoading(false)
-        //     } else {
-        //         toast.error(response?.response?.data?.message)
-        //         setLoading(false)
-        //     }
+        if (editId > 0) {
+            action = ApplicationApi.addUniversityId(dataToSubmit)
+        } else {
+            action = ApplicationApi.addUniversityId(dataToSubmit)
+        }
 
-        //     setLoading(false)
-        // }).catch((error) => {
-        //     console.log(error);
-        //     toast.error(error?.message)
-        //     setLoading(false)
-        // })
+        action.then((response) => {
+            // console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                reset()
+                handleClose()
+                setRefresh(!refresh)
+                setLoading(false)
+            } else {
+                toast.error(response?.response?.data?.message)
+                setLoading(false)
+            }
+
+            setLoading(false)
+        }).catch((error) => {
+            console.log(error);
+            toast.error(error?.message)
+            setLoading(false)
+        })
     }
 
 

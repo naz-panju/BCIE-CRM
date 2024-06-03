@@ -24,7 +24,7 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, MenuItem, Pagination, Select, Stack } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { TemplateApi } from '@/data/Endpoints/Template';
 import { Edit } from '@mui/icons-material';
@@ -93,6 +93,12 @@ const headCells = [
         disablePadding: false,
         label: 'Default CC',
     },
+    {
+        id: 'edit',
+        numeric: false,
+        disablePadding: false,
+        label: '',
+    },
 ];
 
 function EnhancedTableHead(props) {
@@ -106,7 +112,7 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                     <Checkbox
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -116,7 +122,7 @@ function EnhancedTableHead(props) {
                             'aria-label': 'select all desserts',
                         }}
                     />
-                </TableCell>
+                </TableCell> */}
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -307,7 +313,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
 
     const fetchTable = () => {
         setLoading(true)
-        TemplateApi.list({ limit: limit, page: page + 1 }).then((response) => {
+        TemplateApi.list({ limit: limit, page: page }).then((response) => {
             console.log(response?.data);
             setList(response?.data)
             setLoading(false)
@@ -330,106 +336,121 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
                 loading ?
                     <LoadingTable columns={3} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
                     :
-                    <Box sx={{ width: '100%' }}>
-                        <Paper sx={{ width: '100%', mb: 2 }}>
-                            {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-                            <TableContainer>
-                                <Table
-                                    sx={{ minWidth: 750 }}
-                                    aria-labelledby="tableTitle"
-                                    size={dense ? 'small' : 'medium'}
-                                >
-                                    <EnhancedTableHead
-                                        numSelected={selected.length}
-                                        order={order}
-                                        orderBy={orderBy}
-                                        onSelectAllClick={handleSelectAllClick}
-                                        onRequestSort={handleRequestSort}
-                                        rowCount={list?.meta?.total || 0}
-                                    />
-                                    <TableBody>
-                                        {
-                                            list?.data?.length > 0 ?
-                                                list?.data?.map((row, index) => {
-                                                    const isItemSelected = isSelected(row.id);
-                                                    const labelId = `enhanced-table-checkbox-${index}`;
+                    <>
+                        <Box sx={{ width: '100%' }}>
+                            <Paper sx={{ width: '100%', mb: 2 }}>
+                                {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
+                                <TableContainer>
+                                    <Table
+                                        sx={{ minWidth: 750 }}
+                                        aria-labelledby="tableTitle"
+                                        size={dense ? 'small' : 'medium'}
+                                    >
+                                        <EnhancedTableHead
+                                            numSelected={selected.length}
+                                            order={order}
+                                            orderBy={orderBy}
+                                            onSelectAllClick={handleSelectAllClick}
+                                            onRequestSort={handleRequestSort}
+                                            rowCount={list?.meta?.total || 0}
+                                        />
+                                        <TableBody>
+                                            {
+                                                list?.data?.length > 0 ?
+                                                    list?.data?.map((row, index) => {
+                                                        const isItemSelected = isSelected(row.id);
+                                                        const labelId = `enhanced-table-checkbox-${index}`;
 
-                                                    let defaultCC = row?.default_cc || '';
-                                                    let emails = defaultCC.split(',').map(email => email.trim());
-                                                    let mainEmail = emails.shift();
+                                                        let defaultCC = row?.default_cc || '';
+                                                        let emails = defaultCC.split(',').map(email => email.trim());
+                                                        let mainEmail = emails.shift();
 
-                                                    return (
-                                                        <TableRow className='table-custom-tr'
-                                                            hover
-                                                            // onClick={(event) => handleClick(event, row.id)}
-                                                            role="checkbox"
-                                                            aria-checked={isItemSelected}
-                                                            tabIndex={-1}
-                                                            key={row.id}
-                                                            selected={isItemSelected}
-                                                            sx={{ cursor: 'pointer' }}
-                                                        >
-                                                            <TableCell className='checkbox-tb' padding="checkbox">
-                                                                <Checkbox
-                                                                    onClick={(event) => handleClick(event, row.id)}
-                                                                    color="primary"
-                                                                    checked={isItemSelected}
-                                                                    inputProps={{
-                                                                        'aria-labelledby': labelId,
-                                                                    }}
-                                                                />
-                                                            </TableCell>
-                                                            <TableCell
-                                                                onClick={() => handleDetailOpen(row?.id)}
-                                                                component="th"
-                                                                id={labelId}
-                                                                scope="row"
-                                                                padding="none"
-                                                                className='reg-name'
+                                                        return (
+                                                            <TableRow className='table-custom-tr'
+                                                                hover
+                                                                // onClick={(event) => handleClick(event, row.id)}
+                                                                role="checkbox"
+                                                                aria-checked={isItemSelected}
+                                                                tabIndex={-1}
+                                                                key={row.id}
+                                                                selected={isItemSelected}
+                                                                sx={{ cursor: 'pointer' }}
                                                             >
-                                                                {row.name}
-                                                            </TableCell>
-                                                            <TableCell align="left">{row?.subject}</TableCell>
-                                                            <TableCell align="left"> {mainEmail}
-                                                                {emails.length > 0 && (
-                                                                    <Tooltip title={emails.join(', ')}>
-                                                                        <span style={{ color: 'grey' }}> +{emails.length}</span>
-                                                                    </Tooltip>
-                                                                )}</TableCell>
-                                                            <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
+                                                                {/* <TableCell className='checkbox-tb' padding="checkbox">
+                                                                    <Checkbox
+                                                                        onClick={(event) => handleClick(event, row.id)}
+                                                                        color="primary"
+                                                                        checked={isItemSelected}
+                                                                        inputProps={{
+                                                                            'aria-labelledby': labelId,
+                                                                        }}
+                                                                    />
+                                                                </TableCell> */}
+                                                                <TableCell
+                                                                    onClick={() => handleDetailOpen(row?.id)}
+                                                                    component="th"
+                                                                    id={labelId}
+                                                                    scope="row"
+                                                                    padding="none"
+                                                                    className='reg-name'
+                                                                >
+                                                                    {row.name}
+                                                                </TableCell>
+                                                                <TableCell align="left">{row?.subject}</TableCell>
+                                                                <TableCell align="left"> {mainEmail}
+                                                                    {emails.length > 0 && (
+                                                                        <Tooltip title={emails.join(', ')}>
+                                                                            <span style={{ color: 'grey' }}> +{emails.length}</span>
+                                                                        </Tooltip>
+                                                                    )}</TableCell>
+                                                                <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
 
+                                                            </TableRow>
+                                                        );
+                                                    })
+                                                    : (
+                                                        <TableRow
+                                                            style={{
+                                                                height: (dense ? 33 : 53) * emptyRows,
+                                                                width: '100%',
+                                                            }}
+                                                        >
+                                                            <TableCell colSpan={8} align="center">
+                                                                <div className='no-table-ask-block'>
+                                                                    <h4 style={{ color: 'grey' }}>No Template Found</h4>
+                                                                </div>
+                                                            </TableCell>
                                                         </TableRow>
-                                                    );
-                                                })
-                                                : (
-                                                    <TableRow
-                                                        style={{
-                                                            height: (dense ? 33 : 53) * emptyRows,
-                                                            width: '100%',
-                                                        }}
-                                                    >
-                                                        <TableCell colSpan={8} align="center">
-                                                            <div className='no-table-ask-block'>
-                                                                <h4 style={{ color: 'grey' }}>No Template Found</h4>
-                                                            </div>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )
-                                        }
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <TablePagination
-                                rowsPerPageOptions={[10, 15, 25]}
-                                component="div"
-                                count={list?.meta?.total || 0}
-                                rowsPerPage={list?.meta?.per_page || 0}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
-                        </Paper>
-                    </Box>
+                                                    )
+                                            }
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+
+                            </Paper>
+                        </Box>
+                        <div className='table-pagination d-flex justify-content-end align-items-center'>
+
+                            {
+                                list?.data?.length > 0 &&
+                                <div className='d-flex justify-content-between align-items-center'>
+                                    <div className='select-row-box'>
+                                        <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                                            <MenuItem value={10}>10</MenuItem>
+                                            <MenuItem value={15}>15</MenuItem>
+                                            <MenuItem value={25}>25</MenuItem>
+                                        </Select>
+                                        <label>Rows per page</label>
+                                    </div>
+                                    <div>
+                                        <Stack spacing={2}>
+                                            <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                                        </Stack>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </>
             }
         </>
     );

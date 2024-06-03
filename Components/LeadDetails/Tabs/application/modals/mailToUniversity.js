@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
-import { Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
+import { Button, Grid, IconButton, List, ListItem, ListItemButton, ListItemText, Skeleton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { Close, Delete, Refresh } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
@@ -23,6 +23,7 @@ import dynamic from 'next/dynamic';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import Editor from '@/Form/Editor';
 import { ApplicationApi } from '@/data/Endpoints/Application';
+import DocumentSelectModal from './documentSelect';
 
 
 
@@ -213,6 +214,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         setOpen(false)
         setFile()
         setattachmentFiles([])
+        setSelectedDocuments([])
 
     }
 
@@ -272,12 +274,26 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     const getDetails = () => {
         ApplicationApi.view({ id: editId }).then((response) => {
             setappDetails(response?.data?.data)
+            if (response?.data?.data?.university?.contacts?.length > 0) {
+                setValue('to', response?.data?.data?.university?.contacts[0]?.email)
+            }
         })
     }
 
     const handleClick = () => {
         // This will trigger a click event on the input element, opening the file dialog
         document.getElementById('upload-button').click();
+    };
+
+    const [docOpenId, setdocOpenId] = useState()
+    const handleDocumentSelectOpen = () => {
+        setdocOpenId(editId)
+    }
+    const [SelectedDocuments, setSelectedDocuments] = useState([])
+    const [SelectedFile, setSelectedFile] = useState([])
+
+    const handleDocumentOpen = (url) => {
+        window.open(url, '_blank');
     };
 
     useEffect(() => {
@@ -289,11 +305,10 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         getDetails()
     }, [editId])
 
-    console.log(appDetails);
-
 
     return (
         <div>
+            <DocumentSelectModal from='app' editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={SelectedDocuments} setSelectedDocuments={setSelectedDocuments} SelectedAttachments={SelectedFile} setSelectedAttachments={setSelectedFile} />
             <Drawer
                 anchor={anchor}
                 open={open}
@@ -382,7 +397,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
 
                                         </Grid>
 
-                                        <Grid className='form_group' >
+                                        {/* <Grid className='form_group' >
                                             <AsyncSelect
                                                 isMulti
                                                 placeholder='Select Students Documents'
@@ -397,10 +412,10 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                             />
                                             {errors.documents && <span className='form-validation'>{errors.documents.message}</span>}
 
-                                        </Grid>
+                                        </Grid> */}
 
 
-                                        {
+                                        {/* {
                                             attachmentFiles?.length > 0 &&
                                             <Grid display={'flex'} container p={1.5} item xs={12}>
                                                 <Grid item display={'flex'} xs={3} md={3}>
@@ -416,33 +431,35 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                                     }
                                                 </Grid>
                                             </Grid>
-                                        }
+                                        } */}
 
-                                        <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container className='bg-sky-100'  >
+                                        <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container >
                                             <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
-                                                <label htmlFor="file-input">
-                                                    <input
+                                                {/* <label htmlFor="file-input"> */}
+                                                {/* <input
                                                         type="file"
                                                         id="file-input"
                                                         style={{ display: 'none' }}
                                                         onChange={handleFileChange}
-                                                    />
-                                                    <Button sx={{ textTransform: 'none', height: 30 }}
-                                                        variant='contained'
-                                                        className='bg-sky-800' size='small' component="span">
-                                                        Add Attachments
-                                                    </Button>
-                                                </label>
-                                                <input
+                                                    /> */}
+                                                <Button onClick={handleDocumentSelectOpen} sx={{ textTransform: 'none', height: 30 }}
+                                                    variant='contained'
+                                                    className='bg-sky-800' size='small' component="span">
+                                                    Add Documents
+                                                </Button>
+                                                {/* </label> */}
+                                                {/* <input
                                                     type="file"
                                                     id="upload-button"
                                                     style={{ display: 'none' }}
                                                     onChange={handleFileUpload}
                                                     key={fileInputKey}
-                                                />
+                                                /> */}
                                             </Grid>
 
-                                            {
+
+
+                                            {/* {
                                                 file &&
                                                 <Grid display={'flex'} flexDirection={'column'} justifyContent={'space-between'} item pr={1} xs={8} md={8}>
 
@@ -450,21 +467,59 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                                         <Grid display={'flex'} xs={12} md={12} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item >
                                                             <a style={{ color: 'grey', fontSize: '14px' }}>{obj?.name}</a>
                                                             <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
-                                                                {/* You can use any icon for delete, for example, a delete icon */}
                                                                 <Delete fontSize='small' style={{ color: 'red' }} />
                                                             </a>
                                                         </Grid>
                                                     ))}
                                                 </Grid>
-                                            }
+                                            } */}
                                         </Grid>
+
+                                        {
+                                            SelectedDocuments?.length > 0 &&
+                                            <Grid>
+                                                <span style={{ fontSize: '16px' }}>Student Documents</span>
+                                                <List>
+                                                    {SelectedDocuments?.map((document, index) => (
+                                                        <ListItem key={index} className='list-item-mail ' >
+                                                            <ListItemButton >
+                                                                <ListItemText sx={{ cursor: 'pointer' }} onClick={() => handleDocumentOpen(document?.file)} primary={document?.title || document?.document_template?.name} />
+                                                            </ListItemButton>
+                                                        </ListItem>
+                                                    ))}
+                                                </List>
+                                            </Grid>
+                                        }
+
+                                        {
+                                            SelectedFile?.length > 0 &&
+                                            <Grid mt={3}>
+                                                <span style={{ fontSize: '16px' }}>Uploaded Files</span>
+                                                <List >
+                                                    {SelectedFile?.map((document, index) => (
+                                                        <ListItem key={index} className='list-item-mail '>
+                                                            <ListItemText primary={document?.name} />
+                                                        </ListItem>
+                                                    ))}
+                                                </List>
+                                            </Grid>
+                                        }
+
+                                        {/* <Grid item xs={12} md={12}>
+                                            {SelectedFile?.map((obj, index) => (
+                                                <Grid display={'flex'} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item xs={12}>
+                                                    <a style={{}}>{obj?.name}</a>
+                                                   
+                                                </Grid>
+                                            ))}
+                                        </Grid> */}
 
 
 
                                     </>
                             }
 
-                            <Grid pb={3} display={'flex'} >
+                            <Grid mt={1} pb={3} display={'flex'} >
 
                                 <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'> {
                                     loading ?

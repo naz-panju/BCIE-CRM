@@ -105,7 +105,9 @@ function LeadDetails() {
   }
 
   const handleOpenMailModal = () => {
-    setMailId(0)
+    if(details?.id){
+      setMailId(details?.id)
+    }
   }
 
   const handleOpenWhatsappModal = () => {

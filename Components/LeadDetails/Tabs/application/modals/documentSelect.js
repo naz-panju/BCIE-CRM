@@ -8,9 +8,9 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from 'react';
-import { Grid, IconButton, TextField, Tooltip, Skeleton, FormControlLabel, Checkbox } from '@mui/material';
+import { Grid, IconButton, TextField, Tooltip, Skeleton, FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { Close, Delete } from '@mui/icons-material';
+import { AttachFile, Close, Delete } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import toast from 'react-hot-toast';
@@ -25,36 +25,22 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 500,
+    width: 600,
+    maxHeight: 600,
+    overflowY: 'auto',
     bgcolor: 'background.paper',
     borderRadius: 2,
     boxShadow: 24,
     p: 4,
-};
+}
 
-export default function UniversityDocumentModal({ app_id, setapp_id, editId, setEditId, handleRefresh, fetchTable, details }) {
+export default function DocumentSelectModal({ editId, setEditId, SelectedDocuments, setSelectedDocuments, setSelectedAttachments,from }) {
 
-    // console.log(app_id);
-
-    const [template, settemplate] = useState()
 
     let scheme = yup.object().shape({
-
-        template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
+        // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
     })
 
-    if (template?.stage?.action_type == 'Deposit Paid') {
-        scheme = yup.object().shape({
-            // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
-            paid_date: yup.string().required("Please select Date").typeError("Please select Date"),
-            amount: yup.string().required("Please enter Amount").typeError("Please enter Amount"),
-        })
-    }
-    // if (template?.stage?.action_type == 'Get Application Id') {
-    //     scheme = yup.object().shape({
-    //         application_id: yup.string().required("Please enter Application Id").typeError("Please enter Application Id"),
-    //     })
-    // }
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
@@ -66,15 +52,8 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
     const [dataLoading, setDataLoading] = useState(false)
 
     const handleClose = () => {
-        settemplate()
-        setapp_id()
-        setValue('template', '')
-        setValue('application_id', '')
-        setValue('amount', '')
-        setValue('paid_date', '')
+        // setdocumentSelected([])
         setSelectedFile(null)
-        // setDetails()
-        setChangeStage(true)
         setEditId()
         setOpen(false);
     }
@@ -83,9 +62,23 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
     const [fileInputKey, setFileInputKey] = useState(0);
 
 
-    const handleFileChange = (event) => {
-        setFileInputKey(prevKey => prevKey + 1);
-        setSelectedFile(event.target.files[0]);
+    // single
+    // const handleFileChange = (event) => {
+    //     setFileInputKey(prevKey => prevKey + 1);
+    //     setSelectedFile(event.target.files[0]);
+    // };
+
+    const [file, setFile] = useState([])
+    const handleFileChange = (e) => {
+        const newFile = e?.target?.files[0];
+        setFileInputKey(prevKey => prevKey + 1)
+        setFile([...file, newFile]); // Add the new file to the state
+    };
+
+    const handleDeleteAttachment = (index) => {
+        const updatedAttachments = [...file];
+        updatedAttachments.splice(index, 1);
+        setFile(updatedAttachments);
     };
 
 
@@ -103,15 +96,6 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
         setSelectedFile(null); // Clear selected file
     };
 
-    const fetchTemplates = (e) => {
-        return ListingApi.documentTemplate({ keyword: e, type: 'university' }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
-                return response?.data?.data;
-            } else {
-                return [];
-            }
-        })
-    }
 
     const onSubmit = (data) => {
         console.log(selectedFile);
@@ -130,7 +114,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                 formData.append('document', selectedFile)
             }
 
-            if (changeStage) {
+            if (data?.template?.stage?.id) {
                 formData.append('stage', data?.template?.stage?.id)
             }
 
@@ -146,10 +130,6 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                 formData.append('deposit_paid_on', date)
                 formData.append('deposit_amount', data?.amount)
             }
-
-            // for (const [key, value] of formData.entries()) {
-            //     console.log(`${key}: ${value}`);
-            // }
 
             let action;
 
@@ -184,11 +164,6 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
 
     }
 
-    const handleTemplateSelect = (e) => {
-        settemplate(e || '')
-        setValue('template', e || '');
-    }
-
     function trimUrlAndNumbers(url) {
         const lastSlashIndex = url?.lastIndexOf('/');
         let trimmedString = url?.substring(lastSlashIndex + 1);
@@ -196,17 +171,61 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
         return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
     }
 
-    const [changeStage, setChangeStage] = useState(true);
-    const handleCheckboxChange = (event) => {
-        setChangeStage(event.target.checked);
-    };
+    const [documentSelected, setdocumentSelected] = useState(SelectedDocuments)
+    const handleDocumentSelect = (doc) => {
+        const isSelected = documentSelected.includes(doc);
+
+        if (isSelected) {
+            // If the template is already selected, remove it from the array
+            setdocumentSelected(documentSelected.filter(value => value !== doc));
+        } else {
+            // If the template is not selected, add it to the array
+            setdocumentSelected([...documentSelected, doc]);
+        }
+    }
+
+
+    const [Documents, setDocuments] = useState([])
+    const getDetails = () => {
+        setDataLoading(true)
+        ApplicationApi.view({ id: editId }).then((response) => {
+            setDocuments(response?.data?.data?.documents)
+            setDataLoading(false)
+        }).catch((error) => {
+            setDataLoading(false)
+        })
+    }
+    const getLeadDetails = () => {
+        setDataLoading(true)
+        LeadApi.listDocuments({ lead_id: editId ,limit:50}).then((response) => {
+            setDocuments(response?.data?.data)
+            setDataLoading(false)
+        }).catch((error) => {
+            setDataLoading(false)
+        })
+    }
+
+
+    const isDocumentChecked = (value) => documentSelected.includes(value);
+
+    const handleAttach = () => {
+        setSelectedDocuments(documentSelected)
+        setSelectedAttachments(file)
+        handleClose()
+    }
 
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
+            if (Documents?.length == 0) {
+                if(from=='app'){
+                    getDetails()
+                }else if(from=='lead'){
+                    getLeadDetails()
+                }
+            }
         } else if (editId == 0) {
             setOpen(true)
-            setValue('application_id', details?.application_number || '')
         }
     }, [editId])
 
@@ -226,7 +245,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                 <Box sx={style}>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                            {editId > 0 ? 'Edit University Document' : 'Add University Document'}
+                            Add Student Documents
                         </Typography>
                         <IconButton
                             onClick={handleClose}
@@ -239,68 +258,64 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                         dataLoading ?
                             loadingFields()
                             :
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <Grid container>
-                                    <Grid pr={1} mt={2} md={12}>
-                                        <a>Select Template</a>
-                                        <AsyncSelect
-                                            key={watch('template')}
-                                            name={'template'}
-                                            defaultValue={watch('template')}
-                                            isClearable
-                                            defaultOptions
-                                            loadOptions={fetchTemplates}
-                                            getOptionLabel={(e) => e.name}
-                                            getOptionValue={(e) => e.id}
-                                            onChange={handleTemplateSelect}
-                                        />
-                                        {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+                            <div>
+                                <Grid>
+                                    {
+                                        Documents?.length > 0 ?
+                                            <FormGroup style={{}}>
+                                                <Grid container sx={{ display: 'flex', }}>
+                                                    {
+                                                        Documents?.map((obj, index) => (
 
-                                    </Grid>
+                                                            <Grid key={index} mb={2} item xs={12} sm={6}>
+                                                                <FormControlLabel control={<Checkbox onChange={() => handleDocumentSelect(obj)} value={obj} checked={isDocumentChecked(obj)} />} label={obj?.document_template?.name} />
+                                                            </Grid>
+                                                        ))
+                                                    }
+                                                </Grid>
+                                            </FormGroup>
+                                            :
+                                           <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No Document Found</a></Grid>
+                                    }
+
+
                                 </Grid>
 
-                                <Grid container>
-                                    <Grid pr={1} mt={2} md={12}>
-                                        <a>UNI ID</a>
-                                        <TextInput control={control} name="application_id"
-                                            value={watch('application_id')} />
-                                        {errors.application_id && <span className='form-validation'>{errors.application_id.message}</span>}
-
-                                    </Grid>
-                                </Grid>
-
-                                <Grid container>
-                                    <Grid pr={1} mt={2} md={12}>
-                                        <FormControlLabel
-                                            control={<Checkbox checked={changeStage} onChange={handleCheckboxChange} />}
-                                            label="Change Stage"
-                                        />
-
-                                    </Grid>
-                                </Grid>
-
-                                {
-                                    watch('template')?.stage?.action_type == "Deposit Paid" &&
-                                    <Grid container>
-                                        <Grid pr={1} mt={2} md={6}>
-                                            <a>Deposit Amount</a>
-                                            <TextInput type={'number'} control={control} name="amount"
-                                                value={watch('amount')} />
-                                            {errors.amount && <span className='form-validation'>{errors.amount.message}</span>}
-                                        </Grid>
-                                        <Grid pr={1} mt={2} md={6}>
-                                            <a>Deposit Paid Date</a>
-                                            <DateInput
-                                                control={control}
-                                                name="paid_date"
-                                                value={watch('paid_date')}
+                                <Grid display={'flex'} container item xs={12}>
+                                    <Grid item xs={12} md={12}>
+                                        <label htmlFor="file-input">
+                                            <input
+                                                type="file"
+                                                id="file-input"
+                                                style={{ display: 'none' }}
+                                                onChange={handleFileChange}
+                                                key={fileInputKey}
                                             />
-                                            {errors.paid_date && <span className='form-validation'>{errors.paid_date.message}</span>}
-                                        </Grid>
+                                            <Button sx={{ textTransform: 'none', }}
+                                                variant='contained'
+                                                className='bg-sky-800' size='small' component="span">
+                                                Upload<AttachFile />
+                                            </Button>
+                                        </label>
                                     </Grid>
-                                }
+                                    {
+                                        file?.length > 0 &&
+                                        <Grid mt={2} item xs={12} md={12}>
+                                            {file?.map((obj, index) => (
+                                                <Grid display={'flex'} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item xs={12}>
+                                                    <a style={{ color: 'black', fontSize: '14px' }}>{obj?.name}</a>
+                                                    <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
+                                                        {/* You can use any icon for delete, for example, a delete icon */}
+                                                        <Delete fontSize='small' style={{ color: 'red' }} />
+                                                    </a>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    }
+                                </Grid>
 
-                                <div
+                                {/* drag and drop single file */}
+                                {/* <div
                                     className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
                                     onDrop={handleDrop}
                                     onDragOver={handleDragOver}
@@ -318,7 +333,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                                     >
                                         Select File or Drag and Drop Here
                                     </label>
-                                    {(selectedFile || details?.file) && (
+                                    {(selectedFile) && (
                                         <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
                                             <Grid mr={1}>
                                                 {
@@ -333,14 +348,7 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                                                         </p>
                                                     </Tooltip>
                                                 }
-                                                {
-                                                    !selectedFile &&
-                                                    <Tooltip title={details?.file}>
-                                                        <p className="text-gray-700">
-                                                            {trimUrlAndNumbers(details?.file)}
-                                                        </p>
-                                                    </Tooltip>
-                                                }
+
                                             </Grid>
                                             {
                                                 selectedFile &&
@@ -350,22 +358,21 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                                             }
                                         </Grid>
                                     )}
-                                </div>
+                                </div> */}
                                 <Grid mt={2} display={'flex'} justifyContent={'end'}>
 
-                                    <LoadingButton
+                                    <Button
+                                        onClick={handleAttach}
                                         type='submit'
                                         variant='contained'
-                                        // disabled={loading || reqLoading || dataLoading}
-                                        loading={loading}
                                         size='small'
                                         sx={{ textTransform: 'none', height: 30 }}
                                     // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
                                     >
-                                        Upload
-                                    </LoadingButton>
+                                        Attach
+                                    </Button>
                                 </Grid>
-                            </form>
+                            </div>
                     }
 
                 </Box>
@@ -379,10 +386,13 @@ const loadingFields = () => {
     return (
         <Grid>
             <Grid container>
-                <Grid pr={1} mt={2} md={12}>
-                    <a>Select Template</a>
-                    <Skeleton variant="rounded" width={'100%'} height={40} />
-                </Grid>
+                {
+                    [...Array(4)].map((_, index) => (
+                        <Grid mt={1} mb={2} key={index} item xs={12} sm={6}>
+                            <Skeleton variant='rounded' height={20} width={150} />
+                        </Grid>
+                    ))
+                }
 
             </Grid>
 
