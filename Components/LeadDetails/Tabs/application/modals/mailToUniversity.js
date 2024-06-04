@@ -135,7 +135,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     }
 
 
-
+console.log(attachmentFiles);
 
     const onSubmit = async (data) => {
 
@@ -169,7 +169,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         // console.log(dataToSubmit);
 
         let action;
-
+        
         if (editId > 0) {
             // dataToSubmit['id'] = editId
             // action = TaskApi.update(dataToSubmit)
@@ -206,6 +206,8 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     const handleClose = () => {
         setEditId()
         // reset()
+        setattachmentFiles([])
+        setFile([])
         setValue('template', '')
         setValue('default_cc', '')
         setValue('subject', '')
@@ -213,8 +215,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         setValue('body', '')
         setOpen(false)
         setFile()
-        setattachmentFiles([])
-        setSelectedDocuments([])
+        
 
     }
 
@@ -308,7 +309,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
 
     return (
         <div>
-            <DocumentSelectModal from='app' editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={SelectedDocuments} setSelectedDocuments={setSelectedDocuments} SelectedAttachments={SelectedFile} setSelectedAttachments={setSelectedFile} />
+            <DocumentSelectModal from='app' editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} />
             <Drawer
                 anchor={anchor}
                 open={open}
@@ -476,11 +477,11 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                         </Grid>
 
                                         {
-                                            SelectedDocuments?.length > 0 &&
+                                            attachmentFiles?.length > 0 &&
                                             <Grid>
                                                 <span style={{ fontSize: '16px' }}>Student Documents</span>
                                                 <List>
-                                                    {SelectedDocuments?.map((document, index) => (
+                                                    {attachmentFiles?.map((document, index) => (
                                                         <ListItem key={index} className='list-item-mail ' >
                                                             <ListItemButton >
                                                                 <ListItemText sx={{ cursor: 'pointer' }} onClick={() => handleDocumentOpen(document?.file)} primary={document?.title || document?.document_template?.name} />
@@ -492,11 +493,11 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                         }
 
                                         {
-                                            SelectedFile?.length > 0 &&
+                                            file?.length > 0 &&
                                             <Grid mt={3}>
                                                 <span style={{ fontSize: '16px' }}>Uploaded Files</span>
                                                 <List >
-                                                    {SelectedFile?.map((document, index) => (
+                                                    {file?.map((document, index) => (
                                                         <ListItem key={index} className='list-item-mail '>
                                                             <ListItemText primary={document?.name} />
                                                         </ListItem>

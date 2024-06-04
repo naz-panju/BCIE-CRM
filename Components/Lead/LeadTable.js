@@ -32,7 +32,6 @@ import { Close, PersonAdd, PersonAddAlt, PersonOutline, Search } from '@mui/icon
 import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
 import UserProfile from '../Common/Profile';
-import 'rsuite/dist/rsuite.min.css';
 import { DateRangePicker } from 'rsuite';
 import moment from 'moment';
 import { format } from 'date-fns';
