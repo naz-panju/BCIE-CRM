@@ -34,7 +34,7 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleUniDocOpen ,fetchTable}) {
+export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleUniDocOpen, fetchTable }) {
 
     const [open, setOpen] = useState(false)
 
@@ -216,7 +216,10 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                         <Grid m={1} mb={4}>
                             <Grid mb={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                                 <button disabled style={{ backgroundColor: '#689df6', color: 'white', height: '25px', width: '180px', fontSize: '14px', borderRadius: 5 }}> Student Document</button>
-                                <Tooltip title={'Download'}><Download onClick={handleDownlaodOpen} fontSize='small' sx={{ mr: 2, color: '#689df6', cursor: 'pointer' }} /></Tooltip>
+                                {
+                                    details?.documents?.length > 0 &&
+                                    <Tooltip title={'Download'}><Download onClick={handleDownlaodOpen} fontSize='small' sx={{ mr: 2, color: '#689df6', cursor: 'pointer' }} /></Tooltip>
+                                }
                             </Grid>
                             {
                                 loading ?
@@ -225,13 +228,14 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                     details?.documents?.length > 0 ?
                                         details?.documents?.map((obj, index) => (
 
+
                                             <Grid mb={1} key={index} container spacing={1} justifyContent="center">
                                                 <Grid item p={1} xs={11.5}>
                                                     <Paper elevation={3} sx={{ p: 1 }}>
                                                         <Grid key={index} display={'flex'} justifyContent={'space-between'} alignItems={'center'} sx={{ mt: index !== 0 ? 1 : '' }}>
-                                                            <a style={{ fontSize: '14px' }} target='_blank' href={obj?.document} key={index} >{trimUrlAndNumbers(obj?.title || obj?.document_template?.name)}</a>
+                                                            <a style={{ fontSize: '14px' }} target='_blank' href={obj?.file} key={index} >{trimUrlAndNumbers(obj?.title || obj?.document_template?.name)}</a>
                                                             <Grid display={'flex'} alignItems={'center'}>
-                                                                <Tooltip title={'Preview'}><a target='_blank' href={obj?.document}><Visibility fontSize='small' sx={{ color: '#689df6' }} /></a></Tooltip>
+                                                                <Tooltip title={'Preview'}><a target='_blank' href={obj?.file}><Visibility fontSize='small' sx={{ color: '#689df6' }} /></a></Tooltip>
 
                                                             </Grid>
                                                         </Grid>

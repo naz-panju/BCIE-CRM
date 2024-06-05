@@ -40,6 +40,7 @@ import toast from 'react-hot-toast';
 import { useSession } from 'next-auth/react';
 import moment from 'moment';
 import ReactSelector from 'react-select';
+import UniversityInfoModal from './Modals/UniversityInfo';
 
 
 
@@ -733,6 +734,12 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         })
     }
 
+    const [uniInfoId, setuniInfoId] = useState()
+    const handlUniInfoOpen=(obj)=>{
+        setDetails(obj)
+        setuniInfoId(obj?.id)
+    }
+
     const Status = [
         { name: 'Submitted' },
         { name: 'Unsubmitted' },
@@ -764,6 +771,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             <ApplicationDetail id={detailId} setId={setDetailId} />
             <ConfirmPopup loading={submitLoading} ID={submitId} setID={setsubmitId} clickFunc={handleClickSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
 
+            <UniversityInfoModal editId={uniInfoId} setEditId={setuniInfoId} details={details} setDetails={setDetails} />
 
             <div className="filter_sec">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -1144,7 +1152,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' &&
-                                                                        <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{color:'black'}}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
+                                                                        <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
                                                                     }
                                                                 </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
@@ -1152,8 +1160,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
                                                                 <TableCell align="left">
                                                                     <div className='d-flex justify-between items-center'>
-                                                                        {row?.university?.name}
-                                                                        <HtmlTooltip
+                                                                       <span onClick={()=>handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
+                                                                        {/* <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
                                                                                     <Typography color="inherit">University Info</Typography>
@@ -1165,7 +1173,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                             }
                                                                         >
                                                                             <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
-                                                                        </HtmlTooltip>
+                                                                        </HtmlTooltip> */}
 
                                                                     </div>
                                                                 </TableCell>
@@ -1237,9 +1245,12 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                                 <ListItem button onClick={() => handleDocOpen(row)}>
                                                                                     Documents
                                                                                 </ListItem>
-                                                                                <ListItem button >
-                                                                                    Portal Permissions
-                                                                                </ListItem>
+                                                                                {
+                                                                                    session?.data?.user?.role?.id != 5 &&
+                                                                                    <ListItem button >
+                                                                                        Portal Permissions
+                                                                                    </ListItem>
+                                                                                }
                                                                             </List>
                                                                         </Popover>
                                                                         {/* <Tooltip title={'Change Stage'}>

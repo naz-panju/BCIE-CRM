@@ -294,10 +294,12 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         getInitialValue()
     }, [editId])
 
+    console.log(attachmentFiles);
+
 
     return (
         <div>
-            <DocumentSelectModal from={'lead'} editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={SelectedDocuments} setSelectedDocuments={setSelectedDocuments} SelectedAttachments={SelectedFile} setSelectedAttachments={setSelectedFile} />
+            <DocumentSelectModal from={'lead'} editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} />
 
             <Drawer
                 anchor={anchor}
@@ -468,11 +470,11 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                         </Grid>
 
                                         {
-                                            SelectedDocuments?.length > 0 &&
+                                            attachmentFiles?.length > 0 &&
                                             <Grid>
                                                 <span style={{ fontSize: '16px' }}>Student Documents</span>
                                                 <List>
-                                                    {SelectedDocuments?.map((document, index) => (
+                                                    {attachmentFiles?.map((document, index) => (
                                                         <ListItem key={index} className='list-item-mail ' >
                                                             {/* <ListItemButton > */}
                                                                 <ListItemText sx={{cursor:'pointer'}} onClick={() => handleDocumentOpen(document?.file)} primary={document?.title || document?.document_template?.name} />
@@ -484,11 +486,11 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                         }
 
                                         {
-                                            SelectedFile?.length > 0 &&
+                                            file?.length > 0 &&
                                             <Grid mt={3}>
                                                 <span style={{ fontSize: '16px' }}>Uploaded Files</span>
                                                 <List >
-                                                    {SelectedFile?.map((document, index) => (
+                                                    {file?.map((document, index) => (
                                                         <ListItem key={index} className='list-item-mail '>
                                                             <ListItemText primary={document?.name} />
                                                         </ListItem>

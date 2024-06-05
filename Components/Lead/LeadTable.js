@@ -35,6 +35,8 @@ import UserProfile from '../Common/Profile';
 import { DateRangePicker } from 'rsuite';
 import moment from 'moment';
 import { format } from 'date-fns';
+import 'rsuite/dist/rsuite.min.css';
+
 
 
 

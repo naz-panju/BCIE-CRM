@@ -135,7 +135,6 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     }
 
 
-console.log(attachmentFiles);
 
     const onSubmit = async (data) => {
 

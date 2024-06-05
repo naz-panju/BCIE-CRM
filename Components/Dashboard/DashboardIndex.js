@@ -7,6 +7,8 @@ import { ListingApi } from '@/data/Endpoints/Listing'
 import AsyncSelect from "react-select/async";
 import { useForm } from 'react-hook-form'
 import { DateRangePicker } from 'rsuite'
+import 'rsuite/dist/rsuite.min.css';
+
 
 function DashboardIndex() {
 

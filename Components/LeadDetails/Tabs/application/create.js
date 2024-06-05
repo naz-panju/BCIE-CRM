@@ -2,7 +2,7 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Close, Refresh } from '@mui/icons-material';
+import { Close, KeyboardArrowDownOutlined, KeyboardArrowUpOutlined, Refresh } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import { useState } from 'react';
 
@@ -211,6 +211,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         setValue('course', '')
         setValue('intake', '')
         setValue('coursetext', '')
+        setIsExpanded(true)
     }
 
     const handleUniversityChange = (data) => {
@@ -260,6 +261,12 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         }
         setDataLoading(false)
     }
+
+    const [isExpanded, setIsExpanded] = useState(true);
+
+    const toggleExpand = () => {
+        setIsExpanded(!isExpanded);
+    };
 
     useEffect(() => {
         if (watch('country')) {
@@ -361,6 +368,104 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             />
                                             {errors.university && <span className='form-validation'>{errors.university.message}</span>}
                                         </Grid>
+
+                                        {
+                                            watch('university') &&
+                                            (
+                                                <Grid
+                                                    mb={1}
+                                                    className="border-2 radius-sm w-100"
+                                                    maxHeight={500}
+                                                    overflow={'auto'}
+                                                >
+                                                    <Grid className="flex justify-between h-7 items-center border-b-2">
+                                                        <Grid>
+                                                            {
+                                                                !isExpanded &&
+                                                                <span style={{ fontSize: '14px', marginLeft: 10 }}> University Information</span>
+                                                            }
+                                                        </Grid>
+                                                        <Grid>
+                                                            {isExpanded ? (
+                                                                <KeyboardArrowUpOutlined
+                                                                    sx={{ color: 'grey', cursor: 'pointer', mr: 1 }}
+                                                                    fontSize="small"
+                                                                    onClick={toggleExpand}
+                                                                />
+                                                            ) : (
+                                                                <KeyboardArrowDownOutlined
+                                                                    sx={{ color: 'grey', cursor: 'pointer', mr: 1 }}
+                                                                    fontSize="small"
+                                                                    onClick={toggleExpand}
+                                                                />
+                                                            )}
+                                                        </Grid>
+                                                    </Grid>
+                                                    {isExpanded && (
+                                                        <>
+                                                            {(watch('university')?.extra_university_info ||
+                                                                watch('university')?.extra_scholarship_info) ? (
+                                                                <Grid p={2}>
+                                                                    {watch('university')?.extra_university_info && (
+                                                                        <Grid>
+                                                                            <div className="mb-2">
+                                                                                <button
+                                                                                    disabled
+                                                                                    style={{
+                                                                                        backgroundColor: '#689df6',
+                                                                                        color: 'white',
+                                                                                        height: '25px',
+                                                                                        width: '180px',
+                                                                                        fontSize: '14px',
+                                                                                        borderRadius: 5,
+                                                                                    }}
+                                                                                >
+                                                                                    University Info
+                                                                                </button>
+                                                                            </div>
+                                                                            <span style={{ fontSize: '14px' }}>
+                                                                                {watch('university')?.extra_university_info}
+                                                                            </span>
+                                                                        </Grid>
+                                                                    )}
+                                                                    {watch('university')?.extra_scholarship_info && (
+                                                                        <Grid mt={2}>
+                                                                            <div className="mb-2">
+                                                                                <button
+                                                                                    disabled
+                                                                                    style={{
+                                                                                        backgroundColor: '#689df6',
+                                                                                        color: 'white',
+                                                                                        height: '25px',
+                                                                                        width: '180px',
+                                                                                        fontSize: '14px',
+                                                                                        borderRadius: 5,
+                                                                                    }}
+                                                                                >
+                                                                                    Scholarship Info
+                                                                                </button>
+                                                                            </div>
+                                                                            <span style={{ fontSize: '14px' }}>
+                                                                                {watch('university')?.extra_scholarship_info}
+                                                                            </span>
+                                                                        </Grid>
+                                                                    )}
+                                                                </Grid>
+                                                            ) : (
+                                                                <Grid p={2}>
+                                                                    <Grid className="flex justify-center items-center" height={100}>
+                                                                        <span style={{ fontSize: '16px' }}>
+                                                                            No Information Found
+                                                                        </span>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </Grid>
+                                            )
+
+                                        }
 
                                         <a className='form-text'>Subject Area</a>
                                         <Grid className='form_group' >

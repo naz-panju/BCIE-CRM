@@ -1500,3 +1500,12 @@ input[type="number"] {
 .a_hover:hover {
   text-decoration: underline;
 }
+
+.university-info-text {
+  font-family: 'Playfair Display', serif; /* Example font choice */
+  font-size: 20px; /* Adjust based on your layout */
+  font-weight: bold; /* Emphasize the text */
+  text-decoration: underline 2px solid #ccc; /* Subtle underline */
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2); /* Light text shadow */
+  color: #000080; /* Dark blue text */
+}
