@@ -44,6 +44,8 @@ import ApplicationDetail from '../Applications/Modals/Details';
 import { Divider } from 'rsuite';
 import SubmitToUniversityModal from '../Applications/Modals/UniversitySubmit';
 import SaveApplicationSumber from '../Applications/Modals/ApplicationId';
+import UniversityInfoModal from '../Applications/Modals/UniversityInfo';
+import PortalPermissionModal from '../Applications/Modals/PortalPermissions';
 
 
 
@@ -371,7 +373,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
 
 
     const fetchCountry = (e) => {
-        return ListingApi.country({ keyword: e }).then(response => {
+        return ListingApi.universityCountries({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -393,6 +395,10 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
+                const allIntakes = response?.data?.data
+                const defualtIntake = allIntakes?.find(obj => obj?.is_default == 1)
+                setValue('intake', defualtIntake || '')
+                setselectedIntake(defualtIntake?.id)
                 return response.data.data;
             } else {
                 return [];
@@ -529,7 +535,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
 
     const handleMailOpen = (data) => {
         setDetails(data)
-         setMailId(data?.id)
+        setMailId(data?.id)
         handlePopoverClose()
     }
     const handleStageOpen = (row) => {
@@ -541,6 +547,8 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
     const handleCountryChange = (data) => {
         setValue('country', data || '')
         setselectedCountry(data?.id)
+        setValue('university', '')
+        setselectedUniversity()
     }
 
     const handleUniversityChange = (data) => {
@@ -548,9 +556,17 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setselectedUniversity(data?.id)
     }
 
+    const [showAllIntake, setshowAllIntake] = useState(false)
     const handleIntakeChange = (data) => {
-        setValue('intake', data || '')
-        setselectedIntake(data?.id)
+        if (data) {
+            setshowAllIntake(false)
+            setValue('intake', data || '')
+            setselectedIntake(data?.id)
+        }else{
+            setshowAllIntake(true)
+            setValue('intake','')
+            setselectedIntake()
+        }
     }
 
     const handleStreamChange = (data) => {
@@ -737,6 +753,19 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setUniId(row?.id)
     }
 
+    const [uniInfoId, setuniInfoId] = useState()
+    const handlUniInfoOpen=(obj)=>{
+        setDetails(obj)
+        setuniInfoId(obj?.id)
+    }
+
+    const [PortalId, setPortalId] = useState()
+    const handlePortalOpen=(obj)=>{
+        setDetails(obj)
+        setPortalId(obj?.id)
+        handlePopoverClose()
+    }
+
     useEffect(() => {
         fetchTable()
     }, [page, refresh, limit, searchRefresh])
@@ -760,6 +789,8 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
 
             {/* <SubmitToUniversityModal editId={uniSubmitId} setEditId={setuniSubmitId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} /> */}
             <SaveApplicationSumber editId={unId} setEditId={setUniId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
+            <UniversityInfoModal editId={uniInfoId} setEditId={setuniInfoId} details={details} setDetails={setDetails} />
+            <PortalPermissionModal editId={PortalId} setEditId={setPortalId} details={details} setDetails={setDetails} />
 
 
             <div className="filter_sec">
@@ -1081,11 +1112,12 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                     padding="none"
                                                                     className='reg-name'
                                                                 >
-                                                                    {row?.lead?.student_code}
+                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
+                                                                        className='a_hover text-sky-600'> {row?.lead?.student_code} </span>
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' ?
-                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{color:'black'}}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
+                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
                                                                             :
                                                                             <Button onClick={() => handleUniId(row)} size='small' variant='outlined'>
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
@@ -1097,12 +1129,12 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
                                                                 <TableCell align="left">
-                                                                    <div className='d-flex justify-between items-center'>
-                                                                        {row?.university?.name}
-                                                                        <HtmlTooltip
+                                                                <div className='d-flex justify-between items-center'>
+                                                                       <span onClick={()=>handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
+                                                                        {/* <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
-                                                                                    <Typography mb={1} color="inherit">University Info</Typography>
+                                                                                    <Typography color="inherit">University Info</Typography>
                                                                                     {row?.university?.extra_university_info}
                                                                                     <Divider sx={{ mt: 1 }} />
                                                                                     <Typography mt={1} color="inherit">Scholorship Info</Typography>
@@ -1111,7 +1143,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                             }
                                                                         >
                                                                             <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
-                                                                        </HtmlTooltip>
+                                                                        </HtmlTooltip> */}
 
                                                                     </div>
                                                                 </TableCell>
@@ -1182,6 +1214,12 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                                 <ListItem button onClick={() => handleDocOpen(row)}>
                                                                                     Documents
                                                                                 </ListItem>
+                                                                                {
+                                                                                    session?.data?.user?.role?.id != 5 &&
+                                                                                    <ListItem button onClick={() => handlePortalOpen(row)}>
+                                                                                        Portal Permissions
+                                                                                    </ListItem>
+                                                                                }
                                                                             </List>
                                                                         </Popover>
 

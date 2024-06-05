@@ -105,8 +105,10 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
         setLoading(false)
     }
 
+    const [whatsappLoading, setwhatsappLoading] = useState(false)
+
     const fetchWhatsappList = async () => {
-        setLoading(true)
+        setwhatsappLoading(true)
         let params = {
             lead_id: lead_id,
             limit: whatsappLimit,
@@ -119,7 +121,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
         const response = await CommunicationLogApi.list(params)
         // console.log(response);
         setwhatsappList(response?.data)
-        setLoading(false)
+        setwhatsappLoading(false)
     }
 
     const fetchCallList = async () => {
@@ -207,7 +209,6 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                         <Button onClick={handlePhoneCallOpen} variant='outlined'>Add Phone Call Summary</Button>
                     </div>
                 </div> */}
-                <button onClick={()=>setEmailPage(emailPage+1)}>djdd</button>
 
                 <div className='timeline-content-block-item'>
                     <div className='flex mar-25'>
@@ -402,7 +403,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                     </div>
                 </div>
 
-                <CreateTabs callLoading={callLoading} setEmailPage={setEmailPage} emailPage={emailPage} callPage={callPage} whatsappPage={whatsappPage} setcallPage={setcallPage} setwhatsappPage={setwhatsappPage} list={list} whatsappList={whatsappList} callList={callList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} setCallLimit={setCallLimit} loading={loading} handleCallEdit={setphonecallId} handlePhoneRefresh={handlePhoneRefresh}emailLimit={emailLimit} whatsappLimit={whatsappLimit} callLimit={callLimit} />
+                <CreateTabs whatsappLoading={whatsappLoading} callLoading={callLoading} setEmailPage={setEmailPage} emailPage={emailPage} callPage={callPage} whatsappPage={whatsappPage} setcallPage={setcallPage} setwhatsappPage={setwhatsappPage} list={list} whatsappList={whatsappList} callList={callList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} setCallLimit={setCallLimit} loading={loading} handleCallEdit={setphonecallId} handlePhoneRefresh={handlePhoneRefresh}emailLimit={emailLimit} whatsappLimit={whatsappLimit} callLimit={callLimit} />
 
             </div>
         </>

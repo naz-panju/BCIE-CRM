@@ -52,7 +52,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     const [dataLoading, setDataLoading] = useState(false)
 
     const handleClose = () => {
-        // setdocumentSelected([])
+        setdocumentSelected([])
         setSelectedFile(null)
         setEditId()
         setOpen(false);
@@ -184,7 +184,6 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
         }
     }
 
-
     const [Documents, setDocuments] = useState([])
     const getDetails = () => {
         setDataLoading(true)
@@ -197,7 +196,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     }
     const getLeadDetails = () => {
         setDataLoading(true)
-        LeadApi.listDocuments({ lead_id: editId ,limit:50}).then((response) => {
+        LeadApi.listDocuments({ lead_id: editId ,limit:60}).then((response) => {
             setDocuments(response?.data?.data)
             setDataLoading(false)
         }).catch((error) => {
@@ -227,6 +226,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
         } else if (editId == 0) {
             setOpen(true)
         }
+        setdocumentSelected(SelectedDocuments)
     }, [editId])
 
 
@@ -266,10 +266,11 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                                                 <Grid container sx={{ display: 'flex', }}>
                                                     {
                                                         Documents?.map((obj, index) => (
-
+                                                            obj?.file &&
                                                             <Grid key={index} mb={2} item xs={12} sm={6}>
                                                                 <FormControlLabel control={<Checkbox onChange={() => handleDocumentSelect(obj)} value={obj} checked={isDocumentChecked(obj)} />} label={obj?.document_template?.name} />
                                                             </Grid>
+
                                                         ))
                                                     }
                                                 </Grid>

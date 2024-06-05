@@ -166,7 +166,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
         if (editId > 0) {
             // dataToSubmit['id'] = editId
-            // action = TaskApi.update(dataToSubmit)
+            action = LeadApi.sendMail(formData)
         } else {
             action = LeadApi.sendMail(formData)
         }
@@ -205,7 +205,6 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         setOpen(false)
         setFile()
         setattachmentFiles([])
-
     }
 
     const handleDrawerClose = (event) => {
@@ -293,8 +292,6 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         }
         getInitialValue()
     }, [editId])
-
-    console.log(attachmentFiles);
 
 
     return (
@@ -410,7 +407,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                         </Grid>
 
 
-                                        {
+                                        {/* {
                                             attachmentFiles?.length > 0 &&
                                             <Grid display={'flex'} container p={1.5} item xs={12}>
                                                 <Grid item display={'flex'} xs={3} md={3}>
@@ -426,7 +423,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     }
                                                 </Grid>
                                             </Grid>
-                                        }
+                                        } */}
                                         <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container >
                                             <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
                                                 {/* <label htmlFor="file-input"> */}

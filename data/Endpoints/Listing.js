@@ -5,6 +5,7 @@ export const ListingApi = {
     stages: (data) => http.get(`listing/stages`, { params: data }),
     substages: (data) => http.get(`listing/substages`, { params: data }),
     universities: (data) => http.get(`listing/universities`, { params: data }),
+    universityCountries: (data) => http.get(`listing/university-countries`, { params: data }),
     // courses:(data) => http.get(`listing/courses`, { params: data }),
     users:(data) => http.get(`listing/users`, { params: data }),
     documentTemplate:(data) => http.get(`listing/document-templates`, { params: data }),

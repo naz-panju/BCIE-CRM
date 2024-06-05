@@ -43,6 +43,8 @@ import DownloadDocumentModal from '../Applications/Modals/downloadDocument';
 import ApplicationDetail from '../Applications/Modals/Details';
 import { Divider } from 'rsuite';
 import SubmitToUniversityModal from '../Applications/Modals/UniversitySubmit';
+import UniversityInfoModal from '../Applications/Modals/UniversityInfo';
+import PortalPermissionModal from '../Applications/Modals/PortalPermissions';
 
 
 
@@ -370,7 +372,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
 
     const fetchCountry = (e) => {
-        return ListingApi.country({ keyword: e }).then(response => {
+        return ListingApi.universityCountries({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -392,6 +394,10 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
+                const allIntakes = response?.data?.data
+                const defualtIntake = allIntakes?.find(obj => obj?.is_default == 1)
+                setValue('intake', defualtIntake || '')
+                setselectedIntake(defualtIntake?.id)
                 return response.data.data;
             } else {
                 return [];
@@ -540,16 +546,25 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const handleCountryChange = (data) => {
         setValue('country', data || '')
         setselectedCountry(data?.id)
+        setValue('university', '')
+        setselectedUniversity()
     }
-
     const handleUniversityChange = (data) => {
         setValue('university', data || '')
         setselectedUniversity(data?.id)
     }
 
+    const [showAllIntake, setshowAllIntake] = useState(false)
     const handleIntakeChange = (data) => {
-        setValue('intake', data || '')
-        setselectedIntake(data?.id)
+        if (data) {
+            setshowAllIntake(false)
+            setValue('intake', data || '')
+            setselectedIntake(data?.id)
+        }else{
+            setshowAllIntake(true)
+            setValue('intake','')
+            setselectedIntake()
+        }
     }
 
     const handleStreamChange = (data) => {
@@ -751,6 +766,19 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
         setuniSubmitId(row?.id)
     }
 
+    const [uniInfoId, setuniInfoId] = useState()
+    const handlUniInfoOpen = (obj) => {
+        setDetails(obj)
+        setuniInfoId(obj?.id)
+    }
+
+    const [PortalId, setPortalId] = useState()
+    const handlePortalOpen = (obj) => {
+        setDetails(obj)
+        setPortalId(obj?.id)
+        handlePopoverClose()
+    }
+
     useEffect(() => {
         fetchTable()
     }, [page, refresh, limit, searchRefresh])
@@ -774,6 +802,8 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
             <ConfirmPopup loading={submitLoading} ID={uniSubmitId} setID={setuniSubmitId} clickFunc={handleUniversitySubmit} title={`Do you want to Submit this Application to the University?`} />
             {/* <SubmitToUniversityModal editId={uniSubmitId} setEditId={setuniSubmitId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} /> */}
+            <UniversityInfoModal editId={uniInfoId} setEditId={setuniInfoId} details={details} setDetails={setDetails} />
+            <PortalPermissionModal editId={PortalId} setEditId={setPortalId} details={details} setDetails={setDetails} />
 
 
             <div className="filter_sec">
@@ -1095,7 +1125,8 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                     padding="none"
                                                                     className='reg-name'
                                                                 >
-                                                                    {row?.lead?.student_code}
+                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
+                                                                        className='a_hover text-sky-600'> {row?.lead?.student_code} </span>
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' &&
@@ -1107,11 +1138,11 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
                                                                 <TableCell align="left">
                                                                     <div className='d-flex justify-between items-center'>
-                                                                        {row?.university?.name}
-                                                                        <HtmlTooltip
+                                                                        <span onClick={() => handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
+                                                                        {/* <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
-                                                                                    <Typography mb={1} color="inherit">University Info</Typography>
+                                                                                    <Typography color="inherit">University Info</Typography>
                                                                                     {row?.university?.extra_university_info}
                                                                                     <Divider sx={{ mt: 1 }} />
                                                                                     <Typography mt={1} color="inherit">Scholorship Info</Typography>
@@ -1120,7 +1151,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                             }
                                                                         >
                                                                             <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
-                                                                        </HtmlTooltip>
+                                                                        </HtmlTooltip> */}
 
                                                                     </div>
                                                                 </TableCell>
@@ -1198,6 +1229,12 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                                 <ListItem button onClick={() => handleDocOpen(row)}>
                                                                                     Documents
                                                                                 </ListItem>
+                                                                                {
+                                                                                    session?.data?.user?.role?.id != 5 &&
+                                                                                    <ListItem button onClick={() => handlePortalOpen(row)}>
+                                                                                        Portal Permissions
+                                                                                    </ListItem>
+                                                                                }
                                                                             </List>
                                                                         </Popover>
                                                                         {/* <Tooltip title={'Change Stage'}>

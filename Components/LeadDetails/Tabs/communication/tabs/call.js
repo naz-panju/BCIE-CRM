@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import CommCallDetailModal from '../details/email copy/detailModal';
 
 
-function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh,page,setPage,callLimit }) {
+function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh, page, setPage, callLimit }) {
     const [detailId, setdetailId] = useState()
 
     const [deleteId, setdeleteId] = useState()
@@ -70,62 +70,65 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh,page,s
                         loadingTab()
                         :
                         <>
-                            <TableContainer>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell >
-                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                    Call Type
-                                                </Typography>
-
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                    Date and Time
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                    Summary
-                                                </Typography>
-
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {
-                                            list?.data?.map((obj, index) => {
-                                                return (
-                                                    <TableRow key={index}>
-                                                        {/* <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleDetailOpen(obj?.id)}>
-                                                            {
-                                                                obj?.subject?.length > 50 ?
-                                                                    <b> {obj?.subject?.slice(0, 50)} ...</b>
-                                                                    :
-                                                                    <b>{obj?.subject}</b>
-                                                            }
-                                                        </TableCell> */}
-                                                        <TableCell onClick={() => handleDetailOpen(obj?.id)} sx={{cursor:'pointer'}} >{obj?.type}</TableCell>
-                                                        <TableCell>{moment(obj?.date_time_of_call).format('DD-MM-YYYY HH:mm')}</TableCell>
-                                                        <TableCell>{obj?.call_summary}</TableCell>
-                                                        <TableCell>
-                                                            <Edit onClick={() => handleEdit(obj?.id)} fontSize='small' sx={{ color: 'blue', cursor: 'pointer' }} />
-                                                            <Delete onClick={() => handleDeleteOpen(obj?.id)} fontSize='small' sx={{ color: 'red', cursor: 'pointer', ml: 2 }} />
-                                                        </TableCell>
-
-
-                                                    </TableRow>)
-                                            })
-                                        }
-
-                                    </TableBody>
-                                </Table>
-
-                            </TableContainer>
-
-
                             {
+                                list?.data?.length > 0 ?
+                                    <>
+                                        <TableContainer>
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell >
+                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                                Call Type
+                                                            </Typography>
+
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                                Date and Time
+                                                            </Typography>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                                Summary
+                                                            </Typography>
+
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {
+                                                        list?.data?.map((obj, index) => {
+                                                            return (
+                                                                <TableRow key={index}>
+                                                                    {/* <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleDetailOpen(obj?.id)}>
+                                                                {
+                                                                    obj?.subject?.length > 50 ?
+                                                                        <b> {obj?.subject?.slice(0, 50)} ...</b>
+                                                                        :
+                                                                        <b>{obj?.subject}</b>
+                                                                }
+                                                            </TableCell> */}
+                                                                    <TableCell onClick={() => handleDetailOpen(obj?.id)} sx={{ cursor: 'pointer' }} >{obj?.type}</TableCell>
+                                                                    <TableCell>{moment(obj?.date_time_of_call).format('DD-MM-YYYY HH:mm')}</TableCell>
+                                                                    <TableCell>{obj?.call_summary}</TableCell>
+                                                                    <TableCell>
+                                                                        <Edit onClick={() => handleEdit(obj?.id)} fontSize='small' sx={{ color: 'blue', cursor: 'pointer' }} />
+                                                                        <Delete onClick={() => handleDeleteOpen(obj?.id)} fontSize='small' sx={{ color: 'red', cursor: 'pointer', ml: 2 }} />
+                                                                    </TableCell>
+
+
+                                                                </TableRow>)
+                                                        })
+                                                    }
+
+                                                </TableBody>
+                                            </Table>
+
+                                        </TableContainer>
+
+
+                                        {
                                             list?.data?.length > 0 &&
                                             <div className='table-pagination d-flex justify-content-end align-items-center'>
                                                 <div className='d-flex justify-content-between align-items-center'>
@@ -145,8 +148,11 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh,page,s
                                                 </div>
                                             </div>
                                         }
+                                    </>
+                                    :
+                                    <Grid display={'flex'} alignItems={'center'} justifyContent={'center'} height={200} > No Logs Found</Grid>
+                            }
                         </>
-
                 }
             </div>
         </>
