@@ -64,7 +64,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     }
 
     const fetchCounty = (e) => {
-        return ListingApi.country({ keyword: e }).then(response => {
+        return ListingApi.universityCountries({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data;
             } else {

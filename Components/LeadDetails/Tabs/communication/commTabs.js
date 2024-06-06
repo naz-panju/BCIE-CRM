@@ -40,7 +40,7 @@ function a11yProps(index) {
     };
 }
 
-export default function CreateTabs({ list, value, setValue, activeTab, setActiveTab, setEmailLimit, loading, setwhatsappLimit, whatsappList, callList, setCallLimit, handleCallEdit, handlePhoneRefresh,emailLimit,whatsappLimit,callLimit,setEmailPage,emailPage,whatsappPage,setwhatsappPage,callPage,setcallPage,callLoading }) {
+export default function CreateTabs({ list, value, setValue, activeTab, setActiveTab, setEmailLimit, loading, setwhatsappLimit, whatsappList, callList, setCallLimit, handleCallEdit, handlePhoneRefresh,emailLimit,whatsappLimit,callLimit,setEmailPage,emailPage,whatsappPage,setwhatsappPage,callPage,setcallPage,callLoading,whatsappLoading }) {
     // const [value, setValue] = React.useState(0);
     // const [activeTab, setActiveTab] = useState(0);
     const handleChange = (event, newValue) => {
@@ -53,7 +53,7 @@ export default function CreateTabs({ list, value, setValue, activeTab, setActive
             label: 'Email'
         },
         {
-            component: <WhatsappTab page={whatsappPage} setPage={setwhatsappPage} list={whatsappList} setwhatsappLimit={setwhatsappLimit} loading={loading} whatsappLimit={whatsappLimit} />,
+            component: <WhatsappTab page={whatsappPage} setPage={setwhatsappPage} list={whatsappList} setwhatsappLimit={setwhatsappLimit} loading={whatsappLoading} whatsappLimit={whatsappLimit} />,
             label: 'Whatsapp'
         },
         {

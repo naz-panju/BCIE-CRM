@@ -135,7 +135,6 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     }
 
 
-
     const onSubmit = async (data) => {
 
         setLoading(true)
@@ -165,13 +164,16 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
             })
         }
 
+        //  for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ': ' + pair[1]);
+        // }
         // console.log(dataToSubmit);
 
         let action;
         
         if (editId > 0) {
             // dataToSubmit['id'] = editId
-            // action = TaskApi.update(dataToSubmit)
+            action = LeadApi.sendMail(formData)
         } else {
             action = LeadApi.sendMail(formData)
         }

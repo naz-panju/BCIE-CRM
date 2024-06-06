@@ -42,6 +42,8 @@ import ReturnPopup from '../Applications/Modals/returnModal';
 import DownloadDocumentModal from '../Applications/Modals/downloadDocument';
 import ApplicationDetail from '../Applications/Modals/Details';
 import { Divider } from 'rsuite';
+import UniversityInfoModal from '../Applications/Modals/UniversityInfo';
+import PortalPermissionModal from '../Applications/Modals/PortalPermissions';
 
 
 
@@ -368,7 +370,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
 
 
     const fetchCountry = (e) => {
-        return ListingApi.country({ keyword: e }).then(response => {
+        return ListingApi.universityCountries({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -390,6 +392,10 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
+                const allIntakes = response?.data?.data
+                const defualtIntake = allIntakes?.find(obj => obj?.is_default == 1)
+                setValue('intake', defualtIntake || '')
+                setselectedIntake(defualtIntake?.id)
                 return response.data.data;
             } else {
                 return [];
@@ -526,7 +532,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
 
     const handleMailOpen = (data) => {
         setDetails(data)
-         setMailId(data?.id)
+        setMailId(data?.id)
         handlePopoverClose()
     }
     const handleStageOpen = (row) => {
@@ -538,6 +544,8 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
     const handleCountryChange = (data) => {
         setValue('country', data || '')
         setselectedCountry(data?.id)
+        setValue('university', '')
+        setselectedUniversity()
     }
 
     const handleUniversityChange = (data) => {
@@ -545,11 +553,18 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
         setselectedUniversity(data?.id)
     }
 
+    const [showAllIntake, setshowAllIntake] = useState(false)
     const handleIntakeChange = (data) => {
-        setValue('intake', data || '')
-        setselectedIntake(data?.id)
+        if (data) {
+            setshowAllIntake(false)
+            setValue('intake', data || '')
+            setselectedIntake(data?.id)
+        }else{
+            setshowAllIntake(true)
+            setValue('intake','')
+            setselectedIntake()
+        }
     }
-
     const handleStreamChange = (data) => {
         setValue('subjectarea', data || '')
         setselectedStream(data?.id)
@@ -722,15 +737,19 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
         })
     }
 
-    const Status = [
-        { name: 'Submitted' },
-        { name: 'Unsubmitted' },
-        { name: 'Returned' },
-    ]
-    const DepositOptions = [
-        { name: 'Yes' },
-        { name: 'No' }
-    ]
+    const [uniInfoId, setuniInfoId] = useState()
+    const handlUniInfoOpen = (obj) => {
+        setDetails(obj)
+        setuniInfoId(obj?.id)
+    }
+
+    const [PortalId, setPortalId] = useState()
+    const handlePortalOpen = (obj) => {
+        setDetails(obj)
+        setPortalId(obj?.id)
+        handlePopoverClose()
+    }
+
 
     useEffect(() => {
         fetchTable()
@@ -752,6 +771,9 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
 
             <ApplicationDetail id={detailId} setId={setDetailId} />
             <ConfirmPopup loading={submitLoading} ID={submitId} setID={setsubmitId} clickFunc={handleClickSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
+
+            <UniversityInfoModal editId={uniInfoId} setEditId={setuniInfoId} details={details} setDetails={setDetails} />
+            <PortalPermissionModal editId={PortalId} setEditId={setPortalId} details={details} setDetails={setDetails} />
 
 
             <div className="filter_sec">
@@ -1073,7 +1095,8 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                                                                     padding="none"
                                                                     className='reg-name'
                                                                 >
-                                                                    {row?.lead?.student_code}
+                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
+                                                                        className='a_hover text-sky-600'> {row?.lead?.student_code} </span>
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' &&
@@ -1085,11 +1108,11 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
                                                                 <TableCell align="left">
                                                                     <div className='d-flex justify-between items-center'>
-                                                                        {row?.university?.name}
-                                                                        <HtmlTooltip
+                                                                        <span onClick={() => handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
+                                                                        {/* <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
-                                                                                    <Typography mb={1} color="inherit">University Info</Typography>
+                                                                                    <Typography color="inherit">University Info</Typography>
                                                                                     {row?.university?.extra_university_info}
                                                                                     <Divider sx={{ mt: 1 }} />
                                                                                     <Typography mt={1} color="inherit">Scholorship Info</Typography>
@@ -1098,7 +1121,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                                                                             }
                                                                         >
                                                                             <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
-                                                                        </HtmlTooltip>
+                                                                        </HtmlTooltip> */}
 
                                                                     </div>
                                                                 </TableCell>
@@ -1170,6 +1193,12 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                                                                                 <ListItem button onClick={() => handleDocOpen(row)}>
                                                                                     Documents
                                                                                 </ListItem>
+                                                                                {
+                                                                                    session?.data?.user?.role?.id != 5 &&
+                                                                                    <ListItem button onClick={() => handlePortalOpen(row)}>
+                                                                                        Portal Permissions
+                                                                                    </ListItem>
+                                                                                }
                                                                             </List>
                                                                         </Popover>
                                                                         {/* <Tooltip title={'Change Stage'}>

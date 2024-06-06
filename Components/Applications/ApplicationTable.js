@@ -41,6 +41,7 @@ import { useSession } from 'next-auth/react';
 import moment from 'moment';
 import ReactSelector from 'react-select';
 import UniversityInfoModal from './Modals/UniversityInfo';
+import PortalPermissionModal from './Modals/PortalPermissions';
 
 
 
@@ -367,7 +368,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
 
     const fetchCountry = (e) => {
-        return ListingApi.country({ keyword: e }).then(response => {
+        return ListingApi.universityCountries({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -389,6 +390,10 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
+                const allIntakes = response?.data?.data
+                const defualtIntake = allIntakes?.find(obj => obj?.is_default == 1)
+                setValue('intake', defualtIntake || '')
+                setselectedIntake(defualtIntake?.id)
                 return response.data.data;
             } else {
                 return [];
@@ -533,10 +538,11 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setStageId(row?.id)
         handlePopoverClose()
     }
-
     const handleCountryChange = (data) => {
         setValue('country', data || '')
         setselectedCountry(data?.id)
+        setValue('university', '')
+        setselectedUniversity()
     }
 
     const handleUniversityChange = (data) => {
@@ -544,9 +550,17 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setselectedUniversity(data?.id)
     }
 
+    const [showAllIntake, setshowAllIntake] = useState(false)
     const handleIntakeChange = (data) => {
-        setValue('intake', data || '')
-        setselectedIntake(data?.id)
+        if (data) {
+            setshowAllIntake(false)
+            setValue('intake', data || '')
+            setselectedIntake(data?.id)
+        }else{
+            setshowAllIntake(true)
+            setValue('intake','')
+            setselectedIntake()
+        }
     }
 
     const handleStreamChange = (data) => {
@@ -649,6 +663,12 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             student_code: watch('student_code'),
             page: page
         }
+        if(showAllIntake){
+            params['intake_id'] = 'All'
+        }else{
+            params['intake_id'] = selectedIntake
+        }
+
         if (selectedStatus == 'Submitted') {
             params['submitted'] = 1
         } else if (selectedStatus == 'Unsubmitted') {
@@ -663,7 +683,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             params['deposit_paid'] = 0
         }
 
-
+        console.log('here');
 
         ApplicationApi.list(params).then((response) => {
             console.log(response);
@@ -735,9 +755,16 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     }
 
     const [uniInfoId, setuniInfoId] = useState()
-    const handlUniInfoOpen=(obj)=>{
+    const handlUniInfoOpen = (obj) => {
         setDetails(obj)
         setuniInfoId(obj?.id)
+    }
+
+    const [PortalId, setPortalId] = useState()
+    const handlePortalOpen = (obj) => {
+        setDetails(obj)
+        setPortalId(obj?.id)
+        handlePopoverClose()
     }
 
     const Status = [
@@ -772,6 +799,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             <ConfirmPopup loading={submitLoading} ID={submitId} setID={setsubmitId} clickFunc={handleClickSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
 
             <UniversityInfoModal editId={uniInfoId} setEditId={setuniInfoId} details={details} setDetails={setDetails} />
+            <PortalPermissionModal editId={PortalId} setEditId={setPortalId} details={details} setDetails={setDetails} />
 
             <div className="filter_sec">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -1146,9 +1174,10 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                     id={labelId}
                                                                     scope="row"
                                                                     padding="none"
-                                                                    className='reg-name'
+                                                                // className='reg-name'
                                                                 >
-                                                                    {row?.lead?.student_code}
+                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
+                                                                        className='a_hover text-sky-600'> {row?.lead?.student_code} </span>
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' &&
@@ -1160,7 +1189,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
                                                                 <TableCell align="left">
                                                                     <div className='d-flex justify-between items-center'>
-                                                                       <span onClick={()=>handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
+                                                                        <span onClick={() => handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
                                                                         {/* <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
@@ -1247,7 +1276,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                                 </ListItem>
                                                                                 {
                                                                                     session?.data?.user?.role?.id != 5 &&
-                                                                                    <ListItem button >
+                                                                                    <ListItem button onClick={() => handlePortalOpen(row)}>
                                                                                         Portal Permissions
                                                                                     </ListItem>
                                                                                 }

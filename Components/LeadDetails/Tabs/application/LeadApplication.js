@@ -17,6 +17,7 @@ import ViewDocumentModal from './modals/viewDocModal'
 import { InfoOutlined, Note } from '@mui/icons-material'
 import CreateLead from '@/Components/Lead/Create/Create'
 import { Divider } from 'rsuite'
+import UniversityInfoModal from '@/Components/Applications/Modals/UniversityInfo'
 
 
 const HtmlTooltip = styled(({ className, ...props }) => (
@@ -209,7 +210,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
     const fetchList = async () => {
         setLoading(true)
         console.log(lead_id);
-        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, })
+        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page,intake_id:'All' })
         setList(response?.data)
         setLoading(false)
     }
@@ -221,7 +222,11 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
         setdocLoading(false)
     }
 
-    console.log(list);
+    const [uniInfoId, setuniInfoId] = useState()
+    const handlUniInfoOpen=(obj)=>{
+        setDetails(obj)
+        setuniInfoId(obj?.id)
+    }
 
     useEffect(() => {
 
@@ -249,8 +254,10 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
             <ConfirmPopup loading={deleteLoading} ID={submitId} setID={setsubmitId} clickFunc={handleSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
 
-
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
+
+            <UniversityInfoModal editId={uniInfoId} setEditId={setuniInfoId} details={details} setDetails={setDetails} />
+
 
 
             <div className='lead-tabpanel-content-block timeline'>
@@ -380,8 +387,8 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                             <TableRow className='application-tr' >
                                                                 <TableCell>
                                                                     <div className='d-flex justify-between items-center '>
-                                                                        {obj?.university?.name}
-                                                                        <HtmlTooltip
+                                                                        <span style={{cursor:'pointer'}} onClick={() => handlUniInfoOpen(obj)} className='a_hover text-sky-600'> {obj?.university?.name}</span>
+                                                                        {/* <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
                                                                                     <Typography mb={1} color="inherit">University Info</Typography>
@@ -393,7 +400,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                             }
                                                                         >
                                                                             <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
-                                                                        </HtmlTooltip>
+                                                                        </HtmlTooltip> */}
                                                                     </div>
                                                                 </TableCell>
                                                                 <TableCell>{obj?.subject_area?.name}</TableCell>

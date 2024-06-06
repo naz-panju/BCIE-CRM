@@ -1,24 +1,14 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useEffect } from 'react';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from 'react';
 import { Grid, IconButton, TextField, Tooltip, Skeleton, FormControlLabel, Checkbox } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import { Close, Delete } from '@mui/icons-material';
-import { ListingApi } from '@/data/Endpoints/Listing';
-import { LeadApi } from '@/data/Endpoints/Lead';
-import toast from 'react-hot-toast';
-import TextInput from '@/Form/TextInput';
-import AsyncSelect from "react-select/async";
-import { ApplicationApi } from '@/data/Endpoints/Application';
-import DateInput from '@/Form/DateInput';
-import moment from 'moment';
+import { Close } from '@mui/icons-material';
+
 
 const style = {
     position: 'absolute',
