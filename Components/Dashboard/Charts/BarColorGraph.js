@@ -61,7 +61,7 @@ const BarColorChartComponent = () => {
     };
   }, []);
 
-  return <canvas ref={chartRef}></canvas>;
+  return <canvas className='custom-height-bar-color' ref={chartRef}></canvas>;
 };
 
 export default BarColorChartComponent;

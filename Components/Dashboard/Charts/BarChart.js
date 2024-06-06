@@ -56,7 +56,7 @@ const BarChartComponent = () => {
         };
     }, []);
 
-    return <canvas ref={chartRef}></canvas>;
+    return <canvas className='custom-height' ref={chartRef}></canvas>;
 };
 
 export default BarChartComponent;
