@@ -192,6 +192,9 @@ a {
     border: 1px solid gray !important;
     /* overflow-y: auto; */
 }
+canvas.custom-height-bar-color {
+    height: 202px !important;
+}
 
 .rdw-editor-wrapper {
     height: 400px !important;
@@ -1098,6 +1101,293 @@ ul.search-document-block-pred li div span {
 .Mui-disabled svg path{
     stroke: #9A9A9A;
 }
+.section-title {
+    color: #2F435B;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 10px; /* 71.429% */
+}
+.comminication-block .section-title {
+    margin-bottom: 20px;
+}
+.communication-graph {
+    border-radius: 16px;
+    border: 1px solid #E7E7E7;
+    background: #FFF;
+    padding: 12px 15px 45px;
+    position: relative;
+    text-align: center;
+}
+.communication-graph h2 {
+    color: #0B0D23;
+    font-family: Inter;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 15px;
+    margin-top: 25px;
+}
+.communication-graph h4 {
+    color: #2F435B;
+    font-family: Inter;
+    font-size: 10px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 10px;
+    margin-top: 15px;
+}
+.communication-graph .chart-info-title {
+    padding: 0;
+}
+.communication-graph .svg-bg {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+.communication-graph svg {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+}
+.communication-graph .svg-bg svg {
+    width: 100%;
+}
+.border-clm {
+    border: 1px solid #DFDFDF;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+.total {
+    border: 1px solid #E7E7E7;
+    border-radius: 25px;
+    padding: 3px 8px;
+    display: flex;
+    font-size: 18px;
+    font-weight: 600;
+    align-items: center;
+    width: fit-content;
+    
+}
+ .total span {
+    background: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 400;
+    margin-right: 5px;
+}
+
+
+.communication-graph .total span {
+    background: #000;
+    padding: 2px 8px;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 400;
+    margin-right: 5px;
+}
+.communication-graph .total {
+    border: 0;
+    padding: 0;
+}
+
+.communication-details ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: normal;
+    height: 100%;
+    gap: 16px;
+}
+.communication-details ul li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #0B0D23;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 10px; /* 71.429% */
+}
+.communication-details ul li b{
+    font-weight: 500;
+}
+
+.intake_dropdown{
+    z-index: 1000;
+}
+.chart-info-title {
+    padding: 12px 15px;
+}
+.date-range {
+    background: #FAFAFA !important;
+    border-radius: 4px;
+}
+
+.date-range .rs-picker-daterange>.rs-input-group.rs-input-group-inside .rs-input {
+    padding-right: 0;
+    background: transparent;
+}
+.date-range .rs-input-group.rs-input-group-inside {
+    background: #FAFAFA !important;
+}
+canvas.custom-height {
+    height: 225px !important;
+}
+.weekly-card{
+    padding: 20px;
+    border-radius: 10px;
+}
+.weekly-card.bg1{
+    background: linear-gradient(180deg, #D3D3D3 0%, #FFFFFF 100%);
+}
+.weekly-card.bg2{
+    background: linear-gradient(180deg, #FFDED3 0%, #FFFFFF 100%);
+}
+.weekly-card.bg3{
+    background: linear-gradient(180deg, #E3F8FF 0%, #FFFFFF 100%);
+}
+.weekly-card.bg4{
+    background: linear-gradient(180deg, #FFF8EA 0%, #FFFFFF 100%);
+}
+.weekly-card h3 {
+    color: #0B0D23;
+    font-size: 28px;
+    font-weight: 500;
+}
+.weekly-card p{
+    color: #2F435B;
+}
+.chart-info-block h2 {
+    color: #2F435B;
+    font-family: Inter;
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 10px;
+    margin-bottom: 15px;
+}
+.chart-info-block {
+    padding-left: 20px;
+}
+.chart-info-block ul{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8%;
+    position: relative;
+}
+.chart-info-block ul::before {
+    position: absolute;
+    content: "";
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    top: 0;
+    background: rgba(40, 43, 77, 0.15);
+    transform: translate(-50%, 0px);
+}
+.chart-info-block ul li {
+    color: #2F435B;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    padding: 5px 0;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 46%;
+}
+.chart-info-block ul li span {
+    border-radius: 14px;
+    background: #9473F1;
+    width: 14px;
+    height: 5px;
+    display: flex;
+}
+
+.chart-info-block ul li:nth-child(2) span{
+    background: #FF9162;
+}
+.chart-info-block ul li:nth-child(3) span{
+    background: #76D7C4;
+}
+.chart-info-block ul li:nth-child(4) span{
+    background: #FFB3E6;
+}
+.chart-info-block ul li:nth-child(5) span{
+    background: #F3F64B;
+}
+.chart-info-block ul li:nth-child(6) span{
+    background: #9F9;
+}
+.chart-info-block ul li:nth-child(7) span{
+    background: #66B3FF;
+}
+.chart-info-block ul li:nth-child(8) span{
+    background: #FF5656;
+}
+.chart-info-block ul li:nth-child(9) span{
+    background: #92A8D1;
+}
+.chart-info-block ul li:nth-child(10) span{
+    background: #C2C2F0;
+}
+
+.social-container div span {
+    color: #2F435B;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 10px;
+}
+.social-container div span {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.weekly-leads.communication {
+    border-radius: 3px;
+    border: 1px solid #DFDFDF;
+    background: #FFF;
+    padding: 22px 20px;
+    margin-bottom: 20px;
+}
+
+
+.btn-stage {
+    color: #0B0D23;
+    font-size: 13px;
+    padding: 5px 20px;
+    border-radius: 20px;
+}
+span.Unverified{
+    background: #D3D3D34D;
+    border: 1px solid #D3D3D3;
+}
+span.Hot{
+    background: #FFECE6;
+    border: 1px solid #FF784D;
+}
+span.cool{
+    background: #E3F8FF;
+    border: 1px solid #4DD4FF;
+}
+span.warm{
+    background: #FFF8EA;
+    border: 1px solid #FFCA63;
+}
+
 
 .degree-btn-block {
     display: flex;
@@ -1143,6 +1433,89 @@ ul.search-document-block-pred li:hover svg path{
 ul.search-document-block-pred li.Active  svg path{
     stroke: #fff;
 }
+
+.application-stages-block {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    border-radius: 9px;
+    border: 1px solid #E7E7E7;
+    background: #FFF;
+    padding: 20px 40px;
+}
+.application-stages-block-item span {
+    border: 2px solid rgba(135, 106, 221, 0.30);
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #151515;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 28px; /* 200% */
+}
+.application-stages-block-item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+}
+.application-stages-block-item h4 {
+    color: #000;
+    font-family: Inter;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 28px;
+    text-align: center;
+}
+.application-stages-block-item:nth-child(2) span{
+    border-color: rgba(252, 84, 53, 0.30);
+} 
+.application-stages-block-item:nth-child(3) span{
+    border-color: rgba(248, 145, 41, 0.30);
+} 
+
+.application-stages-block-item:nth-child(4) span{
+    border-color: rgba(37, 155, 227, 0.30);
+} 
+
+.application-stages-block-item:nth-child(5) span{
+    border-color: rgba(255, 0, 245, 0.20);
+} 
+
+.application-stages-block-item:nth-child(6) span{
+    border-color: rgba(55, 144, 160, 0.30);
+} 
+
+.application-stages-block-item:nth-child(7) span{
+    border-color: rgba(7, 110, 169, 0.30);
+} 
+
+.application-stages-block-item:nth-child(8) span{
+    border-color: rgba(134, 80, 136, 0.30);
+} 
+
+.application-stages-block-item:nth-child(9) span{
+    border-color: rgba(145, 107, 255, 0.30);
+} 
+
+.application-stages-block-item:nth-child(10) span{
+    border-color: rgba(255, 202, 99, 0.30);
+} 
+
+.application-stages-block-item:nth-child(11) span{
+    border-color: rgba(126, 246, 153, 0.30);
+} 
+
+.application-stages-block-item:nth-child(12) span{
+    border-color: rgba(230, 46, 123, 0.30);
+} 
+
 
 .communication-log-attachments h3 {
     color: #DADDFF;
