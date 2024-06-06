@@ -91,6 +91,7 @@ function LeadDetails() {
     try {
       // console.log(urlID);
       const response = await LeadApi.view({ id: urlID })
+      console.log(response);
       setDetails(response?.data?.data)
       setLoading(false)
     } catch (error) {

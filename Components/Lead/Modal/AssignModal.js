@@ -85,7 +85,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
 
     const fetchCounsellor = (e) => {
-        return ListingApi.users({ keyword: e, branch_id: watch('branch')?.id }).then(response => {
+        return ListingApi.users({ keyword: e, office_id: watch('branch')?.id ,role_id: 5}).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data;
             } else {

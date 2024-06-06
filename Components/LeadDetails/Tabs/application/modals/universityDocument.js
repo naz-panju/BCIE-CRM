@@ -134,9 +134,9 @@ export default function UniversityDocumentModal({ app_id, setapp_id, editId, set
                 formData.append('stage', data?.template?.stage?.id)
             }
 
-            if (data?.template?.stage?.action_type == 'Get Application Id') {
+            // if (data?.template?.stage?.action_type == 'Get Application Id') {
                 formData.append('application_number', data?.application_id)
-            }
+            // }
 
             if (data?.template?.stage?.action_type == 'Deposit Paid') {
                 let date = ''

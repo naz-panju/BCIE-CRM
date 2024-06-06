@@ -69,6 +69,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
     const getFiles = async () => {
         let downloadables = []
         selectedDocuments?.map((obj) => {
+            // console.log(obj);
             let fileType = getLastExtension(obj?.file)
             let object = {
                 name: obj?.title || obj?.document_template?.name,
@@ -102,7 +103,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
             const remoteZips = files.map(async (file) => {
                 const response = await fetch(file?.url);
                 const data = await response.blob();
-                zip.file(`${file.name}.${file.type}`, data);
+                zip.file(`${file?.name}.${file.type}`, data);
                 return data;
             });
 
@@ -110,7 +111,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
                 .then(() => {
                     zip.generateAsync({ type: "blob" }).then((content) => {
                         // give the zip file a name
-                        saveAs(content, `${details?.student?.name}  Application Documents .zip`);
+                        saveAs(content, `${details?.lead?.name}_${details?.lead?.student_code}.zip`);
                     });
                     setLoading(false);
                 })

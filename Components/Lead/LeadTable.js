@@ -519,6 +519,19 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
           <div>
+            <div className='form-group' >
+              <DateRangePicker
+                value={range}
+                onChange={setRange}
+                placeholder="Select Date Range"
+                style={{ width: 280 }}
+                format='dd-MM-yyyy'
+              />
+
+            </div>
+          </div>
+
+          <div>
             <div className='form-group'>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 16 18" fill="none" className='sear-ic'>
                 <path d="M13 17C14.1046 17 15.0454 16.0899 14.7951 15.0141C14.1723 12.338 12.0897 11 8 11C3.91032 11 1.8277 12.338 1.20492 15.0141C0.954552 16.0899 1.89543 17 3 17H13Z" stroke="#0B0D23" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -625,18 +638,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
           </div>
 
 
-          <div>
-            <div className='form-group' >
-              <DateRangePicker
-                value={range}
-                onChange={setRange}
-                placeholder="Select Date Range"
-                style={{ width: 280 }}
-                format='dd-MM-yyyy'
-              />
 
-            </div>
-          </div>
 
           {/* <div>
             <div className='form-group'>

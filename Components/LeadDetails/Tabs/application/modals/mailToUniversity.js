@@ -134,7 +134,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         })
     }
 
-
+// console.log(from);
     const onSubmit = async (data) => {
 
         setLoading(true)
@@ -164,9 +164,9 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
             })
         }
 
-        //  for (let pair of formData.entries()) {
-        //     console.log(pair[0] + ': ' + pair[1]);
-        // }
+         for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
         // console.log(dataToSubmit);
 
         let action;
