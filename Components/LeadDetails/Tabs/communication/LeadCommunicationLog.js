@@ -11,7 +11,7 @@ import PhoneCallModal from './Modals/SummaryModal';
 import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 
 
-export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallRefresh, setphoneCallRefresh}) {
+export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallRefresh, setphoneCallRefresh,leadData}) {
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(false)
@@ -403,7 +403,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                     </div>
                 </div>
 
-                <CreateTabs whatsappLoading={whatsappLoading} callLoading={callLoading} setEmailPage={setEmailPage} emailPage={emailPage} callPage={callPage} whatsappPage={whatsappPage} setcallPage={setcallPage} setwhatsappPage={setwhatsappPage} list={list} whatsappList={whatsappList} callList={callList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} setCallLimit={setCallLimit} loading={loading} handleCallEdit={setphonecallId} handlePhoneRefresh={handlePhoneRefresh}emailLimit={emailLimit} whatsappLimit={whatsappLimit} callLimit={callLimit} />
+                <CreateTabs leadData={leadData} whatsappLoading={whatsappLoading} callLoading={callLoading} setEmailPage={setEmailPage} emailPage={emailPage} callPage={callPage} whatsappPage={whatsappPage} setcallPage={setcallPage} setwhatsappPage={setwhatsappPage} list={list} whatsappList={whatsappList} callList={callList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} setCallLimit={setCallLimit} loading={loading} handleCallEdit={setphonecallId} handlePhoneRefresh={handlePhoneRefresh}emailLimit={emailLimit} whatsappLimit={whatsappLimit} callLimit={callLimit} />
 
             </div>
         </>

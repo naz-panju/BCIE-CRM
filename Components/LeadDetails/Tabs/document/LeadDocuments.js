@@ -255,7 +255,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                 <Image src={Doc} alt='Doc' width={200} height={200} />
 
                                 <h3>Add<span>Document</span></h3>
-                                <h4>Max 10 MB files are allowed</h4>
+                                {/* <h4>Max 10 MB files are allowed</h4> */}
 
                             </div>
                         </div>

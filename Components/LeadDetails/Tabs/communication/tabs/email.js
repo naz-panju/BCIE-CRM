@@ -5,7 +5,8 @@ import { AttachmentOutlined, CachedOutlined } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
 
 
-function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit }) {
+function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit,leadData }) {
+    // console.log(leadData);
     const [detailId, setdetailId] = useState()
 
     const handleDetailOpen = (id) => {
@@ -79,8 +80,8 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit }) {
                                                                         }
                                                                     </TableCell>
                                                                     <TableCell>{obj?.type}</TableCell>
-                                                                    <TableCell>{obj?.from}</TableCell>
-                                                                    <TableCell>{obj?.to}</TableCell>
+                                                                    <TableCell>{obj?.from || obj?.created_by?.name}</TableCell>
+                                                                    <TableCell>{obj?.to || leadData?.email}</TableCell>
                                                                     <TableCell>
                                                                         {
                                                                             obj?.attachments?.length > 0 &&
