@@ -87,6 +87,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
                 return value !== this.parent.phone;
             }),
+            passport_number:yup.string().required("Passport Number is Required"),
+            passport_expiry:yup.string().required("Passport Expiry Date is Required"),
             preffered_course: yup.string().required("Preffered Course is Required"),
             preferred_country: yup.string().required("Preffered Country is Required"),
             preffered_course_level: yup.object().required("Course Level is required").typeError("Please choose a Course"),
@@ -323,6 +325,10 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             dob = moment(data?.dob).format('YYYY-MM-DD')
         }
 
+        let passport_exp_date = ''
+        if (data?.passport_expiry) {
+            passport_exp_date = moment(data?.passport_expiry).format('YYYY-MM-DD')
+        }
 
         let dataToSubmit = {
             title: data?.title?.name,
@@ -340,14 +346,16 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
             preferred_course: data?.preffered_course,
             preferred_countries: data?.preferred_country,
+            
+            passport:data?.passport_number,
+            passport_exp_date:passport_exp_date,
 
-            course_level_id: data?.preffered_course_level?.id || null,
-            intake_id: data?.intake?.id,
+            // course_level_id: data?.preffered_course_level?.id || null,
+            // intake_id: data?.intake?.id,
 
             date_of_birth: dob,
             address: data?.address,
-            // zipcode: data?.zipcode,
-            // state: data?.state,
+           
             country_of_birth_id: data?.country_of_birth?.id || null,
             country_of_residence_id: data?.country_of_residence?.id || null,
 
@@ -356,6 +364,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             source_id: data?.source?.id || null,
             agency_id: data?.agency?.id || null,
             referred_student_id: data?.student?.id || null,
+            referral_university_id:data?.referred_university?.id || null,
             // country_id: data?.country?.id,
 
             note: data?.note
@@ -429,10 +438,13 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             setWhatsappCode(data?.whatsapp_country_code)
 
             setValue('preferred_country', data?.preferred_countries)
-            setValue('preffered_course_level', data?.course_level)
             setValue('preffered_course', data?.preferred_course)
+            
+            // setValue('preffered_course_level', data?.course_level)
+            // setValue('intake', data?.intake)
+            setValue('passport_number', data?.passport)
+            setValue('passport_expiry', data?.passport_exp_date)
 
-            setValue('intake', data?.intake)
             setValue('dob', data?.date_of_birth)
 
             setValue('source', data?.lead_source)
@@ -443,7 +455,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             setValue('country_of_birth', data?.country_of_birth)
             setValue('country_of_residence', data?.country_of_residence)
 
-            // setValue('state', data?.state)
             setValue('address', data?.address)
             setValue('note', data?.note)
 
@@ -646,7 +657,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M3 12H8M3 12C3 16.9706 7.02944 21 12 21M3 12C3 7.02944 7.02944 3 12 3M8 12H16M8 12C8 16.9706 9.79086 21 12 21M8 12C8 7.02944 9.79086 3 12 3M16 12H21M16 12C16 7.02944 14.2091 3 12 3M16 12C16 16.9706 14.2091 21 12 21M21 12C21 7.02944 16.9706 3 12 3M21 12C21 16.9706 16.9706 21 12 21" stroke="#0B0D23" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <input placeholder='Preferred Countries' control={control} {...register('preferred_country')}
+                                <TextInput placeholder='Preferred Countries' control={control} {...register('preferred_country')}
                                     value={watch('preferred_country')} />
                                 {errors.preferred_country && <span className='form-validation'>{errors.preferred_country.message}</span>}
 

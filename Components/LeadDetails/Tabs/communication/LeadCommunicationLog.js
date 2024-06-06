@@ -377,7 +377,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh ,phoneCallR
                 <div className=' md:w-12/12 lg:w-12/12 mt-3'>
                     <div className='communication-log-block-tab-block tab-block'>
                         <div className='communication-log-attachments'>
-                            <h3>Attachments</h3>
+                            {/* <h3>Attachments</h3> */}
                         </div>
 
                         <div className='communication-log-attachments-tab'>
