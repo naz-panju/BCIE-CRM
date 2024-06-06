@@ -317,7 +317,6 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
 
                     </Grid>
-                    <hr />
                     <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
@@ -509,7 +508,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                             <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
                                             :
                                             <>
-                                                Save  <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                Send  <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
                                                     <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                                                 </svg>
                                             </>

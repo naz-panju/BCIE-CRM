@@ -357,8 +357,18 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
   );
 
   const fetchUser = (e) => {
-    return ListingApi.users({ keyword: e }).then(response => {
+    return ListingApi.users({ keyword: e , office_id: selectedBranch ,role_id: 5}).then(response => {
       if (typeof response?.data?.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
+    })
+  }
+
+  const fetchBranches = (e) => {
+    return ListingApi.office({ keyword: e, }).then(response => {
+      if (typeof response.data.data !== "undefined") {
         return response.data.data;
       } else {
         return [];
@@ -402,6 +412,14 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     setValue('stage', e || '')
   }
 
+  const [selectedBranch, setselectedBranch] = useState()
+  const handleSelectBranch = (e) => {
+    setselectedBranch(e?.id || '');
+    setValue('branch', e || '')
+    setSelectedAssignedTo();
+    setValue('assignedTo', '')
+  }
+
   const fetchTable = () => {
     setLoading(true)
     let params = {
@@ -409,6 +427,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       closed: 1,
       assigned_to: selectedAssignedTo,
       stage: selectedStage,
+      assign_to_office_id:selectedBranch,
       name: watch('nameSearch'),
       email: watch('emailSearch'),
       phone_number: watch('numberSearch'),
@@ -482,13 +501,26 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
 
     setValue('assignedTo', null)
     setValue('stage', '')
+    setValue('branch', '')
 
     setSelectedAssignedTo()
     setSelectedStage()
+    setselectedBranch();
     setRange([null, null])
 
     setsearchRefresh(!searchRefresh)
   }
+
+  const customRanges = [
+    {
+      label: 'Last 7 Days',
+      value: [moment().subtract(7, 'days').toDate(), new Date()]
+    },
+    {
+      label: 'Last 30 Days',
+      value: [moment().subtract(30, 'days').toDate(), new Date()]
+    }
+  ];
 
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
@@ -506,6 +538,42 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       <div className="filter_sec">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
 
+        <div>
+            <div className='form-group' >
+              <DateRangePicker
+                value={range}
+                onChange={setRange}
+                placeholder="Select Date Range"
+                style={{ width: 280 }}
+                format='dd-MM-yyyy'
+                ranges={customRanges} 
+              />
+
+            </div>
+          </div>
+
+
+          <div>
+            <div className='form-group'>
+
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <AsyncSelect
+                isClearable
+                defaultOptions
+                name='branch'
+                value={watch('branch')}
+                defaultValue={watch('branch')}
+                loadOptions={fetchBranches}
+                getOptionLabel={(e) => e.name}
+                getOptionValue={(e) => e.id}
+                placeholder={<div>Select Branch</div>}
+                onChange={handleSelectBranch}
+              />
+            </div>
+          </div>
+
           <div>
             <div className='form-group'>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 16 18" fill="none" className='sear-ic'>
@@ -514,6 +582,8 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
               </svg>
               <AsyncSelect
                 isClearable
+                isDisabled={!selectedBranch}
+                key={selectedBranch}
                 defaultOptions
                 name='assignedTo'
                 value={watch('assignedTo')}
@@ -609,20 +679,6 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
                 id="outlined-name"
                 placeholder={`Lead Id`}
               />
-            </div>
-          </div>
-
-
-          <div>
-            <div className='form-group' >
-              <DateRangePicker
-                value={range}
-                onChange={setRange}
-                placeholder="Select Date Range"
-                style={{ width: 280 }}
-                format='dd-MM-yyyy'
-              />
-
             </div>
           </div>
 

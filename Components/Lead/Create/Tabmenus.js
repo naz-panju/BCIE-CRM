@@ -24,6 +24,7 @@ import { Button, Grid } from '@mui/material';
 import ReactSelector from 'react-select';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import moment from 'moment';
+import TextInput from '@/Form/TextInput';
 
 
 
@@ -151,6 +152,18 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
     const fetchStudents = (e) => {
         return StudentApi.list({ keyword: e }).then(response => {
+            if (e) {
+                if (typeof response?.data?.data !== "undefined") {
+                    return response?.data?.data
+                } else {
+                    return [];
+                }
+            }
+        })
+    }
+
+    const fetchAgencies = (e) => {
+        return ListingApi.agencies({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data
             } else {
@@ -159,8 +172,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         })
     }
 
-    const fetchAgencies = (e) => {
-        return ListingApi.agencies({ keyword: e }).then(response => {
+    const fetchUniversities = (e) => {
+        return ListingApi.universities({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data
             } else {
@@ -451,6 +464,11 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         let getTitle = titles?.find((obj => obj?.name == currentTitle))
         setValue('title', getTitle)
     }
+
+    const getOptionLabel = (option) => {
+        return option.student_code ? `${option.name} (${option.student_code})` : option.name;
+    };
+
     useEffect(() => {
         setTitleValue()
     }, [titles])
@@ -503,7 +521,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             </div>
 
 
-                            <input placeholder='Your Name' control={control} {...register('name', { required: 'The Name field is required' })}
+                            <TextInput placeholder='Your Name' control={control} {...register('name', { required: 'The Name field is required' })}
                                 value={watch('name')} />
                             {errors.name && <span className='form-validation'>{errors.name.message}</span>}
 
@@ -519,7 +537,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="14" viewBox="0 0 17 14" fill="none">
                                 <path d="M1 3.5L7.3906 7.7604C8.0624 8.20827 8.9376 8.20827 9.6094 7.7604L16 3.5M3 12.6667H14C15.1046 12.6667 16 11.7712 16 10.6667V3C16 1.89543 15.1046 1 14 1H3C1.89543 1 1 1.89543 1 3V10.6667C1 11.7712 1.89543 12.6667 3 12.6667Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                             </svg>
-                            <input placeholder='Type your email here' control={control} {...register('email', {
+                            <TextInput placeholder='Type your email here' control={control} {...register('email', {
                                 required: 'Please enter your email',
                                 pattern: {
                                     value: /^\S+@\S+$/i,
@@ -638,37 +656,52 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                            <div className='form_group frm-sel-icon-stl'>
 
-                                <svg className='sel-icon' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 9.7998V19.9998M12 9.7998C12 8.11965 12 7.27992 12.327 6.63818C12.6146 6.0737 13.0732 5.6146 13.6377 5.32698C14.2794 5 15.1196 5 16.7998 5H19.3998C19.9599 5 20.2401 5 20.454 5.10899C20.6422 5.20487 20.7948 5.35774 20.8906 5.5459C20.9996 5.75981 21 6.04004 21 6.6001V15.4001C21 15.9601 20.9996 16.2398 20.8906 16.4537C20.7948 16.6419 20.6425 16.7952 20.4543 16.8911C20.2406 17 19.961 17 19.402 17H16.5693C15.6301 17 15.1597 17 14.7334 17.1295C14.356 17.2441 14.0057 17.4317 13.701 17.6821C13.3568 17.965 13.096 18.3557 12.575 19.1372L12 19.9998M12 9.7998C12 8.11965 11.9998 7.27992 11.6729 6.63818C11.3852 6.0737 10.9263 5.6146 10.3618 5.32698C9.72004 5 8.87977 5 7.19961 5H4.59961C4.03956 5 3.75981 5 3.5459 5.10899C3.35774 5.20487 3.20487 5.35774 3.10899 5.5459C3 5.75981 3 6.04004 3 6.6001V15.4001C3 15.9601 3 16.2398 3.10899 16.4537C3.20487 16.6419 3.35774 16.7952 3.5459 16.8911C3.7596 17 4.03901 17 4.59797 17H7.43073C8.36994 17 8.83942 17 9.26569 17.1295C9.64306 17.2441 9.99512 17.4317 10.2998 17.6821C10.6426 17.9638 10.9017 18.3526 11.4185 19.1277L12 19.9998" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <SelectX
-                                    placeholder={'Course Level'}
-                                    menuPlacement='top'
-                                    loadOptions={fetchCourseLevel}
-                                    control={control}
-                                    // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                    // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                    name={'preffered_course_level'}
-                                    defaultValue={watch('preffered_course_level')}
-                                />
-                                {errors.preffered_course_level && <span className='form-validation'>{errors.preffered_course_level.message}</span>}
-
-                            </div>
                             <div className='form_group frm-conn-stl '>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M3 15.0002V16.8C3 17.9201 3 18.4798 3.21799 18.9076C3.40973 19.2839 3.71547 19.5905 4.0918 19.7822C4.5192 20 5.07899 20 6.19691 20H21.0002M3 15.0002V5M3 15.0002L6.8534 11.7891L6.85658 11.7865C7.55366 11.2056 7.90288 10.9146 8.28154 10.7964C8.72887 10.6567 9.21071 10.6788 9.64355 10.8584C10.0105 11.0106 10.3323 11.3324 10.9758 11.9759L10.9822 11.9823C11.6357 12.6358 11.9633 12.9635 12.3362 13.1153C12.7774 13.2951 13.2685 13.3106 13.7207 13.1606C14.1041 13.0334 14.4542 12.7275 15.1543 12.115L21 7" stroke="#0B0D23" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
-                                <input placeholder='Preferred Courses' control={control} {...register('preffered_course')}
+                                <TextInput placeholder='Preferred Courses' control={control} {...register('preffered_course')}
                                     value={watch('preffered_course')} />
 
                                 {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
                             </div>
+                            <div className='form_group'>
+                                <DateInput
+                                    placeholder='Date of Birth'
+                                    control={control}
+                                    name="dob"
+                                    value={watch('dob')}
+                                />
+                                {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
+                            </div>
+                        </div>
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+
+                            <div className='form_group frm-conn-stl '>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M3 15.0002V16.8C3 17.9201 3 18.4798 3.21799 18.9076C3.40973 19.2839 3.71547 19.5905 4.0918 19.7822C4.5192 20 5.07899 20 6.19691 20H21.0002M3 15.0002V5M3 15.0002L6.8534 11.7891L6.85658 11.7865C7.55366 11.2056 7.90288 10.9146 8.28154 10.7964C8.72887 10.6567 9.21071 10.6788 9.64355 10.8584C10.0105 11.0106 10.3323 11.3324 10.9758 11.9759L10.9822 11.9823C11.6357 12.6358 11.9633 12.9635 12.3362 13.1153C12.7774 13.2951 13.2685 13.3106 13.7207 13.1606C14.1041 13.0334 14.4542 12.7275 15.1543 12.115L21 7" stroke="#0B0D23" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <TextInput placeholder='Passport Number' control={control} {...register('passport_number')}
+                                    value={watch('passport_number')} />
+
+                                {errors.passport_number && <span className='form-validation'>{errors.passport_number.message}</span>}
+                            </div>
+                            <div className='form_group'>
+                                <DateInput
+                                    placeholder='Passport Expiry Date'
+                                    control={control}
+                                    name="passport_expiry"
+                                    value={watch('passport_expiry')}
+                                />
+                                {errors.passport_expiry && <span className='form-validation'>{errors.passport_expiry.message}</span>}
+                            </div>
                         </div>
 
 
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                        {/* intake and course level */}
+                        {/* <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                             <div className='form_group frm-sel-icon-stl'>
                                 <svg className='sel-icon' xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none">
                                     <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -687,16 +720,25 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                 {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
 
                             </div>
-                            <div className='form_group'>
-                                <DateInput
-                                    placeholder='Date of Birth'
+                            <div className='form_group frm-sel-icon-stl'>
+
+                                <svg className='sel-icon' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 9.7998V19.9998M12 9.7998C12 8.11965 12 7.27992 12.327 6.63818C12.6146 6.0737 13.0732 5.6146 13.6377 5.32698C14.2794 5 15.1196 5 16.7998 5H19.3998C19.9599 5 20.2401 5 20.454 5.10899C20.6422 5.20487 20.7948 5.35774 20.8906 5.5459C20.9996 5.75981 21 6.04004 21 6.6001V15.4001C21 15.9601 20.9996 16.2398 20.8906 16.4537C20.7948 16.6419 20.6425 16.7952 20.4543 16.8911C20.2406 17 19.961 17 19.402 17H16.5693C15.6301 17 15.1597 17 14.7334 17.1295C14.356 17.2441 14.0057 17.4317 13.701 17.6821C13.3568 17.965 13.096 18.3557 12.575 19.1372L12 19.9998M12 9.7998C12 8.11965 11.9998 7.27992 11.6729 6.63818C11.3852 6.0737 10.9263 5.6146 10.3618 5.32698C9.72004 5 8.87977 5 7.19961 5H4.59961C4.03956 5 3.75981 5 3.5459 5.10899C3.35774 5.20487 3.20487 5.35774 3.10899 5.5459C3 5.75981 3 6.04004 3 6.6001V15.4001C3 15.9601 3 16.2398 3.10899 16.4537C3.20487 16.6419 3.35774 16.7952 3.5459 16.8911C3.7596 17 4.03901 17 4.59797 17H7.43073C8.36994 17 8.83942 17 9.26569 17.1295C9.64306 17.2441 9.99512 17.4317 10.2998 17.6821C10.6426 17.9638 10.9017 18.3526 11.4185 19.1277L12 19.9998" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <SelectX
+                                    placeholder={'Course Level'}
+                                    menuPlacement='top'
+                                    loadOptions={fetchCourseLevel}
                                     control={control}
-                                    name="dob"
-                                    value={watch('dob')}
+                                    // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                    // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                    name={'preffered_course_level'}
+                                    defaultValue={watch('preffered_course_level')}
                                 />
-                                {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
+                                {errors.preffered_course_level && <span className='form-validation'>{errors.preffered_course_level.message}</span>}
+
                             </div>
-                        </div>
+                        </div> */}
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                             <div className='form_group frm-sel-icon-stl'>
@@ -793,28 +835,30 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         {
                             watch('source')?.name == 'Referral' &&
+
+
                             // grid grid-cols-1 md:grid-cols-2 gap-4
                             <div className='form_group'>
-
-                                {/* <div className='form_group frm-sel-icon-stl'> */}
-
-                                {/* <svg className='sel-icon' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="black" stroke-width="1.5" />
-                                    <path d="M10 8.484C10.5 7.494 11 7 12 7C13.246 7 14 7.989 14 8.978C14 9.967 13.5 10.461 12 11.451V13M12 16.5V17" stroke="black" stroke-width="1.5" stroke-linecap="round" />
-                                </svg> */}
-                                <SelectX
+                                <AsyncSelect
                                     placeholder='Referred Student'
-                                    menuPlacement='top'
-                                    loadOptions={fetchStudents}
-                                    control={control}
-                                    // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                    // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
                                     name={'student'}
                                     defaultValue={watch('student')}
+                                    isClearable
+                                    defaultOptions
+                                    loadOptions={fetchStudents}
+                                    getOptionLabel={getOptionLabel}
+                                    getOptionValue={(e) => e.id}
+                                    onChange={(e) => setValue('student', e)}
                                 />
-                                {/* {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>} */}
 
-                                {/* </div> */}
+                                {/* <SelectX
+                            placeholder='Referred Student'
+                            menuPlacement='auto'
+                            loadOptions={fetchStudents}
+                            control={control}
+                            name={'student'}
+                            defaultValue={watch('student')}
+                        /> */}
                             </div>
                         }
 
@@ -824,15 +868,25 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             <div className='form_group'>
                                 <SelectX
                                     placeholder='Referred Angency'
-                                    menuPlacement='top'
+                                    menuPlacement='auto'
                                     loadOptions={fetchAgencies}
                                     control={control}
-                                    // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                    // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
                                     name={'agency'}
                                     defaultValue={watch('agency')}
                                 />
-                                {/* {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>} */}
+                            </div>
+                        }
+                        {
+                            watch('source')?.name == 'University' &&
+                            <div className='form_group'>
+                                <SelectX
+                                    placeholder='Referred University'
+                                    menuPlacement='auto'
+                                    loadOptions={fetchUniversities}
+                                    control={control}
+                                    name={'referred_university'}
+                                    defaultValue={watch('referred_university')}
+                                />
                             </div>
                         }
 

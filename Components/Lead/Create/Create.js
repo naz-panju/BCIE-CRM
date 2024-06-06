@@ -75,7 +75,6 @@ export default function CreateLead({ editId, setEditId, refresh, setRefresh, han
                         <p>Fill below fileds with students detail.</p>
 
                     </Grid>
-                    <hr />
                     <CreateTabs handleClose={handleClose} editId={editId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} from={from} handleLeadRefresh={handleLeadRefresh} />
                 </Grid>
             </Drawer>

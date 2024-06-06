@@ -80,12 +80,13 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
         setseletctedoption()
         setSelected([])
         setEditId()
+        setbranchId()
         setOpen(false);
     }
 
 
     const fetchCounsellor = (e) => {
-        return ListingApi.users({ keyword: e, office_id: watch('branch')?.id ,role_id: 5}).then(response => {
+        return ListingApi.users({ keyword: e, office_id: branchId, role_id: 5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data;
             } else {
@@ -191,8 +192,12 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
         setValue('counsellor', e || '');
     }
 
+    const [branchId, setbranchId] = useState()
     const handleBranchChange = (e) => {
+        setbranchId(e.id)
         setValue('branch', e || '');
+        setValue('counsellors', '');
+        setValue('counsellor', '');
     }
 
     const handleBulkCouncsellorChange = (e) => {
@@ -254,7 +259,6 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                         <a className='back_modal_head'> Assign </a>
 
                     </Grid>
-                    <hr />
 
                     <div className='form-data-cntr'>
 
@@ -288,7 +292,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                             <Grid className='form_group'>
                                 <AsyncSelect
                                     isMulti
-                                    key={watch('branch')}
+                                    key={branchId}
                                     placeholder='Select Counsellors'
                                     name={'counsellors'}
                                     defaultValue={watch('counsellors')}
@@ -304,12 +308,11 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                             </Grid>
                         }
 
-
                         {
                             (selectedoption == 2 && watch('branch')) &&
                             <Grid className='form_group'>
                                 <AsyncSelect
-                                    key={watch('branch')}
+                                    key={branchId}
                                     placeholder='Select Counsellor'
                                     name={'counsellor'}
                                     defaultValue={watch('counsellor')}

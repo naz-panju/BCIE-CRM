@@ -2422,7 +2422,7 @@ input::placeholder{
 }
 
 .lead-table-cntr.active .filter_sec {
-    height: 120px;
+    height: 170px;
     margin-bottom: 30px;
     transition: all .3s;
     opacity: 1;
