@@ -445,8 +445,18 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
     }
 
     const fetchCounsellors = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 5 }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 5,office_id: selectedBranch }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchBranches = (e) => {
+        return ListingApi.office({ keyword: e, }).then(response => {
+            if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
                 return [];
@@ -562,9 +572,9 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
             setshowAllIntake(false)
             setValue('intake', data || '')
             setselectedIntake(data?.id)
-        }else{
+        } else {
             setshowAllIntake(true)
-            setValue('intake','')
+            setValue('intake', '')
             setselectedIntake()
         }
     }
@@ -612,6 +622,14 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setselectedDeposit(data?.name)
     }
 
+    const [selectedBranch, setselectedBranch] = useState()
+    const handleSelectBranch = (e) => {
+        setselectedBranch(e?.id || '');
+        setValue('branch', e || '')
+        setselectedCreatedBy();
+        setValue('created_by', '')
+    }
+
     const [searchRefresh, setsearchRefresh] = useState(false)
 
     const onSearch = () => {
@@ -624,7 +642,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setValue('country', '')
         setValue('university', '')
         setValue('subjectarea', '')
-        setValue('intake', '')
+        // setValue('intake', '')
         setValue('course_level_id', '')
         setValue('stage', '')
         setValue('app_coordinator', '')
@@ -636,7 +654,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setValue('course', '')
 
         setselectedCountry()
-        setselectedIntake()
+        // setselectedIntake()
         setselectedUniversity()
         setselectedStream()
         setselectedcourselevel()
@@ -645,6 +663,10 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setselectedCreatedBy()
         setselectedStatus()
         setselectedDeposit()
+
+        
+        setValue('branch', '')
+        setselectedBranch();
 
         setsearchRefresh(!searchRefresh)
     }
@@ -664,7 +686,8 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
             course_level_id: selectedcourselevel,
             app_coordinator_id: selectedcoordinator,
             stage_id: selectedstage,
-            created_by: selectedCreatedBy,
+            assigned_to_counsellor_id: selectedCreatedBy,
+            assign_to_office_id:selectedBranch,
             course: watch('course'),
             application_number: watch('application_number'),
             student_code: watch('student_code'),
@@ -754,13 +777,13 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
     }
 
     const [uniInfoId, setuniInfoId] = useState()
-    const handlUniInfoOpen=(obj)=>{
+    const handlUniInfoOpen = (obj) => {
         setDetails(obj)
         setuniInfoId(obj?.id)
     }
 
     const [PortalId, setPortalId] = useState()
-    const handlePortalOpen=(obj)=>{
+    const handlePortalOpen = (obj) => {
         setDetails(obj)
         setPortalId(obj?.id)
         handlePopoverClose()
@@ -942,6 +965,26 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                             />
                         </div>
                     </div>
+                    <div>
+                        <div className='form-group'>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                                <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <AsyncSelect
+                                isClearable
+                                defaultOptions
+                                name='branch'
+                                value={watch('branch')}
+                                defaultValue={watch('branch')}
+                                loadOptions={fetchBranches}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>Select Branch</div>}
+                                onChange={handleSelectBranch}
+                            />
+                        </div>
+                    </div>
 
                     <div>
                         <div className='form-group'>
@@ -952,6 +995,8 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                 styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                 isClearable
                                 defaultOptions
+                                isDisabled={!selectedBranch}
+                                key={selectedBranch}
                                 name='created_by'
                                 value={watch('created_by')}
                                 defaultValue={watch('created_by')}
@@ -1129,8 +1174,8 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
                                                                 <TableCell align="left">
-                                                                <div className='d-flex justify-between items-center'>
-                                                                       <span onClick={()=>handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
+                                                                    <div className='d-flex justify-between items-center'>
+                                                                        <span onClick={() => handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
                                                                         {/* <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>

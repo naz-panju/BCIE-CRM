@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
-import ReactSelector from 'react-select';
+import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
-import AlumniTable from './AlumniTable';
+import { useForm } from 'react-hook-form';
 import { Grid, InputAdornment, TextField } from '@mui/material';
 import { Close, Search } from '@mui/icons-material';
-import { useForm } from 'react-hook-form';
+import ReactSelector from 'react-select';
+import AlumniTable from './AlumniTable';
+
 
 
 const StyledMenu = styled((props) => (
@@ -54,17 +56,15 @@ export default function AlumniIndex() {
 
   const router = useRouter();
 
-  const pageNumber = parseInt(router?.asPath?.split("=")[1] - 1 || 0);
+  const pageNumber = parseInt(router?.asPath?.split("=")[1] || 1);
 
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
-
   const searchOptions = [
     { name: 'Email' },
     { name: 'Name' },
     { name: 'Mobile' },
     { name: 'Lead Id' }
   ]
-
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [createModal, setCreateModal] = useState(false)
@@ -88,8 +88,8 @@ export default function AlumniIndex() {
   }
 
   const handleRefresh = () => {
-    if (page != 0) {
-      setPage(0)
+    if (page != 1) {
+      setPage(1)
     }
     setRefresh(!refresh)
   }
@@ -101,8 +101,8 @@ export default function AlumniIndex() {
     } else if (from == 'name') {
       setValue('nameSearch', '')
       setnameSearch('')
-      sessionStorage.removeItem('alumniType')
-      sessionStorage.removeItem('alumniSearch')
+      sessionStorage.removeItem('applicationType')
+      sessionStorage.removeItem('applicationSearch')
     } else if (from == 'mobile') {
       // setValue('mobileSearch', '')
       // setphoneSearch('')
@@ -111,28 +111,31 @@ export default function AlumniIndex() {
 
   const handleTypeChange = (type) => {
     setValue('searchType', type)
-    sessionStorage.setItem('alumniType',type)
+    sessionStorage.setItem('applicationType', type)
     setnameSearch('')
   }
 
   const handleNameSearch = () => {
     setnameSearch(watch('nameSearch'))
-    sessionStorage.setItem('alumniSearch',watch('nameSearch'))
+    sessionStorage.setItem('applicationSearch', watch('nameSearch'))
   }
 
-  const getInitialValue=()=>{
-    let getSearch=sessionStorage.getItem('alumniSearch')
-    if(getSearch){
-      let getSearchType=sessionStorage.getItem('alumniType')
-      if(getSearchType){
-        setValue('searchType', getSearchType)
-      }else{
-        setValue('searchType', searchOptions[0]?.name)
-      }
-      setValue('nameSearch',getSearch)
+  const getInitialValue = () => {
+    let getSearch = sessionStorage.getItem('applicationSearch')
+    if (getSearch) {
+      let getSearchType = sessionStorage.getItem('applicationType')
+      setValue('searchType', getSearchType)
+      setValue('nameSearch', getSearch)
       // setnameSearch(getSearch)
     }
   }
+
+  const [isActive, setIsActive] = useState(false); // State to manage whether the active class should be applied
+  const [searchActive, setsearchActive] = useState(false)
+
+  const toggleActive = () => {
+    setIsActive(!isActive); // Toggle the state value
+  };
 
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
@@ -150,50 +153,15 @@ export default function AlumniIndex() {
             <Grid display={'flex'} >
 
               <Grid display={'flex'}>
-                <Grid width={200}>
-                  <ReactSelector
-                    onInputChange={searchOptions}
-                    styles={{
-                      menu: provided => ({ ...provided, zIndex: 9999 })
-                    }}
-                    options={searchOptions}
-                    getOptionLabel={option => option.name}
-                    getOptionValue={option => option.name}
-                    value={
-                      searchOptions.find(options =>
-                        options.name === watch('searchType')
-                      )
-                    }
-                    name='searchType'
-
-                    defaultValue={(watch('searchType'))}
-                    onChange={(selectedOption) => handleTypeChange(selectedOption?.name)}
-                  />
-                </Grid>
-
-                <form onSubmit={handleSubmit(handleNameSearch)}>
-                  <TextField
-                    {...register('nameSearch')}
-                    style={{ width: 300, marginRight: 10 }}
-                    size='small'
-                    id="outlined-name"
-                    placeholder={`search by ${watch('searchType')?.toLowerCase()}`}
-                    InputProps={{
-                      endAdornment: (
-                        <>
-                          <InputAdornment position="end">
-                            <Search onClick={handleNameSearch} sx={{ cursor: 'pointer' }} fontSize='small' />
-                          </InputAdornment>
-                          <InputAdornment onClick={() => handleClearSearch('name')} sx={{ backgroundColor: '#eeeded', height: '100%', cursor: 'pointer', p: 0.5 }} position="end">
-                            <Close fontSize='small' />
-                          </InputAdornment>
-                        </>
-                      ),
-                    }}
-                  />
-                </form>
-
+                <Button onClick={toggleActive} className='search_btn'>
+                  <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 20L15.6569 15.6569M15.6569 15.6569C17.1046 14.2091 18 12.2091 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C12.2091 18 14.2091 17.1046 15.6569 15.6569Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </Button>
               </Grid>
+              {/* disabled={selected?.length == 0} */}
+
+              {/* <Button className='bg-sky-500' disabled={selected?.length == 0} sx={{ textTransform: 'none' }} onClick={handleCreateassign} size='small' variant='contained'>Assign</Button> */}
             </Grid>
 
           </div>
@@ -204,8 +172,8 @@ export default function AlumniIndex() {
         </div>
 
 
-        <div className='content-block'>
-          <AlumniTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} searchType={watch('searchType')} nameSearch={nameSearch} />
+        <div className={`content-block lead-table-cntr app ${isActive ? 'active' : ''}`}>
+          <AlumniTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} searchType={watch('searchType')} nameSearch={nameSearch} searchActive={searchActive} />
         </div>
       </section>
     </>

@@ -96,6 +96,7 @@ function DashboardIndex() {
         setOfficeId(data?.id)
     }
 
+    // console.log(moment(watch('intake')?.name).format('DD-MM-YYYY'));
     const [range, setRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
     const [weeklyRange, setWeeklyRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
     const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
@@ -111,7 +112,7 @@ function DashboardIndex() {
                 week_ends_on: moment(weeklyRange[1]).format('YYYY-MM-DD'),
                 office: officeId
             })
-            console.log(response);
+            // console.log(response);
             setWeeklyLoading(false)
         } catch (error) {
             console.log(error);
@@ -264,6 +265,27 @@ function DashboardIndex() {
         }
     }
 
+    const [submitApplicationList, setSubmitApplicationList] = useState([]);
+    const [submitApplicationLoading, setSubmitApplicationLoading] = useState(false);
+    const fetchsubmitApplication = async () => {
+        setSubmitApplicationLoading(true)
+        try {
+            const response = await DashboardApi.list({
+                type: 'applications_by_submitted_status',
+                date_from: moment(weeklyApplicationRange[0]).format('YYYY-MM-DD'),
+                date_to: moment(weeklyApplicationRange[1]).format('YYYY-MM-DD'),
+                office: officeId,
+                country: selectedCountries?.id
+            })
+            console.log(response);
+            setSubmitApplicationList(response?.data)
+            setSubmitApplicationLoading(false)
+        } catch (error) {
+            console.log(error);
+            setSubmitApplicationLoading(false)
+        }
+    }
+
     const [targets, setTargets] = useState([]);
     const [targetLoading, setTargetLoading] = useState(false);
     const fetchTargets = async () => {
@@ -274,7 +296,7 @@ function DashboardIndex() {
                 intake: intakeId,
                 counselor: selectedCounsellor?.id,
             })
-            console.log(response);
+            // console.log(response);
             setTargets(response?.data)
             setTargetLoading(false)
         } catch (error) {
@@ -298,6 +320,7 @@ function DashboardIndex() {
     }, [range, selectedCounsellor])
     useEffect(() => {
         fetchApplicationStages()
+        fetchsubmitApplication()
     }, [range, officeId, selectedCountries])
     useEffect(() => {
         fetchWeeklyApplication()
@@ -366,7 +389,7 @@ function DashboardIndex() {
                         <CommunicationSection communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
                     </div>
                     <div className='app_sec'>
-                        <ApplicationSection weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
+                        <ApplicationSection submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
                     </div>
                 </div>
             </section>

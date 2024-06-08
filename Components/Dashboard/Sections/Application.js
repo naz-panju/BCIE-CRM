@@ -4,38 +4,86 @@ import BarColorChartComponent from '../Charts/BarColorGraph'
 import { DateRangePicker } from 'rsuite'
 import AsyncSelect from "react-select/async";
 import { Skeleton } from '@mui/material';
+import { useSession } from 'next-auth/react';
 
-function ApplicationSection({ weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange }) {
-    const [range, setRange] = useState([null, null]);
+function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
+
+    const session = useSession()
+
     return (
         <div >
             <div className='weekly-leads'>
 
                 <div className='border flex'>
-                    <div style={{ height: '100%' }} className='graph w-4/12 border-r'>
-                        <div className='total_sec h-14 border-b-2 d-flex flex items-center justify-between p-3'>
-                            <div className='total'><span>Total</span> 300</div>
-                            <div className='date-range'>
-                                <DateRangePicker
-                                    value={weeklyApplicationRange}
-                                    onChange={setWeeklyApplicationRange}
-                                    // placeholder="Select Date Range"
-                                    style={{ width: 220 }}
-                                    format='dd-MM-yyyy'
-                                />
-                            </div>
-                        </div>
-                        {
-                            weeklyApplicationLoading ?
-                                <div className='graph'>
-                                    <Skeleton variant='rounded' width={'100%'} height={200} />
-                                </div>
+                    {
+                        session?.data?.user?.role?.id != 6 ?
+                            submitApplicationLoading ?
+                                <Skeleton variant='rounded' width={450} height={200} />
                                 :
-                                <div className='graph'>
-                                    <BarChartComponent />
+                                <div style={{ height: '100%' }} className='stage w-5/12 flex items-center justify-evenly mt-10'>
+                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg2'>
+                                        <div>
+
+                                        </div>
+                                        <div>
+                                            <h3> {submitApplicationList?.data?.returned}</h3>
+                                            Application
+                                        </div>
+
+                                        <span className='Hot btn-stage'>Returned</span>
+                                    </div>
+                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg3'>
+                                        <div>
+
+                                        </div>
+                                        <div>
+                                            <h3> {submitApplicationList?.data?.submitted}</h3>
+                                            Application
+                                        </div>
+
+                                        <span className='cool btn-stage'>Submitted</span>
+                                    </div>
+                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg4'>
+                                        <div>
+
+                                        </div>
+                                        <div>
+                                            <h3> {submitApplicationList?.data?.unsubmitted}</h3>
+                                            Application
+
+                                        </div>
+
+                                        <span className='warm btn-stage'>Unsubmitted</span>
+                                    </div>
                                 </div>
-                        }
-                    </div>
+                            :
+
+                            <div style={{ height: '100%' }} className='graph w-4/12 border-r'>
+                                <div className='total_sec h-14 border-b-2 d-flex flex items-center justify-between p-3'>
+                                    <div className='total'><span>Total</span> 300</div>
+                                    <div className='date-range'>
+                                        <DateRangePicker
+                                            value={weeklyApplicationRange}
+                                            onChange={setWeeklyApplicationRange}
+                                            // placeholder="Select Date Range"
+                                            style={{ width: 220 }}
+                                            format='dd-MM-yyyy'
+                                        />
+                                    </div>
+                                </div>
+                                {
+                                    weeklyApplicationLoading ?
+                                        <div className='graph'>
+                                            <Skeleton variant='rounded' width={'100%'} height={200} />
+                                        </div>
+                                        :
+                                        <div className='graph'>
+                                            <BarChartComponent />
+                                        </div>
+                                }
+                            </div>
+                    }
+
 
                     <div style={{ height: '100%' }} className='graph w-8/12 p-3 pt-0 '>
                         <div className='total_sec d-flex flex items-center justify-between p-3'>

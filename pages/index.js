@@ -20,15 +20,17 @@ export default function Home() {
 
   useEffect(() => {
 
-    if (session?.data?.user?.role?.id == 3) {
-      window.location.href = '/lead';
-    } else if (session?.data?.user?.role?.id == 4) {
-      window.location.href = '/lead';
-    } else if (session?.data?.user?.role?.id == 5) {
-      window.location.href = '/lead';
-    } else if (session?.data?.user?.role?.id == 6) {
-      window.location.href = '/applications-unsubmitted';
-    }
+    window.location.href = '/dashboard'
+
+    // if (session?.data?.user?.role?.id == 3) {
+    //   window.location.href = '/lead';
+    // } else if (session?.data?.user?.role?.id == 4) {
+    //   window.location.href = '/lead';
+    // } else if (session?.data?.user?.role?.id == 5) {
+    //   window.location.href = '/lead';
+    // } else if (session?.data?.user?.role?.id == 6) {
+    //   window.location.href = '/applications-unsubmitted';
+    // }
     // Redirect to the new home page
   }, []);
 

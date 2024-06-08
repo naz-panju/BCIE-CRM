@@ -637,7 +637,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setValue('country', '')
         setValue('university', '')
         setValue('subjectarea', '')
-        setValue('intake', '')
+        // setValue('intake', '')
         setValue('course_level_id', '')
         setValue('stage', '')
         setValue('app_coordinator', '')
@@ -650,7 +650,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setValue('course', '')
 
         setselectedCountry()
-        setselectedIntake()
+        // setselectedIntake()
         setselectedUniversity()
         setselectedStream()
         setselectedcourselevel()
@@ -679,7 +679,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             app_coordinator_id: selectedcoordinator,
             assign_to_office_id: selectedBranch,
             stage_id: selectedstage,
-            created_by: selectedCreatedBy,
+            assigned_to_counsellor_id: selectedCreatedBy,
+            assign_to_office_id:selectedBranch,
             course: watch('course'),
             application_number: watch('application_number'),
             student_code: watch('student_code'),

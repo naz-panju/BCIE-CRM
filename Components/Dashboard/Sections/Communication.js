@@ -11,6 +11,13 @@ import TargetTabs from './Target Tabs'
 import { Skeleton } from '@mui/material'
 
 function CommunicationSection({ communicationLogLoading,paymentLoading,targetLoading, fetchCounsellors, selectedCounsellor, handleCounsellorSelect, communicationLog, payments, targets }) {
+  const emails = communicationLog?.data?.emails || 0;
+  const calls = communicationLog?.data?.calls || 0;
+  const messages = communicationLog?.data?.whatsapp || 0;
+
+  // Calculate the total
+  const total = emails + calls + messages;
+
   return (
     <div >
 
@@ -36,7 +43,7 @@ function CommunicationSection({ communicationLogLoading,paymentLoading,targetLoa
                               <div className='total'><span>Total</span></div>
                             </div>
 
-                            <h2>120</h2>
+                            <h2>{total}</h2>
 
                             <h4>Logs</h4>
 
