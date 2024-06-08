@@ -10,19 +10,22 @@ import { DateRangePicker } from 'rsuite'
 import 'rsuite/dist/rsuite.min.css';
 import { DashboardApi } from '@/data/Endpoints/Dashboard'
 import moment from 'moment'
+import { useSession } from 'next-auth/react'
 
 
 function DashboardIndex() {
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
+    const session = useSession()
+
     const [intakeId, setIntakeId] = useState();
     const handleinTakeChange = (data) => {
         setValue('intake', data || '')
         setIntakeId(data?.id)
     }
-    const [intakeRefresh,setIntakerfersh]=useState(false)
-    const fetchIntakes = (e) => {  
+    const [intakeRefresh, setIntakerfersh] = useState(false)
+    const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e, }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 const allIntakes = response?.data?.data
@@ -66,7 +69,7 @@ function DashboardIndex() {
         setSelectedUniversity(data)
     }
     const fetchUniversities = (e) => {
-        return ListingApi.universities({ keyword: e,country:selectedCountries?.id }).then(response => {
+        return ListingApi.universities({ keyword: e, country: selectedCountries?.id }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -88,7 +91,7 @@ function DashboardIndex() {
             }
         })
     }
-   
+
 
     const [officeId, setOfficeId] = useState();
     const handleOfficeChange = (data) => {
@@ -324,10 +327,10 @@ function DashboardIndex() {
     }, [range, officeId, selectedCountries])
     useEffect(() => {
         fetchWeeklyApplication()
-    }, [weeklyApplicationRange, selectedCountries,selectedUniversity])
+    }, [weeklyApplicationRange, selectedCountries, selectedUniversity])
     useEffect(() => {
         fetchTargets()
-    }, [ intakeId,selectedCounsellor])
+    }, [intakeId, selectedCounsellor])
 
 
 
@@ -382,12 +385,19 @@ function DashboardIndex() {
                     </div>
                 </div>
                 <div className='content-block'>
-                    <div className='lead_sec'>
-                        <LeadSection weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadStage={leadStage} />
-                    </div>
-                    <div className='comm_sec'>
-                        <CommunicationSection communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
-                    </div>
+                    {
+                        session?.data?.user?.role?.id != 6 &&
+                        <div className='lead_sec'>
+                            <LeadSection weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadStage={leadStage} />
+                        </div>
+                    }
+                    {
+                        session?.data?.user?.role?.id != 6 &&
+                        <div className='comm_sec'>
+                            <CommunicationSection communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
+                        </div>
+                    }
+
                     <div className='app_sec'>
                         <ApplicationSection submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
                     </div>
