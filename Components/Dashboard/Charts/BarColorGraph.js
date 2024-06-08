@@ -1,22 +1,28 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const BarColorChartComponent = () => {
+const BarColorChartComponent = ({ leadStage }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
     const ctx = chartRef.current.getContext('2d');
-    const colors = ['#e73f76', '#322fc8', '#ff9900', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0', '#ff0000', '#00ff00', '#ffff00']; // Example color palette (10 colors)
+    // const colors = ['#e73f76', '#322fc8', '#ff9900', '#66b3ff', '#99ff99', '#ffcc99', '#c2c2f0', '#ff0000', '#00ff00', '#ffff00']; // Example color palette (10 colors)
+
+    const labels = leadStage?.data?.map(item => item.name);
+    const data = leadStage?.data?.map(item => item.lead_count);
+    const colors = leadStage?.data?.map(item => item.colour);
+
+    // console.log(labels, data, colors);
 
     const chart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['Label 1', 'Label 2', 'Label 3', 'Label 4', 'Label 5', 'Label 6', 'Label 7', 'Label 8', 'Label 9', 'Label 10'], // 10 labels
+        labels: labels, // 10 labels
         datasets: [
           {
-            label: 'Leads',
-            data: [80, 50, 70, 60, 90, 40, 100, 30, 20, 110], // 10 data points
-            backgroundColor: colors.slice(0, 10), // Use the first 10 colors from the palette
+            label: '',
+            data: data, // 10 data points
+            backgroundColor: colors, // Use the first 10 colors from the palette
             borderWidth: 0, // Remove border
             barThickness: 16, // Adjust this value for narrower bars
           },
@@ -35,7 +41,7 @@ const BarColorChartComponent = () => {
         scales: {
           y: {
             beginAtZero: true,
-            max: 120, // Adjust max value if your data requires it
+            // max: 5, // Adjust max value if your data requires it
             grid: {
               display: false, // Hide grid lines
             },
@@ -59,7 +65,7 @@ const BarColorChartComponent = () => {
     return () => {
       chart.destroy();
     };
-  }, []);
+  }, [leadStage]);
 
   return <canvas className='custom-height-bar-color' ref={chartRef}></canvas>;
 };

@@ -83,9 +83,9 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
             console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(`Phone Call Summary Has Been Successfully ${editId > 0 ? 'Updated' : 'Created'} `)
+                handleRefresh()
                 reset()
                 handleClose()
-                handleRefresh()
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)

@@ -9,9 +9,14 @@ import Checkbox from '@mui/material/Checkbox';
 import CreateTabs from './commTabs';
 import PhoneCallModal from './Modals/SummaryModal';
 import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
+import SendMail from '../../Modals/SendMail';
+import { useSession } from 'next-auth/react';
 
 
-export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallRefresh, setphoneCallRefresh }) {
+export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallRefresh, setphoneCallRefresh, leadData }) {
+
+    const session = useSession()
+
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [loading, setLoading] = useState(false)
@@ -53,13 +58,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         },
     })
 
-    const handlePhoneCallOpen = () => {
-        setphonecallId(0)
-    }
 
-    const handlePhoneRefresh = () => {
-        setphoneCallRefresh(!phoneCallRefresh)
-    }
 
     const handleChange = (event) => {
         setAge(event.target.value);
@@ -177,6 +176,28 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         setcallDetails(response?.data?.data)
         setcallSummaryLoading(false)
     }
+    const [mailId, setMailId] = useState()
+    const handleOpenMailModal = () => {
+        if (lead_id) {
+            setMailId(lead_id)
+        }
+    }
+
+    const handleMailRefresh = () => {
+        getSummary()
+        setActiveTab(0)
+        fetchList()
+    }
+
+    const handlePhoneCallOpen = () => {
+        setphonecallId(0)
+    }
+
+    const handlePhoneRefresh = () => {
+        getCallSummary()
+        fetchCallList()
+        setActiveTab(2)
+    }
 
     useEffect(() => {
         getSummary()
@@ -201,6 +222,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
 
         <>
             <PhoneCallModal lead_id={lead_id} editId={phonecallId} setEditId={setphonecallId} handleRefresh={handlePhoneRefresh} />
+            <SendMail from={'lead'} details={leadData} lead_id={lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleMailRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 {/* <div className='lead-tabpanel-content-block-title'>
@@ -262,7 +284,10 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
 
                                 </div>
                             </div>
-                                <Button variant='outlined' sx={{mt:2,mb:-2,textTransform:'none'}}>Send Mail</Button>
+                            {
+                                session?.data?.user?.role?.id != 6 &&
+                                <Button onClick={handleOpenMailModal} variant='outlined' sx={{ mt: 2, mb: -2, textTransform: 'none' }}>Send Mail</Button>
+                            }
                         </div>
 
                         <div className=' md:w-4/12 lg:w-3/12 pad-25 timeline-content-block-item-content-block'>
@@ -314,7 +339,10 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                                     </div>
                                 </div>
                             </div>
-                            <Button>Send Mail</Button>
+                            {
+                                session?.data?.user?.role?.id != 6 &&
+                                <Button variant='outlined' sx={{ mt: 2, mb: -2, textTransform: 'none' }}>Send Whatsapp</Button>
+                            }
                         </div>
 
                         <div className='md:w-4/12 lg:w-3/12 pad-25 timeline-content-block-item-content-block'>
@@ -367,6 +395,10 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
 
                                 </div>
                             </div>
+                            {
+                                session?.data?.user?.role?.id != 6 &&
+                                <Button onClick={handlePhoneCallOpen} variant='outlined' sx={{ mt: 2, mb: -2, textTransform: 'none' }}>Add Call</Button>
+                            }
                         </div>
                     </div>
 
@@ -405,7 +437,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                     </div>
                 </div>
 
-                <CreateTabs whatsappLoading={whatsappLoading} callLoading={callLoading} setEmailPage={setEmailPage} emailPage={emailPage} callPage={callPage} whatsappPage={whatsappPage} setcallPage={setcallPage} setwhatsappPage={setwhatsappPage} list={list} whatsappList={whatsappList} callList={callList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} setCallLimit={setCallLimit} loading={loading} handleCallEdit={setphonecallId} handlePhoneRefresh={handlePhoneRefresh} emailLimit={emailLimit} whatsappLimit={whatsappLimit} callLimit={callLimit} />
+                <CreateTabs leadData={leadData} whatsappLoading={whatsappLoading} callLoading={callLoading} setEmailPage={setEmailPage} emailPage={emailPage} callPage={callPage} whatsappPage={whatsappPage} setcallPage={setcallPage} setwhatsappPage={setwhatsappPage} list={list} whatsappList={whatsappList} callList={callList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} setCallLimit={setCallLimit} loading={loading} handleCallEdit={setphonecallId} handlePhoneRefresh={handlePhoneRefresh} emailLimit={emailLimit} whatsappLimit={whatsappLimit} callLimit={callLimit} />
 
             </div>
         </>

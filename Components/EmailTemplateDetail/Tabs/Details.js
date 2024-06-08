@@ -55,7 +55,8 @@ function Details({ data, loading }) {
                             Body Footer:
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.body_footer}
+                            <div dangerouslySetInnerHTML={{ __html: data?.body_footer }} />
+                            {/* {data?.body_footer} */}
                         </Typography>
                     </Grid>
                 </Grid >

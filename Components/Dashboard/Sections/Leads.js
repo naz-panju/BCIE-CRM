@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import BarChartComponent from '../Charts/BarChart'
 import BarColorChartComponent from '../Charts/BarColorGraph'
-import { Grid } from '@mui/material'
+import { Grid, Skeleton } from '@mui/material'
 import { DateRangePicker } from 'rsuite'
 import Facebook from '@/img/facebook.svg'
 import Instagram from '@/img/instagram.svg'
@@ -10,9 +10,15 @@ import Whatsapp from '@/img/Whatsapp.svg'
 import Linkedin from '@/img/Linkedin.svg'
 import Others from '@/img/Others.svg'
 import Image from 'next/image';
-function LeadSection() {
+function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage }) {
 
-    const [range, setRange] = useState([null, null]);
+    function formatPercentage(value) {
+        if (typeof value === 'number' && !isNaN(value)) {
+            return value.toFixed(2);
+        } else {
+            return value;
+        }
+    }
 
 
 
@@ -26,32 +32,56 @@ function LeadSection() {
                     <div style={{ height: '100%' }} className='graph w-4/12 border-r'>
                         <div className='total_sec h-14 border-b-2 d-flex flex items-center justify-between p-3'>
                             <div className='total'><span>Total</span> 300</div>
-                            <div className='date-range'>  <DateRangePicker
-                                    
-                                    onChange={setRange}
+                            <div className='date-range'>
+                                <DateRangePicker
+                                    value={weeklyRange}
+                                    onChange={setWeeklyRange}
                                     // placeholder="Select Date Range"
-                                    style={{ width: 150 }}
+                                    style={{ width: 220 }}
                                     format='dd-MM-yyyy'
-                                /></div>
+                                />
+                            </div>
                         </div>
-                        <div className='graph'>
-                            <BarChartComponent />
-                        </div>
+                        {
+                            weeklyLoading ?
+                                <div className='graph'>
+                                    <Skeleton variant='rounded' width={'100%'} height={200} />
+                                </div>
+                                :
+                                <div className='graph'>
+                                    <BarChartComponent />
+                                </div>
+                        }
                     </div>
 
                     <div className='stage w-8/12 flex items-center justify-evenly'>
-                        <div className='card weekly-card border rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg1'>
-                            <div>
-                                icon
-                            </div>
-                            <div>
-                                <h3> 20</h3>
-                                Leads
-                            </div>
+                        {
+                            weeklyStageListLoading ?
+                                [...Array(4)]?.map((_, index) => (
+                                    <div className='card border weekly-card rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg3'>
+                                        <Skeleton height={'100%'} width={'100%'} variant='rounded' />
+                                    </div>
+                                ))
+                                :
 
-                            <span className='Unverified btn-stage'>Unverified</span>
-                        </div>
-                        <div className='card border weekly-card rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg2'>
+                                weeklyStageList?.data?.map((obj, index) => (
+                                    <div style={{ background: obj?.colour }} className='card weekly-card border rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg1'>
+                                        <div>
+                                            <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M27 13.5C27 20.9558 20.9558 27 13.5 27C6.04416 27 0 20.9558 0 13.5C0 6.04416 6.04416 0 13.5 0C20.9558 0 27 6.04416 27 13.5Z" fill="#4DD4FF" />
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3> {obj?.lead_count}</h3>
+                                            Leads
+                                        </div>
+
+                                        <span className='Unverified btn-stage'>{obj?.name}</span>
+                                    </div>
+                                ))
+                        }
+
+                        {/* <div className='card border weekly-card rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg2'>
                             <div>
                                 icon
                             </div>
@@ -83,7 +113,7 @@ function LeadSection() {
                             </div>
 
                             <span className='warm btn-stage'>Warm</span>
-                        </div>
+                        </div> */}
                     </div>
 
                 </div>
@@ -97,32 +127,59 @@ function LeadSection() {
                             Lead Source
                         </div>
                         <div className='border rounded-sm h-4/5'>
-                            <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
-                                <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                    <span><Image src={Instagram } alt='Facebook' width={14} height={14} /> Facebook</span>
+                            {
+                                leadSourceListLoading ?
+
+                                    <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
+                                        {[...Array(6)].map((_, index) => (
+                                            <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                                <span> <Skeleton variant='rounded' width={90} height={20} /></span>
+                                                <span><Skeleton variant='rounded' width={40} height={20} /></span>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+
+                                    :
+                                    <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
+                                        <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                            <span><Image src={Instagram} alt='Facebook' width={14} height={14} /> Instagram</span>
+                                            <span>{formatPercentage(leadSourceList?.data?.Instagram)}%</span>
+                                        </Grid>
+                                        {/* <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                    <span><Image src={Linkedin} alt='Facebook' width={14} height={14} />Linkedin</span>
+                                    <span>{formatPercentage(leadSourceList?.data?.Facebook)}% </span>
+                                </Grid> */}
+                                        <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                            <span><Image src={Facebook} alt='Facebook' width={14} height={14} />Facebook</span>
+                                            <span>{formatPercentage(leadSourceList?.data?.Facebook)}% </span>
+                                        </Grid>
+                                        <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                            <span><Image src={Others} alt='Facebook' width={14} height={14} />google Ads</span>
+                                            <span>{formatPercentage(leadSourceList && leadSourceList?.data['Google Ads'])}% </span>
+                                        </Grid>
+                                        <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                            <span><Image src={Others} alt='Facebook' width={14} height={14} />Websites</span>
+                                            <span>{formatPercentage(leadSourceList?.data?.Website)}% </span>
+                                        </Grid>
+                                        <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                            <span><Image src={Others} alt='Facebook' width={14} height={14} />Referral</span>
+                                            <span>{formatPercentage(leadSourceList?.data?.Referral)}% </span>
+                                        </Grid>
+                                        {/* <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                    <span><Image src={Whatsapp} alt='Facebook' width={14} height={14} />Whatsapp</span>
                                     <span>75% </span>
-                                </Grid>
-                                <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                    <span><Image src={Linkedin } alt='Facebook' width={14} height={14} />Linkedin</span>
+                                </Grid> */}
+                                        {/* <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                    <span><Image src={Twitter} alt='Facebook' width={14} height={14} />X</span>
                                     <span>75% </span>
-                                </Grid>
-                                <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                    <span><Image src={Facebook } alt='Facebook' width={14} height={14} />Facebook</span>
-                                    <span>75% </span>
-                                </Grid>
-                                <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                    <span><Image src={Whatsapp } alt='Facebook' width={14} height={14} />Whatsapp</span>
-                                    <span>75% </span>
-                                </Grid>
-                                <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                    <span><Image src={Twitter } alt='Facebook' width={14} height={14} />X</span>
-                                    <span>75% </span>
-                                </Grid>
-                                <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                    <span><Image src={Others } alt='Facebook' width={14} height={14} />Others</span>
-                                    <span>75% </span>
-                                </Grid>
-                            </Grid>
+                                </Grid> */}
+                                        <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                            <span><Image src={Others} alt='Facebook' width={14} height={14} />Others</span>
+                                            <span>{formatPercentage(leadSourceList?.data?.Others)}% </span>
+                                        </Grid>
+                                    </Grid>
+                            }
+
 
                         </div>
 
@@ -131,13 +188,18 @@ function LeadSection() {
                     <div style={{ height: '100%' }} className='graph w-7/12 p-3'>
                         <div className='flex'>
                             <div className='border rounded-sm w-3/6'>
-                                
+
                                 <div className='chart-info-title'>
-                                    <div className='total'><span>Total</span> 300</div>
+                                    <div className='total'><span>Total</span>{leadStageLoading ? <Skeleton height={20} width={30} variant='rounded' /> : '300'} </div>
                                 </div>
 
 
-                                <BarColorChartComponent />
+                                {
+                                    leadStageLoading ?
+                                        <Skeleton height={200} width={'100%'} variant='rounded' />
+                                        :
+                                        <BarColorChartComponent leadStage={leadStage} />
+                                }
 
                             </div>
 
@@ -145,9 +207,24 @@ function LeadSection() {
                                 <div className='chart-info-block'>
                                     <h2>Chart info</h2>
 
+
                                     <div className='flex g-5'>
-                                        <ul>
-                                            <li><span></span>Unverified</li>
+                                        {
+                                            leadStageLoading ?
+                                                <Grid display={'flex'} container justifyContent={'space-between'} >
+                                                    {[...Array(12)].map((_, index) => (
+                                                        <Grid item md={5} className='md-6' style={{ marginBottom: 10 }} key={index}><Skeleton variant='rounded' width={200} height={20} /></Grid>
+                                                    ))}
+                                                </Grid>
+                                                :
+
+                                                <ul>
+                                                    {
+                                                        leadStage?.data?.map((obj, index) => (
+                                                            <li key={index}><span style={{ background: obj?.colour }}></span>{obj?.name}</li>
+                                                        ))
+                                                    }
+                                                    {/* <li><span></span>Unverified</li>
                                             <li><span></span>Warm</li>
                                             <li><span></span>Application Preparation</li>
                                             <li><span></span>Application Submitted</li>
@@ -156,14 +233,15 @@ function LeadSection() {
                                             <li><span></span>Hot</li>
                                             <li><span></span>Deposit Paid</li>
                                             <li><span></span>Visa Submitted</li>
-                                            <li><span></span>Visa Obtained</li>
-                                        </ul>
+                                            <li><span></span>Visa Obtained</li> */}
+                                                </ul>
+                                        }
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        
+
 
                         {/* <div className='graph'>
                             <BarChartComponent />

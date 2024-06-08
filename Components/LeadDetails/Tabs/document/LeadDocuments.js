@@ -26,8 +26,12 @@ import Doc from '@/img/doc.png';
 import DocPreview from '@/img/doc-preview.jpg';
 import Image from 'next/image'
 import PdfViewer from '@/Form/PdfViewer'
+import { useSession } from 'next-auth/react'
 
 function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
+
+    const session = useSession()
+
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
@@ -92,16 +96,14 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
     }
 
     const handleRefresh = () => {
-        if (page != 0) {
-            setPage(0)
-        }
-        setRefresh(!refresh)
+
+        fetchList(true)
     }
 
     const [first, setfirst] = useState(0)
     const [imageLoading, setimageLoading] = useState(0)
 
-    const fetchList = async () => {
+    const fetchList = async (select) => {
         setLoading(true)
 
         // if (first == 0) {
@@ -121,9 +123,9 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
             const response = await LeadApi.listDocuments(params)
             if (response?.status == 200 || response?.status == 201) {
                 setList(response?.data)
-                // if (first == 0) {
-                //     setdocumentSelected(response?.data?.data[0])
-                // }
+                if (select) {
+                    setdocumentSelected(response?.data?.data[0])
+                }
                 // setfirst(first + 1)
                 setLoading(false)
                 setimageLoading(false)
@@ -142,6 +144,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
         }
 
     }
+
 
     async function downloadFile(url, fileName) {
         try {
@@ -171,7 +174,6 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
     }
 
 
-    // console.log(list?.data);
 
     function trimUrlAndNumbers(url) {
         const lastSlashIndex = url?.lastIndexOf('/');
@@ -185,9 +187,11 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
         setdocumentSelected(obj)
     }
 
-    const handleDeselectDocument=()=>{
+    const handleDeselectDocument = () => {
         setdocumentSelected()
     }
+
+    console.log(documentSelected?.status);
 
     const [searchKey, setsearchKey] = useState()
 
@@ -205,8 +209,8 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
 
             <LeadDocumentDetailModal id={detailId} setId={setDetailId} />
 
-            <DocumentConfirmPopup ID={confirmId} setID={setconfirmId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Are you want to Approve this Document?'} getDetails={handleRefresh} />
-            <DocumentRejectPopup ID={rejectId} setID={setrejectId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Are you want to Reject this Document?'} getDetails={handleRefresh} />
+            <DocumentConfirmPopup ID={confirmId} setID={setconfirmId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Do you want to Approve this Document?'} getDetails={handleRefresh} />
+            <DocumentRejectPopup ID={rejectId} setID={setrejectId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Do you want to Reject this Document?'} getDetails={handleRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
@@ -214,10 +218,13 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                         Download & Upload Documents
                     </div>
 
-                    <Grid display={'flex'} alignItems={'end'}>
-                        {/* <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Add</Button> */}
-                        <Button onClick={handleRequest} className='bg-sky-400 Request-Document-btn' ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">  <path d="M19 19L16 16M10.0002 20H7.19692C6.07901 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4796 4 18.9074 4.21799C19.2837 4.40973 19.5905 4.71547 19.7822 5.0918C20 5.5192 20 6.07899 20 7.19691V10.0002M13.5 17C11.567 17 10 15.433 10 13.5C10 11.567 11.567 10 13.5 10C15.433 10 17 11.567 17 13.5C17 15.433 15.433 17 13.5 17Z" stroke="#232648" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg> Request Document</Button>
-                    </Grid>
+                    {
+                        session?.data?.user?.role?.id != 6 &&
+                        <Grid display={'flex'} alignItems={'end'}>
+                            {/* <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Add</Button> */}
+                            <Button onClick={handleRequest} className='bg-sky-400 Request-Document-btn' ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">  <path d="M19 19L16 16M10.0002 20H7.19692C6.07901 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4796 4 18.9074 4.21799C19.2837 4.40973 19.5905 4.71547 19.7822 5.0918C20 5.5192 20 6.07899 20 7.19691V10.0002M13.5 17C11.567 17 10 15.433 10 13.5C10 11.567 11.567 10 13.5 10C15.433 10 17 11.567 17 13.5C17 15.433 15.433 17 13.5 17Z" stroke="#232648" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" /></svg> Request Document</Button>
+                        </Grid>
+                    }
 
                 </div>
 
@@ -241,6 +248,14 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                                     <li className={documentSelected?.id == obj?.id ? 'Active' : ''} onClick={() => handleSelectDocument(obj)} key={index}>
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 13.5V9M9 9L6.75 10.5M9 9L11.25 10.5M9.75 2.25065C9.67838 2.25 9.59796 2.25 9.50604 2.25H6.15015C5.31007 2.25 4.88972 2.25 4.56885 2.41349C4.2866 2.5573 4.0573 2.7866 3.91349 3.06885C3.75 3.38972 3.75 3.81007 3.75 4.65015V13.3501C3.75 14.1902 3.75 14.61 3.91349 14.9309C4.0573 15.2132 4.2866 15.4429 4.56885 15.5867C4.8894 15.75 5.30925 15.75 6.14771 15.75L11.8523 15.75C12.6908 15.75 13.11 15.75 13.4305 15.5867C13.7128 15.4429 13.9429 15.2132 14.0867 14.9309C14.25 14.6104 14.25 14.1911 14.25 13.3527V6.99426C14.25 6.90222 14.25 6.82171 14.2493 6.75M9.75 2.25065C9.96423 2.2526 10.0998 2.26038 10.2291 2.29145C10.3822 2.32819 10.5284 2.38895 10.6626 2.47119C10.8139 2.56392 10.9439 2.69386 11.2031 2.95312L13.5472 5.29724C13.8067 5.55667 13.9357 5.68602 14.0284 5.8374C14.1107 5.9716 14.1715 6.11794 14.2083 6.271C14.2393 6.40032 14.2473 6.53588 14.2493 6.75M9.75 2.25065V4.35C9.75 5.19008 9.75 5.60983 9.91349 5.93069C10.0573 6.21294 10.2866 6.44286 10.5688 6.58667C10.8894 6.75 11.3092 6.75 12.1477 6.75H14.2493M14.2493 6.75H14.2501" stroke="#232648" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
                                                         {obj?.title || obj?.document_template?.name}
+
+                                                        {
+                                                            obj?.status !== 'Uploaded' &&
+                                                            <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M11 5.5C11 8.53757 8.53757 11 5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5Z" fill="#A4B6FF" />
+                                                            </svg>}
+                                                        <span style={{ textAlign: 'end', color: '#898989' }}>
+                                                            {obj?.status !== 'Uploaded' && obj?.status}</span>
                                                     </li>
                                                 ))
                                                 :
@@ -250,14 +265,16 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
 
                             </div>
 
+                            {
+                                session?.data?.user?.role?.id != 6 &&
+                                <div onClick={handleCreate} style={{ cursor: 'pointer' }} className='add-document-block'>
+                                    <Image src={Doc} alt='Doc' width={200} height={200} />
 
-                            <div onClick={handleCreate} style={{cursor:'pointer'}} className='add-document-block'>
-                                <Image src={Doc} alt='Doc' width={200} height={200} />
+                                    <h3>Add<span>Document</span></h3>
+                                    {/* <h4>Max 10 MB files are allowed</h4> */}
 
-                                <h3>Add<span>Document</span></h3>
-                                <h4>Max 10 MB files are allowed</h4>
-
-                            </div>
+                                </div>
+                            }
                         </div>
 
                         <div className='md:w-7/12 lg:w-7/12 pad-25'>
@@ -303,7 +320,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="41" height="41" viewBox="0 0 41 41" fill="none"><path d="M20.5 11.9583V20.5H29.0417M20.5 35.875C12.0086 35.875 5.125 28.9914 5.125 20.5C5.125 12.0086 12.0086 5.125 20.5 5.125C28.9914 5.125 35.875 12.0086 35.875 20.5C35.875 28.9914 28.9914 35.875 20.5 35.875Z" stroke="#FEA878" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
                                                 </div>
                                                 <h2>This Document has been <br /> Requested</h2>
-                                                <span onClick={() => handleUploadRejectedDoc(documentSelected)} style={{ textDecoration: 'underLine',cursor:'pointer' }}>Click here to upload the Document</span>
+                                                <span onClick={() => handleUploadRejectedDoc(documentSelected)} style={{ textDecoration: 'underLine', cursor: 'pointer' }}>Click here to upload the Document</span>
                                             </div>
                                         }
                                     </>
@@ -320,87 +337,29 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                     documentSelected &&
                                     <div className='d-flex justify-between align-center'>
                                         <h2>{documentSelected?.title || documentSelected?.document_template?.name}</h2>
-                                        <Edit onClick={() => handleEditDocument(documentSelected?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
+                                        {
+
+                                            session?.data?.user?.role?.id != 6 &&
+                                            (documentSelected?.status == 'Uploaded') &&
+                                            <Edit onClick={() => handleEditDocument(documentSelected?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
+                                        }
                                     </div>
                                 }
-                                <div className='degree-btn-block'>
-                                    <Button disabled={!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested")} onClick={() => handleAccept(documentSelected?.id)} className='degree-btn'>Approve <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none"><path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
-                                    <Button disabled={!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested")} onClick={() => handleReject(documentSelected?.id)} className='Reject-btn'>Reject <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
-                                </div>
+
+                                {
+                                    session?.data?.user?.role?.id != 6 &&
+                                    <div className='degree-btn-block'>
+                                        <Button disabled={!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested") || documentSelected?.status == "Accepted" || documentSelected?.status == "Rejected"} onClick={() => handleAccept(documentSelected?.id)} className='degree-btn'>Accept <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none"><path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
+                                        <Button disabled={!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested") || documentSelected?.status == "Accepted" || documentSelected?.status == "Rejected"} onClick={() => handleReject(documentSelected?.id)} className='Reject-btn'>Reject <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg></Button>
+                                    </div>
+                                }
+
                             </div>
 
                         </div>
                     </div>
 
 
-
-                    {/* {
-                                list?.data?.length > 0 ?
-                                    <>
-                                        <TableContainer>
-                                            <Table>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        <TableCell>
-
-                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                Name
-                                                            </Typography>
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                Document
-                                                            </Typography>
-                                                        </TableCell>
-                                                      
-                                                        <TableCell>
-                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                Status
-                                                            </Typography>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {
-                                                        list?.data?.map((obj, index) => (
-                                                            <TableRow key={obj?.id}>
-                                                                <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleDetailOpen(obj?.id)}><Tooltip title={obj?.note}>{obj?.title || obj?.document_template?.name}</Tooltip></TableCell>
-                                                                <TableCell><a href={obj?.file} target='_blank' style={{ color: blue[700], textDecoration: 'underLine' }} >{trimUrlAndNumbers(obj?.file)}</a></TableCell>
-                                                              
-                                                                <TableCell>{obj?.status}</TableCell>
-                                                                <TableCell>
-                                                                    {
-
-                                                                        obj?.status == 'Requested' &&
-                                                                        <>
-                                                                            <Upload onClick={() => handleUploadRejectedDoc(obj)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
-                                                                        </>
-                                                                    }
-                                                                </TableCell>
-                                                                <TableCell>
-                                                                    {
-
-                                                                        obj?.status != 'Requested' &&
-                                                                        <>
-                                                                            <Button onClick={() => handleAccept(obj?.id)} sx={{ textTransform: 'none', mr: 1 }} size='small' className='bg-lime-300 text-black hover:bg-lime-400'>Approve</Button>
-                                                                            <Button onClick={() => handleReject(obj?.id)} sx={{ textTransform: 'none', mr: 5 }} size='small' className='bg-red-500 text-white hover:bg-red-600'>Reject</Button>
-                                                                            <Edit onClick={() => handleEditDocument(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
-                                                                        </>
-                                                                    }
-                                                                </TableCell>
-                                                            </TableRow>
-                                                        ))
-                                                    }
-
-                                                </TableBody>
-                                            </Table>
-
-                                           
-                                        </TableContainer>
-                                    </>
-                                    :
-                                    <h4>You have no Documents</h4>
-                            } */}
                 </div>
 
 

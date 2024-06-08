@@ -71,8 +71,10 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
         selectedDocuments?.map((obj) => {
             // console.log(obj);
             let fileType = getLastExtension(obj?.file)
+            const fileName=extractFileName(obj?.file_path)
+            console.log(fileName);
             let object = {
-                name: obj?.title || obj?.document_template?.name,
+                name: fileName,
                 url: obj?.file,
                 type: fileType
                 // type:obj?.file_type
@@ -96,12 +98,28 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedDocuments]);
 
+    function extractFileName(input) {
+        // Step 1: Extract the text after the last '/'
+        const lastPart = input.substring(input.lastIndexOf('/') + 1);
+      
+        // // Step 2: Extract the text after the number followed by an underscore
+        // const partAfterNumber = lastPart.replace(/^\d+_/, '');
+      
+        // Step 3: Remove the text after the '.'
+        const result = lastPart.split('.')[0];
+
+        // console.log(result);
+      
+        return result;
+      }
+
     const downloadDocument = async () => {
         setLoading(true);
         try {
             const zip = new JSZip();
             const remoteZips = files.map(async (file) => {
                 const response = await fetch(file?.url);
+                // console.log(file);
                 const data = await response.blob();
                 zip.file(`${file?.name}.${file.type}`, data);
                 return data;
@@ -113,6 +131,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
                         // give the zip file a name
                         saveAs(content, `${details?.lead?.name}_${details?.lead?.student_code}.zip`);
                     });
+                    // handleClose()
                     setLoading(false);
                 })
                 .catch((error) => {

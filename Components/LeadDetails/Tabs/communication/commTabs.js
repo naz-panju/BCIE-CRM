@@ -40,7 +40,7 @@ function a11yProps(index) {
     };
 }
 
-export default function CreateTabs({ list, value, setValue, activeTab, setActiveTab, setEmailLimit, loading, setwhatsappLimit, whatsappList, callList, setCallLimit, handleCallEdit, handlePhoneRefresh,emailLimit,whatsappLimit,callLimit,setEmailPage,emailPage,whatsappPage,setwhatsappPage,callPage,setcallPage,callLoading,whatsappLoading }) {
+export default function CreateTabs({ list, value, setValue, activeTab, setActiveTab, setEmailLimit, loading, setwhatsappLimit, whatsappList, callList, setCallLimit, handleCallEdit, handlePhoneRefresh,emailLimit,whatsappLimit,callLimit,setEmailPage,emailPage,whatsappPage,setwhatsappPage,callPage,setcallPage,callLoading,whatsappLoading,leadData }) {
     // const [value, setValue] = React.useState(0);
     // const [activeTab, setActiveTab] = useState(0);
     const handleChange = (event, newValue) => {
@@ -49,7 +49,7 @@ export default function CreateTabs({ list, value, setValue, activeTab, setActive
 
     const tabs = [
         {
-            component: <EmailTab page={emailPage} setPage={setEmailPage} list={list} setEmailLimit={setEmailLimit} loading={loading} emailLimit={emailLimit} />,
+            component: <EmailTab page={emailPage} setPage={setEmailPage} list={list} setEmailLimit={setEmailLimit} loading={loading} emailLimit={emailLimit} leadData={leadData} />,
             label: 'Email'
         },
         {

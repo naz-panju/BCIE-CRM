@@ -41,7 +41,7 @@ function a11yProps(index) {
     };
 }
 
-export default function TargetTabs({ id, close ,archiveRefresh}) {
+export default function TargetTabs({ targets }) {
     const [value, setValue] = React.useState(0);
     const [activeTab, setActiveTab] = useState(0);
 
@@ -51,22 +51,22 @@ export default function TargetTabs({ id, close ,archiveRefresh}) {
 
     const tabs = [
         {
-            component: <ApplicationSubmittedGraph  />,
+            component: <ApplicationSubmittedGraph data={targets?.data?.A} />,
             label: 'Application Submitted'
         },
         {
-            component: <ApplicationSubmittedGraph  />,
+            component: <ApplicationSubmittedGraph />,
             label: 'Unconditional Offer'
         },
         {
-            component: <ApplicationSubmittedGraph  />,
+            component: <ApplicationSubmittedGraph />,
             label: 'Deposit Paid'
         },
         {
-            component: <ApplicationSubmittedGraph  />,
+            component: <ApplicationSubmittedGraph />,
             label: 'Visa Obtained'
         },
-       
+
     ];
 
     return (
@@ -79,8 +79,9 @@ export default function TargetTabs({ id, close ,archiveRefresh}) {
                             <Tab label={obj.label} key={index} {...a11yProps(index)} sx={{ textTransform: 'none' }} />
                         ))}
                     </Tabs>
-                 
+
                 </Box>
+
                 {tabs.map((obj, index) => {
                     return <TabPanel value={activeTab} index={index} key={index}>
                         {obj.component}

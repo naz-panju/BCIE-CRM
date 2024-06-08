@@ -30,15 +30,6 @@ export default function DocumentRejectPopup({ ID, setID, setLoading, title, load
         disabled: false,
     });
 
-    const fetchStudents = (e) => {
-        return StudentApi.list({ keyword: e }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
-                return response?.data?.data
-            } else {
-                return [];
-            }
-        })
-    }
 
 
     const handleClose = () => {
@@ -53,7 +44,7 @@ export default function DocumentRejectPopup({ ID, setID, setLoading, title, load
         }
 
         LeadApi.rejectDocument(dataToSubmit).then((response) => {
-            // console.log(response);
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setID()

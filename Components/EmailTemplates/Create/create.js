@@ -221,9 +221,10 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                 setValue('body_footer', data?.body_footer)
                 setSelectedPriority(data?.priority)
                 setValue('default_cc', data?.default_cc)
-
-                console.log(data?.attchments);
                 setattachmentFiles(data?.attchments)
+                if(data?.system_template==1){
+                    setIsSysytemTemplate(true)
+                }
 
                 setDataLoading(false)
             }
@@ -366,17 +367,40 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                 </Grid>
                                             </Grid>
 
-                                            <Grid className='form_group'>
+                                            <Grid display={'flex'} container p={1.5} item xs={12}>
+                                                <Grid item display={'flex'} xs={12} md={2.5}>
+                                                    <Typography sx={{ fontWeight: '500' }}>Body Footer</Typography>
+                                                </Grid>
+                                                <Grid item xs={12} md={12}>
+                                                    {/* <TextField
+                                                        {...register('body')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={2}
+                                                        sx={{ width: '100%', }}
+                                                    /> 
+                                                    {errors.body && <span className='form-validation'>{errors.body.message}</span>}
+                                                    */}
+                                                    {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
+
+                                                    <Editor emoji={false} val={watch('body_footer')}
+                                                        onValueChange={e => setValue('body_footer', e)} copied={copied}
+                                                    />   
+                                                </Grid>
+                                            </Grid>
+
+                                            {/* <Grid className='form_group'>
 
                                                 <TextInput placeholder='Body Footer' control={control} name="body_footer"
                                                     value={watch('body_footer')} />
                                                 {errors.body_footer && <span className='form-validation'>{errors.body_footer.message}</span>}
 
-                                            </Grid>
+                                            </Grid> */}
 
                                             <Grid className='form_group'>
 
-                                                <TextInput placeholder='Default CC' control={control} name="default_cc"
+                                                <TextInput disabled={isSysytemTemplate} placeholder='Default CC' control={control} name="default_cc"
                                                     value={watch('default_cc')} />
                                                 {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
 
