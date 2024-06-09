@@ -478,10 +478,13 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                             }
 
                                                                             {/* edit application */}
-                                                                            <Button className='edit-btn-outline' onClick={() => handleEditDocument(obj?.id)}  > <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                <path d="M8.50065 2.83333H4.83398C3.72941 2.83333 2.83398 3.72876 2.83398 4.83333V12.1667C2.83398 13.2712 3.72941 14.1667 4.83398 14.1667H12.1673C13.2719 14.1667 14.1673 13.2712 14.1673 12.1667V8.5M6.37565 10.625V8.85416L12.5736 2.65625C13.0626 2.16724 13.8554 2.16724 14.3444 2.65624V2.65624C14.8334 3.14525 14.8334 3.93808 14.3444 4.42708L10.9798 7.79166L8.14648 10.625H6.37565Z" stroke="black" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
-                                                                            </svg>
-                                                                                Edit</Button>
+
+                                                                            {session?.data?.user?.role?.id != 6 &&
+                                                                                <Button className='edit-btn-outline' onClick={() => handleEditDocument(obj?.id)}  > <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                    <path d="M8.50065 2.83333H4.83398C3.72941 2.83333 2.83398 3.72876 2.83398 4.83333V12.1667C2.83398 13.2712 3.72941 14.1667 4.83398 14.1667H12.1673C13.2719 14.1667 14.1673 13.2712 14.1673 12.1667V8.5M6.37565 10.625V8.85416L12.5736 2.65625C13.0626 2.16724 13.8554 2.16724 14.3444 2.65624V2.65624C14.8334 3.14525 14.8334 3.93808 14.3444 4.42708L10.9798 7.79166L8.14648 10.625H6.37565Z" stroke="black" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                                                                                </svg>
+                                                                                    Edit</Button>
+                                                                            }
                                                                         </div>
 
                                                                     </div>

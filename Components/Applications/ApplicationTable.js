@@ -706,10 +706,9 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             params['deposit_paid'] = 0
         }
 
-        console.log('here');
 
         ApplicationApi.list(params).then((response) => {
-            console.log(response);
+            // console.log(response);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {
@@ -803,6 +802,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     useEffect(() => {
         fetchTable()
     }, [page, refresh, limit, searchRefresh])
+
+    // console.log(list);
 
 
     return (
@@ -1257,7 +1258,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                                 <TableCell className='stage-colm' align="left"><Tooltip title={row?.stage_note}><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span></Tooltip></TableCell>
-                                                                <TableCell align="left">{row?.counsellor?.name}</TableCell>
+                                                                <TableCell align="left">{row?.lead?.assignedToCounsellor?.name}</TableCell>
                                                                 <TableCell align="left"> {
                                                                     row?.deposit_amount_paid ?
                                                                         <>
