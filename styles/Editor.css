@@ -2943,3 +2943,8 @@ body.body-active .footer {
     border-radius: 5px;
     margin-bottom: 5px; /* Add some space between list items */
 }
+
+.no-clear .rs-input-group-addon {
+    display: none;
+
+}

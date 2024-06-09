@@ -21,10 +21,12 @@ function DashboardIndex() {
 
     const [intakeId, setIntakeId] = useState();
     const handleinTakeChange = (data) => {
+        handleIntakeDateRange(data?.name)
         setValue('intake', data || '')
         setIntakeId(data?.id)
     }
     const [intakeRefresh, setIntakerfersh] = useState(false)
+    const [range, setRange] = useState([null, null]);
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e, }).then(response => {
             if (typeof response.data.data !== "undefined") {
@@ -33,12 +35,21 @@ function DashboardIndex() {
                 setValue('intake', defualtIntake || '')
                 setIntakeId(defualtIntake?.id)
                 setIntakerfersh(true)
+                // handleIntakeDateRange(defualtIntake?.name)
                 return response.data.data;
             } else {
                 return [];
             }
         })
     }
+
+    useEffect(() => {
+        if (intakeId) {
+            handleIntakeDateRange(watch('intake')?.name)
+        }
+    }, [intakeRefresh])
+
+
     const fetchOffice = (e) => {
         return ListingApi.office({ keyword: e, }).then(response => {
             if (typeof response.data.data !== "undefined") {
@@ -95,17 +106,40 @@ function DashboardIndex() {
 
     const [officeId, setOfficeId] = useState();
     const handleOfficeChange = (data) => {
+
         setValue('office', data || '')
         setOfficeId(data?.id)
     }
 
+    const handleIntakeDateRange = (date) => {
+        const dayBefore = moment(date).subtract(1, 'day');
+        // console.log(dayBefore);
+
+        if (dayBefore.month() === 11) {
+            const adjustedDate = moment({ year: dayBefore.year(), month: 8, day: 1 });
+            // console.log(adjustedDate);
+            setRange([adjustedDate.toDate(), dayBefore.toDate()])
+        } else if (dayBefore.month() === 5) {
+            const adjustedDate = moment({ year: dayBefore.year(), month: 0, day: 1 })
+            // console.log(adjustedDate);
+            setRange([adjustedDate.toDate(), dayBefore.toDate()])
+        }
+        else if (dayBefore.month() === 8) {
+            const adjustedDate = moment({ year: dayBefore.year(), month: 5, day: 1 })
+            // console.log(adjustedDate);
+            setRange([adjustedDate.toDate(), dayBefore.toDate()])
+        }
+    }
+
     // console.log(moment(watch('intake')?.name).format('DD-MM-YYYY'));
-    const [range, setRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
+
+
+    // console.log(range);
     const [weeklyRange, setWeeklyRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
     const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
 
     const [weeklyList, setWeeklyList] = useState([]);
-    const [weeklyLoading, setWeeklyLoading] = useState(false)
+    const [weeklyLoading, setWeeklyLoading] = useState(true)
     const fetchWeeklyList = async () => {
         setWeeklyLoading(true)
         try {
@@ -124,7 +158,7 @@ function DashboardIndex() {
 
     }
     const [weeklyStageList, setWeeklyStageList] = useState([]);
-    const [weeklyStageListLoading, setWeeklyStageListLoading] = useState(false);
+    const [weeklyStageListLoading, setWeeklyStageListLoading] = useState(true);
     const fetchWeeklyStageList = async () => {
         setWeeklyStageListLoading(true)
         try {
@@ -144,7 +178,7 @@ function DashboardIndex() {
 
     }
     const [leadSourceList, setLeadSourceList] = useState();
-    const [leadSourceListLoading, setLeadSourceListLoading] = useState(false);
+    const [leadSourceListLoading, setLeadSourceListLoading] = useState(true);
     const fetchLeadSource = async () => {
         setLeadSourceListLoading(true)
         try {
@@ -165,7 +199,7 @@ function DashboardIndex() {
     }
 
     const [leadStage, setLeadStage] = useState([]);
-    const [leadStageLoading, setLeadStageLoading] = useState(false);
+    const [leadStageLoading, setLeadStageLoading] = useState(true);
     const fetchLeadStage = async () => {
         setLeadStageLoading(true)
         try {
@@ -185,7 +219,7 @@ function DashboardIndex() {
     }
 
     const [communicationLog, setCommunicationLog] = useState([]);
-    const [communicationLogLoading, setCommunicationLogLoading] = useState(false);
+    const [communicationLogLoading, setCommunicationLogLoading] = useState(true);
     const fetchCommunicationLog = async () => {
         setCommunicationLogLoading(true)
         try {
@@ -206,7 +240,7 @@ function DashboardIndex() {
     }
 
     const [payments, setPayments] = useState([]);
-    const [paymentLoading, setPaymentLoading] = useState(false);
+    const [paymentLoading, setPaymentLoading] = useState(true);
     const fetchPayments = async () => {
         setPaymentLoading(true)
         try {
@@ -227,7 +261,7 @@ function DashboardIndex() {
     }
 
     const [applicationStages, setApplicationStages] = useState([]);
-    const [applicationStagesLoading, SetApplicationStagesLoading] = useState(false);
+    const [applicationStagesLoading, SetApplicationStagesLoading] = useState(true);
     const fetchApplicationStages = async () => {
         SetApplicationStagesLoading(true)
         try {
@@ -248,7 +282,7 @@ function DashboardIndex() {
     }
 
     const [weeklyApplicationList, setWeeklyApplicationList] = useState([]);
-    const [weeklyApplicationLoading, setWeeklyApplicationLoading] = useState(false);
+    const [weeklyApplicationLoading, setWeeklyApplicationLoading] = useState(true);
     const fetchWeeklyApplication = async () => {
         setWeeklyApplicationLoading(true)
         try {
@@ -269,7 +303,7 @@ function DashboardIndex() {
     }
 
     const [submitApplicationList, setSubmitApplicationList] = useState([]);
-    const [submitApplicationLoading, setSubmitApplicationLoading] = useState(false);
+    const [submitApplicationLoading, setSubmitApplicationLoading] = useState(true);
     const fetchsubmitApplication = async () => {
         setSubmitApplicationLoading(true)
         try {
@@ -280,7 +314,7 @@ function DashboardIndex() {
                 office: officeId,
                 country: selectedCountries?.id
             })
-            console.log(response);
+            // console.log(response);
             setSubmitApplicationList(response?.data)
             setSubmitApplicationLoading(false)
         } catch (error) {
@@ -290,7 +324,7 @@ function DashboardIndex() {
     }
 
     const [targets, setTargets] = useState([]);
-    const [targetLoading, setTargetLoading] = useState(false);
+    const [targetLoading, setTargetLoading] = useState(true);
     const fetchTargets = async () => {
         setTargetLoading(true)
         try {
@@ -314,16 +348,22 @@ function DashboardIndex() {
         fetchLeadSource()
     }, [weeklyRange, officeId])
     useEffect(() => {
-        fetchLeadSource()
-        fetchLeadStage()
+        if (range[0]) {
+            fetchLeadSource()
+            fetchLeadStage()
+        }
     }, [range, officeId])
     useEffect(() => {
-        fetchCommunicationLog()
-        fetchPayments()
+        if (range[0]) {
+            fetchCommunicationLog()
+            fetchPayments()
+        }
     }, [range, selectedCounsellor])
     useEffect(() => {
-        fetchApplicationStages()
-        fetchsubmitApplication()
+        if (range[0]) {
+            fetchApplicationStages()
+            fetchsubmitApplication()
+        }
     }, [range, officeId, selectedCountries])
     useEffect(() => {
         fetchWeeklyApplication()
@@ -332,6 +372,11 @@ function DashboardIndex() {
         fetchTargets()
     }, [intakeId, selectedCounsellor])
 
+
+    const handleClean = (event) => {
+        // Prevent default behavior which clears the date
+        event.preventDefault();
+    };
 
 
     return (
@@ -348,7 +393,7 @@ function DashboardIndex() {
                                     name={'intake'}
                                     key={intakeRefresh}
                                     defaultValue={watch('intake')}
-                                    isClearable
+                                    // isClearable
                                     defaultOptions
                                     loadOptions={fetchIntakes}
                                     getOptionLabel={(e) => e.name}
@@ -374,8 +419,11 @@ function DashboardIndex() {
 
                             <Grid sx={{ width: 230 }} className='intake_dropdown'>
                                 <DateRangePicker
+                                    className='no-clear'
                                     value={range}
                                     onChange={setRange}
+                                    onClean={handleClean}
+                                    ranges={[]}
                                     // placeholder="Select Date Range"
                                     // style={{ width: 150 }}
                                     format='dd-MM-yyyy'

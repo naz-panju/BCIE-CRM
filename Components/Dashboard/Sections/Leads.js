@@ -20,6 +20,10 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
         }
     }
 
+    const totalLeadCount = leadStage?.data?.reduce((total, currentItem) => {
+        return total + currentItem.lead_count;
+      }, 0);
+
 
 
     return (
@@ -34,6 +38,8 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
                             <div className='total'><span>Total</span> 300</div>
                             <div className='date-range'>
                                 <DateRangePicker
+                                    className='no-clear'
+                                    ranges={[]}
                                     value={weeklyRange}
                                     onChange={setWeeklyRange}
                                     // placeholder="Select Date Range"
@@ -58,14 +64,14 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
                         {
                             weeklyStageListLoading ?
                                 [...Array(4)]?.map((_, index) => (
-                                    <div className='card border weekly-card rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg3'>
+                                    <div key={index} className='card border weekly-card rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg3'>
                                         <Skeleton height={'100%'} width={'100%'} variant='rounded' />
                                     </div>
                                 ))
                                 :
 
                                 weeklyStageList?.data?.map((obj, index) => (
-                                    <div style={{ background: obj?.colour }} className='card weekly-card border rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg1'>
+                                    <div key={index} style={{ background: obj?.colour }} className='card weekly-card border rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg1'>
                                         <div>
                                             <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M27 13.5C27 20.9558 20.9558 27 13.5 27C6.04416 27 0 20.9558 0 13.5C0 6.04416 6.04416 0 13.5 0C20.9558 0 27 6.04416 27 13.5Z" fill="#4DD4FF" />
@@ -132,7 +138,7 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
 
                                     <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
                                         {[...Array(6)].map((_, index) => (
-                                            <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                            <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
                                                 <span> <Skeleton variant='rounded' width={90} height={20} /></span>
                                                 <span><Skeleton variant='rounded' width={40} height={20} /></span>
                                             </Grid>
@@ -190,7 +196,7 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
                             <div className='border rounded-sm w-3/6'>
 
                                 <div className='chart-info-title'>
-                                    <div className='total'><span>Total</span>{leadStageLoading ? <Skeleton height={20} width={30} variant='rounded' /> : '300'} </div>
+                                    <div className='total'><span>Total</span>{leadStageLoading ? <Skeleton height={20} width={30} variant='rounded' /> : totalLeadCount} </div>
                                 </div>
 
 
@@ -213,7 +219,7 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
                                             leadStageLoading ?
                                                 <Grid display={'flex'} container justifyContent={'space-between'} >
                                                     {[...Array(12)].map((_, index) => (
-                                                        <Grid item md={5} className='md-6' style={{ marginBottom: 10 }} key={index}><Skeleton variant='rounded' width={200} height={20} /></Grid>
+                                                        <Grid key={index} item md={5} className='md-6' style={{ marginBottom: 10 }} key={index}><Skeleton variant='rounded' width={200} height={20} /></Grid>
                                                     ))}
                                                 </Grid>
                                                 :

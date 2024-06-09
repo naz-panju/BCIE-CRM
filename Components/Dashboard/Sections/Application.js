@@ -10,13 +10,27 @@ function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading
 
     const session = useSession()
 
+    const handleDateRangeChange = (range) => {
+        const [startDate, endDate] = range;
+        if (startDate && endDate) {
+          const daysDifference = endDate.diff(startDate, 'days');
+          if (daysDifference === 6) { // 6 days difference means 7 days inclusive
+            setWeeklyApplicationRange(range);
+          } else {
+            alert('Please select a range of exactly 7 days.');
+          }
+        } else {
+          setWeeklyApplicationRange(range);
+        }
+      };
+
     return (
         <div >
             <div className='weekly-leads'>
 
                 <div className='border flex'>
                     {
-                        session?.data?.user?.role?.id != 6 ?
+                        session?.data?.user?.role?.id == 6 ?
                             submitApplicationLoading ?
                                 <Skeleton variant='rounded' width={450} height={200} />
                                 :
@@ -63,11 +77,14 @@ function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading
                                     <div className='total'><span>Total</span> 300</div>
                                     <div className='date-range'>
                                         <DateRangePicker
+                                            className='no-clear'
+                                            ranges={[]}
                                             value={weeklyApplicationRange}
                                             onChange={setWeeklyApplicationRange}
                                             // placeholder="Select Date Range"
                                             style={{ width: 220 }}
                                             format='dd-MM-yyyy'
+                                            
                                         />
                                     </div>
                                 </div>
