@@ -134,22 +134,27 @@ function DashboardIndex() {
     }
 
     const handleIntakeDateRange = (date) => {
-        const dayBefore = moment(date).subtract(1, 'day');
+        // const dayBefore = moment(date).subtract(1, 'day');
         // console.log(dayBefore);
 
-        if (dayBefore.month() === 11) {
-            const adjustedDate = moment({ year: dayBefore.year(), month: 8, day: 1 });
+        const dayBefore = moment(date)
+
+        if (dayBefore.month() === 0) {
+            const adjustedDate = moment({ year: dayBefore.year(), month: 5, day: 30 });
             // console.log(adjustedDate);
-            setRange([adjustedDate.toDate(), dayBefore.toDate()])
-        } else if (dayBefore.month() === 5) {
-            const adjustedDate = moment({ year: dayBefore.year(), month: 0, day: 1 })
+            // setRange([adjustedDate.toDate(), dayBefore.toDate()])
+            setRange([dayBefore.toDate(), adjustedDate.toDate()])
+        } else if (dayBefore.month() === 6) {
+            const adjustedDate = moment({ year: dayBefore.year(), month: 7, day: 31 })
             // console.log(adjustedDate);
-            setRange([adjustedDate.toDate(), dayBefore.toDate()])
+            // setRange([adjustedDate.toDate(), dayBefore.toDate()])
+            setRange([dayBefore.toDate(), adjustedDate.toDate()])
         }
         else if (dayBefore.month() === 8) {
-            const adjustedDate = moment({ year: dayBefore.year(), month: 5, day: 1 })
+            const adjustedDate = moment({ year: dayBefore.year(), month: 11, day: 31 })
             // console.log(adjustedDate);
-            setRange([adjustedDate.toDate(), dayBefore.toDate()])
+            // setRange([adjustedDate.toDate(), dayBefore.toDate()])
+            setRange([dayBefore.toDate(), adjustedDate.toDate()])
         }
     }
 
@@ -202,6 +207,7 @@ function DashboardIndex() {
     const [leadSourceList, setLeadSourceList] = useState();
     const [leadSourceListLoading, setLeadSourceListLoading] = useState(true);
     const fetchLeadSource = async () => {
+        // console.log('works');
         setLeadSourceListLoading(true)
         try {
             const response = await DashboardApi.list({
@@ -358,7 +364,7 @@ function DashboardIndex() {
                 try {
                     params['manager'] = selectedManager?.id
                     const response = await DashboardApi.list(params)
-                    console.log(response);
+                    // console.log(response);
                     setTargets(response?.data)
                     setTargetLoading(false)
                 } catch (error) {
@@ -370,7 +376,7 @@ function DashboardIndex() {
 
         if (session?.data?.user?.role?.id == 4) {
             if (selectedCounsellor) {
-                console.log(selectedCounsellor);
+                // console.log(selectedCounsellor);
                 try {
                     if (selectedCounsellor?.name == 'All') {
                         params['manager'] = selectedCounsellor?.id
@@ -378,7 +384,7 @@ function DashboardIndex() {
                         params['counselor'] = selectedCounsellor?.id
                     }
                     const response = await DashboardApi.list(params)
-                    console.log(response);
+                    // console.log(response);
                     setTargets(response?.data)
                     setTargetLoading(false)
                 } catch (error) {
@@ -390,11 +396,11 @@ function DashboardIndex() {
 
         if (session?.data?.user?.role?.id == 5) {
             if (selectedCounsellor) {
-                console.log(selectedCounsellor);
+                // console.log(selectedCounsellor);
                 try {
                     params['counselor'] = session?.data?.user?.id
                     const response = await DashboardApi.list(params)
-                    console.log(response);
+                    // console.log(response);
                     setTargets(response?.data)
                     setTargetLoading(false)
                 } catch (error) {
@@ -409,10 +415,11 @@ function DashboardIndex() {
     useEffect(() => {
         fetchWeeklyList()
         fetchWeeklyStageList()
-        fetchLeadSource()
     }, [weeklyRange, officeId])
     useEffect(() => {
+        // console.log('loading....1');
         if (range[0]) {
+            // console.log('loading....2');
             fetchLeadSource()
             fetchLeadStage()
         }

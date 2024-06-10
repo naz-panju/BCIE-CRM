@@ -7,12 +7,12 @@ function ApplicationSubmittedGraph({ data }) {
             <div className='flex items-center justify-between' style={{ height: '180px' }}>
                 <div>
                     Targets
-                    <div> {data?.target}</div>
+                    <div> {data?.target || 0}</div>
                 </div>
                 <DoughnutChartComponent data={data} />
                 <div>
                     Achievd
-                    <div> {data?.achievement}</div>
+                    <div> {data?.achievement || 0}</div>
                 </div>
             </div>
         </div>

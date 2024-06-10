@@ -55,6 +55,7 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
     const counts = labels.map(day => dayCounts[day]);
 
     const backgroundClasses = ['bg1', 'bg2', 'bg3', 'bg4'];
+    const spanClassess = ['Unverified', 'Hot', 'cool', 'warm'];
 
     return (
         <div >
@@ -114,10 +115,11 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
                                             Leads
                                         </div>
 
-                                        <span className='Unverified btn-stage'>{obj?.name}</span>
+                                        <span className= {`${spanClassess[index % backgroundClasses.length]} btn-stage`}>{obj?.name}</span>
                                     </div>
                                 ))
                         }
+                        
 
                         {/* <div className='card border weekly-card rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg2'>
                             <div>
@@ -182,7 +184,7 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
                                         {
                                             leadSourceList?.data?.map((obj, index) => (
                                                
-                                                <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                                <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
                                                     <span><Image src={Others} alt='Facebook' width={14} height={14} /> {obj?.source}</span>
                                                     <span>{formatPercentage(obj?.value) || 0}%</span>
                                                 </Grid>
