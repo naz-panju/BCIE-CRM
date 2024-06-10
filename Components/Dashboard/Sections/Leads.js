@@ -8,9 +8,13 @@ import Instagram from '@/img/instagram.svg'
 import Twitter from '@/img/twitter.svg'
 import Whatsapp from '@/img/Whatsapp.svg'
 import Linkedin from '@/img/Linkedin.svg'
+import Unverified from '@/img/Unverified.png'
+
+
+
 import Others from '@/img/Others.svg'
 import Image from 'next/image';
-function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage }) {
+function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage, index }) {
 
     function formatPercentage(value) {
         if (typeof value === 'number' && !isNaN(value)) {
@@ -55,8 +59,16 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
     const counts = labels?.map(day => dayCounts[day]);
 
     const backgroundClasses = ['bg1', 'bg2', 'bg3', 'bg4'];
-    const spanClassess = ['Unverified', 'Hot', 'cool', 'warm'];
+    const spanClassess = ['Unverified', 'warm', 'cool', 'Hot'];
+    const spanClassessBg = ['UnverifiedBg', 'warmBg', 'coolBg', 'HotBg'];
 
+    const icons = [
+        '@/img/Hot.png',
+        '@/img/Warm.png',
+        '@/img/Cool.png'
+      ];
+    
+    const iconSrc = icons[index % backgroundClasses.length];
     return (
         <div >
             <div className='weekly-leads'>
@@ -106,9 +118,9 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
                                 weeklyStageList?.data?.map((obj, index) => (
                                     <div key={index} className={`card weekly-card border rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between ${backgroundClasses[index % backgroundClasses.length]}`}>
                                         <div>
-                                            <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M27 13.5C27 20.9558 20.9558 27 13.5 27C6.04416 27 0 20.9558 0 13.5C0 6.04416 6.04416 0 13.5 0C20.9558 0 27 6.04416 27 13.5Z" fill="#4DD4FF" />
-                                            </svg>
+
+
+                                           <span className="icon"><Image src={iconSrc} alt='Unverified' width={18} height={18} /> </span>
                                         </div>
                                         <div>
                                             <h3> {obj?.lead_count}</h3>
