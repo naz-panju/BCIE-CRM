@@ -6,24 +6,41 @@ import AsyncSelect from "react-select/async";
 import { Skeleton } from '@mui/material';
 import { useSession } from 'next-auth/react';
 
-function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
+function ApplicationSection({weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
 
     const session = useSession()
 
-    const handleDateRangeChange = (range) => {
-        const [startDate, endDate] = range;
-        if (startDate && endDate) {
-          const daysDifference = endDate.diff(startDate, 'days');
-          if (daysDifference === 6) { // 6 days difference means 7 days inclusive
-            setWeeklyApplicationRange(range);
-          } else {
-            alert('Please select a range of exactly 7 days.');
-          }
-        } else {
-          setWeeklyApplicationRange(range);
-        }
-      };
+    const totalWeeklyAppCount = weeklyApplicationList?.data?.reduce((total, currentItem) => {
+        return total + currentItem.count;
+    }, 0);
 
+    const getDayOfWeek = (dateString) => {
+        const date = new Date(dateString);
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return days[date.getDay()];
+    };
+
+    // Initialize an object to store the counts for each day of the week
+    const dayCounts = {
+        'Sun': 0,
+        'Mon': 0,
+        'Tue': 0,
+        'Wed': 0,
+        'Thu': 0,
+        'Fri': 0,
+        'Sat': 0,
+    };
+
+    weeklyApplicationList?.data?.forEach(item => {
+        const dayOfWeek = getDayOfWeek(item.day);
+        dayCounts[dayOfWeek] += item.count;
+    });
+
+    // // Convert the dayCounts object to an array of counts
+    const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const counts = labels.map(day => dayCounts[day]);
+
+   
     return (
         <div >
             <div className='weekly-leads'>
@@ -34,8 +51,13 @@ function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading
                             submitApplicationLoading ?
                                 <Skeleton variant='rounded' width={450} height={200} />
                                 :
+<<<<<<< HEAD
                                 <div style={{ height: '100%' }} className='stage w-5/12 flex items-center justify-evenly mt-10'>
                                     <div className='card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg2'>
+=======
+                                <div style={{ height: '100%' }} className='stage w-5/12 flex items-center justify-evenly mt-10 application-submit-sec'>
+                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg2'>
+>>>>>>> 11346ce4f5b68d6b8790ec2fc3667fa32f65c800
                                         <div>
 
                                         </div>
@@ -74,7 +96,7 @@ function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading
 
                             <div style={{ height: '100%' }} className='graph w-4/12 border-r'>
                                 <div className='total_sec h-14 border-b-2 d-flex flex items-center justify-between p-3'>
-                                    <div className='total'><span>Total</span> 300</div>
+                                    <div className='total'><span>Total</span> {totalWeeklyAppCount}</div>
                                     <div className='date-range'>
                                         <DateRangePicker
                                             className='no-clear'
@@ -95,7 +117,7 @@ function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading
                                         </div>
                                         :
                                         <div className='graph'>
-                                            <BarChartComponent />
+                                            <BarChartComponent from='app' data={counts} />
                                         </div>
                                 }
                             </div>

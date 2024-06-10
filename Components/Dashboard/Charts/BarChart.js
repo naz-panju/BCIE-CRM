@@ -1,8 +1,18 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const BarChartComponent = () => {
+const BarChartComponent = ({data,from}) => {
     const chartRef = useRef(null);
+
+    const getDayOfWeek = (dateString) => {
+        const date = new Date(dateString);
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return days[date.getDay()];
+    };
+
+    // Initialize an object to store the counts for each day of the week
+
+    
 
     useEffect(() => {
         const ctx = chartRef.current.getContext('2d');
@@ -12,8 +22,8 @@ const BarChartComponent = () => {
                 labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 datasets: [
                     {
-                        label: 'Leads',
-                        data: [80, 80, 80, 50, 50, 40, 103],
+                        label:from=='app'?'Applications': 'Leads',
+                        data: data,
                         backgroundColor: '#29cc39', // Green color without alpha
                         borderWidth: 0, // Remove border
                         barThickness: 9, // Adjust this value for narrower bars
@@ -33,7 +43,7 @@ const BarChartComponent = () => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 120,
+                        // max: ,
                         grid: {
                             display: false,
                         },

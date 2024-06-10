@@ -10,7 +10,7 @@ import Whatsapp from '@/img/Whatsapp.svg'
 import Linkedin from '@/img/Linkedin.svg'
 import Others from '@/img/Others.svg'
 import Image from 'next/image';
-function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage }) {
+function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage }) {
 
     function formatPercentage(value) {
         if (typeof value === 'number' && !isNaN(value)) {
@@ -22,9 +22,40 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
 
     const totalLeadCount = leadStage?.data?.reduce((total, currentItem) => {
         return total + currentItem.lead_count;
-      }, 0);
+    }, 0);
 
+    const totalWeeklyLeadCount = weeklyList?.data?.reduce((total, currentItem) => {
+        return total + currentItem.count;
+    }, 0);
 
+    const getDayOfWeek = (dateString) => {
+        const date = new Date(dateString);
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        return days[date.getDay()];
+    };
+
+    // Initialize an object to store the counts for each day of the week
+    const dayCounts = {
+        'Sun': 0,
+        'Mon': 0,
+        'Tue': 0,
+        'Wed': 0,
+        'Thu': 0,
+        'Fri': 0,
+        'Sat': 0,
+    };
+
+    weeklyList?.data?.forEach(item => {
+        const dayOfWeek = getDayOfWeek(item.day);
+        dayCounts[dayOfWeek] += item.count;
+    });
+
+    // // Convert the dayCounts object to an array of counts
+    const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const counts = labels.map(day => dayCounts[day]);
+
+    const backgroundClasses = ['bg1', 'bg2', 'bg3', 'bg4'];
+    const spanClassess = ['Unverified', 'Hot', 'cool', 'warm'];
 
     return (
         <div >
@@ -33,32 +64,34 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
                     Weekly Lead Updates
                 </div>
                 <div style={{ height: 300 }} className='border-clm flex'>
-                    <div style={{ height: '100%' }} className='graph w-4/12 border-r'>
-                        <div className='total_sec h-14 border-b-2 d-flex flex items-center justify-between p-3'>
-                            <div className='total'><span>Total</span> 300</div>
-                            <div className='date-range'>
-                                <DateRangePicker
-                                    className='no-clear'
-                                    ranges={[]}
-                                    value={weeklyRange}
-                                    onChange={setWeeklyRange}
-                                    // placeholder="Select Date Range"
-                                    style={{ width: 220 }}
-                                    format='dd-MM-yyyy'
-                                />
+                    {
+                        weeklyLoading ?
+                            <div className='graph  w-4/12 border-r'>
+                                <Skeleton variant='rounded' width={'100%'} height={'100%'} />
                             </div>
-                        </div>
-                        {
-                            weeklyLoading ?
-                                <div className='graph'>
-                                    <Skeleton variant='rounded' width={'100%'} height={200} />
+                            :
+
+                            <div style={{ height: '100%' }} className='graph w-4/12 border-r'>
+                                <div className='total_sec h-14 border-b-2 d-flex flex items-center justify-between p-3'>
+                                    <div className='total'><span>Total</span> {totalWeeklyLeadCount}</div>
+                                    <div className='date-range'>
+                                        <DateRangePicker
+                                            className='no-clear'
+                                            ranges={[]}
+                                            value={weeklyRange}
+                                            onChange={setWeeklyRange}
+                                            // placeholder="Select Date Range"
+                                            style={{ width: 220 }}
+                                            format='dd-MM-yyyy'
+                                        />
+                                    </div>
                                 </div>
-                                :
+
                                 <div className='graph'>
-                                    <BarChartComponent />
+                                    <BarChartComponent from={'lead'} data={counts} />
                                 </div>
-                        }
-                    </div>
+                            </div>
+                    }
 
                     <div className='stage w-8/12 flex items-center justify-evenly'>
                         {
@@ -71,7 +104,7 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
                                 :
 
                                 weeklyStageList?.data?.map((obj, index) => (
-                                    <div key={index} style={{ background: obj?.colour }} className='card weekly-card border rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg1'>
+                                    <div key={index} className={`card weekly-card border rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between ${backgroundClasses[index % backgroundClasses.length]}`}>
                                         <div>
                                             <svg width="27" height="27" viewBox="0 0 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M27 13.5C27 20.9558 20.9558 27 13.5 27C6.04416 27 0 20.9558 0 13.5C0 6.04416 6.04416 0 13.5 0C20.9558 0 27 6.04416 27 13.5Z" fill="#4DD4FF" />
@@ -82,10 +115,11 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
                                             Leads
                                         </div>
 
-                                        <span className='Unverified btn-stage'>{obj?.name}</span>
+                                        <span className= {`${spanClassess[index % backgroundClasses.length]} btn-stage`}>{obj?.name}</span>
                                     </div>
                                 ))
                         }
+                        
 
                         {/* <div className='card border weekly-card rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg2'>
                             <div>
@@ -147,14 +181,20 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
 
                                     :
                                     <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
-                                        <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                        {
+                                            leadSourceList?.data?.map((obj, index) => (
+                                               
+                                                <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                                                    <span><Image src={Others} alt='Facebook' width={14} height={14} /> {obj?.source}</span>
+                                                    <span>{formatPercentage(obj?.value) || 0}%</span>
+                                                </Grid>
+                                            ))
+                                        }
+                                        {/* <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
                                             <span><Image src={Instagram} alt='Facebook' width={14} height={14} /> Instagram</span>
                                             <span>{formatPercentage(leadSourceList?.data?.Instagram)}%</span>
                                         </Grid>
-                                        {/* <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                    <span><Image src={Linkedin} alt='Facebook' width={14} height={14} />Linkedin</span>
-                                    <span>{formatPercentage(leadSourceList?.data?.Facebook)}% </span>
-                                </Grid> */}
+                                      
                                         <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
                                             <span><Image src={Facebook} alt='Facebook' width={14} height={14} />Facebook</span>
                                             <span>{formatPercentage(leadSourceList?.data?.Facebook)}% </span>
@@ -170,19 +210,12 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
                                         <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
                                             <span><Image src={Others} alt='Facebook' width={14} height={14} />Referral</span>
                                             <span>{formatPercentage(leadSourceList?.data?.Referral)}% </span>
-                                        </Grid>
+                                        </Grid> */}
+                                       
                                         {/* <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                    <span><Image src={Whatsapp} alt='Facebook' width={14} height={14} />Whatsapp</span>
-                                    <span>75% </span>
-                                </Grid> */}
-                                        {/* <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                    <span><Image src={Twitter} alt='Facebook' width={14} height={14} />X</span>
-                                    <span>75% </span>
-                                </Grid> */}
-                                        <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
                                             <span><Image src={Others} alt='Facebook' width={14} height={14} />Others</span>
                                             <span>{formatPercentage(leadSourceList?.data?.Others)}% </span>
-                                        </Grid>
+                                        </Grid> */}
                                     </Grid>
                             }
 
@@ -219,7 +252,7 @@ function LeadSection({ weeklyLoading, weeklyStageListLoading, leadSourceListLoad
                                             leadStageLoading ?
                                                 <Grid display={'flex'} container justifyContent={'space-between'} >
                                                     {[...Array(12)].map((_, index) => (
-                                                        <Grid key={index} item md={5} className='md-6' style={{ marginBottom: 10 }} key={index}><Skeleton variant='rounded' width={200} height={20} /></Grid>
+                                                        <Grid key={index} item md={5} className='md-6' style={{ marginBottom: 10 }} ><Skeleton variant='rounded' width={200} height={20} /></Grid>
                                                     ))}
                                                 </Grid>
                                                 :

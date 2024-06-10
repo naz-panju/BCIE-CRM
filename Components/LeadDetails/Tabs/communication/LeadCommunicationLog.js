@@ -236,7 +236,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                     <div className='flex mar-25'>
                         <div className='md:w-4/12 lg:w-3/12 pad-25 timeline-content-block-item-content-block'>
 
-                            <h4><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none"><path d="M2.875 7.66667L10.3906 12.6771C11.0624 13.1249 11.9376 13.1249 12.6094 12.6771L20.125 7.66667M4.875 18.2083H18.125C19.2296 18.2083 20.125 17.3129 20.125 16.2083V6.79167C20.125 5.6871 19.2296 4.79167 18.125 4.79167H4.875C3.77043 4.79167 2.875 5.6871 2.875 6.79167V16.2083C2.875 17.3129 3.77043 18.2083 4.875 18.2083Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>Email Summary</h4>
+                            <h4><svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none"><path d="M2.875 7.66667L10.3906 12.6771C11.0624 13.1249 11.9376 13.1249 12.6094 12.6771L20.125 7.66667M4.875 18.2083H18.125C19.2296 18.2083 20.125 17.3129 20.125 16.2083V6.79167C20.125 5.6871 19.2296 4.79167 18.125 4.79167H4.875C3.77043 4.79167 2.875 5.6871 2.875 6.79167V16.2083C2.875 17.3129 3.77043 18.2083 4.875 18.2083Z" stroke="#0B0D23" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" /></svg>Email Summary</h4>
 
                             <div className='timeline-content-block-item-block communication-log'>
                                 <div className='flex mar-10 communication-log-block'>
@@ -347,7 +347,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
 
                         <div className='md:w-4/12 lg:w-3/12 pad-25 timeline-content-block-item-content-block'>
 
-                            <h4><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3.44389 4.96848C4.23722 10.8128 9.18688 15.7625 15.0312 16.5558C15.9759 16.684 16.8009 15.9937 16.9879 15.0589L17.2001 13.9979C17.377 13.1135 16.94 12.2202 16.1334 11.8168L15.3316 11.416C14.6568 11.0786 13.8373 11.272 13.3847 11.8756C13.0898 12.2687 12.6163 12.5083 12.1632 12.3184C10.6057 11.6655 8.33419 9.394 7.68131 7.83651C7.49136 7.38336 7.73101 6.90983 8.12409 6.61502C8.72764 6.16236 8.9211 5.34285 8.58371 4.66807L8.18283 3.86632C7.77949 3.05963 6.88614 2.62271 6.00175 2.79959L4.94078 3.01178C4.00593 3.19875 3.31565 4.02378 3.44389 4.96848Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>Phone Call Summary</h4>
+                            <h4><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3.44389 4.96848C4.23722 10.8128 9.18688 15.7625 15.0312 16.5558C15.9759 16.684 16.8009 15.9937 16.9879 15.0589L17.2001 13.9979C17.377 13.1135 16.94 12.2202 16.1334 11.8168L15.3316 11.416C14.6568 11.0786 13.8373 11.272 13.3847 11.8756C13.0898 12.2687 12.6163 12.5083 12.1632 12.3184C10.6057 11.6655 8.33419 9.394 7.68131 7.83651C7.49136 7.38336 7.73101 6.90983 8.12409 6.61502C8.72764 6.16236 8.9211 5.34285 8.58371 4.66807L8.18283 3.86632C7.77949 3.05963 6.88614 2.62271 6.00175 2.79959L4.94078 3.01178C4.00593 3.19875 3.31565 4.02378 3.44389 4.96848Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" /></svg>Phone Call Summary</h4>
                             <div className='timeline-content-block-item-block communication-log'>
 
                                 <div className='flex mar-10 communication-log-block'>
