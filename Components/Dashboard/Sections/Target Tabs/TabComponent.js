@@ -9,7 +9,7 @@ function ApplicationSubmittedGraph({ data }) {
                     <div className='target-inner-item-title target'>Targets</div>
                     <h3> {data?.target || 0}</h3>
                 </div>
-                <DoughnutChartComponent />
+                <DoughnutChartComponent data={data} />
                 <div className='target-inner-item'>
                     <div className='target-inner-item-title acheived'>Acheived</div>
                     <h3>{data?.achievement || 0}</h3>
