@@ -78,7 +78,7 @@ export default function TargetTabs({ targets }) {
             <Box sx={{ width: '100%' }}>
                 <Box className='targets-tab-block' sx={{  display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Tabs className='targets-tab-block-item-item' value={activeTab} onChange={handleChange} aria-label="basic tabs example" >
-                        {targets.map((obj, index) => (
+                        {targets?.map((obj, index) => (
                             <Tab className='targets-tab-item' label={obj.stage} key={index} {...a11yProps(index)} sx={{ textTransform: 'none' }} />
                         ))}
                     </Tabs>

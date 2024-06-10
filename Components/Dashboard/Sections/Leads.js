@@ -52,7 +52,7 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
 
     // // Convert the dayCounts object to an array of counts
     const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const counts = labels.map(day => dayCounts[day]);
+    const counts = labels?.map(day => dayCounts[day]);
 
     const backgroundClasses = ['bg1', 'bg2', 'bg3', 'bg4'];
     const spanClassess = ['Unverified', 'Hot', 'cool', 'warm'];
@@ -251,7 +251,7 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
                                         {
                                             leadStageLoading ?
                                                 <Grid display={'flex'} container justifyContent={'space-between'} >
-                                                    {[...Array(12)].map((_, index) => (
+                                                    {[...Array(12)]?.map((_, index) => (
                                                         <Grid key={index} item md={5} className='md-6' style={{ marginBottom: 10 }} ><Skeleton variant='rounded' width={200} height={20} /></Grid>
                                                     ))}
                                                 </Grid>

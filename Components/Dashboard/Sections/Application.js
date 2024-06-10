@@ -38,7 +38,7 @@ function ApplicationSection({weeklyApplicationList, submitApplicationLoading, we
 
     // // Convert the dayCounts object to an array of counts
     const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const counts = labels.map(day => dayCounts[day]);
+    const counts = labels?.map(day => dayCounts[day]);
 
    
     return (
