@@ -51,13 +51,8 @@ function ApplicationSection({weeklyApplicationList, submitApplicationLoading, we
                             submitApplicationLoading ?
                                 <Skeleton variant='rounded' width={450} height={200} />
                                 :
-<<<<<<< HEAD
-                                <div style={{ height: '100%' }} className='stage w-5/12 flex items-center justify-evenly mt-10'>
-                                    <div className='card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg2'>
-=======
                                 <div style={{ height: '100%' }} className='stage w-5/12 flex items-center justify-evenly mt-10 application-submit-sec'>
                                     <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg2'>
->>>>>>> 11346ce4f5b68d6b8790ec2fc3667fa32f65c800
                                         <div>
 
                                         </div>
