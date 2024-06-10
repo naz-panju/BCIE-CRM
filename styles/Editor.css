@@ -2917,6 +2917,94 @@ body.body-active .footer {
     border-left: 1px solid #C5CCD3;
 }
 
+.targets-tab-item {
+    color: #000000;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 15px;
+    min-height: auto !important;
+}
+
+.targets-tab-block-item-item span.MuiTabs-indicator{
+    display: none !important;
+}
+
+.targets-tab-block {
+    border: 1px solid #E7E7E7;
+    margin: 12px;
+    border-radius: 36px;
+    padding: 10px;
+}
+.target-inner-item-title {
+    color: #000000;
+    font-size: 12px;
+    line-height: 18px;
+    margin-bottom: 5PX;
+    position: relative;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+}
+.target-inner-item-title.target::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    background: #322FC8;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+}
+.target-inner-item-title.acheived::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    background: #E73F76;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+}
+
+.card.application.border {
+    min-height: 220px;
+}
+
+.target-inner-item h3 {
+    color: #000000;
+    font-size: 18px;
+    line-height: 28px;
+}
+.target-inner-item {
+    margin: 0 30px;
+    text-align: center;
+}
+
+.targets-tab-block-item-item {
+    height: auto !important;
+    min-height: auto !important;
+}
+
+.targets-tab-item.Mui-selected {
+    color: #000000;
+    font-size: 12px;
+    padding: 0;
+    background-color: #BDDBFF;
+    padding: 5px 10px;
+    border-radius: 15px;
+}
+
+.frm-text-conn-stl{
+    background-color: #F0F0F0 !important;
+}
+
+.add-note-textarea textarea{
+    padding-top: 0px;
+}
+.add-note-textarea fieldset{
+    border: 0px !important;
+}
+
+
+
 @media (max-width: 1400px) {
 
     .vari-center span {

@@ -76,10 +76,17 @@ export default function TargetTabs({ targets }) {
         <>
 
             <Box sx={{ width: '100%' }}>
+<<<<<<< HEAD
+                <Box className='targets-tab-block' sx={{  display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Tabs className='targets-tab-block-item-item' value={activeTab} onChange={handleChange} aria-label="basic tabs example" >
+                        {tabs.map((obj, index) => (
+                            <Tab className='targets-tab-item' label={obj.label} key={index} {...a11yProps(index)} sx={{ textTransform: 'none' }} />
+=======
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Tabs value={activeTab} onChange={handleChange} aria-label="basic tabs example" >
                         {targets?.map((obj, index) => (
                             <Tab label={obj?.stage} key={index} {...a11yProps(index)} sx={{ textTransform: 'none' }} />
+>>>>>>> 11346ce4f5b68d6b8790ec2fc3667fa32f65c800
                         ))}
                     </Tabs>
 

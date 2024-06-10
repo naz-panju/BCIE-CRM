@@ -63,7 +63,7 @@ function ApplicationSection({weeklyApplicationList, submitApplicationLoading, we
 
                                         <span className='Hot btn-stage'>Returned</span>
                                     </div>
-                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg3'>
+                                    <div className='card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg3'>
                                         <div>
 
                                         </div>
@@ -74,7 +74,7 @@ function ApplicationSection({weeklyApplicationList, submitApplicationLoading, we
 
                                         <span className='cool btn-stage'>Submitted</span>
                                     </div>
-                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg4'>
+                                    <div className='card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg4'>
                                         <div>
 
                                         </div>
