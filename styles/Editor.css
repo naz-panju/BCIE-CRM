@@ -2683,10 +2683,16 @@ body.body-active .footer {
     box-shadow: unset !important;
 }
 
+
+
 .form_group .MuiInputBase-root {
     background-color: unset !important;
     border: 0 !important;
     box-shadow: unset !important;
+}
+
+.css1nmdiq5-menu{
+    z-index: 9999;
 }
 
 

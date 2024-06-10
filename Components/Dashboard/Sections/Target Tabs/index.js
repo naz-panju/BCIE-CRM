@@ -43,7 +43,7 @@ function a11yProps(index) {
 
 export default function TargetTabs({ targets }) {
 
-    console.log(targets);
+    // console.log(targets);
 
     const [value, setValue] = React.useState(0);
     const [activeTab, setActiveTab] = useState(0);

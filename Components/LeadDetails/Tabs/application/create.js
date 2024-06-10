@@ -288,6 +288,18 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         }
     }, [editId])
 
+    const customStyles = {
+        menuPortal: (base) => ({
+            ...base,
+            zIndex: 9999, // Ensure the dropdown menu is above other elements
+        }),
+        control: (base) => ({
+            ...base,
+            width: '100%', // Ensures the select input width
+        }),
+    };
+
+
 
     return (
         <div>
@@ -307,167 +319,186 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                         </a>
                         <a className='back_modal_head'> {editId > 0 ? 'Edit Application' : 'Apply'} </a>
                     </Grid>
-                   
-                   <div className='modal-header'>
-                        <h2>Lead Onboarding <span>and Management Form</span></h2>
-                   </div>
+
+
                     <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
-                           
-                                    
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
-                                        <div className='application-input'>
-                                            <a className='form-text'>Country</a>
-                                            <Grid className='form_group' >
-                                                <AsyncSelect
-                                                    styles={{ width: '100%' }}
-                                                    name='country'
-                                                    defaultValue={watch('country')}
-                                                    // isClearable
-                                                    defaultOptions
-                                                    loadOptions={fetchCounty}
-                                                    getOptionLabel={(e) => e.name}
-                                                    getOptionValue={(e) => e.id}
-                                                    onChange={handleCountryChange}
-                                                />
+                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                <div className='application-input'>
+                                    <a className='form-text'>Country</a>
+                                    {/* className='form_group */}
+                                    <Grid className='mb-5' >
+                                        <AsyncSelect
 
-                                                {errors.country && <span className='form-validation'>{errors.country.message}</span>}
-                                            </Grid>
-                                        </div>
+                                            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                            // styles={{ width: '100%' }}
+                                            name='country'
+                                            defaultValue={watch('country')}
+                                            // isClearable
+                                            // classNamePrefix="react-select"
+                                            defaultOptions
+                                            loadOptions={fetchCounty}
+                                            getOptionLabel={(e) => e.name}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleCountryChange}
+                                         
+                                        />
 
-                                        <div className='application-input'>
-                                            <a className='form-text'>Course Level</a>
-                                            <Grid className='form_group' >
-                                                <AsyncSelect
-                                                    // isDisabled={!selectedUniversityId}
-                                                    key={selectedUniversityId}
-                                                    name={'course_level'}
-                                                    defaultValue={watch('course_level')}
-                                                    // isClearable
-                                                    defaultOptions
-                                                    loadOptions={fetchCourseLevel}
-                                                    getOptionLabel={(e) => e.name}
-                                                    getOptionValue={(e) => e.id}
-                                                    onChange={handleCourseLevelChange}
-                                                />
-                                                {errors.course_level && <span className='form-validation'>{errors.course_level.message}</span>}
-                                            </Grid>
-                                        </div>
+                                        {errors.country && <span className='form-validation'>{errors.country.message}</span>}
+                                    </Grid>
+                                </div>
 
-                                        <div className='application-input'>
-                                            <a className='form-text'>University</a>
-                                            <Grid className='form_group' >
-                                                <AsyncSelect
-                                                    isDisabled={!selectedCountryID}
-                                                    key={selectedCountryID}
-                                                    name={'university'}
-                                                    defaultValue={watch('university')}
-                                                    // isClearable
-                                                    defaultOptions
-                                                    loadOptions={fetchUniversities}
-                                                    getOptionLabel={(e) => e.name}
-                                                    getOptionValue={(e) => e.id}
-                                                    onChange={handleUniversityChange}
-                                                />
-                                                {errors.university && <span className='form-validation'>{errors.university.message}</span>}
-                                            </Grid>
-                                        </div>
+                                <div className='application-input'>
+                                    <a className='form-text'>Course Level</a>
+                                    <Grid className='mb-5' >
+                                        <AsyncSelect
+                                            // isDisabled={!selectedUniversityId}
+                                            key={selectedUniversityId}
+                                            name={'course_level'}
+                                            defaultValue={watch('course_level')}
+                                            // isClearable
+                                            defaultOptions
+                                            loadOptions={fetchCourseLevel}
+                                            getOptionLabel={(e) => e.name}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleCourseLevelChange}
+                                        />
+                                        {errors.course_level && <span className='form-validation'>{errors.course_level.message}</span>}
+                                    </Grid>
+                                </div>
 
-
-                                        <div className='application-input'>
-                                        <a className='form-text'>Subject Area</a>
-                                        <Grid className='form_group' >
-                                            <AsyncSelect
-                                                isDisabled={!selectedCountryID}
-                                                key={courseRefresh}
-                                                name={'course'}
-                                                defaultValue={watch('course')}
-                                                // isClearable
-                                                defaultOptions
-                                                loadOptions={fetchCourse}
-                                                getOptionLabel={(e) => e.name}
-                                                getOptionValue={(e) => e.id}
-                                                onChange={handleCourseChange}
-                                            />
-                                            {errors.course && <span className='form-validation'>{errors.course.message}</span>}
-                                        </Grid>
-                                        </div>
+                                <div className='application-input'>
+                                    <a className='form-text'>University</a>
+                                    <Grid className='mb-5' >
+                                        <AsyncSelect
+                                            isDisabled={!selectedCountryID}
+                                            key={selectedCountryID}
+                                            name={'university'}
+                                            defaultValue={watch('university')}
+                                            // isClearable
+                                            defaultOptions
+                                            loadOptions={fetchUniversities}
+                                            getOptionLabel={(e) => e.name}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleUniversityChange}
+                                        />
+                                        {errors.university && <span className='form-validation'>{errors.university.message}</span>}
+                                    </Grid>
+                                </div>
 
 
-                                        <div className='application-input'>
-                                        <a className='form-text' > Courses</a>
-                                        <Grid className='form_group' >
-                                            <TextInput control={control} name="coursetext"
-                                                value={watch('coursetext')} />
-                                            {errors.coursetext && <span className='form-validation'>{errors.coursetext.message}</span>}
-                                        </Grid>
-
-                                        </div>
-
-
-                                        <div className='application-input'>
-                                        <a className='form-text'>Intake</a>
-                                        <Grid className='form_group' >
-                                            <AsyncSelect
-                                                isDisabled={!selectedUniversityId}
-                                                key={selectedUniversityId}
-                                                name={'intake'}
-                                                defaultValue={watch('intake')}
-                                                // isClearable
-                                                defaultOptions
-                                                loadOptions={fetchIntakes}
-                                                getOptionLabel={(e) => e.name}
-                                                getOptionValue={(e) => e.id}
-                                                onChange={handleinTakeChange}
-                                            />
-                                            {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
-                                        </Grid>
-                                        </div>
+                                <div className='application-input'>
+                                    <a className='form-text'>Subject Area</a>
+                                    <Grid className='mb-5' >
+                                        <AsyncSelect
+                                            isDisabled={!selectedCountryID}
+                                            key={courseRefresh}
+                                            name={'course'}
+                                            defaultValue={watch('course')}
+                                            // isClearable
+                                            defaultOptions
+                                            loadOptions={fetchCourse}
+                                            getOptionLabel={(e) => e.name}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleCourseChange}
+                                        />
+                                        {errors.course && <span className='form-validation'>{errors.course.message}</span>}
+                                    </Grid>
+                                </div>
 
 
-                                        <div className='application-input'>
-                                        <a className='form-text'>Documents</a>
-                                        <Grid className='form_group' >
-                                            <AsyncSelect
-                                                isMulti
-                                                name={'documents'}
-                                                defaultValue={watch('documents')}
-                                                // isClearable
-                                                defaultOptions
-                                                loadOptions={fetchDocuments}
-                                                getOptionLabel={(e) => e.title}
-                                                getOptionValue={(e) => e.id}
-                                                onChange={handleDocumentChange}
-                                            />
-                                            {errors.documents && <span className='form-validation'>{errors.documents.message}</span>}
-                                        </Grid>
-                                        </div>
+                                <div className='application-input'>
+                                    <a className='form-text' > Courses</a>
+                                    <Grid className='mb-5' >
+                                        <TextInput control={control} name="coursetext"
+                                            value={watch('coursetext')} />
+                                        {errors.coursetext && <span className='form-validation'>{errors.coursetext.message}</span>}
+                                    </Grid>
+
+                                </div>
 
 
-                                        <div className='application-input'>
-                                        <a className='form-text'> Remarks </a>
-                                        <Grid className='form_group' >
-                                            <TextField
-                                                {...register('remarks')}
-                                                variant="outlined"
-                                                fullWidth
-                                                multiline
-                                                rows={2}
-                                                sx={{ width: '100%', }}
-                                            />
-                                            {errors.email && <span className='form-validation'>{errors.email.message}</span>}
-                                        </Grid>
-                                        </div>
+                                <div className='application-input'>
+                                    <a className='form-text'>Intake</a>
+                                    <Grid className='mb-5' >
+                                        <AsyncSelect
+                                            isDisabled={!selectedUniversityId}
+                                            key={selectedUniversityId}
+                                            name={'intake'}
+                                            defaultValue={watch('intake')}
+                                            // isClearable
+                                            defaultOptions
+                                            loadOptions={fetchIntakes}
+                                            getOptionLabel={(e) => e.name}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleinTakeChange}
+                                        />
+                                        {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
+                                    </Grid>
+                                </div>
 
 
-                                    </div>
+                                <div className='application-input'>
+                                    <a className='form-text'>Documents</a>
+                                    <Grid className='mb-5' >
+                                        <AsyncSelect
+                                            isMulti
+                                            name={'documents'}
+                                            defaultValue={watch('documents')}
+                                            // isClearable
+                                            defaultOptions
+                                            loadOptions={fetchDocuments}
+                                            getOptionLabel={(e) => e.title}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleDocumentChange}
+                                        />
+                                        {errors.documents && <span className='form-validation'>{errors.documents.message}</span>}
+                                    </Grid>
+                                </div>
 
-                                        
 
-                                       
-                               
+                                <div className='application-input'>
+                                    <a className='form-text'> Remarks </a>
+                                    <Grid className='mb-5' >
+                                        <TextField
+                                            {...register('remarks')}
+                                            variant="outlined"
+                                            fullWidth
+                                            multiline
+                                            rows={2}
+                                            sx={{ width: '100%', }}
+                                        />
+                                        {errors.email && <span className='form-validation'>{errors.email.message}</span>}
+                                    </Grid>
+                                </div>
+
+
+                            </div>
+
+
+
+
+                            <Grid pb={3} display={'flex'}>
+
+                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>{
+                                    loading ?
+                                        <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                        :
+                                        <>
+                                            Save <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </>
+                                }</LoadingButton>
+                                <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'> Cancel <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                </svg></Button>
+
+                            </Grid>
+
+
 
                         </form>
                     </div>

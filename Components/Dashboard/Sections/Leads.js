@@ -9,6 +9,9 @@ import Twitter from '@/img/twitter.svg'
 import Whatsapp from '@/img/Whatsapp.svg'
 import Linkedin from '@/img/Linkedin.svg'
 import Unverified from '@/img/Unverified.png'
+import Hot from '@/img/Hot.png'
+import Cool from '@/img/Cool.png'
+import Warm from '@/img/Warm.png'
 
 
 
@@ -62,13 +65,18 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
     const spanClassess = ['Unverified', 'warm', 'cool', 'Hot'];
     const spanClassessBg = ['UnverifiedBg', 'warmBg', 'coolBg', 'HotBg'];
 
-    const icons = [
-        '@/img/Hot.png',
-        '@/img/Warm.png',
-        '@/img/Cool.png'
-      ];
-    
-    const iconSrc = icons[index % backgroundClasses.length];
+    const icons = [Unverified, Hot, Cool, Warm];
+
+    const getIconSrc = (index) => {
+        return icons[index] || DefaultIcon; // Provide a default icon in case index doesn't match
+    };
+
+    const getAltText = (index) => {
+        const altTexts = ['Unverified', 'Hot', 'Cool', 'Warm'];
+        return altTexts[index] || 'Default';
+    };
+
+
     return (
         <div >
             <div className='weekly-leads'>
@@ -120,18 +128,21 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
                                         <div>
 
 
-                                           <span className="icon"><Image src={iconSrc} alt='Unverified' width={18} height={18} /> </span>
+                                            <span className="icon">
+                                                <Image src={getIconSrc(index)}
+                                                    alt={getAltText(index)} width={18} height={18} />
+                                            </span>
                                         </div>
                                         <div>
                                             <h3> {obj?.lead_count}</h3>
                                             Leads
                                         </div>
 
-                                        <span className= {`${spanClassess[index % backgroundClasses.length]} btn-stage`}>{obj?.name}</span>
+                                        <span className={`${spanClassess[index % backgroundClasses.length]} btn-stage`}>{obj?.name}</span>
                                     </div>
                                 ))
                         }
-                        
+
 
                         {/* <div className='card border weekly-card rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between bg2'>
                             <div>
@@ -195,7 +206,7 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
                                     <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
                                         {
                                             leadSourceList?.data?.map((obj, index) => (
-                                               
+
                                                 <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
                                                     <span><Image src={Others} alt='Facebook' width={14} height={14} /> {obj?.source}</span>
                                                     <span>{formatPercentage(obj?.value) || 0}%</span>
@@ -223,7 +234,7 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
                                             <span><Image src={Others} alt='Facebook' width={14} height={14} />Referral</span>
                                             <span>{formatPercentage(leadSourceList?.data?.Referral)}% </span>
                                         </Grid> */}
-                                       
+
                                         {/* <Grid display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
                                             <span><Image src={Others} alt='Facebook' width={14} height={14} />Others</span>
                                             <span>{formatPercentage(leadSourceList?.data?.Others)}% </span>
