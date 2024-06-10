@@ -93,9 +93,31 @@ function DashboardIndex() {
     const handleCounsellorSelect = (data) => {
         setSelectedCounsellor(data)
     }
+
+    // console.log(session?.data);
     const fetchCounsellors = (e) => {
         return ListingApi.users({ keyword: e, role_id: 5 }).then(response => {
+            console.log(response);
             if (typeof response.data.data !== "undefined") {
+                if (!selectedCounsellor) {
+                    setSelectedCounsellor({ name: 'All', id: session?.data?.user?.id })
+                }
+                return [{ name: 'All', id: session?.data?.user?.id }, ...response.data.data];
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const [selectedManager, setSelectedManager] = useState();
+    const handleManagerSelect = (data) => {
+        setSelectedManager(data)
+    }
+    const fetchManagers = (e) => {
+        return ListingApi.users({ keyword: e, role_id: 4 }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+
+                setSelectedManager(response?.data?.data[0])
                 return response.data.data;
             } else {
                 return [];
@@ -149,7 +171,7 @@ function DashboardIndex() {
                 week_ends_on: moment(weeklyRange[1]).format('YYYY-MM-DD'),
                 office: officeId
             })
-            // console.log(response);
+            setWeeklyList(response?.data)
             setWeeklyLoading(false)
         } catch (error) {
             console.log(error);
@@ -322,24 +344,66 @@ function DashboardIndex() {
             setSubmitApplicationLoading(false)
         }
     }
-
     const [targets, setTargets] = useState([]);
     const [targetLoading, setTargetLoading] = useState(true);
     const fetchTargets = async () => {
         setTargetLoading(true)
-        try {
-            const response = await DashboardApi.list({
-                type: 'targets',
-                intake: intakeId,
-                counselor: selectedCounsellor?.id,
-            })
-            // console.log(response);
-            setTargets(response?.data)
-            setTargetLoading(false)
-        } catch (error) {
-            console.log(error);
-            setTargetLoading(false)
+        let params = {
+            type: 'targets',
+            intake: intakeId,
         }
+
+        if (session?.data?.user?.role?.id == 3) {
+            if (selectedManager) {
+                try {
+                    params['manager'] = selectedManager?.id
+                    const response = await DashboardApi.list(params)
+                    console.log(response);
+                    setTargets(response?.data)
+                    setTargetLoading(false)
+                } catch (error) {
+                    console.log(error);
+                    setTargetLoading(false)
+                }
+            }
+        }
+
+        if (session?.data?.user?.role?.id == 4) {
+            if (selectedCounsellor) {
+                console.log(selectedCounsellor);
+                try {
+                    if (selectedCounsellor?.name == 'All') {
+                        params['manager'] = selectedCounsellor?.id
+                    } else {
+                        params['counselor'] = selectedCounsellor?.id
+                    }
+                    const response = await DashboardApi.list(params)
+                    console.log(response);
+                    setTargets(response?.data)
+                    setTargetLoading(false)
+                } catch (error) {
+                    console.log(error);
+                    setTargetLoading(false)
+                }
+            }
+        }
+
+        if (session?.data?.user?.role?.id == 5) {
+            if (selectedCounsellor) {
+                console.log(selectedCounsellor);
+                try {
+                    params['counselor'] = session?.data?.user?.id
+                    const response = await DashboardApi.list(params)
+                    console.log(response);
+                    setTargets(response?.data)
+                    setTargetLoading(false)
+                } catch (error) {
+                    console.log(error);
+                    setTargetLoading(false)
+                }
+            }
+        }
+
     }
 
     useEffect(() => {
@@ -370,7 +434,7 @@ function DashboardIndex() {
     }, [weeklyApplicationRange, selectedCountries, selectedUniversity])
     useEffect(() => {
         fetchTargets()
-    }, [intakeId, selectedCounsellor])
+    }, [intakeId, selectedCounsellor, selectedManager])
 
 
     const handleClean = (event) => {
@@ -436,18 +500,18 @@ function DashboardIndex() {
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='lead_sec'>
-                            <LeadSection weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadStage={leadStage} />
+                            <LeadSection weeklyList={weeklyList} weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadStage={leadStage} />
                         </div>
                     }
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='comm_sec'>
-                            <CommunicationSection communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
+                            <CommunicationSection fetchManagers={fetchManagers} handleManagerSelect={handleManagerSelect} selectedManager={selectedManager} communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
                         </div>
                     }
 
                     <div className='app_sec'>
-                        <ApplicationSection submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
+                        <ApplicationSection submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
                     </div>
                 </div>
             </section>

@@ -68,7 +68,7 @@ function TemplateData({ handleToggleTable, setValue, body }) {
 
                 <a className='back_modal' onClick={handleToggleTable}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
-                        <path d="M9.0415 15.5H21.9582M21.9582 15.5L16.7918 20.6666M21.9582 15.5L16.7918 10.3333" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M9.0415 15.5H21.9582M21.9582 15.5L16.7918 20.6666M21.9582 15.5L16.7918 10.3333" stroke="white" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
 
                 </a>
@@ -77,7 +77,7 @@ function TemplateData({ handleToggleTable, setValue, body }) {
             <div className='search-document-block' >
                 <div className='search-document-block-input'>
                     <input onChange={(e) => setSearchKey(e.target.value)} placeholder='Search' />
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">  <path d="M12.5 12.5L17.5 17.5M8.33333 14.1667C5.11167 14.1667 2.5 11.555 2.5 8.33333C2.5 5.11167 5.11167 2.5 8.33333 2.5C11.555 2.5 14.1667 5.11167 14.1667 8.33333C14.1667 11.555 11.555 14.1667 8.33333 14.1667Z" stroke="#0B0D23" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">  <path d="M12.5 12.5L17.5 17.5M8.33333 14.1667C5.11167 14.1667 2.5 11.555 2.5 8.33333C2.5 5.11167 5.11167 2.5 8.33333 2.5C11.555 2.5 14.1667 5.11167 14.1667 8.33333C14.1667 11.555 11.555 14.1667 8.33333 14.1667Z" stroke="#0B0D23" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
                 </div>
             </div>
 

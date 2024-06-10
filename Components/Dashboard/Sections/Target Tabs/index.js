@@ -42,6 +42,9 @@ function a11yProps(index) {
 }
 
 export default function TargetTabs({ targets }) {
+
+    console.log(targets);
+
     const [value, setValue] = React.useState(0);
     const [activeTab, setActiveTab] = useState(0);
 
@@ -75,16 +78,16 @@ export default function TargetTabs({ targets }) {
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Tabs value={activeTab} onChange={handleChange} aria-label="basic tabs example" >
-                        {tabs.map((obj, index) => (
-                            <Tab label={obj.label} key={index} {...a11yProps(index)} sx={{ textTransform: 'none' }} />
+                        {targets.map((obj, index) => (
+                            <Tab label={obj?.stage} key={index} {...a11yProps(index)} sx={{ textTransform: 'none' }} />
                         ))}
                     </Tabs>
 
                 </Box>
 
-                {tabs.map((obj, index) => {
+                {targets.map((obj, index) => {
                     return <TabPanel value={activeTab} index={index} key={index}>
-                        {obj.component}
+                        <ApplicationSubmittedGraph data={obj} />
                     </TabPanel>
                 })}
             </Box>

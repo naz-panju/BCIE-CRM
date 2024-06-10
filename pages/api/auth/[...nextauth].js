@@ -20,6 +20,7 @@ export default NextAuth({
           if (response.data) {
             // console.log('yyy', response);
             const user = {
+              id:response?.data?.data?.id,
               name: response?.data?.data?.name,
               email: response?.data?.data?.email,
               phone: response?.data?.data?.phone_number,

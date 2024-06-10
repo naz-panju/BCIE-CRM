@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const DoughnutChartComponent = () => {
+const DoughnutChartComponent = ({data}) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -13,9 +13,9 @@ const DoughnutChartComponent = () => {
         datasets: [
           {
             label: '',
-            data: [25, 45],
+            data: [data?.achievement, data?.target],
             backgroundColor: ['#e73f76', '#322fc8'], // Example colors for each slice (not used on hover)
-            borderWidth: 20, // Adjust border width as desired
+            // borderWidth: , // Adjust border width as desired
             borderColor: '#fff', // Set white border color
           },
         ],
@@ -33,7 +33,7 @@ const DoughnutChartComponent = () => {
           },
           tooltip: {
             // Configure tooltip options
-            enabled: false, // Enable tooltips
+            enabled: true, // Enable tooltips
           },
           hover: { // Disable hover effects
             mode: null,
