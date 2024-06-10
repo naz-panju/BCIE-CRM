@@ -138,14 +138,14 @@ function DashboardIndex() {
     const handleIntakeDateRange = (date) => {
         // Parsing the date with a specified format
         const dayBefore = moment(date, 'MMM YYYY'); // Ensure date is in 'MMM YYYY' format
-    
+
         if (!dayBefore.isValid()) {
             console.error('Invalid date format');
             return;
         }
-    
+
         if (dayBefore.month() === 0) { // January
-            const adjustedDate =  moment({ year: dayBefore.year(), month: 5, day: 30 });
+            const adjustedDate = moment({ year: dayBefore.year(), month: 5, day: 30 });
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
         } else if (dayBefore.month() === 6) { // July
             const adjustedDate = moment({ year: dayBefore.year(), month: 7, day: 31 })
@@ -396,17 +396,17 @@ function DashboardIndex() {
 
         if (session?.data?.user?.role?.id == 5) {
             // if (selectedCounsellor) {
-                // console.log(selectedCounsellor);
-                try {
-                    params['counselor'] = session?.data?.user?.id
-                    const response = await DashboardApi.list(params)
-                    // console.log(response);
-                    setTargets(response?.data)
-                    setTargetLoading(false)
-                } catch (error) {
-                    console.log(error);
-                    setTargetLoading(false)
-                }
+            // console.log(selectedCounsellor);
+            try {
+                params['counselor'] = session?.data?.user?.id
+                const response = await DashboardApi.list(params)
+                // console.log(response);
+                setTargets(response?.data)
+                setTargetLoading(false)
+            } catch (error) {
+                console.log(error);
+                setTargetLoading(false)
+            }
             // }
         }
 
@@ -450,6 +450,7 @@ function DashboardIndex() {
     };
 
 
+
     return (
         <>
             <section>
@@ -490,6 +491,7 @@ function DashboardIndex() {
 
                             <Grid sx={{ width: 230 }} className='intake_dropdown'>
                                 <DateRangePicker
+                                    preventOverflow
                                     className='no-clear'
                                     value={range}
                                     onChange={setRange}
