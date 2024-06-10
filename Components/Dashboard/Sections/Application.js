@@ -35,7 +35,7 @@ function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading
                                 <Skeleton variant='rounded' width={450} height={200} />
                                 :
                                 <div style={{ height: '100%' }} className='stage w-5/12 flex items-center justify-evenly mt-10'>
-                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg2'>
+                                    <div className='card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg2'>
                                         <div>
 
                                         </div>
@@ -46,7 +46,7 @@ function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading
 
                                         <span className='Hot btn-stage'>Returned</span>
                                     </div>
-                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg3'>
+                                    <div className='card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg3'>
                                         <div>
 
                                         </div>
@@ -57,7 +57,7 @@ function ApplicationSection({ submitApplicationLoading, weeklyApplicationLoading
 
                                         <span className='cool btn-stage'>Submitted</span>
                                     </div>
-                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg4'>
+                                    <div className='card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg4'>
                                         <div>
 
                                         </div>
