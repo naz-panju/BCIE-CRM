@@ -395,7 +395,7 @@ function DashboardIndex() {
         }
 
         if (session?.data?.user?.role?.id == 5) {
-            if (selectedCounsellor) {
+            // if (selectedCounsellor) {
                 // console.log(selectedCounsellor);
                 try {
                     params['counselor'] = session?.data?.user?.id
@@ -407,7 +407,7 @@ function DashboardIndex() {
                     console.log(error);
                     setTargetLoading(false)
                 }
-            }
+            // }
         }
 
     }

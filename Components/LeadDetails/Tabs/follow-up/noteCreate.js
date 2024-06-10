@@ -191,7 +191,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                 <Grid className='modal_title d-flex align-items-center  '>
                     <a className='back_modal' onClick={handleClose}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
-                            <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
                         </svg>
                     </a>
                     <a className='back_modal_head'>Add Note </a>
@@ -210,7 +210,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                             }
 
                             <Grid className='form_group frm-text-conn-stl '>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"></path></svg>
                                 <TextField
                                     placeholder='Add Note'
                                     {...register('note')}
@@ -230,7 +230,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                                         :
                                         <>
                                             {buttonText} <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
-                                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
                                             </svg>
                                         </>
                                 }</LoadingButton>
