@@ -310,7 +310,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                 open={open}
                 onClose={handleClose}
             >
-                <Grid width={550}>
+                <Grid width={600}>
                     <Grid className='modal_title d-flex align-items-center'>
                         <a className='back_modal' onClick={handleClose}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
@@ -325,7 +325,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
-                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
                                     <a className='form-text'>Country</a>
                                     {/* className='form_group */}
@@ -343,7 +343,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             getOptionLabel={(e) => e.name}
                                             getOptionValue={(e) => e.id}
                                             onChange={handleCountryChange}
-                                         
+
                                         />
 
                                         {errors.country && <span className='form-validation'>{errors.country.message}</span>}
@@ -368,6 +368,8 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                         {errors.course_level && <span className='form-validation'>{errors.course_level.message}</span>}
                                     </Grid>
                                 </div>
+                            </div>
+                            <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
 
                                 <div className='application-input'>
                                     <a className='form-text'>University</a>
@@ -407,8 +409,9 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                         {errors.course && <span className='form-validation'>{errors.course.message}</span>}
                                     </Grid>
                                 </div>
+                            </div>
 
-
+                            <div>
                                 <div className='application-input'>
                                     <a className='form-text' > Courses</a>
                                     <Grid className='mb-5' >
@@ -502,8 +505,8 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                         </form>
                     </div>
-                </Grid>
-            </Drawer>
+                </Grid >
+            </Drawer >
         </div >
     );
 }

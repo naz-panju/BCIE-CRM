@@ -866,9 +866,10 @@ a.edit-btn {
 
 a.form-text {
     color: #0B0D23;
-    font-size: 14px;
+    font-size: 16px;
     margin-bottom: 6px;
     display: block;
+    font-weight: 400;
 }
 
 .application-input .form_group {
