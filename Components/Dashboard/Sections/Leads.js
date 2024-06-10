@@ -166,7 +166,7 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
                         <div className='total_sec d-flex flex items-center justify-between p-3'>
                             Lead Source
                         </div>
-                        <div className='border rounded-sm h-4/5'>
+                        <div className='border rounded-sm '>
                             {
                                 leadSourceListLoading ?
 

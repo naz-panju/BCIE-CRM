@@ -315,10 +315,13 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
-                           
+                            {
+                                dataLoading ?
+                                    <LoadingEdit item={items} />
+                                    :
+                                    <>
                                     
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
-                                        <div className='application-input'>
+                                
                                             <a className='form-text'>Country</a>
                                             <Grid className='form_group' >
                                                 <AsyncSelect
@@ -335,9 +338,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                                                 {errors.country && <span className='form-validation'>{errors.country.message}</span>}
                                             </Grid>
-                                        </div>
-
-                                        <div className='application-input'>
+                                        
                                             <a className='form-text'>Course Level</a>
                                             <Grid className='form_group' >
                                                 <AsyncSelect
@@ -354,9 +355,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                 />
                                                 {errors.course_level && <span className='form-validation'>{errors.course_level.message}</span>}
                                             </Grid>
-                                        </div>
-
-                                        <div className='application-input'>
+                             
                                             <a className='form-text'>University</a>
                                             <Grid className='form_group' >
                                                 <AsyncSelect
@@ -373,10 +372,110 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                 />
                                                 {errors.university && <span className='form-validation'>{errors.university.message}</span>}
                                             </Grid>
-                                        </div>
+                          
 
+                                        
 
-                                        <div className='application-input'>
+                                        
+
+                                        {
+                                            watch('university') &&
+                                            (
+                                                <Grid
+                                                    mb={1}
+                                                    className="border-2 radius-sm w-100"
+                                                    maxHeight={500}
+                                                    overflow={'auto'}
+                                                >
+                                                    <Grid className="flex justify-between h-7 items-center border-b-2">
+                                                        <Grid>
+                                                            {
+                                                                !isExpanded &&
+                                                                <span style={{ fontSize: '14px', marginLeft: 10 }}> University Information</span>
+                                                            }
+                                                        </Grid>
+                                                        <Grid>
+                                                            {isExpanded ? (
+                                                                <KeyboardArrowUpOutlined
+                                                                    sx={{ color: 'grey', cursor: 'pointer', mr: 1 }}
+                                                                    fontSize="small"
+                                                                    onClick={toggleExpand}
+                                                                />
+                                                            ) : (
+                                                                <KeyboardArrowDownOutlined
+                                                                    sx={{ color: 'grey', cursor: 'pointer', mr: 1 }}
+                                                                    fontSize="small"
+                                                                    onClick={toggleExpand}
+                                                                />
+                                                            )}
+                                                        </Grid>
+                                                    </Grid>
+                                                    {isExpanded && (
+                                                        <>
+                                                            {(watch('university')?.extra_university_info ||
+                                                                watch('university')?.extra_scholarship_info) ? (
+                                                                <Grid p={2}>
+                                                                    {watch('university')?.extra_university_info && (
+                                                                        <Grid>
+                                                                            <div className="mb-2">
+                                                                                <button
+                                                                                    disabled
+                                                                                    style={{
+                                                                                        backgroundColor: '#689df6',
+                                                                                        color: 'white',
+                                                                                        height: '25px',
+                                                                                        width: '180px',
+                                                                                        fontSize: '14px',
+                                                                                        borderRadius: 5,
+                                                                                    }}
+                                                                                >
+                                                                                    University Info
+                                                                                </button>
+                                                                            </div>
+                                                                            <span style={{ fontSize: '14px' }}>
+                                                                                {watch('university')?.extra_university_info}
+                                                                            </span>
+                                                                        </Grid>
+                                                                    )}
+                                                                    {watch('university')?.extra_scholarship_info && (
+                                                                        <Grid mt={2}>
+                                                                            <div className="mb-2">
+                                                                                <button
+                                                                                    disabled
+                                                                                    style={{
+                                                                                        backgroundColor: '#689df6',
+                                                                                        color: 'white',
+                                                                                        height: '25px',
+                                                                                        width: '180px',
+                                                                                        fontSize: '14px',
+                                                                                        borderRadius: 5,
+                                                                                    }}
+                                                                                >
+                                                                                    Scholarship Info
+                                                                                </button>
+                                                                            </div>
+                                                                            <span style={{ fontSize: '14px' }}>
+                                                                                {watch('university')?.extra_scholarship_info}
+                                                                            </span>
+                                                                        </Grid>
+                                                                    )}
+                                                                </Grid>
+                                                            ) : (
+                                                                <Grid p={2}>
+                                                                    <Grid className="flex justify-center items-center" height={100}>
+                                                                        <span style={{ fontSize: '16px' }}>
+                                                                            No Information Found
+                                                                        </span>
+                                                                    </Grid>
+                                                                </Grid>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </Grid>
+                                            )
+
+                                        }
+
                                         <a className='form-text'>Subject Area</a>
                                         <Grid className='form_group' >
                                             <AsyncSelect
@@ -393,10 +492,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             />
                                             {errors.course && <span className='form-validation'>{errors.course.message}</span>}
                                         </Grid>
-                                        </div>
 
-
-                                        <div className='application-input'>
                                         <a className='form-text' > Courses</a>
                                         <Grid className='form_group' >
                                             <TextInput control={control} name="coursetext"
@@ -404,10 +500,6 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             {errors.coursetext && <span className='form-validation'>{errors.coursetext.message}</span>}
                                         </Grid>
 
-                                        </div>
-
-
-                                        <div className='application-input'>
                                         <a className='form-text'>Intake</a>
                                         <Grid className='form_group' >
                                             <AsyncSelect
@@ -424,10 +516,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             />
                                             {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
                                         </Grid>
-                                        </div>
 
-
-                                        <div className='application-input'>
                                         <a className='form-text'>Documents</a>
                                         <Grid className='form_group' >
                                             <AsyncSelect
@@ -443,10 +532,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             />
                                             {errors.documents && <span className='form-validation'>{errors.documents.message}</span>}
                                         </Grid>
-                                        </div>
 
-
-                                        <div className='application-input'>
                                         <a className='form-text'> Remarks </a>
                                         <Grid className='form_group' >
                                             <TextField
@@ -459,15 +545,26 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             />
                                             {errors.email && <span className='form-validation'>{errors.email.message}</span>}
                                         </Grid>
-                                        </div>
+                                    </>
+                            }
 
+                            <Grid pb={3} display={'flex'}>
 
-                                    </div>
+                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>{
+                                    loading ?
+                                        <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                        :
+                                        <>
+                                            Save <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </>
+                                }</LoadingButton>
+                                <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'> Cancel <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                </svg></Button>
 
-                                        
-
-                                       
-                               
+                            </Grid>
 
                         </form>
                     </div>

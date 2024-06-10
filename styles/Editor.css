@@ -606,8 +606,8 @@ span.timeline-content-content-span {
 .timeline-content-content {
     justify-content: space-between;
     flex-direction: row;
+    flex-wrap: wrap;
 }
-
 .TimelineItemClass:nth-child(2) .timeline-content-content-block .timeline-content-content span.timeline-content-content-span{
     background: #6ED772;
 }
@@ -862,6 +862,58 @@ a.edit-btn {
     font-weight: 400;
     line-height: 10px;
     padding: 6px 10px;
+}
+
+a.form-text {
+    color: #0B0D23;
+    font-size: 14px;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.application-input .form_group {
+    background: transparent !important;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.144);
+    display: block !important;
+    padding: 0px 0px !important;
+}
+.application-input .form_group input::placeholder{
+    font-size: 12px;
+    color: #525252;
+}
+
+.application-input .form_group div{
+    background-color: transparent;
+    background: transparent;
+    border: 0px solid;
+}
+
+.application-input .form_group fieldset{
+    border: 0px;
+}
+
+.modal-header {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: unset;
+    padding: 35px;
+    background-image: url(../img/header-bg.png);
+    width: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.modal-header h2 {
+    font-size: 24px;
+    margin-left: 20px;
+    color: #fff;
+    font-weight: 500;
+}
+.modal-header h2 span {
+    display: block;
+    margin-left: 30px;
 }
 .no-follw-up-block.document-block {
     background-color: #FFF;
@@ -2972,6 +3024,10 @@ body.body-active .footer {
     color: #000000;
     font-size: 18px;
     line-height: 28px;
+    margin-left: 15px;
+}
+.flex.items-center.justify-between.target-dygram canvas {
+    height: 160px !important;
 }
 .target-inner-item {
     margin: 0 30px;

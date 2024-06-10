@@ -155,11 +155,11 @@ function CommunicationSection({ fetchManagers, handleManagerSelect, selectedMana
             </div>
             {
               targetLoading ?
-                <div className='border rounded-sm h-4/5'>
+                <div className='border rounded-sm '>
                   <Skeleton variant='rounded' width={'100%'} height={'100%'} />
                 </div>
                 :
-                <div className='border rounded-sm h-4/5'>
+                <div className='border rounded-sm '>
                   <TargetTabs targets={targets?.data} />
                   <div className=''>
                   </div>
