@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const DoughnutChartComponent = ({data}) => {
+const DoughnutChartComponent = ({ data }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -14,8 +14,8 @@ const DoughnutChartComponent = ({data}) => {
           {
             label: '',
             data: [data?.achievement, data?.target],
-            backgroundColor: ['#e73f76', '#322fc8'], // Example colors for each slice (not used on hover)
-            // borderWidth: , // Adjust border width as desired
+            backgroundColor: ['#e73f76', '#322fc8'], // Example colors for each slice
+            borderWidth: 10, // Adjust border width as desired
             borderColor: '#fff', // Set white border color
           },
         ],
@@ -27,16 +27,34 @@ const DoughnutChartComponent = ({data}) => {
             display: false, // Hide legend by default
           },
           title: {
-            display: false, // Enable title display
-            // text: 'Targets and Achievement', // Set title text
-            // position: '', // Center the title
+            display: false, // Disable title display
           },
           tooltip: {
-            // Configure tooltip options
             enabled: true, // Enable tooltips
+            callbacks: {
+              labelColor: function () {
+                return {
+                  borderColor: 'transparent',
+                  backgroundColor: 'transparent',
+                };
+              },
+              labelTextColor: function () {
+                return 'white'; // Set text color for labels
+              },
+              // label: function (tooltipItem) {
+              //   // Customize the tooltip label to only show text without any color box
+              //   let label = tooltipItem.label || '';
+              //   if (label) {
+              //     label += ': ';
+              //   }
+              //   label += tooltipItem.raw;
+              //   return label;
+              // },
+            },
+            displayColors: false, // Disable color boxes in tooltips
           },
-          hover: { // Disable hover effects
-            mode: null,
+          hover: {
+            mode: null, // Disable hover effects
           },
         },
       },
@@ -46,7 +64,7 @@ const DoughnutChartComponent = ({data}) => {
     return () => {
       chart.destroy();
     };
-  }, []);
+  }, [data]);
 
   return <canvas ref={chartRef}></canvas>;
 };

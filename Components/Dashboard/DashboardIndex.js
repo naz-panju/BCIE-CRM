@@ -133,30 +133,30 @@ function DashboardIndex() {
         setOfficeId(data?.id)
     }
 
+    // setRange([dayBefore.toDate(), new Date()])
+
     const handleIntakeDateRange = (date) => {
-        // const dayBefore = moment(date).subtract(1, 'day');
-        // console.log(dayBefore);
+        // Parsing the date with a specified format
+        const dayBefore = moment(date, 'MMM YYYY'); // Ensure date is in 'MMM YYYY' format
 
-        const dayBefore = moment(date)
+        if (!dayBefore.isValid()) {
+            console.error('Invalid date format');
+            return;
+        }
 
-        if (dayBefore.month() === 0) {
+        if (dayBefore.month() === 0) { // January
             const adjustedDate = moment({ year: dayBefore.year(), month: 5, day: 30 });
-            // console.log(adjustedDate);
-            // setRange([adjustedDate.toDate(), dayBefore.toDate()])
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
-        } else if (dayBefore.month() === 6) {
+        } else if (dayBefore.month() === 6) { // July
             const adjustedDate = moment({ year: dayBefore.year(), month: 7, day: 31 })
-            // console.log(adjustedDate);
-            // setRange([adjustedDate.toDate(), dayBefore.toDate()])
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
-        }
-        else if (dayBefore.month() === 8) {
+        } else if (dayBefore.month() === 8) { // September
             const adjustedDate = moment({ year: dayBefore.year(), month: 11, day: 31 })
-            // console.log(adjustedDate);
-            // setRange([adjustedDate.toDate(), dayBefore.toDate()])
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
+        } else {
+            console.error('Date is not within the expected range');
         }
-    }
+    };
 
     // console.log(moment(watch('intake')?.name).format('DD-MM-YYYY'));
 
@@ -396,17 +396,17 @@ function DashboardIndex() {
 
         if (session?.data?.user?.role?.id == 5) {
             // if (selectedCounsellor) {
-                // console.log(selectedCounsellor);
-                try {
-                    params['counselor'] = session?.data?.user?.id
-                    const response = await DashboardApi.list(params)
-                    // console.log(response);
-                    setTargets(response?.data)
-                    setTargetLoading(false)
-                } catch (error) {
-                    console.log(error);
-                    setTargetLoading(false)
-                }
+            // console.log(selectedCounsellor);
+            try {
+                params['counselor'] = session?.data?.user?.id
+                const response = await DashboardApi.list(params)
+                // console.log(response);
+                setTargets(response?.data)
+                setTargetLoading(false)
+            } catch (error) {
+                console.log(error);
+                setTargetLoading(false)
+            }
             // }
         }
 
@@ -450,6 +450,7 @@ function DashboardIndex() {
     };
 
 
+
     return (
         <>
             <section>
@@ -490,6 +491,7 @@ function DashboardIndex() {
 
                             <Grid sx={{ width: 230 }} className='intake_dropdown'>
                                 <DateRangePicker
+                                    preventOverflow
                                     className='no-clear'
                                     value={range}
                                     onChange={setRange}
