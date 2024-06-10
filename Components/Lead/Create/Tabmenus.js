@@ -87,8 +87,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
                 return value !== this.parent.phone;
             }),
-            passport_number:yup.string().required("Passport Number is Required"),
-            passport_expiry:yup.string().required("Passport Expiry Date is Required"),
+            passport_number: yup.string().required("Passport Number is Required"),
+            passport_expiry: yup.string().required("Passport Expiry Date is Required"),
             preffered_course: yup.string().required("Preffered Course is Required"),
             preferred_country: yup.string().required("Preffered Country is Required"),
             preffered_course_level: yup.object().required("Course Level is required").typeError("Please choose a Course"),
@@ -306,6 +306,17 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         setValue('agency', '')
     }
 
+    const handleResidenceChange = (data) => {
+        setValue('country_of_residence', data || '')
+        if (data) {
+            // setCode(dialCode)
+            setValue('phone', `+${data?.phonecode}`)
+            setValue('alt_phone', `+${data?.phonecode}`)
+            setValue('phone', `+${data?.phonecode}`)
+            setValue('whatsapp', `+${data?.phonecode}`)
+        }
+    }
+
     const handleinTakeChange = (data) => {
         setValue('intake', data || '')
 
@@ -346,16 +357,16 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
             preferred_course: data?.preffered_course,
             preferred_countries: data?.preferred_country,
-            
-            passport:data?.passport_number,
-            passport_exp_date:passport_exp_date,
+
+            passport: data?.passport_number,
+            passport_exp_date: passport_exp_date,
 
             // course_level_id: data?.preffered_course_level?.id || null,
             // intake_id: data?.intake?.id,
 
             date_of_birth: dob,
             address: data?.address,
-           
+
             country_of_birth_id: data?.country_of_birth?.id || null,
             country_of_residence_id: data?.country_of_residence?.id || null,
 
@@ -364,7 +375,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             source_id: data?.source?.id || null,
             agency_id: data?.agency?.id || null,
             referred_student_id: data?.student?.id || null,
-            referral_university_id:data?.referred_university?.id || null,
+            referral_university_id: data?.referred_university?.id || null,
             // country_id: data?.country?.id,
 
             note: data?.note
@@ -439,7 +450,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
             setValue('preferred_country', data?.preferred_countries)
             setValue('preffered_course', data?.preferred_course)
-            
+
             // setValue('preffered_course_level', data?.course_level)
             // setValue('intake', data?.intake)
             setValue('passport_number', data?.passport)
@@ -543,6 +554,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
 
 
+
+
                         <div className='form_group frm-conn-stl  '>
 
                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="14" viewBox="0 0 17 14" fill="none">
@@ -562,13 +575,56 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                         </div>
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                            <div className='form_group frm-sel-icon-stl'>
+                                <svg className='sel-icon' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M5 9.92285C5 14.7747 9.24448 18.7869 11.1232 20.3252C11.3921 20.5454 11.5281 20.6568 11.7287 20.7132C11.8849 20.7572 12.1148 20.7572 12.271 20.7132C12.472 20.6567 12.6071 20.5463 12.877 20.3254C14.7557 18.7871 18.9999 14.7751 18.9999 9.9233C18.9999 8.08718 18.2625 6.32605 16.9497 5.02772C15.637 3.72939 13.8566 3 12.0001 3C10.1436 3 8.36301 3.7295 7.05025 5.02783C5.7375 6.32616 5 8.08674 5 9.92285Z" stroke="#0B0D23" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M10 9C10 10.1046 10.8954 11 12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9Z" stroke="#0B0D23" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <SelectX
+                                    placeholder='Country of Birth'
+                                    menuPlacement='top'
+                                    loadOptions={fetchGlobalCountry}
+                                    control={control}
+                                    name={'country_of_birth'}
+                                    defaultValue={watch('country_of_birth')}
+                                />
+                                {errors.country_of_birth && <span className='form-validation'>{errors.country_of_birth.message}</span>}
+
+                            </div>
+                            <div className='form_group frm-conn-stl'>
+
+                                <AsyncSelect
+                                    placeholder='Country of Residence'
+                                    name={'country_of_residence'}
+                                    defaultValue={watch('country_of_residence')}
+                                    isClearable
+                                    defaultOptions
+                                    loadOptions={fetchGlobalCountry}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    onChange={handleResidenceChange}
+                                />
+                                {/* <SelectX
+                                    placeholder='Country of Residence'
+                                    menuPlacement='top'
+                                    loadOptions={fetchGlobalCountry}
+                                    control={control}
+                                    name={'country_of_residence'}
+                                    defaultValue={watch('country_of_residence')}
+                                /> */}
+                                {errors.country_of_residence && <span className='form-validation'>{errors.country_of_residence.message}</span>}
+
+                            </div>
+                        </div>
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                             <div className='form_group'>
                                 <PhoneInput
                                     {...register('phone', { required: 'Please enter your mobile number' })}
                                     international
                                     // autoFormat
                                     placeholder="Enter Mobile Number"
-                                    country="in"
+                                    // country="global"
                                     value={watch('phone')}
                                     onChange={handlePhoneNumber}
                                     inputprops={{
@@ -597,7 +653,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                     international
                                     // autoFormat
                                     placeholder="Enter Alternate Number"
-                                    country="in"
+                                    // country="in"
                                     value={watch('alt_phone')}
                                     onChange={handleAltPhoneNumber}
                                     inputprops={{
@@ -630,7 +686,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                     international
                                     // autoFormat
                                     placeholder="Enter your number"
-                                    country="in"
+                                    // country="in"
                                     value={watch('whatsapp')}
                                     onChange={handleWhatsAppNumber}
                                     inputprops={{
@@ -750,37 +806,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                             </div>
                         </div> */}
-
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                            <div className='form_group frm-sel-icon-stl'>
-                                <svg className='sel-icon' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M5 9.92285C5 14.7747 9.24448 18.7869 11.1232 20.3252C11.3921 20.5454 11.5281 20.6568 11.7287 20.7132C11.8849 20.7572 12.1148 20.7572 12.271 20.7132C12.472 20.6567 12.6071 20.5463 12.877 20.3254C14.7557 18.7871 18.9999 14.7751 18.9999 9.9233C18.9999 8.08718 18.2625 6.32605 16.9497 5.02772C15.637 3.72939 13.8566 3 12.0001 3C10.1436 3 8.36301 3.7295 7.05025 5.02783C5.7375 6.32616 5 8.08674 5 9.92285Z" stroke="#0B0D23" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                    <path d="M10 9C10 10.1046 10.8954 11 12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9Z" stroke="#0B0D23" strokeWidth="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <SelectX
-                                    placeholder='Country of Birth'
-                                    menuPlacement='top'
-                                    loadOptions={fetchGlobalCountry}
-                                    control={control}
-                                    name={'country_of_birth'}
-                                    defaultValue={watch('country_of_birth')}
-                                />
-                                {errors.country_of_birth && <span className='form-validation'>{errors.country_of_birth.message}</span>}
-
-                            </div>
-                            <div className='form_group frm-conn-stl'>
-                                <SelectX
-                                    placeholder='Country of Residence'
-                                    menuPlacement='top'
-                                    loadOptions={fetchGlobalCountry}
-                                    control={control}
-                                    name={'country_of_residence'}
-                                    defaultValue={watch('country_of_residence')}
-                                />
-                                {errors.country_of_residence && <span className='form-validation'>{errors.country_of_residence.message}</span>}
-
-                            </div>
-                        </div>
 
 
                         {/* 
