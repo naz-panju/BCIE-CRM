@@ -133,30 +133,30 @@ function DashboardIndex() {
         setOfficeId(data?.id)
     }
 
+    // setRange([dayBefore.toDate(), new Date()])
+
     const handleIntakeDateRange = (date) => {
-        // const dayBefore = moment(date).subtract(1, 'day');
-        // console.log(dayBefore);
-
-        const dayBefore = moment(date)
-
-        if (dayBefore.month() === 0) {
-            const adjustedDate = moment({ year: dayBefore.year(), month: 5, day: 30 });
-            // console.log(adjustedDate);
-            // setRange([adjustedDate.toDate(), dayBefore.toDate()])
+        // Parsing the date with a specified format
+        const dayBefore = moment(date, 'MMM YYYY'); // Ensure date is in 'MMM YYYY' format
+    
+        if (!dayBefore.isValid()) {
+            console.error('Invalid date format');
+            return;
+        }
+    
+        if (dayBefore.month() === 0) { // January
+            const adjustedDate =  moment({ year: dayBefore.year(), month: 5, day: 30 });
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
-        } else if (dayBefore.month() === 6) {
+        } else if (dayBefore.month() === 6) { // July
             const adjustedDate = moment({ year: dayBefore.year(), month: 7, day: 31 })
-            // console.log(adjustedDate);
-            // setRange([adjustedDate.toDate(), dayBefore.toDate()])
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
-        }
-        else if (dayBefore.month() === 8) {
+        } else if (dayBefore.month() === 8) { // September
             const adjustedDate = moment({ year: dayBefore.year(), month: 11, day: 31 })
-            // console.log(adjustedDate);
-            // setRange([adjustedDate.toDate(), dayBefore.toDate()])
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
+        } else {
+            console.error('Date is not within the expected range');
         }
-    }
+    };
 
     // console.log(moment(watch('intake')?.name).format('DD-MM-YYYY'));
 
