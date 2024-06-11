@@ -329,9 +329,8 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                 <div className='application-input'>
                                     <a className='form-text'>Country</a>
                                     {/* className='form_group */}
-                                    <Grid className='form_group' >
+                                    <Grid className='mb-5' >
                                         <AsyncSelect
-
                                             styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                             // styles={{ width: '100%' }}
                                             name='country'
