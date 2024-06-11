@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
-import { Button, Grid, IconButton, Paper, Skeleton, TextField, Tooltip, Typography } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, Grid, IconButton, Paper, Skeleton, TextField, Tooltip, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Close, Download, Refresh, Visibility } from '@mui/icons-material';
+import { Close, CloseOutlined, Delete, Download, Refresh, Visibility } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import SelectX from '@/Form/SelectX';
 import { useState } from 'react';
@@ -58,6 +58,13 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
             setdocId(0)
             setapplicationId(details?.id)
         }
+    }
+
+    const handleDocumentClose = () => {
+
+        setdocId()
+        setapplicationId()
+
     }
 
 
@@ -191,10 +198,62 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
     // console.log(details);
 
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [fileInputKey, setFileInputKey] = useState(0);
+
+
+    const handleFileChange = (event) => {
+        setFileInputKey(prevKey => prevKey + 1);
+        setSelectedFile(event.target.files[0]);
+    };
+
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        setSelectedFile(file);
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
+    };
+
+    const handleDeleteFile = () => {
+        setSelectedFile(null); // Clear selected file
+    };
+
+    const fetchTemplates = (e) => {
+        return ListingApi.documentTemplate({ keyword: e, type: 'university' }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    
+    const handleTemplateSelect = (e) => {
+        settemplate(e || '')
+        setValue('template', e || '');
+    }
+
+    function trimUrlAndNumbers(url) {
+        const lastSlashIndex = url?.lastIndexOf('/');
+        let trimmedString = url?.substring(lastSlashIndex + 1);
+        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
+    }
+
+    const [changeStage, setChangeStage] = useState(true);
+    const handleCheckboxChange = (event) => {
+        setChangeStage(event.target.checked);
+    };
+
 
     return (
         <div>
-            <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={docId} setEditId={setdocId} handleRefresh={NoLoadDetails} fetchTable={fetchTable} details={details} />
+            {/* <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={docId} setEditId={setdocId} handleRefresh={NoLoadDetails} fetchTable={fetchTable} details={details} /> */}
             <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 
@@ -258,12 +317,144 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                 <button disabled style={{ backgroundColor: '#689df6', color: 'white', height: '25px', width: '180px', fontSize: '14px', borderRadius: 5 }}>University Document</button>
 
                                 {
-                                   details && 
-                                //    details?.stage?.name !== 'CONDITIONAL OFFER' &&
+                                    details &&
+                                    //    details?.stage?.name !== 'CONDITIONAL OFFER' &&
                                     <Button sx={{ fontSize: '14px', height: '25px', mr: 2, display: 'flex', alignItems: 'center' }} size='small' variant='outlined' onClick={handleDocumentOpen}> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
                                         <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" strokeLinecap="round" stroke-linejoin="round" />
                                     </svg>Add </Button>
                                 }
+                            </Grid>
+
+                            <Grid height={500} className={`border h-6/8 ${docId ? 'Active' : 'F'}`}>
+                                <CloseOutlined onClick={handleDocumentClose} />
+                                <div>
+                                    <Grid container>
+                                        <Grid pr={1} mt={2} md={12}>
+                                            <a>Select Template</a>
+                                            <AsyncSelect
+                                                key={watch('template')}
+                                                name={'template'}
+                                                defaultValue={watch('template')}
+                                                isClearable
+                                                defaultOptions
+                                                loadOptions={fetchTemplates}
+                                                getOptionLabel={(e) => e.name}
+                                                getOptionValue={(e) => e.id}
+                                                onChange={handleTemplateSelect}
+                                            />
+                                            {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid container>
+                                        <Grid pr={1} mt={2} md={12}>
+                                            <a>UNI ID</a>
+                                            <TextInput control={control} name="application_id"
+                                                value={watch('application_id')} />
+                                            {errors.application_id && <span className='form-validation'>{errors.application_id.message}</span>}
+
+                                        </Grid>
+                                    </Grid>
+
+                                    <Grid container>
+                                        <Grid pr={1} mt={2} md={12}>
+                                            <FormControlLabel
+                                                control={<Checkbox checked={changeStage} onChange={handleCheckboxChange} />}
+                                                label="Change Stage"
+                                            />
+
+                                        </Grid>
+                                    </Grid>
+
+                                    {
+                                        watch('template')?.stage?.action_type == "Deposit Paid" &&
+                                        <Grid container>
+                                            <Grid pr={1} mt={2} md={6}>
+                                                <a>Deposit Amount</a>
+                                                <TextInput type={'number'} control={control} name="amount"
+                                                    value={watch('amount')} />
+                                                {errors.amount && <span className='form-validation'>{errors.amount.message}</span>}
+                                            </Grid>
+                                            <Grid pr={1} mt={2} md={6}>
+                                                <a>Deposit Paid Date</a>
+                                                <DateInput
+                                                    control={control}
+                                                    name="paid_date"
+                                                    value={watch('paid_date')}
+                                                />
+                                                {errors.paid_date && <span className='form-validation'>{errors.paid_date.message}</span>}
+                                            </Grid>
+                                        </Grid>
+                                    }
+
+                                    <div
+                                        className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
+                                        onDrop={handleDrop}
+                                        onDragOver={handleDragOver}
+                                    >
+                                        <input
+                                            type="file"
+                                            onChange={handleFileChange}
+                                            className="hidden"
+                                            id="file-upload"
+                                            key={fileInputKey}
+                                        />
+                                        <label
+                                            htmlFor="file-upload"
+                                            className="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            Select File or Drag and Drop Here
+                                        </label>
+                                        {(selectedFile || details?.file) && (
+                                            <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
+                                                <Grid mr={1}>
+                                                    {
+                                                        selectedFile &&
+                                                        <Tooltip title={selectedFile?.name}>
+                                                            <p className="text-gray-700">
+                                                                {
+                                                                    selectedFile?.name?.length > 20
+                                                                        ? selectedFile?.name?.slice(0, 20) + '....'
+                                                                        : selectedFile?.name
+                                                                }
+                                                            </p>
+                                                        </Tooltip>
+                                                    }
+                                                    {
+                                                        !selectedFile &&
+                                                        <Tooltip title={details?.file}>
+                                                            <p className="text-gray-700">
+                                                                {trimUrlAndNumbers(details?.file)}
+                                                            </p>
+                                                        </Tooltip>
+                                                    }
+                                                </Grid>
+                                                {
+                                                    selectedFile &&
+                                                    <Grid>
+                                                        <Delete sx={{ cursor: 'pointer' }} color='error' fontSize='small' onClick={handleDeleteFile} />
+                                                    </Grid>
+                                                }
+                                            </Grid>
+                                        )}
+                                    </div>
+                                    <Grid mt={2} display={'flex'} justifyContent={'end'}>
+
+                                        <LoadingButton
+                                            // type='submit'
+                                            variant='contained'
+                                            // disabled={loading || reqLoading || dataLoading}
+                                            loading={loading}
+                                            size='small'
+                                            sx={{ textTransform: 'none', height: 30 }}
+                                        className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
+                                        >
+                                            Upload
+                                        </LoadingButton>
+                                    </Grid>
+                                </div>
+
                             </Grid>
 
                             {

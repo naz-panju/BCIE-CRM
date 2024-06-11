@@ -191,7 +191,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
         setdocumentSelected()
     }
 
-    console.log(documentSelected?.status);
+    // console.log(documentSelected?.status);
 
     const [searchKey, setsearchKey] = useState()
 

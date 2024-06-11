@@ -373,7 +373,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                 textBoxLoading ?
                                                     <Skeleton variant='rounded' width={'100%'} height={40} />
                                                     :
-                                                    <TextInput placeholder={'Default CC'} control={control} name="default_cc"
+                                                    <TextInput placeholder={'CC'} control={control} name="default_cc"
                                                         value={watch('default_cc')} />
                                             }
                                             {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}

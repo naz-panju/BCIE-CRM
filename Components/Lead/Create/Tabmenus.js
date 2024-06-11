@@ -383,7 +383,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             note: data?.note
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         let action;
 
