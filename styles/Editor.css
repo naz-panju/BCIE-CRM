@@ -2749,7 +2749,39 @@ span.add-author {
     color: #D2D2D2;
     font-size: 14px;
 }
+.MuiGrid-root.document-details-block {
+    background: #F0F0F0;
+    margin-bottom: 18px;
+    border-radius: 5px;
+}
+.MuiGrid-root.document-details-block-title {
+    border-bottom: 1px solid #D5D5D6;
+    padding: 15px 12px;
+}
+svg.MuiSvgIcon-root.dw-btn {
+    border: 1px solid #00000040;
+    margin-right: 0;
+    height: 30px;
+    width: 30px;
+    padding: 5px;
+    border-radius: 7px;
+}
 
+.MuiPaper-root.document-details-block-item {
+    background: #FCFCFD;
+    border: 1px solid #E0E3E6;
+    box-shadow: none;
+    padding: 10px;
+}
+.document-details-block-item-icons {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.MuiPaper-root.document-details-block-item .MuiGrid-root {
+    margin-top: 0;
+}
 
 .form_group .react-tel-input .flag-dropdown {
 
@@ -2764,7 +2796,35 @@ span.add-author {
     box-shadow: unset !important;
 }
 
+.doc-details-add-block {
+    display: none;
+}
+.doc-details-add-block.Active {
+    display: block;
+}
 
+.add-btn{
+    background-color: #0047CD;
+    color: #fff;
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-size: 14px;
+}
+.doc-details-add-block.Active {
+    display: block;
+    background-color: #FCFCFD;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 5px;
+}
+a.not-found {
+    color: #525252;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding-top: 0;
+}
 
 .form_group .MuiInputBase-root {
     background-color: unset !important;

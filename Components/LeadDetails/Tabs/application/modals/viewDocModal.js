@@ -22,7 +22,8 @@ import moment from 'moment';
 import UniversityDocumentModal from './universityDocument';
 import ConfirmPopup from '@/Components/Common/Popup/confirm';
 import DownloadDocumentModal from '@/Components/Applications/Modals/downloadDocument';
-
+import Doc from '@/img/doc.png';
+import Image from 'next/image';
 
 const scheme = yup.object().shape({
     amount: yup.string().required("Deposit Amount is Required"),
@@ -274,13 +275,13 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                     <hr />
                     <div>
 
-                        <Grid m={1} mb={4}>
-                            <Grid mb={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                <button disabled style={{ backgroundColor: '#689df6', color: 'white', height: '25px', width: '180px', fontSize: '14px', borderRadius: 5 }}> Student Document</button>
+                        <Grid className='document-details-block' m={1} mb={4}>
+                            <Grid className='document-details-block-title' mb={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                                <button disabled style={{ display: 'flex', alignItems: 'center', backgroundColor: '#A6E9A9', color: '#0B0D23',  padding: '8px 15px', fontSize: '14px', borderRadius: 5 }}><svg style={{ marginRight: '10px' }} width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.75 10.0834H7.33333M5.04167 12.3751V7.79175M13.2917 12.8334C16.694 12.8334 18.4644 14.0051 19.0377 16.3484C19.3002 17.4214 18.3546 18.3334 17.25 18.3334H9.33334C8.22877 18.3334 7.28316 17.4214 7.54565 16.3484C8.11894 14.0051 9.88932 12.8334 13.2917 12.8334ZM13.2917 9.16675C14.8194 9.16675 15.5833 8.38103 15.5833 6.41675C15.5833 4.45246 14.8194 3.66675 13.2917 3.66675C11.7639 3.66675 11 4.45246 11 6.41675C11 8.38103 11.7639 9.16675 13.2917 9.16675Z" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Student Document</button>
                                 {
                                     // details?.stage?.name !== 'CONDITIONAL OFFER' &&
                                     details?.documents?.length > 0 &&
-                                    <Tooltip title={'Download'}><Download onClick={handleDownlaodOpen} fontSize='small' sx={{ mr: 2, color: '#689df6', cursor: 'pointer' }} /></Tooltip>
+                                    <Tooltip className='dw-btn' title={'Download'}><Download onClick={handleDownlaodOpen} fontSize='small' sx={{ mr: 2, color: '#689df6', cursor: 'pointer' }} /></Tooltip>
                                 }
                             </Grid>
                             {
@@ -293,11 +294,16 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
                                             <Grid mb={1} key={index} container spacing={1} justifyContent="center">
                                                 <Grid item p={1} xs={11.5}>
-                                                    <Paper elevation={3} sx={{ p: 1 }}>
+                                                    <Paper  className='document-details-block-item' elevation={3} sx={{ p: 1 }}>
                                                         <Grid key={index} display={'flex'} justifyContent={'space-between'} alignItems={'center'} sx={{ mt: index !== 0 ? 1 : '' }}>
                                                             <a style={{ fontSize: '14px' }} target='_blank' href={obj?.file} key={index} >{trimUrlAndNumbers(obj?.title || obj?.document_template?.name)}</a>
-                                                            <Grid display={'flex'} alignItems={'center'}>
-                                                                <Tooltip title={'Preview'}><a target='_blank' href={obj?.file}><Visibility fontSize='small' sx={{ color: '#689df6' }} /></a></Tooltip>
+                                                            <Grid className='document-details-block-item-icons' display={'flex'} alignItems={'center'}>
+                                                                <Tooltip title={'Preview'}><a target='_blank' href={obj?.file}><svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.4229 8.28484C16.3997 8.23238 15.8372 6.98461 14.5868 5.73418C12.9207 4.06805 10.8162 3.1875 8.49999 3.1875C6.18374 3.1875 4.07933 4.06805 2.4132 5.73418C1.16277 6.98461 0.59765 8.23438 0.577064 8.28484C0.546858 8.35279 0.53125 8.42631 0.53125 8.50066C0.53125 8.57502 0.546858 8.64854 0.577064 8.71648C0.600306 8.76894 1.16277 10.0161 2.4132 11.2665C4.07933 12.932 6.18374 13.8125 8.49999 13.8125C10.8162 13.8125 12.9207 12.932 14.5868 11.2665C15.8372 10.0161 16.3997 8.76894 16.4229 8.71648C16.4531 8.64854 16.4687 8.57502 16.4687 8.50066C16.4687 8.42631 16.4531 8.35279 16.4229 8.28484ZM8.49999 12.75C6.45601 12.75 4.67035 12.0069 3.19214 10.542C2.58564 9.9388 2.06963 9.25101 1.66015 8.5C2.06947 7.74889 2.5855 7.06108 3.19214 6.45801C4.67035 4.99309 6.45601 4.25 8.49999 4.25C10.544 4.25 12.3296 4.99309 13.8078 6.45801C14.4155 7.06097 14.9327 7.74878 15.3432 8.5C14.8644 9.39383 12.7785 12.75 8.49999 12.75ZM8.49999 5.3125C7.86957 5.3125 7.2533 5.49944 6.72911 5.84969C6.20493 6.19994 5.79638 6.69776 5.55513 7.2802C5.31387 7.86264 5.25075 8.50354 5.37374 9.12185C5.49673 9.74016 5.80031 10.3081 6.24609 10.7539C6.69187 11.1997 7.25983 11.5033 7.87814 11.6263C8.49646 11.7492 9.13736 11.6861 9.7198 11.4449C10.3022 11.2036 10.8001 10.7951 11.1503 10.2709C11.5006 9.7467 11.6875 9.13043 11.6875 8.5C11.6866 7.65489 11.3505 6.84465 10.7529 6.24707C10.1553 5.64949 9.3451 5.31338 8.49999 5.3125ZM8.49999 10.625C8.07971 10.625 7.66886 10.5004 7.31941 10.2669C6.96995 10.0334 6.69759 9.7015 6.53675 9.3132C6.37591 8.92491 6.33383 8.49764 6.41582 8.08543C6.49782 7.67322 6.7002 7.29458 6.99739 6.9974C7.29458 6.70021 7.67322 6.49782 8.08543 6.41583C8.49764 6.33384 8.9249 6.37592 9.3132 6.53676C9.70149 6.69759 10.0334 6.96996 10.2669 7.31941C10.5004 7.66887 10.625 8.07971 10.625 8.5C10.625 9.06359 10.4011 9.60409 10.0026 10.0026C9.60408 10.4011 9.06358 10.625 8.49999 10.625Z" fill="#0B0D23"/></svg></a></Tooltip>
+                                                                
+                                                                
+                                                                <Tooltip title={'Preview'}><a target='_blank' href={obj?.file}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 18V12M12 12L9 14M12 12L15 14M13 3.00087C12.9045 3 12.7973 3 12.6747 3H8.2002C7.08009 3 6.51962 3 6.0918 3.21799C5.71547 3.40973 5.40973 3.71547 5.21799 4.0918C5 4.51962 5 5.08009 5 6.2002V17.8002C5 18.9203 5 19.4801 5.21799 19.9079C5.40973 20.2842 5.71547 20.5905 6.0918 20.7822C6.51921 21 7.079 21 8.19694 21L15.8031 21C16.921 21 17.48 21 17.9074 20.7822C18.2837 20.5905 18.5905 20.2842 18.7822 19.9079C19 19.4805 19 18.9215 19 17.8036V9.32568C19 9.20296 19 9.09561 18.9991 9M13 3.00087C13.2856 3.00347 13.4663 3.01385 13.6388 3.05526C13.8429 3.10425 14.0379 3.18526 14.2168 3.29492C14.4186 3.41857 14.5918 3.59182 14.9375 3.9375L18.063 7.06298C18.4089 7.40889 18.5809 7.58136 18.7046 7.78319C18.8142 7.96214 18.8953 8.15726 18.9443 8.36133C18.9857 8.53376 18.9963 8.71451 18.9991 9M13 3.00087V5.8C13 6.9201 13 7.47977 13.218 7.90759C13.4097 8.28392 13.7155 8.59048 14.0918 8.78223C14.5192 9 15.079 9 16.1969 9H18.9991M18.9991 9H19.0002" stroke="#232648" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a></Tooltip>
+                                                                
+                                                                <Tooltip title={'Preview'}><a target='_blank' href={obj?.file}>  <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.75 6.25V10.625M6.25 6.25V10.625M3.75 3.75V11.125C3.75 11.8251 3.75 12.1749 3.88624 12.4422C4.00608 12.6774 4.19717 12.8691 4.43237 12.9889C4.6995 13.125 5.04937 13.125 5.74807 13.125H9.25193C9.95063 13.125 10.3 13.125 10.5671 12.9889C10.8023 12.8691 10.994 12.6774 11.1139 12.4422C11.25 12.1751 11.25 11.8256 11.25 11.1269V3.75M3.75 3.75H5M3.75 3.75H2.5M5 3.75H10M5 3.75C5 3.16757 5 2.8765 5.09515 2.64679C5.22202 2.3405 5.4652 2.09702 5.77148 1.97015C6.0012 1.875 6.29257 1.875 6.875 1.875H8.125C8.70743 1.875 8.99864 1.875 9.22835 1.97015C9.53464 2.09702 9.77792 2.3405 9.90479 2.64679C9.99994 2.8765 10 3.16757 10 3.75M10 3.75H11.25M11.25 3.75H12.5" stroke="#0B0D23" stroke-linecap="round" stroke-linejoin="round"/></svg></a></Tooltip>
 
                                                             </Grid>
                                                         </Grid>
@@ -312,20 +318,21 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                         </Grid>
 
 
-                        <Grid m={1}>
-                            <Grid mb={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                <button disabled style={{ backgroundColor: '#689df6', color: 'white', height: '25px', width: '180px', fontSize: '14px', borderRadius: 5 }}>University Document</button>
+                        <Grid className='document-details-block' m={1} mb={4}>
+                            <Grid className='document-details-block-title' mb={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                                <button disabled style={{ display: 'flex', alignItems: 'center', backgroundColor: '#A6E9A9', color: '#0B0D23',  padding: '8px 15px', fontSize: '14px', borderRadius: 5 }}><svg style={{ marginRight: '10px' }} width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.75 10.0834H7.33333M5.04167 12.3751V7.79175M13.2917 12.8334C16.694 12.8334 18.4644 14.0051 19.0377 16.3484C19.3002 17.4214 18.3546 18.3334 17.25 18.3334H9.33334C8.22877 18.3334 7.28316 17.4214 7.54565 16.3484C8.11894 14.0051 9.88932 12.8334 13.2917 12.8334ZM13.2917 9.16675C14.8194 9.16675 15.5833 8.38103 15.5833 6.41675C15.5833 4.45246 14.8194 3.66675 13.2917 3.66675C11.7639 3.66675 11 4.45246 11 6.41675C11 8.38103 11.7639 9.16675 13.2917 9.16675Z" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>University Document</button>
 
                                 {
                                     details &&
                                     //    details?.stage?.name !== 'CONDITIONAL OFFER' &&
-                                    <Button sx={{ fontSize: '14px', height: '25px', mr: 2, display: 'flex', alignItems: 'center' }} size='small' variant='outlined' onClick={handleDocumentOpen}> <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-                                        <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" strokeLinecap="round" stroke-linejoin="round" />
-                                    </svg>Add </Button>
+                                    <Button className='add-btn' sx={{ fontSize: '14px', height: '25px', mr: 2, display: 'flex', alignItems: 'center' }} size='small' variant='outlined' onClick={handleDocumentOpen}> <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.09961 7.73337H8.19961M8.19961 7.73337H12.2996M8.19961 7.73337V11.6M8.19961 7.73337V3.8667" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Add </Button>
                                 }
                             </Grid>
 
-                            <Grid height={500} className={`border h-6/8 ${docId ? 'Active' : ''}`}>
+                            <Grid height={500} className={`border h-6/8 doc-details-add-block ${docId>=0 ? 'Active' : ''}`}>
                                 <CloseOutlined onClick={handleDocumentClose} />
                                 <div>
                                     <Grid container>
@@ -389,23 +396,19 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                     }
 
                                     <div
-                                        className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
                                         onDrop={handleDrop}
                                         onDragOver={handleDragOver}
                                     >
-                                        <input
-                                            type="file"
-                                            onChange={handleFileChange}
-                                            className="hidden"
-                                            id="file-upload"
-                                            key={fileInputKey}
-                                        />
-                                        <label
-                                            htmlFor="file-upload"
-                                            className="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                                        >
-                                            Select File or Drag and Drop Here
-                                        </label>
+                                       
+
+
+                                       <div style={{ cursor: 'pointer' }} className='add-document-block'>
+                                                    <Image src={Doc} alt='Doc' width={200} height={200} />
+
+                                                    <h3>Add<span>Document</span></h3>
+                                                </div>
+
+
                                         {(selectedFile || details?.file) && (
                                             <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
                                                 <Grid mr={1}>
@@ -491,7 +494,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                             </Grid>
                                         ))
                                         :
-                                        <a style={{ marginLeft: 10 }}>No Document Found</a>
+                                        <a className='not-found' style={{ marginLeft: 10 }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2.20706L22 22.0011M6.562 2.51506C8.568 1.91306 14.316 1.79206 17.724 2.39706C18.549 2.54406 19.344 3.07606 19.778 3.78206C20.504 4.96506 20.465 6.34206 20.465 7.72406L20.345 16.1791M4 4.17206C3.368 6.43906 3.453 10.6001 3.494 16.7421C3.5 17.5321 3.537 18.3321 3.775 19.0871C4.144 20.2571 4.758 20.9671 6.107 21.5371C6.682 21.7811 7.313 21.8611 7.94 21.8611H11.983C15.779 21.7691 17.311 21.3731 18.989 19.1831M10.487 21.8611C12.868 20.6541 14.095 20.4861 13.783 17.4501C13.723 16.6641 14.173 15.7251 14.977 15.4731M20.405 12.0451C20.162 13.4811 19.999 14.0151 19.03 14.8461" stroke="#525252" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>No Document Found</a>
                             }
                         </Grid>
 
