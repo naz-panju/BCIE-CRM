@@ -2672,6 +2672,84 @@ body.body-active .footer {
     background: unset;
     border: 0;
 }
+.save-btn.right{
+    margin: 0px auto;
+    margin-right: 0;
+    display: block;
+}
+.add-note-block {
+    background: #ededed;
+    padding: 13px !important;
+    margin: 0px 15px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-left: 30px !important;
+    border-radius: 3px;
+}
+.add-note-block::before {
+    position: absolute;
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #3058FC;
+    border-radius: 50%;
+    left: 11px;
+    top: 25px;
+}
+
+.add-note-block::after {
+    position: absolute;
+    content: "";
+    width: 18px;
+    height: 18px;
+    border: 2px solid #A4B6FF;
+    border-radius: 50%;
+    left: 7px;
+    top: 21px;
+}
+
+.centeritem {
+    align-items: center;
+    margin-bottom: 5px;
+}
+a.text {
+    color: #0B0D23;
+    font-size: 14px;
+    padding-bottom: 8px;
+}
+span.add-author {
+    position: absolute;
+    bottom: 10px;
+    right: 30px;
+    background-color: #FFCCBC;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 13px;
+    color: #51426F;
+    font-weight: 600;
+    line-height: normal;
+}
+.add-note-block-icon-item {
+    padding: 0;
+    width: fit-content;
+    min-width: fit-content;
+    padding: 0 10px;
+}
+
+.SelectTemplatesItems {
+    margin-top: 20px;
+}
+.MuiCheckbox-root{
+    color: #D2D2D2;
+    font-size: 14px;
+}
+
 
 .form_group .react-tel-input .flag-dropdown {
 

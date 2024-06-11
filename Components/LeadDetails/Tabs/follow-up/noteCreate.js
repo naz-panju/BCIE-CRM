@@ -8,8 +8,9 @@ import { Close, Delete, DeleteForever, Edit } from '@mui/icons-material';
 import { TaskApi } from '@/data/Endpoints/Task';
 import DeletePopup from '@/Components/Common/Popup/delete';
 import { LeadApi } from '@/data/Endpoints/Lead';
-
-
+import DeleteIcon from '@/img/Delete.svg'
+import EditIcon from '@/img/Edit.svg'
+import Image from 'next/image';
 
 const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, app_id }) => {
 
@@ -224,7 +225,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                             </Grid>
 
                             <Grid sx={{ pt: 2, pb: 2 }} item xs={12}>
-                                <LoadingButton className='save-btn' loading={submitLoading} disabled={submitLoading} size='small' sx={{ textTransform: 'none', height: 35 }} onClick={onSubmit} variant='outlined'>{
+                                <LoadingButton className='save-btn right' loading={submitLoading} disabled={submitLoading} size='small' sx={{ textTransform: 'none', height: 35 }} onClick={onSubmit} variant='outlined'>{
                                     submitLoading ?
                                         <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
                                         :
@@ -251,7 +252,24 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                                 Notes && Notes.data && Notes.data.length > 0 ? (
                                     Notes.data.map((note) => (
                                         <div key={note.id}>
-                                            <Typography variant="body2" style={{ paddingTop: 2, fontSize: '16px', whiteSpace: 'pre-line' }}>
+                                            <Typography className='add-note-block' variant="body2" style={{ paddingTop: 2, fontSize: '16px', whiteSpace: 'pre-line' }}>
+
+                                                
+                                                <Grid className='centeritem' display={'flex'} justifyContent={'space-between'} mt={1}>
+                                                    <Grid display={'flex'} justifyContent={'space-between'} xs={6}>
+                                                        <a style={{ fontSize: 13, color: 'grey' }}>Date: {moment(note?.created_at).format('DD-MM-YYYY')}</a>
+                                                    </Grid>
+                                                    <Grid className='add-note-block-icon' display={'flex'} justifyContent={'end'}>
+                                                        <Button className='add-note-block-icon-item' onClick={() => handleEdit(note)}>
+                                                            <Image  src={EditIcon} alt='DeleteIcon'  width={16} height={16} />
+                                                        </Button>
+                                                        <LoadingButton  className='add-note-block-icon-item' onClick={() => deleteNote(note.id)}>
+                                                            <Image  src={DeleteIcon} alt='DeleteIcon'  width={16} height={16} />
+                                                        </LoadingButton>
+                                                    </Grid>
+                                                </Grid>
+
+
                                                 <a style={{}} className="text">
                                                     {note.note.length <= 140 ? (
                                                         <a style={{ fontWeight: 400 }}>{note.note}</a>
@@ -270,22 +288,12 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                                                     )}
                                                 </a>
 
-                                                <Grid display={'flex'} justifyContent={'space-between'} mt={1}>
-                                                    <Grid display={'flex'} justifyContent={'space-between'} xs={6}>
-                                                        <a style={{ fontSize: 13, color: 'grey' }}>Date: {moment(note?.created_at).format('DD-MM-YYYY')}</a>
-                                                        <a style={{ fontSize: 13, color: 'grey' }}>Added By: {note?.created_by?.name}</a>
-                                                    </Grid>
-                                                    <Grid display={'flex'} justifyContent={'end'}>
-                                                        <Button onClick={() => handleEdit(note)}>
-                                                            <Edit fontSize='small' />
-                                                        </Button>
-                                                        <LoadingButton onClick={() => deleteNote(note.id)}>
-                                                            <Delete color='error' fontSize='small' />
-                                                        </LoadingButton>
-                                                    </Grid>
-                                                </Grid>
+                                                <a style={{ fontSize: 13, color: 'grey' }}>Added By: {note?.created_by?.name}</a>
+
+                                                <span className='add-author'>SS</span>
+
+                                                
                                             </Typography>
-                                            <Divider sx={{ mb: 1 }} />
                                         </div>
                                     ))
                                 ) : (
