@@ -91,8 +91,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             passport_expiry: yup.string().required("Passport Expiry Date is Required"),
             preffered_course: yup.string().required("Preffered Course is Required"),
             preferred_country: yup.string().required("Preffered Country is Required"),
-            preffered_course_level: yup.object().required("Course Level is required").typeError("Please choose a Course"),
-            intake: yup.object().required("Intake is required").typeError("Please choose a Course"),
+            // preffered_course_level: yup.object().required("Course Level is required").typeError("Please choose a Course"),
+            // intake: yup.object().required("Intake is required").typeError("Please choose a Course"),
             country_of_birth: yup.object().required("Country of Birth is required").typeError("Please choose a Course"),
             country_of_residence: yup.object().required("Country of Residence is required").typeError("Please choose a Course"),
             source: yup.object().required("Lead Source is required").typeError("Please choose a Course"),
@@ -329,6 +329,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
     // console.log('here');
 
     const onSubmit = async (data) => {
+
+        console.log(data);
 
         setLoading(true)
         let dob = ''

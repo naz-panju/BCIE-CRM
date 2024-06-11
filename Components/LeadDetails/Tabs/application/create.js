@@ -329,7 +329,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                 <div className='application-input'>
                                     <a className='form-text'>Country</a>
                                     {/* className='form_group */}
-                                    <Grid className='mb-5' >
+                                    <Grid className='form_group' >
                                         <AsyncSelect
 
                                             styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
@@ -343,7 +343,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             getOptionLabel={(e) => e.name}
                                             getOptionValue={(e) => e.id}
                                             onChange={handleCountryChange}
-
+                                            // menuIsOpen={true}
                                         />
 
                                         {errors.country && <span className='form-validation'>{errors.country.message}</span>}
