@@ -140,7 +140,8 @@ export default function LeadDocumentRequest({ id, reqId, setReqId, fetchList, ha
                                     :
                                     <Grid mt={2}>
                                         <a style={{ color: 'grey' }}>Select Templates</a>
-                                        <FormGroup style={{}}>
+                                        
+                                        <FormGroup className='SelectTemplatesItems' style={{}}>
                                             <Grid container sx={{ display: 'flex', }}>
                                                 {
                                                     templates?.map((obj, index) => (
