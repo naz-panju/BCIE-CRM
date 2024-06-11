@@ -325,7 +325,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                 }
                             </Grid>
 
-                            <Grid height={500} className={`border h-6/8 ${docId ? 'Active' : 'F'}`}>
+                            <Grid height={500} className={`border h-6/8 ${docId ? 'Active' : ''}`}>
                                 <CloseOutlined onClick={handleDocumentClose} />
                                 <div>
                                     <Grid container>
