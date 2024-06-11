@@ -866,9 +866,10 @@ a.edit-btn {
 
 a.form-text {
     color: #0B0D23;
-    font-size: 14px;
+    font-size: 16px;
     margin-bottom: 6px;
     display: block;
+    font-weight: 400;
 }
 
 .application-input .form_group {
@@ -2685,11 +2686,17 @@ body.body-active .footer {
     box-shadow: unset !important;
 }
 
+
+
 .form_group .MuiInputBase-root {
     background-color: unset !important;
     border: 0 !important;
     box-shadow: unset !important;
     padding-top: 10px;
+}
+
+.css1nmdiq5-menu{
+    z-index: 9999;
 }
 
 
