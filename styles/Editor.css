@@ -1644,6 +1644,7 @@ span.note-span {
     display: block;
     padding: 4px 8px;
     height: fit-content;
+    width: fit-content;
 }
 .notes-block-content {
     display: block;
@@ -2568,8 +2569,9 @@ input::placeholder{
     font-style: normal;
     font-weight: 400;
     line-height: 28px;
-    /* 186.667% */
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .modal_title .back_modal_head svg {
@@ -2687,8 +2689,8 @@ body.body-active .footer {
     background-color: unset !important;
     border: 0 !important;
     box-shadow: unset !important;
+    padding-top: 10px;
 }
-
 
 
 .form_group div button {
@@ -2779,7 +2781,10 @@ body.body-active .footer {
 
 .frm-text-conn-stl textarea {
     padding-left: 35px;
-
+    padding-top: 0;
+}
+.frm-text-conn-stl fieldset{
+    border: 0px !important;
 }
 
 .frm-text-conn-stl svg {
