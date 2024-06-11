@@ -237,7 +237,6 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
                                     <LoadingEdit item={items} />
                                     :
                                     <>
-
                                         <Grid className='form_group' >
 
 

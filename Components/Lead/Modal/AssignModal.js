@@ -88,6 +88,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
     const fetchCounsellor = (e) => {
         return ListingApi.users({ keyword: e, office_id: branchId, role_id: 5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
+                console.log(response?.data?.data);
                 return response?.data?.data;
             } else {
                 return [];
@@ -161,7 +162,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                     leads: selected,
                     assign_to_office_id: watch('branch')?.id
                 }
-                // console.log(dataToSubmit)
+                console.log(dataToSubmit)
                 LeadApi.bulkAssign(dataToSubmit).then((response) => {
                     console.log(response);
                     if (response?.status == 200 || response?.status == 201) {
