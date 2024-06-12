@@ -14,20 +14,20 @@ function Index() {
 export default Index
 
 
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context)
+export async function getServerSideProps(context) {
+  const session = await getSession(context)
 
-//   console.log('session',session);
+  console.log('session',session);
 
-//   if (!session) {
-//     return {
-//       redirect: {
-//         destination: '/login',
-//         permanent: false,
-//       },
-//     };
-//   }
-//   return {
-//     props: { session },
-//   };
-// }
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: { session },
+  };
+}

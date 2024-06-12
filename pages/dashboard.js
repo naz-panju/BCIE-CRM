@@ -13,18 +13,18 @@ function DashBoard() {
 
 export default DashBoard
 
-// export async function getServerSideProps(context) {
-//     const session = await getSession(context)
+export async function getServerSideProps(context) {
+    const session = await getSession(context)
   
-//     if (!session) {
-//       return {
-//         redirect: {
-//           destination: '/login',
-//           permanent: false,
-//         },
-//       };
-//     }
-//     return {
-//       props: { session },
-//     };
-//   }
+    if (!session) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
+    return {
+      props: { session },
+    };
+  }
