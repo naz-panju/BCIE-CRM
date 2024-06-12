@@ -55,6 +55,8 @@ export default function UniversityInfoModal({ editId, setEditId, details, setDet
         }
     }, [editId])
 
+    // console.log(details);
+
 
     return (
         <div>
@@ -95,7 +97,7 @@ export default function UniversityInfoModal({ editId, setEditId, details, setDet
                         <Grid>
                             <h3 className="university-info-text mt-5">Scholorship Info</h3>
                             <Grid>
-                                <span style={{ fontSize: '14px' }} >{details?.university?.extra_university_info}</span>
+                                <span style={{ fontSize: '14px' }} >{details?.university?.extra_scholarship_info}</span>
                             </Grid>
                         </Grid>
                     }

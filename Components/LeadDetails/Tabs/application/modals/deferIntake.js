@@ -183,36 +183,45 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
                                     <LoadingEdit item={items} />
                                     :
                                     <>
-                                        <Grid className='form_group' >
-                                            <AsyncSelect
-                                                placeholder='Intake'
-                                                // isDisabled={!selectedUniversityId}
-                                                // key={selectedUniversityId}
-                                                name={'intake'}
-                                                defaultValue={watch('intake')}
-                                                // isClearable
-                                                defaultOptions
-                                                loadOptions={fetchIntakes}
-                                                getOptionLabel={(e) => e.name}
-                                                getOptionValue={(e) => e.id}
-                                                onChange={(e) => setValue('intake', e)}
-                                            />
-                                            {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Intake</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <AsyncSelect
+                                                        // placeholder='Intake'
+                                                        // isDisabled={!selectedUniversityId}
+                                                        // key={selectedUniversityId}
+                                                        name={'intake'}
+                                                        defaultValue={watch('intake')}
+                                                        // isClearable
+                                                        defaultOptions
+                                                        loadOptions={fetchIntakes}
+                                                        getOptionLabel={(e) => e.name}
+                                                        getOptionValue={(e) => e.id}
+                                                        onChange={(e) => setValue('intake', e)}
+                                                    />
+                                                    {errors.intake && <span className='form-validation'>{errors.intake.message}</span>}
 
-                                        </Grid>
-
-                                        <Grid className='form_group' >
-                                            <TextField
-                                                placeholder='Note'
-                                                {...register('note')}
-                                                variant="outlined"
-                                                fullWidth
-                                                multiline
-                                                rows={2}
-                                                sx={{ width: '100%', }}
-                                            />
-                                            {errors.note && <span className='form-validation'>{errors.note.message}</span>}
-                                        </Grid>
+                                                </Grid>
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Note</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextField
+                                                        // placeholder='Note'
+                                                        {...register('note')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={2}
+                                                        sx={{ width: '100%', }}
+                                                    />
+                                                    {errors.note && <span className='form-validation'>{errors.note.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
                                     </>
                             }

@@ -269,63 +269,77 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                     <LoadingEdit item={items} />
                                     :
                                     <>
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Title</a>
+                                                <Grid className='mb-5 forms-data'>
+                                                    <TextInput control={control} name="title"
+                                                        value={watch('title')} />
+                                                    {errors.title && <span className='form-validation'>{errors.title.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-
-                                        <Grid className='form_group  '>
-                                            <TextInput control={control} name="title" placeholder="Title"
-                                                value={watch('title')} />
-                                            {errors.title && <span className='form-validation'>{errors.title.message}</span>}
-                                        </Grid>
 
 
                                         {/* date */}
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                            <div className='application-input'>
+
+                                                <a className='form-text'>Due Date</a>
+                                                <Grid className='mb-5 forms-data  '>
+                                                    {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
+                                                    <DateInput
+                                                        control={control}
+                                                        name="date"
+                                                        value={watch('date')}
+                                                    // placeholder='Due Date'
+                                                    />
+                                                    {/* </LocalizationProvider> */}
+
+                                                </Grid>
+                                            </div>
 
 
-                                        <Grid className='form_group  '>
-                                            {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
-                                            <DateInput
-                                                control={control}
-                                                name="date"
-                                                value={watch('date')}
-                                                placeholder='Due Date'
-                                            />
-                                            {/* </LocalizationProvider> */}
+                                            {/* assigned to */}
 
-                                        </Grid>
-
-
-                                        {/* assigned to */}
-
-
-                                        <Grid className='form_group  '>
-                                            <SelectX
-                                                placeholder='Assigned To'
-                                                loadOptions={fetchUser}
-                                                control={control}
-                                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                                name={'assigned_to'}
-                                                defaultValue={watch('assigned_to')}
-                                            />
-                                        </Grid>
+                                            <div className='application-input'>
+                                                <a className='form-text'>Assigned To</a>
+                                                <Grid className='mb-5 forms-data  '>
+                                                    <SelectX
+                                                        // placeholder='Assigned To'
+                                                        loadOptions={fetchUser}
+                                                        control={control}
+                                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                        name={'assigned_to'}
+                                                        defaultValue={watch('assigned_to')}
+                                                    />
+                                                </Grid>
+                                            </div>
+                                        </div>
 
 
-                                        <Grid className='form_group frm-text-conn-stl '>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"></path></svg>
-                                            <TextField
-                                                {...register('description')}
-                                                variant="outlined"
-                                                fullWidth
-                                                multiline
-                                                rows={2}
-                                                sx={{ width: '100%', }}
-                                            />
-                                            {errors.description && <span className='form-validation'>{errors.description.message}</span>}
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Description</a>
+                                                {/* frm-text-conn-stl */}
+                                                <Grid className='mb-5 forms-data  '>
+                                                    {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"></path></svg> */}
+                                                    <TextField
+                                                        {...register('description')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={3}
+                                                        sx={{ width: '100%', }}
+                                                    />
+                                                    {errors.description && <span className='form-validation'>{errors.description.message}</span>}
 
-                                            {/* <Editor emoji={false} val={watch('description')}
-                                            onValueChange={e => setValue('description', e)}
-                                        /> */}
-                                        </Grid>
+                                                 
+                                                </Grid>
+                                            </div>
+                                        </div>
 
                                     </>
                             }
@@ -342,8 +356,8 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                             </svg>
                                         </>
                                 } <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
-                                    <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                                </svg></LoadingButton>
+                                        <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                    </svg></LoadingButton>
                                 <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                     <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
                                 </svg> </Button>

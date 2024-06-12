@@ -20,7 +20,7 @@ import SelectX from '@/Form/SelectX';
 import AsyncSelect from "react-select/async";
 import DateInput from '@/Form/DateInput';
 import { LoadingButton } from '@mui/lab';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 import ReactSelector from 'react-select';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import moment from 'moment';
@@ -82,6 +82,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             email: yup.string().email("Invalid email format").required("Email is Required"),
             dob: yup.string().required('Date of Birth is Required'),
             address: yup.string().required('Address is Required'),
+            city: yup.string().required('City is Required'),
             reference: yup.string().required('Reference is Required'),
             phone: yup.string().required('Phone number is Required'),
             alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
@@ -368,6 +369,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
             date_of_birth: dob,
             address: data?.address,
+            city:data?.city,
 
             country_of_birth_id: data?.country_of_birth?.id || null,
             country_of_residence_id: data?.country_of_residence?.id || null,
@@ -468,6 +470,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             setValue('country_of_birth', data?.country_of_birth)
             setValue('country_of_residence', data?.country_of_residence)
 
+            setValue('city', data?.city)
             setValue('address', data?.address)
             setValue('note', data?.note)
 
@@ -832,10 +835,19 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         <div className='form_group frm-text-conn-stl '>
 
+                            <TextInput placeholder='City' control={control} {...register('city')}
+                                value={watch('city')} />
+                            {errors.city && <span className='form-validation'>{errors.city.message}</span>}
+
+
+
+                        </div>
+                        <div className='form_group frm-text-conn-stl '>
+
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
                             </svg>
-                            <textarea placeholder='Address' multiline rows={2} fullWidth control={control}  {...register('address')}
+                            <TextField placeholder='Address' multiline rows={2} fullWidth control={control}  {...register('address')}
                                 value={watch('address') || ''} />
                             {errors.address && <span className='form-validation'>{errors.address.message}</span>}
 

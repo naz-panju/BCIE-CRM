@@ -109,30 +109,40 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
                         <a className='back_modal_head'>{details?.closed == 1 ? 'Unarchive' : 'Archive'} {title}</a>
 
                     </Grid>
-                    <hr />
                     <div className='form-data-cntr'>
 
+                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div className='application-input'>
+                                <a className='form-text'>Note</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
 
-                        <Grid className='form_group'>
+                                    <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
+                                        value={watch('note') || ''} />
 
-                            <TextField placeholder='Note' multiline rows={2} fullWidth control={control}  {...register('note')}
-                                value={watch('note') || ''} />
+                                </Grid>
+                            </div>
+                        </div>
 
-                        </Grid>
+                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div className='application-input'>
+                                <a className='form-text'>Reasons</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <SelectX
+                                        // placeholder='Reasons'
+                                        // menuPlacement='top'
+                                        loadOptions={fetchReasons}
+                                        control={control}
+                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                        name={'reason'}
+                                        defaultValue={watch('reason')}
+                                    />
 
-                        <Grid className='form_group'>
-                            <SelectX
-                                placeholder='Reasons'
-                                // menuPlacement='top'
-                                loadOptions={fetchReasons}
-                                control={control}
-                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                name={'reason'}
-                                defaultValue={watch('reason')}
-                            />
-
-                        </Grid>
+                                </Grid>
+                            </div>
+                        </div>
 
                         <Grid pb={3}  >
                             <LoadingButton onClick={ArchiveLead} className='save-btn' loading={loading} disabled={loading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>

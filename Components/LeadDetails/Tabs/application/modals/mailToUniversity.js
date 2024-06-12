@@ -134,7 +134,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         })
     }
 
-// console.log(from);
+    // console.log(from);
     const onSubmit = async (data) => {
 
         setLoading(true)
@@ -164,13 +164,13 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
             })
         }
 
-         for (let pair of formData.entries()) {
+        for (let pair of formData.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
         }
         // console.log(dataToSubmit);
 
         let action;
-        
+
         if (editId > 0) {
             // dataToSubmit['id'] = editId
             action = LeadApi.sendMail(formData)
@@ -216,7 +216,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         setValue('body', '')
         setOpen(false)
         setFile()
-        
+
 
     }
 
@@ -301,10 +301,11 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
+            getDetails()
         } else if (editId == 0) {
             setOpen(true)
+            getDetails()
         }
-        getDetails()
     }, [editId])
 
 
@@ -339,65 +340,90 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                     :
                                     <>
 
-                                        <Grid className='form_group' >
-                                            <AsyncSelect
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 9999 })
-                                                }}
-                                                placeholder='Select Template'
-                                                // isDisabled={!selectedUniversityId}
-                                                // key={selectedUniversityId}
-                                                name={'template'}
-                                                defaultValue={watch('template')}
-                                                // isClearable
-                                                defaultOptions
-                                                loadOptions={fetchTemplates}
-                                                getOptionLabel={(e) => e.name}
-                                                getOptionValue={(e) => e.id}
-                                                onChange={handleTemplateChange}
-                                            />
-                                            {errors.template && <span className='form-validation'>{errors.template.message}</span>}
-                                        </Grid>
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Select Template</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <AsyncSelect
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 9999 })
+                                                        }}
+                                                        // placeholder='Select Template'
+                                                        // isDisabled={!selectedUniversityId}
+                                                        // key={selectedUniversityId}
+                                                        name={'template'}
+                                                        defaultValue={watch('template')}
+                                                        // isClearable
+                                                        defaultOptions
+                                                        loadOptions={fetchTemplates}
+                                                        getOptionLabel={(e) => e.name}
+                                                        getOptionValue={(e) => e.id}
+                                                        onChange={handleTemplateChange}
+                                                    />
+                                                    {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid className='form_group' >
-                                            <TextInput placeholder='Send to' control={control} name="to"
-                                                value={watch('to')} />
-                                            {errors.to && <span className='form-validation'>{errors.to.message}</span>}
-                                        </Grid>
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Send to</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextInput control={control} name="to"
+                                                        value={watch('to')} />
+                                                    {errors.to && <span className='form-validation'>{errors.to.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid className='form_group' >
-                                            {
-                                                textBoxLoading ?
-                                                    <Skeleton variant='rounded' width={'100%'} height={40} />
-                                                    :
-                                                    <TextInput placeholder='Mail CC' control={control} name="default_cc"
-                                                        value={watch('default_cc')} />
-                                            }
-                                            {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
-                                        </Grid>
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Mail CC</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    {
+                                                        textBoxLoading ?
+                                                            <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                            :
+                                                            <TextInput control={control} name="default_cc"
+                                                                value={watch('default_cc')} />
+                                                    }
+                                                    {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid className='form_group' >
-                                            {
-                                                textBoxLoading ?
-                                                    <Skeleton variant='rounded' width={'100%'} height={40} />
-                                                    :
-                                                    <TextInput placeholder='Subject' control={control} name="subject"
-                                                        value={watch('subject')} />
-                                            }
-                                            {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
-                                        </Grid>
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Subject</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    {
+                                                        textBoxLoading ?
+                                                            <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                            :
+                                                            <TextInput control={control} name="subject"
+                                                                value={watch('subject')} />
+                                                    }
+                                                    {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid className='form_group' >
-                                            {
-                                                textBoxLoading ?
-                                                    <Skeleton variant='rounded' width={'100%'} height={400} />
-                                                    :
-                                                    <Editor key={editorKey} emoji={false} val={watch('body')}
-                                                        onValueChange={e => setValue('body', e)} />
-                                            }
-                                            {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Body</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    {
+                                                        textBoxLoading ?
+                                                            <Skeleton variant='rounded' width={'100%'} height={400} />
+                                                            :
+                                                            <Editor key={editorKey} emoji={false} val={watch('body')}
+                                                                onValueChange={e => setValue('body', e)} />
+                                                    }
+                                                    {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
 
-                                        </Grid>
+                                                </Grid>
+                                            </div>
+                                        </div>
 
                                         {/* <Grid className='form_group' >
                                             <AsyncSelect

@@ -175,70 +175,82 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
                                     :
                                     <>
 
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Type</a>
+
+                                                <Grid className='mb-5 forms-data'>
+                                                    <ReactSelector
+                                                        // placeholder={'Type'}
+                                                        onInputChange={searchOptions}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 9999 })
+                                                        }}
+                                                        options={searchOptions}
+                                                        getOptionLabel={option => option.name}
+                                                        getOptionValue={option => option.name}
+                                                        value={
+                                                            searchOptions.find(options =>
+                                                                options.name === watch('type')
+                                                            )
+                                                        }
+                                                        name='type'
+
+                                                        defaultValue={(watch('type'))}
+                                                        onChange={(selectedOption) => setValue('type', selectedOption?.name)}
+                                                    />
+                                                    {errors.type && <span className='form-validation'>{errors.type.message}</span>}
+                                                </Grid>
+                                            </div>
 
 
-                                        <Grid className='form_group  '>
-                                            <ReactSelector
-                                                placeholder={'Type'}
-                                                onInputChange={searchOptions}
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 9999 })
-                                                }}
-                                                options={searchOptions}
-                                                getOptionLabel={option => option.name}
-                                                getOptionValue={option => option.name}
-                                                value={
-                                                    searchOptions.find(options =>
-                                                        options.name === watch('type')
-                                                    )
-                                                }
-                                                name='type'
-
-                                                defaultValue={(watch('type'))}
-                                                onChange={(selectedOption) => setValue('type', selectedOption?.name)}
-                                            />
-                                            {errors.type && <span className='form-validation'>{errors.type.message}</span>}
-                                        </Grid>
 
 
+                                            <div className='application-input'>
+                                                <a className='form-text'>Date and Time</a>
+
+                                                <Grid className='mb-5 forms-data  '>
+                                                    <DateTime
+                                                        // placeholder='Date and Time'
+                                                        control={control}
+                                                        name="date_and_time"
+                                                        value={watch('date_and_time')}
+
+                                                    />
+                                                    {errors.date_and_time && <span className='form-validation'>{errors.date_and_time.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Call Summary</a>
+
+                                                {/* frm-text-conn-stl */}
+                                                <Grid className='mb-5 forms-data'>
+                                                    {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"></path></svg> */}
 
 
+                                                    <TextField
+                                                        // placeholder='Call Summary'
+                                                        {...register('summary')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={3}
+                                                        sx={{ width: '100%', }}
+                                                    />
+                                                    {errors.summary && <span className='form-validation'>{errors.summary.message}</span>}
 
-
-                                        <Grid className='form_group  '>
-                                            <DateTime
-                                                placeholder='Date and Time'
-                                                control={control}
-                                                name="date_and_time"
-                                                value={watch('date_and_time')}
-
-                                            />
-                                            {errors.date_and_time && <span className='form-validation'>{errors.date_and_time.message}</span>}
-                                        </Grid>
-
-
-                                        <Grid className='form_group frm-text-conn-stl '>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round"></path></svg>
-
-
-                                            <TextField
-                                                placeholder='Call Summary'
-                                                {...register('summary')}
-                                                variant="outlined"
-                                                fullWidth
-                                                multiline
-                                                rows={2}
-                                                sx={{ width: '100%', }}
-                                            />
-                                            {errors.summary && <span className='form-validation'>{errors.summary.message}</span>}
-
-                                        </Grid>
+                                                </Grid>
+                                            </div>
+                                        </div>
 
 
                                     </>
                             }
 
-                            <Grid p={1} pb={3} display={'flex'} >
+                            <Grid pb={3} display={'flex'} >
                                 <LoadingButton className='save-btn' disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'> {
                                     loading ?
                                         <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>

@@ -263,75 +263,90 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
                     <div className='form-data-cntr'>
 
-                        <Grid className='form_group  '>
+                        <Grid className='mb-5 forms-data  '>
                             {Options.map(obj => {
                                 return <DynamicChip color='primary' key={obj.id} name={obj.name} id={obj.id} active={selectedoption} onChipCLick={handleOptionChange} />
                             })}
                         </Grid>
                         {
                             selectedoption &&
-                            <Grid className='form_group' >
-                                <AsyncSelect
-                                    key={selectedoption}
-                                    placeholder='Select Branch'
-                                    name={'branch'}
-                                    defaultValue={watch('branch')}
-                                    isClearable
-                                    defaultOptions
-                                    loadOptions={fetchBranches}
-                                    getOptionLabel={(e) => e.name}
-                                    getOptionValue={(e) => e.id}
-                                    onChange={handleBranchChange}
-                                />
-                                {errors.branch && <span className='form-validation'>{errors.branch.message}</span>}
+                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                <div className='application-input'>
+                                    <a className='form-text'>Select Branch</a>
+                                    <Grid className='mb-5 forms-data' >
+                                        <AsyncSelect
+                                            key={selectedoption}
+                                            // placeholder='Select Branch'
+                                            name={'branch'}
+                                            defaultValue={watch('branch')}
+                                            isClearable
+                                            defaultOptions
+                                            loadOptions={fetchBranches}
+                                            getOptionLabel={(e) => e.name}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleBranchChange}
+                                        />
+                                        {errors.branch && <span className='form-validation'>{errors.branch.message}</span>}
 
-                            </Grid>
+                                    </Grid>
+                                </div>
+                            </div>
                         }
 
                         {
                             (selectedoption == 1 && watch('branch')) &&
-                            <Grid className='form_group'>
-                                <AsyncSelect
-                                    isMulti
-                                    key={branchId}
-                                    placeholder='Select Counsellors'
-                                    name={'counsellors'}
-                                    defaultValue={watch('counsellors')}
-                                    isClearable
-                                    defaultOptions
-                                    loadOptions={fetchCounsellor}
-                                    getOptionLabel={(e) => e.name}
-                                    getOptionValue={(e) => e.id}
-                                    onChange={handleBulkCouncsellorChange}
-                                />
-                                {errors.counsellors && <span className='form-validation'>{errors.counsellors.message}</span>}
+                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                <div className='application-input'>
+                                    <a className='form-text'>Select Counsellors</a>
+                                    <Grid className='mb-5 forms-data'>
+                                        <AsyncSelect
+                                            isMulti
+                                            key={branchId}
+                                            // placeholder='Select Counsellors'
+                                            name={'counsellors'}
+                                            defaultValue={watch('counsellors')}
+                                            isClearable
+                                            defaultOptions
+                                            loadOptions={fetchCounsellor}
+                                            getOptionLabel={(e) => e.name}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleBulkCouncsellorChange}
+                                        />
+                                        {errors.counsellors && <span className='form-validation'>{errors.counsellors.message}</span>}
 
-                            </Grid>
+                                    </Grid>
+                                </div>
+                            </div>
                         }
 
                         {
                             (selectedoption == 2 && watch('branch')) &&
-                            <Grid className='form_group'>
-                                <AsyncSelect
-                                    key={branchId}
-                                    placeholder='Select Counsellor'
-                                    name={'counsellor'}
-                                    defaultValue={watch('counsellor')}
-                                    isClearable
-                                    defaultOptions
-                                    loadOptions={fetchCounsellor}
-                                    getOptionLabel={(e) => e.name}
-                                    getOptionValue={(e) => e.id}
-                                    onChange={handleCouncsellorChange}
-                                />
-                                {errors.counsellor && <span className='form-validation'>{errors.counsellor.message}</span>}
+                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                <div className='application-input'>
+                                    <a className='form-text'>Select Counsellor</a>
+                                    <Grid className='mb-5 forms-data'>
+                                        <AsyncSelect
+                                            key={branchId}
+                                            // placeholder='Select Counsellor'
+                                            name={'counsellor'}
+                                            defaultValue={watch('counsellor')}
+                                            isClearable
+                                            defaultOptions
+                                            loadOptions={fetchCounsellor}
+                                            getOptionLabel={(e) => e.name}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={handleCouncsellorChange}
+                                        />
+                                        {errors.counsellor && <span className='form-validation'>{errors.counsellor.message}</span>}
 
-                            </Grid>
+                                    </Grid>
+                                </div>
+                            </div>
                         }
 
                         {
                             ((watch('counsellor') || watch('counsellors')?.length > 0)) &&
-                            <Grid p={1} pb={3}  >
+                            <Grid pb={3}  >
 
                                 <LoadingButton onClick={onSubmit} loading={loading} disabled={loading} type='submit' className='save-btn'>
                                     {

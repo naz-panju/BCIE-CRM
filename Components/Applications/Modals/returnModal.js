@@ -32,16 +32,6 @@ export default function ReturnPopup({ ID, setID, setLoading, title, loading, det
         disabled: false,
     });
 
-    const fetchReasons = (e) => {
-        return ListingApi.archiveReason({ keyword: e }).then(response => {
-            if (response?.status == 200 || response?.status == 201) {
-                return response?.data?.data
-            } else {
-                return [];
-            }
-        })
-    }
-
 
     const handleClose = () => {
         setID();

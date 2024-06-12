@@ -18,6 +18,9 @@ import TextInput from '@/Form/TextInput';
 import DateInput from '@/Form/DateInput';
 import { PaymentApi } from '@/data/Endpoints/Payments';
 import moment from 'moment';
+import Image from 'next/image';
+import Doc from '@/img/doc.png';
+
 
 // amount: yup
 // .string()
@@ -62,6 +65,16 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
         if (file) {
             setAttachment(file);
         }
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        setAttachment(file);
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
     };
 
     const handleDelete = () => {
@@ -149,7 +162,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
         reset()
         setOpen(false)
         setLoading(false)
-
+        setAttachment()
     }
 
     const handleDrawerClose = (event) => {
@@ -237,61 +250,91 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                     :
                                     <>
 
-                                        <Grid className='form_group' >
-                                            <TextInput placeholder={'Amount'} type='text' control={control} name="amount"
-                                                value={watch('amount')} />
-                                            {errors.amount && <span className='form-validation'>{errors.amount.message}</span>}
-                                        </Grid>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Amount</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextInput type='text' control={control} name="amount"
+                                                        value={watch('amount')} />
+                                                    {errors.amount && <span className='form-validation'>{errors.amount.message}</span>}
+                                                </Grid>
+                                            </div>
 
-                                        <Grid className='form_group' >
-                                            <DateInput
-                                                control={control}
-                                                name="date"
-                                                value={watch('date')}
-                                                placeholder='Date'
-                                            />
+                                            <div className='application-input'>
+                                                <a className='form-text'>Date</a>
 
-                                            {errors.date && <span className='form-validation'>{errors.date.message}</span>}
+                                                <Grid className='mb-5 forms-data' >
+                                                    <DateInput
+                                                        control={control}
+                                                        name="date"
+                                                        value={watch('date')}
+                                                    // placeholder='Date'
+                                                    />
+                                                    {errors.date && <span className='form-validation'>{errors.date.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        </Grid>
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Mode of Payment</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextInput control={control} name="payment_mode"
+                                                        value={watch('payment_mode')} />
+                                                    {errors.payment_mode && <span className='form-validation'>{errors.payment_mode.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid className='form_group' >
-                                            <TextInput placeholder='Mode of Payment' control={control} name="payment_mode"
-                                                value={watch('payment_mode')} />
-                                            {errors.payment_mode && <span className='form-validation'>{errors.payment_mode.message}</span>}
-                                        </Grid>
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Details</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextField
+                                                        // placeholder='Details'
+                                                        {...register('details')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={3}
+                                                        sx={{ width: '100%', }}
+                                                    />
+                                                    {errors.details && <span className='form-validation'>{errors.details.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid className='form_group' >
-                                            <TextField
-                                                placeholder='Details'
-                                                {...register('details')}
-                                                variant="outlined"
-                                                fullWidth
-                                                multiline
-                                                rows={2}
-                                                sx={{ width: '100%', }}
-                                            />
-                                            {errors.details && <span className='form-validation'>{errors.details.message}</span>}
-                                        </Grid>
-
-                                        <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container className='bg-sky-100' height={80} >
-                                            <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
-                                                <Button
+                                        <div onDrop={handleDrop}
+                                            onDragOver={handleDragOver} >
+                                            {/* <Button
                                                     onClick={handleClick}
                                                     sx={{ textTransform: 'none', height: 30 }}
                                                     variant='contained'
                                                     className='bg-sky-800'
                                                 >
                                                     Upload Receipt
-                                                </Button>
-                                                <input
+                                                </Button> */}
+                                            {/* <input
                                                     type="file"
                                                     id="upload-button"
                                                     style={{ display: 'none' }}
                                                     onChange={handleFileUpload}
                                                     key={fileInputKey}
-                                                />
-                                            </Grid>
+                                                /> */}
+                                            <input
+                                                type="file"
+                                                onChange={handleFileUpload}
+                                                className="hidden"
+                                                id="file-upload"
+                                                key={fileInputKey}
+                                            />
+                                            <label htmlFor="file-upload" style={{ cursor: 'pointer' }} className='add-document-block'>
+                                                <Image src={Doc} alt='Doc' width={200} height={200} />
+
+                                                <h3><span>Select File</span>  or Drag and Drop Here</h3>
+                                            </label>
+
+
 
                                             {
                                                 (attachment || details?.receipt_file) &&
@@ -309,7 +352,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                                     {
                                                         !attachment &&
                                                         <Tooltip title={details?.receipt_file}>
-                                                            <p className="text-gray-700">
+                                                            <p className="text-gray-700 text-start">
                                                                 {trimUrlAndNumbers(details?.receipt_file)}
                                                             </p>
                                                         </Tooltip>
@@ -320,11 +363,11 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                                     }
                                                 </Grid>
                                             }
-                                        </Grid>
+                                        </div>
                                     </>
                             }
 
-                            <Grid pb={3} >
+                            <Grid mt={2}  pb={3} >
 
                                 <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>{
                                     loading ?

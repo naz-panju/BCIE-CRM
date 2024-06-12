@@ -98,16 +98,28 @@ const headCells = [
     label: 'Registered Name',
   },
   {
-    id: 'email',
-    numeric: true,
-    disablePadding: false,
-    label: 'Registered Email ',
+    id: 'office',
+    numeric: false,
+    disablePadding: true,
+    label: 'Office',
   },
   {
-    id: 'mobile',
-    numeric: true,
-    disablePadding: false,
-    label: 'Registered Mobile',
+    id: 'residence',
+    numeric: false,
+    disablePadding: true,
+    label: 'Country of Residence',
+  },
+  {
+    id: 'city',
+    numeric: false,
+    disablePadding: true,
+    label: 'City of Student',
+  },
+  {
+    id: 'preferred',
+    numeric: false,
+    disablePadding: true,
+    label: 'Preferred Country',
   },
   {
     id: 'assigned_to',
@@ -370,7 +382,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   );
 
   const fetchUser = (e) => {
-    return ListingApi.users({ keyword: e , office_id: selectedBranch ,role_id: 5}).then(response => {
+    return ListingApi.users({ keyword: e, office_id: selectedBranch, role_id: 5 }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response.data.data;
       } else {
@@ -439,7 +451,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       limit: limit,
       assigned_to: selectedAssignedTo,
       stage: selectedStage,
-      assign_to_office_id:selectedBranch,
+      assign_to_office_id: selectedBranch,
       name: watch('nameSearch'),
       email: watch('emailSearch'),
       phone_number: watch('numberSearch'),
@@ -558,7 +570,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 placeholder="Select Date Range"
                 style={{ width: 280 }}
                 format='dd-MM-yyyy'
-                ranges={customRanges} 
+                ranges={customRanges}
               />
 
             </div>
@@ -798,9 +810,11 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 >
                                   <a target='_blank' href={`/lead/${row?.id}`}>{row.name}</a>
                                 </TableCell>
-                                <TableCell align="left">{row?.email}</TableCell>
-                                <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
-                                <TableCell align="left" className='assigned-colm'>
+                                <TableCell align="left">{row?.assignedToOffice?.name || 'NA'}</TableCell>
+                                <TableCell align="left">{row?.country_of_residence?.name || 'NA'}</TableCell>
+                                <TableCell align="left">{row?.city || 'NA'}</TableCell>
+                                <TableCell align="left">{row?.preferred_countries || 'NA'}</TableCell>
+                                <TableCell sx={{display:'flex',alignItems:'center'}} align="left" className='assigned-colm'>
                                   {
                                     row?.assignedToCounsellor &&
                                     <span className='assigned-span'>{getFirstLettersOfTwoWords(row?.assignedToCounsellor?.name)}</span>
@@ -809,7 +823,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                     row?.assignedToCounsellor ?
                                       <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToCounsellor?.name}</Button>
                                       :
-                                      <Button className='not_assigned' sx={{ textTransform: 'none' }} onClick={() => openAssign(row?.id)}>Not Assigned</Button>
+                                      <Button className='not_assigned' sx={{ textTransform: 'none',borderRadius:'28px;',border:'1px solid #C1C1C1',background:'#FFFCFD',color:'#0B0D23',fontFamily:'Inter',fontSize:'14px',fontStyle:'normal',fontWeight:'400',lineHeight:'14px'}} onClick={() => openAssign(row?.id)}>Not Assigned</Button>
                                   }
                                   {/* {row?.assignedToUser?.name} */}
                                 </TableCell>

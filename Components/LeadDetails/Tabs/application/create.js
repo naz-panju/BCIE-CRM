@@ -329,7 +329,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                 <div className='application-input'>
                                     <a className='form-text'>Country</a>
                                     {/* className='form_group */}
-                                    <Grid className='mb-5' >
+                                    <Grid className='mb-5 forms-data' >
                                         <AsyncSelect
                                             styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                             // styles={{ width: '100%' }}
@@ -351,7 +351,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                                 <div className='application-input'>
                                     <a className='form-text'>Course Level</a>
-                                    <Grid className='mb-5' >
+                                    <Grid className='mb-5 forms-data' >
                                         <AsyncSelect
                                             // isDisabled={!selectedUniversityId}
                                             key={selectedUniversityId}
@@ -372,7 +372,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                                 <div className='application-input'>
                                     <a className='form-text'>University</a>
-                                    <Grid className='mb-5' >
+                                    <Grid className='mb-5 forms-data' >
                                         <AsyncSelect
                                             isDisabled={!selectedCountryID}
                                             key={selectedCountryID}
@@ -392,7 +392,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                                 <div className='application-input'>
                                     <a className='form-text'>Subject Area</a>
-                                    <Grid className='mb-5' >
+                                    <Grid className='mb-5 forms-data' >
                                         <AsyncSelect
                                             isDisabled={!selectedCountryID}
                                             key={courseRefresh}
@@ -413,7 +413,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                             <div>
                                 <div className='application-input'>
                                     <a className='form-text' > Courses</a>
-                                    <Grid className='mb-5' >
+                                    <Grid className='mb-5 forms-data' >
                                         <TextInput control={control} name="coursetext"
                                             value={watch('coursetext')} />
                                         {errors.coursetext && <span className='form-validation'>{errors.coursetext.message}</span>}
@@ -424,7 +424,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                                 <div className='application-input'>
                                     <a className='form-text'>Intake</a>
-                                    <Grid className='mb-5' >
+                                    <Grid className='mb-5 forms-data' >
                                         <AsyncSelect
                                             isDisabled={!selectedUniversityId}
                                             key={selectedUniversityId}
@@ -444,7 +444,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                                 <div className='application-input'>
                                     <a className='form-text'>Documents</a>
-                                    <Grid className='mb-5' >
+                                    <Grid className='mb-5 forms-data' >
                                         <AsyncSelect
                                             isMulti
                                             name={'documents'}
@@ -462,7 +462,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
 
                                 <div className='application-input'>
-                                    <a className='form-text'> Remarks </a>
+                                    <a className='form-text forms-data'> Remarks </a>
                                     <Grid className='mb-5' >
                                         <TextField
                                             {...register('remarks')}

@@ -181,6 +181,12 @@ function LeadDetail({ data, handleEdit, loading }) {
                                 </div>
                             }
                             {
+                                data?.city &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>City </label> {data?.city}
+                                </div>
+                            }
+                            {
                                 data?.address &&
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Address </label> {data?.address}

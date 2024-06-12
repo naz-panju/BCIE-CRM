@@ -505,6 +505,13 @@ function DashboardIndex() {
                         </div>
                     </div>
                 </div>
+                <div>
+                    <div className='content-block'>
+                        {/* <div className='page-title-block-content justify-between'> */}
+                            <h5>Welcome {session?.data?.user?.name}</h5>
+                        {/* </div> */}
+                    </div>
+                </div>
                 <div className='content-block'>
                     {
                         session?.data?.user?.role?.id != 6 &&

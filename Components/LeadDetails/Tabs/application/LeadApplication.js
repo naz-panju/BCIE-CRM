@@ -213,7 +213,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
     const fetchList = async () => {
         setLoading(true)
-        console.log(lead_id);
+        // console.log(lead_id);
         const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, intake_id: 'All' })
         setList(response?.data)
         setLoading(false)
@@ -221,7 +221,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
     const fetchLoadingList = async () => {
         setdocLoading(true)
-        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, })
+        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, intake_id: 'All' })
         setList(response?.data)
         setdocLoading(false)
     }
@@ -461,6 +461,10 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                         </div>
 
                                                                         <div className='application-btn-right'>
+                                                                            {
+                                                                                obj?.app_coordinator &&
+                                                                                <span style={{fontSize:'14px'}} className='mr-3'> <span style={{color:'grey'}}>Submitted to :</span> {obj?.app_coordinator?.name}</span>
+                                                                            }
 
                                                                             {
                                                                                 obj?.app_coordinator_status == null &&
@@ -468,13 +472,15 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
                                                                             }
                                                                             {
                                                                                 obj?.app_coordinator_status == 'Returned' &&
-                                                                                <div className='d-flex align-center'>
-                                                                                    <Button className='edit-btn-outline' Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Returned</Button>
-                                                                                    {
-                                                                                        obj?.app_coordinator_retun_status_note &&
-                                                                                        <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '14px', ml: 1 }} /></Tooltip>
-                                                                                    }
-                                                                                </div>
+                                                                                // <div className='d-flex align-center'>
+                                                                                    <>
+                                                                                        <Button className='edit-btn-outline ' Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Resubmit</Button>
+                                                                                        {
+                                                                                            obj?.app_coordinator_retun_status_note &&
+                                                                                            <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '15px',mr:1,ml:-2 }} /></Tooltip>
+                                                                                        }
+                                                                                    </>
+                                                                                // </div>
                                                                             }
 
                                                                             {/* edit application */}

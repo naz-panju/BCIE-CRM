@@ -679,7 +679,8 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
             unsubmitted: 1,
             country_id: selectedCountry,
             university_id: selectedUniversity,
-            intake_id: selectedIntake,
+            intake_id: selectedIntake || 'All',
+            // intake_id: 'All',
             subject_area_id: selectedStream,
             course_level_id: selectedcourselevel,
             app_coordinator_id: selectedcoordinator,
@@ -711,6 +712,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const [returnId, setreturnId] = useState()
     const handleReturnPopupOpen = (id) => {
         setreturnId(id)
+        handlePopoverClose()
     }
     const handleFirstPage = () => {
         setPage(1)
@@ -818,7 +820,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
             <SendUniversityMail from={'lead'} details={details} lead_id={details?.lead_id} editId={mailId} setEditId={setMailId} />
             <UniversityDeposit editId={depositId} setEditId={setdepositId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
-            <ReturnPopup getDetails={handleFirstPage} loading={confirmLoading} ID={returnId} setID={setreturnId} setLoading={setconfirmLoading} title={`Do you want to return this Application to the Counsellor?`} />
+            <ReturnPopup getDetails={fetchTable} loading={confirmLoading} ID={returnId} setID={setreturnId} setLoading={setconfirmLoading} title={`Do you want to return this Application to the Counsellor?`} />
 
             <ApplicationDetail id={detailId} setId={setDetailId} />
             <ConfirmPopup loading={submitLoading} ID={submitId} setID={setsubmitId} clickFunc={handleClickSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
@@ -1251,7 +1253,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                         >
                                                                             <List>
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id == 6 && row?.app_coordinator_status == 'Submitted') &&
+                                                                                    (session?.data?.user?.role?.id !=5 && row?.app_coordinator_status == 'Submitted') &&
                                                                                     <ListItem button onClick={() => handleReturnPopupOpen(row?.id)}>
                                                                                         Return Application
                                                                                     </ListItem>

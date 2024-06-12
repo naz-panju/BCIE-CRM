@@ -6,7 +6,8 @@ import AsyncSelect from "react-select/async";
 import { Skeleton } from '@mui/material';
 import { useSession } from 'next-auth/react';
 
-function ApplicationSection({weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
+function ApplicationSection({ weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
+
 
     const session = useSession()
 
@@ -39,8 +40,8 @@ function ApplicationSection({weeklyApplicationList, submitApplicationLoading, we
     // // Convert the dayCounts object to an array of counts
     const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const counts = labels.map(day => dayCounts[day]);
+    const backgroundClasses = ['bg1', 'bg2', 'bg3', 'bg4'];
 
-   
     return (
         <div >
             <div className='weekly-leads'>
@@ -49,21 +50,26 @@ function ApplicationSection({weeklyApplicationList, submitApplicationLoading, we
                     {
                         session?.data?.user?.role?.id == 6 ?
                             submitApplicationLoading ?
-                                <Skeleton variant='rounded' width={450} height={200} />
+                                <Skeleton style={{ marginTop:'70px'}} variant='rounded' width={600} height={200} />
                                 :
-                                <div style={{ height: '100%' }} className='stage w-5/12 flex items-center justify-evenly mt-10 application-submit-sec'>
-                                    <div className='card border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg2'>
-                                        <div>
+                                <div style={{ height: '100%' ,marginTop:'70px'}} className='stage w-5/12 flex items-center justify-evenly application-submit-sec'>
+                                    {
+                                        submitApplicationList?.data?.map((obj, index) => (
 
-                                        </div>
-                                        <div>
-                                            <h3> {submitApplicationList?.data?.returned}</h3>
-                                            Application
-                                        </div>
+                                            <div key={index} className={`card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between ${backgroundClasses[index % backgroundClasses.length]} `}>
+                                                <div>
 
-                                        <span className='Hot btn-stage'>Returned</span>
-                                    </div>
-                                    <div className='card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg3'>
+                                                </div>
+                                                <div>
+                                                    <h3> {obj?.count}</h3>
+                                                    Application
+                                                </div>
+
+                                                <span className='Hot btn-stage'>{obj?.status}</span>
+                                            </div>
+                                        ))
+                                    }
+                                    {/* <div className='card application border weekly-card rounded-sm h-5/6 w-2/8 flex items-center flex-column justify-between bg3'>
                                         <div>
 
                                         </div>
@@ -85,7 +91,7 @@ function ApplicationSection({weeklyApplicationList, submitApplicationLoading, we
                                         </div>
 
                                         <span className='warm btn-stage'>Unsubmitted</span>
-                                    </div>
+                                    </div> */}
                                 </div>
                             :
 
@@ -101,7 +107,7 @@ function ApplicationSection({weeklyApplicationList, submitApplicationLoading, we
                                             // placeholder="Select Date Range"
                                             style={{ width: 220 }}
                                             format='dd-MM-yyyy'
-                                            
+
                                         />
                                     </div>
                                 </div>

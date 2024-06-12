@@ -325,85 +325,95 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                 dataLoading ?
                                     <LoadingEdit item={items} />
                                     :
-                                    <>
+                                    <div>
 
-
-
-                                        <Grid className='form_group'>
-                                            <AsyncSelect
-                                                styles={{
-                                                    menu: provided => ({ ...provided, zIndex: 9999 })
-                                                }}
-                                                placeholder='Select Template'
-                                                // isDisabled={!selectedUniversityId}
-                                                // key={selectedUniversityId}
-                                                name={'template'}
-                                                defaultValue={watch('template')}
-                                                // isClearable
-                                                defaultOptions
-                                                loadOptions={fetchTemplates}
-                                                getOptionLabel={(e) => e.name}
-                                                getOptionValue={(e) => e.id}
-                                                onChange={handleTemplateChange}
-                                            />
-                                            {/* <SelectX
+                                        <div className='application-input'>
+                                            <a className='form-text' > Select Template</a>
+                                            <Grid className='mb-5 forms-data'>
+                                                <AsyncSelect
+                                                    styles={{
+                                                        menu: provided => ({ ...provided, zIndex: 9999 })
+                                                    }}
+                                                    // placeholder='Select Template'
+                                                    // isDisabled={!selectedUniversityId}
+                                                    // key={selectedUniversityId}
+                                                    name={'template'}
+                                                    defaultValue={watch('template')}
+                                                    // isClearable
+                                                    defaultOptions
+                                                    loadOptions={fetchTemplates}
+                                                    getOptionLabel={(e) => e.name}
+                                                    getOptionValue={(e) => e.id}
+                                                    onChange={handleTemplateChange}
+                                                />
+                                                {/* <SelectX
                                                     // menuPlacement='top'
                                                     loadOptions={fetchTemplates}
                                                     control={control}
                                                     name={'template'}
                                                     defaultValue={watch('template')}
                                                 /> */}
-                                            {errors.template && <span className='form-validation'>{errors.template.message}</span>}
-                                        </Grid>
+                                                {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+                                            </Grid>
+                                        </div>
 
 
 
-
-                                        <Grid className='form_group  '>
-                                            <TextInput placeholder={'To'} disabled control={control} name="to"
-                                                value={watch('to')} />
-                                            {errors.to && <span className='form-validation'>{errors.to.message}</span>}
-                                        </Grid>
-
-
-
-
-                                        <Grid className='form_group  '>
-                                            {
-                                                textBoxLoading ?
-                                                    <Skeleton variant='rounded' width={'100%'} height={40} />
-                                                    :
-                                                    <TextInput placeholder={'CC'} control={control} name="default_cc"
-                                                        value={watch('default_cc')} />
-                                            }
-                                            {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
-                                        </Grid>
+                                        <div className='application-input'>
+                                            <a className='form-text' > To</a>
+                                            <Grid className='mb-5 forms-data  '>
+                                                <TextInput  disabled control={control} name="to"
+                                                    value={watch('to')} />
+                                                {errors.to && <span className='form-validation'>{errors.to.message}</span>}
+                                            </Grid>
+                                        </div>
 
 
 
+                                        <div className='application-input'>
+                                            <a className='form-text' > CC</a>
+                                            <Grid className='mb-5 forms-data  '>
+                                                {
+                                                    textBoxLoading ?
+                                                        <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                        :
+                                                        <TextInput control={control} name="default_cc"
+                                                            value={watch('default_cc')} />
+                                                }
+                                                {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
+                                            </Grid>
+                                        </div>
 
-                                        <Grid className='form_group  '>
-                                            {
-                                                textBoxLoading ?
-                                                    <Skeleton variant='rounded' width={'100%'} height={40} />
-                                                    :
-                                                    <TextInput placeholder='Subject' control={control} name="subject"
-                                                        value={watch('subject')} />
-                                            }
-                                            {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
-                                        </Grid>
+
+                                        <div className='application-input'>
+                                            <a className='form-text' > Subject</a>
+
+                                            <Grid className='mb-5 forms-data  '>
+                                                {
+                                                    textBoxLoading ?
+                                                        <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                        :
+                                                        <TextInput control={control} name="subject"
+                                                            value={watch('subject')} />
+                                                }
+                                                {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
+                                            </Grid>
+                                        </div>
 
 
-                                        <Grid className='form_group  '>
-                                            {
-                                                textBoxLoading ?
-                                                    <Skeleton variant='rounded' width={'100%'} height={400} />
-                                                    :
-                                                    <Editor key={editorKey} emoji={false} val={watch('body')}
-                                                        onValueChange={e => setValue('body', e)} />
-                                            }
-                                            {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
-                                        </Grid>
+                                        <div className='application-input'>
+                                            <a className='form-text' > Body</a>
+                                            <Grid className='mb-5 forms-data  '>
+                                                {
+                                                    textBoxLoading ?
+                                                        <Skeleton variant='rounded' width={'100%'} height={400} />
+                                                        :
+                                                        <Editor key={editorKey} emoji={false} val={watch('body')}
+                                                            onValueChange={e => setValue('body', e)} />
+                                                }
+                                                {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
+                                            </Grid>
+                                        </div>
 
 
                                         {/* {
@@ -423,33 +433,35 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                 </Grid>
                                             </Grid>
                                         } */}
-                                        <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container >
-                                            <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
-                                                {/* <label htmlFor="file-input"> */}
-                                                {/* <input
+                                        <div className='application-input'>
+                                            
+                                            <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container >
+                                                <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
+                                                    {/* <label htmlFor="file-input"> */}
+                                                    {/* <input
                                                         type="file"
                                                         id="file-input"
                                                         style={{ display: 'none' }}
                                                         onChange={handleFileChange}
                                                     /> */}
-                                                <Button onClick={handleDocumentSelectOpen} sx={{ textTransform: 'none', height: 30 }}
-                                                    variant='contained'
-                                                    className='bg-sky-800' size='small' component="span">
-                                                    Add Documents
-                                                </Button>
-                                                {/* </label> */}
-                                                {/* <input
+                                                    <Button onClick={handleDocumentSelectOpen} sx={{ textTransform: 'none', height: 30 }}
+                                                        variant='contained'
+                                                        className='bg-sky-800' size='small' component="span">
+                                                        Add Documents
+                                                    </Button>
+                                                    {/* </label> */}
+                                                    {/* <input
                                                     type="file"
                                                     id="upload-button"
                                                     style={{ display: 'none' }}
                                                     onChange={handleFileUpload}
                                                     key={fileInputKey}
                                                 /> */}
-                                            </Grid>
+                                                </Grid>
 
 
 
-                                            {/* {
+                                                {/* {
                                                 file &&
                                                 <Grid display={'flex'} flexDirection={'column'} justifyContent={'space-between'} item pr={1} xs={8} md={8}>
 
@@ -463,7 +475,8 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     ))}
                                                 </Grid>
                                             } */}
-                                        </Grid>
+                                            </Grid>
+                                        </div>
 
                                         {
                                             attachmentFiles?.length > 0 &&
@@ -473,7 +486,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     {attachmentFiles?.map((document, index) => (
                                                         <ListItem key={index} className='list-item-mail ' >
                                                             {/* <ListItemButton > */}
-                                                                <ListItemText sx={{cursor:'pointer'}} onClick={() => handleDocumentOpen(document?.file)} primary={document?.title || document?.document_template?.name} />
+                                                            <ListItemText sx={{ cursor: 'pointer' }} onClick={() => handleDocumentOpen(document?.file)} primary={document?.title || document?.document_template?.name} />
                                                             {/* </ListItemButton> */}
                                                         </ListItem>
                                                     ))}
@@ -498,7 +511,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
 
 
-                                    </>
+                                    </div>
                             }
 
                             <Grid p={1} pb={3} display={'flex'} >

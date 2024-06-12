@@ -16,6 +16,8 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import toast from 'react-hot-toast';
 import TextInput from '@/Form/TextInput';
 import AsyncSelect from "react-select/async";
+import Doc from '@/img/doc.png';
+import Image from 'next/image';
 
 const style = {
     position: 'absolute',
@@ -239,42 +241,62 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                 loadingFields()
                                 :
                                 <form onSubmit={handleSubmit(onSubmit)}>
-                                    <Grid className='form_group  ' >
 
-                                        <AsyncSelect
-                                            placeholder={'Select Template'}
-                                            key={watch('template')}
-                                            name={'template'}
-                                            defaultValue={watch('template')}
-                                            isClearable
-                                            defaultOptions
-                                            loadOptions={fetchTemplates}
-                                            getOptionLabel={(e) => e.name}
-                                            getOptionValue={(e) => e.id}
-                                            onChange={handleTemplateSelect}
-                                        />
-                                        {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+                                    <div className='grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0'>
 
-                                    </Grid>
-                                    <Grid className='form_group  ' >
+                                        <div className='application-input'>
+                                            <a className='form-text'>Select Template</a>
+                                            <Grid className='mb-5 forms-data  ' >
 
-                                        <TextInput control={control} placeholder={'Title'} name="title"
-                                            value={watch('title')} />
-                                    </Grid>
-                                    <Grid className='form_group  ' >
-                                        <TextField
-                                            placeholder='Remarks'
-                                            {...register('remarks')}
-                                            variant="outlined"
-                                            fullWidth
-                                            multiline
-                                            rows={2}
-                                            sx={{ width: '100%', }}
-                                        />
-                                    </Grid>
+                                                <AsyncSelect
+                                                    // placeholder={'Select Template'}
+                                                    key={watch('template')}
+                                                    name={'template'}
+                                                    defaultValue={watch('template')}
+                                                    isClearable
+                                                    defaultOptions
+                                                    loadOptions={fetchTemplates}
+                                                    getOptionLabel={(e) => e.name}
+                                                    getOptionValue={(e) => e.id}
+                                                    onChange={handleTemplateSelect}
+                                                />
+                                                {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+
+                                            </Grid>
+                                        </div>
+                                    </div>
+                                    <div className='grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0'>
+
+                                        <div className='application-input'>
+                                            <a className='form-text'>Title</a>
+                                            <Grid className='mb-5 forms-data  ' >
+
+                                                <TextInput control={control} name="title"
+                                                    value={watch('title')} />
+                                            </Grid>
+                                        </div>
+                                    </div>
+
+                                    <div className='grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0'>
+
+                                        <div className='application-input'>
+                                            <a className='form-text'>Remarks</a>
+                                            <Grid className='mb-5 forms-data  ' >
+                                                <TextField
+                                                    // placeholder='Remarks'
+                                                    {...register('remarks')}
+                                                    variant="outlined"
+                                                    fullWidth
+                                                    multiline
+                                                    rows={3}
+                                                    sx={{ width: '100%', }}
+                                                />
+                                            </Grid>
+                                        </div>
+                                    </div>
 
                                     <div
-                                        className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
+                                        // className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
                                         onDrop={handleDrop}
                                         onDragOver={handleDragOver}
                                     >
@@ -285,12 +307,12 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                             id="file-upload"
                                             key={fileInputKey}
                                         />
-                                        <label
-                                            htmlFor="file-upload"
-                                            className="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                                        >
-                                            Select File or Drag and Drop Here
+                                        <label htmlFor="file-upload" style={{ cursor: 'pointer' }} className='add-document-block'>
+                                            <Image src={Doc} alt='Doc' width={200} height={200} />
+
+                                            <h3><span>Select File</span>  or Drag and Drop Here</h3>
                                         </label>
+
                                         {(selectedFile || details?.file) && (
                                             <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
                                                 <Grid mr={1}>
