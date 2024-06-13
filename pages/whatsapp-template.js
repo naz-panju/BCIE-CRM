@@ -14,25 +14,25 @@ function WhatsAppTemplate() {
 
 export default WhatsAppTemplate
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
+// export async function getServerSideProps(context) {
+//   const session = await getSession(context)
 
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-  }
+//   if (!session) {
+//     return {
+//       redirect: {
+//         destination: '/login',
+//         permanent: false,
+//       },
+//     };
+//   }
 
-  if (session?.user?.role?.id !== 3 && session?.data?.user?.role?.id !== 4) {
-    return {
-      notFound: true,
-    };
-  }
+//   if (session?.user?.role?.id !== 3 && session?.data?.user?.role?.id !== 4) {
+//     return {
+//       notFound: true,
+//     };
+//   }
 
-  return {
-    props: { session },
-  };
-}
+//   return {
+//     props: { session },
+//   };
+// }
