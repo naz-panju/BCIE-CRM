@@ -224,7 +224,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                         <a className='back_modal_head'> Change Application Stage </a>
 
                     </Grid>
-                    <hr />
+                    {/* <hr /> */}
                     <div className='form-data-cntr'>
                         <form onSubmit={handleSubmit(onSubmit)}>
 

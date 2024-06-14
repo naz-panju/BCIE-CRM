@@ -7,10 +7,10 @@ function LoadingEdit({ item, leftMD, rightMD }) {
             {
                 item?.map((obj, index) => (
                     <Grid key={index} display={'flex'}  container p={1.5} item xs={12}>
-                        <Grid item xs={12} md={leftMD || 4}>
+                        {/* <Grid item xs={12} md={leftMD || 4}>
                             <Skeleton variant='rounded' width={'90%'} height={25} />
-                        </Grid>
-                        <Grid item xs={12} md={rightMD || 8}>
+                        </Grid> */}
+                        <Grid item xs={12} md={rightMD || 12}>
                             {
                                 obj?.multi ?
                                     <Skeleton variant='rounded' width={'100%'} height={70} />

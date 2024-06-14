@@ -851,6 +851,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                 isClearable
                                 defaultOptions
                                 name='university'
+                                // isMulti
                                 key={selectedCountry}
                                 value={watch('university')}
                                 defaultValue={watch('university')}

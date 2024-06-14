@@ -156,7 +156,7 @@ function CommunicationSection({ fetchManagers, handleManagerSelect, selectedMana
             {
               targetLoading ?
                 <div className='border rounded-sm '>
-                  <Skeleton variant='rounded' width={'100%'} height={'100%'} />
+                  <Skeleton variant='rounded' width={'100%'} height={250} />
                 </div>
                 :
                 <div className='border rounded-sm '>

@@ -7,7 +7,8 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Grid, IconButton, TextField, Tooltip, Skeleton, FormControlLabel, Checkbox, Paper } from '@mui/material';
-import { Close } from '@mui/icons-material';
+import { Close, ContentCopyOutlined, CopyAllOutlined, DoneOutlined } from '@mui/icons-material';
+import { useState } from 'react';
 
 const style = {
     position: 'absolute',
@@ -44,6 +45,34 @@ export default function PortalPermissionModal({ editId, setEditId, details, setD
         setEditId()
         setOpen(false);
     }
+
+    const [nameCopied, setNameCopied] = useState(false);
+    const [passCopied, setPassCopied] = useState(false);
+    const [linkCopied, setLinkCopied] = useState(false);
+    const handleCopy = () => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000); // Hide the message after 3 seconds
+    };
+
+    const copyToClipboard = (text, from) => {
+        navigator.clipboard.writeText(text).then(() => {
+            // setcopied(text)
+            if (from == 'name') {
+                setNameCopied(true)
+            } else if (from == 'pass') {
+                setPassCopied(true)
+            } else if (from == 'link') {
+                setLinkCopied(true)
+            }
+            setTimeout(() => {
+                setNameCopied(false)
+                setPassCopied(false)
+                setLinkCopied(false)
+            }, 2000);
+        }).catch(err => {
+            console.error('Could not copy text: ', err);
+        });
+    };
 
     useEffect(() => {
         if (editId > 0) {
@@ -84,7 +113,12 @@ export default function PortalPermissionModal({ editId, setEditId, details, setD
                             <Paper elevation={3} sx={{ p: 1 }}>
                                 <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                                     <a style={{ fontSize: '14px' }} >{details?.university?.portal_username || 'NA'}</a>
-
+                                    {
+                                        nameCopied ?
+                                            <span style={{color:'#689df6',fontSize:'13px'}}>copied <DoneOutlined sx={{ color: '#689df6',cursor:'pointer' }} fontSize='small' /></span>
+                                            :
+                                            <ContentCopyOutlined onClick={()=>copyToClipboard(details?.university?.portal_username,'name')} fontSize='small' sx={{ color: '#689df6',cursor:'pointer' }} />
+                                    }
                                 </Grid>
                             </Paper>
                         </Grid>
@@ -96,6 +130,12 @@ export default function PortalPermissionModal({ editId, setEditId, details, setD
                             <Paper elevation={3} sx={{ p: 1 }}>
                                 <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                                     <a style={{ fontSize: '14px' }} >{details?.university?.portal_password || 'NA'}</a>
+                                    {
+                                        passCopied ?
+                                            <span style={{color:'#689df6',fontSize:'13px'}}>copied <DoneOutlined sx={{ color: '#689df6',cursor:'pointer' }} fontSize='small' /></span>
+                                            :
+                                            <ContentCopyOutlined onClick={()=>copyToClipboard(details?.university?.portal_password,'pass')} fontSize='small' sx={{ color: '#689df6',cursor:'pointer' }} />
+                                    }
                                 </Grid>
                             </Paper>
                         </Grid>
@@ -106,14 +146,19 @@ export default function PortalPermissionModal({ editId, setEditId, details, setD
                         <Grid item p={1} xs={12}>
                             <Paper elevation={3} sx={{ p: 1 }}>
                                 <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                    <a href={details?.university?.portal_link} target='_blank' style={{ fontSize: '14px', color: details?.university?.portal_link ? 'blue' : '', cursor: 'pointer' }} className={details?.university?.portal_link ? 'a_hover' : '' }> { details?.university?.portal_link || 'NA'}</a>
-
+                                    <a href={details?.university?.portal_link} target='_blank' style={{ fontSize: '14px', color: details?.university?.portal_link ? 'blue' : '', cursor: 'pointer' }} className={details?.university?.portal_link ? 'a_hover' : ''}> {details?.university?.portal_link || 'NA'}</a>
+                                    {
+                                        linkCopied ?
+                                            <span style={{color:'#689df6',fontSize:'13px'}}>copied <DoneOutlined sx={{ color: '#689df6',cursor:'pointer' }} fontSize='small' /></span>
+                                            :
+                                            <ContentCopyOutlined onClick={()=>copyToClipboard(details?.university?.portal_link,'link')} fontSize='small' sx={{ color: '#689df6',cursor:'pointer' }} />
+                                    }
+                                </Grid>
+                            </Paper>
                         </Grid>
-                    </Paper>
-                </Grid>
-            </Grid>
+                    </Grid>
 
-            {/* <Grid mb={1}  container spacing={1} justifyContent="center">
+                    {/* <Grid mb={1}  container spacing={1} justifyContent="center">
                         <Grid item p={1} xs={11.5}>
                             <Paper elevation={3} sx={{ p: 1 }}>
                                 <Grid  display={'flex'} justifyContent={'space-between'} alignItems={'center'} sx={{ mt: index !== 0 ? 1 : '' }}>
@@ -128,7 +173,7 @@ export default function PortalPermissionModal({ editId, setEditId, details, setD
                     </Grid> */}
 
 
-        </Box>
+                </Box>
             </Modal >
         </div >
     );

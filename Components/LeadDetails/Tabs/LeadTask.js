@@ -21,7 +21,7 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
 
     const [editId, setEditId] = useState()
     const [list, setList] = useState([])
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [reqId, setReqId] = useState()
     const [refresh, setRefresh] = useState(false)
 
@@ -125,46 +125,45 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
                         loadTable()
                         :
                         <div className='no-follw-up-block app_tab_cntr'>
-                            {
-                                list?.data?.length > 0 ?
 
-                                    <TableContainer>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>
 
-                                                        <Typography className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Title
-                                                        </Typography>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Typography className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Assigned To
-                                                        </Typography>
-                                                    </TableCell>
-                                                    {/* <TableCell>
+                            <TableContainer>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow style={{ backgroundColor: '#232648' }}>
+                                            <TableCell>
+
+                                                <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                    Title
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                    Assigned To
+                                                </Typography>
+                                            </TableCell>
+                                            {/* <TableCell>
                                                         <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                             Reviewer
                                                         </Typography>
                                                     </TableCell> */}
-                                                    <TableCell>
-                                                        <Typography className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Due Date
-                                                        </Typography>
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Typography className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Status
-                                                        </Typography>
-                                                    </TableCell>
-                                                    {/* <TableCell>
-                                                        <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                            Status
-                                                        </Typography>
-                                                    </TableCell> */}
-                                                </TableRow>
-                                            </TableHead>
+                                            <TableCell>
+                                                <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                    Due Date
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                    Status
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
+
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    {
+                                        list?.data?.length > 0 ?
                                             <TableBody>
                                                 {
                                                     list?.data?.map((obj, index) => (
@@ -207,11 +206,18 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
                                                 }
 
                                             </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                    :
-                                    <h4>No Task Found</h4>
-                            }
+                                            :
+                                            (
+                                                <TableBody>
+                                                    <TableRow sx={{ height: 250, color: 'transparent' }}>
+                                                        <TableCell colSpan={8} style={{ textAlign: 'center' }}>
+                                                            No Data Available
+                                                        </TableCell>
+                                                    </TableRow>
+                                                </TableBody>
+                                            )}
+                                </Table>
+                            </TableContainer>
 
                             {
                                 list?.data?.length > 0 &&

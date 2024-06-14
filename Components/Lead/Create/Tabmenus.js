@@ -369,7 +369,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
             date_of_birth: dob,
             address: data?.address,
-            city:data?.city,
+            city: data?.city,
 
             country_of_birth_id: data?.country_of_birth?.id || null,
             country_of_residence_id: data?.country_of_residence?.id || null,
@@ -377,9 +377,10 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             referrance_from: data?.reference,
 
             source_id: data?.source?.id || null,
-            agency_id: data?.agency?.id || null,
-            referred_student_id: data?.student?.id || null,
-            referral_university_id: data?.referred_university?.id || null,
+
+            agency_id: data?.source?.name == 'Agency' ? data?.agency?.id : null || null,
+            referred_student_id: data?.source?.name == 'Referral' ? data?.student?.id : null || null,
+            referral_university_id: data?.source?.name == 'University' ? data?.referred_university?.id : null || null,
             // country_id: data?.country?.id,
 
             note: data?.note
@@ -465,6 +466,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             setValue('source', data?.lead_source)
             setValue('student', data?.referredStudent)
             setValue('agency', data?.agency)
+            setValue('referred_university', data?.referred_university)
             setValue('reference', data?.referrance_from)
 
             setValue('country_of_birth', data?.country_of_birth)
@@ -527,7 +529,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             {/* <button type='reset' onClick={() => setLoading(false)}>click</button> */}
             {
                 dataLoading ?
-                    <LoadingEdit leftMD={5} rightMD={7} item={items} />
+                    <LoadingEdit leftMD={5} rightMD={12} item={items} />
                     :
                     <form onSubmit={handleSubmit(onSubmit)}>
 

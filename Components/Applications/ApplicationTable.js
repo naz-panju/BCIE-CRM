@@ -859,6 +859,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                 isClearable
                                 defaultOptions
                                 name='university'
+                                // isMulti
                                 key={selectedCountry}
                                 value={watch('university')}
                                 defaultValue={watch('university')}

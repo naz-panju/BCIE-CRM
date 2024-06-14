@@ -5,7 +5,7 @@ import { AttachmentOutlined, CachedOutlined } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
 
 
-function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit,leadData }) {
+function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, leadData }) {
     // console.log(leadData);
     const [detailId, setdetailId] = useState()
 

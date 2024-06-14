@@ -1140,7 +1140,7 @@ ul.search-document-block-pred li div span {
     margin-top: 10px;
     text-decoration: none !important;
 }
-.Mui-disabled {
+.Doc-Button-disabled {
     border-radius: 4px;
     background: #ECECEC;
     color: var(--neutral-nr07, #6D6D6D) !important;
@@ -1151,7 +1151,7 @@ ul.search-document-block-pred li div span {
     line-height: 10px;
     letter-spacing: -0.15px;
 }
-.Mui-disabled svg path{
+.Doc-Button-disabled svg path{
     stroke: #9A9A9A;
 }
 .section-title {
@@ -1461,12 +1461,14 @@ span.warm{
 }
 .app-tab-title {
     color: #0B0D23;
+    /* color: #ffffff; */
     font-family: Inter;
     font-size: 14px;
     font-style: normal;
     font-weight: 500;
     line-height: normal;
 }
+
 .all_act_cntr.application {
     margin-top: 0;
 }
@@ -3254,3 +3256,6 @@ a.not-found {
 
 }
 
+/* .css-1s5vo3j-MuiButtonBase-root-MuiButton-root.Mui-disabled{
+    height: 35px;
+} */

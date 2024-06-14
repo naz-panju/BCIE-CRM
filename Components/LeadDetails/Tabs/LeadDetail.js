@@ -270,14 +270,14 @@ function LeadDetail({ data, handleEdit, loading }) {
                             {
                                 data?.lead_source?.name == 'University' &&
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Referred University </label> {data?.university?.name || 'NA'}
+                                    <label style={{ fontWeight: 'bold' }}>Referred University </label> {data?.referred_university?.name || 'NA'}
                                 </div>
                             }
 
                             {
                                 data?.referrance_from &&
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Lead Source </label> {data?.referrance_from}
+                                    <label style={{ fontWeight: 'bold' }}>Referrence From </label> {data?.referrance_from}
                                 </div>
                             }
 
