@@ -273,7 +273,7 @@ function Form({ data }) {
         //     action = LeadApi.add(dataToSubmit)
         // }
         LeadApi.publicAdd(dataToSubmit).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.data?.data) {
 
                 toast.success('Lead Has Been Successfully Created')

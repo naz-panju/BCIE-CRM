@@ -54,6 +54,8 @@ export default function DeletePopup({ ID, setID, setDeletePopup, Callfunc, api, 
                 let dataToDelete = {
                     id: ID,
                 }
+
+                // console.log(dataToDelete);
                 response = await api(dataToDelete)
             } else {
 
@@ -61,7 +63,7 @@ export default function DeletePopup({ ID, setID, setDeletePopup, Callfunc, api, 
             }
 
             // console.log(response);
-            if (response?.statusText == "OK") {
+            if (response?.status == 200 || response?.status == 201) {
               
                 toast.success(`${response?.data?.message}`, { autoClose: 1000, position: "top-center" });
                 handleClose()

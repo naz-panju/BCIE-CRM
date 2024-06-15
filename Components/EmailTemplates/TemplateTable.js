@@ -98,6 +98,7 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: '',
+        noSort:false
     },
 ];
 
@@ -130,18 +131,21 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
+                        {
+                            !headCell?.noSort &&
+                            <TableSortLabel
+                                active={orderBy === headCell.id}
+                                direction={orderBy === headCell.id ? order : 'asc'}
+                                onClick={createSortHandler(headCell.id)}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
+                                    <Box component="span" sx={visuallyHidden}>
+                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                    </Box>
+                                ) : null}
+                            </TableSortLabel>
+                        }
                     </TableCell>
                 ))}
             </TableRow>
@@ -314,7 +318,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
     const fetchTable = () => {
         setLoading(true)
         TemplateApi.list({ limit: limit, page: page }).then((response) => {
-            console.log(response?.data);
+            // console.log(response?.data);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {

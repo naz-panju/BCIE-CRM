@@ -109,7 +109,7 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'WhatsApp Template Has Been Successfully Updated' : 'WhatsApp Template Has Been Successfully Created')
                 reset()

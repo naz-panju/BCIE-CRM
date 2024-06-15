@@ -159,7 +159,7 @@ export default function LeadApplicationModalOrginal({ lead_id, editId, setEditId
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Application has been Updated Successfully' : 'Applied Successfully')
                 reset()
@@ -247,7 +247,7 @@ export default function LeadApplicationModalOrginal({ lead_id, editId, setEditId
         const response = await ApplicationApi.view({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
-            console.log(data);
+            // console.log(data);
 
             setValue('country', data?.country)
             setValue('university', data?.university)
@@ -317,7 +317,7 @@ export default function LeadApplicationModalOrginal({ lead_id, editId, setEditId
 
                            
                                     
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                         <div className='application-input'>
                                             <a className='form-text'>Country</a>
                                             <Grid className='form_group' >

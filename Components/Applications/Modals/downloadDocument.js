@@ -149,7 +149,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
     const getDetails = async () => {
         setDataLoading(true)
         const response = await ApplicationApi.view({ id: editId, status: 'Accepted' })
-        console.log(response?.data?.data);
+        // console.log(response?.data?.data);
         if (response?.status == 200 || response?.status == 201) {
             setDetails(response?.data?.data)
             // setdocuments(response?.data?.data?.documents)

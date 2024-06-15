@@ -147,7 +147,7 @@ function LeadPayments({ lead_id, from, app_id }) {
                                                             <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M13.125 16.625C13.125 14.692 10.7745 13.125 7.875 13.125C4.9755 13.125 2.625 14.692 2.625 16.625M18.375 8.75L14.875 12.25L13.125 10.5M7.875 10.5C5.942 10.5 4.375 8.933 4.375 7C4.375 5.067 5.942 3.5 7.875 3.5C9.808 3.5 11.375 5.067 11.375 7C11.375 8.933 9.808 10.5 7.875 10.5Z" stroke="#ffffff" strokeWidth="1.4" strokeLinecap="round" stroke-linejoin="round" />
                                                             </svg>
-                                                            Date & Creator
+                                                            Creator & Date
                                                         </Typography>
                                                     </TableCell>
                                                     <TableCell>

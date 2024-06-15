@@ -82,7 +82,7 @@ export default function SaveApplicationSumber({ details, editId, setEditId, refr
             university_id: data?.uni_id,
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
 
         let action;

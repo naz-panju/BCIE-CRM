@@ -88,7 +88,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
     const fetchCounsellor = (e) => {
         return ListingApi.users({ keyword: e, office_id: branchId, role_id: 5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
-                console.log(response?.data?.data);
+                // console.log(response?.data?.data);
                 return response?.data?.data;
             } else {
                 return [];
@@ -162,9 +162,9 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                     leads: selected,
                     assign_to_office_id: watch('branch')?.id
                 }
-                console.log(dataToSubmit)
+                // console.log(dataToSubmit)
                 LeadApi.bulkAssign(dataToSubmit).then((response) => {
-                    console.log(response);
+                    // console.log(response);
                     if (response?.status == 200 || response?.status == 201) {
                         toast.success(response?.data?.message)
                         handleClose()
@@ -270,7 +270,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                         </Grid>
                         {
                             selectedoption &&
-                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                 <div className='application-input'>
                                     <a className='form-text'>Select Branch</a>
                                     <Grid className='mb-5 forms-data' >
@@ -295,7 +295,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
                         {
                             (selectedoption == 1 && watch('branch')) &&
-                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                 <div className='application-input'>
                                     <a className='form-text'>Select Counsellors</a>
                                     <Grid className='mb-5 forms-data'>
@@ -321,7 +321,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
                         {
                             (selectedoption == 2 && watch('branch')) &&
-                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                 <div className='application-input'>
                                     <a className='form-text'>Select Counsellor</a>
                                     <Grid className='mb-5 forms-data'>

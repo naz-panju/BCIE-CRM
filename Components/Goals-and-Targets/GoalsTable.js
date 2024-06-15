@@ -13,7 +13,7 @@ function GoalsTable() {
     const { watch, setValue } = useForm()
 
     const session = useSession()
-    console.log(session);
+    // console.log(session);
     const [datas, setdatas] = useState()
     const [councellorId, setcouncellorId] = useState()
 

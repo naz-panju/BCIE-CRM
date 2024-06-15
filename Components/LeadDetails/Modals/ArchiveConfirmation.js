@@ -60,7 +60,7 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
         } else {
             dataToSubmit['archive_note'] = watch('note')
             dataToSubmit['archive_reason'] = watch('reason')?.reason
-            console.log(dataToSubmit);
+            // console.log(dataToSubmit);
             action = LeadApi.closeLead(dataToSubmit)
         }
         action.then((response) => {
@@ -111,7 +111,7 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
                     </Grid>
                     <div className='form-data-cntr'>
 
-                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                             <div className='application-input'>
                                 <a className='form-text'>Note</a>
                                 {/* className='form_group */}
@@ -124,7 +124,7 @@ export default function ArchiveConfirmPopup({ ID, setID, setLoading, title, load
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                             <div className='application-input'>
                                 <a className='form-text'>Reasons</a>
                                 {/* className='form_group */}

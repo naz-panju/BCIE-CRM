@@ -135,7 +135,7 @@ export default function CustomizedMenus() {
     setRefresh(!refresh)
   }
 
-  const [isActive, setIsActive] = useState(false); // State to manage whether the active class should be applied
+  const [isActive, setIsActive] = useState(false); // State to manage whether the active className should be applied
 
   const toggleActive = () => {
     setIsActive(!isActive); // Toggle the state value
@@ -197,7 +197,7 @@ export default function CustomizedMenus() {
       setValue('searchType', getSearchType)
     }
     if (getSearch) {
-      console.log(getSearchType);
+      // console.log(getSearchType);
       setValue('nameSearch', getSearch)
       // setnameSearch(getSearch)
     }

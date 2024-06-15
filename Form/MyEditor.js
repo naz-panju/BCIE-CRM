@@ -9,7 +9,7 @@ function MyEditor(props) {
 
     function MyCustomUploadAdapterPlugin(editor) {
         editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-            console.log(loader);
+            // console.log(loader);
             return {
                 upload: async () => {
                     const data = new FormData();
@@ -18,7 +18,7 @@ function MyEditor(props) {
 
                     // Replace 'upload_url' with your server's upload endpoint
                     const response = await ImageUploadApi.upload({ file: data })
-                    console.log(response);
+                    // console.log(response);
 
                     return {
                         default: response.url // assuming the server responds with the URL of the uploaded image

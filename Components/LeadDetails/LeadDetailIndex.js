@@ -95,7 +95,7 @@ function LeadDetails() {
     try {
       // console.log(urlID);
       const response = await LeadApi.view({ id: urlID })
-      console.log(response);
+      // console.log(response);
       setDetails(response?.data?.data)
       setLoading(false)
     } catch (error) {
@@ -224,6 +224,16 @@ function LeadDetails() {
     setAssignId(0)
     setSelected([details?.id])
     setsingleAssign(true)
+  }
+
+  const [toNoteTab, setToNoteTab] = useState(false)
+  const switchNoteTab=()=>{
+    setToNoteTab(true)
+  }
+
+  const afterSwitchNoteTab=(func)=>{
+    func(2)
+    setToNoteTab(false)
   }
 
   useEffect(() => {
@@ -642,7 +652,7 @@ function LeadDetails() {
 
 
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
 
               <div>
@@ -744,12 +754,12 @@ function LeadDetails() {
                     <div className='d-flex align-items-center justify-content-between'>
                       <div>
                         <span>Note</span>
-                        <h5>
+                        <h5 className='a_hover' style={{cursor:'pointer'}} onClick={switchNoteTab}>
                           {details?.latest_lead_note?.note ?
                             details.latest_lead_note.note.length > 20 ?
                               <Tooltip title={details.latest_lead_note.note}>
                                 {
-                                  details.latest_lead_note.note.slice(0, 20) + '...'
+                                  <a>{details.latest_lead_note.note.slice(0, 20) + '...'}</a>
                                 }
                               </Tooltip>
                               : details.latest_lead_note.note
@@ -774,7 +784,7 @@ function LeadDetails() {
 
 
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
 
                   <div>
@@ -827,7 +837,7 @@ function LeadDetails() {
 
           <div className='lead-det-cnt'>
 
-            <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} />
+            <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} toNoteTab={toNoteTab} setToNoteTab={setToNoteTab} />
           </div>
         </div>
       </section>

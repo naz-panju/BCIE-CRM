@@ -20,7 +20,7 @@ const CheckboxInput = (props) => {
 
     useEffect(() => {
         props.setValue(props.name, selectedItems);
-        console.log("Values :", props.value)
+        // console.log("Values :", props.value)
     }, [selectedItems]);
 
 

@@ -59,7 +59,7 @@ export default function UnArchiveConfirmPopup({ ID, setID, setLoading, title, lo
         } else {
             dataToSubmit['archive_note']=watch('note')
             dataToSubmit['archive_reason']=watch('reason')?.reason
-            console.log(dataToSubmit);
+            // console.log(dataToSubmit);
             action = LeadApi.closeLead(dataToSubmit)
         }
         action.then((response) => {

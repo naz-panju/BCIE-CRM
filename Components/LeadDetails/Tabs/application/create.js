@@ -159,7 +159,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Application has been Updated Successfully' : 'Applied Successfully')
                 reset()
@@ -325,7 +325,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
                                     <a className='form-text'>Country</a>
                                     {/* className='form_group */}

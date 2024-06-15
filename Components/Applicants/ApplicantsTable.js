@@ -332,7 +332,7 @@ export default function ApplicantTable({ refresh, editId, setEditId, page, setPa
             params['lead_id'] = nameSearch
         }
 
-        console.log(params);
+        // console.log(params);
 
         StudentApi.list(params).then((response) => {
             // console.log(response);

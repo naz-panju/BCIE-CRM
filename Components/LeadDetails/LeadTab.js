@@ -67,7 +67,7 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh ,taskRefresh, handleTaskRefresh}) {
+export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh, taskRefresh, handleTaskRefresh, toNoteTab, setToNoteTab }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
@@ -159,6 +159,13 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
       setValue(8)
     }
   }, []);
+
+  useEffect(() => {
+    if (toNoteTab) {
+      setValue(2)
+      setToNoteTab(false)
+    }
+  }, [toNoteTab]);
 
   return (
     <>

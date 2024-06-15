@@ -164,9 +164,9 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
             })
         }
 
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ': ' + pair[1]);
+        // }
         // console.log(dataToSubmit);
 
         let action;
@@ -179,7 +179,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success('Email Sent Successfully');
                 reset()
@@ -340,7 +340,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                     :
                                     <>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Select Template</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -365,7 +365,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                             </div>
                                         </div>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Send to</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -376,7 +376,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                             </div>
                                         </div>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Mail CC</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -392,7 +392,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                             </div>
                                         </div>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Subject</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -408,7 +408,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                             </div>
                                         </div>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Body</a>
                                                 <Grid className='mb-5 forms-data' >

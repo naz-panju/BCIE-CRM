@@ -44,7 +44,7 @@ export default function DocumentRejectPopup({ ID, setID, setLoading, title, load
         }
 
         LeadApi.rejectDocument(dataToSubmit).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setID()

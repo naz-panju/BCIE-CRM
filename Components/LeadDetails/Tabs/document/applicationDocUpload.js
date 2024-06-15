@@ -101,7 +101,7 @@ export default function ApplicationDocumentUpload({ lead_id, editId, setEditId, 
             }
 
             action.then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response?.status == 200 || response?.status == 201) {
                     handleClose()
                     toast.success(response?.data?.message)

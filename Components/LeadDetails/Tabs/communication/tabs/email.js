@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Grid, MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Grid, MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
 import { AttachmentOutlined, CachedOutlined } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
@@ -47,11 +47,11 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                             </Typography>
 
                                                         </TableCell>
-                                                        <TableCell>
+                                                        {/* <TableCell>
                                                             <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                                 Email Type
                                                             </Typography>
-                                                        </TableCell>
+                                                        </TableCell> */}
                                                         <TableCell>
                                                             <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                                 From
@@ -63,6 +63,12 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                                 To
                                                             </Typography>
                                                         </TableCell>
+                                                        <TableCell>
+
+                                                        </TableCell>
+                                                        <TableCell>
+
+                                                        </TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -71,15 +77,31 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                         list?.data?.map((obj, index) => {
                                                             return (
                                                                 <TableRow key={index}>
-                                                                    <TableCell sx={{ cursor: 'pointer' }} onClick={() => handleDetailOpen(obj?.id)}>
+                                                                    <TableCell sx={{
+                                                                        cursor: 'pointer',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        paddingLeft:'0px'
+                                                                       
+                                                                    }} onClick={() => handleDetailOpen(obj?.id)}>
+                                                                       <Tooltip title={obj?.type}>
+                                                                            <div style={{
+                                                                                padding:0,
+                                                                                width: '3px',  // Width of the vertical line
+                                                                                borderLeft: obj?.type=='Send' ?'3px solid blue':'3px green',  // Vertical line
+                                                                                height: '23px',  // Full height of the TableCell
+                                                                                marginRight: '8px',  // Space between the line and the text
+                                                                                marginLeft:'0%'
+                                                                            }}></div>
+                                                                       </Tooltip>
                                                                         {
                                                                             obj?.subject?.length > 50 ?
-                                                                                <b> {obj?.subject?.slice(0, 50)} ...</b>
+                                                                                <b className='a_hover'> {obj?.subject?.slice(0, 50)} ...</b>
                                                                                 :
-                                                                                <b>{obj?.subject}</b>
+                                                                                <b className='a_hover'>{obj?.subject}</b>
                                                                         }
                                                                     </TableCell>
-                                                                    <TableCell>{obj?.type}</TableCell>
+                                                                    {/* <TableCell>{obj?.type}</TableCell> */}
                                                                     <TableCell>{obj?.from || obj?.created_by?.name}</TableCell>
                                                                     <TableCell>{obj?.to || leadData?.email}</TableCell>
                                                                     <TableCell>

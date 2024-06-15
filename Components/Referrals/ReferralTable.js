@@ -24,7 +24,7 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, MenuItem, Pagination, Select } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { TemplateApi } from '@/data/Endpoints/Template';
 import { Edit } from '@mui/icons-material';
@@ -32,6 +32,7 @@ import EmailTemplateDetailModal from '../EmailTemplateDetail/Modal';
 import { ReferralApi } from '@/data/Endpoints/Referrals';
 import moment from 'moment';
 import ReferralDetailModal from './RefferalDetails/Modal';
+import { Stack } from 'rsuite';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -102,6 +103,13 @@ const headCells = [
         disablePadding: false,
         label: 'Validity',
     },
+    {
+        id: 'edit',
+        numeric: false,
+        disablePadding: false,
+        label: '',
+        noSort:true
+    },
 ];
 
 function EnhancedTableHead(props) {
@@ -133,18 +141,21 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        <TableSortLabel
-                            active={orderBy === headCell.id}
-                            direction={orderBy === headCell.id ? order : 'asc'}
-                            onClick={createSortHandler(headCell.id)}
-                        >
-                            {headCell.label}
-                            {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden}>
-                                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                                </Box>
-                            ) : null}
-                        </TableSortLabel>
+                        {
+                            !headCell?.noSort &&
+                            <TableSortLabel
+                                active={orderBy === headCell.id}
+                                direction={orderBy === headCell.id ? order : 'asc'}
+                                onClick={createSortHandler(headCell.id)}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
+                                    <Box component="span" sx={visuallyHidden}>
+                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                    </Box>
+                                ) : null}
+                            </TableSortLabel>
+                        }
                     </TableCell>
                 ))}
             </TableRow>
@@ -278,7 +289,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         // console.log(newPage);
-        router.replace(`/lead?page=${newPage + 1}`);
+        // router.replace(`/lead?page=${newPage + 1}`);
         // router.push(`/lead?page=${newPage + 1}`);
     };
 
@@ -289,7 +300,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
 
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
-        setPage(0);
+        setPage(1);
     };
 
     const handleChangeDense = (event) => {
@@ -319,8 +330,8 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
 
     const fetchTable = () => {
         setLoading(true)
-        ReferralApi.list({ limit: limit, page: page + 1 }).then((response) => {
-            console.log(response);
+        ReferralApi.list({ limit: limit, page: page }).then((response) => {
+            // console.log(response);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {
@@ -426,18 +437,31 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                     </TableBody>
                                 </Table>
                             </TableContainer>
-                            <TablePagination
-                                rowsPerPageOptions={[10, 15, 25]}
-                                component="div"
-                                count={list?.meta?.total || 0}
-                                rowsPerPage={list?.meta?.per_page || 0}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
+
                         </Paper>
                     </Box>
             }
+            <div className='table-pagination d-flex justify-content-end align-items-center'>
+
+                {
+                    list?.data?.length > 0 &&
+                    <div className='d-flex justify-content-between align-items-center'>
+                        <div className='select-row-box'>
+                            <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                                <MenuItem value={10}>10</MenuItem>
+                                <MenuItem value={15}>15</MenuItem>
+                                <MenuItem value={25}>25</MenuItem>
+                            </Select>
+                            <label>Rows per page</label>
+                        </div>
+                        <div>
+                            <Stack spacing={2}>
+                                <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                            </Stack>
+                        </div>
+                    </div>
+                }
+            </div>
         </>
     );
 }

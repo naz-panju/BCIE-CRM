@@ -15,7 +15,7 @@ function LeadDetail({ data, handleEdit, loading }) {
             <div className='lead-tabpanel-content-block-title'>
 
 
-                <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
 
                     <div className='lead-detail-title'>
                         Edit and Preview Details of Students
@@ -37,13 +37,13 @@ function LeadDetail({ data, handleEdit, loading }) {
                 loading ?
                     <div className='lead-tabpanel-content-item'>
 
-                        <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                             <div className="lead-details-list">
                                 <label><Skeleton variant="rectangular" width={130} height={20} /> </label>  <Skeleton variant="rectangular" width={250} height={20} />
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="lead-details-list">
                                 <label><Skeleton variant="rectangular" width={130} height={20} /> </label>  <Skeleton variant="rectangular" width={250} height={20} />
                             </div>
@@ -101,7 +101,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                     :
                     <div className='lead-tabpanel-content-item'>
 
-                        <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                             <div>
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Name </label> <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
@@ -114,7 +114,7 @@ function LeadDetail({ data, handleEdit, loading }) {
 
 
 
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
                             {
                                 data?.stage &&

@@ -80,7 +80,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
     }
 
     const handlePriorityChange = (id) => {
-        console.log(id);
+        // console.log(id);
         setSelectedPriority(id);
     }
 
@@ -103,7 +103,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
             // priority: selectedPriority,
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         if (lead_id) {
             dataToSubmit['lead_id'] = lead_id
@@ -269,7 +269,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                     <LoadingEdit item={items} />
                                     :
                                     <>
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Title</a>
                                                 <Grid className='mb-5 forms-data'>
@@ -283,7 +283,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
 
                                         {/* date */}
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                             <div className='application-input'>
 
                                                 <a className='form-text'>Due Date</a>
@@ -320,7 +320,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                         </div>
 
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Description</a>
                                                 {/* frm-text-conn-stl */}

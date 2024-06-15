@@ -69,7 +69,7 @@ function LeadTask({ lead_id }) {
         setLoading(false)
     }
 
-    console.log(list);
+    // console.log(list);
 
     useEffect(() => {
         fetchList()

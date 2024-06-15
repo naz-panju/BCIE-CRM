@@ -98,12 +98,12 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
 
 
     const onSubmit = (data) => {
-        console.log(selectedFile);
+        // console.log(selectedFile);
         if (!selectedFile) {
             toast.error('Please select a File')
         } else {
             setLoading(true)
-            console.log(data);
+            // console.log(data);
 
             const formData = new FormData()
 
@@ -141,7 +141,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
             }
 
             action.then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response?.status == 200 || response?.status == 201) {
                     handleClose()
                     toast.success(response?.data?.message)

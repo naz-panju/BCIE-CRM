@@ -365,7 +365,7 @@ const Sidebar = () => {
     });
 
     const handleButtonClick = () => {
-        // Toggle the state to add or remove the class
+        // Toggle the state to add or remove the className
         setSideBarActive(!sideBarActive)
         localStorage.setItem('settings', JSON.stringify({ sidebar: !sideBarActive }));
         setIsBodyClassAdded((prev) => !prev);
@@ -378,7 +378,7 @@ const Sidebar = () => {
             document.body.classList.remove('body-active');
         }
 
-        // Cleanup: remove the class when the component is unmounted
+        // Cleanup: remove the className when the component is unmounted
         return () => {
             document.body.classList.remove('body-active');
         };

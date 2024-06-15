@@ -74,7 +74,7 @@ export default function SubmitToUniversityModal({ details, editId, setEditId, re
     }
 
     const onSubmit = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         // setLoading(true)
 

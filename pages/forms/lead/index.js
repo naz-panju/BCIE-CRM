@@ -273,7 +273,7 @@ function Form({  }) {
         //     action = LeadApi.add(dataToSubmit)
         // }
         LeadApi.publicAdd(dataToSubmit).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.data?.data) {
 
                 toast.success('Lead Has Been Successfully Created')
@@ -298,7 +298,7 @@ function Form({  }) {
         // const response = await LeadApi.view({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
-            console.log(data);
+            // console.log(data);
 
             // console.log(`+${data?.phone_country_code}${data?.phone_number}`);
 

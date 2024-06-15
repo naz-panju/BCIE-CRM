@@ -72,7 +72,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
 
     const fetchSubStages = (e) => {
         return ListingApi.stages({ keyword: watch('stage')?.name }).then(response => {
-            console.log(response?.data?.data[0]?.sub_stages);
+            // console.log(response?.data?.data[0]?.sub_stages);
             if (typeof response.data.data !== "undefined") {
                 return response.data.data[0]?.sub_stages;
             } else {
@@ -84,7 +84,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
 
 
     const onSubmit = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         setLoading(true)
         // let dob = ''
@@ -102,7 +102,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
             dataToSubmit['stage_id'] = data?.subStage?.id
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         let action;
 
@@ -237,7 +237,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
                                     <LoadingEdit item={items} />
                                     :
                                     <>
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Select Stage</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -264,7 +264,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
 
                                         {
                                             watch('stage')?.sub_stages?.length > 0 &&
-                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'>Select Sub Stag</a>
 

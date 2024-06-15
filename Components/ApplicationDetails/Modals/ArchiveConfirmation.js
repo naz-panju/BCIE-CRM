@@ -21,7 +21,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function AlumniConfirmConfirmPopup({ ID, setID, setLoading, title, loading, details, getDetails }) {
 
-    console.log(ID);
+    // console.log(ID);
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 

@@ -96,8 +96,8 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
 
     const onSubmit = (data) => {
         setLoading(true)
-        console.log(data);
-        console.log(selectedFile)
+        // console.log(data);
+        // console.log(selectedFile)
 
         const formData = new FormData()
 
@@ -119,7 +119,7 @@ export default function LeadDocumentModal({ id, editId, setEditId, handleRefresh
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.data?.data) {
                 handleClose()
                 toast.success(editId > 0 ? 'Document has been successfully updated' : 'Document has been successfully added')

@@ -69,7 +69,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
 
     const handleUpload = () => {
         // Handle file upload logic here
-        console.log("Selected File:", selectedFile);
+        // console.log("Selected File:", selectedFile);
         // You can send the file to the server using fetch or any other method
     };
 
@@ -98,8 +98,8 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
 
     const onSubmit = (data) => {
         setLoading(true)
-        console.log(data);
-        console.log(selectedFile)
+        // console.log(data);
+        // console.log(selectedFile)
 
         const formData = new FormData()
 
@@ -124,7 +124,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.data?.data) {
                 handleClose()
                 toast.success(editId > 0 ? 'Document has been successfully updated' : 'Document has been successfully added')

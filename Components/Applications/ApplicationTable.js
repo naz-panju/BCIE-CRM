@@ -197,8 +197,25 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
+                {/* <TableCell padding="checkbox">
+                    <div className="form-group">
+                        <input id='html2'
+                            type='checkbox'
+                            color="primary"
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            // checked={rowCount > 0 && numSelected === rowCount}
+                            checked={numSelected > 0}
+                            onChange={onSelectAllClick}
+                            inputprops={{
+                                'aria-label': 'select all desserts',
+                            }}
+                        />
+                        <label htmlFor="html2"> </label>
+                    </div>
+                </TableCell> */}
 
                 {headCells.map((headCell) => (
+
                     <TableCell
                         key={headCell.id}
                         align={headCell.numeric ? 'left' : 'left'}
@@ -680,7 +697,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             assign_to_office_id: selectedBranch,
             stage_id: selectedstage,
             assigned_to_counsellor_id: selectedCreatedBy,
-            assign_to_office_id:selectedBranch,
+            assign_to_office_id: selectedBranch,
             course: watch('course'),
             application_number: watch('application_number'),
             student_code: watch('student_code'),
@@ -760,7 +777,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     const handleClickSubmit = () => {
         setsubmitLoading(true)
         ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setsubmitLoading(false)
@@ -805,6 +822,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
     // console.log(list);
 
+    // console.log(selected);
+
 
     return (
 
@@ -826,7 +845,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             <PortalPermissionModal editId={PortalId} setEditId={setPortalId} details={details} setDetails={setDetails} />
 
             <div className="filter_sec">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
                     <div>
                         <div className='form-group'>
@@ -1215,6 +1234,21 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 selected={isItemSelected}
                                                                 sx={{ cursor: 'pointer' }}
                                                             >
+                                                                {/* <TableCell className='checkbox-tb' padding="checkbox">
+                                                                    <div className="form-group">
+                                                                        <input
+                                                                            type='checkbox'
+                                                                            id={row?.id}
+                                                                            onClick={(event) => handleClick(event, row.id)}
+                                                                            color="primary"
+                                                                            checked={isItemSelected}
+                                                                            inputprops={{
+                                                                                'aria-labelledby': labelId,
+                                                                            }}
+                                                                        />
+                                                                        <label htmlFor={row?.id}> </label>
+                                                                    </div>
+                                                                </TableCell> */}
 
                                                                 <TableCell
                                                                     // onClick={() => handleDetailOpen(row?.id)}
@@ -1279,7 +1313,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
                                                                 <TableCell align="left">
                                                                     <Grid display={'flex'} alignItems={'center'}>
-                                                                        
+
                                                                         {/* <SummarizeOutlined fontSize='small' onClick={()=>handleDocOpen(row)} style={{cursor:'pointer'}} /> */}
                                                                         <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
                                                                             <MoreHorizOutlined sx={{ color: 'blue' }} />

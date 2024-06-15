@@ -695,7 +695,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
 
         ApplicationApi.list(params).then((response) => {
-            console.log(response);
+            // console.log(response);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {
@@ -750,7 +750,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const handleClickSubmit = () => {
         setsubmitLoading(true)
         ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setsubmitLoading(false)
@@ -769,7 +769,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const handleUniversitySubmit = () => {
         setsubmitLoading(true)
         ApplicationApi.submitToUniversity({ id: uniSubmitId }).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setsubmitLoading(false)
@@ -832,7 +832,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
 
             <div className="filter_sec">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
                     <div>
                         <div className='form-group'>

@@ -127,7 +127,7 @@ export default function DepositPaidIndex() {
     }
   }
 
-  const [isActive, setIsActive] = useState(false); // State to manage whether the active class should be applied
+  const [isActive, setIsActive] = useState(false); // State to manage whether the active className should be applied
   const [searchActive, setsearchActive] = useState(false)
 
   const toggleActive = () => {

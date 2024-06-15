@@ -42,7 +42,7 @@ const Header = ({ }) => {
   });
 
   const handleButtonClick = () => {
-    // Toggle the state to add or remove the class
+    // Toggle the state to add or remove the className
     setSideBarActive(!sideBarActive)
     localStorage.setItem('settings', JSON.stringify({ sidebar: !sideBarActive }));
     setIsBodyClassAdded((prev) => !prev);
@@ -68,7 +68,7 @@ const Header = ({ }) => {
   //     }
   // }, [sideBarActive]);
 
-  // Use a useEffect hook to add or remove the class on the body element
+  // Use a useEffect hook to add or remove the className on the body element
   useEffect(() => {
     if (sideBarActive) {
       document.body.classList.add('body-active');
@@ -76,7 +76,7 @@ const Header = ({ }) => {
       document.body.classList.remove('body-active');
     }
 
-    // Cleanup: remove the class when the component is unmounted
+    // Cleanup: remove the className when the component is unmounted
     return () => {
       document.body.classList.remove('body-active');
     };

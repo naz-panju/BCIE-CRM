@@ -711,10 +711,10 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
             params['deposit_paid'] = 0
         }
 
-        console.log('here');
+        // console.log('here');
 
         ApplicationApi.list(params).then((response) => {
-            console.log(response);
+            // console.log(response);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {
@@ -766,7 +766,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
     const handleClickSubmit = () => {
         setsubmitLoading(true)
         ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setsubmitLoading(false)
@@ -830,7 +830,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
             <PortalPermissionModal editId={PortalId} setEditId={setPortalId} details={details} setDetails={setDetails} />
 
             <div className="filter_sec">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
                     <div>
                         <div className='form-group'>

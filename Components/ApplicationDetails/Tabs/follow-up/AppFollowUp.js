@@ -62,7 +62,7 @@ export default function FollowUp({ lead_id, data }) {
             id: confirmId
         }
         FollowupApi.complete(dataToSubmit).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setconfirmId()

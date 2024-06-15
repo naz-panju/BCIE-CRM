@@ -73,7 +73,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     }
 
     const onSubmit = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         setLoading(true)
         // let dob = ''
@@ -92,7 +92,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
             dataToSubmit['stage_id'] = data?.subStage?.id
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         let action;
 
@@ -154,7 +154,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
         for (const item of stages) {
             // Check if details.sub_stages is a sub stage of the current item
             if (item.sub_stages.some(subStage => subStage?.id === detailsSubStages?.id)) {
-                console.log(item); // If found, return true
+                // console.log(item); // If found, return true
                 setValue('stage', item)
                 setsubStages(item?.sub_stages)
                 setValue('subStage', details?.stage)
@@ -164,7 +164,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     }
 
     const initialValues = () => {
-        console.log(details);
+        // console.log(details);
         // isSubStage(details?.stage)
         setValue('stage', details?.stage)
         setValue('note', details?.stage_note)
@@ -234,7 +234,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                     :
                                     <>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Select Stage</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -298,7 +298,7 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
                                             </Grid>
                                         }
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Note</a>
                                                 <Grid className='mb-5 forms-data' >

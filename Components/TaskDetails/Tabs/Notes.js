@@ -28,7 +28,7 @@ const TaskNotes = (props) => {
     const fetchNotes = () => {
         setLoading(true)
         TaskApi.listNotes({ limit: 50, id: props.id }).then((notes) => {
-            console.log(notes);
+            // console.log(notes);
             if (notes?.data?.data?.length > 0) {
                 setNotes(notes.data)
                 setLoading(false)
@@ -53,18 +53,18 @@ const TaskNotes = (props) => {
                 note: watch('note'),
             }
     
-            console.log(dataToSubmit);
+            // console.log(dataToSubmit);
             let action;
     
             if (editID > 0) {
                 dataToSubmit['id'] = editID
                 action = TaskApi.updateNote(dataToSubmit)
             } else {
-                console.log(dataToSubmit);
+                // console.log(dataToSubmit);
                 action = TaskApi.addNote(dataToSubmit)
             }
             action.then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response?.data) {
                     toast.success(editID > 0 ? 'Note has been successfully updated.' : 'Note has been successfully added.')
                     setSubmitLoading(false)

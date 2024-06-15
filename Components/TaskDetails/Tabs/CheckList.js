@@ -48,18 +48,18 @@ const CheckListTab = ({ id }) => {
             checklist: watch('check_note')
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
         let action;
 
         if (checkNoteEdit > 0) {
             dataToSubmit['id'] = checkNoteEdit
             action = TaskApi.updateChecklist(dataToSubmit)
         } else {
-            console.log(dataToSubmit);
+            // console.log(dataToSubmit);
             action = TaskApi.addChecklist(dataToSubmit)
         }
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || 201) {
                 toast.success(checkNoteEdit > 0 ? 'Checklist has been successfully updated.' : 'Checklist has been successfully added.')
                 fetchDetails()
@@ -107,7 +107,7 @@ const CheckListTab = ({ id }) => {
         })
     }
 
-    console.log(checkNotes);
+    // console.log(checkNotes);
 
     const handleCheck = (id) => {
         // console.log(id);

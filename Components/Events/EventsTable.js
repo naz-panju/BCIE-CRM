@@ -22,12 +22,13 @@ import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button, Grid } from '@mui/material';
+import { Button, Grid, MenuItem, Pagination, Select } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { Edit } from '@mui/icons-material';
 import { EventsApi } from '@/data/Endpoints/Events';
 import moment from 'moment';
 import EventDetailModal from './Details/Modal';
+import { Stack } from 'rsuite';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -103,6 +104,12 @@ const headCells = [
         numeric: true,
         disablePadding: false,
         label: 'End Date',
+    },
+    {
+        id: 'edit',
+        numeric: true,
+        disablePadding: false,
+        label: '',
     },
 ];
 
@@ -277,7 +284,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         // console.log(newPage);
-        router.replace(`/lead?page=${newPage + 1}`);
+        // router.replace(`/lead?page=${newPage + 1}`);
         // router.push(`/lead?page=${newPage + 1}`);
     };
 
@@ -288,7 +295,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
 
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
-        setPage(0);
+        setPage(1);
     };
 
     const handleChangeDense = (event) => {
@@ -318,7 +325,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
 
     const fetchTable = () => {
         setLoading(true)
-        EventsApi.list({ limit: limit, page: page + 1 }).then((response) => {
+        EventsApi.list({ limit: limit, page: page }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -425,18 +432,32 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
                                     </TableBody>
                                 </Table>
                             </TableContainer>
-                            <TablePagination
-                                rowsPerPageOptions={[10, 15, 25]}
-                                component="div"
-                                count={list?.meta?.total || 0}
-                                rowsPerPage={list?.meta?.per_page || 0}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                onRowsPerPageChange={handleChangeRowsPerPage}
-                            />
+
                         </Paper>
                     </Box>
             }
+
+            <div className='table-pagination d-flex justify-content-end align-items-center'>
+
+                {
+                    list?.data?.length > 0 &&
+                    <div className='d-flex justify-content-between align-items-center'>
+                        <div className='select-row-box'>
+                            <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                                <MenuItem value={10}>10</MenuItem>
+                                <MenuItem value={15}>15</MenuItem>
+                                <MenuItem value={25}>25</MenuItem>
+                            </Select>
+                            <label>Rows per page</label>
+                        </div>
+                        <div>
+                            <Stack spacing={2}>
+                                <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                            </Stack>
+                        </div>
+                    </div>
+                }
+            </div>
         </>
     );
 }

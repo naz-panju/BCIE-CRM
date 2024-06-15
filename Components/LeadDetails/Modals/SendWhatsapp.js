@@ -171,8 +171,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
         }
 
         action.then((response) => {
-            console.log(response);
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success('Whatsapp Message Sent Successfully');
                 reset()
@@ -224,7 +223,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
         setTextBoxLoading(true)
         setValue('template', data || '')
         WhatsAppTemplateApi.getTemplate({ template_id: data?.id, lead_id: lead_id }).then((response) => {
-            console.log(response);
+            // console.log(response);
 
             if (response?.status == 200 || response?.status == 201) {
                 setValue('body', response?.data?.data?.content || '')

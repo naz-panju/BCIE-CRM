@@ -197,7 +197,7 @@ export default function FollowUpModal({ lead_id, editId, setEditId, refresh, set
     };
 
     const handleAssignedToChange = (data) => {
-        console.log(data);
+        // console.log(data);
         setValue('assigned_to', data || '')
     }
 

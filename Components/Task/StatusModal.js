@@ -74,7 +74,7 @@ const StatusModal = (props) => {
                 status_note: statusNote
             });
 
-        console.log(change);
+        // console.log(change);
 
         if (change?.data?.message || change?.status == 200) {
             toast.dismiss(loadingToast);
@@ -95,7 +95,7 @@ const StatusModal = (props) => {
 
     const fetchStatus = async () => {
         let history = await TaskApi.statusTimeline({ id: dataSet?.id });
-        console.log(history);
+        // console.log(history);
         if (history?.statusText === "OK") {
             setHistory(history?.data?.data);
         }

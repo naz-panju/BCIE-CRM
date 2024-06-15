@@ -59,12 +59,12 @@ const Editor = (props) => {
     // };
 
     const uploadCallback = async (file) => {
-        console.log(file);
+        // console.log(file);
         const data = new FormData();
         data.append('file', file);
         try {
             const response = await ImageUploadApi.upload(data);
-            console.log(response);
+            // console.log(response);
             return { data: { link: response.data.data.file_path } };
         } catch (error) {
             console.error('Image upload failed:', error);

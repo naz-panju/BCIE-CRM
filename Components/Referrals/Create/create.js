@@ -163,7 +163,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Referral Link Has Been Successfully Updated' : 'Referral Link Has Been Successfully Created')
                 reset()

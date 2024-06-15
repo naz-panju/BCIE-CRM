@@ -172,7 +172,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success('Email Sent Successfully');
                 setRefresh()

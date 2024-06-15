@@ -140,9 +140,9 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
             formData.append('attachment_ids[]',null )
         }
 
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]); // Iterate through form data and log key-value pairs
-        }
+        // for (var pair of formData.entries()) {
+        //     console.log(pair[0] + ': ' + pair[1]); // Iterate through form data and log key-value pairs
+        // }
 
         let action;
 
@@ -154,7 +154,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Email Template Has Been Successfully Updated' : 'Email Template Has Been Successfully Created')
                 reset()
@@ -332,7 +332,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                         :
                                         <>
 
-                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <Grid className='mb-5 forms-data flex items-center'>
 
@@ -345,7 +345,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                 </div>
                                             </div>
 
-                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'>Template Name</a>
                                                     <Grid className='mb-5 forms-data'>
@@ -359,7 +359,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                             </div>
 
 
-                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'>Subject</a>
                                                     <Grid className='mb-5 forms-data'>
@@ -372,7 +372,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                 </div>
                                             </div>
 
-                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'> CC</a>
                                                     <Grid className='mb-5 forms-data'>
@@ -392,7 +392,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                 <MyEditor  name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
                                             </Grid> */}
 
-                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'>Body</a>
                                                     <Grid className='mb-5 forms-data'>
@@ -415,7 +415,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                 </div>
                                             </div>
 
-                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'>Body Footer</a>
                                                     <Grid className='mb-5 forms-data'>
@@ -520,7 +520,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
                                             </Grid>
 
-                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
 
                                                     <Grid className='mb-5 forms-data flex items-center'>

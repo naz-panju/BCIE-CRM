@@ -442,7 +442,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
 
 
     LeadApi.list(params).then((response) => {
-      console.log(response);
+      // console.log(response);
       setList(response?.data)
       setLoading(false)
     }).catch((error) => {
@@ -536,7 +536,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     <>
 
       <div className="filter_sec">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
         <div>
             <div className='form-group' >

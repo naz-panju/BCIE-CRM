@@ -178,7 +178,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
     const handleSubmit = () => {
         setdeleteLoading(true)
         ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setdeleteLoading(false)
@@ -266,7 +266,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
-                    <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
 
                         <div className='lead-detail-title'>
                             Find Universities,Courses and more

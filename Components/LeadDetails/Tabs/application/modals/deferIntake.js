@@ -183,7 +183,7 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
                                     <LoadingEdit item={items} />
                                     :
                                     <>
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Intake</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -205,7 +205,7 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
                                                 </Grid>
                                             </div>
                                         </div>
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Note</a>
                                                 <Grid className='mb-5 forms-data' >

@@ -136,7 +136,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Payment has been Updated Successfully' : 'Payment has been Added Successfully')
                 reset()
@@ -250,7 +250,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                     :
                                     <>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Amount</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -275,7 +275,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                             </div>
                                         </div>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Mode of Payment</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -286,7 +286,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                             </div>
                                         </div>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Details</a>
                                                 <Grid className='mb-5 forms-data' >

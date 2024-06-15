@@ -270,7 +270,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
     const [uploadLoading, setUploadLoading] = useState(false);
     const onSubmit = (data) => {
-        console.log(selectedFile);
+        // console.log(selectedFile);
         if (!selectedFile) {
             toast.error('Please select a File')
         } else {
@@ -317,7 +317,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
             }
 
             action.then((response) => {
-                console.log(response);
+                // console.log(response);
                 if (response?.status == 200 || response?.status == 201) {
                     handleDocumentClose()
                     toast.success(response?.data?.message)

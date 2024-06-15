@@ -693,7 +693,7 @@ const fetchBranches = (e) => {
 
 
     ApplicationApi.list(params).then((response) => {
-      console.log(response);
+      // console.log(response);
       setList(response?.data)
       setLoading(false)
     }).catch((error) => {
@@ -745,7 +745,7 @@ const fetchBranches = (e) => {
   const handleClickSubmit = () => {
     setsubmitLoading(true)
     ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
-      console.log(response);
+      // console.log(response);
       if (response?.status == 200 || response?.status == 201) {
         toast.success(response?.data?.message)
         setsubmitLoading(false)
@@ -801,7 +801,7 @@ const fetchBranches = (e) => {
 
 
       <div className="filter_sec">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
           <div>
             <div className='form-group'>

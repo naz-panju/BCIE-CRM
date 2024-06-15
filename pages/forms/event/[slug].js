@@ -60,7 +60,7 @@ function EventForm({ data }) {
 
 
         EventRegistrationApi.add(dataToSubmit).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.data?.data) {
                 toast.success('Registered Successfully')
                 setValue('phone', `+${code}`)

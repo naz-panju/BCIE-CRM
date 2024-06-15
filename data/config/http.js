@@ -122,7 +122,7 @@ http.interceptors.response.use(
         // console.log(response);
         // Check if the response contains a specific message
         if (response?.response?.status === 401 || response?.response?.statusText === 'Unauthorized') {
-            console.log(response);
+            // console.log(response);
             console.log("Sign out now");
             signOut();
         }

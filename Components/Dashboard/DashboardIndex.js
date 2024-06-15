@@ -97,7 +97,7 @@ function DashboardIndex() {
     // console.log(session?.data);
     const fetchCounsellors = (e) => {
         return ListingApi.users({ keyword: e, role_id: 5 }).then(response => {
-            console.log(response);
+            // console.log(response);
             if (typeof response.data.data !== "undefined") {
                 if (!selectedCounsellor) {
                     setSelectedCounsellor({ name: 'All', id: session?.data?.user?.id })

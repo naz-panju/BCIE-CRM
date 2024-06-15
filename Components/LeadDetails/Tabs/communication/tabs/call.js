@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Grid, MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Grid, MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
 import { AttachmentOutlined, CachedOutlined, Delete, Edit } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
@@ -22,7 +22,7 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh, page,
     const handleDelete = () => {
         setdeleteLoading(true)
         PhoneCallApi.delete({ id: deleteId }).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 setdeleteLoading(false)
@@ -51,9 +51,6 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh, page,
         // setPage(1);
     };
 
-    console.log(page);
-
-
 
     return (
 
@@ -77,9 +74,15 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh, page,
                                             <Table>
                                                 <TableHead>
                                                     <TableRow>
-                                                        <TableCell >
+                                                        {/* <TableCell >
                                                             <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
                                                                 Call Type
+                                                            </Typography>
+
+                                                        </TableCell> */}
+                                                        <TableCell>
+                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                                Summary
                                                             </Typography>
 
                                                         </TableCell>
@@ -88,12 +91,7 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh, page,
                                                                 Date and Time
                                                             </Typography>
                                                         </TableCell>
-                                                        <TableCell>
-                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                Summary
-                                                            </Typography>
 
-                                                        </TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -109,9 +107,39 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh, page,
                                                                         <b>{obj?.subject}</b>
                                                                 }
                                                             </TableCell> */}
-                                                                    <TableCell onClick={() => handleDetailOpen(obj?.id)} sx={{ cursor: 'pointer' }} >{obj?.type}</TableCell>
+                                                                    {/* <TableCell onClick={() => handleDetailOpen(obj?.id)} >
+
+                                                                        {obj?.type}
+                                                                    </TableCell> */}
+
+                                                                    <TableCell sx={{
+                                                                        cursor: 'pointer',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        paddingLeft: '0px'
+
+                                                                    }}>
+                                                                        <Tooltip title={obj?.type}>
+                                                                            <div style={{
+                                                                                padding: 0,
+                                                                                width: '3px',  // Width of the vertical line
+                                                                                borderLeft: obj?.type == 'Outbound' ? '3px solid blue' : '3px solid green',  // Vertical line
+                                                                                height: '23px',  // Full height of the TableCell
+                                                                                marginRight: '8px',  // Space between the line and the text
+                                                                                marginLeft: '0%'
+                                                                            }}></div>
+                                                                        </Tooltip>
+                                                                        {
+                                                                            obj?.call_summary?.length > 50 ?
+                                                                               <a>{ obj?.call_summary?.slice(0, 50) +'...'}</a>
+                                                                                :
+                                                                             <a onClick={() => handleDetailOpen(obj?.id)} className='a_hover'> {obj?.call_summary}</a>
+                                                                        }
+                                                                        {/* {obj?.call_summary} */}
+                                                                    </TableCell>
+
                                                                     <TableCell>{moment(obj?.date_time_of_call).format('DD-MM-YYYY HH:mm')}</TableCell>
-                                                                    <TableCell>{obj?.call_summary}</TableCell>
+
                                                                     <TableCell>
                                                                         <Edit onClick={() => handleEdit(obj?.id)} fontSize='small' sx={{ color: 'blue', cursor: 'pointer' }} />
                                                                         <Delete onClick={() => handleDeleteOpen(obj?.id)} fontSize='small' sx={{ color: 'red', cursor: 'pointer', ml: 2 }} />

@@ -17,7 +17,7 @@ function StudentDetail({ data, handleEdit, loading }) {
     return (
         <div className='lead-tabpanel-content-block'>
             <div className='lead-tabpanel-content-block-title'>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
                     <div>
                         {
@@ -98,7 +98,7 @@ function StudentDetail({ data, handleEdit, loading }) {
                     </div>
                     :
                     <div className='lead-tabpanel-content-item'>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
 
                             {/* <div className="lead-details-list">
@@ -118,9 +118,7 @@ function StudentDetail({ data, handleEdit, loading }) {
                             <div className="lead-details-list">
                                 <label className='title'>Mobile Number  </label> +{student?.phone_number}
                             </div>
-                            {
-                                console.log(student)
-                            }
+                          
                             <div className="lead-details-list">
                                 <label className='title'>Alternate Mobile Number </label>
                                 {

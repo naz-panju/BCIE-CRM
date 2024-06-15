@@ -53,7 +53,7 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
 
 
     const onSubmit = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         setLoading(true)
         let date_and_time = ''
@@ -68,7 +68,7 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
             call_summary: data?.summary,
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         let action;
 
@@ -80,7 +80,7 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(`Phone Call Summary Has Been Successfully ${editId > 0 ? 'Updated' : 'Created'} `)
                 handleRefresh()
@@ -175,7 +175,7 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
                                     :
                                     <>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Type</a>
 
@@ -222,7 +222,7 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
                                             </div>
                                         </div>
 
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Call Summary</a>
 

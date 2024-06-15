@@ -118,7 +118,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
 
 
     const onSubmit = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         setLoading(true)
         let dob = ''
@@ -144,7 +144,7 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
             whatsapp_number: data?.whatsapp
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         let action;
 

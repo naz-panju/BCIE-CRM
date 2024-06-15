@@ -65,7 +65,7 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
 
     const handleUpload = () => {
         // Handle file upload logic here
-        console.log("Selected File:", selectedFile);
+        // console.log("Selected File:", selectedFile);
         // You can send the file to the server using fetch or any other method
     };
 
@@ -94,8 +94,8 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
 
     const onSubmit = (data) => {
         setLoading(true)
-        console.log(data);
-        console.log(selectedFile)
+        // console.log(data);
+        // console.log(selectedFile)
 
         const formData = new FormData()
 

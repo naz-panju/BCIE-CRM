@@ -159,7 +159,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         }
 
         action.then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Application has been Updated Successfully' : 'Applied Successfully')
                 reset()
@@ -247,7 +247,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         const response = await ApplicationApi.view({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
-            console.log(data);
+            // console.log(data);
 
             setValue('country', data?.country)
             setValue('university', data?.university)

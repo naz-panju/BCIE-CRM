@@ -366,6 +366,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   };
 
 
+
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
@@ -560,7 +561,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     <>
 
       <div className="filter_sec">
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
           <div>
             <div className='form-group' >
