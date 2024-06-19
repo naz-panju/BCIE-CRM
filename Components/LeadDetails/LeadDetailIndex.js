@@ -25,7 +25,8 @@ import CreateTask from '../Task/Create/Create';
 import AssignLeadModal from '../Lead/Modal/AssignModal';
 import UnArchiveConfirmPopup from './Modals/UnarchiveConfirmation';
 import { useSession } from 'next-auth/react';
-
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 function LeadDetails() {
 
@@ -227,11 +228,11 @@ function LeadDetails() {
   }
 
   const [toNoteTab, setToNoteTab] = useState(false)
-  const switchNoteTab=()=>{
+  const switchNoteTab = () => {
     setToNoteTab(true)
   }
 
-  const afterSwitchNoteTab=(func)=>{
+  const afterSwitchNoteTab = (func) => {
     func(2)
     setToNoteTab(false)
   }
@@ -252,6 +253,8 @@ function LeadDetails() {
   useEffect(() => {
     getStageList()
   }, [])
+
+  const gradientId = 'myGradient';
 
   return (
 
@@ -484,14 +487,68 @@ function LeadDetails() {
                         }
                         {/* <h5>25%</h5> */}
 
-                        <label>Complete</label>
+                        {
+                          stages?.length > 0 &&
+                          <label>Complete</label>
+                        }
                       </div>
 
 
                       {/* <RadialBarChartComponent /> */}
 
+                      {/* <CircularProgressbar value={30} />; */}
 
-                      <svg xmlns="http://www.w3.org/2000/svg" width="129" height="129" viewBox="0 0 129 129" fill="none">
+                      <div style={{ width: 129, height: 129 }}>
+
+                        {
+                          stages?.map((obj, index) => {
+                            let ind;
+                            ind = stages.findIndex(obj =>
+                              obj.sub_stages.some(subStage =>
+                                subStage.name === details?.stage.name
+                              ) || obj.name === details?.stage.name
+                            );
+                            let finalIndex;
+                            if (ind >= 0) {
+                              finalIndex = ind + 1
+                            } else {
+                              ind = stages.findIndex(obj => obj?.name == details?.stage?.name)
+                              finalIndex = ind + 1
+                            }
+
+                            return (
+
+                              ind == index &&
+                              // <h5 key={index}>{finalIndex / stages?.length * 100}%</h5>
+                              <React.Fragment key={index}>
+                                <CircularProgressbar
+                                  value={finalIndex / stages?.length * 100}
+                                  strokeWidth={5}
+                                  styles={buildStyles({
+                                    pathColor: 'url(#newGradient)',
+                                    trailColor: 'transparent',
+                                    // strokeLinecap: 'butt',
+                                    pathTransitionDuration: 0.5,
+                                    pathTransition: 'none',
+                                    // rotation: 0.75,  // Adjust this value to start the progress from the top
+                                  })}
+                                />
+                                <svg width="0" height="0">
+                                  <defs>
+                                    <linearGradient id="newGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" stopColor="#04FFFF" />
+                                      <stop offset="100%" stopColor="#0029FF" />
+                                    </linearGradient>
+                                  </defs>
+                                </svg>
+                              </React.Fragment>
+                            )
+                          })
+                        }
+
+                      </div>
+
+                      {/* <svg xmlns="http://www.w3.org/2000/svg" width="129" height="129" viewBox="0 0 129 129" fill="none">
                         <g filter="url(#filter0_d_1041_732)">
                           <path fillRule="evenodd" clipRule="evenodd" d="M64.5 10.05C75.2692 10.05 85.7965 13.2434 94.7508 19.2265C103.705 25.2095 110.684 33.7134 114.805 43.6629C118.926 53.6123 120.005 64.5604 117.904 75.1227C115.803 85.6849 110.617 95.387 103.002 103.002C95.387 110.617 85.6849 115.803 75.1227 117.904C64.5604 120.005 53.6123 118.926 43.6629 114.805C33.7134 110.684 25.2095 103.705 19.2265 94.7508C13.2434 85.7965 10.05 75.2692 10.05 64.5H4C4 66.6155 4.1109 68.7225 4.33023 70.813C5.3515 80.5471 8.72355 89.9218 14.1961 98.112C20.8439 108.061 30.2927 115.816 41.3476 120.395C52.4026 124.974 64.5671 126.172 76.3029 123.837C88.0388 121.503 98.8189 115.741 107.28 107.28C115.741 98.8189 121.503 88.0388 123.837 76.3029C126.172 64.5671 124.974 52.4026 120.395 41.3476C115.816 30.2927 108.061 20.8439 98.112 14.1961C89.9218 8.72355 80.5471 5.3515 70.813 4.33023C68.7225 4.1109 66.6155 4 64.5 4V10.05Z" fill="url(#paint0_linear_1041_732)" />
                         </g>
@@ -511,11 +568,7 @@ function LeadDetails() {
                             <stop offset="1" stopColor="#0029FF" />
                           </linearGradient>
                         </defs>
-                      </svg>
-
-
-
-
+                      </svg> */}
 
                     </div>
 
@@ -754,7 +807,7 @@ function LeadDetails() {
                     <div className='d-flex align-items-center justify-content-between'>
                       <div>
                         <span>Note</span>
-                        <h5 className='a_hover' style={{cursor:'pointer'}} onClick={switchNoteTab}>
+                        <h5 className='a_hover' style={{ cursor: 'pointer' }} onClick={switchNoteTab}>
                           {details?.latest_lead_note?.note ?
                             details.latest_lead_note.note.length > 20 ?
                               <Tooltip title={details.latest_lead_note.note}>

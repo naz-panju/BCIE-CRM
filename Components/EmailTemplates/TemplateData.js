@@ -24,6 +24,8 @@ function TemplateData({ handleToggleTable, setValue, body }) {
         { title: 'Branch', key: "{{17}}" },
         { title: 'Stage', key: "{{18}}" },
         { title: 'Student ID', key: "{{19}}" },
+        { title: 'Assigned Counselor Address', key: "{{20}}" },
+        { title: 'Assigned Office Address', key: "{{21}}" },
         { title: 'Applied Country', key: "{{30}}" },
         { title: 'Applied University', key: "{{31}}" },
         { title: 'Applied Course Level', key: "{{32}}" },
@@ -34,7 +36,8 @@ function TemplateData({ handleToggleTable, setValue, body }) {
         { title: 'Application Stage', key: "{{37}}" },
         { title: 'Application Number', key: "{{38}}" },
         { title: 'Deposit Paid', key: "{{39}}" },
-        { title: 'Deposit Paid On', key: "{{40}}" }
+        { title: 'Deposit Paid On', key: "{{40}}" },
+        { title: 'Application Assigned App Coordinator Address', key: "{{41}}" }
     ];
 
     const [searchKey, setSearchKey] = useState('');
@@ -81,7 +84,7 @@ function TemplateData({ handleToggleTable, setValue, body }) {
                 </div>
             </div>
 
-            <div className=''>
+            <div className='email-template-div'>
                 <TableContainer>
                     <Table>
                         <TableHead>

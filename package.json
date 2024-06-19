@@ -43,6 +43,7 @@
     "next-auth": "^4.24.6",
     "react": "^18",
     "react-apexcharts": "^1.4.1",
+    "react-circular-progressbar": "^2.1.0",
     "react-dom": "^18",
     "react-draft-wysiwyg": "^1.15.0",
     "react-hook-form": "^7.50.1",
