@@ -362,7 +362,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                         <div className='application-input'>
                                             <a className='form-text' > To</a>
                                             <Grid className='mb-5 forms-data  '>
-                                                <TextInput  disabled control={control} name="to"
+                                                <TextInput disabled control={control} name="to"
                                                     value={watch('to')} />
                                                 {errors.to && <span className='form-validation'>{errors.to.message}</span>}
                                             </Grid>
@@ -434,7 +434,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                             </Grid>
                                         } */}
                                         <div className='application-input'>
-                                            
+
                                             <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container >
                                                 <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
                                                     {/* <label htmlFor="file-input"> */}
@@ -477,16 +477,16 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                             } */}
                                             </Grid>
                                         </div>
-
                                         {
                                             attachmentFiles?.length > 0 &&
                                             <Grid>
                                                 <span style={{ fontSize: '16px' }}>Student Documents</span>
                                                 <List>
                                                     {attachmentFiles?.map((document, index) => (
+
                                                         <ListItem key={index} className='list-item-mail ' >
                                                             {/* <ListItemButton > */}
-                                                            <ListItemText sx={{ cursor: 'pointer' }} onClick={() => handleDocumentOpen(document?.file)} primary={document?.title || document?.document_template?.name} />
+                                                            <ListItemText sx={{ cursor: 'pointer' }} onClick={() => handleDocumentOpen(document?.file || document?.attachment)} primary={document?.title || document?.document_template?.name || trimUrlAndNumbers(document?.file_path)} />
                                                             {/* </ListItemButton> */}
                                                         </ListItem>
                                                     ))}

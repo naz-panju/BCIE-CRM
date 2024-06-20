@@ -5,6 +5,8 @@ import React from 'react'
 
 function Details({ data, loading }) {
 
+    // console.log(data);
+
 
     return (
         loading ?
@@ -149,14 +151,10 @@ function Details({ data, loading }) {
                 <Grid container style={{ marginBottom: '10px' }}>
                     <Grid item xs={6} sm={6}>
                         <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Due Date:
+                            Created By:
                         </Typography>
                         <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {
-                                data?.due_date ?
-                                moment(data?.due_date).format("DD-MM-YYYY")
-                                :'NA'
-                            }
+                            {data?.createdBy?.name}
                         </Typography>
                     </Grid>
                     <Grid item xs={6} sm={6}>
@@ -170,6 +168,23 @@ function Details({ data, loading }) {
                             }
                         </Typography>
                     </Grid>
+                </Grid>
+                <Divider sx={{ mb: 1 }} />
+
+                <Grid container style={{ marginBottom: '10px' }}>
+                    <Grid item xs={6} sm={6}>
+                        <Typography variant="" style={{ fontWeight: 'bold' }}>
+                            Due Date:
+                        </Typography>
+                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
+                            {
+                                data?.due_date ?
+                                    moment(data?.due_date).format("DD-MM-YYYY")
+                                    : 'NA'
+                            }
+                        </Typography>
+                    </Grid>
+
                 </Grid>
                 <Divider sx={{ mb: 1 }} />
 

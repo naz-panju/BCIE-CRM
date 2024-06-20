@@ -13,7 +13,7 @@ import SendMail from '../../Modals/SendMail';
 import { useSession } from 'next-auth/react';
 
 
-export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallRefresh, setphoneCallRefresh, leadData }) {
+export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallRefresh, setphoneCallRefresh, leadData,setDetailRefresh }) {
 
     const session = useSession()
 
@@ -184,6 +184,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
     }
 
     const handleMailRefresh = () => {
+        setDetailRefresh(!refresh)
         getSummary()
         setActiveTab(0)
         fetchList()
@@ -194,6 +195,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
     }
 
     const handlePhoneRefresh = () => {
+        setDetailRefresh(!refresh)
         getCallSummary()
         fetchCallList()
         setActiveTab(2)

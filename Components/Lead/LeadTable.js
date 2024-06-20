@@ -252,7 +252,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive }) {
+export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive,unassign }) {
 
   const router = useRouter();
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
@@ -352,8 +352,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     // console.log(newPage);
-    // router.push(`/lead?page=${newPage + 1}`);
-    router.replace(`/lead?page=${newPage}`);
+    // router.push(`/lead?page=${newPage + 1}`)
+    if(unassign){
+      router.replace(`/un-assigned-leads?page=${newPage}`);
+    }else{
+      router.replace(`/lead?page=${newPage}`);
+    }
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -460,6 +464,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       page: page
     }
 
+    if(unassign){
+      params['unassigned']=1
+    }
+
     if (range[0]) {
       params['from'] = moment(range[0]).format('YYYY-MM-DD')
       params['to'] = moment(range[1]).format('YYYY-MM-DD')
@@ -467,7 +475,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
 
     LeadApi.list(params).then((response) => {
-      // console.log(response);
+      console.log(response);
       setList(response?.data)
       setLoading(false)
     }).catch((error) => {

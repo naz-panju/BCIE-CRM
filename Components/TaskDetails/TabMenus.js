@@ -49,7 +49,7 @@ function a11yProps(index) {
     };
 }
 
-export default function TaskDetailTabs({ id, close ,archiveRefresh}) {
+export default function TaskDetailTabs({ id, close, archiveRefresh }) {
     const [value, setValue] = React.useState(0);
     const [activeTab, setActiveTab] = useState(0);
     const [details, setDetails] = useState()
@@ -77,6 +77,37 @@ export default function TaskDetailTabs({ id, close ,archiveRefresh}) {
         TaskApi.archive(dataToSubmit).then((response) => {
             if (response?.status === 200 || response?.status === 201) {
                 toast.success('Task has been Archived')
+                setArchiveId()
+                archiveRefresh()
+                setArchiveLoading(false)
+                close()
+                // handleClose()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setArchiveId()
+                setArchiveLoading(false)
+            }
+        }).catch((error) => {
+            console.log(error);
+            toast.error(error?.response?.data?.message)
+            setArchiveLoading(false)
+        })
+
+    }
+
+    const [reOpenId, setreOpenId] = useState()
+    const handleReopen = () => {
+        setreOpenId(taskId)
+    }
+    const reOpen = () => {
+        setArchiveLoading(true)
+        let dataToSubmit = {
+            id: reOpenId
+        }
+
+        TaskApi.reopen(dataToSubmit).then((response) => {
+            if (response?.status === 200 || response?.status === 201) {
+                toast.success(response?.data?.message)
                 setArchiveId()
                 archiveRefresh()
                 setArchiveLoading(false)
@@ -141,6 +172,8 @@ export default function TaskDetailTabs({ id, close ,archiveRefresh}) {
     return (
         <>
             <ConfirmPopup loading={archiveLoading} ID={archiveId} setID={setArchiveId} clickFunc={archiveTask} title={'Do you want to Archive this Task?'} />
+            <ConfirmPopup loading={archiveLoading} ID={reOpenId} setID={setreOpenId} clickFunc={reOpen} title={'Do you want to Un Archive this Task?'} />
+
 
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -150,10 +183,15 @@ export default function TaskDetailTabs({ id, close ,archiveRefresh}) {
                         ))}
                     </Tabs>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'end'}>
-                        {/* {
-                            details?.status == 'Completed' &&
+                        {
+                            (details?.status == 'Completed' && details?.archived != 1) &&
                             <Button onClick={handleConfirmArchive} size='small' sx={{ textTransform: 'none', mr: 2, height: '28px' }} className='bg-sky-500' variant='contained'><Archive sx={{ mr: 1 }} fontSize='small' /> Archive</Button>
-                        } */}
+                        }
+                        {
+                            details?.archived == 1 &&
+                            <Button onClick={handleReopen} size='small' sx={{ textTransform: 'none', mr: 2, height: '28px' }} className='bg-sky-500' variant='contained'><Archive sx={{ mr: 1 }} fontSize='small' /> Un Archive</Button>
+                        }
+
 
                         <IconButton
                             onClick={close}

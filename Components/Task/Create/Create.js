@@ -242,7 +242,6 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                     </Grid>
 
 
-                    <hr />
                     <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>

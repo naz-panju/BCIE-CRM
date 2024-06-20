@@ -2,16 +2,13 @@ import React, { useState } from 'react'
 import { styled, alpha } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import Button from '@mui/material/Button';
-import LeadTable from './LeadTable';
-import CreateLead from './Create/Create';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
-import AssignLeadModal from './Modal/AssignModal';
-import { DownloadOutlined, GroupsOutlined, ImportExportOutlined, PersonAddAlt1Outlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import Tooltip from '@mui/material/Tooltip';
-import BulkUpload from './Modal/Bulkupload';
+import AssignLeadModal from '../Lead/Modal/AssignModal';
+import EnhancedTable from '../Lead/LeadTable';
 
 
 
@@ -56,7 +53,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function CustomizedMenus() {
+export default function UnAssignedLeads() {
 
   const router = useRouter();
 
@@ -219,31 +216,17 @@ export default function CustomizedMenus() {
   return (
 
     <>
-      <CreateLead from='lead' editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <AssignLeadModal assignToUser={assignToUser} setassignToUser={setassignToUser} single={singleAssign} setsingle={setsingleAssign} selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} handlePopClose={handleClose} />
-      <BulkUpload editId={uploadId} setEditId={setuploadId} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>
-            <h1>Lead Manager</h1>
+            <h1>Un Assigned Leads</h1>
 
             <Grid display={'flex'} >
 
               <Grid display={'flex'}>
 
-                {/* <Tooltip title={'Add Lead'}> */}
-                <Button onClick={toggleActive} className='search_btn'>
-                  <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 20L15.6569 15.6569M15.6569 15.6569C17.1046 14.2091 18 12.2091 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C12.2091 18 14.2091 17.1046 15.6569 15.6569Z" stroke="black" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
-                  </svg>
-                </Button>
-                <Button sx={{ mr: 2 ,textTransform:'none'}} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
-                  <PersonAddAlt1Outlined fontSize='small' /> Add Lead
-                </Button>
-
-                <Button sx={{ mr: 2,textTransform:'none' }} variant='outlined' onClick={handleUploadOpen} className='add_lead_btn'>
-                  <DownloadOutlined fontSize='small' /> Import Leads
-                </Button>
+              
 
                 <Tooltip title={selected?.length === 0 && 'Please select one or more Lead'}>
 
@@ -278,7 +261,7 @@ export default function CustomizedMenus() {
         </div>
 
         <div className={`content-block lead-table-cntr ${isActive ? 'active' : ''}`}>
-          <LeadTable handleEditAssign={handleEditAssign} openAssign={handleSigleAssign} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} selected={selected} setSelected={setSelected} searchType={watch('searchType')} nameSearch={nameSearch} emailSearch={emailSearch} phoneSearch={phoneSearch} userIdSearch={userIdSearch} searchActive={searchActive} />
+          <EnhancedTable unassign={true} handleEditAssign={handleEditAssign} openAssign={handleSigleAssign} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} selected={selected} setSelected={setSelected} searchType={watch('searchType')} nameSearch={nameSearch} emailSearch={emailSearch} phoneSearch={phoneSearch} userIdSearch={userIdSearch} searchActive={searchActive} />
         </div>
       </section>
     </>

@@ -114,7 +114,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
     },
     {
       label: 'Communication Logs',
-      component: <LeadCommunicationLog leadData={data} refresh={refresh} from='lead' lead_id={data?.id} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} />,
+      component: <LeadCommunicationLog leadData={data} refresh={refresh} setDetailRefresh={setRefresh} from='lead' lead_id={data?.id} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} />,
       icon: <ChatBubbleOutlineIcon />
     },
     {

@@ -18,6 +18,7 @@ import { StudentApi } from '@/data/Endpoints/Student';
 import toast from 'react-hot-toast';
 import DateTime from '@/Form/DateTime';
 import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
+import CreateTask from '@/Components/Task/Create/Create';
 
 const scheme = yup.object().shape({
     summary: yup.string().required("Call Summary is Required"),
@@ -136,6 +137,14 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
         setDataLoading(false)
     }
 
+    const [taskId, settaskId] = useState()
+    const handleTaskOpen = () => {
+        settaskId(0)
+    }
+
+    const taskFunc = () => {
+
+    }
 
 
     useEffect(() => {
@@ -149,6 +158,9 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
 
     return (
         <div>
+
+            <CreateTask lead_id={lead_id} from={'lead'} editId={taskId} setEditId={settaskId} handleRefresh={taskFunc} />
+
             <Drawer
                 anchor={anchor}
                 open={open}
@@ -162,7 +174,7 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
                             </svg>
                         </a>
                         <a className='back_modal_head'>{editId == 0 ? 'Add Phone Call Summary' : 'Edit Phone Call Summary'}</a>
-
+                        <Button onClick={handleTaskOpen} className='bg-sky-700' sx={{ml:'auto',textTransform:'none'}} variant='contained'>Add Task</Button>
                     </Grid>
                     <hr />
                     <div className='form-data-cntr'>

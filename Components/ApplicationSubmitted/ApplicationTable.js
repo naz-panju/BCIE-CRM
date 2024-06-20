@@ -502,7 +502,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         // console.log(newPage);
-        router.replace(`/applications?page=${newPage}`);
+        router.replace(`/applications-submitted?page=${newPage}`);
         // router.push(`/lead?page=${newPage + 1}`);
     };
 
@@ -681,7 +681,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
             submitted: 1,
             country_id: selectedCountry,
             university_id: selectedUniversity,
-            intake_id: selectedIntake || 'All',
+            intake_id: selectedIntake,
             // intake_id: 'All'
             subject_area_id: selectedStream,
             course_level_id: selectedcourselevel,
@@ -693,6 +693,12 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
             application_number: watch('application_number'),
             student_code: watch('student_code'),
             page: page
+        }
+
+        if (showAllIntake) {
+            params['intake_id'] = 'All'
+        } else {
+            params['intake_id'] = selectedIntake
         }
 
 

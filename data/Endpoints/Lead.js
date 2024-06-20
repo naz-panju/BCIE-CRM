@@ -38,4 +38,7 @@ export const LeadApi = {
 
     stageChange: (data) => http.post(`leads/change-stage`, data),
 
+    import: (data) => http.post(`leads/import`, data),
+
+
 }
