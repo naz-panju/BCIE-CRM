@@ -34,7 +34,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 }));
 
 
-function LeadApplication({ data, lead_id, handleLeadRefresh }) {
+function LeadApplication({ data, lead_id, handleLeadRefresh,appRefresh }) {
 
     const session = useSession()
 
@@ -236,9 +236,9 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
         fetchList()
 
-    }, [refresh, page])
+    }, [refresh, page,appRefresh,limit])
 
-
+console.log(appRefresh);
 
     return (
         <>
@@ -307,7 +307,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
                                 session?.data?.user?.role?.id != 6 &&
                                     data?.user ?
-                                    <Button variant='contained' onClick={handleCreate} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 17H15M9 14H15M13.0004 3.00087C12.9048 3 12.7974 3 12.6747 3H8.2002C7.08009 3 6.51962 3 6.0918 3.21799C5.71547 3.40973 5.40973 3.71547 5.21799 4.0918C5 4.51962 5 5.08009 5 6.2002V17.8002C5 18.9203 5 19.4801 5.21799 19.9079C5.40973 20.2842 5.71547 20.5905 6.0918 20.7822C6.51921 21 7.079 21 8.19694 21L15.8031 21C16.921 21 17.48 21 17.9074 20.7822C18.2837 20.5905 18.5905 20.2842 18.7822 19.9079C19 19.4805 19 18.9215 19 17.8036V9.32568C19 9.20302 18.9999 9.09553 18.999 9M13.0004 3.00087C13.2858 3.00348 13.4657 3.01407 13.6382 3.05547C13.8423 3.10446 14.0379 3.18526 14.2168 3.29492C14.4186 3.41857 14.5918 3.59181 14.9375 3.9375L18.063 7.06298C18.4089 7.40889 18.5809 7.58136 18.7046 7.78319C18.8142 7.96214 18.8953 8.15726 18.9443 8.36133C18.9857 8.53379 18.9964 8.71454 18.999 9M13.0004 3.00087L13 5.80021C13 6.92031 13 7.48015 13.218 7.90797C13.4097 8.2843 13.7155 8.59048 14.0918 8.78223C14.5192 9 15.079 9 16.1969 9H18.999" stroke="#232648" strokeWidth="1.4" strokeLinecap="round" stroke-linejoin="round" /></svg>Apply</Button>
+                                    <Button disabled={data?.withdrawn == 1 } variant='contained' onClick={handleCreate} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 17H15M9 14H15M13.0004 3.00087C12.9048 3 12.7974 3 12.6747 3H8.2002C7.08009 3 6.51962 3 6.0918 3.21799C5.71547 3.40973 5.40973 3.71547 5.21799 4.0918C5 4.51962 5 5.08009 5 6.2002V17.8002C5 18.9203 5 19.4801 5.21799 19.9079C5.40973 20.2842 5.71547 20.5905 6.0918 20.7822C6.51921 21 7.079 21 8.19694 21L15.8031 21C16.921 21 17.48 21 17.9074 20.7822C18.2837 20.5905 18.5905 20.2842 18.7822 19.9079C19 19.4805 19 18.9215 19 17.8036V9.32568C19 9.20302 18.9999 9.09553 18.999 9M13.0004 3.00087C13.2858 3.00348 13.4657 3.01407 13.6382 3.05547C13.8423 3.10446 14.0379 3.18526 14.2168 3.29492C14.4186 3.41857 14.5918 3.59181 14.9375 3.9375L18.063 7.06298C18.4089 7.40889 18.5809 7.58136 18.7046 7.78319C18.8142 7.96214 18.8953 8.15726 18.9443 8.36133C18.9857 8.53379 18.9964 8.71454 18.999 9M13.0004 3.00087L13 5.80021C13 6.92031 13 7.48015 13.218 7.90797C13.4097 8.2843 13.7155 8.59048 14.0918 8.78223C14.5192 9 15.079 9 16.1969 9H18.999" stroke="#232648" strokeWidth="1.4" strokeLinecap="round" stroke-linejoin="round" /></svg>Apply</Button>
                                     :
                                     <Tooltip title="Only for Applicants" >
                                         <a>
@@ -448,64 +448,68 @@ function LeadApplication({ data, lead_id, handleLeadRefresh }) {
 
                                                                 </TableRow>
 
-                                                                <TableCell colSpan={8} style={{ padding: 0, borderTop: 'none' }} >
-                                                                    <div className='appl_act_cntr' >
+                                                                {
+                                                                    obj?.withdrawn != 1 &&
+                                                                    <TableCell colSpan={8} style={{ padding: 0, borderTop: 'none' }} >
+                                                                        <div className='appl_act_cntr' >
 
 
-                                                                        <div className='all_act_cntr application'>
-                                                                            <div className='application-btn-left'>
-                                                                                <Button className='application-btn change-stage' onClick={() => handleStageOpen(obj)}  ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                                                                    <path d="M5 6.00008V13.9044C5 15.0386 5 15.6056 5.1701 15.9526C5.48537 16.5959 6.17631 16.9656 6.88639 16.8711C7.2695 16.8201 7.74136 16.5055 8.68508 15.8764L8.68735 15.8749C9.0614 15.6255 9.24846 15.5008 9.44413 15.4316C9.80351 15.3046 10.1956 15.3046 10.555 15.4316C10.7511 15.5009 10.9389 15.6261 11.3144 15.8765C12.2582 16.5057 12.7305 16.82 13.1137 16.871C13.8237 16.9654 14.5146 16.5959 14.8299 15.9526C15 15.6056 15 15.0384 15 13.9044V5.99734C15 5.06575 15 4.59925 14.8185 4.24308C14.6587 3.92948 14.4031 3.6747 14.0895 3.51491C13.733 3.33325 13.2669 3.33325 12.3335 3.33325H7.66683C6.73341 3.33325 6.26635 3.33325 5.90983 3.51491C5.59623 3.6747 5.34144 3.92948 5.18166 4.24308C5 4.5996 5 5.06666 5 6.00008Z" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                                                                                </svg> Change Stage</Button>
-                                                                                <Button className='application-btn Defer-Intake' onClick={handleDeferOpen}  > <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
-                                                                                    <path d="M1 5.66667H13M1 5.66667V12.5113C1 13.3825 1 13.8178 1.16349 14.1506C1.3073 14.4433 1.5366 14.6815 1.81885 14.8306C2.1394 15 2.55925 15 3.39768 15H10.6023C11.4408 15 11.86 15 12.1805 14.8306C12.4628 14.6815 12.6929 14.4433 12.8367 14.1506C13 13.8182 13 13.3834 13 12.5139V5.66667M1 5.66667V5.0446C1 4.1734 1 3.73748 1.16349 3.40473C1.3073 3.11203 1.5366 2.87424 1.81885 2.7251C2.13972 2.55556 2.56007 2.55556 3.40015 2.55556H4M13 5.66667V5.04204C13 4.17255 13 3.73716 12.8367 3.40473C12.6929 3.11203 12.4628 2.87424 12.1805 2.7251C11.8597 2.55556 11.4402 2.55556 10.6001 2.55556H10M10 1V2.55556M10 2.55556H4M4 1V2.55556" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                                                                                </svg> Defer Intake</Button>
-                                                                                <Button className='application-btn Mail-University' onClick={() => handleMailOpen(obj)}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
-                                                                                    <path d="M1 3.57143L7.91849 8.01903C8.5773 8.44255 9.4227 8.44255 10.0815 8.01903L17 3.57143M3 13H15C16.1046 13 17 12.1046 17 11V3C17 1.89543 16.1046 1 15 1H3C1.89543 1 1 1.89543 1 3V11C1 12.1046 1.89543 13 3 13Z" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                                                                                </svg> Mail to University</Button>
-                                                                                <Button className='application-btn documents' onClick={() => handleDocOpen(obj)}  > <svg width="20" height="20" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                    <path d="M4.1582 10.5093L10.478 4.18953C12.3574 2.31013 15.4045 2.31013 17.2839 4.18953C19.1633 6.06893 19.1631 9.1162 17.2837 10.9956L9.99166 18.2876C8.73873 19.5406 6.70767 19.5404 5.45473 18.2875C4.2018 17.0345 4.2015 15.0033 5.45443 13.7504L12.7465 6.45837C13.3729 5.83191 14.3892 5.83191 15.0156 6.45837C15.6421 7.08484 15.6417 8.1003 15.0152 8.72676L8.69543 15.0465" stroke="#0B0D23" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                                                                                </svg> Documents</Button>
+                                                                            <div className='all_act_cntr application'>
+                                                                                <div className='application-btn-left'>
+                                                                                    <Button className='application-btn change-stage' onClick={() => handleStageOpen(obj)}  ><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                                                                        <path d="M5 6.00008V13.9044C5 15.0386 5 15.6056 5.1701 15.9526C5.48537 16.5959 6.17631 16.9656 6.88639 16.8711C7.2695 16.8201 7.74136 16.5055 8.68508 15.8764L8.68735 15.8749C9.0614 15.6255 9.24846 15.5008 9.44413 15.4316C9.80351 15.3046 10.1956 15.3046 10.555 15.4316C10.7511 15.5009 10.9389 15.6261 11.3144 15.8765C12.2582 16.5057 12.7305 16.82 13.1137 16.871C13.8237 16.9654 14.5146 16.5959 14.8299 15.9526C15 15.6056 15 15.0384 15 13.9044V5.99734C15 5.06575 15 4.59925 14.8185 4.24308C14.6587 3.92948 14.4031 3.6747 14.0895 3.51491C13.733 3.33325 13.2669 3.33325 12.3335 3.33325H7.66683C6.73341 3.33325 6.26635 3.33325 5.90983 3.51491C5.59623 3.6747 5.34144 3.92948 5.18166 4.24308C5 4.5996 5 5.06666 5 6.00008Z" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                                                                    </svg> Change Stage</Button>
+                                                                                    <Button className='application-btn Defer-Intake' onClick={handleDeferOpen}  > <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
+                                                                                        <path d="M1 5.66667H13M1 5.66667V12.5113C1 13.3825 1 13.8178 1.16349 14.1506C1.3073 14.4433 1.5366 14.6815 1.81885 14.8306C2.1394 15 2.55925 15 3.39768 15H10.6023C11.4408 15 11.86 15 12.1805 14.8306C12.4628 14.6815 12.6929 14.4433 12.8367 14.1506C13 13.8182 13 13.3834 13 12.5139V5.66667M1 5.66667V5.0446C1 4.1734 1 3.73748 1.16349 3.40473C1.3073 3.11203 1.5366 2.87424 1.81885 2.7251C2.13972 2.55556 2.56007 2.55556 3.40015 2.55556H4M13 5.66667V5.04204C13 4.17255 13 3.73716 12.8367 3.40473C12.6929 3.11203 12.4628 2.87424 12.1805 2.7251C11.8597 2.55556 11.4402 2.55556 10.6001 2.55556H10M10 1V2.55556M10 2.55556H4M4 1V2.55556" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                                                                    </svg> Defer Intake</Button>
+                                                                                    <Button className='application-btn Mail-University' onClick={() => handleMailOpen(obj)}  > <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none">
+                                                                                        <path d="M1 3.57143L7.91849 8.01903C8.5773 8.44255 9.4227 8.44255 10.0815 8.01903L17 3.57143M3 13H15C16.1046 13 17 12.1046 17 11V3C17 1.89543 16.1046 1 15 1H3C1.89543 1 1 1.89543 1 3V11C1 12.1046 1.89543 13 3 13Z" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                                                                    </svg> Mail to University</Button>
+                                                                                    <Button className='application-btn documents' onClick={() => handleDocOpen(obj)}  > <svg width="20" height="20" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                        <path d="M4.1582 10.5093L10.478 4.18953C12.3574 2.31013 15.4045 2.31013 17.2839 4.18953C19.1633 6.06893 19.1631 9.1162 17.2837 10.9956L9.99166 18.2876C8.73873 19.5406 6.70767 19.5404 5.45473 18.2875C4.2018 17.0345 4.2015 15.0033 5.45443 13.7504L12.7465 6.45837C13.3729 5.83191 14.3892 5.83191 15.0156 6.45837C15.6421 7.08484 15.6417 8.1003 15.0152 8.72676L8.69543 15.0465" stroke="#0B0D23" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                                                                    </svg> Documents</Button>
+
+                                                                                </div>
+
+                                                                                <div className='application-btn-right'>
+                                                                                    {
+                                                                                        obj?.app_coordinator &&
+                                                                                        <span style={{ fontSize: '14px' }} className='mr-3'> <span style={{ color: 'grey' }}>Submitted to :</span> {obj?.app_coordinator?.name}</span>
+                                                                                    }
+
+                                                                                    {
+                                                                                        obj?.app_coordinator_status == null &&
+                                                                                        <Button className='edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
+                                                                                    }
+                                                                                    {
+                                                                                        obj?.app_coordinator_status == 'Returned' &&
+                                                                                        // <div className='d-flex align-center'>
+                                                                                        <>
+                                                                                            <Button className='edit-btn-outline ' Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Resubmit</Button>
+                                                                                            {
+                                                                                                obj?.app_coordinator_retun_status_note &&
+                                                                                                <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '15px', mr: 1, ml: -2 }} /></Tooltip>
+                                                                                            }
+                                                                                        </>
+                                                                                        // </div>
+                                                                                    }
+
+                                                                                    {/* edit application */}
+
+                                                                                    {session?.data?.user?.role?.id != 6 &&
+                                                                                        <Button className='edit-btn-outline' onClick={() => handleEditDocument(obj?.id)}  > <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                            <path d="M8.50065 2.83333H4.83398C3.72941 2.83333 2.83398 3.72876 2.83398 4.83333V12.1667C2.83398 13.2712 3.72941 14.1667 4.83398 14.1667H12.1673C13.2719 14.1667 14.1673 13.2712 14.1673 12.1667V8.5M6.37565 10.625V8.85416L12.5736 2.65625C13.0626 2.16724 13.8554 2.16724 14.3444 2.65624V2.65624C14.8334 3.14525 14.8334 3.93808 14.3444 4.42708L10.9798 7.79166L8.14648 10.625H6.37565Z" stroke="black" strokeWidth="1.3" strokeLinecap="round" stroke-linejoin="round" />
+                                                                                        </svg>
+                                                                                            Edit</Button>
+                                                                                    }
+                                                                                </div>
 
                                                                             </div>
-
-                                                                            <div className='application-btn-right'>
-                                                                                {
-                                                                                    obj?.app_coordinator &&
-                                                                                    <span style={{ fontSize: '14px' }} className='mr-3'> <span style={{ color: 'grey' }}>Submitted to :</span> {obj?.app_coordinator?.name}</span>
-                                                                                }
-
-                                                                                {
-                                                                                    obj?.app_coordinator_status == null &&
-                                                                                    <Button className='edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
-                                                                                }
-                                                                                {
-                                                                                    obj?.app_coordinator_status == 'Returned' &&
-                                                                                    // <div className='d-flex align-center'>
-                                                                                    <>
-                                                                                        <Button className='edit-btn-outline ' Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Resubmit</Button>
-                                                                                        {
-                                                                                            obj?.app_coordinator_retun_status_note &&
-                                                                                            <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '15px', mr: 1, ml: -2 }} /></Tooltip>
-                                                                                        }
-                                                                                    </>
-                                                                                    // </div>
-                                                                                }
-
-                                                                                {/* edit application */}
-
-                                                                                {session?.data?.user?.role?.id != 6 &&
-                                                                                    <Button className='edit-btn-outline' onClick={() => handleEditDocument(obj?.id)}  > <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                        <path d="M8.50065 2.83333H4.83398C3.72941 2.83333 2.83398 3.72876 2.83398 4.83333V12.1667C2.83398 13.2712 3.72941 14.1667 4.83398 14.1667H12.1673C13.2719 14.1667 14.1673 13.2712 14.1673 12.1667V8.5M6.37565 10.625V8.85416L12.5736 2.65625C13.0626 2.16724 13.8554 2.16724 14.3444 2.65624V2.65624C14.8334 3.14525 14.8334 3.93808 14.3444 4.42708L10.9798 7.79166L8.14648 10.625H6.37565Z" stroke="black" strokeWidth="1.3" strokeLinecap="round" stroke-linejoin="round" />
-                                                                                    </svg>
-                                                                                        Edit</Button>
-                                                                                }
-                                                                            </div>
-
                                                                         </div>
-                                                                    </div>
 
-                                                                </TableCell>
+                                                                    </TableCell>
+                                                                }
+
                                                             </React.Fragment>
                                                         ))
                                                     }

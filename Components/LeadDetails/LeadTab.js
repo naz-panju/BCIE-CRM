@@ -67,7 +67,7 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh, taskRefresh, handleTaskRefresh, toNoteTab, setToNoteTab, toTaskTab, setToTaskTab }) {
+export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh, taskRefresh, handleTaskRefresh, toNoteTab, setToNoteTab, toTaskTab, setToTaskTab,appRefresh }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
@@ -134,7 +134,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
     },
     {
       label: 'Applications',
-      component: <LeadApplication from='lead' data={data} lead_id={data?.id} handleStudentModalOpen={handleStudentModalOpen} handleLeadRefresh={handleRefresh} />,
+      component: <LeadApplication from='lead' data={data} lead_id={data?.id} handleStudentModalOpen={handleStudentModalOpen} handleLeadRefresh={handleRefresh} appRefresh={appRefresh} />,
       icon: <Apps />
     },
   ]

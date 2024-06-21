@@ -252,7 +252,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive,unassign }) {
+export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive,unassign,withdraw }) {
 
   const router = useRouter();
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
@@ -353,6 +353,9 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setPage(newPage);
     // console.log(newPage);
     // router.push(`/lead?page=${newPage + 1}`)
+    if(withdraw){
+      router.replace(`/withdrawn-leads?page=${newPage}`);
+    }
     if(unassign){
       router.replace(`/un-assigned-leads?page=${newPage}`);
     }else{
@@ -466,6 +469,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
     if(unassign){
       params['unassigned']=1
+    }
+
+    if(withdraw){
+      params['withdrawn']=1
     }
 
     if (range[0]) {
@@ -830,9 +837,9 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                   }
                                   {
                                     row?.assignedToCounsellor ?
-                                      <Button onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToCounsellor?.name}</Button>
+                                      <Button disabled={withdraw} onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToCounsellor?.name}</Button>
                                       :
-                                      <Button className='not_assigned' sx={{ textTransform: 'none',borderRadius:'28px;',border:'1px solid #C1C1C1',background:'#FFFCFD',color:'#0B0D23',fontFamily:'Inter',fontSize:'14px',fontStyle:'normal',fontWeight:'400',lineHeight:'14px'}} onClick={() => openAssign(row?.id)}>Not Assigned</Button>
+                                      <Button disabled={withdraw} className='not_assigned' sx={{ textTransform: 'none',borderRadius:'28px;',border:'1px solid #C1C1C1',background:'#FFFCFD',color:'#0B0D23',fontFamily:'Inter',fontSize:'14px',fontStyle:'normal',fontWeight:'400',lineHeight:'14px'}} onClick={() => openAssign(row?.id)}>Not Assigned</Button>
                                   }
                                   {/* {row?.assignedToUser?.name} */}
                                 </TableCell>

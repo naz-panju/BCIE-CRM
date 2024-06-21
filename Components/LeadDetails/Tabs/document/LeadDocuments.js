@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
 import LeadDocumentRequest from './request'
-import { DeleteOutline, DownloadOutlined, Edit, Upload, UploadOutlined } from '@mui/icons-material'
+import { DeleteOutline, DownloadOutlined, Edit, ManageAccounts, Upload, UploadOutlined, ZoomInOutlined } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
 import LeadDocumentDetailModal from './Modal'
 import DocumentConfirmPopup from './confirmPopup'
@@ -297,6 +297,9 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                         {
                                             (documentSelected?.file && documentSelected?.status !== "Requested") &&
                                             <div className='doc-preview-block'>
+                                                <div className='flex justify-end mb-5'>
+                                                   <a style={{cursor:'pointer'}} target='_blank' href={documentSelected?.file} > <ZoomInOutlined sx={{color:'#858585'}} /> </a>
+                                                </div>
                                                 {(
                                                     documentSelected.file.endsWith('.pdf') ? (
                                                         <PdfViewer fileUrl={documentSelected?.file} />

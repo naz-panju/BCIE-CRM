@@ -6,7 +6,7 @@ import AsyncSelect from "react-select/async";
 import { Skeleton } from '@mui/material';
 import { useSession } from 'next-auth/react';
 
-function ApplicationSection({intakeRange, weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
+function ApplicationSection({ selectedAppCounsellor, selectedAppCoordinators, handleAppCounsellorSelect, handleAppCoordinatorSelect, fetchAppCounsellors, fetchAppCoordinators, intakeRange, weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
 
 
     const session = useSession()
@@ -50,9 +50,9 @@ function ApplicationSection({intakeRange, weeklyApplicationList, submitApplicati
                     {
                         session?.data?.user?.role?.id == 6 ?
                             submitApplicationLoading ?
-                                <Skeleton style={{ marginTop:'70px'}} variant='rounded' width={600} height={200} />
+                                <Skeleton style={{ marginTop: '70px' }} variant='rounded' width={600} height={200} />
                                 :
-                                <div style={{ height: '100%' ,marginTop:'70px'}} className='stage w-5/12 flex items-center justify-evenly application-submit-sec'>
+                                <div style={{ height: '100%', marginTop: '70px' }} className='stage w-5/12 flex items-center justify-evenly application-submit-sec'>
                                     {
                                         submitApplicationList?.data?.map((obj, index) => (
 
@@ -108,7 +108,7 @@ function ApplicationSection({intakeRange, weeklyApplicationList, submitApplicati
                                             style={{ width: 220 }}
                                             format='dd-MM-yyyy'
                                             disabledDate={(date) => {
-                                                const startDate =intakeRange[0];
+                                                const startDate = intakeRange[0];
                                                 const endDate = intakeRange[1];
                                                 return date < startDate || date > endDate;
                                             }}
@@ -175,6 +175,46 @@ function ApplicationSection({intakeRange, weeklyApplicationList, submitApplicati
                                     placeholder={<div>University</div>}
                                     onChange={handleSelectUniversity}
                                 />
+                                {
+                                    session?.data?.user?.role?.id != 5 &&
+                                    <AsyncSelect
+                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
+                                        isClearable
+                                        defaultOptions
+                                        // isDisabled={!selectedCountries}
+                                        // key={selectedCountries?.id}
+                                        name='counselllor'
+                                        value={selectedAppCounsellor}
+                                        defaultValue={selectedAppCounsellor}
+                                        loadOptions={fetchAppCounsellors}
+                                        getOptionLabel={(e) => e.name}
+                                        getOptionValue={(e) => e.id}
+                                        placeholder={<div>Counsellor</div>}
+                                        onChange={handleAppCounsellorSelect}
+                                    />
+                                }
+
+                                {
+                                    session?.data?.user?.role?.id != 6 &&
+                                    <AsyncSelect
+                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
+                                        isClearable
+                                        defaultOptions
+                                        // isDisabled={!selectedCountries}
+                                        // key={selectedCountries?.id}
+                                        name='app_coordinator'
+                                        value={selectedAppCoordinators}
+                                        defaultValue={selectedAppCoordinators}
+                                        loadOptions={fetchAppCoordinators}
+                                        getOptionLabel={(e) => e.name}
+                                        getOptionValue={(e) => e.id}
+                                        placeholder={<div>App Coordinator</div>}
+                                        onChange={handleAppCoordinatorSelect}
+                                    />
+                                }
+
+
+
 
 
                             </div>

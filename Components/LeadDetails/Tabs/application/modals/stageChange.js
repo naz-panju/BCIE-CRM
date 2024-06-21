@@ -60,9 +60,8 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
 
-
     const fetchStages = (e) => {
-        return ListingApi.stages({ keyword: e, type: 'application', changable: 1 }).then(response => {
+        return ListingApi.applicationStages({ keyword: e, id: details?.stage?.id }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 setstages(response.data.data)
                 return response.data.data;

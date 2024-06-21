@@ -1315,9 +1315,12 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                     <Grid display={'flex'} alignItems={'center'}>
 
                                                                         {/* <SummarizeOutlined fontSize='small' onClick={()=>handleDocOpen(row)} style={{cursor:'pointer'}} /> */}
-                                                                        <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
-                                                                            <MoreHorizOutlined sx={{ color: 'blue' }} />
-                                                                        </IconButton>
+                                                                        {
+                                                                            row?.withdrawn != 1 &&
+                                                                            <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
+                                                                                <MoreHorizOutlined sx={{ color: 'blue' }} />
+                                                                            </IconButton>
+                                                                        }
 
                                                                         <Popover
                                                                             id={popoverRowId === row.id ? `popover-${row.id}` : undefined}

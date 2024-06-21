@@ -1203,9 +1203,12 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
 
                                 <TableCell align="left">
                                   <Grid display={'flex'} alignItems={'center'}>
-                                    <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
-                                      <MoreHorizOutlined sx={{ color: 'blue' }} />
-                                    </IconButton>
+                                    {
+                                      row?.withdrawn != 1 &&
+                                      <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
+                                        <MoreHorizOutlined sx={{ color: 'blue' }} />
+                                      </IconButton>
+                                    }
 
                                     <Popover
                                       id={popoverRowId === row.id ? `popover-${row.id}` : undefined}

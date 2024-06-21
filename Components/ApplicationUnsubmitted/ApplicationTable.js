@@ -444,7 +444,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     }
 
     const fetchCounsellors = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 5,office_id: selectedBranch }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 5, office_id: selectedBranch }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -570,9 +570,9 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
             setshowAllIntake(false)
             setValue('intake', data || '')
             setselectedIntake(data?.id)
-        }else{
+        } else {
             setshowAllIntake(true)
-            setValue('intake','')
+            setValue('intake', '')
             setselectedIntake()
         }
     }
@@ -686,7 +686,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
             app_coordinator_id: selectedcoordinator,
             stage_id: selectedstage,
             assigned_to_counsellor_id: selectedCreatedBy,
-            assign_to_office_id:selectedBranch,
+            assign_to_office_id: selectedBranch,
             course: watch('course'),
             application_number: watch('application_number'),
             student_code: watch('student_code'),
@@ -1238,9 +1238,12 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
                                                                 <TableCell align="left">
                                                                     <Grid display={'flex'} alignItems={'center'}>
-                                                                        <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
-                                                                            <MoreHorizOutlined sx={{ color: 'blue' }} />
-                                                                        </IconButton>
+                                                                        {
+                                                                            row?.withdrawn != 1 &&
+                                                                            <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
+                                                                                <MoreHorizOutlined sx={{ color: 'blue' }} />
+                                                                            </IconButton>
+                                                                        }
 
                                                                         <Popover
                                                                             id={popoverRowId === row.id ? `popover-${row.id}` : undefined}
@@ -1258,7 +1261,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                         >
                                                                             <List>
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id !=5 && row?.app_coordinator_status == 'Submitted') &&
+                                                                                    (session?.data?.user?.role?.id != 5 && row?.app_coordinator_status == 'Submitted') &&
                                                                                     <ListItem button onClick={() => handleReturnPopupOpen(row?.id)}>
                                                                                         Return Application
                                                                                     </ListItem>

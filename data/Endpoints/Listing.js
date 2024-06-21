@@ -22,6 +22,8 @@ export const ListingApi = {
     archiveReason:(data) => http.get(`listing/lead-archive-reasons`, { params: data }),
     emailTemplate:(data) => http.get(`listing/email-templates`, { params: data }),
     whatsappTemplate:(data) => http.get(`listing/whatsapp-templates`, { params: data }),
+    applicationStages:(data) => http.get(`listing/next-stages/${data?.id}`, { params: data }),
+   
 }
 
 

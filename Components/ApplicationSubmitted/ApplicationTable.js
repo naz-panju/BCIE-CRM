@@ -445,7 +445,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
     }
 
     const fetchCounsellors = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 5,office_id: selectedBranch }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 5, office_id: selectedBranch }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -664,7 +664,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setselectedStatus()
         setselectedDeposit()
 
-        
+
         setValue('branch', '')
         setselectedBranch();
 
@@ -688,7 +688,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
             app_coordinator_id: selectedcoordinator,
             stage_id: selectedstage,
             assigned_to_counsellor_id: selectedCreatedBy,
-            assign_to_office_id:selectedBranch,
+            assign_to_office_id: selectedBranch,
             course: watch('course'),
             application_number: watch('application_number'),
             student_code: watch('student_code'),
@@ -1223,9 +1223,12 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
 
                                                                 <TableCell align="left">
                                                                     <Grid display={'flex'} alignItems={'center'}>
-                                                                        <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
-                                                                            <MoreHorizOutlined sx={{ color: 'blue' }} />
-                                                                        </IconButton>
+                                                                        {
+                                                                            row?.withdrawn != 1 &&
+                                                                            <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
+                                                                                <MoreHorizOutlined sx={{ color: 'blue' }} />
+                                                                            </IconButton>
+                                                                        }
 
                                                                         <Popover
                                                                             id={popoverRowId === row.id ? `popover-${row.id}` : undefined}

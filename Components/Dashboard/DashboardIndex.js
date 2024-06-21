@@ -109,6 +109,37 @@ function DashboardIndex() {
         })
     }
 
+    const [selectedAppCounsellor, setselectedAppCounsellor] = useState()
+    const handleAppCounsellorSelect = (data) => {
+        setselectedAppCounsellor(data)
+    }
+    const fetchAppCounsellors = (e) => {
+        return ListingApi.users({ keyword: e, role_id: 5 }).then(response => {
+            // console.log(response);
+            if (typeof response.data.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const [selectedAppCoordinators, setselectedAppCoordinators] = useState()
+    const handleAppCoordinatorSelect = (data) => {
+        setselectedAppCoordinators(data)
+    }
+    const fetchAppCoordinators = (e) => {
+        return ListingApi.users({ keyword: e, role_id: 6 }).then(response => {
+            // console.log(response);
+            if (typeof response.data.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+
     const [selectedManager, setSelectedManager] = useState();
     const handleManagerSelect = (data) => {
         setSelectedManager(data)
@@ -344,7 +375,9 @@ function DashboardIndex() {
                 date_from: moment(range[0]).format('YYYY-MM-DD'),
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
-                country: selectedCountries?.id
+                country: selectedCountries?.id,
+                counselor:selectedAppCounsellor?.id,
+                app_coordinator:selectedAppCoordinators?.id,
             })
             // console.log(response);
             setApplicationStages(response?.data)
@@ -489,7 +522,7 @@ function DashboardIndex() {
             fetchApplicationStages()
             fetchsubmitApplication()
         }
-    }, [range, officeId, selectedCountries])
+    }, [range, officeId, selectedCountries,selectedAppCoordinators,selectedAppCounsellor])
     useEffect(() => {
         if(weeklyApplicationRange[0]){
             fetchWeeklyApplication()
@@ -588,7 +621,7 @@ function DashboardIndex() {
                     }
 
                     <div className='app_sec'>
-                        <ApplicationSection intakeRange={range} submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
+                        <ApplicationSection fetchAppCoordinators={fetchAppCoordinators} fetchAppCounsellors={fetchAppCounsellors} handleAppCoordinatorSelect={handleAppCoordinatorSelect} handleAppCounsellorSelect={handleAppCounsellorSelect} selectedAppCoordinators={selectedAppCoordinators} selectedAppCounsellor={selectedAppCounsellor} intakeRange={range} submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
                     </div>
                 </div>
             </section>

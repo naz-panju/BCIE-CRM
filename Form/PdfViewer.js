@@ -12,14 +12,14 @@ const PdfViewer = ({ fileUrl }) => {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <Worker workerUrl={`https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js`}>
-        <div style={{ flexGrow: 0 }}>
+        {/* <div style={{ flexGrow: 0 }}>
           <Toolbar />
-        </div>
+        </div> */}
         <div style={{ flexGrow: 1, height: '320px' }}>
           <Viewer
             fileUrl={fileUrl}
             defaultScale={SpecialZoomLevel.PageFit}
-            plugins={[toolbarPluginInstance]}
+            // plugins={[toolbarPluginInstance]}
           />
         </div>
       </Worker>
