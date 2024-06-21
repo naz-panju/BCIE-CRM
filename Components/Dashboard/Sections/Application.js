@@ -6,7 +6,7 @@ import AsyncSelect from "react-select/async";
 import { Skeleton } from '@mui/material';
 import { useSession } from 'next-auth/react';
 
-function ApplicationSection({ weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
+function ApplicationSection({intakeRange, weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
 
 
     const session = useSession()
@@ -100,13 +100,18 @@ function ApplicationSection({ weeklyApplicationList, submitApplicationLoading, w
                                     <div className='total'><span>Total</span> {totalWeeklyAppCount}</div>
                                     <div className='date-range'>
                                         <DateRangePicker
-                                            className='no-clear'
+                                            className='no-clear date-focused'
                                             ranges={[]}
                                             value={weeklyApplicationRange}
                                             onChange={setWeeklyApplicationRange}
                                             // placeholder="Select Date Range"
                                             style={{ width: 220 }}
                                             format='dd-MM-yyyy'
+                                            disabledDate={(date) => {
+                                                const startDate =intakeRange[0];
+                                                const endDate = intakeRange[1];
+                                                return date < startDate || date > endDate;
+                                            }}
 
                                         />
                                     </div>

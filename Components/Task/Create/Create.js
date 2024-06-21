@@ -26,7 +26,7 @@ const scheme = yup.object().shape({
     description: yup.string().required("Description is Required"),
 })
 
-export default function CreateTask({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh, from, app_id }) {
+export default function CreateTask({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh, from, app_id,detailRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -125,6 +125,9 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
         action.then((response) => {
             if (response?.data) {
                 toast.success(editId > 0 ? 'Task Has Been Successfully Updated' : 'Task Has Been Successfully Created')
+                if(detailRefresh){
+                    detailRefresh()
+                }
                 reset()
                 handleClose()
                 handleRefresh()

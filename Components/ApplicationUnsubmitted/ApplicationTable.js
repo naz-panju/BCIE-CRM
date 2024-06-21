@@ -501,7 +501,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         // console.log(newPage);
-        router.replace(`/applications?page=${newPage}`);
+        router.replace(`/applications-unsubmitted?page=${newPage}`);
         // router.push(`/lead?page=${newPage + 1}`);
     };
 
@@ -679,7 +679,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
             unsubmitted: 1,
             country_id: selectedCountry,
             university_id: selectedUniversity,
-            intake_id: selectedIntake || 'All',
+            intake_id: selectedIntake,
             // intake_id: 'All',
             subject_area_id: selectedStream,
             course_level_id: selectedcourselevel,
@@ -693,6 +693,11 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
             page: page
         }
 
+        if (showAllIntake) {
+            params['intake_id'] = 'All'
+        } else {
+            params['intake_id'] = selectedIntake
+        }
 
         ApplicationApi.list(params).then((response) => {
             // console.log(response);

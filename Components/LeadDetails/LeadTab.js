@@ -67,7 +67,7 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh, taskRefresh, handleTaskRefresh, toNoteTab, setToNoteTab }) {
+export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh, taskRefresh, handleTaskRefresh, toNoteTab, setToNoteTab, toTaskTab, setToTaskTab }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
 
@@ -129,7 +129,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
     },
     {
       label: 'Task',
-      component: <LeadTask from='lead' lead_id={data?.id} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} />,
+      component: <LeadTask from='lead' lead_id={data?.id} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} detailRefresh={handleRefresh} />,
       icon: <TaskSharp />
     },
     {
@@ -166,6 +166,13 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
       setToNoteTab(false)
     }
   }, [toNoteTab]);
+
+  useEffect(() => {
+    if (toTaskTab) {
+      setValue(6)
+      setToTaskTab(false)
+    }
+  }, [toTaskTab]);
 
   return (
     <>

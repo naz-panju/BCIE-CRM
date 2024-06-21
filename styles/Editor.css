@@ -1398,6 +1398,10 @@ span.icon {
     border-radius: 4px;
 }
 
+.date-focused{
+    border: 1px solid #dadae6;
+}
+
 .date-range .rs-picker-daterange>.rs-input-group.rs-input-group-inside .rs-input {
     padding-right: 0;
     background: transparent;

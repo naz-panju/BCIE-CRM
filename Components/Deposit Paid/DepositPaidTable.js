@@ -392,10 +392,10 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
   const fetchIntakes = (e) => {
     return ListingApi.intakes({ keyword: e }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
-        const allIntakes = response?.data?.data
-        const defualtIntake = allIntakes?.find(obj => obj?.is_default == 1)
-        setValue('intake', defualtIntake || '')
-        setselectedIntake(defualtIntake?.id)
+        // const allIntakes = response?.data?.data
+        // const defualtIntake = allIntakes?.find(obj => obj?.is_default == 1)
+        // setValue('intake', defualtIntake || '')
+        // setselectedIntake(defualtIntake?.id)
         return response.data.data;
       } else {
         return [];
@@ -442,24 +442,24 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
   }
 
   const fetchCounsellors = (e) => {
-    return ListingApi.users({ keyword: e, role_id: 5,office_id: selectedBranch }).then(response => {
-        if (typeof response?.data?.data !== "undefined") {
-            return response.data.data;
-        } else {
-            return [];
-        }
+    return ListingApi.users({ keyword: e, role_id: 5, office_id: selectedBranch }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
     })
-}
+  }
 
-const fetchBranches = (e) => {
+  const fetchBranches = (e) => {
     return ListingApi.office({ keyword: e, }).then(response => {
-        if (typeof response.data.data !== "undefined") {
-            return response.data.data;
-        } else {
-            return [];
-        }
+      if (typeof response.data.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
     })
-}
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -498,7 +498,7 @@ const fetchBranches = (e) => {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
     // console.log(newPage);
-    router.replace(`/applications?page=${newPage}`);
+    router.replace(`/deposit-paid?page=${newPage}`);
     // router.push(`/lead?page=${newPage + 1}`);
   };
 
@@ -620,10 +620,10 @@ const fetchBranches = (e) => {
 
   const [selectedBranch, setselectedBranch] = useState()
   const handleSelectBranch = (e) => {
-      setselectedBranch(e?.id || '');
-      setValue('branch', e || '')
-      setselectedCreatedBy();
-      setValue('created_by', '')
+    setselectedBranch(e?.id || '');
+    setValue('branch', e || '')
+    setselectedCreatedBy();
+    setValue('created_by', '')
   }
 
 
@@ -690,6 +690,12 @@ const fetchBranches = (e) => {
       student_code: watch('student_code'),
       page: page
     }
+
+    // if (showAllIntake) {
+    //   params['intake_id'] = 'All'
+    // } else {
+    //   params['intake_id'] = selectedIntake
+    // }
 
 
     ApplicationApi.list(params).then((response) => {

@@ -499,7 +499,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         // console.log(newPage);
-        router.replace(`/applications?page=${newPage}`);
+        router.replace(`/applications-returned?page=${newPage}`);
         // router.push(`/lead?page=${newPage + 1}`);
     };
 
@@ -676,7 +676,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
             returned: 1,
             country_id: selectedCountry,
             university_id: selectedUniversity,
-            intake_id: selectedIntake || 'All',
+            intake_id: selectedIntake ,
             // intake_id: ,
             subject_area_id: selectedStream,
             course_level_id: selectedcourselevel,
@@ -688,6 +688,12 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
             application_number: watch('application_number'),
             student_code: watch('student_code'),
             page: page
+        }
+
+        if (showAllIntake) {
+            params['intake_id'] = 'All'
+        } else {
+            params['intake_id'] = selectedIntake
         }
 
 

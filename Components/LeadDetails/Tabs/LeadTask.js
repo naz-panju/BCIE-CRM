@@ -14,7 +14,7 @@ import TaskCompletePopup from '../Modals/TaskCompleteModal'
 import { Stack } from 'rsuite'
 import { useSession } from 'next-auth/react'
 
-function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
+function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detailRefresh }) {
 
     const session = useSession()
 
@@ -97,7 +97,7 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh }) {
     return (
         <>
 
-            <CreateTask lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
+            <CreateTask lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} detailRefresh={detailRefresh} />
             <TaskCompletePopup getDetails={fetchList} ID={completeId} setID={setcompleteId} loading={completeLoading} setLoading={setcompleteLoading} title={'Mark this Task as Completed'} />
             <TaskDetailModal id={detailId} setId={setDetailId} />
 

@@ -3,11 +3,6 @@ import BarChartComponent from '../Charts/BarChart'
 import BarColorChartComponent from '../Charts/BarColorGraph'
 import { Grid, Skeleton } from '@mui/material'
 import { DateRangePicker } from 'rsuite'
-import Facebook from '@/img/facebook.svg'
-import Instagram from '@/img/instagram.svg'
-import Twitter from '@/img/twitter.svg'
-import Whatsapp from '@/img/Whatsapp.svg'
-import Linkedin from '@/img/Linkedin.svg'
 import Unverified from '@/img/Unverified.png'
 import Hot from '@/img/Hot.png'
 import Cool from '@/img/Cool.png'
@@ -17,7 +12,7 @@ import Warm from '@/img/Warm.png'
 
 import Others from '@/img/Others.svg'
 import Image from 'next/image';
-function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage, index }) {
+function LeadSection({ intakeRange,weeklyList, weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage, index }) {
 
     function formatPercentage(value) {
         if (typeof value === 'number' && !isNaN(value)) {
@@ -76,6 +71,11 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
         return altTexts[index] || 'Default';
     };
 
+    const predefinedRanges = {
+        'This Week': [new Date(), new Date()]
+        // Add more ranges if needed
+    };
+
 
     return (
         <div >
@@ -96,13 +96,19 @@ function LeadSection({ weeklyList, weeklyLoading, weeklyStageListLoading, leadSo
                                     <div className='total'><span>Total</span> {totalWeeklyLeadCount}</div>
                                     <div className='date-range'>
                                         <DateRangePicker
-                                            className='no-clear'
+                                            className='no-clear date-focused'
                                             ranges={[]}
                                             value={weeklyRange}
                                             onChange={setWeeklyRange}
                                             // placeholder="Select Date Range"
                                             style={{ width: 220 }}
                                             format='dd-MM-yyyy'
+                                            disabledDate={(date) => {
+                                                const startDate =intakeRange[0];
+                                                const endDate = intakeRange[1];
+                                                return date < startDate || date > endDate;
+                                            }}
+                                          
                                         />
                                     </div>
                                 </div>

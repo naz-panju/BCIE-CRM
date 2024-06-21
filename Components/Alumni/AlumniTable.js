@@ -501,7 +501,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
         // console.log(newPage);
-        router.replace(`/applications?page=${newPage}`);
+        router.replace(`/alumni?page=${newPage}`);
         // router.push(`/lead?page=${newPage + 1}`);
     };
 

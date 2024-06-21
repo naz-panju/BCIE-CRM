@@ -232,10 +232,11 @@ function LeadDetails() {
     setToNoteTab(true)
   }
 
-  const afterSwitchNoteTab = (func) => {
-    func(2)
-    setToNoteTab(false)
+  const [toTaskTab, setToTaskTab] = useState(false)
+  const switchTaskTab = () => {
+    setToTaskTab(true)
   }
+
 
   useEffect(() => {
     getSummary()
@@ -267,7 +268,7 @@ function LeadDetails() {
 
       <PhoneCallModal lead_id={details?.id} editId={phonecallId} setEditId={setphonecallId} handleRefresh={handlePhoneRefresh} />
 
-      <CreateTask lead_id={details?.id} from={'lead'} editId={taskId} setEditId={settaskId} refresh={refresh} setRefresh={settaskRefresh} handleRefresh={handleTaskRefresh} />
+      <CreateTask lead_id={details?.id} from={'lead'} editId={taskId} setEditId={settaskId} refresh={refresh} setRefresh={settaskRefresh} handleRefresh={handleTaskRefresh} detailRefresh={handleRefresh} />
 
 
       {/* <FollowUpModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={followupId} setEditId={setfollowupId} data={details} /> */}
@@ -793,7 +794,20 @@ function LeadDetails() {
                     <div className='d-flex align-items-center justify-content-between mb-30'>
                       <div>
                         <span>Date</span>
-                        <h5>{details?.next_follow_up_date || 'NA'}</h5>
+                        {
+                          details?.latest_task ?
+                            <Tooltip title={details?.latest_task?.title}>
+                              <h5 className='a_hover' style={{ cursor: 'pointer' }} onClick={switchTaskTab}>{details?.latest_task?.due_date ?
+                                moment(details?.latest_task?.due_date).format('DD-MM-YYYY')
+                                :
+                                details?.latest_task?.title
+                              }
+                              </h5>
+                            </Tooltip>
+                            :
+                            <h5>NA</h5>
+                        }
+
                       </div>
                       <div>
                         {
@@ -807,17 +821,26 @@ function LeadDetails() {
                     <div className='d-flex align-items-center justify-content-between'>
                       <div>
                         <span>Note</span>
-                        <h5 className='a_hover' style={{ cursor: 'pointer' }} onClick={switchNoteTab}>
-                          {details?.latest_lead_note?.note ?
-                            details.latest_lead_note.note.length > 20 ?
-                              <Tooltip title={details.latest_lead_note.note}>
-                                {
-                                  <a>{details.latest_lead_note.note.slice(0, 20) + '...'}</a>
-                                }
-                              </Tooltip>
-                              : details.latest_lead_note.note
-                            : 'NA'}
-                        </h5>
+
+                        {
+                          details?.latest_lead_note?.note ?
+
+                            <h5 className='a_hover' style={{ cursor: 'pointer' }} onClick={switchNoteTab}>
+                              {details.latest_lead_note.note.length > 20 ?
+                                <Tooltip title={details.latest_lead_note.note}>
+                                  {
+                                    <a>{details.latest_lead_note.note.slice(0, 20) + '...'}</a>
+                                  }
+                                </Tooltip>
+                                : details.latest_lead_note.note
+                              }
+                            </h5>
+                            :
+                            <h5>
+                              NA
+                            </h5>
+                        }
+
                       </div>
                       <div>
                         {
@@ -890,7 +913,7 @@ function LeadDetails() {
 
           <div className='lead-det-cnt'>
 
-            <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} toNoteTab={toNoteTab} setToNoteTab={setToNoteTab} />
+            <LeadTab data={details} refresh={refresh} setRefresh={setRefresh} loading={loading} handleRefresh={handleRefresh} handleStudentModalOpen={handleStudentModalOpen} followRefresh={followRefresh} setFollowRefresh={setFollowRefresh} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} toNoteTab={toNoteTab} setToNoteTab={setToNoteTab} toTaskTab={toTaskTab} setToTaskTab={setToTaskTab} />
           </div>
         </div>
       </section>

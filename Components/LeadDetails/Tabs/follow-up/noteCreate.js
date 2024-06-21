@@ -118,6 +118,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
 
     const deleteFunction = () => {
         fetchNotes()
+         setRefresh(!refresh)
     }
 
     const toggleReadMore = (id) => {
@@ -143,6 +144,20 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
         setOpen(false)
 
     }
+
+    const getFirstLettersOfTwoWords = (name) => {
+        if (name) {
+            const words = name.split(" "); // Split the name into an array of words
+            if (words.length >= 2) {
+                // Extract the first letter of the first two words and concatenate them
+                return words[0].charAt(0) + words[1].charAt(0);
+            } else if (words.length === 1) {
+                // If there's only one word, return its first letter
+                return words[0].charAt(0);
+            }
+        }
+        return ""; // Return an empty string if name is not provided
+    };
 
 
     const handleDrawerClose = (event) => {
@@ -290,7 +305,7 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
 
                                                 <a style={{ fontSize: 13, color: 'grey' }}>Added By: {note?.created_by?.name}</a>
 
-                                                <span className='add-author'>SS</span>
+                                                <span className='add-author'>{getFirstLettersOfTwoWords(note?.created_by?.name)}</span>
 
                                                 
                                             </Typography>

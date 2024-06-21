@@ -136,6 +136,8 @@ function DashboardIndex() {
     // setRange([dayBefore.toDate(), new Date()])
 
     const handleIntakeDateRange = (date) => {
+
+        const currentDate = moment();
         // Parsing the date with a specified format
         const dayBefore = moment(date, 'MMM YYYY'); // Ensure date is in 'MMM YYYY' format
 
@@ -147,12 +149,33 @@ function DashboardIndex() {
         if (dayBefore.month() === 0) { // January
             const adjustedDate = moment({ year: dayBefore.year(), month: 5, day: 30 });
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
+            if (currentDate.isBetween(dayBefore, adjustedDate, 'days', '[]')) {
+                setWeeklyRange([moment().subtract(6, 'days').toDate(), new Date()])
+                setWeeklyApplicationRange([moment().subtract(6, 'days').toDate(), new Date()])
+            } else {
+                setWeeklyRange([moment(adjustedDate).subtract(6, 'days').toDate(), adjustedDate.toDate()])
+                setWeeklyApplicationRange([moment(adjustedDate).subtract(6, 'days').toDate(), adjustedDate.toDate()])
+            }
         } else if (dayBefore.month() === 6) { // July
             const adjustedDate = moment({ year: dayBefore.year(), month: 7, day: 31 })
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
+            if (currentDate.isBetween(dayBefore, adjustedDate, 'days', '[]')) {
+                setWeeklyRange([moment().subtract(6, 'days').toDate(), new Date()])
+                setWeeklyApplicationRange([moment().subtract(6, 'days').toDate(), new Date()])
+            } else {
+                setWeeklyRange([moment(adjustedDate).subtract(6, 'days').toDate(), adjustedDate.toDate()])
+                setWeeklyApplicationRange([moment(adjustedDate).subtract(6, 'days').toDate(), adjustedDate.toDate()])
+            }
         } else if (dayBefore.month() === 8) { // September
             const adjustedDate = moment({ year: dayBefore.year(), month: 11, day: 31 })
             setRange([dayBefore.toDate(), adjustedDate.toDate()])
+            if (currentDate.isBetween(dayBefore, adjustedDate, 'days', '[]')) {
+                setWeeklyRange([moment().subtract(6, 'days').toDate(), new Date()])
+                setWeeklyApplicationRange([moment().subtract(6, 'days').toDate(), new Date()])
+            } else {
+                setWeeklyRange([moment(adjustedDate).subtract(6, 'days').toDate(), adjustedDate.toDate()])
+                setWeeklyApplicationRange([moment(adjustedDate).subtract(6, 'days').toDate(), adjustedDate.toDate()])
+            }
         } else {
             console.error('Date is not within the expected range');
         }
@@ -162,8 +185,10 @@ function DashboardIndex() {
 
 
     // console.log(range);
-    const [weeklyRange, setWeeklyRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
-    const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
+    // const [weeklyRange, setWeeklyRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
+    // const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
+    const [weeklyRange, setWeeklyRange] = useState([null, null]);
+    const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([null,null]);
 
     const [weeklyList, setWeeklyList] = useState([]);
     const [weeklyLoading, setWeeklyLoading] = useState(true)
@@ -413,8 +438,10 @@ function DashboardIndex() {
     }
 
     useEffect(() => {
-        fetchWeeklyList()
-        fetchWeeklyStageList()
+        if (weeklyRange[0]) {
+            fetchWeeklyList()
+            fetchWeeklyStageList()
+        }
     }, [weeklyRange, officeId])
     useEffect(() => {
         // console.log('loading....1');
@@ -437,7 +464,9 @@ function DashboardIndex() {
         }
     }, [range, officeId, selectedCountries])
     useEffect(() => {
-        fetchWeeklyApplication()
+        if(weeklyApplicationRange[0]){
+            fetchWeeklyApplication()
+        }
     }, [weeklyApplicationRange, selectedCountries, selectedUniversity])
     useEffect(() => {
         fetchTargets()
@@ -492,7 +521,7 @@ function DashboardIndex() {
                             <Grid sx={{ width: 230 }} className='intake_dropdown'>
                                 <DateRangePicker
                                     preventOverflow
-                                    className='no-clear'
+                                    className='no-clear date-focused'
                                     value={range}
                                     onChange={setRange}
                                     onClean={handleClean}
@@ -500,6 +529,11 @@ function DashboardIndex() {
                                     // placeholder="Select Date Range"
                                     // style={{ width: 150 }}
                                     format='dd-MM-yyyy'
+                                    disabledDate={(date) => {
+                                        const startDate =range[0];
+                                        const endDate = range[1];
+                                        return date < startDate || date > endDate;
+                                    }}
                                 />
                             </Grid>
                         </div>
@@ -508,7 +542,7 @@ function DashboardIndex() {
                 <div>
                     <div className='content-block'>
                         {/* <div className='page-title-block-content justify-between'> */}
-                            <h5>Welcome {session?.data?.user?.name}</h5>
+                        <h5>Welcome {session?.data?.user?.name}</h5>
                         {/* </div> */}
                     </div>
                 </div>
@@ -516,7 +550,7 @@ function DashboardIndex() {
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='lead_sec'>
-                            <LeadSection weeklyList={weeklyList} weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadStage={leadStage} />
+                            <LeadSection intakeRange={range} weeklyList={weeklyList} weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadStage={leadStage} />
                         </div>
                     }
                     {
@@ -527,7 +561,7 @@ function DashboardIndex() {
                     }
 
                     <div className='app_sec'>
-                        <ApplicationSection submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
+                        <ApplicationSection intakeRange={range} submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
                     </div>
                 </div>
             </section>
