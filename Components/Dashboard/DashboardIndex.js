@@ -251,6 +251,27 @@ function DashboardIndex() {
 
     }
 
+    const [leadCountryList, setLeadCountryList] = useState()
+    const fetchLeadCountry = async () => {
+        // console.log('works');
+        setLeadSourceListLoading(true)
+        try {
+            const response = await DashboardApi.list({
+                type: 'lead_by_country',
+                date_from: moment(range[0]).format('YYYY-MM-DD'),
+                date_to: moment(range[1]).format('YYYY-MM-DD'),
+                // office: officeId
+            })
+            // console.log(response);
+            setLeadCountryList(response?.data)
+            setLeadSourceListLoading(false)
+        } catch (error) {
+            console.log(error);
+            setLeadSourceListLoading(false)
+        }
+
+    }
+
     const [leadStage, setLeadStage] = useState([]);
     const [leadStageLoading, setLeadStageLoading] = useState(true);
     const fetchLeadStage = async () => {
@@ -444,10 +465,16 @@ function DashboardIndex() {
         }
     }, [weeklyRange, officeId])
     useEffect(() => {
+        if (range[0]) {
+            fetchLeadCountry()
+        }
+    }, [range])
+    useEffect(() => {
         // console.log('loading....1');
         if (range[0]) {
             // console.log('loading....2');
-            fetchLeadSource()
+            // fetchLeadSource()
+            // fetchLeadCountry() called in seperatae useEffect due to no country
             fetchLeadStage()
         }
     }, [range, officeId])
@@ -550,7 +577,7 @@ function DashboardIndex() {
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='lead_sec'>
-                            <LeadSection intakeRange={range} weeklyList={weeklyList} weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadStage={leadStage} />
+                            <LeadSection intakeRange={range} weeklyList={weeklyList} weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} />
                         </div>
                     }
                     {

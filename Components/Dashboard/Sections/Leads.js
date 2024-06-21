@@ -12,7 +12,7 @@ import Warm from '@/img/Warm.png'
 
 import Others from '@/img/Others.svg'
 import Image from 'next/image';
-function LeadSection({ intakeRange,weeklyList, weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage, index }) {
+function LeadSection({ intakeRange,weeklyList, weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage, index,leadCountryList }) {
 
     function formatPercentage(value) {
         if (typeof value === 'number' && !isNaN(value)) {
@@ -193,7 +193,7 @@ function LeadSection({ intakeRange,weeklyList, weeklyLoading, weeklyStageListLoa
                 <div style={{ height: 300 }} className='border flex'>
                     <div style={{ height: '100%' }} className='graph w-5/12 p-3'>
                         <div className='total_sec d-flex flex items-center justify-between p-3'>
-                            Lead Source
+                            Lead Country
                         </div>
                         <div className='border rounded-sm '>
                             {
@@ -211,10 +211,10 @@ function LeadSection({ intakeRange,weeklyList, weeklyLoading, weeklyStageListLoa
                                     :
                                     <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
                                         {
-                                            leadSourceList?.data?.map((obj, index) => (
+                                            leadCountryList?.data?.map((obj, index) => (
 
                                                 <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                                                    <span><Image src={Others} alt='Facebook' width={14} height={14} /> {obj?.source}</span>
+                                                    <span style={{lineHeight:1}}><Image src={Others} alt='alt' width={14} height={14} /> {obj?.country}</span>
                                                     <span>{formatPercentage(obj?.value) || 0}%</span>
                                                 </Grid>
                                             ))

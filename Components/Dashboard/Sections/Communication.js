@@ -102,7 +102,7 @@ function CommunicationSection({ fetchManagers, handleManagerSelect, selectedMana
                         <div className=' w-5/12'>
                           <div className='communication-details'>
                             <ul>
-                              <li><Image src={Deposit} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_paid_leads}</b>Deposit Paid</li>
+                              <li style={{lineHeight:1}} ><Image src={Deposit} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_paid_leads}</b>Deposit Paid</li>
                               <li><Image src={Pending} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_not_paid_leads}</b>Pending</li>
                             </ul>
                           </div>
