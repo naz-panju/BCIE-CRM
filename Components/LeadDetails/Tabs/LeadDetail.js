@@ -277,7 +277,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                             {
                                 data?.referrance_from &&
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Referrence From </label> {data?.referrance_from}
+                                    <label style={{ fontWeight: 'bold' }}>Here about us from </label> {data?.referrance_from}
                                 </div>
                             }
 

@@ -946,7 +946,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         <div className='form_group'>
                             <ReactSelector
-                                placeholder='Refrence From'
+                                placeholder='How did you hear about us?'
                                 menuPlacement='auto'
                                 onInputChange={fetchReference}
                                 styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}

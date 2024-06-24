@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import CreateEmailTemplate from './Create/create';
 import TemplateTable from './TemplateTable';
+import { Grid } from '@mui/material';
 
 
 const StyledMenu = styled((props) => (
@@ -87,13 +88,16 @@ export default function EmailTemplateIndex() {
       <CreateEmailTemplate editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <section>
         <div className='page-title-block'>
-          <div className='page-title-block-content'>
+          <div className='page-title-block-content justify-between'>
             <h1>Email Templates</h1>
+            <Grid display={'flex'}>
+             
+                <Button className='add_lead_btn' sx={{ textTransform: 'none',height:30 }} onClick={handleCreateNew} variant='outlined'>Add</Button>
+
+            </Grid>
           </div>
 
-          <div className='page-title-block-right'>
-            <Button sx={{ textTransform: 'none' }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
-          </div>
+
         </div>
 
 

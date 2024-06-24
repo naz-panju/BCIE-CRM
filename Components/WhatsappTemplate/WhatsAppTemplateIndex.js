@@ -87,13 +87,14 @@ export default function WhatsappTemplateIndex() {
       <CreateWhatsAppTemplate editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <section>
         <div className='page-title-block'>
-          <div className='page-title-block-content'>
+          <div className='page-title-block-content justify-between'>
             <h1>WhatsApp Templates</h1>
+            <div className='flex'>
+              <Button className='add_lead_btn' sx={{ textTransform: 'none',height:30 }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
+            </div>
           </div>
 
-          <div className='page-title-block-right'>
-            <Button sx={{ textTransform: 'none' }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
-          </div>
+
         </div>
 
 
