@@ -3253,11 +3253,11 @@ a.not-found {
     font-style: normal;
     font-weight: 600;
     line-height: 10px;
+    height: 70px;
     /* 50% */
-    padding: 28px;
+    padding-left: 28px;
     position: relative;
 }
-
 .log-rht-cntr button svg {
     position: absolute;
     right: 18px;

@@ -373,10 +373,7 @@ function Form({ data }) {
                 </div>
                 <div className='form-data-cntr'>
 
-                    {
-                        dataLoading ?
-                            <LoadingEdit leftMD={5} rightMD={12} item={items} />
-                            :
+                  
                             <form onSubmit={handleSubmit(onSubmit)}>
 
 
@@ -817,7 +814,7 @@ function Form({ data }) {
 
                                 </Grid>
                             </form>
-                    }
+                    
 
 
                 </div >

@@ -59,20 +59,20 @@ function Login() {
 
 export default Login
 
-  export async function getServerSideProps(context) {
-    const session = await getSession(context);
-  
-    if (session) {
-      const redirectTo = '/';
-      return {
-        redirect: {
-          destination: redirectTo,
-          permanent: false,
-        },
-      };
-    }
-  
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if (session) {
+    const redirectTo = '/';
     return {
-      props: { session },
+      redirect: {
+        destination: redirectTo,
+        permanent: false,
+      },
     };
   }
+
+  return {
+    props: { session },
+  };
+}
