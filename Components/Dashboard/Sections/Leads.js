@@ -33,19 +33,20 @@ function LeadSection({ intakeRange,weeklyList, weeklyLoading, weeklyStageListLoa
 
     const getDayOfWeek = (dateString) => {
         const date = new Date(dateString);
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const days = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat','Sun',];
         return days[date.getDay()];
     };
 
     // Initialize an object to store the counts for each day of the week
     const dayCounts = {
-        'Sun': 0,
+       
         'Mon': 0,
         'Tue': 0,
         'Wed': 0,
         'Thu': 0,
         'Fri': 0,
         'Sat': 0,
+        'Sun': 0,
     };
 
     weeklyList?.data?.forEach(item => {

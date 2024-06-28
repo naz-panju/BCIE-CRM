@@ -23,13 +23,13 @@ function ApplicationSection({ selectedAppCounsellor, selectedAppCoordinators, ha
 
     // Initialize an object to store the counts for each day of the week
     const dayCounts = {
-        'Sun': 0,
         'Mon': 0,
         'Tue': 0,
         'Wed': 0,
         'Thu': 0,
         'Fri': 0,
         'Sat': 0,
+        'Sun': 0,
     };
 
     weeklyApplicationList?.data?.forEach(item => {
@@ -38,7 +38,7 @@ function ApplicationSection({ selectedAppCounsellor, selectedAppCoordinators, ha
     });
 
     // // Convert the dayCounts object to an array of counts
-    const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const labels = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat','Sun',];
     const counts = labels.map(day => dayCounts[day]);
     const backgroundClasses = ['bg1', 'bg2', 'bg3', 'bg4'];
 
