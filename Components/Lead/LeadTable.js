@@ -856,7 +856,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 width: '100%',
                               }}
                             >
-                              <TableCell colSpan={8} align="center">
+                              <TableCell colSpan={9} align="center">
                                 <div className='no-table-ask-block'>
                                   <h4 style={{ color: 'grey' }}>No Lead Found</h4>
                                 </div>
