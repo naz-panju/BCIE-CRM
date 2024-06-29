@@ -27,23 +27,23 @@ function WhatsAppTemplate() {
 
 export default WhatsAppTemplate
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
+// export async function getServerSideProps(context) {
+//   const session = await getSession(context)
 
-  if (!session) {
-      return {
-          redirect: {
-              destination: '/login',
-              permanent: false,
-          },
-      };
-  }
-  if (session?.user?.role?.id == 5 || session?.user?.role?.id == 6) {
-      return {
-          notFound: true,
-      };
-  }
-  return {
-      props: { session },
-  };
-}
+//   if (!session) {
+//       return {
+//           redirect: {
+//               destination: '/login',
+//               permanent: false,
+//           },
+//       };
+//   }
+//   if (session?.user?.role?.id == 5 || session?.user?.role?.id == 6) {
+//       return {
+//           notFound: true,
+//       };
+//   }
+//   return {
+//       props: { session },
+//   };
+// }

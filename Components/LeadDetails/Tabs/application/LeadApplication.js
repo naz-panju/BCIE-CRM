@@ -284,7 +284,7 @@ console.log(appRefresh);
                             !data?.user &&
                             <Grid>
                                 <Tooltip
-                                    title={(data?.action_type != 'Hot Lead' || data?.assignedToCounsellor === null) && 'This button will be enabled if student is Hot and Counsellor is assigned'}
+                                    title={(data?.stage?.action_type !== 'Hot Lead' || data?.assignedToCounsellor == null) && 'This button will be enabled if student is Hot and Counsellor is assigned'}
                                 >
                                     <a>
 

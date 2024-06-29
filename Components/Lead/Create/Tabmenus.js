@@ -545,6 +545,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                     control={control}
                                     name={'title'}
                                     defaultValue={watch('title')}
+                                    placeholder={'Title'}
                                 />
                                 {errors.title && <span className='form-validation'>{errors.title.message}</span>}
                             </div>

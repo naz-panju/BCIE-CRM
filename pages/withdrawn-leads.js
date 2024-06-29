@@ -14,7 +14,7 @@ function Index() {
 
   useEffect(() => {
 
-      if (session?.data?.user?.role?.id == 5) {
+      if (session?.data?.user?.role?.id == 6) {
           router.push('/404')
       }
 
@@ -30,23 +30,23 @@ function Index() {
 export default Index
 
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context)
+// export async function getServerSideProps(context) {
+//   const session = await getSession(context)
 
-  if (!session) {
-      return {
-          redirect: {
-              destination: '/login',
-              permanent: false,
-          },
-      };
-  }
-  if (session?.user?.role?.id == 6) {
-      return {
-          notFound: true,
-      };
-  }
-  return {
-      props: { session },
-  };
-}
+//   if (!session) {
+//       return {
+//           redirect: {
+//               destination: '/login',
+//               permanent: false,
+//           },
+//       };
+//   }
+//   if (session?.user?.role?.id == 6) {
+//       return {
+//           notFound: true,
+//       };
+//   }
+//   return {
+//       props: { session },
+//   };
+// }
