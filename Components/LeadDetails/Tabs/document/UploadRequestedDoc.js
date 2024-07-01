@@ -1,8 +1,5 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+
 import { useEffect } from 'react';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -14,8 +11,9 @@ import { Close, Delete } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import toast from 'react-hot-toast';
-import TextInput from '@/Form/TextInput';
-import AsyncSelect from "react-select/async";
+import Doc from '@/img/doc.png';
+import Image from 'next/image';
+
 
 const style = {
     position: 'absolute',
@@ -29,7 +27,7 @@ const style = {
     p: 4,
 };
 
-export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEditId, handleRefresh, from, app_id, datas,setdocumentSelected }) {
+export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEditId, handleRefresh, from, app_id, datas, setdocumentSelected }) {
     const scheme = yup.object().shape({
 
         // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -60,7 +58,15 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
 
     const handleFileChange = (event) => {
         setFileInputKey(prevKey => prevKey + 1);
-        setSelectedFile(event.target.files[0]);
+
+        const file = event.target.files[0]
+        const maxSize = watch('template')?.max_upload_size || size
+        console.log(maxSize)
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setSelectedFile(event.target.files[0]);
+        }
     };
 
     const handleUpload = () => {
@@ -72,7 +78,13 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
     const handleDrop = (event) => {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
-        setSelectedFile(file);
+        const maxSize = watch('template')?.max_upload_size || size
+        console.log(maxSize)
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setSelectedFile(file);
+        }
     };
 
     const handleDragOver = (event) => {
@@ -120,7 +132,7 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
 
         action.then((response) => {
             // console.log(response);
-            if (response?.status==200 || response?.status==201) {
+            if (response?.status == 200 || response?.status == 201) {
                 setdocumentSelected(response?.data?.data)
                 handleClose()
                 toast.success(editId > 0 ? 'Document has been successfully uploaded' : 'Document has been successfully uploaded')
@@ -205,6 +217,14 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
         }
     }, [editId])
 
+    const [size, setsize] = useState()
+    useEffect(() => {
+        const session = sessionStorage.getItem('size')
+        if (session) {
+            setsize(session)
+        }
+    }, [])
+
 
     return (
         <div>
@@ -265,8 +285,9 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
                                     />
                                 </Grid> */}
 
+
                             <div
-                                className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
+                                // className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
                                 onDrop={handleDrop}
                                 onDragOver={handleDragOver}
                             >
@@ -277,12 +298,13 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
                                     id="file-upload"
                                     key={fileInputKey}
                                 />
-                                <label
-                                    htmlFor="file-upload"
-                                    className="cursor-pointer bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                                >
-                                    Select File or Drag and Drop Here
+                                <label htmlFor="file-upload" style={{ cursor: 'pointer' }} className='add-document-block'>
+                                    <Image src={Doc} alt='Doc' width={200} height={200} />
+
+                                    <h3><span>Select File</span>  or Drag and Drop Here</h3>
+                                    <h4>Max {datas?.document_template?.max_upload_size || size} MB files are allowed</h4>
                                 </label>
+
                                 {(selectedFile || details?.file) && (
                                     <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">
                                         <Grid mr={1}>
@@ -328,12 +350,12 @@ export default function LeadRequestUploadDocumentModal({ lead_id, editId, setEdi
                                     sx={{ textTransform: 'none', height: 30 }}
                                 // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
                                 >
-                                     {
+                                    {
                                         loading ?
                                             <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
                                             :
                                             <>
-                                                Upload 
+                                                Upload
                                             </>
                                     }
                                 </LoadingButton>

@@ -64,7 +64,14 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
 
     const handleFileChange = (event) => {
         setFileInputKey(prevKey => prevKey + 1);
-        setSelectedFile(event.target.files[0]);
+
+        const file = event.target.files[0]
+        const maxSize = watch('template')?.max_upload_size || size
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setSelectedFile(event.target.files[0]);
+        }
     };
 
     const handleUpload = () => {
@@ -76,7 +83,13 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
     const handleDrop = (event) => {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
-        setSelectedFile(file);
+        const maxSize = watch('template')?.max_upload_size || size
+        console.log(maxSize)
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setSelectedFile(file);
+        }
     };
 
     const handleDragOver = (event) => {
@@ -212,6 +225,14 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
     }, [editId])
 
 
+    const [size, setsize] = useState()
+    useEffect(() => {
+        const session = sessionStorage.getItem('size')
+        if (session) {
+            setsize(session)
+        }
+    }, [])
+
     return (
         <div>
 
@@ -311,6 +332,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                             <Image src={Doc} alt='Doc' width={200} height={200} />
 
                                             <h3><span>Select File</span>  or Drag and Drop Here</h3>
+                                            <h4>Max {watch('template')?.max_upload_size || size} MB files are allowed</h4>
                                         </label>
 
                                         {(selectedFile || details?.file) && (

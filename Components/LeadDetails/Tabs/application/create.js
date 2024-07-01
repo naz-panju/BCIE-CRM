@@ -1,8 +1,8 @@
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
-import { Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
+import { Button, Grid, IconButton, Skeleton, TextField, Tooltip, Typography, styled, tooltipClasses } from '@mui/material';
 import { useEffect } from 'react';
-import { Close, KeyboardArrowDownOutlined, KeyboardArrowUpOutlined, Refresh } from '@mui/icons-material';
+import { CheckCircle, Close, InfoOutlined, KeyboardArrowDownOutlined, KeyboardArrowUpOutlined, Refresh } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import { useState } from 'react';
 
@@ -17,7 +17,20 @@ import toast from 'react-hot-toast';
 import TextInput from '@/Form/TextInput';
 import AddCourse from './addCourse';
 import { LeadApi } from '@/data/Endpoints/Lead';
+import { useRef } from 'react';
 
+
+const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip placement="right" {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: '#f5f5f9',
+        color: 'rgba(0, 0, 0, 0.87)',
+        maxWidth: 220,
+        fontSize: theme.typography.pxToRem(12),
+        border: '1px solid #dadde9',
+    },
+}));
 
 const scheme = yup.object().shape({
     country: yup.object().required("Please Choose a Country").typeError("Please choose a Country"),
@@ -123,7 +136,14 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         })
     }
 
-
+    const [mandatoryDocuments, setmandatoryDocuments] = useState([])
+    const mandatoryTemplate = () => {
+        ListingApi.documentTemplate().then((response) => {
+            // console.log(response);
+            const mandatoryDocs = response?.data?.data?.filter(obj => obj?.is_mandatory === 1);
+            setmandatoryDocuments(mandatoryDocs);
+        })
+    }
 
     const onSubmit = async (data) => {
         // console.log(data);
@@ -232,6 +252,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
 
     const handleDocumentChange = (data) => {
+        setMenuIsOpen(true);
         setValue('documents', data || '')
 
     }
@@ -268,6 +289,37 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         setIsExpanded(!isExpanded);
     };
 
+    const [menuIsOpen, setMenuIsOpen] = useState(false);
+    const selectRef = useRef(null);
+
+    const handleMenuOpen = () => {
+        setMenuIsOpen(true);
+    };
+
+    const handleMenuClose = () => {
+        setMenuIsOpen(false);
+    };
+
+    const handleClickOutside = (event) => {
+        if (selectRef.current && !selectRef.current.contains(event.target)) {
+            setMenuIsOpen(false);
+        }
+    };
+
+    const handleInputChange = (inputValue, actionMeta) => {
+        if (actionMeta.action === 'input-change') {
+            setMenuIsOpen(true); // Open menu when input changes
+        }
+    };
+
+    // Attach click event listener to detect clicks outside the menu
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     useEffect(() => {
         if (watch('country')) {
             setselectedCountryID(watch('country')?.id)
@@ -286,6 +338,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         } else if (editId == 0) {
             setOpen(true)
         }
+        mandatoryTemplate()
     }, [editId])
 
     const customStyles = {
@@ -342,7 +395,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                             getOptionLabel={(e) => e.name}
                                             getOptionValue={(e) => e.id}
                                             onChange={handleCountryChange}
-                                            // menuIsOpen={true}
+                                        // menuIsOpen={true}
                                         />
 
                                         {errors.country && <span className='form-validation'>{errors.country.message}</span>}
@@ -443,20 +496,61 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
 
                                 <div className='application-input'>
-                                    <a className='form-text'>Documents</a>
+                                    <div className='flex justify-between'>
+                                        <a className='form-text'>Documents</a>
+
+                                        <HtmlTooltip
+                                            title={
+                                                <React.Fragment>
+                                                    <table style={{ borderCollapse: 'collapse', width: '100%', padding: 0 }}>
+                                                        <thead>
+                                                            <tr>
+                                                                <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Mandatory Documents</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {mandatoryDocuments?.map((docs, ind) => {
+
+                                                                const selectedDocuments = watch('documents') || [];
+
+                                                                return (<tr key={ind}>
+                                                                    <td className='flex justify-between' style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                                                        {docs?.name}
+                                                                        <CheckCircle fontSize='small' color={
+                                                                            selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id) ? 'success' : 'disabled'
+                                                                        } />
+                                                                    </td>
+
+                                                                </tr>)
+                                                            })}
+                                                        </tbody>
+                                                    </table>
+                                                </React.Fragment>
+                                            }
+                                        >
+                                            <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
+                                        </HtmlTooltip>
+                                        {/* <InfoOutlined color='info' fontSize='small' /> */}
+                                    </div>
                                     <Grid className='mb-5 forms-data' >
-                                        <AsyncSelect
-                                            isMulti
-                                            name={'documents'}
-                                            defaultValue={watch('documents')}
-                                            // isClearable
-                                            defaultOptions
-                                            loadOptions={fetchDocuments}
-                                            getOptionLabel={(e) => e.title}
-                                            getOptionValue={(e) => e.id}
-                                            onChange={handleDocumentChange}
-                                        />
-                                        {errors.documents && <span className='form-validation'>{errors.documents.message}</span>}
+                                        <div ref={selectRef} >
+                                            <AsyncSelect
+                                                isMulti
+                                                name={'documents'}
+                                                defaultValue={watch('documents')}
+                                                // isClearable
+                                                defaultOptions
+                                                loadOptions={fetchDocuments}
+                                                getOptionLabel={(e) => e.title}
+                                                getOptionValue={(e) => e.id}
+                                                menuIsOpen={menuIsOpen}
+                                                onMenuOpen={handleMenuOpen}
+                                                onMenuClose={handleMenuClose}
+
+                                                onChange={handleDocumentChange}
+                                            />
+                                            {errors.documents && <span className='form-validation'>{errors.documents.message}</span>}
+                                        </div>
                                     </Grid>
                                 </div>
 

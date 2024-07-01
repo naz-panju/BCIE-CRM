@@ -238,8 +238,6 @@ function LeadApplication({ data, lead_id, handleLeadRefresh,appRefresh }) {
 
     }, [refresh, page,appRefresh,limit])
 
-console.log(appRefresh);
-
     return (
         <>
             <CreateLead from='app' editId={leadEditId} setEditId={setleadEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} handleLeadRefresh={handleLeadRefresh} />

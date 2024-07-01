@@ -25,6 +25,4 @@ export const ApplicationApi = {
     submitToUniversity:(data) => http.post(`applications/submit-to-university`, data),
 
     addUniversityId:(data) => http.post(`applications/save-university-id`, data),
-
-
 }

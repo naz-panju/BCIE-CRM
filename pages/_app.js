@@ -8,11 +8,24 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import 'react-phone-input-2/lib/style.css';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import { useEffect } from "react";
+import { ListingApi } from "@/data/Endpoints/Listing";
 
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
 
   // console.log(pageProps);
+  useEffect(() => {
+
+    const session=sessionStorage.getItem('size')
+    if(!session){
+      ListingApi.maxFileSize().then((response)=>{
+        sessionStorage.setItem('size',response?.data?.size)
+      })
+    }
+    
+  }, [])
+  
 
   return <SessionProvider session={session}>
     <Toaster />

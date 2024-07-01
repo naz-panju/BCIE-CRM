@@ -222,14 +222,28 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
     const handleFileChange = (event) => {
         setFileInputKey(prevKey => prevKey + 1);
-        setSelectedFile(event.target.files[0]);
+
+        const file = event.target.files[0]
+        const maxSize = watch('template')?.max_upload_size || size
+        console.log(maxSize)
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setSelectedFile(event.target.files[0]);
+        }
     };
 
 
     const handleDrop = (event) => {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
-        setSelectedFile(file);
+        const maxSize = watch('template')?.max_upload_size || size
+        console.log(maxSize)
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setSelectedFile(file);
+        }
     };
 
     const handleDragOver = (event) => {
@@ -342,6 +356,14 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
     }
 
+    const [size, setsize] = useState()
+    useEffect(() => {
+        const session = sessionStorage.getItem('size')
+        if (session) {
+            setsize(session)
+        }
+    }, [])
+
 
     return (
         <div>
@@ -392,7 +414,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
                                                                 <Tooltip title={'Preview'}>
                                                                     <a target='_blank' href={obj?.file}>
-                                                                        <Visibility fontSize='small' sx={{ color: '#689df6',  }} />
+                                                                        <Visibility fontSize='small' sx={{ color: '#689df6', }} />
                                                                     </a>
                                                                 </Tooltip>
 
@@ -533,6 +555,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                             <Image src={Doc} alt='Doc' width={200} height={200} />
 
                                             <h3>Add<span>Document</span></h3>
+                                            <h4>Max {watch('template')?.max_upload_size || size} MB files are allowed</h4>
                                         </label>
 
 

@@ -93,8 +93,13 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     const handleDrop = (event) => {
         event.preventDefault();
+        const maxSize = size
         const newFile = event.dataTransfer.files[0];
-        setFile([...file, newFile]);
+        if (newFile?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setFile([...file, newFile]);
+        }
     };
 
     const handleDragOver = (event) => {
@@ -104,8 +109,14 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
     const [fileInputKey, setFileInputKey] = useState(0);
     const handleFileChange = (e) => {
         setFileInputKey(prevKey => prevKey + 1);
+        const maxSize = size
         const newFile = e?.target?.files[0];
-        setFile([...file, newFile]); // Add the new file to the state
+        if (newFile?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setFile([...file, newFile]);
+        }
+        // setFile([...file, newFile]); // Add the new file to the state
     };
 
     const onSubmit = async (data) => {
@@ -136,8 +147,8 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
             attachmentFiles?.map((obj) => {
                 formData.append('attachment_ids[]', obj?.id)
             })
-        }else{
-            formData.append('attachment_ids[]',null )
+        } else {
+            formData.append('attachment_ids[]', null)
         }
 
         // for (var pair of formData.entries()) {
@@ -271,6 +282,16 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     const [copied, setcopied] = useState()
 
+
+    const [size, setsize] = useState()
+    useEffect(() => {
+        const session = sessionStorage.getItem('size')
+        if (session) {
+            setsize(session)
+        }
+    }, [])
+
+
     return (
         <div style={{ overflow: 'hidden' }}>
 
@@ -310,7 +331,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
                             <div className='email-template-div'>
                                 <form onSubmit={handleSubmit(onSubmit)}>
-    
+
                                     {/* <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
                                         <Grid item md={4}>
                                             <Typography sx={{ fontWeight: '500' }}>Select Lead</Typography>
@@ -326,73 +347,73 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                             />
                                         </Grid>
                                     </Grid> */}
-    
+
                                     {
                                         dataLoading ?
                                             <LoadingEdit item={items} />
                                             :
                                             < >
-    
+
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                     <div className='application-input'>
                                                         <Grid className='mb-5 forms-data flex items-center'>
-    
+
                                                             {/* <Typography sx={{ fontWeight: '500' }}>System Template</Typography> */}
                                                             <a className='form-text'>System Template</a>
-    
+
                                                             <Checkbox checked={isSysytemTemplate} disabled />
-    
+
                                                         </Grid>
                                                     </div>
                                                 </div>
-    
+
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                     <div className='application-input'>
                                                         <a className='form-text'>Template Name</a>
                                                         <Grid className='mb-5 forms-data'>
-    
+
                                                             <TextInput disabled={isSysytemTemplate} control={control} name="name"
                                                                 value={watch('name')} />
                                                             {errors.name && <span className='form-validation'>{errors.name.message}</span>}
-    
+
                                                         </Grid>
                                                     </div>
                                                 </div>
-    
-    
+
+
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                     <div className='application-input'>
                                                         <a className='form-text'>Subject</a>
                                                         <Grid className='mb-5 forms-data'>
-    
+
                                                             <TextInput control={control} name="subject"
                                                                 value={watch('subject')} />
                                                             {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
-    
+
                                                         </Grid>
                                                     </div>
                                                 </div>
-    
+
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                     <div className='application-input'>
                                                         <a className='form-text'> CC</a>
                                                         <Grid className='mb-5 forms-data'>
-    
+
                                                             <TextInput disabled={isSysytemTemplate} control={control} name="default_cc"
                                                                 value={watch('default_cc')} />
                                                             {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
-    
-    
+
+
                                                         </Grid>
                                                     </div>
                                                 </div>
-    
+
                                                 {/* <a>Body</a> */}
                                                 {/* <Grid className='form_group'>
                                                    
                                                     <MyEditor  name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} />
                                                 </Grid> */}
-    
+
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                     <div className='application-input'>
                                                         <a className='form-text'>Body</a>
@@ -408,14 +429,14 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         {errors.body && <span className='form-validation'>{errors.body.message}</span>}
                                                         */}
                                                             {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
-    
+
                                                             <Editor emoji={false} val={watch('body')}
                                                                 onValueChange={e => setValue('body', e)} copied={copied}
                                                             />
                                                         </Grid>
                                                     </div>
                                                 </div>
-    
+
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                     <div className='application-input'>
                                                         <a className='form-text'>Body Footer</a>
@@ -431,14 +452,14 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         {errors.body && <span className='form-validation'>{errors.body.message}</span>}
                                                         */}
                                                             {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
-    
+
                                                             <Editor emoji={false} val={watch('body_footer')}
                                                                 onValueChange={e => setValue('body_footer', e)}
                                                             />
                                                         </Grid>
                                                     </div>
                                                 </div>
-    
+
                                                 {/* <Grid className='form_group'>
     
                                                     <TextInput placeholder='Body Footer' control={control} name="body_footer"
@@ -446,10 +467,10 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                     {errors.body_footer && <span className='form-validation'>{errors.body_footer.message}</span>}
     
                                                 </Grid> */}
-    
+
                                                 <Grid className='mb-5 forms-data'>
-    
-    
+
+
                                                     {
                                                         attachmentFiles?.length > 0 &&
                                                         <Grid display={'flex'} container p={1.5} item xs={12}>
@@ -470,7 +491,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                             </Grid>
                                                         </Grid>
                                                     }
-    
+
                                                     <div
                                                         // className="flex flex-col items-center justify-center mt-4 border-dashed border-2 border-gray-400 p-4 "
                                                         onDrop={handleDrop}
@@ -485,12 +506,13 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         />
                                                         <label htmlFor="file-upload" style={{ cursor: 'pointer' }} className='add-document-block'>
                                                             <Image src={Doc} alt='Doc' width={200} height={200} />
-    
+
                                                             <h3><span>Select File</span>  or Drag and Drop Here</h3>
+                                                            <h4>Max {size} MB files are allowed</h4>
                                                         </label>
                                                     </div>
-    
-    
+
+
                                                     <Grid display={'flex'} container p={1.5} item xs={12}>
                                                         {/* <Grid item xs={12} md={2.5}>
                                                             <label htmlFor="file-input">
@@ -518,27 +540,27 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                                 </Grid>
                                                             ))} </Grid>
                                                     </Grid>
-    
+
                                                 </Grid>
-    
+
                                                 <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                     <div className='application-input'>
-    
+
                                                         <Grid className='mb-5 forms-data flex items-center'>
-    
+
                                                             {/* <Typography sx={{ fontWeight: '500' }}></Typography> */}
                                                             <a className='form-text'>Is Public Template</a>
-    
+
                                                             <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
-    
+
                                                         </Grid>
                                                     </div>
                                                 </div>
-    
-    
+
+
                                             </>
                                     }
-    
+
                                     <Grid pb={3} display={'flex'} >
                                         <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>  {
                                             loading ?
@@ -554,7 +576,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                             <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
                                         </svg></Button>
                                     </Grid>
-    
+
                                 </form>
                             </div>
                         </div>

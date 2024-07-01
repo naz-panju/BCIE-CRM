@@ -62,15 +62,25 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
     const handleFileUpload = (event) => {
         setFileInputKey(prevKey => prevKey + 1);
         const file = event.target.files[0];
-        if (file) {
-            setAttachment(file);
+        const maxSize = size
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setAttachment(event.target.files[0]);
         }
+
     };
 
     const handleDrop = (event) => {
         event.preventDefault();
         const file = event.dataTransfer.files[0];
-        setAttachment(file);
+        const maxSize = size
+        console.log(maxSize)
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setAttachment(file);
+        }
     };
 
     const handleDragOver = (event) => {
@@ -217,6 +227,13 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
         }
     }, [editId])
 
+    const [size, setsize] = useState()
+    useEffect(() => {
+        const session = sessionStorage.getItem('size')
+        if (session) {
+            setsize(session)
+        }
+    }, [])
 
     return (
         <div>
@@ -332,6 +349,8 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                                 <Image src={Doc} alt='Doc' width={200} height={200} />
 
                                                 <h3><span>Select File</span>  or Drag and Drop Here</h3>
+                                                <h4>Max {size} MB files are allowed</h4>
+
                                             </label>
 
 
@@ -367,7 +386,7 @@ export default function LeadPaymentModal({ lead_id, editId, setEditId, handleRef
                                     </>
                             }
 
-                            <Grid mt={2}  pb={3} >
+                            <Grid mt={2} pb={3} >
 
                                 <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>{
                                     loading ?

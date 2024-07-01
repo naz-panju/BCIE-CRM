@@ -23,7 +23,9 @@ export const ListingApi = {
     emailTemplate:(data) => http.get(`listing/email-templates`, { params: data }),
     whatsappTemplate:(data) => http.get(`listing/whatsapp-templates`, { params: data }),
     applicationStages:(data) => http.get(`listing/next-stages/${data?.id}`, { params: data }),
-   
+
+    maxFileSize:(data) => http.get(`max-file-upload-size`, { params: data }),
+
 }
 
 
