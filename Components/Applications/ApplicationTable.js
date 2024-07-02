@@ -690,7 +690,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             // status: 'Admission Completed',
             country_id: selectedCountry,
             university_id: selectedUniversity,
-            intake_id: selectedIntake,
+            intake_id: 'selectedIntake',
             subject_area_id: selectedStream,
             course_level_id: selectedcourselevel,
             app_coordinator_id: selectedcoordinator,

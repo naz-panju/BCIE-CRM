@@ -37,6 +37,7 @@ const scheme = yup.object().shape({
     university: yup.object().required("Please Choose an University").typeError("Please choose an University"),
     course: yup.object().required("Please Choose a Course").typeError("Please choose a Course"),
     intake: yup.object().required("Please Choose an Intake").typeError("Please choose an Intake"),
+    coursetext:yup.string().required("Please enter course"),
 })
 
 export default function LeadApplicationModal({ lead_id, editId, setEditId, handleRefresh, details }) {
@@ -169,6 +170,9 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
             remarks: data.remarks,
         }
+
+        console.log(dataToSubmit);
+
         let action;
 
         if (editId > 0) {
@@ -179,7 +183,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         }
 
         action.then((response) => {
-            // console.log(response);
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Application has been Updated Successfully' : 'Applied Successfully')
                 reset()
@@ -232,21 +236,25 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         setValue('intake', '')
         setValue('coursetext', '')
         setIsExpanded(true)
+        trigger('country')
     }
 
     const handleUniversityChange = (data) => {
         setValue('university', data || '')
         setValue('intake', '')
+        trigger('university')
     }
 
     const handleCourseChange = (data) => {
         setValue('course', data || '')
+        trigger('course')
     }
     const handleCourseLevelChange = (data) => {
         setValue('course_level', data || '')
     }
     const handleinTakeChange = (data) => {
         setValue('intake', data || '')
+        trigger('intake')
 
     }
 
@@ -262,15 +270,15 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     }
 
 
-
+    const [countryRefresh, setcountryRefresh] = useState(0)
     const getDetails = async () => {
         setDataLoading(true)
         const response = await ApplicationApi.view({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
-            console.log(data);
+            // console.log(data);
 
-            setValue('country', data?.country)
+            setValue('country', data?.university?.country)
             setValue('university', data?.university)
             setValue('course_level', data?.course_level)
             setValue('course', data?.subject_area)
@@ -278,9 +286,9 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             setValue('remarks', data?.remarks)
             setValue('coursetext', data?.course)
             setValue('documents', data?.documents)
-
         }
         setDataLoading(false)
+        setcountryRefresh(countryRefresh + 1)
     }
 
     const [isExpanded, setIsExpanded] = useState(true);
@@ -320,6 +328,8 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         };
     }, []);
 
+
+
     useEffect(() => {
         if (watch('country')) {
             setselectedCountryID(watch('country')?.id)
@@ -328,7 +338,6 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             setselectedUniversityId(watch('university')?.id || '')
         }
     }, [watch('country'), watch('university')])
-
 
 
     useEffect(() => {
@@ -384,6 +393,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                     {/* className='form_group */}
                                     <Grid className='mb-5 forms-data' >
                                         <AsyncSelect
+                                            key={countryRefresh}
                                             styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                             // styles={{ width: '100%' }}
                                             name='country'
@@ -447,8 +457,9 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                     <a className='form-text'>Subject Area</a>
                                     <Grid className='mb-5 forms-data' >
                                         <AsyncSelect
+                                            key={countryRefresh}
                                             isDisabled={!selectedCountryID}
-                                            key={courseRefresh}
+                                            // key={courseRefresh}
                                             name={'course'}
                                             defaultValue={watch('course')}
                                             // isClearable
@@ -462,6 +473,103 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                     </Grid>
                                 </div>
                             </div>
+
+                            {
+                                watch('university') &&
+                                (
+                                    <Grid
+                                        mb={1}
+                                        className="border-2 radius-sm w-100"
+                                        maxHeight={500}
+                                        overflow={'auto'}
+                                    >
+                                        <Grid className="flex justify-between h-7 items-center border-b-2">
+                                            <Grid>
+                                                {
+                                                    !isExpanded &&
+                                                    <span style={{ fontSize: '14px', marginLeft: 10 }}> University Information</span>
+                                                }
+                                            </Grid>
+                                            <Grid>
+                                                {isExpanded ? (
+                                                    <KeyboardArrowUpOutlined
+                                                        sx={{ color: 'grey', cursor: 'pointer', mr: 1 }}
+                                                        fontSize="small"
+                                                        onClick={toggleExpand}
+                                                    />
+                                                ) : (
+                                                    <KeyboardArrowDownOutlined
+                                                        sx={{ color: 'grey', cursor: 'pointer', mr: 1 }}
+                                                        fontSize="small"
+                                                        onClick={toggleExpand}
+                                                    />
+                                                )}
+                                            </Grid>
+                                        </Grid>
+                                        {isExpanded && (
+                                            <>
+                                                {(watch('university')?.extra_university_info ||
+                                                    watch('university')?.extra_scholarship_info) ? (
+                                                    <Grid p={2}>
+                                                        {watch('university')?.extra_university_info && (
+                                                            <Grid>
+                                                                <div className="mb-2">
+                                                                    <button
+                                                                        disabled
+                                                                        style={{
+                                                                            backgroundColor: '#689df6',
+                                                                            color: 'white',
+                                                                            height: '25px',
+                                                                            width: '180px',
+                                                                            fontSize: '14px',
+                                                                            borderRadius: 5,
+                                                                        }}
+                                                                    >
+                                                                        University Info
+                                                                    </button>
+                                                                </div>
+                                                                <span style={{ fontSize: '14px' }}>
+                                                                    {watch('university')?.extra_university_info}
+                                                                </span>
+                                                            </Grid>
+                                                        )}
+                                                        {watch('university')?.extra_scholarship_info && (
+                                                            <Grid mt={2}>
+                                                                <div className="mb-2">
+                                                                    <button
+                                                                        disabled
+                                                                        style={{
+                                                                            backgroundColor: '#689df6',
+                                                                            color: 'white',
+                                                                            height: '25px',
+                                                                            width: '180px',
+                                                                            fontSize: '14px',
+                                                                            borderRadius: 5,
+                                                                        }}
+                                                                    >
+                                                                        Scholarship Info
+                                                                    </button>
+                                                                </div>
+                                                                <span style={{ fontSize: '14px' }}>
+                                                                    {watch('university')?.extra_scholarship_info}
+                                                                </span>
+                                                            </Grid>
+                                                        )}
+                                                    </Grid>
+                                                ) : (
+                                                    <Grid p={2}>
+                                                        <Grid className="flex justify-center items-center" height={100}>
+                                                            <span style={{ fontSize: '16px' }}>
+                                                                No Information Found
+                                                            </span>
+                                                        </Grid>
+                                                    </Grid>
+                                                )}
+                                            </>
+                                        )}
+                                    </Grid>
+                                )
+                            }
 
                             <div>
                                 <div className='application-input'>
@@ -536,6 +644,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                         <div ref={selectRef} >
                                             <AsyncSelect
                                                 isMulti
+                                                key={countryRefresh}
                                                 name={'documents'}
                                                 defaultValue={watch('documents')}
                                                 // isClearable

@@ -473,7 +473,6 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                     )}
                                                 </Grid>
                                             )
-
                                         }
 
                                         <a className='form-text'>Subject Area</a>
