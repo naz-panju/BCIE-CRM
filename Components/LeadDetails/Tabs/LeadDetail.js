@@ -298,6 +298,27 @@ function LeadDetail({ data, handleEdit, loading }) {
                                 </div>
                             }
 
+                            {
+                                data?.closed == 1 && data?.archive_reason &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Archive Note </label>: {data?.archive_reason}
+                                </div>
+                            }
+
+                            {
+                                data?.closed == 1 && data?.archive_note &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Archive Note </label>: {data?.archive_note}
+                                </div>
+                            }
+
+                            {
+                                data?.withdrawn == 1 && data?.withdraw_reason &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Withdrawn Reason</label>: {data?.withdraw_reason}
+                                </div>
+                            }
+
 
 
 

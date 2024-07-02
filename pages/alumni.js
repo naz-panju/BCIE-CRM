@@ -3,7 +3,7 @@ import ApplicantsIndex from '@/Components/Applicants/ApllicantsIndex'
 import Layout from '@/Components/Common/Layout'
 import { getSession, useSession } from 'next-auth/react'
 import { useRouter } from 'next/router'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 function Applicants() {
 
