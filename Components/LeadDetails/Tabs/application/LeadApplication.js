@@ -215,7 +215,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh,appRefresh }) {
         setLoading(true)
         // console.log(lead_id);
         const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, intake_id: 'All' })
-        // console.log(response);
+        console.log(response);
         setList(response?.data)
         setLoading(false)
     }

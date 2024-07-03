@@ -1335,7 +1335,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                 width: '100%',
                                                             }}
                                                         >
-                                                            <TableCell colSpan={11} align="center">
+                                                            <TableCell colSpan={12} align="center">
                                                                 <div className='no-table-ask-block'>
                                                                     <h4 style={{ color: 'grey' }}>No Application Found</h4>
                                                                 </div>

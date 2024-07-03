@@ -2,7 +2,7 @@ import { signOut, useSession } from 'next-auth/react';
 import React, { useState } from 'react'
 
 function Footer() {
-  
+
   const [isOpen, setIsOpen] = useState(false);
 
   const { data: session, status } = useSession();
@@ -11,31 +11,32 @@ function Footer() {
 
 
   const togglePopup = () => {
-      setIsOpen(!isOpen);
+    setIsOpen(!isOpen);
   };
 
   const closePopup = () => {
-      setIsOpen(false);
+    setIsOpen(false);
   };
 
   const handleSignout = () => {
-      localStorage.removeItem('token')
-      signOut()
+    signOut()
+    window.location.href('/login')
+    localStorage.removeItem('token')
   }
 
 
   const getFirstLettersOfTwoWords = (name) => {
-      if (name) {
-          const words = name.split(" "); // Split the name into an array of words
-          if (words.length >= 2) {
-              // Extract the first letter of the first two words and concatenate them
-              return words[0].charAt(0) + words[1].charAt(0);
-          } else if (words.length === 1) {
-              // If there's only one word, return its first letter
-              return words[0].charAt(0);
-          }
+    if (name) {
+      const words = name.split(" "); // Split the name into an array of words
+      if (words.length >= 2) {
+        // Extract the first letter of the first two words and concatenate them
+        return words[0].charAt(0) + words[1].charAt(0);
+      } else if (words.length === 1) {
+        // If there's only one word, return its first letter
+        return words[0].charAt(0);
       }
-      return ""; // Return an empty string if name is not provided
+    }
+    return ""; // Return an empty string if name is not provided
   };
 
   return (

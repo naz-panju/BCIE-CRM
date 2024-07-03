@@ -27,6 +27,7 @@ const style = {
 
 export default function PortalPermissionModal({ editId, setEditId, details, setDetails }) {
 
+    // console.log(details);
 
     let scheme = yup.object().shape({
 
