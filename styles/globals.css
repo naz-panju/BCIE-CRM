@@ -1509,3 +1509,13 @@ input[type="number"] {
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2); /* Light text shadow */
   color: #000080; /* Dark blue text */
 }
+
+.forgot-text {
+  color: #0866ff;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.forgot-text:hover {
+  text-decoration: underline;
+}
