@@ -229,7 +229,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
         if (file?.size > maxSize * 1024 * 1024) {
             toast.error(`File size exceeds ${maxSize}MB`)
         } else {
-            setSelectedFile(event.target.files[0]);
+            setSelectedFile(file);
         }
     };
 

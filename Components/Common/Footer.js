@@ -20,7 +20,7 @@ function Footer() {
 
   const handleSignout = () => {
     signOut()
-    window.location.href('/login')
+    window.location.href = '/login';
     localStorage.removeItem('token')
   }
 

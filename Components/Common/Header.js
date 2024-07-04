@@ -28,6 +28,7 @@ const Header = ({ }) => {
 
   const handleSignout = () => {
     localStorage.removeItem('token')
+    window.location.href = '/login';
     signOut()
   }
 
