@@ -123,7 +123,7 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                     <Checkbox
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -133,7 +133,7 @@ function EnhancedTableHead(props) {
                             'aria-label': 'select all desserts',
                         }}
                     />
-                </TableCell>
+                </TableCell> */}
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -391,7 +391,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                             selected={isItemSelected}
                                                             sx={{ cursor: 'pointer' }}
                                                         >
-                                                            <TableCell className='checkbox-tb' padding="checkbox">
+                                                            {/* <TableCell className='checkbox-tb' padding="checkbox">
                                                                 <Checkbox
                                                                     onClick={(event) => handleClick(event, row.id)}
                                                                     color="primary"
@@ -400,7 +400,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                                         'aria-labelledby': labelId,
                                                                     }}
                                                                 />
-                                                            </TableCell>
+                                                            </TableCell> */}
                                                             <TableCell
                                                                 onClick={() => handleDetailOpen(row?.id)}
                                                                 component="th"

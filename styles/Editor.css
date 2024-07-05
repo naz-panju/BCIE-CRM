@@ -964,6 +964,14 @@ a.form-text {
     font-weight: 500;
 }
 
+.modal-footer h2 {
+    font-size: 24px;
+    margin-left: 20px;
+    color: #fff;
+    font-weight: 500;
+    padding: 10px;
+}
+
 .modal-header h2 span {
     display: block;
     margin-left: 30px;

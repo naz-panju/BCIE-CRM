@@ -77,129 +77,75 @@ function Details({ data, loading }) {
                 <Divider sx={{ mb: 1 }} />
             </Grid>
             :
-            <Grid p={3}>
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Title:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.title}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ mb: 1 }} />
+            <div style={{ padding: '15px' }} className='lead-tabpanel-content-item'>
 
-                <Grid container style={{ marginBottom: '10px' }}>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Lead:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.lead?.name || "Null"}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Status:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.status}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ mb: 1 }} />
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Title:</label>
+                        <span>{data?.title}</span>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Lead:</label>
+                        <span>{data?.lead?.name || "Null"}</span>
+                    </div>
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Status:</label>
+                        <span>{data?.status}</span>
+                    </div>
+                </div>
+
+                {data?.status_note && (
+                    <div className="grid grid-cols-1 gap-4">
+                        <div className="lead-details-list">
+                            <label style={{ fontWeight: 'bold' }}>Status Note:</label>
+                            <span>{data?.status_note}</span>
+                        </div>
+                    </div>
+                )}
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Assigned To:</label>
+                        <span>{data?.assignedToUser?.name}</span>
+                    </div>
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Assigned By:</label>
+                        <span>{data?.assignedByUser?.name}</span>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Created By:</label>
+                        <span>{data?.createdBy?.name}</span>
+                    </div>
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Created At:</label>
+                        <span>{data?.created_at && moment(data?.created_at).format("DD-MM-YYYY")}</span>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Due Date:</label>
+                        <span>{data?.due_date ? moment(data?.due_date).format("DD-MM-YYYY") : 'NA'}</span>
+                    </div>
+                </div>
 
                 {
-                    data?.status_note &&
-                    <>
-                        <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                            <Grid item xs={12} sm={12}>
-                                <Typography variant="" style={{ fontWeight: 'bold' }}>
-                                    Status Note:
-                                </Typography>
-                                <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                                    {data?.status_note}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Divider sx={{ mb: 1 }} />
-                    </>
+                    data?.description &&
+                    <div className="grid grid-cols-1 gap-4">
+                        <div className="lead-details-list">
+                            <label style={{ fontWeight: 'bold' }}>Description:</label>
+                            <span>{data?.description}</span>
+                        </div>
+                    </div>
                 }
+            </div>
 
-
-                <Grid container style={{ marginBottom: '10px' }}>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Assigned To:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.assignedToUser?.name}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Assigned By:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.assignedByUser?.name}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ mb: 1 }} />
-
-                <Grid container style={{ marginBottom: '10px' }}>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Created By:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.createdBy?.name}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Created At:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {
-                                data?.created_at &&
-                                moment(data?.created_at).format("DD-MM-YYYY")
-                            }
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ mb: 1 }} />
-
-                <Grid container style={{ marginBottom: '10px' }}>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Due Date:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {
-                                data?.due_date ?
-                                    moment(data?.due_date).format("DD-MM-YYYY")
-                                    : 'NA'
-                            }
-                        </Typography>
-                    </Grid>
-
-                </Grid>
-                <Divider sx={{ mb: 1 }} />
-
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Description:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.description}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ mb: 1 }} />
-            </Grid>
     )
 }
 

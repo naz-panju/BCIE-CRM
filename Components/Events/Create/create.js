@@ -2,7 +2,7 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Button, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import {  Close } from '@mui/icons-material';
+import { Close } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import DateInput from '@/Form/DateInput';
 import SelectX from '@/Form/SelectX';
@@ -78,9 +78,9 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
         let dataToSubmit = {
             name: data?.name,
             start_date: start_date,
-            end_date:end_date,
-            venue:data?.venue,
-            office_id:data?.branch?.id,
+            end_date: end_date,
+            venue: data?.venue,
+            office_id: data?.branch?.id,
             description: data?.description,
         }
 
@@ -198,34 +198,23 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
                 onClose={handleClose}
             >
                 <Grid width={550}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? "Edit Event" : 'Add Event'}</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
+
+                    <Grid className='modal_title d-flex align-items-center'>
+
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <a className='back_modal_head'> {editId > 0 ? "Edit Event" : 'Create Event'} </a>
+
                     </Grid>
-                    <hr />
-                    <div>
+
+                    <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
-                            {/* <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                <Grid item md={4}>
-                                    <Typography sx={{ fontWeight: '500' }}>Select Lead</Typography>
-                                </Grid>
-                                <Grid item md={8}>
-                                    <SelectX
-                                        options={fetchLead}
-                                        control={control}
-                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                        name={'lead'}
-                                        defaultValue={watch('lead')}
-                                    />
-                                </Grid>
-                            </Grid> */}
 
                             {
                                 dataLoading ?
@@ -233,101 +222,124 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
                                     :
                                     <>
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <Typography sx={{ fontWeight: '500' }}>Name</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <TextInput control={control} name="name"
-                                                    value={watch('name')} />
-                                                {errors.name && <span className='form-validation'>{errors.name.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Name</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextInput control={control} name="name"
+                                                        value={watch('name')} />
+                                                    {errors.name && <span className='form-validation'>{errors.name.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <Typography sx={{ fontWeight: '500' }}>Start Date</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <DateInput
-                                                    control={control}
-                                                    name="start_date"
-                                                    value={watch('start_date')}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <Typography sx={{ fontWeight: '500' }}>End Date</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <DateInput
-                                                    control={control}
-                                                    name="end_date"
-                                                    value={watch('end_date')}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                            <div className='application-input'>
+                                                <a className='form-text'>Start Date</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <DateInput
+                                                        control={control}
+                                                        name="start_date"
+                                                        value={watch('start_date')}
+                                                    />
+                                                </Grid>
+                                            </div>
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item md={3}>
-                                                <Typography sx={{ fontWeight: '500' }}>Select Branch</Typography>
-                                            </Grid>
-                                            <Grid item md={9}>
-                                                <SelectX
-                                                    loadOptions={fetchBranches}
-                                                    control={control}
-                                                    name={'branch'}
-                                                    defaultValue={watch('branch')}
-                                                />
-                                            </Grid>
-                                        </Grid>
+                                            <div className='application-input'>
+                                                <a className='form-text'>End Date</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <DateInput
+                                                        control={control}
+                                                        name="end_date"
+                                                        value={watch('end_date')}
+                                                    />
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <Typography sx={{ fontWeight: '500' }}>Venue</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <TextInput control={control} name="venue"
-                                                    value={watch('venue')} />
-                                                {errors.venue && <span className='form-validation'>{errors.venue.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
 
-                                        <Grid display={'flex'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <Typography sx={{ fontWeight: '500' }}>Description</Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <TextField
-                                                    {...register('description')}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    multiline
-                                                    rows={2}
-                                                    sx={{ width: '100%', }}
-                                                />
-                                                {errors.description && <span className='form-validation'>{errors.description.message}</span>}
+                                            <div className='application-input'>
+                                                <a className='form-text'>Select Branch</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <SelectX
+                                                        loadOptions={fetchBranches}
+                                                        control={control}
+                                                        name={'branch'}
+                                                        defaultValue={watch('branch')}
+                                                    />
+                                                </Grid>
+                                            </div>
 
-                                                {/* <Editor emoji={false} val={watch('description')}
-                                            onValueChange={e => setValue('description', e)}
-                                        /> */}
-                                            </Grid>
-                                        </Grid>
+                                            <div className='application-input'>
+                                                <a className='form-text'>Venue</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextField
+                                                        {...register('venue')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={2}
+                                                        sx={{ width: '100%', }}
+                                                    />
+                                                    {/* <TextInput control={control} name="venue"
+                                                        value={watch('venue')} /> */}
+                                                    {errors.venue && <span className='form-validation'>{errors.venue.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+
+                                            <div className='application-input'>
+                                                <a className='form-text'>Description</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextField
+                                                        {...register('description')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={2}
+                                                        sx={{ width: '100%', }}
+                                                    />
+                                                    {errors.description && <span className='form-validation'>{errors.description.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
                                     </>
                             }
 
-                            <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
+                            <Grid pb={3}  >
+                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} type='submit'  >
+                                    {
+                                        loading ?
+                                            <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                            :
+                                            <>
+                                                Submit <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                    <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </>
+                                    }
+                                </LoadingButton>
+                                <Button className='cancel-btn' onClick={handleClose}>Cancel <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                </svg></Button>
+
+                            </Grid>
+
+
+                            {/* <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                                 <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
                                 <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
-                            </Grid>
+                            </Grid> */}
 
                         </form>
                     </div>
                 </Grid>
             </Drawer>
-        </div>
+        </div >
     );
 }

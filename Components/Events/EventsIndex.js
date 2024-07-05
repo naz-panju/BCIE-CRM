@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import EventsTable from './EventsTable';
 import CreateEvent from './Create/create';
+import { Grid } from 'rsuite';
+import { EventOutlined } from '@mui/icons-material';
 
 
 const StyledMenu = styled((props) => (
@@ -87,13 +89,19 @@ export default function EventsIndex() {
       <CreateEvent editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <section>
         <div className='page-title-block'>
-          <div className='page-title-block-content'>
+          <div className='page-title-block-content justify-between'>
             <h1>Events</h1>
+            <Grid className=' flex justify-end' >
+                <Button sx={{ mr: 2, textTransform: 'none' }} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
+                  <EventOutlined fontSize='small' /> Add Event
+                </Button>
+            </Grid>
+
           </div>
 
-          <div className='page-title-block-right'>
+          {/* <div className='page-title-block-right'>
             <Button sx={{ textTransform: 'none' }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
-          </div>
+          </div> */}
         </div>
 
 

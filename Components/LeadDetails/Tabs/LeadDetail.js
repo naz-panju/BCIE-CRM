@@ -301,7 +301,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                             {
                                 data?.closed == 1 && data?.archive_reason &&
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Archive Note </label> {data?.archive_reason}
+                                    <label style={{ fontWeight: 'bold' }}>Archive Reason </label> {data?.archive_reason}
                                 </div>
                             }
 

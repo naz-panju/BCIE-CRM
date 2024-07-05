@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import ReferralTable from './ReferralTable';
 import CreateReferral from './Create/create';
+import { LinkOffOutlined, LinkOutlined } from '@mui/icons-material';
+import { Grid } from '@mui/material';
 
 
 const StyledMenu = styled((props) => (
@@ -87,12 +89,19 @@ export default function ReferralIndex() {
       <CreateReferral editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <section>
         <div className='page-title-block'>
-          <div className='page-title-block-content'>
+          <div className='page-title-block-content justify-between'>
             <h1>Referral Links</h1>
-          </div>
 
-          <div className='page-title-block-right'>
-            <Button sx={{ textTransform: 'none' }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
+            <Grid display={'flex'} >
+
+              <Grid display={'flex'}>
+
+                <Button sx={{ mr: 2 ,textTransform:'none'}} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
+                  <LinkOutlined fontSize='small' /> Add Link
+                </Button>
+         
+              </Grid>
+               </Grid>
           </div>
         </div>
 

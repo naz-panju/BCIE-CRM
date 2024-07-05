@@ -1,6 +1,6 @@
 import { EventRegistrationApi } from '@/data/Endpoints/EventRegistration';
 import { ArrowOutward, Check, Link } from '@mui/icons-material';
-import { Button, Divider, Grid, IconButton, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material';
+import { Button, Divider, Grid, IconButton, MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react'
 import { useEffect } from 'react';
@@ -19,7 +19,7 @@ function EventRegistrations({ details }) {
     const [editId, setEditId] = useState()
 
 
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const [limit, setLimit] = useState(10);
 
     const [refresh, setRefresh] = useState(false)
@@ -30,7 +30,7 @@ function EventRegistrations({ details }) {
     };
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
-        setPage(0);
+        setPage(1);
     };
 
     const currentURL = window?.location?.origin;
@@ -44,7 +44,7 @@ function EventRegistrations({ details }) {
         }, 1000);
     }
 
-    const handleEventRegisterOpen=()=>{
+    const handleEventRegisterOpen = () => {
         setEditId(0)
     }
 
@@ -59,28 +59,28 @@ function EventRegistrations({ details }) {
 
     const fetchRegistrations = () => {
         setloading(true)
-        EventRegistrationApi.list({ event_id: details?.id, limit, page: page + 1 }).then((response) => {
+        EventRegistrationApi.list({ event_id: details?.id, limit, page: page }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setloading(false)
         })
     }
 
-    const handleEdit=(id)=>{
+    const handleEdit = (id) => {
         setEditId(id)
     }
 
-    
+
     const handleRefresh = () => {
-        if (page != 0) {
-          setPage(0)
+        if (page != 1) {
+            setPage(1)
         }
         setRefresh(!refresh)
-      }
+    }
 
     useEffect(() => {
         fetchRegistrations()
-    }, [page, limit,refresh])
+    }, [page, limit, refresh])
 
 
 
@@ -165,33 +165,34 @@ function EventRegistrations({ details }) {
                 {
                     loading ?
                         loadTable() :
-                        list?.data?.length > 0 ?
 
-                            <TableContainer>
-                                <Table>
-                                    <TableHead sx={{ backgroundColor: '#eeeef0' }}>
-                                        <TableRow>
-                                            <TableCell>
-                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                    Name
-                                                </Typography>
-                                            </TableCell>
 
-                                            <TableCell>
+                        <TableContainer>
+                            <Table>
+                                <TableHead sx={{ backgroundColor: '#eeeef0' }}>
+                                    <TableRow>
+                                        <TableCell>
+                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                Name
+                                            </Typography>
+                                        </TableCell>
 
-                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                    Email
-                                                </Typography>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                    Phone
-                                                </Typography>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {
+                                        <TableCell>
+
+                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                Email
+                                            </Typography>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                Phone
+                                            </Typography>
+                                        </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        list?.data?.length > 0 ?
                                             list?.data?.map((obj, index) => (
                                                 <TableRow key={obj?.id}>
                                                     <TableCell>{obj?.name}</TableCell>
@@ -200,28 +201,46 @@ function EventRegistrations({ details }) {
 
                                                     {/* <TableCell><Edit onClick={() => handleEdit(obj?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' /></TableCell> */}
                                                 </TableRow>
+
                                             ))
-                                        }
+                                            :
+                                            <TableRow>
+                                                <TableCell colSpan={3}>
+                                                    <Grid height={200} className='flex items-center justify-center'> No Registration Found</Grid>
 
-                                    </TableBody>
-                                </Table>
-                                <TablePagination
-                                    rowsPerPageOptions={[10, 15, 25]}
-                                    component="div"
-                                    count={list?.meta?.total || 0}
-                                    rowsPerPage={list?.meta?.per_page || 0}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
+                                                </TableCell>                                            </TableRow>
+                                    }
 
-                            </TableContainer>
-                            :
-                            <h4>No Registrations Found</h4>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+
                 }
 
 
+                <div className='table-pagination d-flex justify-content-end align-items-center'>
+
+                    {
+                        list?.data?.length > 0 &&
+                        <div className='d-flex justify-content-between align-items-center'>
+                            <div className='select-row-box'>
+                                <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
+                                    <MenuItem value={10}>10</MenuItem>
+                                    <MenuItem value={15}>15</MenuItem>
+                                    <MenuItem value={25}>25</MenuItem>
+                                </Select>
+                                <label>Rows per page</label>
+                            </div>
+                            <div>
+                                <Stack spacing={2}>
+                                    <Pagination count={list?.meta?.last_page} variant="outlined" shape="rounded" page={page} onChange={handleChangePage} />
+                                </Stack>
+                            </div>
+                        </div>
+                    }
+                </div>
             </Grid >
+
         </>
 
     )

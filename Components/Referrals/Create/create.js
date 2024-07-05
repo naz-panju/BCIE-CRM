@@ -18,6 +18,9 @@ import AsyncSelect from "react-select/async";
 import SelectX from '@/Form/SelectX';
 import DateInput from '@/Form/DateInput';
 import { ReferralApi } from '@/data/Endpoints/Referrals';
+import Image from 'next/image';
+import Doc from '@/img/doc.png';
+
 
 
 // import MyEditor from '@/Form/MyEditor';
@@ -51,9 +54,29 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
     const handleFileUpload = (event) => {
         setFileInputKey(prevKey => prevKey + 1);
         const file = event.target.files[0];
-        if (file) {
+        const maxSize = size
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
+            setAttachment(event.target.files[0]);
+        }
+
+    };
+
+    const handleDrop = (event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files[0];
+        const maxSize = size
+        console.log(maxSize)
+        if (file?.size > maxSize * 1024 * 1024) {
+            toast.error(`File size exceeds ${maxSize}MB`)
+        } else {
             setAttachment(file);
         }
+    };
+
+    const handleDragOver = (event) => {
+        event.preventDefault();
     };
 
     const handleDelete = () => {
@@ -74,6 +97,16 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
 
     const fetchAgencies = (e) => {
         return ListingApi.agencies({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchUniversities = (e) => {
+        return ListingApi.universities({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response?.data?.data
             } else {
@@ -135,7 +168,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         if (data?.agent) {
             formData.append('agency_id', data?.agent?.id)
         }
-        if(data?.events){
+        if (data?.events) {
             formData.append('events_id', data?.events?.id)
         }
         if (data?.validity_date) {
@@ -255,8 +288,13 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         }
     }, [editId])
 
-    // console.log(watch('body'));
-
+    const [size, setsize] = useState()
+    useEffect(() => {
+        const session = sessionStorage.getItem('size')
+        if (session) {
+            setsize(session)
+        }
+    }, [])
 
     return (
         <div>
@@ -267,18 +305,20 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                 onClose={handleClose}
             >
                 <Grid width={550}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>{editId > 0 ? "Edit Referral Link" : 'Create Referral Link'}</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
-                    </Grid>
-                    <hr />
-                    <div>
+                    <Grid className='modal_title d-flex align-items-center'>
 
-                        <form className='form-text-purpose' onSubmit={handleSubmit(onSubmit)}>
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </a>
+
+                        <a className='back_modal_head'> {editId > 0 ? "Edit Referral Link" : 'Create Referral Link'} </a>
+
+                    </Grid>
+                    <div className='form-data-cntr'>
+
+                        <form onSubmit={handleSubmit(onSubmit)}>
 
 
                             {
@@ -288,173 +328,187 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                     <>
 
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <a sx={{ fontWeight: '500' }}>Title</a>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <TextInput control={control} name="title"
-                                                    value={watch('title')} />
-                                                {errors.title && <span className='form-validation'>{errors.title.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Title</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextInput control={control} name="title"
+                                                        value={watch('title')} />
+                                                    {errors.title && <span className='form-validation'>{errors.title.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <a sx={{ fontWeight: '500' }}>Lead Source</a>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <AsyncSelect
-                                                    name={'source'}
-                                                    defaultValue={watch('source')}
-                                                    isClearable
-                                                    defaultOptions
-                                                    loadOptions={fetchSources}
-                                                    getOptionLabel={(e) => e.name}
-                                                    getOptionValue={(e) => e.id}
-                                                    onChange={handleSourseChange}
-                                                />
-                                                {errors?.source && <span className='form-validation'>{errors?.source.message}</span>}
-                                            </Grid>
-
-                                        </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Lead Source</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <AsyncSelect
+                                                        name={'source'}
+                                                        defaultValue={watch('source')}
+                                                        isClearable
+                                                        defaultOptions
+                                                        loadOptions={fetchSources}
+                                                        getOptionLabel={(e) => e.name}
+                                                        getOptionValue={(e) => e.id}
+                                                        onChange={handleSourseChange}
+                                                    />
+                                                    {errors?.source && <span className='form-validation'>{errors?.source.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
                                         {
                                             watch('source')?.name == 'Agency' &&
-                                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                                <Grid item xs={12} md={3}>
-                                                    <a sx={{ fontWeight: '500' }}>Agent</a>
-                                                </Grid>
-                                                <Grid item xs={12} md={9}>
-                                                    <SelectX
-                                                        // menuPlacement='top'
-                                                        loadOptions={fetchAgencies}
-                                                        control={control}
-                                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                                        name={'agent'}
-                                                        defaultValue={watch('agent')}
-                                                    />
-                                                </Grid>
-                                            </Grid>
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                                <div className='application-input'>
+                                                    <a className='form-text'>Referred Agency</a>
+                                                    <Grid className='mb-5 forms-data' >
+                                                        <SelectX
+                                                            // placeholder='Select...'
+                                                            menuPlacement='auto'
+                                                            loadOptions={fetchAgencies}
+                                                            control={control}
+                                                            name={'agent'}
+                                                            defaultValue={watch('agent')}
+                                                        />
+                                                    </Grid>
+                                                </div>
+                                            </div>
                                         }
+
+
 
                                         {
                                             watch('source')?.name == 'Events' &&
-                                            <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                                <Grid item xs={12} md={3}>
-                                                    <a sx={{ fontWeight: '500' }}>Events</a>
-                                                </Grid>
-                                                <Grid item xs={12} md={9}>
-                                                    <SelectX
-                                                        // menuPlacement='top'
-                                                        loadOptions={fetchEvents}
-                                                        control={control}
-                                                        // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                                        // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                                        name={'events'}
-                                                        defaultValue={watch('events')}
-                                                    />
-                                                </Grid>
-                                            </Grid>
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                                <div className='application-input'>
+                                                    <a className='form-text'>Event</a>
+                                                    <Grid className='mb-5 forms-data' >
+                                                        <SelectX
+                                                            // menuPlacement='top'
+                                                            loadOptions={fetchEvents}
+                                                            control={control}
+                                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                            name={'events'}
+                                                            defaultValue={watch('events')}
+                                                        />
+                                                    </Grid>
+                                                </div>
+                                            </div>
                                         }
 
-                                        <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <a sx={{ fontWeight: '500' }}>Last Date of Validity</a>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <DateInput
-                                                    control={control}
-                                                    name="validity_date"
-                                                    value={watch('validity_date')}
-                                                // placeholder='Due Date'
-                                                />
-                                                {errors.validity_date && <span className='form-validation'>{errors.validity_date.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                        {
+                                            watch('source')?.name == 'University' &&
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                                <div className='application-input'>
+                                                    <a className='form-text'>Referred University</a>
+                                                    <Grid className='mb-5 forms-data' >
+                                                        <SelectX
+                                                            // placeholder='Referred University'
+                                                            menuPlacement='auto'
+                                                            loadOptions={fetchUniversities}
+                                                            control={control}
+                                                            name={'referred_university'}
+                                                            defaultValue={watch('referred_university')}
+                                                        />
+                                                    </Grid>
+                                                </div>
+                                            </div>
+                                        }
 
-                                        <Grid display={'flex'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <a sx={{ fontWeight: '500' }}>Top Description</a>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <TextField
-                                                    {...register('top_description')}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    multiline
-                                                    rows={2}
-                                                    sx={{ width: '100%', }}
-                                                />
-                                                {errors.top_description && <span className='form-validation'>{errors.top_description.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Last date of Validity</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <DateInput
+                                                        control={control}
+                                                        name="validity_date"
+                                                        value={watch('validity_date')}
+                                                    // placeholder='Due Date'
+                                                    />
+                                                    {errors.validity_date && <span className='form-validation'>{errors.validity_date.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid display={'flex'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <a sx={{ fontWeight: '500' }}>Bottom Description</a>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <TextField
-                                                    {...register('bottom_description')}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    multiline
-                                                    rows={2}
-                                                    sx={{ width: '100%', }}
-                                                />
-                                                {errors.bottom_description && <span className='form-validation'>{errors.bottom_description.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Top Description</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextField
+                                                        {...register('top_description')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={2}
+                                                        sx={{ width: '100%', }}
+                                                    />
+                                                    {errors.top_description && <span className='form-validation'>{errors.top_description.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid display={'flex'} container p={1.5} item xs={12}>
-                                            <Grid item xs={12} md={3}>
-                                                <a sx={{ fontWeight: '500' }}>Private Remarks</a>
-                                            </Grid>
-                                            <Grid item xs={12} md={9}>
-                                                <TextField
-                                                    {...register('private_remarks')}
-                                                    variant="outlined"
-                                                    fullWidth
-                                                    multiline
-                                                    rows={2}
-                                                    sx={{ width: '100%', }}
-                                                />
-                                                {errors.private_remarks && <span className='form-validation'>{errors.private_remarks.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Bottom Description</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextField
+                                                        {...register('bottom_description')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={2}
+                                                        sx={{ width: '100%', }}
+                                                    />
+                                                    {errors.bottom_description && <span className='form-validation'>{errors.bottom_description.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container className='bg-sky-100' height={80} >
-                                            <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
-                                                <Button
-                                                    onClick={handleClick}
-                                                    sx={{ textTransform: 'none', height: 30 }}
-                                                    variant='contained'
-                                                    className='bg-sky-800'
-                                                >
-                                                    Banner Image
-                                                </Button>
-                                                <input
-                                                    type="file"
-                                                    id="upload-button"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileUpload}
-                                                    key={fileInputKey}
-                                                />
-                                            </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Private Remarks</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextField
+                                                        {...register('private_remarks')}
+                                                        variant="outlined"
+                                                        fullWidth
+                                                        multiline
+                                                        rows={2}
+                                                        sx={{ width: '100%', }}
+                                                    />
+                                                    {errors.private_remarks && <span className='form-validation'>{errors.private_remarks.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
+
+
+                                        <div onDrop={handleDrop}
+                                            onDragOver={handleDragOver} >
+
+                                            <input
+                                                type="file"
+                                                onChange={handleFileUpload}
+                                                className="hidden"
+                                                id="file-upload"
+                                                key={fileInputKey}
+                                            />
+                                            <label htmlFor="file-upload" style={{ cursor: 'pointer' }} className='add-document-block'>
+                                                <Image src={Doc} alt='Doc' width={200} height={200} />
+
+                                                <h3><span>Select File</span>  or Drag and Drop Here</h3>
+                                                <h4>Max {size} MB files are allowed</h4>
+
+                                            </label>
+
+
 
                                             {
                                                 (attachment || details?.banner_image) &&
                                                 <Grid display={'flex'} justifyContent={'space-between'} item pr={1} xs={8} md={8}>
-                                                    {
-                                                        !attachment &&
-                                                        <Tooltip title={details?.banner_image}>
-                                                            <a style={{ textDecoration: 'underLine', color: 'blue' }} href={details?.banner_image} target='_blank' className="text-gray-700">
-                                                                {trimUrlAndNumbers(details?.banner_image)}
-                                                            </a>
-                                                        </Tooltip>
-                                                    }
+
                                                     {
                                                         attachment &&
                                                             attachment?.name?.length > 30 ?
@@ -464,27 +518,52 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                             :
                                                             <p>{attachment?.name}</p>
                                                     }
-
+                                                    {
+                                                        !attachment &&
+                                                        <Tooltip title={details?.banner_image}>
+                                                            <p className="text-gray-700 text-start">
+                                                                {trimUrlAndNumbers(details?.banner_image)}
+                                                            </p>
+                                                        </Tooltip>
+                                                    }
                                                     {
                                                         attachment &&
                                                         <Delete onClick={handleDelete} fontSize='small' sx={{ color: 'red', cursor: 'pointer' }} />
                                                     }
                                                 </Grid>
                                             }
-                                        </Grid>
-
+                                        </div>
                                     </>
                             }
 
-                            <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
+                            <Grid pt={3} pb={3}  >
+                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} type='submit'  >
+                                    {
+                                        loading ?
+                                            <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                            :
+                                            <>
+                                                Submit <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                    <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                                </svg>
+                                            </>
+                                    }
+                                </LoadingButton>
+                                <Button className='cancel-btn' onClick={handleClose}>Cancel <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
+                                </svg></Button>
+
+                            </Grid>
+
+                            {/* <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                                 <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
                                 <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
-                            </Grid>
+                            </Grid> */}
 
                         </form>
                     </div>
                 </Grid>
             </Drawer>
-        </div>
+        </div >
     );
 }

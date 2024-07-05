@@ -175,13 +175,36 @@ export default function TaskDetailTabs({ id, close, archiveRefresh }) {
             <ConfirmPopup loading={archiveLoading} ID={reOpenId} setID={setreOpenId} clickFunc={reOpen} title={'Do you want to Un Archive this Task?'} />
 
 
-            <Box sx={{ width: '100%' }}>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Tabs value={activeTab} onChange={handleChange} aria-label="basic tabs example" >
-                        {tabs.map((obj, index) => (
-                            <Tab label={obj.label} key={index} {...a11yProps(index)} sx={{ textTransform: 'none' }} />
-                        ))}
-                    </Tabs>
+            {/* <Box sx={{ width: '100%' }}> */}
+                <Grid className='modal_title d-flex align-items-center' >
+                    <a className='back_modal' onClick={close}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                            <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                    </a>
+
+                    {/* <a className='back_modal_head'>Details </a> */}
+
+                    <div className='communication-log-block-tab-block tab-block'>
+                        <div className='communication-log-attachments'>
+                            {/* <h3>Attachments</h3> */}
+                        </div>
+
+                        <div className='communication-log-attachments-tab'>
+                            <div onClick={() => setActiveTab(0)} className='communication-log-item '>
+                                <div className={`lead-score-block-tab flex   ${activeTab == 0 ? 'lead-tab-active' : 'bg-trans'}`}>
+                                    <span style={{ color: 'white' }} >Details</span>
+                                </div>
+                            </div>
+
+                            <div onClick={() => setActiveTab(1)} className='communication-log-item '>
+                                <div className={`lead-score-block-tab tab flex ${activeTab == 1 ? 'lead-tab-active' : 'bg-trans'}`} >
+                                    <span style={{ color: 'white' }}>
+                                        Notes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'end'}>
                         {
                             (details?.status == 'Completed' && details?.archived != 1) &&
@@ -191,21 +214,14 @@ export default function TaskDetailTabs({ id, close, archiveRefresh }) {
                             details?.archived == 1 &&
                             <Button onClick={handleReopen} size='small' sx={{ textTransform: 'none', mr: 2, height: '28px' }} className='bg-sky-500' variant='contained'><Archive sx={{ mr: 1 }} fontSize='small' /> Un Archive</Button>
                         }
-
-
-                        <IconButton
-                            onClick={close}
-                        >
-                            <Close />
-                        </IconButton>
                     </Grid>
-                </Box>
+                </Grid>
                 {tabs.map((obj, index) => {
                     return <TabPanel value={activeTab} index={index} key={index}>
                         {obj.component}
                     </TabPanel>
                 })}
-            </Box>
+            {/* </Box> */}
         </>
     );
 }
