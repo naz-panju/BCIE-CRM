@@ -82,7 +82,7 @@ export default function BulkUpload({ editId, setEditId }) {
 
         formData.append('file', selectedFile)
 
-       
+
         // console.log(dataToSubmit);
 
         let action;
@@ -161,6 +161,17 @@ export default function BulkUpload({ editId, setEditId }) {
         setSelectedFile(null); // Clear selected file
     };
 
+    const downloadExcel = () => {
+        const url = `${process.env.NEXT_PUBLIC_DOC_PATH}lead_upload.xlsx`;
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'lead_upload.xlsx'; // This attribute prompts the browser to download the file
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    
+
 
     useEffect(() => {
         if (editId > 0) {
@@ -194,6 +205,7 @@ export default function BulkUpload({ editId, setEditId }) {
 
                     </Grid>
                     <div className='form-data-cntr'>
+                        <Button onClick={downloadExcel} variant='outlined' style={{ textTransform: 'none' }} >Download Excel File</Button>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 

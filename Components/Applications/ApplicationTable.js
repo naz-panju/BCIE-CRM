@@ -725,7 +725,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
 
         ApplicationApi.list(params).then((response) => {
-            // console.log(response);
+            console.log(response);
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {

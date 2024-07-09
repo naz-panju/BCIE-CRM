@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab'
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit'
+import formImage from '@/img/header-bg.png'
 
 import axios from 'axios'
 import { EventRegistrationApi } from '@/data/Endpoints/EventRegistration'
@@ -23,7 +24,7 @@ const scheme = yup.object().shape({
 
 function EventForm({ data }) {
 
-    // console.log(data);
+    console.log(data);
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
@@ -79,83 +80,97 @@ function EventForm({ data }) {
     }
 
     return (
-        <Grid mt={5} mb={5} display={'flex'} alignItems={'center'} flexDirection={'column'} justifyContent={'center'} >
+        <Grid
+            style={{ backgroundColor: '#f0f4f8', padding: '20px', height: '100vh' }}
+            container
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+        >
+            <Grid
+                item
+                xs={12}
+                md={8}
+                lg={6}
+                style={{
+                    maxWidth: '500px',  // Adjust this value as needed
+                    backgroundColor: 'white',
+                    padding: '20px',
+                    borderRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Grid container spacing={2}>
+                    <Grid item xs={12} className='form-data-cntr'>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} style={{ backgroundImage:formImage, backgroundSize: 'cover', backgroundPosition: 'center' }} className='modal-header'>
+                                    <h2>{data?.top_description}</h2>
+                                </Grid>
+                                <Grid item xs={12} md={12}>
+                                    <a className='form-text'>Name</a>
+                                    <TextInput
+                                        placeholder=''
+                                        control={control}
+                                        {...register('name', { required: 'The Name field is required' })}
+                                        value={watch('name')}
+                                    />
+                                    {errors.name && <span className='form-validation'>{errors.name.message}</span>}
+                                </Grid>
 
-            <Typography>{data?.name}</Typography>
-            <form style={{ width: 600 }} onSubmit={handleSubmit(onSubmit)}>
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item xs={12} md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Name</Typography>
-                    </Grid>
-                    <Grid item xs={12} md={7}>
-                        <TextInput control={control} {...register('name', { required: 'The Name field is required' })}
-                            value={watch('name')} />
-                        {errors.name && <span className='form-validation'>{errors.name.message}</span>}
+                                <Grid item xs={12} md={12}>
+                                    <a className='form-text'>Email</a>
+                                    <TextInput
+                                        control={control}
+                                        {...register('email', {
+                                            required: 'Please enter your email',
+                                            pattern: { value: /^\S+@\S+$/i, message: 'Please enter valid email address' },
+                                        })}
+                                        value={watch('email')}
+                                    />
+                                    {errors.email && <span className='form-validation'>{errors.email.message}</span>}
+                                </Grid>
+
+                                <Grid item xs={12} md={12}>
+                                    <a className='form-text'>Enter Mobile Number</a>
+                                    <PhoneInput
+                                        {...register('phone', { required: 'Please enter your mobile number' })}
+                                        international
+                                        placeholder=""
+                                        value={watch('phone')}
+                                        onChange={handlePhoneNumber}
+                                        inputProps={{ autoComplete: 'off', required: true }}
+                                        inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }}
+                                        buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }}
+                                    />
+                                    {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
+                                </Grid>
+                            </Grid>
+
+                            <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
+                                <LoadingButton
+                                    loading={loading}
+                                    disabled={loading}
+                                    size='small'
+                                    type='submit'
+                                    sx={{ textTransform: 'none', height: 30 }}
+                                    variant='contained'
+                                >
+                                    Save
+                                </LoadingButton>
+                            </Grid>
+                            {/* <Grid item xs={12} className='modal-footer flex items-center justify-center' style={{ backgroundColor: '#060a11', backgroundSize: 'cover', backgroundPosition: 'center' }} >
+                                <h2> {data?.bottom_description}</h2>
+                            </Grid> */}
+                        </form>
                     </Grid>
                 </Grid>
+            </Grid>
+        </Grid>
 
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item xs={12} md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Email Address</Typography>
-                    </Grid>
-                    <Grid item xs={12} md={7}>
-                        <TextInput control={control} {...register('email', {
-                            required: 'Please enter your email',
-                            pattern: {
-                                value: /^\S+@\S+$/i,
-                                message: 'Please enter valid email address',
-                            },
-                        })}
-                            value={watch('email')} />
-                        {errors.email && <span className='form-validation'>{errors.email.message}</span>}
-
-                    </Grid>
-                </Grid>
-
-                <Grid display={'flex'} alignItems={'center'} container p={1.5} item xs={12}>
-                    <Grid item xs={12} md={5}>
-                        <Typography sx={{ fontWeight: '500' }}>Mobile Number</Typography>
-                    </Grid>
-                    <Grid item xs={12} md={7}>
-                        {/* <TextInput control={control} name="mobile"
-                                value={watch('mobile')} /> */}
-
-                        <PhoneInput
-                            {...register('phone', { required: 'Please enter your mobile number' })}
-                            international
-                            // autoFormat
-                            placeholder="Enter your number"
-                            country="in"
-                            value={watch('phone')}
-                            onChange={handlePhoneNumber}
-                            inputprops={{
-                                autoFocus: true,
-                                autoComplete: 'off',
-                                // name: 'phone',
-                                required: true,
-                            }}
-                            inputstyle={{
-                                width: '100%',
-                                height: '40px',
-                                paddingLeft: '40px', // Adjust the padding to make space for the country symbol
-                            }}
-                            buttonstyle={{
-                                border: 'none',
-                                backgroundColor: 'transparent',
-                                marginLeft: '5px',
-                            }}
-                        />
-                        {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
-
-                    </Grid>
-                </Grid>
-
-                <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                    <LoadingButton loading={loading} disabled={loading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
-                </Grid>
-            </form>
-
-        </Grid >
     )
 }
 

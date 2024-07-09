@@ -23,10 +23,10 @@ import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 
 const scheme = yup.object().shape({
     title: yup.string().required("Title is Required"),
-    description: yup.string().required("Description is Required"),
+    // description: yup.string().required("Description is Required"),
 })
 
-export default function CreateTask({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh, from, app_id,detailRefresh }) {
+export default function CreateTask({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh, from, app_id, detailRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -123,9 +123,10 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
         }
 
         action.then((response) => {
+            console.log(response);
             if (response?.data) {
                 toast.success(editId > 0 ? 'Task Has Been Successfully Updated' : 'Task Has Been Successfully Created')
-                if(detailRefresh){
+                if (detailRefresh) {
                     detailRefresh()
                 }
                 reset()
@@ -338,7 +339,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                                     />
                                                     {errors.description && <span className='form-validation'>{errors.description.message}</span>}
 
-                                                 
+
                                                 </Grid>
                                             </div>
                                         </div>

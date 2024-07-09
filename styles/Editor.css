@@ -339,11 +339,12 @@ span.assigned-span {
     font-size: 12px;
 }
 
+
+/*
 .table-custom-tr:nth-child(2) .assigned-colm span.assigned-span {
     background: #BCDBFF;
 }
-
-.table-custom-tr:nth-child(3) .assigned-colm span.assigned-span {
+ .table-custom-tr:nth-child(3) .assigned-colm span.assigned-span {
     background: #D9BCFF;
 }
 
@@ -377,20 +378,24 @@ span.assigned-span {
 
 .table-custom-tr:nth-child(11) .assigned-colm span.assigned-span {
     background: #BCFFBE;
-}
+} */
 
 
 span.stage-span {
     border-radius: 30px;
     border: 1px solid #ECC9BE;
     background: #FFDED3;
-    color: #0B0D23;
+    color: #0D1422;
     font-family: Inter;
     font-size: 13px;
     font-style: normal;
     font-weight: 400;
-    line-height: 10px;
+    line-height: 13px;
     padding: 8px 14px;
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .table-custom-tr:nth-child(2) .stage-colm span.stage-span {

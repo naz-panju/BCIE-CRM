@@ -28,6 +28,7 @@ import TemplateData from '../TemplateData';
 
 import Doc from '@/img/doc.png';
 import Image from 'next/image';
+import { useRef } from 'react';
 
 
 // import MyEditor from '@/Form/MyEditor';
@@ -61,6 +62,8 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
     const [confirmLoading, setconfirmLoading] = useState(false)
 
     const [isSysytemTemplate, setIsSysytemTemplate] = useState(false)
+
+    const templateDataRef = useRef(null);
 
 
     const handleDeleteAttachment = (index) => {
@@ -282,6 +285,39 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
     const [copied, setcopied] = useState()
 
+    const [isFocused, setIsFocused] = useState(false);
+
+    const handleFocus = () => {
+        setIsFocused(true);
+    }
+
+    const handleBlur = (e) => {
+        if (templateDataRef.current && templateDataRef.current.contains(e.relatedTarget)) {
+            // console.log('blur');
+            return; // Do not trigger onBlur if the click is within TemplateData
+        }
+        setIsFocused(false);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (templateDataRef.current && !templateDataRef.current.contains(event.target)) {
+                // console.log('heer');
+            } else {
+                setIsFocused(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [])
+
+
+    const setSubject = (text) => {
+        setValue('subject')
+    }
 
     const [size, setsize] = useState()
     useEffect(() => {
@@ -306,8 +342,8 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                 <Grid display={'flex'}>
                     {
                         toggleTable &&
-                        <Grid width={500}>
-                            <TemplateData handleToggleTable={handleToggleTable} setValue={setcopied} />
+                        <Grid width={500} ref={templateDataRef}>
+                            <TemplateData handleToggleTable={handleToggleTable} setValue={setcopied} isFocused={isFocused} setSubject={setSubject} />
                         </Grid>
                     }
                     <Grid width={750} sx={{ borderLeft: toggleTable ? '1px solid' : '' }}>
@@ -386,8 +422,8 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         <a className='form-text'>Subject</a>
                                                         <Grid className='mb-5 forms-data'>
 
-                                                            <TextInput control={control} name="subject"
-                                                                value={watch('subject')} />
+                                                            <TextInput control={control} name="subject" onFocus={handleFocus} onBlur={handleBlur}
+                                                                value={watch('subject')} onfocus />
                                                             {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
 
                                                         </Grid>
@@ -402,7 +438,6 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                             <TextInput disabled={isSysytemTemplate} control={control} name="default_cc"
                                                                 value={watch('default_cc')} />
                                                             {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
-
 
                                                         </Grid>
                                                     </div>

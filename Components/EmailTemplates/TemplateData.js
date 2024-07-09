@@ -2,7 +2,7 @@ import { AddCircleOutline, ContentCopyOutlined, CopyAllOutlined } from '@mui/ico
 import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
-function TemplateData({ handleToggleTable, setValue, body }) {
+function TemplateData({ handleToggleTable, setValue, body,isFocused,setSubject }) {
 
     const Datas = [
         { title: 'Lead name', key: "{{1}}" },
@@ -26,6 +26,10 @@ function TemplateData({ handleToggleTable, setValue, body }) {
         { title: 'Student ID', key: "{{19}}" },
         { title: 'Assigned Counselor Address', key: "{{20}}" },
         { title: 'Assigned Office Address', key: "{{21}}" },
+
+        { title: 'Assigned Office Email Ids', key: "{{22}}" },
+        { title: 'Assigned Office Phone Numbers', key: "{{23}}" },
+
         { title: 'Applied Country', key: "{{30}}" },
         { title: 'Applied University', key: "{{31}}" },
         { title: 'Applied Course Level', key: "{{32}}" },
@@ -50,7 +54,11 @@ function TemplateData({ handleToggleTable, setValue, body }) {
     const [copied, setcopied] = useState()
 
     const addToTextBox = (text) => {
-        setValue(text)
+        if(isFocused){
+            setSubject(text)
+        }else{
+            setValue(text)
+        }
     }
 
     const copyToClipboard = (text) => {

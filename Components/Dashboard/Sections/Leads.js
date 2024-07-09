@@ -132,7 +132,7 @@ function LeadSection({ intakeRange,weeklyList, weeklyLoading, weeklyStageListLoa
                                 :
 
                                 weeklyStageList?.data?.map((obj, index) => (
-                                    <div key={index} className={`card weekly-card border rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between ${backgroundClasses[index % backgroundClasses.length]}`}>
+                                    <div style={{backgroundColor:obj?.colour}} key={index} className={`card weekly-card border rounded-sm h-5/6 w-1/6 flex items-center flex-column justify-between `}>
                                         <div>
 
 
