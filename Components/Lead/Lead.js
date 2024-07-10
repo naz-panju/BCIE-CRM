@@ -222,7 +222,7 @@ export default function CustomizedMenus() {
     <>
       <CreateLead from='lead' editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} />
       <AssignLeadModal assignToUser={assignToUser} setassignToUser={setassignToUser} single={singleAssign} setsingle={setsingleAssign} selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} handlePopClose={handleClose} />
-      <BulkUpload editId={uploadId} setEditId={setuploadId} />
+      <BulkUpload editId={uploadId} setEditId={setuploadId} handleRefresh={noPageRefresh} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>

@@ -329,7 +329,6 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                         <a className='back_modal_head'> Send Mail to University </a>
 
                     </Grid>
-                    <hr />
                     <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>

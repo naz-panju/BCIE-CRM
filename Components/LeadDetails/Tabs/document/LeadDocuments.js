@@ -1,34 +1,40 @@
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Paper, Select, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Grid, Tooltip, tooltipClasses, styled, Skeleton } from '@mui/material'
 import React, { useState } from 'react'
 import LeadDocumentModal from './create'
 import { useEffect } from 'react'
 import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
 import LeadDocumentRequest from './request'
-import { DeleteOutline, DownloadOutlined, Edit, ManageAccounts, Upload, UploadOutlined, ZoomInOutlined } from '@mui/icons-material'
+import { CheckCircle, Edit, VisibilityOutlined, ZoomInOutlined } from '@mui/icons-material'
 import { blue } from '@mui/material/colors'
 import LeadDocumentDetailModal from './Modal'
 import DocumentConfirmPopup from './confirmPopup'
 import DocumentRejectPopup from './rejectPopup'
 import toast from 'react-hot-toast';
-import TimelineOppositeContent, {
-    timelineOppositeContentClasses,
-} from '@mui/lab/TimelineOppositeContent';
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
 import ApplicationDocumentUpload from './applicationDocUpload'
 import LeadRequestUploadDocumentModal from './UploadRequestedDoc'
 import Doc from '@/img/doc.png';
-import DocPreview from '@/img/doc-preview.jpg';
 import Image from 'next/image'
 import PdfViewer from '@/Form/PdfViewer'
 import { useSession } from 'next-auth/react'
+import { ListingApi } from '@/data/Endpoints/Listing'
+import DocViewer from '@/Form/DocViewer'
+import DocView from '@/Form/DocViewer'
+import IframeComponent from '@/Form/Iframe'
 
-function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
+const HtmlTooltip = styled(({ className, ...props }) => (
+    <Tooltip placement="right" {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+        backgroundColor: '#f5f5f9',
+        color: 'rgba(0, 0, 0, 0.87)',
+        maxWidth: 220,
+        fontSize: theme.typography.pxToRem(12),
+        border: '1px solid #dadde9',
+    },
+}));
+
+function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadData }) {
 
     const session = useSession()
 
@@ -145,6 +151,19 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
     }
 
 
+    const [mandatoryDocuments, setmandatoryDocuments] = useState([])
+    const mandatoryTemplate = () => {
+        ListingApi.documentTemplate().then((response) => {
+            if (leadData?.lead_source?.id == 10) {
+                const carryoverDoc = response?.data?.data?.find(obj => obj?.id == 18)
+                setmandatoryDocuments([carryoverDoc])
+            } else {
+                const mandatoryDocs = response?.data?.data?.filter(obj => obj?.is_mandatory === 1);
+                setmandatoryDocuments(mandatoryDocs);
+            }
+        })
+    }
+
     async function downloadFile(url, fileName) {
         try {
             // Fetch the file content
@@ -195,6 +214,10 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
     const [searchKey, setsearchKey] = useState()
 
     useEffect(() => {
+        mandatoryTemplate()
+    }, [])
+
+    useEffect(() => {
         fetchList()
     }, [refresh, page, searchKey])
 
@@ -232,6 +255,38 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                     <div className='flex mar-25'>
                         <div className='md:w-5/12 lg:w-5/12 pad-25'>
                             <div className='search-document-block'>
+                                <div className='flex mb-1'>
+                                    <HtmlTooltip
+                                        title={
+                                            <React.Fragment>
+                                                <table style={{ borderCollapse: 'collapse', width: '100%', padding: 0 }}>
+                                                    <thead>
+                                                        <tr>
+                                                            <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Mandatory Documents</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {mandatoryDocuments?.map((docs, ind) => {
+                                                            const selectedDocuments = list?.data || [];
+                                                            return (<tr key={ind}>
+                                                                <td className='flex justify-between' style={{ border: '1px solid #ddd', padding: '8px' }}>
+                                                                    <span style={{ cursor: 'pointer' }} > {docs?.name}</span>
+                                                                    <CheckCircle fontSize='small'
+                                                                        color={
+                                                                            selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id) ? 'success' : 'disabled'
+                                                                        }
+                                                                    />
+                                                                </td>
+                                                            </tr>)
+                                                        })}
+                                                    </tbody>
+                                                </table>
+                                            </React.Fragment>
+                                        }
+                                    >
+                                        <VisibilityOutlined fontSize='small' sx={{ color: '#689df6', cursor: 'pointer', ml: 'auto' }} />
+                                    </HtmlTooltip>
+                                </div>
                                 <div className='search-document-block-input'>
                                     <input onChange={(e) => setsearchKey(e.target.value)} placeholder='Search Documents' />
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">  <path d="M12.5 12.5L17.5 17.5M8.33333 14.1667C5.11167 14.1667 2.5 11.555 2.5 8.33333C2.5 5.11167 5.11167 2.5 8.33333 2.5C11.555 2.5 14.1667 5.11167 14.1667 8.33333C14.1667 11.555 11.555 14.1667 8.33333 14.1667Z" stroke="#0B0D23" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" /></svg>
@@ -299,12 +354,14 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh }) {
                                             <div className='doc-preview-block'>
                                                 <div className='flex justify-end mb-5'>
                                                     <a style={{ cursor: 'pointer' }} target='_blank' href={documentSelected?.file} > <ZoomInOutlined sx={{ color: '#858585' }} /> </a>
-                                                </div>
+                                                </div> 
+
                                                 {(
                                                     documentSelected.file.endsWith('.pdf') ? (
                                                         <PdfViewer fileUrl={documentSelected?.file} />
                                                     ) :
-                                                        <Image src={documentSelected?.file} alt='DocPreview' width={340} height={300} />
+                                                        <DocView doc={documentSelected?.file} />
+                                                    // <Image src={documentSelected?.file} alt='DocPreview' width={340} height={300} />
                                                 )}
                                             </div>
                                         }

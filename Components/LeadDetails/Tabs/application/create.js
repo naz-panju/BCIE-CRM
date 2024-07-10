@@ -2,7 +2,7 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Button, Grid, IconButton, Skeleton, TextField, Tooltip, Typography, styled, tooltipClasses } from '@mui/material';
 import { useEffect } from 'react';
-import { CheckCircle, Close, InfoOutlined, KeyboardArrowDownOutlined, KeyboardArrowUpOutlined, Refresh } from '@mui/icons-material';
+import { CheckCircle, Close, InfoOutlined, KeyboardArrowDownOutlined, KeyboardArrowUpOutlined, Refresh, VisibilityOutlined } from '@mui/icons-material';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import { useState } from 'react';
 
@@ -37,7 +37,7 @@ const scheme = yup.object().shape({
     university: yup.object().required("Please Choose an University").typeError("Please choose an University"),
     course: yup.object().required("Please Choose a Course").typeError("Please choose a Course"),
     intake: yup.object().required("Please Choose an Intake").typeError("Please choose an Intake"),
-    coursetext:yup.string().required("Please enter course"),
+    coursetext: yup.string().required("Please enter course"),
 })
 
 export default function LeadApplicationModal({ lead_id, editId, setEditId, handleRefresh, details }) {
@@ -127,9 +127,12 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         })
     }
 
+    const [allDocuments, setallDocuments] = useState([])
+
     const fetchDocuments = (e) => {
         return LeadApi.listDocuments({ keyword: e, lead_id: lead_id, limit: 50, status: 'Accepted' }).then(response => {
             if (typeof response.data.data !== "undefined") {
+                setallDocuments(response.data.data)
                 return response.data.data;
             } else {
                 return [];
@@ -140,9 +143,13 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     const [mandatoryDocuments, setmandatoryDocuments] = useState([])
     const mandatoryTemplate = () => {
         ListingApi.documentTemplate().then((response) => {
-            // console.log(response);
-            const mandatoryDocs = response?.data?.data?.filter(obj => obj?.is_mandatory === 1);
-            setmandatoryDocuments(mandatoryDocs);
+            if(details?.lead_source?.id==10){
+                const carryoverDoc=response?.data?.data?.find(obj => obj?.id == 18)
+                setmandatoryDocuments([carryoverDoc])
+            }else{
+                const mandatoryDocs = response?.data?.data?.filter(obj => obj?.is_mandatory === 1);
+                setmandatoryDocuments(mandatoryDocs);
+            }
         })
     }
 
@@ -271,6 +278,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
 
     const [countryRefresh, setcountryRefresh] = useState(0)
+    const [docRefresh, setdocRefresh] = useState(0)
     const getDetails = async () => {
         setDataLoading(true)
         const response = await ApplicationApi.view({ id: editId })
@@ -289,6 +297,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         }
         setDataLoading(false)
         setcountryRefresh(countryRefresh + 1)
+        setdocRefresh(docRefresh + 1)
     }
 
     const [isExpanded, setIsExpanded] = useState(true);
@@ -319,6 +328,29 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             setMenuIsOpen(true); // Open menu when input changes
         }
     };
+
+    const handleSelectMandatoryDoc = (data) => {
+        let docArray = watch('documents') || []; // Get the current documents array
+        const existingDocIndex = docArray.findIndex(doc => doc?.document_template?.id === data?.id);
+
+        if (existingDocIndex !== -1) {
+            // Document template is already present, so remove it
+            docArray.splice(existingDocIndex, 1);
+            setValue('documents', docArray); // Update the documents array in form state
+            setdocRefresh(docRefresh + 1); // Optionally update any state to trigger re-render
+        } else {
+            // Document template not found in the current documents array, try to add it
+            const getDocs = allDocuments?.find(doc => doc?.document_template?.id === data?.id);
+
+            if (getDocs) {
+                docArray.push(getDocs); // Add the document to the array
+                setValue('documents', docArray); // Update the documents array in form state
+                setdocRefresh(docRefresh + 1); // Optionally update any state to trigger re-render
+            } else {
+                toast.error('Document not found'); // Notify user if document template is not found
+            }
+        }
+    }
 
     // Attach click event listener to detect clicks outside the menu
     useEffect(() => {
@@ -623,10 +655,12 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
 
                                                                 return (<tr key={ind}>
                                                                     <td className='flex justify-between' style={{ border: '1px solid #ddd', padding: '8px' }}>
-                                                                        {docs?.name}
-                                                                        <CheckCircle fontSize='small' color={
-                                                                            selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id) ? 'success' : 'disabled'
-                                                                        } />
+                                                                        <span style={{ cursor: 'pointer' }} onClick={() => handleSelectMandatoryDoc(docs)}> {docs?.name}</span>
+                                                                        <CheckCircle fontSize='small'
+                                                                            color={
+                                                                                selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id) ? 'success' : 'disabled'
+                                                                            }
+                                                                        />
                                                                     </td>
 
                                                                 </tr>)
@@ -636,7 +670,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                 </React.Fragment>
                                             }
                                         >
-                                            <InfoOutlined fontSize='small' sx={{ color: '#689df6' }} />
+                                            <VisibilityOutlined fontSize='small' sx={{ color: '#689df6', cursor: 'pointer', mr: 1 }} />
                                         </HtmlTooltip>
                                         {/* <InfoOutlined color='info' fontSize='small' /> */}
                                     </div>
@@ -644,7 +678,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                         <div ref={selectRef} >
                                             <AsyncSelect
                                                 isMulti
-                                                key={countryRefresh}
+                                                key={docRefresh}
                                                 name={'documents'}
                                                 defaultValue={watch('documents')}
                                                 // isClearable

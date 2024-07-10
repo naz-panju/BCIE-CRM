@@ -30,7 +30,7 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function BulkUpload({ editId, setEditId }) {
+export default function BulkUpload({ editId, setEditId,handleRefresh }) {
 
     const [state, setState] = React.useState({
         right: false,
@@ -102,6 +102,7 @@ export default function BulkUpload({ editId, setEditId }) {
                 reset()
                 handleClose()
                 // setRefresh(!refresh)
+                handleRefresh()
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
@@ -205,7 +206,7 @@ export default function BulkUpload({ editId, setEditId }) {
 
                     </Grid>
                     <div className='form-data-cntr'>
-                        <Button onClick={downloadExcel} variant='outlined' style={{ textTransform: 'none' }} >Download Excel File</Button>
+                        <Button onClick={downloadExcel} variant='outlined' style={{ textTransform: 'none' }} >Download Format</Button>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 

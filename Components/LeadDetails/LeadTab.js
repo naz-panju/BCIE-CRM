@@ -119,7 +119,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
     },
     {
       label: 'Documents',
-      component: <LeadDocuments from='lead' lead_id={data?.id} />,
+      component: <LeadDocuments from='lead' lead_id={data?.id} leadData={data} />,
       icon: <FolderOpenIcon />
     },
     {
