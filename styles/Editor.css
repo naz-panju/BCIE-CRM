@@ -3429,6 +3429,8 @@ a.not-found {
 .sidebar__inner.scrollCustom {
     height: 100%;
     overflow: auto;
+    scrollbar-color: #585b5e #C5CCD3;
+    scrollbar-width: thin;
 }
 .sidebar-dropdown {
     background-color: #fff;
