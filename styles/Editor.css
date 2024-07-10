@@ -3426,7 +3426,23 @@ a.not-found {
 .add-note-textarea fieldset {
     border: 0px !important;
 }
-
+.sidebar__inner.scrollCustom {
+    height: 100%;
+    overflow: auto;
+}
+.sidebar-dropdown {
+    background-color: #fff;
+    margin: 0px 20px;
+    padding: 15px 15px 10px;
+    border-radius: 5px;
+}
+.sidebar-dropdown div a {
+    color: #000;
+    font-size: 15px;
+    text-decoration: none;
+    padding-bottom: 5px;
+    display: block;
+}
 
 
 @media (max-width: 1400px) {
