@@ -499,6 +499,14 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         return option.student_code ? `${option.name} (${option.student_code})` : option.name;
     };
 
+    const disableSpecificDate = (date) => {
+        return moment(date).isBefore(moment(), 'day');
+    }
+
+    const disableSpecificDateForDob = (date) => {
+        return moment(date).isAfter(moment().subtract(14, 'years'), 'day');
+    }
+
     useEffect(() => {
         setTitleValue()
     }, [titles])
@@ -565,55 +573,58 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
 
 
-                        <div className='form_group frm-conn-stl  '>
-
-                            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="14" viewBox="0 0 17 14" fill="none">
-                                <path d="M1 3.5L7.3906 7.7604C8.0624 8.20827 8.9376 8.20827 9.6094 7.7604L16 3.5M3 12.6667H14C15.1046 12.6667 16 11.7712 16 10.6667V3C16 1.89543 15.1046 1 14 1H3C1.89543 1 1 1.89543 1 3V10.6667C1 11.7712 1.89543 12.6667 3 12.6667Z" stroke="#0B0D23" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <TextInput placeholder='Type your email here' control={control} {...register('email', {
-                                required: 'Please enter your email',
-                                pattern: {
-                                    value: /^\S+@\S+$/i,
-                                    message: 'Please enter valid email address',
-                                },
-                            })}
-                                value={watch('email')} />
-                            {errors.email && <span className='form-validation'>{errors.email.message}</span>}
-
-
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div className='application-input'>
+                                <a className='form-text'>Email</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <TextInput placeholder='' control={control} {...register('email', {
+                                        required: 'Please enter your email',
+                                        pattern: {
+                                            value: /^\S+@\S+$/i,
+                                            message: 'Please enter valid email address',
+                                        },
+                                    })}
+                                        value={watch('email')} />
+                                    {errors.email && <span className='form-validation'>{errors.email.message}</span>}
+                                </Grid>
+                            </div>
                         </div>
 
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                            <div className='form_group frm-sel-icon-stl'>
-                                <svg className='sel-icon' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M5 9.92285C5 14.7747 9.24448 18.7869 11.1232 20.3252C11.3921 20.5454 11.5281 20.6568 11.7287 20.7132C11.8849 20.7572 12.1148 20.7572 12.271 20.7132C12.472 20.6567 12.6071 20.5463 12.877 20.3254C14.7557 18.7871 18.9999 14.7751 18.9999 9.9233C18.9999 8.08718 18.2625 6.32605 16.9497 5.02772C15.637 3.72939 13.8566 3 12.0001 3C10.1436 3 8.36301 3.7295 7.05025 5.02783C5.7375 6.32616 5 8.08674 5 9.92285Z" stroke="#0B0D23" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                                    <path d="M10 9C10 10.1046 10.8954 11 12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9Z" stroke="#0B0D23" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <SelectX
-                                    placeholder='Country of Birth'
-                                    menuPlacement='top'
-                                    loadOptions={fetchGlobalCountry}
-                                    control={control}
-                                    name={'country_of_birth'}
-                                    defaultValue={watch('country_of_birth')}
-                                />
-                                {errors.country_of_birth && <span className='form-validation'>{errors.country_of_birth.message}</span>}
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
+                            <div className='application-input'>
+                                <a className='form-text'>Country of Birth</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <SelectX
+                                        placeholder=''
+                                        menuPlacement='top'
+                                        loadOptions={fetchGlobalCountry}
+                                        control={control}
+                                        name={'country_of_birth'}
+                                        defaultValue={watch('country_of_birth')}
+                                    />
+                                    {errors.country_of_birth && <span className='form-validation'>{errors.country_of_birth.message}</span>}
 
+                                </Grid>
                             </div>
-                            <div className='form_group frm-conn-stl'>
+                            <div className='application-input'>
+                                <a className='form-text'>Country of Residence</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
 
-                                <AsyncSelect
-                                    placeholder='Country of Residence'
-                                    name={'country_of_residence'}
-                                    defaultValue={watch('country_of_residence')}
-                                    isClearable
-                                    defaultOptions
-                                    loadOptions={fetchGlobalCountry}
-                                    getOptionLabel={(e) => e.name}
-                                    getOptionValue={(e) => e.id}
-                                    onChange={handleResidenceChange}
-                                />
-                                {/* <SelectX
+                                    <AsyncSelect
+                                        placeholder=''
+                                        name={'country_of_residence'}
+                                        defaultValue={watch('country_of_residence')}
+                                        isClearable
+                                        defaultOptions
+                                        loadOptions={fetchGlobalCountry}
+                                        getOptionLabel={(e) => e.name}
+                                        getOptionValue={(e) => e.id}
+                                        onChange={handleResidenceChange}
+                                    />
+                                    {/* <SelectX
                                     placeholder='Country of Residence'
                                     menuPlacement='top'
                                     loadOptions={fetchGlobalCountry}
@@ -621,157 +632,182 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                     name={'country_of_residence'}
                                     defaultValue={watch('country_of_residence')}
                                 /> */}
-                                {errors.country_of_residence && <span className='form-validation'>{errors.country_of_residence.message}</span>}
+                                    {errors.country_of_residence && <span className='form-validation'>{errors.country_of_residence.message}</span>}
 
+
+                                </Grid>
                             </div>
                         </div>
 
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                            <div className='form_group'>
-                                <PhoneInput
-                                    {...register('phone', { required: 'Please enter your mobile number' })}
-                                    international
-                                    // autoFormat
-                                    placeholder="Enter Mobile Number"
-                                    // country="global"
-                                    value={watch('phone')}
-                                    onChange={handlePhoneNumber}
-                                    inputprops={{
-                                        autoFocus: true,
-                                        autoComplete: 'off',
-                                        // name: 'phone',
-                                        required: true,
-                                    }}
-                                    inputstyle={{
-                                        width: '100%',
-                                        height: '40px',
-                                        paddingLeft: '40px', // Adjust the padding to make space for the country symbol
-                                    }}
-                                    buttonstyle={{
-                                        border: 'none',
-                                        backgroundColor: 'transparent',
-                                        marginLeft: '5px',
-                                    }}
-                                />
-                                {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
+                            <div className='application-input'>
+                                <a className='form-text'>Enter Mobile Number</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <PhoneInput
+                                        {...register('phone', { required: 'Please enter your mobile number' })}
+                                        international
+                                        // autoFormat
+                                        placeholder=""
+                                        // country="global"
+                                        value={watch('phone')}
+                                        onChange={handlePhoneNumber}
+                                        inputprops={{
+                                            autoFocus: true,
+                                            autoComplete: 'off',
+                                            // name: 'phone',
+                                            required: true,
+                                        }}
+                                        inputstyle={{
+                                            width: '100%',
+                                            height: '40px',
+                                            paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                        }}
+                                        buttonstyle={{
+                                            border: 'none',
+                                            backgroundColor: 'transparent',
+                                            marginLeft: '5px',
+                                        }}
+                                    />
+                                    {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
+                                </Grid>
                             </div>
-                            <div className='form_group'>
-                                <PhoneInput
-                                    {...register('alt_phone')}
+                            <div className='application-input'>
+                                <a className='form-text'>Enter Alternate Number</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <PhoneInput
+                                        {...register('alt_phone')}
 
-                                    international
-                                    // autoFormat
-                                    placeholder="Enter Alternate Number"
-                                    // country="in"
-                                    value={watch('alt_phone')}
-                                    onChange={handleAltPhoneNumber}
-                                    inputprops={{
-                                        autoFocus: true,
-                                        autoComplete: 'off',
-                                        name: 'phone',
-                                        required: true,
-                                    }}
-                                    inputstyle={{
-                                        width: '100%',
-                                        height: '40px',
-                                        paddingLeft: '40px', // Adjust the padding to make space for the country symbol
-                                    }}
-                                    buttonstyle={{
-                                        border: 'none',
-                                        backgroundColor: 'transparent',
-                                        marginLeft: '5px',
-                                    }}
-                                />
-                                {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
-                            </div>
-                        </div>
-
-
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                            <div className='form_group'>
-                                <PhoneInput
-                                    {...register('whatsapp')}
-
-                                    international
-                                    // autoFormat
-                                    placeholder="Enter your number"
-                                    // country="in"
-                                    value={watch('whatsapp')}
-                                    onChange={handleWhatsAppNumber}
-                                    inputprops={{
-                                        autoFocus: true,
-                                        autoComplete: 'off',
-                                        name: 'phone',
-                                        required: true,
-                                    }}
-                                    inputstyle={{
-                                        width: '100%',
-                                        height: '40px',
-                                        paddingLeft: '40px', // Adjust the padding to make space for the country symbol
-                                    }}
-                                    buttonstyle={{
-                                        border: 'none',
-                                        backgroundColor: 'transparent',
-                                        marginLeft: '5px',
-                                    }}
-                                />
-                                {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
-
-                            </div>
-                            <div className='form_group frm-conn-stl '>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M3 12H8M3 12C3 16.9706 7.02944 21 12 21M3 12C3 7.02944 7.02944 3 12 3M8 12H16M8 12C8 16.9706 9.79086 21 12 21M8 12C8 7.02944 9.79086 3 12 3M16 12H21M16 12C16 7.02944 14.2091 3 12 3M16 12C16 16.9706 14.2091 21 12 21M21 12C21 7.02944 16.9706 3 12 3M21 12C21 16.9706 16.9706 21 12 21" stroke="#0B0D23" strokeWidth="1.2" strokeLinecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <TextInput placeholder='Preferred Countries' control={control} {...register('preferred_country')}
-                                    value={watch('preferred_country')} />
-                                {errors.preferred_country && <span className='form-validation'>{errors.preferred_country.message}</span>}
-
+                                        international
+                                        // autoFormat
+                                        placeholder=""
+                                        // country="in"
+                                        value={watch('alt_phone')}
+                                        onChange={handleAltPhoneNumber}
+                                        inputprops={{
+                                            autoFocus: true,
+                                            autoComplete: 'off',
+                                            name: 'phone',
+                                            required: true,
+                                        }}
+                                        inputstyle={{
+                                            width: '100%',
+                                            height: '40px',
+                                            paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                        }}
+                                        buttonstyle={{
+                                            border: 'none',
+                                            backgroundColor: 'transparent',
+                                            marginLeft: '5px',
+                                        }}
+                                    />
+                                    {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
+                                </Grid>
                             </div>
                         </div>
 
 
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
+                            <div className='application-input'>
+                                <a className='form-text'>Enter Whatsapp Number</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <PhoneInput
+                                        {...register('whatsapp')}
 
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                                        international
+                                        // autoFormat
+                                        placeholder=""
+                                        // country="in"
+                                        value={watch('whatsapp')}
+                                        onChange={handleWhatsAppNumber}
+                                        inputprops={{
+                                            autoFocus: true,
+                                            autoComplete: 'off',
+                                            name: 'phone',
+                                            required: true,
+                                        }}
+                                        inputstyle={{
+                                            width: '100%',
+                                            height: '40px',
+                                            paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                        }}
+                                        buttonstyle={{
+                                            border: 'none',
+                                            backgroundColor: 'transparent',
+                                            marginLeft: '5px',
+                                        }}
+                                    />
+                                    {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
 
-                            <div className='form_group frm-conn-stl '>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M3 15.0002V16.8C3 17.9201 3 18.4798 3.21799 18.9076C3.40973 19.2839 3.71547 19.5905 4.0918 19.7822C4.5192 20 5.07899 20 6.19691 20H21.0002M3 15.0002V5M3 15.0002L6.8534 11.7891L6.85658 11.7865C7.55366 11.2056 7.90288 10.9146 8.28154 10.7964C8.72887 10.6567 9.21071 10.6788 9.64355 10.8584C10.0105 11.0106 10.3323 11.3324 10.9758 11.9759L10.9822 11.9823C11.6357 12.6358 11.9633 12.9635 12.3362 13.1153C12.7774 13.2951 13.2685 13.3106 13.7207 13.1606C14.1041 13.0334 14.4542 12.7275 15.1543 12.115L21 7" stroke="#0B0D23" strokeWidth="1.2" strokeLinecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <TextInput placeholder='Preferred Courses' control={control} {...register('preffered_course')}
-                                    value={watch('preffered_course')} />
-
-                                {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
+                                </Grid>
                             </div>
-                            <div className='form_group'>
-                                <DateInput
-                                    placeholder='Date of Birth'
-                                    control={control}
-                                    name="dob"
-                                    value={watch('dob')}
-                                />
-                                {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
+                            <div className='application-input'>
+                                <a className='form-text'>Preferred Countries</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <TextInput placeholder='' control={control} {...register('preferred_country')}
+                                        value={watch('preferred_country')} />
+                                    {errors.preferred_country && <span className='form-validation'>{errors.preferred_country.message}</span>}
+
+                                </Grid>
                             </div>
                         </div>
 
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 
-                            <div className='form_group frm-conn-stl '>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M3 15.0002V16.8C3 17.9201 3 18.4798 3.21799 18.9076C3.40973 19.2839 3.71547 19.5905 4.0918 19.7822C4.5192 20 5.07899 20 6.19691 20H21.0002M3 15.0002V5M3 15.0002L6.8534 11.7891L6.85658 11.7865C7.55366 11.2056 7.90288 10.9146 8.28154 10.7964C8.72887 10.6567 9.21071 10.6788 9.64355 10.8584C10.0105 11.0106 10.3323 11.3324 10.9758 11.9759L10.9822 11.9823C11.6357 12.6358 11.9633 12.9635 12.3362 13.1153C12.7774 13.2951 13.2685 13.3106 13.7207 13.1606C14.1041 13.0334 14.4542 12.7275 15.1543 12.115L21 7" stroke="#0B0D23" strokeWidth="1.2" strokeLinecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <TextInput placeholder='Passport Number' control={control} {...register('passport_number')}
-                                    value={watch('passport_number')} />
 
-                                {errors.passport_number && <span className='form-validation'>{errors.passport_number.message}</span>}
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
+
+                            <div className='application-input'>
+                                <a className='form-text'>Preferred Courses</a>
+                                <Grid className='mb-5 forms-data' >
+                                    <TextInput placeholder='' control={control} {...register('preffered_course')}
+                                        value={watch('preffered_course')} />
+
+                                    {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
+                                </Grid>
                             </div>
-                            <div className='form_group'>
-                                <DateInput
-                                    placeholder='Passport Expiry Date'
-                                    control={control}
-                                    name="passport_expiry"
-                                    value={watch('passport_expiry')}
-                                />
-                                {errors.passport_expiry && <span className='form-validation'>{errors.passport_expiry.message}</span>}
+                            <div className='application-input'>
+                                <a className='form-text'>Date of Birth</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <DateInput
+                                        shouldDisableDate={disableSpecificDateForDob}
+                                        placeholder=''
+                                        control={control}
+                                        name="dob"
+                                        value={watch('dob')}
+                                    />
+                                    {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
+                                </Grid>
+                            </div>
+                        </div>
+
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
+
+                            <div className='application-input'>
+                                <a className='form-text'>Passport Number</a>
+                                <Grid className='mb-5 forms-data' >
+                                    <TextInput placeholder='' control={control} {...register('passport_number')}
+                                        value={watch('passport_number')} />
+
+                                    {errors.passport_number && <span className='form-validation'>{errors.passport_number.message}</span>}
+                                </Grid>
+                            </div>
+                            <div className='application-input'>
+                                <a className='form-text'>Passport Expiry Date</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <DateInput
+                                        shouldDisableDate={disableSpecificDate}
+                                        placeholder=''
+                                        control={control}
+                                        name="passport_expiry"
+                                        value={watch('passport_expiry')}
+                                    />
+                                    {errors.passport_expiry && <span className='form-validation'>{errors.passport_expiry.message}</span>}
+                                </Grid>
                             </div>
                         </div>
 
@@ -837,149 +873,148 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                         </div>
                     </div> */}
 
-                        <div className='form_group frm-text-conn-stl '>
-
-                            <TextInput placeholder='City' control={control} {...register('city')}
-                                value={watch('city')} />
-                            {errors.city && <span className='form-validation'>{errors.city.message}</span>}
-
-
-
-                        </div>
-                        <div className='form_group frm-text-conn-stl '>
-
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <TextField placeholder='Address' multiline rows={2} fullWidth control={control}  {...register('address')}
-                                value={watch('address') || ''} />
-                            {errors.address && <span className='form-validation'>{errors.address.message}</span>}
-
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div className='application-input'>
+                                <a className='form-text'>City</a>
+                                {/* className='form_group */}
+                                <Grid className='mb-5 forms-data' >
+                                    <TextInput placeholder='' control={control} {...register('city')}
+                                        value={watch('city')} />
+                                    {errors.city && <span className='form-validation'>{errors.city.message}</span>}
+                                </Grid>
+                            </div>
                         </div>
 
 
-
-                        {/* grid grid-cols-1 md:grid-cols-2 gap-4 */}
-                        <div className='form_group'>
-                            {/* <div className='form_group frm-sel-icon-stl'> */}
-
-                            {/* <svg className='sel-icon' xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
-                                <path d="M6 9.75L11 12.25M11 4.75L6 7.25M13.5 16C12.1193 16 11 14.8807 11 13.5C11 12.1193 12.1193 11 13.5 11C14.8807 11 16 12.1193 16 13.5C16 14.8807 14.8807 16 13.5 16ZM3.5 11C2.11929 11 1 9.88071 1 8.5C1 7.11929 2.11929 6 3.5 6C4.88071 6 6 7.11929 6 8.5C6 9.88071 4.88071 11 3.5 11ZM13.5 6C12.1193 6 11 4.88071 11 3.5C11 2.11929 12.1193 1 13.5 1C14.8807 1 16 2.11929 16 3.5C16 4.88071 14.8807 6 13.5 6Z" stroke="#0B0D23" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                            </svg> */}
-                            <AsyncSelect
-                                placeholder='Lead Source'
-                                // isDisabled={!selectedUniversityId}
-                                // key={selectedUniversityId}
-                                name={'source'}
-                                defaultValue={watch('source')}
-                                isClearable
-                                defaultOptions
-                                loadOptions={fetchSources}
-                                getOptionLabel={(e) => e.name}
-                                getOptionValue={(e) => e.id}
-                                onChange={handleSourseChange}
-                            />
-                            {/* </div> */}
-                            {errors.source && <span className='form-validation'>{errors.source.message}</span>}
-
-
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div className='application-input'>
+                                <a className='form-text'>Address</a>
+                                <Grid className='mb-5 forms-data' >
+                                    <TextField placeholder='' multiline rows={2} fullWidth control={control}  {...register('address')}
+                                        value={watch('address') || ''} />
+                                    {errors.address && <span className='form-validation'>{errors.address.message}</span>}
+                                </Grid>
+                            </div>
                         </div>
 
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                            <div className='application-input'>
+                                <a className='form-text'>Lead Source</a>
+                                <Grid className='mb-5 forms-data' >
+                                    <AsyncSelect
+                                        placeholder=''
+                                        // isDisabled={!selectedUniversityId}
+                                        // key={selectedUniversityId}
+                                        name={'source'}
+                                        defaultValue={watch('source')}
+                                        isClearable
+                                        defaultOptions
+                                        loadOptions={fetchSources}
+                                        getOptionLabel={(e) => e.name}
+                                        getOptionValue={(e) => e.id}
+                                        onChange={handleSourseChange}
+                                    />
+                                    {/* </div> */}
+                                    {errors.source && <span className='form-validation'>{errors.source.message}</span>}
+                                </Grid>
+                            </div>
 
+                            <div className='application-input'>
+                                <a className='form-text'>How did you hear about us?</a>
+                                <Grid className='mb-5 forms-data' >
+                                    <ReactSelector
+                                        placeholder=''
+                                        menuPlacement='auto'
+                                        onInputChange={fetchReference}
+                                        styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}
+                                        options={referenceOption}
+                                        getOptionLabel={option => option.name}
+                                        getOptionValue={option => option.name}
+                                        value={
+                                            referenceOption.filter(options =>
+                                                options?.name == watch('reference')
+                                            )
+                                        }
+                                        name='reference'
+                                        isClearable
+                                        defaultValue={(watch('reference'))}
+                                        onChange={(selectedOption) => setValue('reference', selectedOption?.name || '')}
+                                    />
+                                    {errors.reference && <span className='form-validation'>{errors.reference.message}</span>}
+                                </Grid>
+                            </div>
+
+                        </div>
 
                         {
                             watch('source')?.name == 'Referral' &&
-
-
-                            // grid grid-cols-1 md:grid-cols-2 gap-4
-                            <div className='form_group'>
-                                <AsyncSelect
-                                    placeholder='Referred Student'
-                                    name={'student'}
-                                    defaultValue={watch('student')}
-                                    isClearable
-                                    defaultOptions
-                                    loadOptions={fetchStudents}
-                                    getOptionLabel={getOptionLabel}
-                                    getOptionValue={(e) => e.id}
-                                    onChange={(e) => setValue('student', e)}
-                                />
-
-                                {/* <SelectX
-                            placeholder='Referred Student'
-                            menuPlacement='auto'
-                            loadOptions={fetchStudents}
-                            control={control}
-                            name={'student'}
-                            defaultValue={watch('student')}
-                        /> */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                <div className='application-input'>
+                                    <a className='form-text'>Referred Student</a>
+                                    <Grid className='mb-5 forms-data' >
+                                        <AsyncSelect
+                                            placeholder=''
+                                            name={'student'}
+                                            defaultValue={watch('student')}
+                                            isClearable
+                                            defaultOptions
+                                            loadOptions={fetchStudents}
+                                            getOptionLabel={getOptionLabel}
+                                            getOptionValue={(e) => e.id}
+                                            onChange={(e) => setValue('student', e)}
+                                        />
+                                    </Grid>
+                                </div>
                             </div>
                         }
 
 
                         {
                             watch('source')?.name == 'Agency' &&
-                            <div className='form_group'>
-                                <SelectX
-                                    placeholder='Referred Angency'
-                                    menuPlacement='auto'
-                                    loadOptions={fetchAgencies}
-                                    control={control}
-                                    name={'agency'}
-                                    defaultValue={watch('agency')}
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                <div className='application-input'>
+                                    <a className='form-text'>Referred Angency</a>
+                                    <Grid className='mb-5 forms-data' >
+                                        <SelectX
+                                            placeholder=''
+                                            menuPlacement='auto'
+                                            loadOptions={fetchAgencies}
+                                            control={control}
+                                            name={'agency'}
+                                            defaultValue={watch('agency')}
+                                        />
+                                    </Grid>
+                                </div>
                             </div>
                         }
                         {
                             watch('source')?.name == 'University' &&
-                            <div className='form_group'>
-                                <SelectX
-                                    placeholder='Referred University'
-                                    menuPlacement='auto'
-                                    loadOptions={fetchUniversities}
-                                    control={control}
-                                    name={'referred_university'}
-                                    defaultValue={watch('referred_university')}
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                <div className='application-input'>
+                                    <a className='form-text'>Referred University</a>
+                                    <Grid className='mb-5 forms-data' >
+                                        <SelectX
+                                            placeholder=''
+                                            menuPlacement='auto'
+                                            loadOptions={fetchUniversities}
+                                            control={control}
+                                            name={'referred_university'}
+                                            defaultValue={watch('referred_university')}
+                                        />
+                                    </Grid>
+                                </div>
                             </div>
                         }
 
 
-
-                        <div className='form_group'>
-                            <ReactSelector
-                                placeholder='How did you hear about us?'
-                                menuPlacement='auto'
-                                onInputChange={fetchReference}
-                                styles={{ menu: provided => ({ ...provided, zIndex: 9999 }) }}
-                                options={referenceOption}
-                                getOptionLabel={option => option.name}
-                                getOptionValue={option => option.name}
-                                value={
-                                    referenceOption.filter(options =>
-                                        options?.name == watch('reference')
-                                    )
-                                }
-                                name='reference'
-                                isClearable
-                                defaultValue={(watch('reference'))}
-                                onChange={(selectedOption) => setValue('reference', selectedOption?.name || '')}
-                            />
-                            {errors.reference && <span className='form-validation'>{errors.reference.message}</span>}
-
-                        </div>
-
-
-
-
-
-                        <div className='form_group frm-text-conn-stl '>
-
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.5" strokeLinecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <textarea placeholder='Note' multiline rows={2} fullWidth control={control}  {...register('note')}
-                                value={watch('note') || ''} />
+                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                            <div className='application-input'>
+                                <a className='form-text'>Note</a>
+                                <Grid className='mb-5 forms-data' >
+                                    <TextField placeholder='' multiline rows={2} fullWidth control={control}  {...register('note')}
+                                        value={watch('note') || ''} />
+                                </Grid>
+                            </div>
                         </div>
 
 

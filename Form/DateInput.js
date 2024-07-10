@@ -71,6 +71,10 @@ const DateInput = (props) => {
         }
     }
 
+    // const disableSpecificDate = (date) => {
+    //     return moment(date).isBefore(moment(), 'day');
+    // }
+
     return (
         <>
             <Controller
@@ -89,6 +93,7 @@ const DateInput = (props) => {
                         onChange={onChange}
                         disableFuture={props.disableFuture}
                         minDate={props?.minDate ? new Date() : ''}
+                        shouldDisableDate={props?.shouldDisableDate || null}
                         renderInput={(params) => {
                             return (
                                 <TextField {...params}

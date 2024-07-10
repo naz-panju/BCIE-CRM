@@ -146,7 +146,8 @@ function LeadSection({ intakeRange,weeklyList, weeklyLoading, weeklyStageListLoa
                                             Leads
                                         </div>
 
-                                        <span className={`${spanClassess[index % backgroundClasses.length]} btn-stage`}>{obj?.name}</span>
+                                        {/* index % backgroundClasses.length */}
+                                        <span className={`${spanClassess[2]} btn-stage`}>{obj?.name}</span>
                                     </div>
                                 ))
                         }
