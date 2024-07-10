@@ -3443,6 +3443,22 @@ a.not-found {
     padding-bottom: 5px;
     display: block;
 }
+.form-data-cntr .form_group.frm-nam-fild {
+    border-radius: 3px;
+    border: 1px solid #e5e7eb;
+    position: relative;
+    padding: 0px 9px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+}
+.form-data-cntr .form_group.frm-nam-fild .css-hwkq3c-MuiInputBase-root-MuiFilledInput-root::after{
+    display: none;
+}
+.form-data-cntr .form_group.frm-nam-fild .css-hwkq3c-MuiInputBase-root-MuiFilledInput-root:hover:not(.Mui-disabled, .Mui-error):before{
+    display: none;
+}
 
 
 @media (max-width: 1400px) {
