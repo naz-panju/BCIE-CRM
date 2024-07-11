@@ -282,6 +282,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         trigger('alt_phone');
     };
 
+    // console.log(watch('alt_phone'));
+
     const handleWhatsAppNumber = (value, country) => {
         if (!value) {
             setWhatsapp('');
@@ -312,10 +314,19 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         setValue('country_of_residence', data || '')
         if (data) {
             // setCode(dialCode)
-            setValue('phone', `+${data?.phonecode}`)
-            setValue('alt_phone', `+${data?.phonecode}`)
-            setValue('phone', `+${data?.phonecode}`)
-            setValue('whatsapp', `+${data?.phonecode}`)
+            if (!watch('phone')) {
+                setValue('phone', `+${data?.phonecode}`)
+            }
+            if (!watch('alt_phone')) {
+                setValue('alt_phone', `+${data?.phonecode}`)
+            }
+            if (!watch('whatsapp')) {
+                setValue('whatsapp', `+${data?.phonecode}`)
+            }
+
+            // setValue('alt_phone', `+${data?.phonecode}`)
+            // setValue('phone', `+${data?.phonecode}`)
+            // setValue('whatsapp', `+${data?.phonecode}`)
         }
     }
 
@@ -353,11 +364,11 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             phone_country_code: code,
             phone_number: phone,
 
-            alternate_phone_country_code: altCode,
-            alternate_phone_number: altPhone,
+            alternate_phone_country_code: altCode || code,
+            alternate_phone_number: altPhone || null,
 
-            whatsapp_country_code: whatsappCode,
-            whatsapp_number: whatsapp,
+            whatsapp_country_code: whatsappCode || code,
+            whatsapp_number: whatsapp || null,
 
             preferred_course: data?.preffered_course,
             preferred_countries: data?.preferred_country,
@@ -387,7 +398,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             note: data?.note
         }
 
-        // console.log(dataToSubmit);
+        console.log(dataToSubmit);
 
         let action;
 
@@ -427,8 +438,11 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
     }
 
+    console.log(altCode);
+
     // const [dataLoading, setDataLoading] = useState(false)
 
+    const [numKey, setnumKey] = useState(0)
     const getDetails = async () => {
         setDataLoading(true)
         const response = await LeadApi.view({ id: editId })
@@ -437,7 +451,13 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
             setcurrentTitle(data?.title)
 
-            // console.log(data);
+            // if (!data?.alternate_phone_number) {
+            //     console.log(`hhhshaf`);
+            //     setValue('alt_phone',data?.phone_number)
+               
+            // }
+
+            console.log(watch('alt_phone'));
             // console.log(`+${data?.phone_country_code}${data?.phone_number}`);
             setValue('name', data?.name)
             setValue('email', data?.email)
@@ -672,6 +692,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                     {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
                                 </Grid>
                             </div>
+
+
                             <div className='application-input'>
                                 <a className='form-text'>Enter Alternate Number</a>
                                 {/* className='form_group */}
@@ -973,7 +995,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             watch('source')?.name == 'Agency' &&
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
-                                    <a className='form-text'>Referred Angency</a>
+                                    <a className='form-text'>Referred Agency</a>
                                     <Grid className='mb-5 forms-data' >
                                         <SelectX
                                             placeholder=''

@@ -38,7 +38,7 @@ function ApplicationSection({ selectedAppCounsellor, selectedAppCoordinators, ha
     });
 
     // // Convert the dayCounts object to an array of counts
-    const labels = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat','Sun',];
+    const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',];
     const counts = labels.map(day => dayCounts[day]);
     const backgroundClasses = ['bg1', 'bg2', 'bg3', 'bg4'];
 
@@ -96,6 +96,10 @@ function ApplicationSection({ selectedAppCounsellor, selectedAppCoordinators, ha
                             :
 
                             <div style={{ height: '100%' }} className='graph w-4/12 border-r'>
+                                <div className="section-title p-5 pb-4">
+                                    Weekly Application Updates
+                                </div>
+
                                 <div className='total_sec h-14 border-b-2 d-flex flex items-center justify-between p-3'>
                                     <div className='total'><span>Total</span> {totalWeeklyAppCount}</div>
                                     <div className='date-range'>

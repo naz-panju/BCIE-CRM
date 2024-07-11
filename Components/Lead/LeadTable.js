@@ -36,6 +36,7 @@ import { DateRangePicker } from 'rsuite';
 import moment from 'moment';
 import { format } from 'date-fns';
 import 'rsuite/dist/rsuite.min.css';
+import { blue } from '@mui/material/colors';
 
 
 
@@ -252,7 +253,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive,unassign,withdraw }) {
+export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive, unassign, withdraw }) {
 
   const router = useRouter();
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
@@ -353,12 +354,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setPage(newPage);
     // console.log(newPage);
     // router.push(`/lead?page=${newPage + 1}`)
-    if(withdraw){
+    if (withdraw) {
       router.replace(`/withdrawn-leads?page=${newPage}`);
     }
-    if(unassign){
+    if (unassign) {
       router.replace(`/un-assigned-leads?page=${newPage}`);
-    }else{
+    } else {
       router.replace(`/lead?page=${newPage}`);
     }
   };
@@ -409,6 +410,17 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     })
   }
 
+  const fetchAgency = (e) => {
+    return ListingApi.agencies({ keyword: e, }).then(response => {
+      if (typeof response.data.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
+    })
+  }
+
+
   const fetchStage = (e) => {
     return ListingApi.stages({ keyword: e, type: 'student', }).then(response => {
       let returnOptions = []
@@ -445,6 +457,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setValue('stage', e || '')
   }
 
+  const [selectedAgency, setselectedAgency] = useState()
+  const handleSelectAgency = (e) => {
+    setselectedAgency(e?.id || '');
+    setValue('agency', e || '')
+  }
+
   const [selectedBranch, setselectedBranch] = useState()
   const handleSelectBranch = (e) => {
     setselectedBranch(e?.id || '');
@@ -460,6 +478,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       assigned_to: selectedAssignedTo,
       stage: selectedStage,
       assign_to_office_id: selectedBranch,
+      agency: selectedAgency,
       name: watch('nameSearch'),
       email: watch('emailSearch'),
       phone_number: watch('numberSearch'),
@@ -467,12 +486,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       page: page
     }
 
-    if(unassign){
-      params['unassigned']=1
+    if (unassign) {
+      params['unassigned'] = 1
     }
 
-    if(withdraw){
-      params['withdrawn']=1
+    if (withdraw) {
+      params['withdrawn'] = 1
     }
 
     if (range[0]) {
@@ -490,6 +509,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       setLoading(false)
     })
   }
+
+  // console.log(list)
 
   const [nameSearch, setnameSearch] = useState()
   const [phoneSearch, setphoneSearch] = useState()
@@ -524,6 +545,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
   }
 
+  const handleleadOpen = (id) => {
+    window.open(`/lead/${id}`, '_blank');
+  };
+
   const [searchRefresh, setsearchRefresh] = useState(false)
   const formatDate = (date) => {
     return date ? moment(date).format('DD-MM-YYYY') : ''; // Format the date to 'dd-MM-yyyy' format
@@ -542,10 +567,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setValue('assignedTo', null)
     setValue('stage', '')
     setValue('branch', '')
+    setValue('agency', '')
 
     setSelectedAssignedTo()
     setSelectedStage()
     setselectedBranch();
+    setselectedAgency();  
     setRange([null, null])
 
     setsearchRefresh(!searchRefresh)
@@ -568,7 +595,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   }, [])
 
   // hdh
-// table use
+  // table use
   useEffect(() => {
     fetchTable()
   }, [page, refresh, limit, searchRefresh])
@@ -656,6 +683,27 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 getOptionValue={(e) => e.id}
                 placeholder={<div>Select Stage</div>}
                 onChange={handleSelectStage}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className='form-group'>
+
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
+              </svg>
+              <AsyncSelect
+                isClearable
+                defaultOptions
+                name='agency'
+                value={watch('agency')}
+                defaultValue={watch('agency')}
+                loadOptions={fetchAgency}
+                getOptionLabel={(e) => e.name}
+                getOptionValue={(e) => e.id}
+                placeholder={<div>Select Agency</div>}
+                onChange={handleSelectAgency}
               />
             </div>
           </div>
@@ -818,7 +866,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                     <label htmlFor={row?.id}> </label>
                                   </div>
                                 </TableCell>
-                                <TableCell align="left">{row?.id}</TableCell>
+                                <TableCell align="left">{row?.lead_unique_id || 'NA'}</TableCell>
                                 <TableCell
                                   component="th"
                                   id={labelId}
@@ -826,13 +874,14 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                   padding="none"
                                   className='reg-name'
                                 >
-                                  <a target='_blank' href={`/lead/${row?.id}`}>{row.name}</a>
+                                  
+                                  <span className='a_hover text-sky-500' onClick={()=>handleleadOpen(row?.id)}>{row.name}</span>
                                 </TableCell>
                                 <TableCell align="left">{row?.assignedToOffice?.name || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.country_of_residence?.name || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.city || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.preferred_countries || 'NA'}</TableCell>
-                                <TableCell sx={{display:'flex',alignItems:'center'}} align="left" className='assigned-colm'>
+                                <TableCell sx={{ display: 'flex', alignItems: 'center' }} align="left" className='assigned-colm'>
                                   {
                                     row?.assignedToCounsellor &&
                                     <span className='assigned-span'>{getFirstLettersOfTwoWords(row?.assignedToCounsellor?.name)}</span>
@@ -841,7 +890,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                     row?.assignedToCounsellor ?
                                       <Button disabled={withdraw} onClick={() => handleEditAssign(row)} style={{ color: 'blue', textTransform: 'none' }} >{row?.assignedToCounsellor?.name}</Button>
                                       :
-                                      <Button disabled={withdraw} className='not_assigned' sx={{ textTransform: 'none',borderRadius:'28px;',border:'1px solid #C1C1C1',background:'#FFFCFD',color:'#0B0D23',fontFamily:'Inter',fontSize:'14px',fontStyle:'normal',fontWeight:'400',lineHeight:'14px'}} onClick={() => openAssign(row?.id)}>Not Assigned</Button>
+                                      <Button disabled={withdraw} className='not_assigned' sx={{ textTransform: 'none', borderRadius: '28px;', border: '1px solid #C1C1C1', background: '#FFFCFD', color: '#0B0D23', fontFamily: 'Inter', fontSize: '14px', fontStyle: 'normal', fontWeight: '400', lineHeight: '14px' }} onClick={() => openAssign(row?.id)}>Not Assigned</Button>
                                   }
                                   {/* {row?.assignedToUser?.name} */}
                                 </TableCell>
@@ -899,6 +948,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                   </div>
                 </div>
               }
+
             </div>
           </>
       }

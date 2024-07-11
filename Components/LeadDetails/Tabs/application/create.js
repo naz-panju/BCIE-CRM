@@ -152,7 +152,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
             }
         })
     }
-
+    
     const onSubmit = async (data) => {
         // console.log(data);
 

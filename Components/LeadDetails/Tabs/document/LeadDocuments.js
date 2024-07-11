@@ -232,7 +232,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
             <LeadDocumentDetailModal id={detailId} setId={setDetailId} />
 
             <DocumentConfirmPopup ID={confirmId} setID={setconfirmId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Do you want to Approve this Document?'} getDetails={handleRefresh} />
-            <DocumentRejectPopup ID={rejectId} setID={setrejectId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Do you want to Reject this Document?'} getDetails={handleRefresh} />
+            <DocumentRejectPopup lead_id={lead_id} details={documentSelected} ID={rejectId} setID={setrejectId} loading={confirmLoading} setLoading={setconfirmLoading} title={'Do you want to Reject this Document?'} getDetails={handleRefresh} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 <div className='lead-tabpanel-content-block-title'>
@@ -354,7 +354,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                             <div className='doc-preview-block'>
                                                 <div className='flex justify-end mb-5'>
                                                     <a style={{ cursor: 'pointer' }} target='_blank' href={documentSelected?.file} > <ZoomInOutlined sx={{ color: '#858585' }} /> </a>
-                                                </div> 
+                                                </div>
 
                                                 {(
                                                     documentSelected.file.endsWith('.pdf') ? (
@@ -396,6 +396,28 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                             (documentSelected?.status == 'Uploaded') &&
                                             <Edit onClick={() => handleEditDocument(documentSelected?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
                                         }
+                                    </div>
+                                }
+
+                                {
+                                    documentSelected && documentSelected?.note &&
+                                    <div className='d-flex justify-between align-center'>
+                                        <div className='flex bh-lime-50 align-center'>
+                                            <span style={{ fontSize: '13px', color: 'grey' }}><span style={{ fontWeight: 'bold' }}>Remarks:</span> {documentSelected?.note}</span>
+
+                                        </div>
+
+                                    </div>
+                                }
+
+                                {
+                                    documentSelected && documentSelected?.reject_reason &&
+                                    <div className='d-flex justify-between align-center'>
+                                        <div className='flex bh-lime-50 align-center'>
+                                            <span style={{ fontSize: '13px', color: red[300] }}><span style={{ fontWeight: 'bold' }}>Rejection Note:</span> {documentSelected?.reject_reason}</span>
+
+                                        </div>
+
                                     </div>
                                 }
 

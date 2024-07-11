@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Grid, IconButton, TextField, Tooltip, Skeleton, FormControlLabel, Checkbox } from '@mui/material';
 import { Close } from '@mui/icons-material';
+import Image from 'next/image';
 
 
 const style = {
@@ -20,7 +21,7 @@ const style = {
     borderRadius: 2,
     boxShadow: 24,
     p: 4,
-    pt:1,
+    pt: 1,
     maxHeigth: 600,
     overflowY: 'auto'
 };
@@ -81,6 +82,14 @@ export default function UniversityInfoModal({ editId, setEditId, details, setDet
                             <Close />
                         </IconButton>
                     </Grid>
+                    <div className='flex items-start justify-start gap-3 mb-2'>
+                        {
+                            details?.university?.logo &&
+                            <Image src={details?.university?.logo} alt='uni logo' width={60} height={30} />
+                        }
+                        <b>{details?.university?.name}</b>
+                    </div>
+                    <hr className='mb-2' />
 
                     {
                         details?.university?.extra_university_info &&

@@ -26,7 +26,6 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
     
   }, [])
 
-  https://bcie.spider.ws/uploads/settings/fav65cc656288dd0.ico
   
 
   return <SessionProvider session={session}>

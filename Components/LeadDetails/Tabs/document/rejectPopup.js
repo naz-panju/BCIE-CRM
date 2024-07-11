@@ -10,7 +10,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { LoadingButton } from '@mui/lab';
 import { toast } from 'react-hot-toast';
 import { LeadApi } from '@/data/Endpoints/Lead';
-import { Grid, TextField, Typography } from '@mui/material';
+import { Checkbox, FormControlLabel, Grid, TextField, Typography } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { StudentApi } from '@/data/Endpoints/Student';
 import SelectX from '@/Form/SelectX';
@@ -19,7 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export default function DocumentRejectPopup({ ID, setID, setLoading, title, loading, details, getDetails }) {
+export default function DocumentRejectPopup({ ID, setID, setLoading, title, loading, details, getDetails ,lead_id}) {
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
@@ -34,22 +34,48 @@ export default function DocumentRejectPopup({ ID, setID, setLoading, title, load
 
     const handleClose = () => {
         setID();
+        setValue('note','')
         setOpen(false);
     };
+
+    const [checked, setchecked] = useState(true)
+    const handleCheckboxChange = (event) => {
+        setchecked(event.target.checked)
+    };
+
+    console.log(details);
 
     const onSubmit = () => {
         setLoading(true)
         let dataToSubmit = {
-            id: ID
+            id: ID,
+            reject_reason: watch('note')
         }
 
         LeadApi.rejectDocument(dataToSubmit).then((response) => {
             // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
-                toast.success(response?.data?.message)
-                setID()
-                getDetails()
-                setLoading(false)
+                if (checked) {
+                    LeadApi.requestDocument({
+                        lead_id: lead_id,
+                        document_template_ids: [details?.document_template?.id]
+                    }).then((response) => {
+                        if (response?.status == 200 || 201) {
+                            toast.success('Document has been Rejected and Re Requested')
+                            setID()
+                            getDetails()
+                            setLoading(false)
+                        } else {
+                            toast.error(response?.response?.data?.message)
+                            setLoading(false)
+                        }
+                    })
+                } else {
+                    toast.success(response?.data?.message)
+                    setID()
+                    getDetails()
+                    setLoading(false)
+                }
             } else {
                 toast.error(response?.response?.data?.message)
                 setLoading(false)
@@ -90,6 +116,20 @@ export default function DocumentRejectPopup({ ID, setID, setLoading, title, load
                     {/* <DialogContentText id="alert-dialog-slide-description">
                         {title}
                     </DialogContentText> */}
+                    <div className='application-input'>
+                        <a className='form-text'>Note</a>
+                        {/* className='form_group */}
+                        <Grid className='mb-1 forms-data' >
+                            <TextField multiline rows={2} fullWidth control={control}  {...register('note')}
+                                value={watch('note') || ''} />
+                        </Grid>
+                    </div>
+
+                    <div className='application-input'>
+                        {/* <a className='form-text'>Re Request</a> */}
+                        <FormControlLabel control={<Checkbox checked={checked} onChange={handleCheckboxChange} />} label="Re Request" />
+
+                    </div>
 
                 </DialogContent>
                 <DialogActions>

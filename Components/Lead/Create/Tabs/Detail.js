@@ -770,7 +770,7 @@
 //                             watch('source')?.name == 'Agency' &&
 //                             <div className='form_group'>
 //                                 <SelectX
-//                                     placeholder='Referred Angency'
+//                                     placeholder='Referred Agency'
 //                                     menuPlacement='top'
 //                                     loadOptions={fetchAgencies}
 //                                     control={control}

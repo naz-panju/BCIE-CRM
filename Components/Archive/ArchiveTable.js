@@ -774,7 +774,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
                                   </div>
                                 </TableCell> */}
 
-                                <TableCell align="left">{row?.id}</TableCell>
+                                <TableCell align="left">{row?.lead_unique_id || 'NA'}</TableCell>
                                 <TableCell
                                   component="th"
                                   id={labelId}
