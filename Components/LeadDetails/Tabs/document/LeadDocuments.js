@@ -373,7 +373,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="41" height="41" viewBox="0 0 41 41" fill="none"><path d="M20.5 11.9583V20.5H29.0417M20.5 35.875C12.0086 35.875 5.125 28.9914 5.125 20.5C5.125 12.0086 12.0086 5.125 20.5 5.125C28.9914 5.125 35.875 12.0086 35.875 20.5C35.875 28.9914 28.9914 35.875 20.5 35.875Z" stroke="#FEA878" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" /></svg>
                                                 </div>
                                                 <h2>This Document has been <br /> Requested</h2>
-                                                <span onClick={() => handleUploadRejectedDoc(documentSelected)} style={{ textDecoration: 'underLine', cursor: 'pointer' }}>Click here to upload the Document</span>
+                                                <span onClick={() => handleUploadRejectedDoc(documentSelected)} style={{ textDecoration: 'underLine', cursor: 'pointer',color:'#1849D6' }}>Click here to upload the Document</span>
                                             </div>
                                         }
                                     </>

@@ -33,6 +33,8 @@ const scheme = yup.object().shape({
 
 export default function DeferIntake({ details, editId, setEditId, refresh, setRefresh }) {
 
+    console.log(details)
+
     const [open, setOpen] = useState(false)
 
     const [loading, setLoading] = useState(false)
@@ -74,11 +76,13 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
         // }
 
         let dataToSubmit = {
-            id: details.id,
+            id: details?.id,
             intake_id: data?.intake?.id,
             note: data?.note
             // substage_id: data?.substage?.id,
         }
+
+        console.log(dataToSubmit);
 
 
         let action;
@@ -93,7 +97,7 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
         // }
 
         action.then((response) => {
-            // console.log(response);
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(response?.data?.message)
                 reset()

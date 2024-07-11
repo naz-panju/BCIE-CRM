@@ -392,10 +392,10 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
   const fetchIntakes = (e) => {
     return ListingApi.intakes({ keyword: e }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
-        // const allIntakes = response?.data?.data
-        // const defualtIntake = allIntakes?.find(obj => obj?.is_default == 1)
-        // setValue('intake', defualtIntake || '')
-        // setselectedIntake(defualtIntake?.id)
+        const allIntakes = response?.data?.data
+        const defualtIntake = allIntakes?.find(obj => obj?.is_default == 1)
+        setValue('intake', defualtIntake || '')
+        setselectedIntake(defualtIntake?.id)
         return response.data.data;
       } else {
         return [];
@@ -691,12 +691,11 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
       page: page
     }
 
-    // if (showAllIntake) {
-    //   params['intake_id'] = 'All'
-    // } else {
-    //   params['intake_id'] = selectedIntake
-    // }
-
+    if (showAllIntake) {
+      params['intake_id'] = 'All'
+    } else {
+      params['intake_id'] = selectedIntake
+    }
 
     ApplicationApi.list(params).then((response) => {
       // console.log(response);

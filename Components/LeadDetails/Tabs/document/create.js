@@ -81,6 +81,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
     };
 
     const handleDrop = (event) => {
+
         event.preventDefault();
         const file = event.dataTransfer.files[0];
         const maxSize = watch('template')?.max_upload_size || size
