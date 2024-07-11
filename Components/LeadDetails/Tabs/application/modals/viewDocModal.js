@@ -470,8 +470,8 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                             </clipPath>
                                         </defs>
                                     </svg>
-
                                 </div>
+
                                 <form onSubmit={handleSubmit(onSubmit)}>
                                     <Grid container>
                                         <Grid pr={1} mt={2} md={12}>
@@ -532,18 +532,19 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                                 />
                                                 {errors.paid_date && <span className='form-validation'>{errors.paid_date.message}</span>}
                                             </Grid>
+                                            <Grid pr={1} mt={2} md={6}>
+                                                {/* <a>Deposit Amount</a> */}
+                                                <TextInput placeholder={'Payment Mode'} control={control} name="payment_mode"
+                                                    value={watch('payment_mode')} />
+                                                {errors?.payment_mode && <span className='form-validation'>{errors?.payment_mode?.message}</span>}
+                                            </Grid>
                                         </Grid>
                                     }
-
-
-
+                                    
                                     <div
                                         onDrop={handleDrop}
                                         onDragOver={handleDragOver}
                                     >
-
-
-
                                         <input
                                             type="file"
                                             onChange={handleFileChange}
@@ -557,8 +558,6 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                             <h3>Add<span>Document</span></h3>
                                             <h4>Max {watch('template')?.max_upload_size || size} MB files are allowed</h4>
                                         </label>
-
-
 
                                         {(selectedFile || details?.file) && (
                                             <Grid display={'flex'} justifyContent={'space-between'} className="mt-4">

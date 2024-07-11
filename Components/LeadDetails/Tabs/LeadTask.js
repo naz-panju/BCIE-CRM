@@ -97,7 +97,7 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detail
     return (
         <>
 
-            <CreateTask lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} detailRefresh={detailRefresh} />
+            <CreateTask detail={true} lead_id={lead_id} from={from} app_id={app_id} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} detailRefresh={detailRefresh} />
             <TaskCompletePopup getDetails={fetchList} ID={completeId} setID={setcompleteId} loading={completeLoading} setLoading={setcompleteLoading} title={'Mark this Task as Completed'} />
             <TaskDetailModal id={detailId} setId={setDetailId} />
 

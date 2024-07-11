@@ -19,6 +19,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
+import { ApplicationApi } from '@/data/Endpoints/Application';
 
 
 const scheme = yup.object().shape({
@@ -26,7 +27,7 @@ const scheme = yup.object().shape({
     // description: yup.string().required("Description is Required"),
 })
 
-export default function CreateTask({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh, from, app_id, detailRefresh }) {
+export default function CreateTask({ editId, setEditId, refresh, setRefresh, lead_id, handleRefresh, from, app_id, detailRefresh, detail }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -61,6 +62,17 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
     const fetchUser = (e) => {
         return ListingApi.users({ keyword: e }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchApplications = (e) => {
+        return ApplicationApi.list({ keyword: e }).then(response => {
+            console.log(response.data.data)
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -322,6 +334,40 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                             </div>
                                         </div>
 
+                                        {
+                                            detail &&
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                                <div className='application-input'>
+                                                    <a className='form-text'>Lead</a>
+                                                    <Grid className='mb-5 forms-data  '>
+                                                        <SelectX
+                                                            // placeholder='Assigned To'
+                                                            loadOptions={fetchLead}
+                                                            control={control}
+                                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                            name={'assigned_lead'}
+                                                            defaultValue={watch('assigned_lead')}
+                                                        />
+                                                    </Grid>
+                                                </div>
+
+                                                <div className='application-input'>
+                                                    <a className='form-text'>Applications</a>
+                                                    <Grid className='mb-5 forms-data  '>
+                                                        <SelectX
+                                                            // placeholder='Assigned To'
+                                                            loadOptions={fetchApplications}
+                                                            control={control}
+                                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                            name={'application'}
+                                                            defaultValue={watch('application')}
+                                                        />
+                                                    </Grid>
+                                                </div>
+                                            </div>
+                                        }
 
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
