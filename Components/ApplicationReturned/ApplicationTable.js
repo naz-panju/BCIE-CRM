@@ -1203,7 +1203,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                                                                     <Grid display={'flex'} alignItems={'center'}>
                                                                         {
                                                                             row?.withdrawn != 1 &&
-                                                                            <IconButton onClick={(event) => handlePopoverClick(event, row.id)}>
+                                                                            <IconButton disabled onClick={(event) => handlePopoverClick(event, row.id)}>
                                                                                 <MoreHorizOutlined sx={{ color: 'blue' }} />
                                                                             </IconButton>
                                                                         }

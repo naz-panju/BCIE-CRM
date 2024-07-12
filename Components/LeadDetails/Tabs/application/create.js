@@ -40,7 +40,7 @@ const scheme = yup.object().shape({
     coursetext: yup.string().required("Please enter course"),
 })
 
-export default function LeadApplicationModal({ lead_id, editId, setEditId, handleRefresh, details }) {
+export default function LeadApplicationModal({ lead_id, editId, setEditId, handleRefresh, details, setDetailRefresh }) {
     const [state, setState] = React.useState({
         right: false,
     });
@@ -143,16 +143,44 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     const [mandatoryDocuments, setmandatoryDocuments] = useState([])
     const mandatoryTemplate = () => {
         ListingApi.documentTemplate().then((response) => {
-            if(details?.lead_source?.id==10){
-                const carryoverDoc=response?.data?.data?.find(obj => obj?.id == 18)
+            if (details?.lead_source?.id == 10) {
+                const carryoverDoc = response?.data?.data?.find(obj => obj?.id == 18)
                 setmandatoryDocuments([carryoverDoc])
-            }else{
+            } else {
                 const mandatoryDocs = response?.data?.data?.filter(obj => obj?.is_mandatory === 1);
                 setmandatoryDocuments(mandatoryDocs);
             }
         })
     }
-    
+
+
+    const [allDocs, setallDocs] = useState([])
+    const fetchList = async (select) => {
+
+        let params = {
+            lead_id: lead_id,
+            limit: 200,
+            // keyword: searchKey,
+            // page: page + 1
+        }
+        try {
+            const response = await LeadApi.listDocuments(params)
+            if (response?.status == 200 || response?.status == 201) {
+                setallDocs(response?.data)
+            } else {
+                // toast.error(response?.response?.data?.message)
+
+
+            }
+        } catch (error) {
+            toast.error(error?.response?.data?.message)
+            setimageLoading(false)
+            setLoading(false)
+
+        }
+
+    }
+
     const onSubmit = async (data) => {
         // console.log(data);
 
@@ -197,6 +225,9 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                 handleClose()
                 handleRefresh()
                 setLoading(false)
+                if (setDetailRefresh) {
+                    setDetailRefresh()
+                }
             }
             else {
                 toast.error(response?.response?.data?.message)
@@ -379,6 +410,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
         } else if (editId == 0) {
             setOpen(true)
         }
+        fetchList()
         mandatoryTemplate()
     }, [editId])
 
@@ -651,14 +683,15 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                         <tbody>
                                                             {mandatoryDocuments?.map((docs, ind) => {
 
-                                                                const selectedDocuments = watch('documents') || [];
+                                                                // const selectedDocuments = watch('documents') || [];
+                                                                const selectedDocuments = allDocs?.data || [];
 
                                                                 return (<tr key={ind}>
                                                                     <td className='flex justify-between' style={{ border: '1px solid #ddd', padding: '8px' }}>
                                                                         <span style={{ cursor: 'pointer' }} onClick={() => handleSelectMandatoryDoc(docs)}> {docs?.name}</span>
                                                                         <CheckCircle fontSize='small'
                                                                             color={
-                                                                                selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id) ? 'success' : 'disabled'
+                                                                                selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id && doc?.status === 'Accepted') ? 'success' : 'disabled'
                                                                             }
                                                                         />
                                                                     </td>

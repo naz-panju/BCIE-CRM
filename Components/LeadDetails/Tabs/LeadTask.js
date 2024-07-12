@@ -188,8 +188,11 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detail
                                                                         </Tooltip>
                                                                         :
 
-                                                                        session?.data?.user?.role?.id != 6 &&
+                                                                        (session?.data?.user?.role?.id != 6) &&
+                                                                        session?.data?.user?.id == obj?.assignedToUser?.id ?
                                                                         <Button onClick={() => completeOpen(obj?.id)} size='small' variant='outlined' sx={{ textTransform: 'none' }}>Mark as Completed</Button>
+                                                                        :
+                                                                        obj?.status
                                                                 }
 
                                                                 {/* <Button sx={{ textTransform: 'none', }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button> */}
@@ -197,7 +200,8 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detail
                                                             <TableCell >
                                                                 {
                                                                     session?.data?.user?.role?.id != 6 &&
-                                                                    obj?.status !== 'Completed' &&
+                                                                   ( session?.data?.user?.id == obj?.createdBy?.id &&
+                                                                    obj?.status !== 'Completed') &&
                                                                     <Button sx={{ textTransform: 'none' }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button>
                                                                 }
                                                             </TableCell>

@@ -271,6 +271,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                             <Grid className='mb-5 forms-data  ' >
 
                                                 <AsyncSelect
+                                                    isDisabled={editId > 0}
                                                     // placeholder={'Select Template'}
                                                     key={watch('template')}
                                                     name={'template'}

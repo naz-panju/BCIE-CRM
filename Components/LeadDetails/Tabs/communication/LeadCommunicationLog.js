@@ -99,7 +99,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
             params['application_id'] = app_id
         }
         const response = await CommunicationLogApi.list(params)
-        // console.log(response);
+        console.log(response);
         setList(response?.data)
         setLoading(false)
     }

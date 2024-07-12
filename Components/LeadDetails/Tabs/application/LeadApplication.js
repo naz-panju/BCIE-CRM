@@ -34,7 +34,7 @@ const HtmlTooltip = styled(({ className, ...props }) => (
 }));
 
 
-function LeadApplication({ data, lead_id, handleLeadRefresh,appRefresh }) {
+function LeadApplication({ data, lead_id, handleLeadRefresh,appRefresh ,setDetailRefresh}) {
 
     const session = useSession()
 
@@ -245,7 +245,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh,appRefresh }) {
         <>
             <CreateLead from='app' editId={leadEditId} setEditId={setleadEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} handleLeadRefresh={handleLeadRefresh} />
 
-            <LeadApplicationModal details={data} lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
+            <LeadApplicationModal setDetailRefresh={setDetailRefresh} details={data} lead_id={lead_id} editId={editId} setEditId={setEditId} handleRefresh={handleRefresh} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={uniDocId} setEditId={setuniDocId} handleRefresh={fetchLoadingList} />
 

@@ -637,7 +637,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
     }
     const handleClearSearch = (from) => {
 
-        reset()
+        // reset()
 
         setValue('country', '')
         setValue('university', '')
@@ -808,7 +808,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
             <ApplicationStageChangeModal editId={stageId} setEditId={setStageId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <DeferIntake editId={deferId} setEditId={setdeferId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
-            <ViewDocumentModal editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} handleUniDocOpen={handleUniDocOpen} fetchTable={fetchTable} />
+            <ViewDocumentModal appSubmit={true} editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} handleUniDocOpen={handleUniDocOpen} fetchTable={fetchTable} />
             <SendUniversityMail from={'lead'} details={details} lead_id={details?.lead_id} editId={mailId} setEditId={setMailId} />
             <UniversityDeposit editId={depositId} setEditId={setdepositId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 

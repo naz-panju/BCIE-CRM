@@ -266,9 +266,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {
-                                                            console.log(list?.data)
-                                                        }
+                                                       
                                                         {mandatoryDocuments?.map((docs, ind) => {
                                                             const selectedDocuments = list?.data || [];
                                                             return (<tr key={ind}>

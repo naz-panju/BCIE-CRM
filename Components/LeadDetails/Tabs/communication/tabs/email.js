@@ -6,7 +6,7 @@ import CommEmailDetailModal from '../details/email/detailModal';
 
 
 function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, leadData }) {
-    // console.log(leadData);
+    console.log(list);
     const [detailId, setdetailId] = useState()
 
     const handleDetailOpen = (id) => {

@@ -134,7 +134,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
     },
     {
       label: 'Applications',
-      component: <LeadApplication from='lead' data={data} lead_id={data?.id} handleStudentModalOpen={handleStudentModalOpen} handleLeadRefresh={handleRefresh} appRefresh={appRefresh} />,
+      component: <LeadApplication setDetailRefresh={setRefresh} from='lead' data={data} lead_id={data?.id} handleStudentModalOpen={handleStudentModalOpen} handleLeadRefresh={handleRefresh} appRefresh={appRefresh} />,
       icon: <Apps />
     },
   ]
