@@ -65,7 +65,7 @@ const SelectX = (props) => {
                         isClearable={true}
                         defaultOptions
                         loadOptions={props.loadOptions} // Corrected prop name
-                        getOptionLabel={e => e?.name || e?.name || e?.reason}
+                        getOptionLabel={e => e?.name || e?.name || e?.reason || e?.university?.name}
                         getOptionValue={e => e.id}
                         menuPortalTarget={document.body}
                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}

@@ -60,6 +60,17 @@ function DashboardIndex() {
         })
     }
 
+    const fetchCounsellor = (e) => {
+        return ListingApi.users({ keyword: e, role_id: 5 }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+
     const [selectedCountries, setSelectedCountries] = useState();
     const handleCountrySelect = (data) => {
         setSelectedCountries(data)
@@ -164,6 +175,13 @@ function DashboardIndex() {
         setOfficeId(data?.id)
     }
 
+    const [counsellorId, setcounsellorId] = useState()
+    const handleCounsellorChange = (data) => {
+
+        setValue('counsellor', data || '')
+        setcounsellorId(data?.id)
+    }
+
     // setRange([dayBefore.toDate(), new Date()])
 
     const handleIntakeDateRange = (date) => {
@@ -219,7 +237,7 @@ function DashboardIndex() {
     // const [weeklyRange, setWeeklyRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
     // const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
     const [weeklyRange, setWeeklyRange] = useState([null, null]);
-    const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([null,null]);
+    const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([null, null]);
 
     const [weeklyList, setWeeklyList] = useState([]);
     const [weeklyLoading, setWeeklyLoading] = useState(true)
@@ -376,8 +394,8 @@ function DashboardIndex() {
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
                 country: selectedCountries?.id,
-                counselor:selectedAppCounsellor?.id,
-                app_coordinator:selectedAppCoordinators?.id,
+                counselor: selectedAppCounsellor?.id,
+                app_coordinator: selectedAppCoordinators?.id,
             })
             // console.log(response);
             setApplicationStages(response?.data)
@@ -522,9 +540,9 @@ function DashboardIndex() {
             fetchApplicationStages()
             fetchsubmitApplication()
         }
-    }, [range, officeId, selectedCountries,selectedAppCoordinators,selectedAppCounsellor])
+    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor])
     useEffect(() => {
-        if(weeklyApplicationRange[0]){
+        if (weeklyApplicationRange[0]) {
             fetchWeeklyApplication()
         }
     }, [weeklyApplicationRange, selectedCountries, selectedUniversity])
@@ -578,6 +596,24 @@ function DashboardIndex() {
                                 />
                             </Grid>
 
+                            {
+                                session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4 &&
+                                <Grid mr={2} sx={{ width: 200 }} className='intake_dropdown'>
+                                    <AsyncSelect
+                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
+                                        placeholder='Counsellor'
+                                        name={'counsellor'}
+                                        defaultValue={watch('counsellor')}
+                                        isClearable
+                                        defaultOptions
+                                        loadOptions={fetchCounsellor}
+                                        getOptionLabel={(e) => e.name}
+                                        getOptionValue={(e) => e.id}
+                                        onChange={handleCounsellorChange}
+                                    />
+                                </Grid>
+                            }
+
                             <Grid sx={{ width: 230 }} className='intake_dropdown'>
                                 <DateRangePicker
                                     preventOverflow
@@ -590,7 +626,7 @@ function DashboardIndex() {
                                     // style={{ width: 150 }}
                                     format='dd-MM-yyyy'
                                     disabledDate={(date) => {
-                                        const startDate =range[0];
+                                        const startDate = range[0];
                                         const endDate = range[1];
                                         return date < startDate || date > endDate;
                                     }}

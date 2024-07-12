@@ -314,14 +314,17 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         setValue('country_of_residence', data || '')
         if (data) {
             // setCode(dialCode)
-            if (!watch('phone')) {
+            if (watch('phone') == `+${code}` || watch('phone') == code) {
                 setValue('phone', `+${data?.phonecode}`)
+                setCode(data?.phonecode)
             }
-            if (!watch('alt_phone')) {
+            if (watch('alt_phone') == `+${altCode}` || watch('alt_phone')==altCode) {
                 setValue('alt_phone', `+${data?.phonecode}`)
+                setAltCode(data?.phonecode)
             }
-            if (!watch('whatsapp')) {
+            if (watch('whatsapp') == `+${whatsappCode}` || watch('whatsapp')==whatsappCode) {
                 setValue('whatsapp', `+${data?.phonecode}`)
+                setWhatsappCode(data?.phonecode)
             }
 
             // setValue('alt_phone', `+${data?.phonecode}`)
@@ -438,8 +441,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
     }
 
-    console.log(altCode);
-
     // const [dataLoading, setDataLoading] = useState(false)
 
     const [numKey, setnumKey] = useState(0)
@@ -454,7 +455,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             // if (!data?.alternate_phone_number) {
             //     console.log(`hhhshaf`);
             //     setValue('alt_phone',data?.phone_number)
-               
+
             // }
 
             console.log(watch('alt_phone'));

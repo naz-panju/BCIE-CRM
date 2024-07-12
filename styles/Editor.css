@@ -609,6 +609,7 @@ span.stage-span {
     width: fit-content;
     transition: .5s;
     margin: 0px auto;
+    min-width: 165px;
 }
 
 
@@ -1411,7 +1412,7 @@ span.icon {
     border-radius: 4px;
 }
 
-.date-focused{
+.date-focused {
     border: 1px solid #dadae6;
 }
 
@@ -2979,8 +2980,8 @@ svg.MuiSvgIcon-root.dw-btn {
     margin-top: 0;
 }
 
-.form_group .react-tel-input .flag-dropdown {
-
+ .react-tel-input .flag-dropdown {
+    /* display: none; */
     background-color: #fff;
     border: 1px solid #fff;
     border-radius: 3px 0 0 3px;
@@ -3271,6 +3272,7 @@ a.not-found {
     padding-left: 28px;
     position: relative;
 }
+
 .log-rht-cntr button svg {
     position: absolute;
     right: 18px;
@@ -3426,18 +3428,21 @@ a.not-found {
 .add-note-textarea fieldset {
     border: 0px !important;
 }
+
 .sidebar__inner.scrollCustom {
     height: 100%;
     overflow: auto;
     scrollbar-color: #585b5e #C5CCD3;
     scrollbar-width: thin;
 }
+
 .sidebar-dropdown {
     background-color: #fff;
     margin: 0px 20px;
     padding: 15px 15px 10px;
     border-radius: 5px;
 }
+
 .sidebar-dropdown div a {
     color: #000;
     font-size: 15px;
@@ -3445,6 +3450,7 @@ a.not-found {
     padding-bottom: 5px;
     display: block;
 }
+
 .form-data-cntr .form_group.frm-nam-fild {
     border-radius: 3px;
     border: 1px solid #e5e7eb;
@@ -3455,10 +3461,12 @@ a.not-found {
     align-items: center;
     background-color: transparent;
 }
-.form-data-cntr .form_group.frm-nam-fild .css-hwkq3c-MuiInputBase-root-MuiFilledInput-root::after{
+
+.form-data-cntr .form_group.frm-nam-fild .css-hwkq3c-MuiInputBase-root-MuiFilledInput-root::after {
     display: none;
 }
-.form-data-cntr .form_group.frm-nam-fild .css-hwkq3c-MuiInputBase-root-MuiFilledInput-root:hover:not(.Mui-disabled, .Mui-error):before{
+
+.form-data-cntr .form_group.frm-nam-fild .css-hwkq3c-MuiInputBase-root-MuiFilledInput-root:hover:not(.Mui-disabled, .Mui-error):before {
     display: none;
 }
 
