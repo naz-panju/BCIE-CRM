@@ -33,7 +33,6 @@ const scheme = yup.object().shape({
 
 export default function DeferIntake({ details, editId, setEditId, refresh, setRefresh }) {
 
-    console.log(details)
 
     const [open, setOpen] = useState(false)
 

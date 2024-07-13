@@ -320,6 +320,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     }, [editId])
 
 
+
     return (
         <div>
             <DocumentSelectModal from='app' editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} />
@@ -521,7 +522,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                                     {attachmentFiles?.map((document, index) => (
                                                         <ListItem key={index} className='list-item-mail ' >
                                                             <ListItemButton >
-                                                                <ListItemText sx={{ cursor: 'pointer' }} onClick={() => handleDocumentOpen(document?.file)} primary={document?.title || document?.document_template?.name} />
+                                                                <ListItemText sx={{ cursor: 'pointer' }} onClick={() => handleDocumentOpen(document?.file)} primary={document?.title || document?.document_template?.name || trimUrlAndNumbers(document?.file_path)} />
                                                             </ListItemButton>
                                                         </ListItem>
                                                     ))}

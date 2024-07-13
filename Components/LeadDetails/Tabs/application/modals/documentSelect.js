@@ -190,7 +190,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
-            console.log(response);
+            // console.log(response);
             // const mergedArray = response?.data?.data?.documents.concat(response?.data?.data?.university_documents);
             setuniDocuments(response?.data?.data?.university_documents)
             setDocuments(response?.data?.data?.documents)
@@ -228,7 +228,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
             setOpen(true)
             if (Documents?.length == 0) {
                 if(from=='app'){
-                    console.log('here');
+                    // console.log('here');
                     getDetails()
                 }else if(from=='lead'){
                     getLeadDetails()
