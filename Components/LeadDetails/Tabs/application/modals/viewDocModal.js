@@ -447,14 +447,14 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                         </Grid>
 
 
-                        {
-                            appSubmit &&
+                        {/* {
+                            appSubmit && */}
                             <Grid className='document-details-block' m={1} mb={4}>
                                 <Grid className='document-details-block-title' mb={2} display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
                                     <button disabled style={{ display: 'flex', alignItems: 'center', backgroundColor: '#A6E9A9', color: '#0B0D23', padding: '8px 15px', fontSize: '14px', borderRadius: 5 }}><svg style={{ marginRight: '10px' }} width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.75 10.0834H7.33333M5.04167 12.3751V7.79175M13.2917 12.8334C16.694 12.8334 18.4644 14.0051 19.0377 16.3484C19.3002 17.4214 18.3546 18.3334 17.25 18.3334H9.33334C8.22877 18.3334 7.28316 17.4214 7.54565 16.3484C8.11894 14.0051 9.88932 12.8334 13.2917 12.8334ZM13.2917 9.16675C14.8194 9.16675 15.5833 8.38103 15.5833 6.41675C15.5833 4.45246 14.8194 3.66675 13.2917 3.66675C11.7639 3.66675 11 4.45246 11 6.41675C11 8.38103 11.7639 9.16675 13.2917 9.16675Z" stroke="#232648" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>University Document</button>
 
                                     {
-                                        details &&
+                                        details && appSubmit &&
                                         //    details?.stage?.name !== 'CONDITIONAL OFFER' &&
                                         <Button className='add-btn' sx={{ fontSize: '14px', height: '25px', mr: 2, display: 'flex', alignItems: 'center' }} size='small' variant='outlined' onClick={handleDocumentOpen}> <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M4.09961 7.73337H8.19961M8.19961 7.73337H12.2996M8.19961 7.73337V11.6M8.19961 7.73337V3.8667" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
@@ -660,7 +660,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
                                             </Grid>}
                             </Grid>
-                        }
+                        {/* } */}
 
                     </div>
                 </Grid>

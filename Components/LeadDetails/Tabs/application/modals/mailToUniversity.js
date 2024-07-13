@@ -134,7 +134,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         })
     }
 
-    // console.log(from);
+    // console.log(file);
     const onSubmit = async (data) => {
 
         setLoading(true)
@@ -203,10 +203,11 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         })
     }
 
+    // console.log(attachmentFiles);
+
 
     const handleClose = () => {
         setEditId()
-        // reset()
         setattachmentFiles([])
         setFile([])
         setValue('template', '')
@@ -215,9 +216,6 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         setValue('to', '')
         setValue('body', '')
         setOpen(false)
-        setFile()
-
-
     }
 
     const handleDrawerClose = (event) => {
@@ -518,7 +516,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                         {
                                             attachmentFiles?.length > 0 &&
                                             <Grid>
-                                                <span style={{ fontSize: '16px' }}>Student Documents</span>
+                                                <span style={{ fontSize: '16px' }}>Documents</span>
                                                 <List>
                                                     {attachmentFiles?.map((document, index) => (
                                                         <ListItem key={index} className='list-item-mail ' >

@@ -34,7 +34,7 @@ const style = {
     p: 4,
 }
 
-export default function DocumentSelectModal({ editId, setEditId, SelectedDocuments, setSelectedDocuments, setSelectedAttachments,from }) {
+export default function DocumentSelectModal({ editId, setEditId, SelectedDocuments, setSelectedDocuments, setSelectedAttachments,from ,SelectedAttachments}) {
 
 
     let scheme = yup.object().shape({
@@ -185,20 +185,22 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     }
 
     const [Documents, setDocuments] = useState([])
+    const [uniDocuments, setuniDocuments] = useState([])
     const getDetails = () => {
     
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
             console.log(response);
-            const mergedArray = response?.data?.data?.documents.concat(response?.data?.data?.university_documents);
-            setDocuments(mergedArray)
+            // const mergedArray = response?.data?.data?.documents.concat(response?.data?.data?.university_documents);
+            setuniDocuments(response?.data?.data?.university_documents)
+            setDocuments(response?.data?.data?.documents)
             setDataLoading(false)
         }).catch((error) => {
             setDataLoading(false)
         })
     }
 
-    console.log(Documents);
+    // console.log(Documents);
     const getLeadDetails = () => {
         setDataLoading(true)
         LeadApi.listDocuments({ lead_id: editId ,limit:60}).then((response) => {
@@ -215,7 +217,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
 
     const handleAttach = () => {
         setSelectedDocuments(documentSelected)
-        setSelectedAttachments(file)
+        setSelectedAttachments(file )
         handleClose()
     }
 
@@ -236,6 +238,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
             setOpen(true)
         }
         setdocumentSelected(SelectedDocuments)
+        setFile(SelectedAttachments || [])
     }, [editId])
 
 
@@ -254,7 +257,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                 <Box sx={style}>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Add  Documents
+                            {/* Add  Documents */}
                         </Typography>
                         <IconButton
                             onClick={handleClose}
@@ -268,6 +271,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                             loadingFields()
                             :
                             <div>
+                                <div><span style={{fontWeight:'bold',fontSize:'16px'}}>Student Documents</span></div>
                                 <Grid>
                                     {
                                         Documents?.length > 0 ?
@@ -285,7 +289,32 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                                                 </Grid>
                                             </FormGroup>
                                             :
-                                           <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No Document Found</a></Grid>
+                                           <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No Student Document Found</a></Grid>
+                                    }
+
+
+                                </Grid>
+
+                                <div><span style={{fontWeight:'bold',fontSize:'16px'}}>University Documents</span></div>
+
+                                <Grid>
+                                    {
+                                        uniDocuments?.length > 0 ?
+                                            <FormGroup style={{}}>
+                                                <Grid container sx={{ display: 'flex', }}>
+                                                    {
+                                                        uniDocuments?.map((obj, index) => (
+                                                            obj &&
+                                                            <Grid key={index} mb={2} item xs={12} sm={6}>
+                                                                <FormControlLabel control={<Checkbox onChange={() => handleDocumentSelect(obj)} value={obj} checked={isDocumentChecked(obj)} />} label={obj?.document_template?.name} />
+                                                            </Grid>
+
+                                                        ))
+                                                    }
+                                                </Grid>
+                                            </FormGroup>
+                                            :
+                                           <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No University Document Found</a></Grid>
                                     }
 
 

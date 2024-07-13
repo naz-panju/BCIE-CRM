@@ -193,6 +193,8 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         })
     }
 
+    // console.log(file);
+
 
     const handleClose = () => {
         setEditId()
