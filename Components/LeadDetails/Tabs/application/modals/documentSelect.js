@@ -189,14 +189,16 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
-            // console.log(response);
-            console.log(response?.data?.data)
-            setDocuments([...response?.data?.data?.documents,...response?.data?.data?.university_documents])
+            console.log(response);
+            const mergedArray = response?.data?.data?.documents.concat(response?.data?.data?.university_documents);
+            setDocuments(mergedArray)
             setDataLoading(false)
         }).catch((error) => {
             setDataLoading(false)
         })
     }
+
+    console.log(Documents);
     const getLeadDetails = () => {
         setDataLoading(true)
         LeadApi.listDocuments({ lead_id: editId ,limit:60}).then((response) => {
@@ -252,7 +254,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                 <Box sx={style}>
                     <Grid display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
                         <Typography id="modal-modal-title" variant="h6" component="h2">
-                            Add Student Documents
+                            Add  Documents
                         </Typography>
                         <IconButton
                             onClick={handleClose}
@@ -273,7 +275,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                                                 <Grid container sx={{ display: 'flex', }}>
                                                     {
                                                         Documents?.map((obj, index) => (
-                                                            obj?.file &&
+                                                            obj &&
                                                             <Grid key={index} mb={2} item xs={12} sm={6}>
                                                                 <FormControlLabel control={<Checkbox onChange={() => handleDocumentSelect(obj)} value={obj} checked={isDocumentChecked(obj)} />} label={obj?.document_template?.name} />
                                                             </Grid>
