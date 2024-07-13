@@ -248,7 +248,8 @@ function DashboardIndex() {
                 type: 'weekly_leads',
                 week_starts_from: moment(weeklyRange[0]).format('YYYY-MM-DD'),
                 week_ends_on: moment(weeklyRange[1]).format('YYYY-MM-DD'),
-                office: officeId
+                office: officeId,
+                counselor: counsellorId
             })
             setWeeklyList(response?.data)
             setWeeklyLoading(false)
@@ -267,7 +268,8 @@ function DashboardIndex() {
                 type: 'weekly_leads_by_stage',
                 week_starts_from: moment(weeklyRange[0]).format('YYYY-MM-DD'),
                 week_ends_on: moment(weeklyRange[1]).format('YYYY-MM-DD'),
-                office: officeId
+                office: officeId,
+                counselor: counsellorId
             })
             // console.log(response);
             setWeeklyStageList(response?.data)
@@ -288,7 +290,8 @@ function DashboardIndex() {
                 type: 'lead_by_source',
                 date_from: moment(range[0]).format('YYYY-MM-DD'),
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
-                office: officeId
+                office: officeId,
+                counselor: counsellorId
             })
             // console.log(response);
             setLeadSourceList(response?.data)
@@ -309,6 +312,7 @@ function DashboardIndex() {
                 type: 'lead_by_country',
                 date_from: moment(range[0]).format('YYYY-MM-DD'),
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
+                counselor: counsellorId
                 // office: officeId
             })
             // console.log(response);
@@ -330,7 +334,8 @@ function DashboardIndex() {
                 type: 'leads_by_stage',
                 date_from: moment(range[0]).format('YYYY-MM-DD'),
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
-                office: officeId
+                office: officeId,
+                counselor: counsellorId
             })
             // console.log(response);
             setLeadStage(response?.data)
@@ -351,7 +356,8 @@ function DashboardIndex() {
                 date_from: moment(range[0]).format('YYYY-MM-DD'),
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
-                counselor: selectedCounsellor?.id
+                // counselor: selectedCounsellor?.id
+                counselor: counsellorId
             })
             // console.log(response);
             setCommunicationLog(response?.data)
@@ -394,7 +400,8 @@ function DashboardIndex() {
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
                 country: selectedCountries?.id,
-                counselor: selectedAppCounsellor?.id,
+                // counselor: selectedAppCounsellor?.id,
+                counselor: counsellorId,
                 app_coordinator: selectedAppCoordinators?.id,
             })
             // console.log(response);
@@ -417,6 +424,7 @@ function DashboardIndex() {
                 week_ends_on: moment(weeklyApplicationRange[1]).format('YYYY-MM-DD'),
                 country: selectedCountries?.id,
                 university: selectedUniversity?.id,
+                counselor: counsellorId
             })
             // console.log(response);
             setWeeklyApplicationList(response?.data)
@@ -437,7 +445,8 @@ function DashboardIndex() {
                 date_from: moment(weeklyApplicationRange[0]).format('YYYY-MM-DD'),
                 date_to: moment(weeklyApplicationRange[1]).format('YYYY-MM-DD'),
                 office: officeId,
-                country: selectedCountries?.id
+                country: selectedCountries?.id,
+                counselor: counsellorId
             })
             // console.log(response);
             setSubmitApplicationList(response?.data)

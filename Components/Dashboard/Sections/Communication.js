@@ -89,7 +89,7 @@ function CommunicationSection({ fetchManagers, handleManagerSelect, selectedMana
                               <div className='total'><span>Total</span></div>
                             </div>
                             <h2>${payments?.data?.total_deposits}</h2>
-                            <h4>Amount Received</h4>
+                            <h4>Total Deposit </h4>
 
                             <svg xmlns="http://www.w3.org/2000/svg" width="156" height="30" viewBox="0 0 156 30" fill="none">  <path d="M-95 20.3111C-87.9778 20.3112 -87.9778 30.8444 -80.9556 30.8444C-73.9333 30.8444 -73.9333 43.1333 -66.9111 43.1333C-59.8889 43.1333 -59.8889 34.3556 -52.8667 34.3556C-45.8445 34.3556 -45.8445 25.5778 -38.8222 25.5778C-31.8 25.5778 -31.8 27.7722 -24.7778 27.7722C-17.7556 27.7722 -17.7556 30.8445 -10.7333 30.8445C-3.71113 30.8444 -3.71113 15.0445 3.3111 15.0445C10.3333 15.0445 10.3334 25.1389 17.3556 25.1389C24.3778 25.1389 24.3778 9.77778 31.4 9.77778C38.4222 9.77778 38.4222 11.5334 45.4445 11.5334C52.4667 11.5334 52.4667 20.3111 59.4889 20.3111C66.5111 20.3111 66.5111 30.8444 73.5334 30.8445C80.5556 30.8445 80.8711 18.9551 87.5778 13.2889C92.5184 9.11479 94.6 4.51112 101.622 4.51114C108.644 4.51117 108.644 9.77781 115.667 9.77781C122.689 9.77781 129.711 1.00001 136.733 1C143.756 0.99999 143.756 6.26667 150.778 6.26667C157.8 6.26667 158.678 25.5778 164.822 25.5778C170.967 25.5778 171.844 13.2889 178.867 13.2889C185.889 13.2889 185.889 20.3111 192.911 20.3111C199.933 20.3111 199.933 13.2889 206.956 13.2889C213.978 13.2889 212.222 1.43889 221 1.43889" stroke="#22C55E" strokeWidth="2" /></svg>
 
@@ -102,7 +102,7 @@ function CommunicationSection({ fetchManagers, handleManagerSelect, selectedMana
                         <div className=' w-5/12'>
                           <div className='communication-details'>
                             <ul>
-                              <li style={{lineHeight:1}} ><Image src={Deposit} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_paid_leads}</b>Deposit Paid</li>
+                              {/* <li style={{lineHeight:1}} ><Image src={Deposit} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_paid_leads}</b>Deposit Paid</li> */}
                               <li><Image src={Pending} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_not_paid_leads}</b>Pending</li>
                             </ul>
                           </div>

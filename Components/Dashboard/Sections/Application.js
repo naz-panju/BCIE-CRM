@@ -179,7 +179,7 @@ function ApplicationSection({ selectedAppCounsellor, selectedAppCoordinators, ha
                                     placeholder={<div>University</div>}
                                     onChange={handleSelectUniversity}
                                 />
-                                {
+                                {/* {
                                     session?.data?.user?.role?.id != 5 &&
                                     <AsyncSelect
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
@@ -196,7 +196,7 @@ function ApplicationSection({ selectedAppCounsellor, selectedAppCoordinators, ha
                                         placeholder={<div>Counsellor</div>}
                                         onChange={handleAppCounsellorSelect}
                                     />
-                                }
+                                } */}
 
                                 {
                                     session?.data?.user?.role?.id != 6 &&

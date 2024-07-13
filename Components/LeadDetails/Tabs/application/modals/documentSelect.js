@@ -190,7 +190,8 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
             console.log(response);
-            setDocuments(response?.data?.data?.documents)
+            console.log(response?.data?.data)
+            setDocuments([...response?.data?.data?.documents,...response?.data?.data?.university_documents])
             setDataLoading(false)
         }).catch((error) => {
             setDataLoading(false)
@@ -200,6 +201,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
         setDataLoading(true)
         LeadApi.listDocuments({ lead_id: editId ,limit:60}).then((response) => {
             setDocuments(response?.data?.data)
+            console.log(response?.data?.data)
             setDataLoading(false)
         }).catch((error) => {
             setDataLoading(false)

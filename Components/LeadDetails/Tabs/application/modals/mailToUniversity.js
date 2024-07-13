@@ -255,10 +255,10 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
 
                 // setValue('default_cc', cc)
 
-                setValue('default_cc', response?.data?.data?.default_cc || '')
+                setValue('default_cc', response?.data?.data?.template?.default_cc || '')
                 // setValue('to', details?.email || '')
                 setValue('subject', response?.data?.data?.template?.subject || '')
-                setValue('body', response?.data?.data?.body || '')
+                setValue('body', response?.data?.data?.template?.body || '')
                 setattachmentFiles(response?.data?.data?.attchments)
 
                 seteditorKey(Math.random() * 0.23)
