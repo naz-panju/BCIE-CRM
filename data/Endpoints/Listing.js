@@ -26,6 +26,8 @@ export const ListingApi = {
     applications:(data) => http.get(`listing/applications/${data?.id}`, { params: data }),
     counsellors:(data) => http.get(`listing/counselors`, { params: data }),
 
+    permissionUser:(data) => http.get(`listing/accessable-users`, { params: data }),
+    
     maxFileSize:(data) => http.get(`max-file-upload-size`, { params: data }),
 
 }

@@ -189,7 +189,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
-            console.log(response);
+            // console.log(response);
             console.log(response?.data?.data)
             setDocuments([...response?.data?.data?.documents,...response?.data?.data?.university_documents])
             setDataLoading(false)

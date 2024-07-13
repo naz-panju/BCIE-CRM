@@ -81,8 +81,9 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
         })
     }
 
-    const fetchLead = (e) => {
-        return LeadApi.list({ keyword: e }).then(response => {
+   
+    const fetchUsers = (e) => {
+        return ListingApi.permission({ keyword: e }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -325,7 +326,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                                 <Grid className='mb-5 forms-data  '>
                                                     <SelectX
                                                         // placeholder='Assigned To'
-                                                        loadOptions={fetchUser}
+                                                        loadOptions={fetchUsers}
                                                         control={control}
                                                         // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
                                                         // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
@@ -339,20 +340,20 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                         {
                                             detail &&
                                             <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
-                                                {/* <div className='application-input'>
+                                                <div className='application-input'>
                                                     <a className='form-text'>Lead</a>
                                                     <Grid className='mb-5 forms-data  '>
-                                                        <SelectX
+                                                        {/* <SelectX
                                                             // placeholder='Assigned To'
-                                                            loadOptions={fetchLead}
+                                                            loadOptions={fetchUsers}
                                                             control={control}
                                                             // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
                                                             // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                                            name={'assigned_lead'}
-                                                            defaultValue={watch('assigned_lead')}
-                                                        />
+                                                            name={'users'}
+                                                            defaultValue={watch('users')}
+                                                        /> */}
                                                     </Grid>
-                                                </div> */}
+                                                </div>
 
                                                 <div className='application-input'>
                                                     <a className='form-text'>Applications</a>
