@@ -113,6 +113,18 @@ const headCells = [
     label: 'Status',
   },
   {
+    id: 'lead',
+    numeric: true,
+    disablePadding: false,
+    label: 'Lead',
+  },
+  {
+    id: 'application',
+    numeric: true,
+    disablePadding: false,
+    label: 'Application',
+  },
+  {
     id: 'icon',
     numeric: true,
     disablePadding: false,
@@ -716,6 +728,8 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
                                       row?.status
                                 }
                               </TableCell>
+                              <TableCell align="left"><a target='_blank' href={`/lead/${row?.applicaion?.lead?.id}`}>{row?.applicaion?.lead?.name || 'NA'}</a></TableCell>
+                              <TableCell align="left">{row?.applicaion?.university?.name || 'NA'}</TableCell>
                               <TableCell align="left">
                                 {
                                   session?.data?.user?.id == row?.createdBy?.id &&

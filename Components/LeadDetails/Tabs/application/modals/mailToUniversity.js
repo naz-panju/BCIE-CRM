@@ -234,12 +234,14 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     };
 
 
+    // console.log(details);
+
     const handleTemplateChange = (data) => {
         // console.log(data);
         setTextBoxLoading(true)
         setValue('template', data || '')
 
-        TemplateApi.mailTemplate({ template_id: data?.id, lead_id: lead_id }).then((response) => {
+        TemplateApi.universityMailTemplate({ template_id: data?.id, lead_id: editId }).then((response) => {
 
             // console.log(response);
 
@@ -277,8 +279,19 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         ApplicationApi.view({ id: editId }).then((response) => {
             setappDetails(response?.data?.data)
             if (response?.data?.data?.university?.contacts?.length > 0) {
-                setValue('to', response?.data?.data?.university?.contacts[0]?.email)
+                const emails = response?.data?.data?.university?.contacts
+                    .map(contact => contact.email)
+                    .filter(email => email) // filter out undefined or null emails
+                    .join(',');
+    
+                setValue('to', emails);
+    
+                // console.log(appData.university.contacts);
             }
+            // if (response?.data?.data?.university?.contacts?.length > 0) {
+            //     console.log(response?.data?.data?.university?.contacts)
+            //     setValue('to', response?.data?.data?.university?.contacts[0]?.email)
+            // }
         })
     }
 

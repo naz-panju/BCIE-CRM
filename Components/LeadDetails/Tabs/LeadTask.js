@@ -82,6 +82,8 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detail
         setLoading(false)
     }
 
+    console.log(list);
+
     const [completeId, setcompleteId] = useState()
     const [completeLoading, setcompleteLoading] = useState(false)
 
@@ -158,6 +160,11 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detail
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>
+                                                <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                                    Application
+                                                </Typography>
+                                            </TableCell>
+                                            <TableCell>
 
                                             </TableCell>
                                         </TableRow>
@@ -197,6 +204,7 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detail
 
                                                                 {/* <Button sx={{ textTransform: 'none', }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button> */}
                                                             </TableCell>
+                                                            <TableCell>{obj?.applicaion?.university?.name}</TableCell>
                                                             <TableCell >
                                                                 {
                                                                     session?.data?.user?.role?.id != 6 &&

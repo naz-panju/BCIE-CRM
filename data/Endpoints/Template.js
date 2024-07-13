@@ -7,5 +7,5 @@ export const TemplateApi = {
     update: (data) => http.post(`email-templates/update`, data),
 
     mailTemplate: (data) => http.get(`email-templates/template/${data?.template_id}/lead/${data?.lead_id}`, {params:data}),
-    
+    universityMailTemplate:(data) => http.get(`email-templates/template/${data?.template_id}/application/${data?.lead_id}`),
 }

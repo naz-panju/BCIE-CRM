@@ -71,8 +71,8 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
     }
 
     const fetchApplications = (e) => {
-        return ApplicationApi.list({ keyword: e }).then(response => {
-            console.log(response.data.data)
+        return ApplicationApi.list({ keyword: e, lead_id: lead_id,intake_id: 'All',limit:30 }).then(response => {
+            // console.log(response)
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -119,13 +119,15 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
         if (lead_id) {
             dataToSubmit['lead_id'] = lead_id
-            if (from == 'app') {
-                dataToSubmit['application_id'] = app_id
-            }
+            dataToSubmit['application_id'] = data?.application?.id || null
+            // if (from == 'app') {
+            //     dataToSubmit['application_id'] = app_id
+            // }
         }
 
-
         let action;
+
+        console.log(dataToSubmit);
 
         if (editId > 0) {
             dataToSubmit['id'] = editId
@@ -213,9 +215,9 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                 setValue('title', data?.title)
                 setValue('date', data?.due_date)
                 setValue('assigned_to', data?.assignedToUser)
-                // setValue('reviewer', data?.reviewer)
                 // setSelectedPriority(data?.priority)
                 setValue('description', data?.description)
+                setValue('application', data?.applicaion)
                 setDataLoading(false)
             }
             setDataLoading(false)
@@ -336,8 +338,8 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
                                         {
                                             detail &&
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
-                                                <div className='application-input'>
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                                {/* <div className='application-input'>
                                                     <a className='form-text'>Lead</a>
                                                     <Grid className='mb-5 forms-data  '>
                                                         <SelectX
@@ -350,7 +352,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                                             defaultValue={watch('assigned_lead')}
                                                         />
                                                     </Grid>
-                                                </div>
+                                                </div> */}
 
                                                 <div className='application-input'>
                                                     <a className='form-text'>Applications</a>

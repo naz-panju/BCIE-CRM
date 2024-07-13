@@ -31,7 +31,7 @@ import DeferIntake from '../LeadDetails/Tabs/application/modals/deferIntake';
 import ViewDocumentModal from '../LeadDetails/Tabs/application/modals/viewDocModal';
 import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUniversity';
 import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
-import { AssignmentReturn, Autorenew, InfoOutlined, MoreHorizOutlined, SummarizeOutlined } from '@mui/icons-material';
+import { AssignmentReturn, AssignmentReturnedOutlined, Autorenew, InfoOutlined, MoreHorizOutlined, ReplayOutlined, SummarizeOutlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import ReturnPopup from './Modals/returnModal';
 import ApplicationDetail from './Modals/Details';
@@ -42,6 +42,7 @@ import moment from 'moment';
 import ReactSelector from 'react-select';
 import UniversityInfoModal from './Modals/UniversityInfo';
 import PortalPermissionModal from './Modals/PortalPermissions';
+import { blue } from '@mui/material/colors';
 
 
 
@@ -1292,7 +1293,16 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 <TableCell align="left"> {row?.course}</TableCell>
                                                                 <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
-                                                                <TableCell className='stage-colm' align="left"><Tooltip title={row?.stage_note}><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span></Tooltip></TableCell>
+                                                                {
+
+                                                                }
+                                                                <TableCell  className='stage-colm flex items-center' align="left"><Tooltip title={row?.stage_note}><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name} {
+                                                                        row?.app_coordinator_status == 'Returned' && <ReplayOutlined fontSize='small' className='ml-1' /> }</span> </Tooltip>
+                                                                    {/* {
+                                                                        selectedStatus == 'Returned' && */}
+                                                                        {/* <ReplayOutlined fontSize='small' className='ml-1' /> */}
+                                                                    {/* } */}
+                                                                </TableCell>
                                                                 <TableCell align="left">{row?.lead?.assignedToCounsellor?.name}</TableCell>
                                                                 <TableCell align="left"> {
                                                                     row?.deposit_amount_paid ?
