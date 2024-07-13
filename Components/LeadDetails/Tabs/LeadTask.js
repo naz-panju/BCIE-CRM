@@ -204,7 +204,7 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detail
 
                                                                 {/* <Button sx={{ textTransform: 'none', }} onClick={() => handleEdit(obj?.id)}><Edit fontSize='small' /></Button> */}
                                                             </TableCell>
-                                                            <TableCell>{obj?.applicaion?.university?.name}</TableCell>
+                                                            <TableCell>{obj?.applicaion?.university?.name || 'NA'}</TableCell>
                                                             <TableCell >
                                                                 {
                                                                     session?.data?.user?.role?.id != 6 &&

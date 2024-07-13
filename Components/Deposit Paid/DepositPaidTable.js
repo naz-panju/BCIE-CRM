@@ -30,7 +30,7 @@ import DeferIntake from '../LeadDetails/Tabs/application/modals/deferIntake';
 import ViewDocumentModal from '../LeadDetails/Tabs/application/modals/viewDocModal';
 import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUniversity';
 import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
-import { AssignmentReturn, Autorenew, InfoOutlined, MoreHorizOutlined } from '@mui/icons-material';
+import { AssignmentReturn, Autorenew, DeleteOutline, EditOutlined, InfoOutlined, MoreHorizOutlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 
 import ConfirmPopup from '../Common/Popup/confirm';
@@ -44,6 +44,7 @@ import ApplicationDetail from '../Applications/Modals/Details';
 import { Divider } from 'rsuite';
 import UniversityInfoModal from '../Applications/Modals/UniversityInfo';
 import PortalPermissionModal from '../Applications/Modals/PortalPermissions';
+import EditPaymentModal from '../Applications/Modals/editPaymentModal';
 
 
 
@@ -766,6 +767,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
     })
   }
 
+
   const [uniInfoId, setuniInfoId] = useState()
   const handlUniInfoOpen = (obj) => {
     setDetails(obj)
@@ -779,6 +781,34 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
     handlePopoverClose()
   }
 
+  const [editPaymentId, seteditPaymentId] = useState()
+  const handleEditPaymentOpen = (obj) => {
+    // setDetails(obj)
+    seteditPaymentId(obj?.id)
+  }
+
+  const [deleteAmount, setdeleteAmount] = useState()
+  const handleDeletePaymentOpen = (obj) => {
+    setdeleteAmount(obj?.id)
+  }
+  const handleDeleteAmount = () => {
+    setsubmitLoading(true)
+    ApplicationApi.deletePayment({ id: deleteAmount }).then((response) => {
+      // console.log(response);
+      if (response?.status == 200 || response?.status == 201) {
+        toast.success(response?.data?.message)
+        setsubmitLoading(false)
+        setdeleteAmount()
+        fetchTable()
+      } else {
+        toast.error(response?.response?.data?.message)
+        setsubmitLoading(false)
+      }
+    }).catch((error) => {
+      toast.error(error?.response?.data?.message)
+      setdeleteLoading(false)
+    })
+  }
 
   useEffect(() => {
     fetchTable()
@@ -803,6 +833,9 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
 
       <UniversityInfoModal editId={uniInfoId} setEditId={setuniInfoId} details={details} setDetails={setDetails} />
       <PortalPermissionModal editId={PortalId} setEditId={setPortalId} details={details} setDetails={setDetails} />
+
+      <EditPaymentModal editId={editPaymentId} setEditId={seteditPaymentId} refresh={fetchTable} />
+      <ConfirmPopup loading={submitLoading} ID={deleteAmount} setID={setdeleteAmount} clickFunc={handleDeleteAmount} title={`Do you want to Delete Deposit Amount?`} />
 
 
       <div className="filter_sec">
@@ -1183,21 +1216,29 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
                                 <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                 <TableCell className='stage-colm' align="left"><Tooltip title={row?.stage_note}><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span></Tooltip></TableCell>
+                                <TableCell align="left">{row?.lead?.assignedToCounsellor?.name}</TableCell>
+                                <TableCell align="left">
+                                  {
+                                    row?.deposit_amount_paid ?
+                                      <HtmlTooltip
+                                        title={
+                                          <React.Fragment>
+                                            <div style={{ borderCollapse: 'collapse', width: '100%', padding: 3, display: 'flex', flexDirection: 'column' }}>
+                                              <span style={{ fontSize: '13px', color: 'grey', marginBottom: 3 }}>Payment Date :<sapn style={{ color: 'black' }} >{moment(row?.deposit_paid_on).format('DD-MM-YYYY') || 'NA'}</sapn></span>
+                                              <hr />
+                                              <span style={{ fontSize: '13px', color: 'grey', marginTop: 3 }}>Payment Mode :<span style={{ color: 'black' }}>{row?.deposit_mode_of_payment || 'NA'}</span></span>
+                                            </div>
+                                          </React.Fragment>
+                                        }
+                                      >
+                                        {row?.deposit_amount_paid}
+                                        <EditOutlined style={{ cursor: 'pointer' }} onClick={() => handleEditPaymentOpen(row)} className='ml-2' fontSize='small' />
+                                        <DeleteOutline style={{ cursor: 'pointer' }} onClick={() => handleDeletePaymentOpen(row)} className='ml-2' fontSize='small' />
+                                      </HtmlTooltip>
+                                      : 'NA'
+                                  }
 
-                                <TableCell align="left"> {
-                                  row?.deposit_amount_paid ?
-                                    <>
-                                      <a> {row?.deposit_amount_paid} </a>
-                                      <br />
-                                      {
-                                        row?.deposit_paid_on &&
-                                        <span style={{ fontSize: '13px', color: 'grey' }}>Date :{moment(row?.deposit_paid_on).format('DD-MM-YYYY')}</span>
-                                      }
-                                    </>
-                                    :
-                                    'NA'
-                                  // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
-                                }</TableCell>
+                                </TableCell>
 
                                 {/* <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell> */}
 

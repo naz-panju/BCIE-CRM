@@ -186,8 +186,10 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
 
     const [Documents, setDocuments] = useState([])
     const getDetails = () => {
+    
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
+            console.log(response);
             setDocuments(response?.data?.data?.documents)
             setDataLoading(false)
         }).catch((error) => {
@@ -213,11 +215,14 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
         handleClose()
     }
 
+    
+
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
             if (Documents?.length == 0) {
                 if(from=='app'){
+                    console.log('here');
                     getDetails()
                 }else if(from=='lead'){
                     getLeadDetails()

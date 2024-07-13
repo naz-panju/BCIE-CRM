@@ -28,6 +28,7 @@ export default NextAuth({
               token: response?.data?.data?._token,
               user_id: response.data?.data?.user?.user_id,
               role: response?.data?.data?.role,
+              office_country:response?.data?.data?.office_country,
             };
             return Promise.resolve(user);
           } else {

@@ -45,7 +45,7 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function SendMail({ details, editId, setEditId, lead_id, refresh, setRefresh, from, app_id }) {
+export default function SendMail({ details, editId, setEditId, lead_id, refresh, setRefresh, from, app_id,application }) {
 
     const [state, setState] = React.useState({
         right: false,
@@ -296,7 +296,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
     return (
         <div>
-            <DocumentSelectModal from={'lead'} editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} />
+            <DocumentSelectModal from={from || 'lead'} editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} />
 
             <Drawer
                 anchor={anchor}

@@ -16,6 +16,7 @@ export const ApplicationApi = {
     deleteUniversityDocument: (data) => http.post(`applications/delete-university-document`, data), 
 
     addDeposit: (data) => http.post(`applications/deposit/store`, data),
+    editDepositPayment:(data) => http.post(`applications/deposit/update`, data),
     deferIntake: (data) => http.post(`applications/differ-intake`, data),
 
     stageChange:(data) => http.post(`applications/change-stage`, data),
@@ -25,4 +26,8 @@ export const ApplicationApi = {
     submitToUniversity:(data) => http.post(`applications/submit-to-university`, data),
 
     addUniversityId:(data) => http.post(`applications/save-university-id`, data),
+
+    deletePayment:(data) => http.post(`applications/deposit/delete`, data),
+
+
 }

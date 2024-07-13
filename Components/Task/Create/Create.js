@@ -71,7 +71,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
     }
 
     const fetchApplications = (e) => {
-        return ApplicationApi.list({ keyword: e, lead_id: lead_id,intake_id: 'All',limit:30 }).then(response => {
+        return ListingApi.applications({ keyword: e, id: lead_id}).then(response => {
             // console.log(response)
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;

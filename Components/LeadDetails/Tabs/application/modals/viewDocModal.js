@@ -317,6 +317,9 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                 }
                 formData.append('deposit_paid_on', date)
                 formData.append('deposit_amount', data?.amount)
+                formData.append('deposit_mode_of_payment', data?.payment_mode)
+
+                
             }
 
             // for (const [key, value] of formData.entries()) {
@@ -460,7 +463,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                     }
                                 </Grid>
 
-                                <Grid height={500} className={`border h-6/8 doc-details-add-block ${docId >= 0 ? 'Active' : ''}`}>
+                                <Grid height={500} style={{overflowY:'auto'}} className={`border h-6/8 doc-details-add-block ${docId >= 0 ? 'Active' : ''}`}>
 
                                     <div className='flex justify-between items-center'>
                                         <a>Add University Document</a>

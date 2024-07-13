@@ -36,7 +36,7 @@ function LeadDetails() {
 
   const [details, setDetails] = useState()
   const [refresh, setRefresh] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [disabled, setdisabled] = useState(false)
   const [followRefresh, setFollowRefresh] = useState(false)
 
@@ -495,7 +495,7 @@ function LeadDetails() {
 
                         <div className='vari-left'>
                           <div className='vari-left-cap'>
-                            {
+                            {/* {
                               stages?.map((obj, index) => {
                                 let ind;
                                 ind = stages.findIndex(obj =>
@@ -513,12 +513,12 @@ function LeadDetails() {
 
                                 return (
 
-                                  ind == index &&
-                                  <h5 key={index}>{finalIndex / stages?.length * 100}%</h5>
-                                )
+                                  ind == index && */}
+                                  {/* <h5 key={index}>{finalIndex / stages?.length * 100}%</h5> */}
+                                  <h5 >{details?.stage?.progress_percentage}%</h5>
+                                {/* )
                               })
-                            }
-                            {/* <h5>25%</h5> */}
+                            } */}
 
                             {
                               stages?.length > 0 &&
@@ -533,7 +533,7 @@ function LeadDetails() {
 
                           <div style={{ width: 129, height: 129 }}>
 
-                            {
+                            {/* {
                               stages?.map((obj, index) => {
                                 let ind;
                                 ind = stages.findIndex(obj =>
@@ -551,11 +551,12 @@ function LeadDetails() {
 
                                 return (
 
-                                  ind == index &&
-                                  // <h5 key={index}>{finalIndex / stages?.length * 100}%</h5>
-                                  <React.Fragment key={index}>
+                                  ind == index && */}
+                                  {/* // <h5 key={index}>{finalIndex / stages?.length * 100}%</h5> */}
+                                  <React.Fragment >
                                     <CircularProgressbar
-                                      value={finalIndex / stages?.length * 100}
+                                      // value={finalIndex / stages?.length * 100}
+                                      value={details?.stage?.progress_percentage}
                                       strokeWidth={5}
                                       styles={buildStyles({
                                         pathColor: 'url(#newGradient)',
@@ -575,9 +576,9 @@ function LeadDetails() {
                                       </defs>
                                     </svg>
                                   </React.Fragment>
-                                )
+                                {/* )
                               })
-                            }
+                            } */}
 
                           </div>
 
@@ -646,7 +647,7 @@ function LeadDetails() {
                         <li > </li> */}
                           </ul>
 
-                          {
+                          {/* {
                             stages?.map((obj, index) => {
                               let ind;
                               ind = stages.findIndex(obj =>
@@ -664,14 +665,14 @@ function LeadDetails() {
 
                               return (
 
-                                ind == index &&
+                                ind == index && */}
 
 
-                                <div key={index} style={{ width: `${finalIndex / stages?.length * 100}%` }} className='track-range'>
+                                <div  style={{ width: `${details?.stage?.progress_percentage}%` }} className='track-range'>
                                 </div>
-                              )
+                              {/* )
                             })
-                          }
+                          } */}
                           {/* {
                         stages?.map((obj, index) => {
                           return (

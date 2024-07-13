@@ -21,12 +21,12 @@ function DashboardIndex() {
 
     const [intakeId, setIntakeId] = useState();
     const handleinTakeChange = (data) => {
-        handleIntakeDateRange(data?.name)
+        // handleIntakeDateRange(data?.name)
         setValue('intake', data || '')
         setIntakeId(data?.id)
     }
     const [intakeRefresh, setIntakerfersh] = useState(false)
-    const [range, setRange] = useState([null, null]);
+    const [range, setRange] = useState([ moment().startOf('month').toDate(),  moment().endOf('month').toDate()]);
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e, }).then(response => {
             if (typeof response.data.data !== "undefined") {
@@ -43,11 +43,11 @@ function DashboardIndex() {
         })
     }
 
-    useEffect(() => {
-        if (intakeId) {
-            handleIntakeDateRange(watch('intake')?.name)
-        }
-    }, [intakeRefresh])
+    // useEffect(() => {
+    //     if (intakeId) {
+    //         handleIntakeDateRange(watch('intake')?.name)
+    //     }
+    // }, [intakeRefresh])
 
 
     const fetchOffice = (e) => {
@@ -61,7 +61,7 @@ function DashboardIndex() {
     }
 
     const fetchCounsellor = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 5 }).then(response => {
+        return ListingApi.counsellors({ keyword: e }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -234,10 +234,10 @@ function DashboardIndex() {
 
 
     // console.log(range);
-    // const [weeklyRange, setWeeklyRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
-    // const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
-    const [weeklyRange, setWeeklyRange] = useState([null, null]);
-    const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([null, null]);
+    const [weeklyRange, setWeeklyRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
+    const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([moment().subtract(7, 'days').toDate(), new Date()]);
+    // const [weeklyRange, setWeeklyRange] = useState([null, null]);
+    // const [weeklyApplicationRange, setWeeklyApplicationRange] = useState([null, null]);
 
     const [weeklyList, setWeeklyList] = useState([]);
     const [weeklyLoading, setWeeklyLoading] = useState(true)
@@ -597,7 +597,7 @@ function DashboardIndex() {
                             </Grid>
 
                             {
-                                session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4 &&
+                                 session?.data?.user?.role?.id !== 5 &&
                                 <Grid mr={2} sx={{ width: 200 }} className='intake_dropdown'>
                                     <AsyncSelect
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
@@ -625,11 +625,11 @@ function DashboardIndex() {
                                     // placeholder="Select Date Range"
                                     // style={{ width: 150 }}
                                     format='dd-MM-yyyy'
-                                    disabledDate={(date) => {
-                                        const startDate = range[0];
-                                        const endDate = range[1];
-                                        return date < startDate || date > endDate;
-                                    }}
+                                    // disabledDate={(date) => {
+                                    //     const startDate = range[0];
+                                    //     const endDate = range[1];
+                                    //     return date < startDate || date > endDate;
+                                    // }}
                                 />
                             </Grid>
                         </div>

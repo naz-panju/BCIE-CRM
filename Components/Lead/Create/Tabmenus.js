@@ -25,6 +25,7 @@ import ReactSelector from 'react-select';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import moment from 'moment';
 import TextInput from '@/Form/TextInput';
+import { useSession } from 'next-auth/react';
 
 
 
@@ -65,6 +66,11 @@ function a11yProps(index) {
 
 
 export default function CreateTabs({ handleClose, refresh, setRefresh, editId, handleRefresh, from, handleLeadRefresh }) {
+
+    const session=useSession()
+
+    // console.log(session)
+
     const [phone, setPhone] = useState()
     const [code, setCode] = useState()
 
@@ -670,7 +676,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                         international
                                         // autoFormat
                                         placeholder=""
-                                        // country="global"
+                                        country={session?.data?.user?.office_country?.country_code.toLowerCase()}
                                         value={watch('phone')}
                                         onChange={handlePhoneNumber}
                                         inputprops={{
@@ -705,7 +711,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                         international
                                         // autoFormat
                                         placeholder=""
-                                        // country="in"
+                                        country={session?.data?.user?.office_country?.country_code.toLowerCase()}
                                         value={watch('alt_phone')}
                                         onChange={handleAltPhoneNumber}
                                         inputprops={{
@@ -742,7 +748,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                         international
                                         // autoFormat
                                         placeholder=""
-                                        // country="in"
+                                        country={session?.data?.user?.office_country?.country_code.toLowerCase()}
                                         value={watch('whatsapp')}
                                         onChange={handleWhatsAppNumber}
                                         inputprops={{
