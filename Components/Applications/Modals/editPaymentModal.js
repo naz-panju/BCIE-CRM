@@ -159,7 +159,6 @@ export default function EditPaymentModal({ editId, setEditId, refresh }) {
                         <a className='back_modal_head'> Edit Deposit Payment </a>
 
                     </Grid>
-                    <hr />
                     <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>

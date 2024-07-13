@@ -31,7 +31,7 @@ import DeferIntake from '../LeadDetails/Tabs/application/modals/deferIntake';
 import ViewDocumentModal from '../LeadDetails/Tabs/application/modals/viewDocModal';
 import SendUniversityMail from '../LeadDetails/Tabs/application/modals/mailToUniversity';
 import UniversityDeposit from '../LeadDetails/Tabs/application/modals/universityDepost';
-import { AssignmentReturn, AssignmentReturnedOutlined, Autorenew, InfoOutlined, MoreHorizOutlined, ReplayOutlined, SummarizeOutlined } from '@mui/icons-material';
+import { AssignmentReturn, AssignmentReturnedOutlined, Autorenew, DeleteOutline, EditOutlined, InfoOutlined, MoreHorizOutlined, ReplayOutlined, SummarizeOutlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import ReturnPopup from './Modals/returnModal';
 import ApplicationDetail from './Modals/Details';
@@ -43,6 +43,7 @@ import ReactSelector from 'react-select';
 import UniversityInfoModal from './Modals/UniversityInfo';
 import PortalPermissionModal from './Modals/PortalPermissions';
 import { blue } from '@mui/material/colors';
+import EditPaymentModal from './Modals/editPaymentModal';
 
 
 
@@ -817,6 +818,35 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         { name: 'No' }
     ]
 
+    const [editPaymentId, seteditPaymentId] = useState()
+    const handleEditPaymentOpen = (obj) => {
+        // setDetails(obj)
+        seteditPaymentId(obj?.id)
+    }
+
+    const [deleteAmount, setdeleteAmount] = useState()
+    const handleDeletePaymentOpen = (obj) => {
+        setdeleteAmount(obj?.id)
+    }
+    const handleDeleteAmount = () => {
+        setsubmitLoading(true)
+        ApplicationApi.deletePayment({ id: deleteAmount }).then((response) => {
+            // console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                setsubmitLoading(false)
+                setdeleteAmount()
+                fetchTable()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setsubmitLoading(false)
+            }
+        }).catch((error) => {
+            toast.error(error?.response?.data?.message)
+            setdeleteLoading(false)
+        })
+    }
+
     useEffect(() => {
         fetchTable()
     }, [page, refresh, limit, searchRefresh])
@@ -844,6 +874,10 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
             <UniversityInfoModal editId={uniInfoId} setEditId={setuniInfoId} details={details} setDetails={setDetails} />
             <PortalPermissionModal editId={PortalId} setEditId={setPortalId} details={details} setDetails={setDetails} />
+
+            <EditPaymentModal editId={editPaymentId} setEditId={seteditPaymentId} refresh={fetchTable} />
+            <ConfirmPopup loading={submitLoading} ID={deleteAmount} setID={setdeleteAmount} clickFunc={handleDeleteAmount} title={`Do you want to Delete Deposit Amount?`} />
+
 
             <div className="filter_sec">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -1296,28 +1330,37 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 {
 
                                                                 }
-                                                                <TableCell  className='stage-colm flex items-center' align="left"><Tooltip title={row?.stage_note}><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name} {
-                                                                        row?.app_coordinator_status == 'Returned' && <ReplayOutlined fontSize='small' className='ml-1' /> }</span> </Tooltip>
+                                                                <TableCell className='stage-colm flex items-center' align="left"><Tooltip title={row?.stage_note}><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name} {
+                                                                    row?.app_coordinator_status == 'Returned' && <ReplayOutlined fontSize='small' className='ml-1' />}</span> </Tooltip>
                                                                     {/* {
                                                                         selectedStatus == 'Returned' && */}
-                                                                        {/* <ReplayOutlined fontSize='small' className='ml-1' /> */}
+                                                                    {/* <ReplayOutlined fontSize='small' className='ml-1' /> */}
                                                                     {/* } */}
                                                                 </TableCell>
                                                                 <TableCell align="left">{row?.lead?.assignedToCounsellor?.name}</TableCell>
-                                                                <TableCell align="left"> {
-                                                                    row?.deposit_amount_paid ?
-                                                                        <>
-                                                                            <a> {row?.deposit_amount_paid} </a>
-                                                                            <br />
-                                                                            {
-                                                                                row?.deposit_paid_on &&
-                                                                                <a style={{ fontSize: '13px', color: 'grey' }}>Date :{moment(row?.deposit_paid_on).format('DD-MM-YYYY')}</a>
-                                                                            }
-                                                                        </>
-                                                                        :
-                                                                        'NA'
-                                                                    // <Button variant='outlined' size='small' onClick={() => handleDepositOpen(row)}>  Add</Button>
-                                                                }</TableCell>
+                                                                <TableCell align="left">
+                                                                    {
+                                                                        row?.deposit_amount_paid ?
+                                                                            <HtmlTooltip
+                                                                                title={
+                                                                                    <React.Fragment>
+                                                                                        <div style={{ borderCollapse: 'collapse', width: '100%', padding: 3, display: 'flex', flexDirection: 'column' }}>
+                                                                                            <span style={{ fontSize: '13px', color: 'grey', marginBottom: 3 }}>Payment Date :<sapn style={{ color: 'black' }} >{moment(row?.deposit_paid_on).format('DD-MM-YYYY') || 'NA'}</sapn></span>
+                                                                                            <hr />
+                                                                                            <span style={{ fontSize: '13px', color: 'grey', marginTop: 3 }}>Payment Mode :<span style={{ color: 'black' }}>{row?.deposit_mode_of_payment || 'NA'}</span></span>
+                                                                                        </div>
+                                                                                    </React.Fragment>
+                                                                                }
+                                                                            >
+                                                                                {row?.deposit_amount_paid}
+                                                                                <EditOutlined style={{ cursor: 'pointer' }} onClick={() => handleEditPaymentOpen(row)} className='ml-2' fontSize='small' />
+                                                                                <DeleteOutline style={{ cursor: 'pointer' }} onClick={() => handleDeletePaymentOpen(row)} className='ml-2' fontSize='small' />
+
+                                                                            </HtmlTooltip>
+                                                                            : 'NA'
+                                                                    }
+
+                                                                </TableCell>
 
                                                                 {/* <TableCell align="left"> <Tooltip title={'Return Application to Counsellor'}><Button onClick={() => handleReturnPopupOpen(row?.id)} variant='outlined' size='small'> <Autorenew />  </Button></Tooltip></TableCell> */}
 
