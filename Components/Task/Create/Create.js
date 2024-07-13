@@ -83,7 +83,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
    
     const fetchUsers = (e) => {
-        return ListingApi.permission({ keyword: e }).then(response => {
+        return ListingApi.permissionUser({ keyword: e }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
