@@ -248,12 +248,17 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         if (editId == 0) {
             setValue('whatsapp', value)
             setWhatsappCode(dialCode)
-            setValue('whatsapp', value)
+            // setValue('whatsapp', value)
             if (value.startsWith(dialCode)) {
                 const trimmedPhone = value.slice(dialCode.length);
                 setWhatsapp(trimmedPhone);
             } else {
                 setWhatsapp(value);
+            }
+            if(!altPhone){
+                setValue('alt_phone',dialCode)
+                setAltCode(dialCode)
+                // setAltPhone(dialCode)
             }
         }
         if (value.startsWith(dialCode)) {
@@ -405,6 +410,13 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             // country_id: data?.country?.id,
 
             note: data?.note
+        }
+
+        if(!altPhone){
+            dataToSubmit['alternate_phone_country_code']=code
+        }
+        if(!whatsappCode){
+            dataToSubmit['whatsapp_country_code']=code
         }
 
         console.log(dataToSubmit);

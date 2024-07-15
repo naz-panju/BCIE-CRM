@@ -143,8 +143,8 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     const [mandatoryDocuments, setmandatoryDocuments] = useState([])
     const mandatoryTemplate = () => {
         ListingApi.documentTemplate().then((response) => {
-            if (details?.lead_source?.id == 10) {
-                const carryoverDoc = response?.data?.data?.find(obj => obj?.id == 18)
+            if (details?.lead_source?.id == 13) {
+                const carryoverDoc = response?.data?.data?.find(obj => obj?.id == 19)
                 setmandatoryDocuments([carryoverDoc])
             } else {
                 const mandatoryDocs = response?.data?.data?.filter(obj => obj?.is_mandatory === 1);
@@ -683,15 +683,15 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                         <tbody>
                                                             {mandatoryDocuments?.map((docs, ind) => {
 
-                                                                // const selectedDocuments = watch('documents') || [];
-                                                                const selectedDocuments = allDocs?.data || [];
+                                                                const selectedDocuments = watch('documents') || [];
+                                                                // const selectedDocuments = allDocs?.data || [];
 
                                                                 return (<tr key={ind}>
                                                                     <td className='flex justify-between' style={{ border: '1px solid #ddd', padding: '8px' }}>
                                                                         <span style={{ cursor: 'pointer' }} onClick={() => handleSelectMandatoryDoc(docs)}> {docs?.name}</span>
                                                                         <CheckCircle fontSize='small'
                                                                             color={
-                                                                                selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id && doc?.status === 'Accepted') ? 'success' : 'disabled'
+                                                                                selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id) ? 'success' : 'disabled'
                                                                             }
                                                                         />
                                                                     </td>

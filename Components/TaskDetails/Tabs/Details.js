@@ -119,6 +119,19 @@ function Details({ data, loading }) {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Student:</label>
+                        <span>{data?.applicaion?.lead?.name || 'NA'}</span>
+                    </div>
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>University:</label>
+                        <span>{data?.applicaion?.university?.name || 'NA'}</span>
+                    </div>
+
+                </div>
+
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Created By:</label>
                         <span>{data?.createdBy?.name}</span>
                     </div>

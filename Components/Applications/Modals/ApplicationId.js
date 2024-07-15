@@ -154,6 +154,7 @@ export default function SaveApplicationSumber({ details, editId, setEditId, refr
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
+            setValue('uni_id',details?.application_number)
         } else if (editId == 0) {
             setOpen(true)
         }
@@ -176,7 +177,7 @@ export default function SaveApplicationSumber({ details, editId, setEditId, refr
                             </svg>
                         </a>
 
-                        <a className='back_modal_head'> Add UNI ID </a>
+                        <a className='back_modal_head'>{editId==0?'Add UNI ID' :'Edit UNI ID'}  </a>
 
                     </Grid>
                     <hr />

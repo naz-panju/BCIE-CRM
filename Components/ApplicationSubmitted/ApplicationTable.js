@@ -101,6 +101,13 @@ const headCells = [
         label: 'Student Id',
         noSort: false
     },
+    {
+        id: 'student',
+        numeric: false,
+        disablePadding: false,
+        label: 'Student',
+        noSort: false
+    },
     // {
     //     id: 'email',
     //     numeric: false,
@@ -779,9 +786,13 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
     }
 
     const [unId, setUniId] = useState()
-    const handleUniId = (row) => {
+    const handleUniId = (row, edit) => {
         setDetails(row)
-        setUniId(row?.id)
+        if (edit) {
+            setUniId(row?.id)
+        }else{
+            setUniId(0)
+        }
     }
 
     const [uniInfoId, setuniInfoId] = useState()
@@ -1191,19 +1202,16 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                             >
 
                                                                 <TableCell
-                                                                    // onClick={() => handleDetailOpen(row?.id)}
                                                                     component="th"
                                                                     id={labelId}
                                                                     scope="row"
                                                                     padding="none"
-                                                                    className='reg-name'
                                                                 >
-                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
-                                                                        className='a_hover text-sky-600'> {row?.lead?.student_code} </span>
+                                                                    {row?.lead?.student_code}
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' ?
-                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
+                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span onClick={() => handleUniId(row,true)} style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
                                                                             :
                                                                             <Button onClick={() => handleUniId(row)} size='small' variant='outlined'>
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
@@ -1211,6 +1219,11 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                                 </svg> UNI ID</Button>
                                                                     }
                                                                 </TableCell>
+                                                                <TableCell align="left">
+                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
+                                                                        className='a_hover text-sky-600'> {row?.lead?.name} </span>
+                                                                </TableCell>
+     
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
@@ -1253,7 +1266,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                                     </React.Fragment>
                                                                                 }
                                                                             >
-                                                                                {row?.deposit_amount_paid} 
+                                                                                {row?.deposit_amount_paid}
                                                                                 <EditOutlined style={{ cursor: 'pointer' }} onClick={() => handleEditPaymentOpen(row)} className='ml-2' fontSize='small' />
                                                                                 <DeleteOutline style={{ cursor: 'pointer' }} onClick={() => handleDeletePaymentOpen(row)} className='ml-2' fontSize='small' />
 

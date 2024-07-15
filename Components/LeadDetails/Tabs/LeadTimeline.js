@@ -38,10 +38,10 @@ export default function BasicSelect({ lead_id, from, app_id }) {
         let action
 
         if (from == 'lead') {
-            action = LeadApi.timeline({id:lead_id,limit})
+            action = LeadApi.timeline({ id: lead_id, limit })
         }
         if (from == 'app') {
-            action = ApplicationApi.timeline({id:app_id,limit})
+            action = ApplicationApi.timeline({ id: app_id, limit })
         }
 
         setLaoding(true)
@@ -90,9 +90,9 @@ export default function BasicSelect({ lead_id, from, app_id }) {
                                             <TimelineItem key={index} className='TimelineItemClass'>
                                                 <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
                                                     <div className='TimelineOppositeContent-block'>
-                                                        {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')} 
+                                                        {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')}
                                                     </div>
-                                                    
+
                                                 </TimelineOppositeContent>
                                                 <TimelineSeparator>
                                                     <Image className='TimelineDotIcon' src={TimelineDotIcon} alt='TimelineDotIcon' width={18} height={18} />
@@ -103,9 +103,13 @@ export default function BasicSelect({ lead_id, from, app_id }) {
                                                         <p>{obj?.description}</p>
                                                         {/* <span>+10</span> */}
 
-                                                        <svg className='timeline-content-content-svg' xmlns="http://www.w3.org/2000/svg" width="9" height="12" viewBox="0 0 9 12" fill="none"><path d="M-2.62268e-07 6L9 0.803848L9 11.1962L-2.62268e-07 6Z" fill="white"/></svg>
+                                                        <svg className='timeline-content-content-svg' xmlns="http://www.w3.org/2000/svg" width="9" height="12" viewBox="0 0 9 12" fill="none"><path d="M-2.62268e-07 6L9 0.803848L9 11.1962L-2.62268e-07 6Z" fill="white" /></svg>
 
-                                                        <span className='timeline-content-content-span'></span>
+                                                        {
+                                                            (obj?.type == 'email_send'  || obj?.type == 'email_receive') &&
+                                                            <span style={{background:'green'}} className='timeline-content-content-span'></span>
+                                                        }
+                                                        {/* <span className='timeline-content-content-span'></span> */}
                                                     </div>
                                                 </TimelineContent>
                                             </TimelineItem>

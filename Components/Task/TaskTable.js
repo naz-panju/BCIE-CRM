@@ -113,16 +113,16 @@ const headCells = [
     label: 'Status',
   },
   {
-    id: 'lead',
+    id: 'student',
     numeric: true,
     disablePadding: false,
-    label: 'Lead',
+    label: 'Student',
   },
   {
-    id: 'application',
+    id: 'uni_name',
     numeric: true,
     disablePadding: false,
-    label: 'Application',
+    label: 'University',
   },
   {
     id: 'icon',
@@ -328,7 +328,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
   // );
 
   const fetchUser = (e) => {
-    return ListingApi.users({ keyword: e }).then(response => {
+    return ListingApi.permissionUser({ keyword: e }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response.data.data;
       } else {

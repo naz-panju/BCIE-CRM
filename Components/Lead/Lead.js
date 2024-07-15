@@ -12,6 +12,7 @@ import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import Tooltip from '@mui/material/Tooltip';
 import BulkUpload from './Modal/Bulkupload';
+import { useSession } from 'next-auth/react';
 
 
 
@@ -60,7 +61,7 @@ export default function CustomizedMenus() {
 
   const router = useRouter();
 
-  // const session=useSession()
+  const session = useSession()
 
   // console.log(session?.data?.user)
 
@@ -108,7 +109,7 @@ export default function CustomizedMenus() {
     setAnchorEl(null);
   };
 
-  
+
   const handleCreateNew = () => {
     setEditId(0)
   }
@@ -238,36 +239,39 @@ export default function CustomizedMenus() {
                     <path d="M20 20L15.6569 15.6569M15.6569 15.6569C17.1046 14.2091 18 12.2091 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C12.2091 18 14.2091 17.1046 15.6569 15.6569Z" stroke="black" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
                   </svg>
                 </Button>
-                <Button sx={{ mr: 2 ,textTransform:'none'}} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
+                <Button sx={{ mr: 2, textTransform: 'none' }} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
                   <PersonAddAlt1Outlined fontSize='small' /> Add Lead
                 </Button>
 
-                <Button sx={{ mr: 2,textTransform:'none' }} variant='outlined' onClick={handleUploadOpen} className='add_lead_btn'>
-                  <DownloadOutlined fontSize='small' /> Import Leads
-                </Button>
-
-                <Tooltip title={selected?.length === 0 && 'Please select one or more Lead'}>
-
-                  <span>
-                    <Button disabled={selected?.length == 0} variant='outlined' onClick={handleCreateassign} className={`assign_btn ${selected?.length > 0 ? 'box_checked' : ''}`}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 7H5C3.89543 7 3 7.89543 3 9V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V9C21 7.89543 20.1046 7 19 7H15M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7M9 7H15" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>  Assign
-                      {
-                        selected?.length > 0 ?
-                          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                            <circle cx="5" cy="5" r="5" fill="#46F863" />
-                          </svg>
-                          :
-                          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                            <circle cx="5" cy="5" r="5" fill="#808080" />
-                          </svg>
-                      }
+                {
+                  session?.data?.user?.role?.id !== 5 &&
+                  <>
+                    <Button sx={{ mr: 2, textTransform: 'none' }} variant='outlined' onClick={handleUploadOpen} className='add_lead_btn'>
+                      <DownloadOutlined fontSize='small' /> Import Leads
                     </Button>
-                  </span>
-                </Tooltip>
-                {/* </Tooltip> */}
-                {/* <Button sx={{ textTransform: 'none', mr: 1 }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button> */}
+
+                    <Tooltip title={selected?.length === 0 && 'Please select one or more Lead'}>
+
+                      <span>
+                        <Button disabled={selected?.length == 0} variant='outlined' onClick={handleCreateassign} className={`assign_btn ${selected?.length > 0 ? 'box_checked' : ''}`}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 7H5C3.89543 7 3 7.89543 3 9V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V9C21 7.89543 20.1046 7 19 7H15M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7M9 7H15" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>  Assign
+                          {
+                            selected?.length > 0 ?
+                              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                <circle cx="5" cy="5" r="5" fill="#46F863" />
+                              </svg>
+                              :
+                              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                <circle cx="5" cy="5" r="5" fill="#808080" />
+                              </svg>
+                          }
+                        </Button>
+                      </span>
+                    </Tooltip>
+                  </>
+                }
 
               </Grid>
               {/* disabled={selected?.length == 0} */}

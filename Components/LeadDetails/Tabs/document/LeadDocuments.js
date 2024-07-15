@@ -150,12 +150,13 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
 
     }
 
-
+    // console.log(leadData);
     const [mandatoryDocuments, setmandatoryDocuments] = useState([])
     const mandatoryTemplate = () => {
         ListingApi.documentTemplate().then((response) => {
-            if (leadData?.lead_source?.id == 10) {
-                const carryoverDoc = response?.data?.data?.find(obj => obj?.id == 18)
+            console.log(response?.data?.data);
+            if (leadData?.lead_source?.id == 13) {
+                const carryoverDoc = response?.data?.data?.find(obj => obj?.id == 19)
                 setmandatoryDocuments([carryoverDoc])
             } else {
                 const mandatoryDocs = response?.data?.data?.filter(obj => obj?.is_mandatory === 1);
@@ -266,7 +267,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                       
+
                                                         {mandatoryDocuments?.map((docs, ind) => {
                                                             const selectedDocuments = list?.data || [];
                                                             return (<tr key={ind}>
@@ -274,7 +275,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                                                     <span style={{ cursor: 'pointer' }} > {docs?.name}</span>
                                                                     <CheckCircle fontSize='small'
                                                                         color={
-                                                                            selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id  && doc?.status === 'Accepted' ) ? 'success' : 'disabled'
+                                                                            selectedDocuments?.some(doc => doc?.document_template?.id === docs?.id && doc?.status === 'Accepted') ? 'success' : 'disabled'
                                                                         }
                                                                     />
                                                                 </td>

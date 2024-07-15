@@ -60,8 +60,8 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
         { id: 4, name: "Low" },
     ]
 
-    const fetchUser = (e) => {
-        return ListingApi.users({ keyword: e }).then(response => {
+    const fetchLeads = (e) => {
+        return LeadApi.list({ keyword: e }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -71,7 +71,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
     }
 
     const fetchApplications = (e) => {
-        return ListingApi.applications({ keyword: e, id: lead_id}).then(response => {
+        return ListingApi.applications({ keyword: e, id: lead_id || watch('users')?.id }).then(response => {
             // console.log(response)
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
@@ -81,7 +81,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
         })
     }
 
-   
+
     const fetchUsers = (e) => {
         return ListingApi.permissionUser({ keyword: e }).then(response => {
             if (typeof response.data.data !== "undefined") {
@@ -118,13 +118,13 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
 
         // console.log(dataToSubmit);
 
-        if (lead_id) {
-            dataToSubmit['lead_id'] = lead_id
+        // if (lead_id) {
+            dataToSubmit['lead_id'] = lead_id || data?.users?.id
             dataToSubmit['application_id'] = data?.application?.id || null
             // if (from == 'app') {
             //     dataToSubmit['application_id'] = app_id
             // }
-        }
+        // }
 
         let action;
 
@@ -157,22 +157,6 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
             setLoading(false)
         })
 
-        // try {
-        //     const response = await TaskApi.add(dataToSubmit)
-        //     console.log(response);
-
-        //     if (response?.data) {
-        //         toast.success('Task Has Been Successfully Created ')
-        //         setRefresh(!refresh)
-        //         reset()
-        //         setOpen(false)
-        //     }
-
-        // } catch (error) {
-        //     console.log(error);
-        //     toast.error(error?.message)
-
-        // }
     }
 
 
@@ -187,6 +171,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
         setValue('title', '')
         setValue('date', '')
         setValue('assigned_to', '')
+        setValue('application', '')
         // setValue('reviewer', '')
         setOpen(false)
         // setSelectedPriority('Medium')
@@ -227,7 +212,10 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
         }
     }
 
-
+    const [appKey, setAppKey] = useState(0)
+    useEffect(() => {
+        setAppKey(appKey + 1)
+    }, [watch('users')])
 
     useEffect(() => {
         if (editId > 0) {
@@ -337,39 +325,60 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                             </div>
                                         </div>
 
-                                        {
-                                            detail &&
-                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
-                                                <div className='application-input'>
-                                                    <a className='form-text'>Lead</a>
-                                                    <Grid className='mb-5 forms-data  '>
-                                                        {/* <SelectX
-                                                            // placeholder='Assigned To'
-                                                            loadOptions={fetchUsers}
-                                                            control={control}
-                                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                                            name={'users'}
-                                                            defaultValue={watch('users')}
-                                                        /> */}
-                                                    </Grid>
-                                                </div>
 
-                                                <div className='application-input'>
-                                                    <a className='form-text'>Applications</a>
-                                                    <Grid className='mb-5 forms-data  '>
-                                                        <SelectX
-                                                            // placeholder='Assigned To'
-                                                            loadOptions={fetchApplications}
-                                                            control={control}
-                                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                                            name={'application'}
-                                                            defaultValue={watch('application')}
-                                                        />
-                                                    </Grid>
+                                        {
+                                            detail ?
+                                                <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+
+                                                    <div className='application-input'>
+                                                        <a className='form-text'>Applications</a>
+                                                        <Grid className='mb-5 forms-data  '>
+                                                            <SelectX
+                                                                // placeholder='Assigned To'
+                                                                loadOptions={fetchApplications}
+                                                                control={control}
+                                                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                                name={'application'}
+                                                                defaultValue={watch('application')}
+                                                            />
+                                                        </Grid>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                                :
+                                                <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                                    <div className='application-input'>
+                                                        <a className='form-text'>Lead</a>
+                                                        <Grid className='mb-5 forms-data  '>
+                                                            <SelectX
+                                                                // placeholder='Assigned To'
+                                                                loadOptions={fetchLeads}
+                                                                control={control}
+                                                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                                name={'users'}
+                                                                defaultValue={watch('users')}
+                                                            />
+                                                        </Grid>
+                                                    </div>
+
+                                                    <div className='application-input'>
+                                                        <a className='form-text'>Applications</a>
+                                                        <Grid className='mb-5 forms-data  '>
+                                                            <SelectX
+                                                                disabled={watch('users') ? false : true}
+                                                                key={appKey}
+                                                                // placeholder='Assigned To'
+                                                                loadOptions={fetchApplications}
+                                                                control={control}
+                                                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
+                                                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
+                                                                name={'application'}
+                                                                defaultValue={watch('application')}
+                                                            />
+                                                        </Grid>
+                                                    </div>
+                                                </div>
                                         }
 
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">

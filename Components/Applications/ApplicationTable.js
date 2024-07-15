@@ -44,6 +44,7 @@ import UniversityInfoModal from './Modals/UniversityInfo';
 import PortalPermissionModal from './Modals/PortalPermissions';
 import { blue } from '@mui/material/colors';
 import EditPaymentModal from './Modals/editPaymentModal';
+import SaveApplicationSumber from './Modals/ApplicationId';
 
 
 
@@ -98,6 +99,14 @@ const headCells = [
         label: 'Student Id',
         noSort: false
     },
+
+    {
+        id: 'student',
+        numeric: false,
+        disablePadding: false,
+        label: 'Student',
+        noSort: false
+    },
     // {
     //     id: 'email',
     //     numeric: false,
@@ -138,13 +147,13 @@ const headCells = [
         label: 'Course',
         noSort: false
     },
-    {
-        id: 'subject_area',
-        numeric: false,
-        disablePadding: false,
-        label: 'Subject Area',
-        noSort: false
-    },
+    // {
+    //     id: 'subject_area',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: 'Subject Area',
+    //     noSort: false
+    // },
     {
         id: 'intake',
         numeric: false,
@@ -801,6 +810,16 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setuniInfoId(obj?.id)
     }
 
+    const [unId, setUniId] = useState()
+    const handleUniId = (row, edit) => {
+        setDetails(row)
+        if (edit) {
+            setUniId(row?.id)
+        }else{
+            setUniId(0)
+        }
+    }
+
     const [PortalId, setPortalId] = useState()
     const handlePortalOpen = (obj) => {
         setDetails(obj)
@@ -817,6 +836,9 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         { name: 'Yes' },
         { name: 'No' }
     ]
+
+
+
 
     const [editPaymentId, seteditPaymentId] = useState()
     const handleEditPaymentOpen = (obj) => {
@@ -877,6 +899,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
             <EditPaymentModal editId={editPaymentId} setEditId={seteditPaymentId} refresh={fetchTable} />
             <ConfirmPopup loading={submitLoading} ID={deleteAmount} setID={setdeleteAmount} clickFunc={handleDeleteAmount} title={`Do you want to Delete Deposit Amount?`} />
+
+            <SaveApplicationSumber editId={unId} setEditId={setUniId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
 
             <div className="filter_sec">
@@ -1286,20 +1310,32 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 </TableCell> */}
 
                                                                 <TableCell
-                                                                    // onClick={() => handleDetailOpen(row?.id)}
                                                                     component="th"
                                                                     id={labelId}
                                                                     scope="row"
                                                                     padding="none"
-                                                                // className='reg-name'
                                                                 >
-                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
-                                                                        className='a_hover text-sky-600'> {row?.lead?.student_code} </span>
+                                                                    {row?.lead?.student_code}
                                                                     <br />
                                                                     {
-                                                                        row?.application_number && row?.application_number != 'undefined' &&
-                                                                        <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
+                                                                        (row?.application_number && row?.application_number != 'undefined') ?
+                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span onClick={() => handleUniId(row, true)} className='a_hover' style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
+                                                                            :
+                                                                            row?.stage?.action_type === 'Application Submitted' ?
+                                                                                <Button onClick={() => handleUniId(row)} size='small' variant='outlined'>
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                                                                        <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" strokeLinecap="round" stroke-linejoin="round" />
+                                                                                    </svg> UNI ID</Button>
+                                                                                : ''
                                                                     }
+                                                                    {/* {
+                                                                        (row?.application_number && row?.application_number != 'undefined') &&
+                                                                        <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
+                                                                    } */}
+                                                                </TableCell>
+                                                                <TableCell align="left">
+                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
+                                                                        className='a_hover text-sky-600'> {row?.lead?.name} </span>
                                                                 </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
@@ -1325,7 +1361,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 </TableCell>
                                                                 <TableCell align="left"> {row?.course_level?.name}</TableCell>
                                                                 <TableCell align="left"> {row?.course}</TableCell>
-                                                                <TableCell align="left"> {row?.subject_area?.name}</TableCell>
+
                                                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                                 {
 

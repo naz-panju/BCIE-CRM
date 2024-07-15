@@ -22,90 +22,58 @@ function Details({ data, loading }) {
             // for loading
             loadingDetail()
             :
-            <Grid p={3}>
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Call Summary:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.call_summary}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
+            <div style={{ padding: '15px' }} className='lead-tabpanel-content-item'>
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Call Summary:</label>
+                        <span>{data?.call_summary}</span>
+                    </div>
+                </div>
 
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Call Type:</label>
+                        <span>{data?.type}</span>
+                    </div>
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Date and Time Of Call:</label>
+                        <span>
+                            {data?.date_time_of_call && moment(data?.date_time_of_call).format("DD-MM-YYYY HH:mm:ss")}
+                        </span>
+                    </div>
+                </div>
 
-                <Grid container style={{ marginBottom: '10px' }}>
-                <Grid item xs={6} sm={6}>
-                    <Typography variant="" style={{ fontWeight: 'bold' }}>
-                        Call Type:
-                    </Typography>
-                    <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                        {data?.type}
-                    </Typography>
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                    <Typography variant="" style={{ fontWeight: 'bold' }}>
-                       Date and Time Of Call:
-                    </Typography>
-                    <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                        {
-                            data?.updated_at &&
-                            moment(data?.date_time_of_call).format("DD-MM-YYYY HH:mm:ss")
-                        }
-                    </Typography>
-                </Grid>
-            </Grid>
-            <Divider sx={{ mb: 1 }} />
-
-                
-
-                {
-                    data?.attachments?.length > 0 &&
+                {data?.attachments?.length > 0 && (
                     <>
-                        <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                            <Grid item xs={12} sm={12}>
-                                <Typography variant="" style={{ fontWeight: 'bold' }}>
-                                    Attachments:
-                                </Typography>
-                                {
-                                    data?.attachments?.map((obj, index) => (
-                                        <Typography key={index} variant="body1" style={{ fontSize: '16px', color: 'blue' }}>
-                                            <a href={obj?.attachment} target='_blank' style={{ cursor: 'pointer' }} > {trimUrlAndNumbers(obj?.attachment)}</a>
-                                        </Typography>
-                                    ))
-                                }
-                            </Grid>
-                        </Grid >
-                        <Divider sx={{ mb: 1 }} />
+                        <div className="grid grid-cols-1 gap-4">
+                            <div className="lead-details-list">
+                                <label style={{ fontWeight: 'bold' }}>Attachments:</label>
+                                {data?.attachments?.map((obj, index) => (
+                                    <span key={index} style={{ color: 'blue', display: 'block' }}>
+                                        <a href={obj?.attachment} target='_blank' style={{ cursor: 'pointer' }}>
+                                            {trimUrlAndNumbers(obj?.attachment)}
+                                        </a>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
                     </>
-                }
+                )}
 
-                <Grid container style={{ marginBottom: '10px' }}>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Created By:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.created_by?.name}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Created At:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {
-                                data?.updated_at &&
-                                moment(data?.updated_at).format("DD-MM-YYYY")
-                            }
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ mb: 1 }} />
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Created By:</label>
+                        <span>{data?.created_by?.name}</span>
+                    </div>
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Created At:</label>
+                        <span>
+                            {data?.updated_at && moment(data?.updated_at).format("DD-MM-YYYY")}
+                        </span>
+                    </div>
+                </div>
+            </div>
 
-            </Grid>
     )
 }
 

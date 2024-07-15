@@ -258,7 +258,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
             <UniversityDeposit editId={depositId} setEditId={setdepositId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <DeferIntake editId={deferId} setEditId={setdeferId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
-            <ViewDocumentModal editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} handleDeleteOpen={handleDeleteOpen} handleUniDocOpen={handleUniDocOpen} fetchTable={fetchList} />
+            <ViewDocumentModal appSubmit={true} editId={documentId} setEditId={setdocumentId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} handleDeleteOpen={handleDeleteOpen} handleUniDocOpen={handleUniDocOpen} fetchTable={fetchList} />
             <SendUniversityMail from={'lead'} details={details} lead_id={lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
 
             <ConfirmPopup loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Do you want to Delete this Document?`} />

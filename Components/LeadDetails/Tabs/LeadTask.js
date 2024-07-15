@@ -161,7 +161,7 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detail
                                             </TableCell>
                                             <TableCell>
                                                 <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                    Application
+                                                    University
                                                 </Typography>
                                             </TableCell>
                                             <TableCell>

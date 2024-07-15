@@ -102,7 +102,7 @@ export default function UniversityInfoModal({ editId, setEditId, details, setDet
                     }
 
                     {
-                        details?.university?.extra_university_info &&
+                        details?.university?.extra_scholarship_info &&
                         <Grid>
                             <h3 className="university-info-text mt-5">Scholorship Info</h3>
                             <Grid>
@@ -111,7 +111,7 @@ export default function UniversityInfoModal({ editId, setEditId, details, setDet
                         </Grid>
                     }
                     {
-                        (!details?.university?.extra_university_info && !details?.university?.extra_university_info) &&
+                        (!details?.university?.extra_university_info && !details?.university?.extra_scholarship_info) &&
                         <Grid display={'flex'} justifyContent={'center'} alignItems={'center'} height={150}>
                             <a style={{ fontSize: '20px' }}>University Information Not Found</a>
                         </Grid>

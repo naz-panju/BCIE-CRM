@@ -1528,3 +1528,9 @@ input[type="number"] {
 .hhecdi{
 background-image: none !important;
 }
+
+.resizable-image-container {
+  display: inline-block;
+  resize: both;
+  overflow: auto;
+}

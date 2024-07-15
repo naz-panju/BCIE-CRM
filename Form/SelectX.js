@@ -60,6 +60,8 @@ const SelectX = (props) => {
                 render={({ field }) => (
                     <AsyncSelect
                         {...field}
+                        // key={}
+                        isDisabled={props?.disabled || false}
                         placeholder={props?.placeholder}
                         required={props?.required || false}
                         isClearable={true}

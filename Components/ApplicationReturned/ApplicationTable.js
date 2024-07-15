@@ -98,6 +98,13 @@ const headCells = [
         label: 'Student Id',
         noSort: false
     },
+    {
+        id: 'student',
+        numeric: false,
+        disablePadding: false,
+        label: 'Student',
+        noSort: false
+    },
     // {
     //     id: 'email',
     //     numeric: false,
@@ -138,13 +145,13 @@ const headCells = [
         label: 'Course',
         noSort: false
     },
-    {
-        id: 'subject_area',
-        numeric: false,
-        disablePadding: false,
-        label: 'Subject Area',
-        noSort: false
-    },
+    // {
+    //     id: 'subject_area',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: 'Subject Area',
+    //     noSort: false
+    // },
     {
         id: 'intake',
         numeric: false,
@@ -1140,20 +1147,21 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                                                             >
 
                                                                 <TableCell
-                                                                    // onClick={() => handleDetailOpen(row?.id)}
                                                                     component="th"
                                                                     id={labelId}
                                                                     scope="row"
                                                                     padding="none"
-                                                                    className='reg-name'
                                                                 >
-                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
-                                                                        className='a_hover text-sky-600'> {row?.lead?.student_code} </span>
+                                                                    {row?.lead?.student_code}
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' &&
-                                                                        <span style={{ fontSize: '13px', color: 'grey' }}>App_id :{row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span>
+                                                                        <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
                                                                     }
+                                                                </TableCell>
+                                                                <TableCell align="left">
+                                                                    <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
+                                                                        className='a_hover text-sky-600'> {row?.lead?.name} </span>
                                                                 </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
@@ -1179,7 +1187,6 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                                                                 </TableCell>
                                                                 <TableCell align="left"> {row?.course_level?.name}</TableCell>
                                                                 <TableCell align="left"> {row?.course}</TableCell>
-                                                                <TableCell align="left"> {row?.subject_area?.name}</TableCell>
                                                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                                 <TableCell className='stage-colm' align="left"><Tooltip title={row?.stage_note}><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span></Tooltip></TableCell>
                                                                 <TableCell align="left">{row?.lead?.assignedToCounsellor?.name}</TableCell>
