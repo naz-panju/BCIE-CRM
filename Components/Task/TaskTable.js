@@ -728,7 +728,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
                                       row?.status
                                 }
                               </TableCell>
-                              <TableCell align="left"><a target='_blank' href={`/lead/${row?.applicaion?.lead?.id}`}>{row?.applicaion?.lead?.name || 'NA'}</a></TableCell>
+                              <TableCell align="left"><a target='_blank' href={`/lead/${row?.applicaion?.lead?.id}`}>{row?.applicaion?.lead?.name || row?.applicaion?.lead?.name || 'NA'}</a></TableCell>
                               <TableCell align="left">{row?.applicaion?.university?.name || 'NA'}</TableCell>
                               <TableCell align="left">
                                 {
