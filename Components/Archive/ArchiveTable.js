@@ -357,7 +357,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
   );
 
   const fetchUser = (e) => {
-    return ListingApi.users({ keyword: e , office_id: selectedBranch ,role_id: 5}).then(response => {
+    return ListingApi.permissionUser({ keyword: e , office_id: selectedBranch}).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response.data.data;
       } else {

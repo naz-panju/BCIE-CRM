@@ -33,30 +33,6 @@ const Editor = (props) => {
     );
 
 
-    // const uploadImageCallBack = async (file) => {
-
-    //     const data = new FormData();
-    //     data.append("file", file)
-    //     let response = await Files.store(data);
-    //     console.log("uploadImageCallBack", response.data.data.file)
-    //     return { data: { link: response.data.data.file } };
-    // }
-
-    // Define editor styles for multiline input
-
-    // const uploadCallback = (file) => {
-    //     return new Promise(
-    //         (resolve, reject) => {
-    //             if (file) {
-    //                 let reader = new FileReader();
-    //                 reader.onload = (e) => {
-    //                     resolve({ data: { link: e.target.result } });
-    //                 };
-    //                 reader.readAsDataURL(file);
-    //             }
-    //         }
-    //     );
-    // };
 
     const uploadCallback = async (file) => {
         // console.log(file);

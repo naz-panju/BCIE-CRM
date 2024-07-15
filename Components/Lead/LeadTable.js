@@ -256,6 +256,8 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive, unassign, withdraw }) {
 
+  const session=useSession()
+
   const router = useRouter();
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
@@ -392,7 +394,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   );
 
   const fetchUser = (e) => {
-    return ListingApi.users({ keyword: e, office_id: selectedBranch, role_id: 5 }).then(response => {
+    return ListingApi.permissionUser({ keyword: e, office_id: selectedBranch, role_id: 5 }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response.data.data;
       } else {

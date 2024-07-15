@@ -143,7 +143,7 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
     const [mandatoryDocuments, setmandatoryDocuments] = useState([])
     const mandatoryTemplate = () => {
         ListingApi.documentTemplate().then((response) => {
-            if (details?.lead_source?.id == 13) {
+            if (details?.lead_source?.id == 10) {
                 const carryoverDoc = response?.data?.data?.find(obj => obj?.id == 19)
                 setmandatoryDocuments([carryoverDoc])
             } else {

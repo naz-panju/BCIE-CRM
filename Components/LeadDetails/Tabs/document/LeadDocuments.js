@@ -155,7 +155,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
     const mandatoryTemplate = () => {
         ListingApi.documentTemplate().then((response) => {
             console.log(response?.data?.data);
-            if (leadData?.lead_source?.id == 13) {
+            if (leadData?.lead_source?.id == 10) {
                 const carryoverDoc = response?.data?.data?.find(obj => obj?.id == 19)
                 setmandatoryDocuments([carryoverDoc])
             } else {
