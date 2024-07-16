@@ -106,16 +106,24 @@ export default function BasicSelect({ lead_id, from, app_id }) {
                                                         <svg className='timeline-content-content-svg' xmlns="http://www.w3.org/2000/svg" width="9" height="12" viewBox="0 0 9 12" fill="none"><path d="M-2.62268e-07 6L9 0.803848L9 11.1962L-2.62268e-07 6Z" fill="white" /></svg>
 
                                                         {
-                                                            (obj?.type == 'email_send' || obj?.type == 'email_receive') &&
-                                                            <span style={{ background: 'green' }} className='timeline-content-content-span'></span>
+                                                            obj?.type && (
+                                                                <>
+                                                                    {obj.type === 'email_send' || obj.type === 'email_received' ? (
+                                                                        <span style={{ background: 'green' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type === 'phone_call_created' ? (
+                                                                        <span style={{ background: 'orange' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type.startsWith('lead_') ? (
+                                                                        <span style={{ background: 'blue' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type.startsWith('application_') ? (
+                                                                        <span style={{ background: 'yellow' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type.startsWith('stage_') ? (
+                                                                        <span style={{ background: 'grey' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type.startsWith('task_') ? (
+                                                                        <span style={{ background: 'aqua' }} className='timeline-content-content-span'></span>
+                                                                    ) : <span style={{ background: 'black' }} className='timeline-content-content-span'></span>}
+                                                                </>
+                                                            )
                                                         }
-
-                                                        {
-                                                            (obj?.type == 'phone_call_created') &&
-                                                            <span style={{ background: 'orange' }} className='timeline-content-content-span'></span>
-                                                        }
-
-                                                        {/* <span className='timeline-content-content-span'></span> */}
                                                     </div>
                                                 </TimelineContent>
                                             </TimelineItem>

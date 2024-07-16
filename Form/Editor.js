@@ -108,39 +108,3 @@ const Editor = (props) => {
 
 export default Editor;
 
- //     toolbar={{
-        //         options: ['image',],
-                            
-        //         image: {
-        //         uploadEnabled: true,
-        //         uploadCallback: uploadCallback,
-        //         previewImage: true,
-        //         inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
-        //         alt: { present: false, mandatory: false },
-        //         defaultSize: {
-        //              height: 'auto',
-        //              width: 'auto',
-        //         },
-        //      },
-        //    }}
-            // toolbar={{
-            //     options: ['inline', 'blockType', 'fontSize', 'fontFamily'], // Include essential options
-            //     inline: {
-            //         options: ['bold', 'italic', 'underline'], // Include inline formatting options
-            //     },
-            //     blockType: {
-            //         inDropdown: true, // Show block type dropdown
-            //         options: ['Normal', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'Blockquote'], // Include block type options
-            //     },
-            //     fontSize: {
-            //         options: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30], // Include font size options
-            //     },
-            //     fontFamily: {
-            //         options: ['Arial', 'Georgia', 'Impact', 'Tahoma', 'Verdana'], // Include font family options
-            //     },  
-                          // inline: { inDropdown: true },
-            //     // list: { inDropdown: true },
-            //     // textAlign: { inDropdown: true },
-            //     // link: { inDropdown: false },
-            //     // history: { inDropdown: false },
-            // }}

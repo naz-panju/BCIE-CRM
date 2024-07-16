@@ -159,7 +159,7 @@ export default function PhoneCallModal({ lead_id, editId, setEditId, handleRefre
     return (
         <div>
 
-            <CreateTask lead_id={lead_id} from={'lead'} editId={taskId} setEditId={settaskId} handleRefresh={taskFunc} />
+            <CreateTask detail={true} lead_id={lead_id} from={'lead'} editId={taskId} setEditId={settaskId} handleRefresh={taskFunc} />
 
             <Drawer
                 anchor={anchor}
