@@ -97,16 +97,28 @@ const headCells = [
     label: 'Registered Name',
   },
   {
-    id: 'email',
-    numeric: true,
-    disablePadding: false,
-    label: 'Registered Email ',
+    id: 'office',
+    numeric: false,
+    disablePadding: true,
+    label: 'Office',
   },
   {
-    id: 'mobile',
-    numeric: true,
-    disablePadding: false,
-    label: 'Registered Mobile',
+    id: 'residence',
+    numeric: false,
+    disablePadding: true,
+    label: 'Country of Residence',
+  },
+  {
+    id: 'city',
+    numeric: false,
+    disablePadding: true,
+    label: 'City of Student',
+  },
+  {
+    id: 'preferred',
+    numeric: false,
+    disablePadding: true,
+    label: 'Preferred Country',
   },
   {
     id: 'assigned_to',
@@ -863,10 +875,12 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
                                   padding="none"
                                   className='reg-name'
                                 >
-                                  <a target='_blank' href={`/lead/${row?.id}`}>{row.name}</a>
+                                   <span className='a_hover text-sky-500' onClick={()=>handleleadOpen(row?.id)}>{row.name}</span>
                                 </TableCell>
-                                <TableCell align="left">{row?.email}</TableCell>
-                                <TableCell align="left">{row?.phone_country_code} {row?.phone_number}</TableCell>
+                                <TableCell align="left">{row?.assignedToOffice?.name || 'NA'}</TableCell>
+                                <TableCell align="left">{row?.country_of_residence?.name || 'NA'}</TableCell>
+                                <TableCell align="left">{row?.city || 'NA'}</TableCell>
+                                <TableCell align="left">{row?.preferred_countries || 'NA'}</TableCell>
                                 <TableCell align="left" className='assigned-colm'>
                                   {
                                     row?.assignedToCounsellor &&

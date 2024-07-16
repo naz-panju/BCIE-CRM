@@ -396,6 +396,7 @@ span.stage-span {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
 
 .table-custom-tr:nth-child(2) .stage-colm span.stage-span {
@@ -2637,6 +2638,15 @@ span.profile-db {
 .all_act_cntr button svg {
     display: inline-block;
     margin-right: 5px;
+}
+
+.content-block.lead-table-cntr .filter_sec{
+    display: none;
+    transition: .25s;
+}
+.content-block.lead-table-cntr.active .filter_sec{
+    display: block;
+    transition: .25s;
 }
 
 .filter_sec .form-group {
