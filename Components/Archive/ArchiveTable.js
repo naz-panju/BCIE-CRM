@@ -357,7 +357,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
   );
 
   const fetchUser = (e) => {
-    return ListingApi.permissionUser({ keyword: e , office_id: selectedBranch}).then(response => {
+    return ListingApi.permissionUser({ keyword: e, office_id: selectedBranch }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response.data.data;
       } else {
@@ -368,6 +368,26 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
 
   const fetchBranches = (e) => {
     return ListingApi.office({ keyword: e, }).then(response => {
+      if (typeof response.data.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
+    })
+  }
+
+  const fetchAgency = (e) => {
+    return ListingApi.agencies({ keyword: e, }).then(response => {
+      if (typeof response.data.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
+    })
+  }
+
+  const fetchSource = (e) => {
+    return ListingApi.leadSource({ keyword: e, }).then(response => {
       if (typeof response.data.data !== "undefined") {
         return response.data.data;
       } else {
@@ -412,6 +432,18 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     setValue('stage', e || '')
   }
 
+  const [selectedAgency, setselectedAgency] = useState()
+  const handleSelectAgency = (e) => {
+    setselectedAgency(e?.id || '');
+    setValue('agency', e || '')
+  }
+
+  const [selectedSource, setselectedSource] = useState()
+  const handleSelectSource = (e) => {
+    setselectedSource(e?.id || '');
+    setValue('source', e || '')
+  }
+
   const [selectedBranch, setselectedBranch] = useState()
   const handleSelectBranch = (e) => {
     setselectedBranch(e?.id || '');
@@ -427,7 +459,10 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       closed: 1,
       assigned_to: selectedAssignedTo,
       stage: selectedStage,
-      assign_to_office_id:selectedBranch,
+      assign_to_office_id: selectedBranch,
+      agency: selectedAgency,
+      source_id:selectedSource,
+
       name: watch('nameSearch'),
       email: watch('emailSearch'),
       phone_number: watch('numberSearch'),
@@ -502,10 +537,14 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     setValue('assignedTo', null)
     setValue('stage', '')
     setValue('branch', '')
+    setValue('agency', '')
+    setValue('source', '')
 
     setSelectedAssignedTo()
     setSelectedStage()
     setselectedBranch();
+    setselectedSource()
+    setselectedAgency();  
     setRange([null, null])
 
     setsearchRefresh(!searchRefresh)
@@ -538,7 +577,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       <div className="filter_sec">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
-        <div>
+          <div>
             <div className='form-group' >
               <DateRangePicker
                 value={range}
@@ -546,7 +585,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
                 placeholder="Select Date Range"
                 style={{ width: 280 }}
                 format='dd-MM-yyyy'
-                ranges={customRanges} 
+                ranges={customRanges}
               />
 
             </div>
@@ -614,6 +653,48 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
                 getOptionValue={(e) => e.id}
                 placeholder={<div>Select Stage</div>}
                 onChange={handleSelectStage}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className='form-group'>
+
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
+              </svg>
+              <AsyncSelect
+                isClearable
+                defaultOptions
+                name='source'
+                value={watch('source')}
+                defaultValue={watch('source')}
+                loadOptions={fetchSource}
+                getOptionLabel={(e) => e.name}
+                getOptionValue={(e) => e.id}
+                placeholder={<div>Select Source</div>}
+                onChange={handleSelectSource}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className='form-group'>
+
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
+              </svg>
+              <AsyncSelect
+                isClearable
+                defaultOptions
+                name='agency'
+                value={watch('agency')}
+                defaultValue={watch('agency')}
+                loadOptions={fetchAgency}
+                getOptionLabel={(e) => e.name}
+                getOptionValue={(e) => e.id}
+                placeholder={<div>Select Agency</div>}
+                onChange={handleSelectAgency}
               />
             </div>
           </div>

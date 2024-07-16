@@ -423,6 +423,16 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     })
   }
 
+  const fetchSource = (e) => {
+    return ListingApi.leadSource({ keyword: e, }).then(response => {
+      if (typeof response.data.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
+    })
+  }
+
 
   const fetchStage = (e) => {
     return ListingApi.stages({ keyword: e, type: 'student', }).then(response => {
@@ -466,6 +476,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setValue('agency', e || '')
   }
 
+  const [selectedSource, setselectedSource] = useState()
+  const handleSelectSource = (e) => {
+    setselectedSource(e?.id || '');
+    setValue('source', e || '')
+  }
+
   const [selectedBranch, setselectedBranch] = useState()
   const handleSelectBranch = (e) => {
     setselectedBranch(e?.id || '');
@@ -482,10 +498,13 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       stage: selectedStage,
       assign_to_office_id: selectedBranch,
       agency: selectedAgency,
+      source_id:selectedSource,
+
       name: watch('nameSearch'),
       email: watch('emailSearch'),
       phone_number: watch('numberSearch'),
       lead_id: watch('lead_id_search'),
+      
       page: page
     }
 
@@ -501,7 +520,6 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       params['from'] = moment(range[0]).format('YYYY-MM-DD')
       params['to'] = moment(range[1]).format('YYYY-MM-DD')
     }
-
 
     LeadApi.list(params).then((response) => {
       console.log(response);
@@ -571,8 +589,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setValue('stage', '')
     setValue('branch', '')
     setValue('agency', '')
+    setValue('source', '')
 
     setSelectedAssignedTo()
+    setselectedSource()
     setSelectedStage()
     setselectedBranch();
     setselectedAgency();  
@@ -686,6 +706,27 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 getOptionValue={(e) => e.id}
                 placeholder={<div>Select Stage</div>}
                 onChange={handleSelectStage}
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className='form-group'>
+
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" stroke-linejoin="round" />
+              </svg>
+              <AsyncSelect
+                isClearable
+                defaultOptions
+                name='source'
+                value={watch('source')}
+                defaultValue={watch('source')}
+                loadOptions={fetchSource}
+                getOptionLabel={(e) => e.name}
+                getOptionValue={(e) => e.id}
+                placeholder={<div>Select Source</div>}
+                onChange={handleSelectSource}
               />
             </div>
           </div>

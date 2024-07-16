@@ -371,7 +371,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                         )}
                                     </div>
                                     <Grid mt={2} display={'flex'} >
-                                        <LoadingButton
+                                        {/* <LoadingButton
                                             variant='contained'
                                             onClick={requestDocument}
                                             loading={reqLoading}
@@ -390,7 +390,7 @@ export default function LeadDocumentModal({ lead_id, editId, setEditId, handleRe
                                                         </svg>
                                                     </>
                                             }
-                                        </LoadingButton>
+                                        </LoadingButton> */}
                                         <LoadingButton
                                             type='submit'
                                             className='save-btn'
