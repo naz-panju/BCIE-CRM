@@ -260,41 +260,32 @@ export default function ApplicationStageChangeModal({ details, editId, setEditId
 
                                         {
                                             watch('stage')?.sub_stages?.length > 0 &&
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                                <div className='application-input'>
+                                                    <a className='form-text'>Select Stage</a>
+                                                    <Grid className='mb-5 forms-data' >
+                                                        <ReactSelector
+                                                            onInputChange={subStages}
+                                                            styles={{
+                                                                menu: provided => ({ ...provided, zIndex: 9999 })
+                                                            }}
+                                                            options={subStages}
+                                                            getOptionLabel={option => option.name}
+                                                            getOptionValue={option => option}
+                                                            value={
+                                                                subStages.find(options =>
+                                                                    options.name === watch('subStage')
+                                                                )
+                                                            }
+                                                            name='subStage'
 
-                                            <Grid p={1} container >
-                                                <Grid item pr={1} xs={4} md={4}>
-                                                    <a className='form-text'>Lead Sub Stage </a>
-                                                </Grid>
-                                                <Grid item pr={1} xs={8} md={8}>
-                                                    <ReactSelector
-                                                        onInputChange={subStages}
-                                                        styles={{
-                                                            menu: provided => ({ ...provided, zIndex: 9999 })
-                                                        }}
-                                                        options={subStages}
-                                                        getOptionLabel={option => option.name}
-                                                        getOptionValue={option => option}
-                                                        value={
-                                                            subStages.find(options =>
-                                                                options.name === watch('subStage')
-                                                            )
-                                                        }
-                                                        name='subStage'
-
-                                                        defaultValue={(watch('subStage'))}
-                                                        onChange={(selectedOption) => setValue('subStage', selectedOption)}
-                                                    />
-
-                                                    {/* <SelectX
-                                                        menuPlacement='top'
-                                                        loadOptions={fetchSubStages}
-                                                        control={control}
-                                                        name={'substage'}
-                                                        defaultValue={watch('substage')}
-                                                    /> */}
-                                                    {errors.substage && <span className='form-validation'>{errors.substage.message}</span>}
-                                                </Grid>
-                                            </Grid>
+                                                            defaultValue={(watch('subStage'))}
+                                                            onChange={(selectedOption) => setValue('subStage', selectedOption)}
+                                                        />
+                                                        {errors.substage && <span className='form-validation'>{errors.substage.message}</span>}
+                                                    </Grid>
+                                                </div>
+                                            </div>
                                         }
 
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">

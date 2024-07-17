@@ -256,7 +256,7 @@ EnhancedTableToolbar.propTypes = {
 
 export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive, unassign, withdraw }) {
 
-  const session=useSession()
+  const session = useSession()
 
   const router = useRouter();
   const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
@@ -498,13 +498,13 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       stage: selectedStage,
       assign_to_office_id: selectedBranch,
       agency: selectedAgency,
-      source_id:selectedSource,
+      source_id: selectedSource,
 
       name: watch('nameSearch'),
       email: watch('emailSearch'),
       phone_number: watch('numberSearch'),
       lead_id: watch('lead_id_search'),
-      
+
       page: page
     }
 
@@ -522,8 +522,9 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     }
 
     LeadApi.list(params).then((response) => {
-      console.log(response);
-      setList(response?.data)
+      // console.log(response);
+      // if ()
+        setList(response?.data)
       setLoading(false)
     }).catch((error) => {
       console.log(error);
@@ -595,7 +596,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setselectedSource()
     setSelectedStage()
     setselectedBranch();
-    setselectedAgency();  
+    setselectedAgency();
     setRange([null, null])
 
     setsearchRefresh(!searchRefresh)
@@ -918,8 +919,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                   padding="none"
                                   className='reg-name'
                                 >
-                                  
-                                  <span className='a_hover text-sky-500' onClick={()=>handleleadOpen(row?.id)}>{row.name}</span>
+
+                                  <span className='a_hover text-sky-500' onClick={() => handleleadOpen(row?.id)}>{row.name}</span>
                                 </TableCell>
                                 <TableCell align="left">{row?.assignedToOffice?.name || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.country_of_residence?.name || 'NA'}</TableCell>

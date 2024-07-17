@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { EditorState, convertToRaw, ContentState, Modifier, SelectionState } from "draft-js";
 import draftToHtml from 'draftjs-to-html';
 import { ImageUploadApi } from '@/data/Endpoints/ImageUploader';
-// import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-// import htmlToDraft from 'html-to-draftjs';
+
 let htmlToDraft;
 if (typeof window !== 'undefined') {
     htmlToDraft = require('html-to-draftjs').default;
@@ -19,18 +18,16 @@ if (typeof window !== 'undefined') {
 
 const Editor = (props) => {
     const [value_, setValue] = useState();
-    const [editorState, setEditorState] = useState(
-        () => {
-            if (props.initialHtml) {
-                const contentBlock = htmlToDraft(props.initialHtml);
-                if (contentBlock) {
-                    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-                    return EditorState.createWithContent(contentState);
-                }
+    const [editorState, setEditorState] = useState(() => {
+        if (props.initialHtml) {
+            const contentBlock = htmlToDraft(props.initialHtml);
+            if (contentBlock) {
+                const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+                return EditorState.createWithContent(contentState);
             }
-            return EditorState.createEmpty();
         }
-    );
+        return EditorState.createEmpty();
+    });
 
 
 

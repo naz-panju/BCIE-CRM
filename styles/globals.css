@@ -14,7 +14,30 @@ body {
   padding: 0;
   font-family: "Inter", sans-serif;
 }
-
+.ck-editor__editable h1{
+  font-size: 36px;
+  font-weight: 800;
+}
+.ck-editor__editable h2{
+  font-size: 30px;
+  font-weight: 700;
+}
+.ck-editor__editable h3{
+  font-size: 28px;
+  font-weight: 600;
+}
+.ck-editor__editable h4{
+  font-size: 24;
+  font-weight: 500;
+}
+.ck-editor__editable h5{
+  font-size: 20px;
+  font-weight: 400;
+}
+.ck-editor__editable p{
+  font-size: 16px;
+  font-weight: 400;
+}
 .header {
   background-color: #fff;
   z-index: 10000;
@@ -1533,4 +1556,8 @@ background-image: none !important;
   display: inline-block;
   resize: both;
   overflow: auto;
+}
+
+.delete-doc-popup .MuiDialog-paperScrollPaper{
+  overflow-y: unset;
 }

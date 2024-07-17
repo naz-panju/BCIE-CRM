@@ -370,7 +370,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                                                     textBoxLoading ?
                                                         <Skeleton variant='rounded' width={'100%'} height={400} />
                                                         :
-                                                        <Editor key={editorKey} emoji={false} val={watch('body')}
+                                                        <MyEditor key={editorKey} emoji={false} val={watch('body')}
                                                             onValueChange={e => setValue('body', e)} />
                                                 }
                                                 {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}

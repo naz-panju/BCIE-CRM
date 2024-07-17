@@ -723,8 +723,8 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const [confirmLoading, setconfirmLoading] = useState(false)
     const [returnId, setreturnId] = useState()
     const handleReturnPopupOpen = (id) => {
-        setreturnId(id)
         handlePopoverClose()
+        setreturnId(id)
     }
     const handleFirstPage = () => {
         setPage(1)
@@ -799,6 +799,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
 
     const [uniSubmitId, setuniSubmitId] = useState()
     const handleUniSubmitId = (row) => {
+        handlePopoverClose()
         setDetails(row)
         setuniSubmitId(row?.id)
     }
@@ -1177,7 +1178,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
                                                                 sx={{ cursor: 'pointer' }}
                                                             >
 
-<TableCell
+                                                                <TableCell
                                                                     component="th"
                                                                     id={labelId}
                                                                     scope="row"

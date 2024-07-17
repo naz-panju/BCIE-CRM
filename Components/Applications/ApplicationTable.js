@@ -752,6 +752,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     const [confirmLoading, setconfirmLoading] = useState(false)
     const [returnId, setreturnId] = useState()
     const handleReturnPopupOpen = (id) => {
+        handlePopoverClose()
         setreturnId(id)
     }
     const handleFirstPage = () => {
@@ -782,8 +783,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     const [submitId, setsubmitId] = useState()
     const [submitLoading, setsubmitLoading] = useState(false)
     const handleSubmitOpen = (id) => {
-        setsubmitId(id)
         handlePopoverClose()
+        setsubmitId(id)
     }
     const handleClickSubmit = () => {
         setsubmitLoading(true)
@@ -810,12 +811,38 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setuniInfoId(obj?.id)
     }
 
+    const [uniSubmitId, setuniSubmitId] = useState()
+    const handleUniSubmitId = (row) => {
+        handlePopoverClose()
+        setDetails(row)
+        setuniSubmitId(row?.id)
+    }
+
+    const handleUniversitySubmit = () => {
+        setsubmitLoading(true)
+        ApplicationApi.submitToUniversity({ id: uniSubmitId }).then((response) => {
+            // console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                setsubmitLoading(false)
+                setuniSubmitId()
+                fetchTable()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setsubmitLoading(false)
+            }
+        }).catch((error) => {
+            toast.error(error?.response?.data?.message)
+            setsubmitLoading(false)
+        })
+    }
+
     const [unId, setUniId] = useState()
     const handleUniId = (row, edit) => {
         setDetails(row)
         if (edit) {
             setUniId(row?.id)
-        }else{
+        } else {
             setUniId(0)
         }
     }
@@ -901,6 +928,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             <ConfirmPopup loading={submitLoading} ID={deleteAmount} setID={setdeleteAmount} clickFunc={handleDeleteAmount} title={`Do you want to Delete Deposit Amount?`} />
 
             <SaveApplicationSumber editId={unId} setEditId={setUniId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
+            <ConfirmPopup loading={submitLoading} ID={uniSubmitId} setID={setuniSubmitId} clickFunc={handleUniversitySubmit} title={`Do you want to Submit this Application to the University?`} />
 
 
             <div className="filter_sec">
@@ -1318,15 +1346,20 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                     {row?.lead?.student_code}
                                                                     <br />
                                                                     {
-                                                                        (row?.application_number && row?.application_number != 'undefined') ?
-                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span onClick={() => handleUniId(row, true)} className='a_hover' style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
+
+                                                                        (session?.data?.user?.role?.id !== 5) ?
+                                                                            (row?.application_number && row?.application_number != 'undefined') ?
+                                                                                <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span onClick={() => handleUniId(row, true)} className='a_hover' style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
+                                                                                :
+                                                                                row?.stage?.action_type === 'Application Submitted' ?
+                                                                                    <Button onClick={() => handleUniId(row)} size='small' variant='outlined'>
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                                                                            <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" strokeLinecap="round" stroke-linejoin="round" />
+                                                                                        </svg> UNI ID</Button>
+                                                                                    : ''
                                                                             :
-                                                                            row?.stage?.action_type === 'Application Submitted' ?
-                                                                                <Button onClick={() => handleUniId(row)} size='small' variant='outlined'>
-                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-                                                                                        <path d="M6.33268 9.50008H9.49935M9.49935 9.50008H12.666M9.49935 9.50008V12.6667M9.49935 9.50008V6.33341M3.16602 13.3002V5.70024C3.16602 4.81349 3.16602 4.36978 3.33859 4.03109C3.49039 3.73316 3.73243 3.49112 4.03035 3.33932C4.36905 3.16675 4.81275 3.16675 5.6995 3.16675H13.2995C14.1863 3.16675 14.6294 3.16675 14.9681 3.33932C15.266 3.49112 15.5085 3.73316 15.6603 4.03109C15.8329 4.36978 15.8329 4.81316 15.8329 5.69991V13.2999C15.8329 14.1867 15.8329 14.6301 15.6603 14.9687C15.5085 15.2667 15.266 15.5092 14.9681 15.661C14.6297 15.8334 14.1872 15.8334 13.3022 15.8334H5.6969C4.81189 15.8334 4.36872 15.8334 4.03035 15.661C3.73243 15.5092 3.49039 15.2667 3.33859 14.9688C3.16602 14.6301 3.16602 14.187 3.16602 13.3002Z" stroke="#0B0D23" strokeLinecap="round" stroke-linejoin="round" />
-                                                                                    </svg> UNI ID</Button>
-                                                                                : ''
+                                                                            (row?.application_number && row?.application_number != 'undefined') &&
+                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
                                                                     }
                                                                     {/* {
                                                                         (row?.application_number && row?.application_number != 'undefined') &&
@@ -1389,8 +1422,14 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                                 }
                                                                             >
                                                                                 {row?.deposit_amount_paid}
-                                                                                <EditOutlined style={{ cursor: 'pointer' }} onClick={() => handleEditPaymentOpen(row)} className='ml-2' fontSize='small' />
-                                                                                <DeleteOutline style={{ cursor: 'pointer' }} onClick={() => handleDeletePaymentOpen(row)} className='ml-2' fontSize='small' />
+
+                                                                                {
+                                                                                    (session?.data?.user?.role?.id !== 5) &&
+                                                                                    <div style={{}} className='text-start'>
+                                                                                        <EditOutlined style={{ cursor: 'pointer', fontSize: '17px' }} onClick={() => handleEditPaymentOpen(row)} className='icon_hover' fontSize='small' />
+                                                                                        <DeleteOutline style={{ cursor: 'pointer', marginLeft: '0px', fontSize: '17px' }} onClick={() => handleDeletePaymentOpen(row)} className='ml-2 icon_hover' fontSize='small' />
+                                                                                    </div>
+                                                                                }
 
                                                                             </HtmlTooltip>
                                                                             : 'NA'
@@ -1427,15 +1466,21 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                         >
                                                                             <List>
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id == 6 && row?.app_coordinator_status == 'Submitted') &&
+                                                                                    (session?.data?.user?.role?.id !== 5 && row?.app_coordinator_status == 'Submitted') &&
                                                                                     <ListItem button onClick={() => handleReturnPopupOpen(row?.id)}>
                                                                                         Return Application
                                                                                     </ListItem>
                                                                                 }
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id == 5 && row?.app_coordinator_status == null) &&
+                                                                                    (session?.data?.user?.role?.id != 6 && row?.app_coordinator_status == null) &&
                                                                                     <ListItem button onClick={() => handleSubmitOpen(row?.id)}>
-                                                                                        Submit Application
+                                                                                        Submit Application to Coordinator
+                                                                                    </ListItem>
+                                                                                }
+                                                                                {
+                                                                                    (session?.data?.user?.role?.id != 5 && row?.app_coordinator_status == 'Submitted') &&
+                                                                                    <ListItem button onClick={() => handleUniSubmitId(row)}>
+                                                                                        Submit Application to University
                                                                                     </ListItem>
                                                                                 }
                                                                                 <ListItem button onClick={() => handleStageOpen(row)}>

@@ -295,7 +295,7 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
                                             </Grid>
                                             <Grid item xs={12} md={9.5}>
 
-                                                <Editor emoji={false} val={watch('content')}
+                                                <MyEditor emoji={false} val={watch('content')}
                                                     onValueChange={e => setValue('content', e)} />
                                                 {/* <MyEditor name={'content'} onValueChange={e => setValue('content', e)} value={watch('content')} /> */}
 

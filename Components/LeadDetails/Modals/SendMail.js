@@ -45,7 +45,7 @@ const scheme = yup.object().shape({
     // state: yup.string().required("State is Required"),
 })
 
-export default function SendMail({ details, editId, setEditId, lead_id, refresh, setRefresh, from, app_id,application }) {
+export default function SendMail({ details, editId, setEditId, lead_id, refresh, setRefresh, from, app_id, application }) {
 
     const [state, setState] = React.useState({
         right: false,
@@ -140,6 +140,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         formData.append('cc', data?.default_cc)
         formData.append('subject', data?.subject || '')
         formData.append('message', data?.body || '')
+        formData.append('body_footer', data?.body_footer || '')
         formData.append('lead_id', lead_id || '')
 
         if (from == 'app') {
@@ -240,12 +241,11 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                 let cc = response?.data?.data?.template?.default_cc?.join(',');
 
 
-                // setValue('default_cc', cc)
-
                 setValue('default_cc', response?.data?.data?.template?.default_cc || '')
                 // setValue('to', details?.email || '')
                 setValue('subject', response?.data?.data?.template?.subject || '')
                 setValue('body', response?.data?.data?.template?.body || '')
+                setValue('body_footer', response?.data?.data?.template?.body_footer || '')
                 setattachmentFiles(response?.data?.data?.attchments)
 
                 seteditorKey(Math.random() * 0.23)
@@ -410,31 +410,30 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     textBoxLoading ?
                                                         <Skeleton variant='rounded' width={'100%'} height={400} />
                                                         :
-                                                        <Editor key={editorKey} emoji={false} val={watch('body')}
+                                                        <MyEditor key={editorKey} emoji={false} val={watch('body')}
                                                             onValueChange={e => setValue('body', e)} />
                                                 }
                                                 {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
                                             </Grid>
                                         </div>
 
-
-                                        {/* {
-                                            attachmentFiles?.length > 0 &&
-                                            <Grid display={'flex'} container p={1.5} item xs={12}>
-                                                <Grid item display={'flex'} xs={3} md={3}>
-                                                    <Typography sx={{ fontWeight: '500' }}>Attachments</Typography>
-                                                </Grid>
-                                                <Grid item xs={9} md={9}>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Body Footer</a>
+                                                <Grid className='mb-5 forms-data' >
                                                     {
-                                                        attachmentFiles?.map((obj, index) => (
-                                                            <p style={{ textDecoration: 'underLine', color: 'blue', cursor: 'pointer' }} key={index} className="text-gray-700">
-                                                                <a target='_blank' href={obj?.attachment}>{trimUrlAndNumbers(obj?.attachment)}</a>
-                                                            </p>
-                                                        ))
+                                                        textBoxLoading ?
+                                                            <Skeleton variant='rounded' width={'100%'} height={400} />
+                                                            :
+                                                            <MyEditor key={editorKey} emoji={false} val={watch('body_footer')}
+                                                                onValueChange={e => setValue('body_footer', e)} />
                                                     }
+                                                    {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
+
                                                 </Grid>
-                                            </Grid>
-                                        } */}
+                                            </div>
+                                        </div>
+
                                         <div className='application-input'>
 
                                             <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container >

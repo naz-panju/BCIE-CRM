@@ -1,18 +1,11 @@
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
-import { Button, Checkbox, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
+import { Button, Checkbox, Grid, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Archive, AttachFile, Close, Delete, Refresh } from '@mui/icons-material';
-import { ListingApi } from '@/data/Endpoints/Listing';
-import DateInput from '@/Form/DateInput';
-import SelectX from '@/Form/SelectX';
+import { Delete} from '@mui/icons-material';
 import TextInput from '@/Form/TextInput';
-import DynamicChip from '@/utils/DynamicChip';
 import { useState } from 'react';
-import moment from 'moment';
-import { TaskApi } from '@/data/Endpoints/Task';
 import toast from 'react-hot-toast';
-import { LeadApi } from '@/data/Endpoints/Lead';
 
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -23,7 +16,6 @@ import ConfirmPopup from '@/Components/Common/Popup/confirm';
 import { TemplateApi } from '@/data/Endpoints/Template';
 import Editor from '@/Form/Editor';
 import dynamic from 'next/dynamic';
-import { files } from 'jszip';
 import TemplateData from '../TemplateData';
 
 import Doc from '@/img/doc.png';
@@ -465,7 +457,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         */}
                                                             {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
 
-                                                            <Editor emoji={false} val={watch('body')}
+                                                            <MyEditor emoji={false} val={watch('body')}
                                                                 onValueChange={e => setValue('body', e)} copied={copied}
                                                             />
                                                         </Grid>
@@ -488,7 +480,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         */}
                                                             {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
 
-                                                            <Editor emoji={false} val={watch('body_footer')}
+                                                            <MyEditor emoji={false} val={watch('body_footer')}
                                                                 onValueChange={e => setValue('body_footer', e)}
                                                             />
                                                         </Grid>

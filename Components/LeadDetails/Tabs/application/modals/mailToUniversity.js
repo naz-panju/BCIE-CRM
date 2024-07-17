@@ -144,6 +144,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         formData.append('cc', data?.default_cc)
         formData.append('subject', data?.subject || '')
         formData.append('message', data?.body || '')
+        formData.append('body_footer', data?.body_footer)
         formData.append('lead_id', lead_id || '')
 
         if (from == 'app') {
@@ -234,29 +235,31 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
 
     // console.log(details);
 
+    const [templateData, settemplateData] = useState()
     const handleTemplateChange = (data) => {
         // console.log(data);
         setTextBoxLoading(true)
         setValue('template', data || '')
 
+        let newword = watch('default_cc')
+        
         TemplateApi.universityMailTemplate({ template_id: data?.id, lead_id: editId }).then((response) => {
 
-            // console.log(response);
-
             if (response?.status == 200 || response?.status == 201) {
-                // let cc = 
-                // cc = response?.data?.data?.template?.default_cc?.map((obj) => {
-                //     cc.
-                // })
-                // let cc = response?.data?.data?.default_cc?.join(',');
 
-
-                // setValue('default_cc', cc)
-
-                setValue('default_cc', response?.data?.data?.template?.default_cc || '')
+                if (watch('default_cc')) {
+                    const defaultCc = response?.data?.data?.template?.default_cc;
+                    if (defaultCc && !newword.includes(defaultCc)) {
+                        newword += (newword ? ',' : '') + defaultCc;
+                    }
+                    setValue('default_cc', newword);
+                } else {
+                    setValue('default_cc', response?.data?.data?.template?.default_cc || '')
+                }
                 // setValue('to', details?.email || '')
                 setValue('subject', response?.data?.data?.template?.subject || '')
                 setValue('body', response?.data?.data?.template?.body || '')
+                setValue('body_footer', response?.data?.data?.template?.body_footer || '')
                 setattachmentFiles(response?.data?.data?.attchments)
 
                 seteditorKey(Math.random() * 0.23)
@@ -272,24 +275,30 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     }
 
 
+    const [mailLoading, setmailLoading] = useState(true)
     const [appDetails, setappDetails] = useState()
     const getDetails = () => {
+        setmailLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
             setappDetails(response?.data?.data)
+
             if (response?.data?.data?.university?.contacts?.length > 0) {
+                setValue('to', response?.data?.data?.university?.contacts[0]?.email)
                 const emails = response?.data?.data?.university?.contacts
+                    .slice(1) // Exclude the first element
                     .map(contact => contact.email)
-                    .filter(email => email) // filter out undefined or null emails
+                    .filter(email => email) // Filter out undefined or null emails
                     .join(',');
-    
-                setValue('to', emails);
-    
-                // console.log(appData.university.contacts);
+
+                setValue('default_cc', emails);
+                setafterMails(emails)
+                setmailLoading(false)
             }
             // if (response?.data?.data?.university?.contacts?.length > 0) {
-            //     console.log(response?.data?.data?.university?.contacts)
             //     setValue('to', response?.data?.data?.university?.contacts[0]?.email)
             // }
+        }).catch((error) => {
+            setmailLoading(false)
         })
     }
 
@@ -380,8 +389,13 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                             <div className='application-input'>
                                                 <a className='form-text'>Send to</a>
                                                 <Grid className='mb-5 forms-data' >
-                                                    <TextInput control={control} name="to"
-                                                        value={watch('to')} />
+                                                    {
+                                                        mailLoading ?
+                                                            <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                            :
+                                                            <TextInput control={control} name="to"
+                                                                value={watch('to')} />
+                                                    }
                                                     {errors.to && <span className='form-validation'>{errors.to.message}</span>}
                                                 </Grid>
                                             </div>
@@ -392,7 +406,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                                 <a className='form-text'>Mail CC</a>
                                                 <Grid className='mb-5 forms-data' >
                                                     {
-                                                        textBoxLoading ?
+                                                        (textBoxLoading || mailLoading) ?
                                                             <Skeleton variant='rounded' width={'100%'} height={40} />
                                                             :
                                                             <TextInput control={control} name="default_cc"
@@ -427,8 +441,25 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                                         textBoxLoading ?
                                                             <Skeleton variant='rounded' width={'100%'} height={400} />
                                                             :
-                                                            <Editor key={editorKey} emoji={false} val={watch('body')}
+                                                            <MyEditor key={editorKey} emoji={false} val={watch('body')}
                                                                 onValueChange={e => setValue('body', e)} />
+                                                    }
+                                                    {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
+
+                                                </Grid>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Body Footer</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    {
+                                                        textBoxLoading ?
+                                                            <Skeleton variant='rounded' width={'100%'} height={400} />
+                                                            :
+                                                            <MyEditor key={editorKey} emoji={false} val={watch('body_footer')}
+                                                                onValueChange={e => setValue('body_footer', e)} />
                                                     }
                                                     {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
 

@@ -22,7 +22,7 @@ const style = {
     boxShadow: 24,
     p: 3,
     pt: 1,
-    height:600,
+    height: 600,
     maxHeigth: 600,
     overflowY: 'auto'
 };
@@ -116,7 +116,7 @@ export default function PortalPermissionModal({ editId, setEditId, details, setD
                         <Grid item p={1} xs={12}>
                             <Paper elevation={3} sx={{ p: 1 }}>
                                 <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                    <a style={{ fontSize: '14px' }} >{details?.university?.portal_username || 'NA'}</a>
+                                    <span style={{ fontSize: '14px' }} >{details?.university?.portal_username || 'NA'}</span>
                                     {
                                         nameCopied ?
                                             <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
@@ -133,7 +133,7 @@ export default function PortalPermissionModal({ editId, setEditId, details, setD
                         <Grid item p={1} xs={12}>
                             <Paper elevation={3} sx={{ p: 1 }}>
                                 <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                    <a style={{ fontSize: '14px' }} >{details?.university?.portal_password || 'NA'}</a>
+                                    <span style={{ fontSize: '14px' }} >{details?.university?.portal_password || 'NA'}</span>
                                     {
                                         passCopied ?
                                             <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
@@ -164,99 +164,99 @@ export default function PortalPermissionModal({ editId, setEditId, details, setD
 
                     {/* 2 */}
 
-                   
-                        <Grid mb={1} mt={2} container spacing={1} >
-                            <Grid pl={1}><a style={{ fontSize: '14px' }}>User Name 2</a></Grid>
-                            <Grid item p={1} xs={12}>
-                                <Paper elevation={3} sx={{ p: 1 }}>
-                                    <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                        <a style={{ fontSize: '14px' }} >{details?.university?.portal2_username || 'NA'}</a>
-                                        {
-                                            nameCopied ?
-                                                <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
-                                                :
-                                                <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal2_username, 'name')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
-                                        }
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    
 
-                    
-                        <Grid mb={1} mt={2} container spacing={1} >
-                            <Grid pl={1}><a style={{ fontSize: '14px' }}>Password 2</a></Grid>
-                            <Grid item p={1} xs={12}>
-                                <Paper elevation={3} sx={{ p: 1 }}>
-                                    <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                        <a style={{ fontSize: '14px' }} >{details?.university?.portal2_password || 'NA'}</a>
-                                        {
-                                            passCopied ?
-                                                <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
-                                                :
-                                                <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal2_password, 'pass')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
-                                        }
-                                    </Grid>
-                                </Paper>
-                            </Grid>
+                    <Grid mb={1} mt={2} container spacing={1} >
+                        <Grid pl={1}><a style={{ fontSize: '14px' }}>User Name 2</a></Grid>
+                        <Grid item p={1} xs={12}>
+                            <Paper elevation={3} sx={{ p: 1 }}>
+                                <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                                    <span style={{ fontSize: '14px' }} >{details?.university?.portal2_username || 'NA'}</span>
+                                    {
+                                        nameCopied ?
+                                            <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
+                                            :
+                                            <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal2_username, 'name')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
+                                    }
+                                </Grid>
+                            </Paper>
                         </Grid>
-                    
-                        <Grid mb={1} mt={2} container spacing={1} >
-                            <Grid pl={1}><a style={{ fontSize: '14px' }}>Portal Link 2</a></Grid>
-                            <Grid item p={1} xs={12}>
-                                <Paper elevation={3} sx={{ p: 1 }}>
-                                    <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                        <a href={details?.university?.portal2_link} target='_blank' style={{ fontSize: '14px', color: details?.university?.portal2_link ? 'blue' : '', cursor: 'pointer' }} className={details?.university?.portal2_link ? 'a_hover' : ''}> {details?.university?.portal2_link || 'NA'}</a>
-                                        {
-                                            linkCopied ?
-                                                <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
-                                                :
-                                                <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal2_link, 'link')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
-                                        }
-                                    </Grid>
-                                </Paper>
-                            </Grid>
+                    </Grid>
+
+
+
+                    <Grid mb={1} mt={2} container spacing={1} >
+                        <Grid pl={1}><a style={{ fontSize: '14px' }}>Password 2</a></Grid>
+                        <Grid item p={1} xs={12}>
+                            <Paper elevation={3} sx={{ p: 1 }}>
+                                <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                                    <span style={{ fontSize: '14px' }} >{details?.university?.portal2_password || 'NA'}</span>
+                                    {
+                                        passCopied ?
+                                            <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
+                                            :
+                                            <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal2_password, 'pass')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
+                                    }
+                                </Grid>
+                            </Paper>
                         </Grid>
-                    
+                    </Grid>
+
+                    <Grid mb={1} mt={2} container spacing={1} >
+                        <Grid pl={1}><a style={{ fontSize: '14px' }}>Portal Link 2</a></Grid>
+                        <Grid item p={1} xs={12}>
+                            <Paper elevation={3} sx={{ p: 1 }}>
+                                <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                                    <a href={details?.university?.portal2_link} target='_blank' style={{ fontSize: '14px', color: details?.university?.portal2_link ? 'blue' : '', cursor: 'pointer' }} className={details?.university?.portal2_link ? 'a_hover' : ''}> {details?.university?.portal2_link || 'NA'}</a>
+                                    {
+                                        linkCopied ?
+                                            <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
+                                            :
+                                            <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal2_link, 'link')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
+                                    }
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+
 
                     {/* 3 */}
 
-                   
-                        <Grid mb={1} mt={2} container spacing={1} >
-                            <Grid pl={1}><a style={{ fontSize: '14px' }}>User Name 3</a></Grid>
-                            <Grid item p={1} xs={12}>
-                                <Paper elevation={3} sx={{ p: 1 }}>
-                                    <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                        <a style={{ fontSize: '14px' }} >{details?.university?.portal3_username || 'NA'}</a>
-                                        {
-                                            nameCopied ?
-                                                <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
-                                                :
-                                                <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal2_username, 'name')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
-                                        }
-                                    </Grid>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    
 
-                        <Grid mb={1} mt={2} container spacing={1} >
-                            <Grid pl={1}><a style={{ fontSize: '14px' }}>Password 3</a></Grid>
-                            <Grid item p={1} xs={12}>
-                                <Paper elevation={3} sx={{ p: 1 }}>
-                                    <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
-                                        <a style={{ fontSize: '14px' }} >{details?.university?.portal3_password || 'NA'}</a>
-                                        {
-                                            passCopied ?
-                                                <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
-                                                :
-                                                <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal3_password, 'pass')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
-                                        }
-                                    </Grid>
-                                </Paper>
-                            </Grid>
+                    <Grid mb={1} mt={2} container spacing={1} >
+                        <Grid pl={1}><a style={{ fontSize: '14px' }}>User Name 3</a></Grid>
+                        <Grid item p={1} xs={12}>
+                            <Paper elevation={3} sx={{ p: 1 }}>
+                                <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                                    <span style={{ fontSize: '14px' }} >{details?.university?.portal3_username || 'NA'}</span>
+                                    {
+                                        nameCopied ?
+                                            <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
+                                            :
+                                            <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal2_username, 'name')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
+                                    }
+                                </Grid>
+                            </Paper>
                         </Grid>
-                    
+                    </Grid>
+
+
+                    <Grid mb={1} mt={2} container spacing={1} >
+                        <Grid pl={1}><a style={{ fontSize: '14px' }}>Password 3</a></Grid>
+                        <Grid item p={1} xs={12}>
+                            <Paper elevation={3} sx={{ p: 1 }}>
+                                <Grid display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                                    <span style={{ fontSize: '14px' }} >{details?.university?.portal3_password || 'NA'}</span>
+                                    {
+                                        passCopied ?
+                                            <span style={{ color: '#689df6', fontSize: '13px' }}>copied <DoneOutlined sx={{ color: '#689df6', cursor: 'pointer' }} fontSize='small' /></span>
+                                            :
+                                            <ContentCopyOutlined onClick={() => copyToClipboard(details?.university?.portal3_password, 'pass')} fontSize='small' sx={{ color: '#689df6', cursor: 'pointer' }} />
+                                    }
+                                </Grid>
+                            </Paper>
+                        </Grid>
+                    </Grid>
+
 
 
                     <Grid mb={1} mt={2} container spacing={1} >
