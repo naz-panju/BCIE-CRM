@@ -113,7 +113,7 @@ function ApplicationSection({paymentLoading,payments, selectedAppCounsellor, sel
                             // </div>
 
                             <div className=' w-5/12'>
-                                <div className='comminication-block'>
+                                <div className='comminication-block p-5'>
                                     <div className='section-title'>Payments</div>
                                     {
                                         paymentLoading ?

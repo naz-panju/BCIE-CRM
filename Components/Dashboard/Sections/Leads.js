@@ -219,12 +219,12 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
                     </Grid>
                 </div>
 
-                <div style={{ height: 300 }} className='border flex'>
+                <div style={{ height: 320 }} className='border flex'>
 
-                    <div className=' w-3/12'>
-                        <div className='flex justify-between'>
-                            <div className=' w-5/12'>
-                                <div className='comminication-block'>
+                    <div className=' w-4/12'>
+                        <div className=''>
+                            <div className=' w-12/12'>
+                                <div className='comminication-block p-5'>
                                     <div className='section-title'>Communications</div>
                                     {
                                         communicationLogLoading ?
@@ -232,8 +232,8 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
                                                 <Skeleton variant='rounded' width={400} height={200} />
                                             </div>
                                             :
-                                            <div className='flex justify-between'>
-                                                <div className=' w-6/12'>
+                                            <div className='w-full'>
+                                                <div className=' w-full'>
                                                     <div className='communication-graph'>
                                                         <div className='chart-info-title'>
                                                             <div className='total'><span>Total</span></div>
@@ -251,9 +251,9 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
 
                                                     </div>
                                                 </div>
-                                                <div className=' w-5/12'>
+                                                <div className=' w-full mt-2'>
                                                     <div className='communication-details'>
-                                                        <ul>
+                                                        <ul clas>
                                                             <li><Image src={Mail} alt='Mail' width={22} height={22} /><b>{communicationLog?.data?.emails}</b>Emails</li>
                                                             <li><Image src={Phone} alt='Mail' width={22} height={22} /><b>{communicationLog?.data?.calls}</b>Calls</li>
                                                             <li><Image src={Message} alt='Mail' width={22} height={22} /><b>{communicationLog?.data?.whatsapp}</b>Messages</li>

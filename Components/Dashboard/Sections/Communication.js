@@ -39,7 +39,7 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
 
         <div className='flex '>
 
-          <div style={{ height: '100%' }} className='graph w-5/12 p-3'>
+          <div style={{ height: '100%' }} className='graph w-6/12 p-3'>
             <div className='total_sec d-flex flex items-center justify-between p-3'>
               Country wise Application
             </div>
@@ -160,7 +160,7 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
             </div>
           </div> */}
 
-          <div className='graph w-7/12'>
+          <div className='graph w-6/12'>
             <div className='total_sec d-flex flex items-center justify-between pb-3'>
               Targets
 
