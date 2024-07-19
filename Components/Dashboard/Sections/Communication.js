@@ -59,6 +59,7 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
                   :
                   <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
                     {
+                      leadCountryList?.data?.length>0?
                       leadCountryList?.data?.map((obj, index) => (
 
                         <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
@@ -66,6 +67,10 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
                           <span>{formatPercentage(obj?.value) || 0}%</span>
                         </Grid>
                       ))
+                      :
+                      <Grid className='flex justify-center items-center' >
+                        No Application Found
+                      </Grid>
                     }
                   </Grid>
               }

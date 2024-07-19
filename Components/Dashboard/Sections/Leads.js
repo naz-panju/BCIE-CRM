@@ -221,9 +221,9 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
 
                 <div style={{ height: 300 }} className='border flex'>
 
-                    <div className=' w-3/12'>
+                    <div className=' w-3/12  p-5'>
                         <div className='flex justify-between'>
-                            <div className=' w-5/12'>
+                            <div className=' w-10/12'>
                                 <div className='comminication-block'>
                                     <div className='section-title'>Communications</div>
                                     {

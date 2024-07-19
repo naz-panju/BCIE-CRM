@@ -315,7 +315,7 @@ function DashboardIndex() {
                 counselor: counsellorId
                 // office: officeId
             })
-            // console.log(response);
+            console.log(response);
             setLeadCountryList(response?.data)
             setLeadSourceListLoading(false)
         } catch (error) {
@@ -463,6 +463,7 @@ function DashboardIndex() {
         let params = {
             type: 'targets',
             intake: intakeId,
+            counselor: counsellorId
         }
 
         if (session?.data?.user?.role?.id == 3) {
@@ -523,12 +524,12 @@ function DashboardIndex() {
             fetchWeeklyList()
             fetchWeeklyStageList()
         }
-    }, [weeklyRange, officeId])
+    }, [weeklyRange, officeId,counsellorId])
     useEffect(() => {
         if (range[0]) {
             fetchLeadCountry()
         }
-    }, [range])
+    }, [range,counsellorId])
     useEffect(() => {
         // console.log('loading....1');
         if (range[0]) {
@@ -537,27 +538,27 @@ function DashboardIndex() {
             // fetchLeadCountry() called in seperatae useEffect due to no country
             fetchLeadStage()
         }
-    }, [range, officeId])
+    }, [range, officeId,counsellorId])
     useEffect(() => {
         if (range[0]) {
             fetchCommunicationLog()
             fetchPayments()
         }
-    }, [range, selectedCounsellor])
+    }, [range, selectedCounsellor,counsellorId])
     useEffect(() => {
         if (range[0]) {
             fetchApplicationStages()
             fetchsubmitApplication()
         }
-    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor])
+    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor,counsellorId])
     useEffect(() => {
         if (weeklyApplicationRange[0]) {
             fetchWeeklyApplication()
         }
-    }, [weeklyApplicationRange, selectedCountries, selectedUniversity])
+    }, [weeklyApplicationRange, selectedCountries, selectedUniversity,counsellorId])
     useEffect(() => {
         fetchTargets()
-    }, [intakeId, selectedCounsellor, selectedManager])
+    }, [intakeId, selectedCounsellor, selectedManager,counsellorId])
 
 
     const handleClean = (event) => {
@@ -656,12 +657,12 @@ function DashboardIndex() {
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='comm_sec'>
-                            <CommunicationSection leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} fetchManagers={fetchManagers} handleManagerSelect={handleManagerSelect} selectedManager={selectedManager} communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
+                            <CommunicationSection leadSourceListLoading={leadSourceListLoading} leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} fetchManagers={fetchManagers} handleManagerSelect={handleManagerSelect} selectedManager={selectedManager} communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
                         </div>
                     }
 
                     <div className='app_sec'>
-                        <ApplicationSection fetchAppCoordinators={fetchAppCoordinators} fetchAppCounsellors={fetchAppCounsellors} handleAppCoordinatorSelect={handleAppCoordinatorSelect} handleAppCounsellorSelect={handleAppCounsellorSelect} selectedAppCoordinators={selectedAppCoordinators} selectedAppCounsellor={selectedAppCounsellor} intakeRange={range} submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
+                        <ApplicationSection paymentLoading={paymentLoading} fetchAppCoordinators={fetchAppCoordinators} fetchAppCounsellors={fetchAppCounsellors} handleAppCoordinatorSelect={handleAppCoordinatorSelect} handleAppCounsellorSelect={handleAppCounsellorSelect} selectedAppCoordinators={selectedAppCoordinators} selectedAppCounsellor={selectedAppCounsellor} intakeRange={range} submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
                     </div>
                 </div>
             </section>
