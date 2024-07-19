@@ -24,12 +24,13 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import Editor from '@/Form/Editor';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import DocumentSelectModal from './documentSelect';
+// import MyEditor from '@/Form/MyEditor';
 
 
 
-// const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
-//     ssr: false,
-// });
+const MyEditor = dynamic(() => import("../../../../../Form/MyEditor"), {
+    ssr: false,
+});
 
 
 const scheme = yup.object().shape({

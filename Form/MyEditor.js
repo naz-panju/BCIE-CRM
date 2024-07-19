@@ -1,79 +1,99 @@
-import { ImageUploadApi } from '@/data/Endpoints/ImageUploader';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import React, { useState, useEffect, useRef } from 'react';
-
+// import { CKEditor } from '@ckeditor/ckeditor5-react';
+// import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import React, { useState, useEffect, useRef } from 'react';
+// import { ImageUploadApi } from '@/data/Endpoints/ImageUploader';
 
 function MyEditor(props) {
-    const [editorData, setEditorData] = useState(props.val || '');
-    const editorRef = useRef(null);
+    // const [editorData, setEditorData] = useState('');
+    // const editorRef = useRef(null);
 
-    function MyCustomUploadAdapterPlugin(editor) {
-        editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
-            return {
-                upload: async () => {
-                    const data = new FormData();
-                    data.append('file', await loader.file);
+    // function MyCustomUploadAdapterPlugin(editor) {
+    //     editor.plugins.get('FileRepository').createUploadAdapter = (loader) => {
+    //         return {
+    //             upload: async () => {
+    //                 const data = new FormData();
+    //                 data.append('file', await loader.file);
 
-                    try {
-                        const response = await ImageUploadApi.upload(data);
-                        console.log(response);
-                        return { default: response.data.data.file_path };
-                    } catch (error) {
-                        console.error('Image upload failed:', error);
-                        return { default: '' };
-                    }
-                },
-                abort: () => { }
-            };
-        };
-    }
+    //                 try {
+    //                     const response = await ImageUploadApi.upload(data);
+    //                     console.log(response);
+    //                     return { default: response.data.data.file_path };
+    //                 } catch (error) {
+    //                     console.error('Image upload failed:', error);
+    //                     return { default: '' };
+    //                 }
+    //             },
+    //             abort: () => { }
+    //         };
+    //     };
+    // }
 
-    // Function to insert text into the editor
-    const insertText = (text) => {
-        if (editorRef.current) {
-            const editorInstance = editorRef.current;
-            editorInstance.model.change(writer => {
-                const insertPosition = editorInstance.model.document.selection.getFirstPosition();
-                writer.insertText(text, insertPosition);
-            });
+    // const insertText = (text) => {
+    //     if (editorRef.current) {
+    //         const editorInstance = editorRef.current;
+    //         editorInstance.model.change(writer => {
+    //             const insertPosition = editorInstance.model.document.selection.getFirstPosition();
+    //             writer.insertText(text, insertPosition);
+    //         });
 
-            const data = editorInstance.getData();
-            setEditorData(data);
-            if (props?.onValueChange) {
-                props.onValueChange(data);
-            }
-        }
-    };
+    //         const data = editorInstance.getData();
+    //         setEditorData(data);
+    //         if (props?.onValueChange) {
+    //             props.onValueChange(data);
+    //         }
+    //     }
+    // };
 
-    // Handle props changes and insert text
-    useEffect(() => {
-        if (props?.copied) {
-            insertText(props.copied);
-        }
-    }, [props?.copied]);
+    // useEffect(() => {
+    //     if (props?.copied) {
+    //         insertText(props.copied);
+    //     }
+    // }, [props?.copied]);
 
-    // Handle initial value setting
-    useEffect(() => {
-        if (props?.val) {
-            setEditorData(props.val);
-        }
-    }, [props?.val]);
-    console.log(props?.val);
+    // useEffect(() => {
+    //     if (props?.val) {
+    //         setEditorData(props.val);
+    //     }
+    // }, [props?.val]);
 
     return (
         <div>
-            <CKEditor
+            {/* <CKEditor
                 editor={ClassicEditor}
                 data={editorData}
                 config={{
                     extraPlugins: [MyCustomUploadAdapterPlugin],
+                    image: {
+                        toolbar: [
+                            'imageStyle:full',
+                            'imageStyle:side',
+                            '|',
+                            'imageTextAlternative',
+                            'imageResize'
+                        ],
+                        resizeOptions: [
+                            {
+                                name: 'imageResize:original',
+                                label: 'Original',
+                                value: null
+                            },
+                            {
+                                name: 'imageResize:50',
+                                label: '50%',
+                                value: '50'
+                            },
+                            {
+                                name: 'imageResize:75',
+                                label: '75%',
+                                value: '75'
+                            }
+                        ],
+                        resizeUnit: '%'
+                    }
                 }}
                 onReady={(editor) => {
                     editorRef.current = editor;
-                    if (props?.val) {
-                        editor.setData(props.val);
-                    }
+                    setEditorData(props?.val || '');
                 }}
                 onChange={(event, editor) => {
                     const data = editor.getData();
@@ -83,7 +103,7 @@ function MyEditor(props) {
                     }
                 }}
                 className='ckeditor-container'
-            />
+            /> */}
         </div>
     );
 }

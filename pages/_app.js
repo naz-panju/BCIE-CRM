@@ -1,5 +1,7 @@
 import "@/styles/globals.css";
 import "@/styles/Editor.css";
+import '@/Components/Editor/App.css';
+
 
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";

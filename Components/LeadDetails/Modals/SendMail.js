@@ -31,6 +31,10 @@ const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
     ssr: false,
 });
 
+const CKEditorBox = dynamic(() => import("../../../Components/Editor/Editor"), {
+    ssr: false,
+});
+
 
 
 
@@ -305,7 +309,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                 open={open}
                 onClose={handleClose}
             >
-                <Grid width={650}>
+                <Grid width={750}>
                     <Grid className='modal_title d-flex align-items-center  '>
 
                         <a className='back_modal' onClick={handleClose}>
@@ -410,7 +414,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                     textBoxLoading ?
                                                         <Skeleton variant='rounded' width={'100%'} height={400} />
                                                         :
-                                                        <MyEditor key={editorKey} emoji={false} val={watch('body')}
+                                                        <CKEditorBox key={editorKey} emoji={false} val={watch('body')}
                                                             onValueChange={e => setValue('body', e)} />
                                                 }
                                                 {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
@@ -425,7 +429,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
                                                         textBoxLoading ?
                                                             <Skeleton variant='rounded' width={'100%'} height={400} />
                                                             :
-                                                            <MyEditor key={editorKey} emoji={false} val={watch('body_footer')}
+                                                            <CKEditorBox key={editorKey} emoji={false} val={watch('body_footer')}
                                                                 onValueChange={e => setValue('body_footer', e)} />
                                                     }
                                                     {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}

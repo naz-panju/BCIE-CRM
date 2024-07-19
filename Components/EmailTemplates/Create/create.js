@@ -2,7 +2,7 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Button, Checkbox, Grid, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Delete} from '@mui/icons-material';
+import { Delete } from '@mui/icons-material';
 import TextInput from '@/Form/TextInput';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -21,6 +21,7 @@ import TemplateData from '../TemplateData';
 import Doc from '@/img/doc.png';
 import Image from 'next/image';
 import { useRef } from 'react';
+// import CKEditorBox from '@/Components/Editor/Editor';
 
 
 // import MyEditor from '@/Form/MyEditor';
@@ -28,6 +29,11 @@ import { useRef } from 'react';
 const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
     ssr: false,
 });
+
+const CKEditorBox = dynamic(() => import("../../../Components/Editor/Editor"), {
+    ssr: false,
+});
+
 
 const scheme = yup.object().shape({
 
@@ -456,10 +462,11 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         {errors.body && <span className='form-validation'>{errors.body.message}</span>}
                                                         */}
                                                             {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
-
-                                                            <MyEditor emoji={false} val={watch('body')}
+                                                            <CKEditorBox emoji={false} val={watch('body')}
+                                                                onValueChange={e => setValue('body', e)} copied={copied} />
+                                                            {/* <MyEditor emoji={false} val={watch('body')}
                                                                 onValueChange={e => setValue('body', e)} copied={copied}
-                                                            />
+                                                            /> */}
                                                         </Grid>
                                                     </div>
                                                 </div>
@@ -480,7 +487,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         */}
                                                             {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
 
-                                                            <MyEditor emoji={false} val={watch('body_footer')}
+                                                            <CKEditorBox emoji={false} val={watch('body_footer')}
                                                                 onValueChange={e => setValue('body_footer', e)}
                                                             />
                                                         </Grid>
