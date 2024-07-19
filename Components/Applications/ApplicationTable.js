@@ -660,7 +660,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     }
     const handleClearSearch = (from) => {
 
-        reset()
+        // reset()
 
         setValue('country', '')
         setValue('university', '')

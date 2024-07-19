@@ -14,13 +14,14 @@ import { Checkbox, FormControlLabel, Grid } from '@mui/material';
 import AsyncSelect from "react-select/async";
 import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
+import { ApplicationApi } from '@/data/Endpoints/Application';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
 
-export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, loading, details }) {
+export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, details,callback }) {
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
@@ -37,7 +38,7 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, loa
     // }
 
     const fetchStages = (e) => {
-        return ListingApi.applicationStages({ keyword: e, id: details?.stage?.id }).then(response => {
+        return ListingApi.stages({ keyword: e, type: 'application' }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -65,7 +66,7 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, loa
         }
     }
 
-    const [changeStage, setChangeStage] = useState(true);
+    const [changeStage, setChangeStage] = useState(false);
     const handleCheckboxChange = (event) => {
         setChangeStage(event.target.checked);
     };
@@ -74,6 +75,7 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, loa
     const handleClose = () => {
         reset()
         setID();
+        setChangeStage(false)
         setOpen(false);
     };
 
@@ -85,6 +87,34 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, loa
         // setValue('subStage', details?.substage)
 
     }
+
+    const [loading, setdeleteLoading] = useState()
+    const handleDelete = () => {
+        setdeleteLoading(true)
+        let dataToSubmit = {
+            id: ID
+        }
+
+        if (changeStage) {
+            dataToSubmit['stage'] = watch('stage')?.id
+        }
+        ApplicationApi.deleteUniversityDocument(dataToSubmit).then((response) => {
+            if (response?.status == 200 || response?.status == 201) {
+                toast.success(response?.data?.message)
+                setdeleteLoading(false)
+                setID()
+                callback()
+                handleClose()
+            } else {
+                toast.error(response?.response?.data?.message)
+                setdeleteLoading(false)
+            }
+        }).catch((error) => {
+            toast.error(error?.response?.data?.message)
+            setdeleteLoading(false)
+        })
+    }
+
 
     useEffect(() => {
         if (ID > 0) {
@@ -114,81 +144,107 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, loa
                 }}
             >
                 <DialogTitle>Are you sure want to delete this Document?</DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-slide-description">
+                <DialogContent style={{ overflowY: 'unset' }}>
+                    {/* <DialogContentText id="alert-dialog-slide-description">
                         {title}
-                    </DialogContentText>
+                    </DialogContentText> */}
 
-
-                </DialogContent>
-
-                <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0 p-5 pt-0">
-                    <div className='application-input'>
-                        {/* <a className='form-text'>Select Stage</a> */}
-                        <Grid className='mb-5 forms-data' >
-                            <AsyncSelect
-                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                // isDisabled={!selectedUniversityId}
-                                key={ID}
-                                placeholder='Select Stage'
-                                name={'stage'}
-                                defaultValue={watch('stage')}
-                                isClearable
-                                defaultOptions
-                                loadOptions={fetchStages}
-                                getOptionLabel={(e) => e.name}
-                                getOptionValue={(e) => e.id}
-                                onChange={handleStageChange}
-                            />
-                            {errors.stage && <span className='form-validation'>{errors.stage.message}</span>}
-
-                        </Grid>
-                    </div>
-                    {
-                        watch('stage')?.sub_stages?.length > 0 &&
-                        <div className='application-input'>
-                            <a className='form-text'>Select Stage</a>
-                            <Grid className='mb-5 forms-data' >
-                                <ReactSelector
-                                    onInputChange={subStages}
-                                    styles={{
-                                        menu: provided => ({ ...provided, zIndex: 9999 })
-                                    }}
-                                    options={subStages}
-                                    getOptionLabel={option => option.name}
-                                    getOptionValue={option => option}
-                                    value={
-                                        subStages.find(options =>
-                                            options.name === watch('subStage')
-                                        )
-                                    }
-                                    name='subStage'
-
-                                    defaultValue={(watch('subStage'))}
-                                    onChange={(selectedOption) => setValue('subStage', selectedOption)}
-                                />
-                                {errors.substage && <span className='form-validation'>{errors.substage.message}</span>}
-                            </Grid>
-                        </div>
-                    }
                     <div className='application-input'>
                         {/* <a className='form-text'>Select Stage</a> */}
                         <Grid className='mb-5 forms-data' >
                             <FormControlLabel
                                 control={<Checkbox checked={changeStage} onChange={handleCheckboxChange} />}
-                                label="Prevent all Other stage actions"
+                                label="Do you want to change stage?"
                             />
 
                         </Grid>
                     </div>
-                </div>
+                    {
+                        changeStage &&
+                        <div className='application-input'>
+                            <Grid className='mb-5 forms-data' >
+                                <AsyncSelect
+                                    styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                    // isDisabled={!selectedUniversityId}
+                                    key={ID}
+                                    placeholder='Select Stage'
+                                    name={'stage'}
+                                    defaultValue={watch('stage')}
+                                    isClearable
+                                    defaultOptions
+                                    loadOptions={fetchStages}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    onChange={handleStageChange}
+                                />
+                                {errors.stage && <span className='form-validation'>{errors.stage.message}</span>}
 
+                            </Grid>
+                        </div>
+                    }
+                </DialogContent>
+
+                {/* <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0 p-5 pt-0">
+
+                    {
+                        changeStage &&
+                        <>
+                            <div className='application-input'>
+                                <Grid className='mb-5 forms-data' >
+                                    <AsyncSelect
+                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                        key={ID}
+                                        placeholder='Select Stage'
+                                        name={'stage'}
+                                        defaultValue={watch('stage')}
+                                        isClearable
+                                        defaultOptions
+                                        loadOptions={fetchStages}
+                                        getOptionLabel={(e) => e.name}
+                                        getOptionValue={(e) => e.id}
+                                        onChange={handleStageChange}
+                                    />
+                                    {errors.stage && <span className='form-validation'>{errors.stage.message}</span>}
+
+                                </Grid>
+                            </div>
+                            {
+                                watch('stage')?.sub_stages?.length > 0 &&
+                                <div className='application-input'>
+                                    <a className='form-text'>Select Stage</a>
+                                    <Grid className='mb-5 forms-data' >
+                                        <ReactSelector
+                                            onInputChange={subStages}
+                                            styles={{
+                                                menu: provided => ({ ...provided, zIndex: 9999 })
+                                            }}
+                                            options={subStages}
+                                            getOptionLabel={option => option.name}
+                                            getOptionValue={option => option}
+                                            value={
+                                                subStages.find(options =>
+                                                    options.name === watch('subStage')
+                                                )
+                                            }
+                                            name='subStage'
+
+                                            defaultValue={(watch('subStage'))}
+                                            onChange={(selectedOption) => setValue('subStage', selectedOption)}
+                                        />
+                                        {errors.substage && <span className='form-validation'>{errors.substage.message}</span>}
+                                    </Grid>
+                                </div>
+                            }
+                        </>
+                    }
+
+                </div> */}
                 <DialogActions>
                     <Button size='small' onClick={handleClose} variant="outlined" color="inherit">
                         No
                     </Button>
-                    <LoadingButton className='bg-sky-500 text-white hover:bg-sky-700' size='small' onClick={clickFunc} loading={loading} disabled={loading}
-                        variant="contained" color='info' >Yes</LoadingButton>
+                    <LoadingButton className='bg-sky-500 text-white hover:bg-sky-700' size='small' onClick={handleDelete} loading={loading} disabled={loading}
+                        variant="contained" color='info' >Confirm</LoadingButton>
                 </DialogActions>
             </Dialog>
         </div>

@@ -159,8 +159,6 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
         })
     }
 
-    console.log(details);
-
     const NoLoadDetails = () => {
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
@@ -169,7 +167,6 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
             setDataLoading(false)
         })
     }
-
 
     const handleDelete = () => {
         setdeleteLoading(true)
@@ -369,6 +366,13 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
     }
 
+    const callFunc=()=>{
+        if (fetchTable) {
+            fetchTable()
+        }
+        NoLoadDetails()
+    }
+
 
     const [size, setsize] = useState()
     useEffect(() => {
@@ -379,11 +383,10 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
     }, [])
 
 
-
     return (
         <div>
             {/* <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={docId} setEditId={setdocId} handleRefresh={NoLoadDetails} fetchTable={fetchTable} details={details} /> */}
-            <DocDeleteConfirmPopup details={details} loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Confirm prompt`} />
+            <DocDeleteConfirmPopup details={details} loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Confirm prompt`} callback={callFunc} />
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 
             <Drawer
