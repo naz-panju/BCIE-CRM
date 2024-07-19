@@ -232,8 +232,8 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
                                                 <Skeleton variant='rounded' width={400} height={200} />
                                             </div>
                                             :
-                                            <div className='w-full'>
-                                                <div className=' w-full'>
+                                            <div className='flex'>
+                                                <div className=' w-full  mt-2' >
                                                     <div className='communication-graph'>
                                                         <div className='chart-info-title'>
                                                             <div className='total'><span>Total</span></div>
@@ -251,7 +251,7 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
 
                                                     </div>
                                                 </div>
-                                                <div className=' w-full mt-2'>
+                                                <div className=' w-full mt-2 px-2'>
                                                     <div className='communication-details'>
                                                         <ul clas>
                                                             <li><Image src={Mail} alt='Mail' width={22} height={22} /><b>{communicationLog?.data?.emails}</b>Emails</li>
