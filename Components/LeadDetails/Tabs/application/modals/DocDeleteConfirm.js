@@ -94,7 +94,6 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, det
         let dataToSubmit = {
             id: ID
         }
-
         if (changeStage) {
             dataToSubmit['stage'] = watch('stage')?.id
         }

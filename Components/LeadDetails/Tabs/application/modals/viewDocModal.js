@@ -367,9 +367,9 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
     }
 
     const callFunc = () => {
-        if (fetchTable) {
-            fetchTable()
-        }
+        // if (fetchTable) {
+        //     fetchTable()
+        // }
         NoLoadDetails()
     }
 
@@ -386,7 +386,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
     return (
         <div>
             {/* <UniversityDocumentModal app_id={applicationId} setapp_id={setapplicationId} editId={docId} setEditId={setdocId} handleRefresh={NoLoadDetails} fetchTable={fetchTable} details={details} /> */}
-            <DocDeleteConfirmPopup details={details} loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Confirm prompt`} callback={callFunc} />
+            <DocDeleteConfirmPopup details={details} loading={deleteLoading} ID={deleteId} setID={setdeleteId} clickFunc={handleDelete} title={`Confirm prompt`} callback={callFunc} fetchTable={fetchTable} />
             <DownloadDocumentModal editId={downloadId} setEditId={setDownloadId} />
 
             <Drawer
