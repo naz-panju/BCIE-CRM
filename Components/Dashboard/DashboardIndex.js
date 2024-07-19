@@ -26,7 +26,7 @@ function DashboardIndex() {
         setIntakeId(data?.id)
     }
     const [intakeRefresh, setIntakerfersh] = useState(false)
-    const [range, setRange] = useState([ moment().startOf('month').toDate(),  moment().endOf('month').toDate()]);
+    const [range, setRange] = useState([moment().startOf('month').toDate(), moment().endOf('month').toDate()]);
     const fetchIntakes = (e) => {
         return ListingApi.intakes({ keyword: e, }).then(response => {
             if (typeof response.data.data !== "undefined") {
@@ -606,7 +606,7 @@ function DashboardIndex() {
                             </Grid>
 
                             {
-                                 session?.data?.user?.role?.id !== 5 &&
+                                session?.data?.user?.role?.id !== 5 &&
                                 <Grid mr={2} sx={{ width: 200 }} className='intake_dropdown'>
                                     <AsyncSelect
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
@@ -623,7 +623,7 @@ function DashboardIndex() {
                                 </Grid>
                             }
 
-                            <Grid sx={{ width: 230 }} className='intake_dropdown'>
+                            {/* <Grid sx={{ width: 230 }} className='intake_dropdown'>
                                 <DateRangePicker
                                     preventOverflow
                                     className='no-clear date-focused'
@@ -631,16 +631,9 @@ function DashboardIndex() {
                                     onChange={setRange}
                                     onClean={handleClean}
                                     ranges={[]}
-                                    // placeholder="Select Date Range"
-                                    // style={{ width: 150 }}
                                     format='dd-MM-yyyy'
-                                    // disabledDate={(date) => {
-                                    //     const startDate = range[0];
-                                    //     const endDate = range[1];
-                                    //     return date < startDate || date > endDate;
-                                    // }}
                                 />
-                            </Grid>
+                            </Grid> */}
                         </div>
                     </div>
                 </div>
@@ -655,13 +648,15 @@ function DashboardIndex() {
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='lead_sec'>
-                            <LeadSection intakeRange={range} weeklyList={weeklyList} weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} />
+                            <LeadSection range={range} setRange={setRange} handleClean={handleClean} intakeRange={range} weeklyList={weeklyList} weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} communicationLogLoading={communicationLogLoading} communicationLog={communicationLog} />
                         </div>
                     }
+
+                   
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='comm_sec'>
-                            <CommunicationSection fetchManagers={fetchManagers} handleManagerSelect={handleManagerSelect} selectedManager={selectedManager} communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
+                            <CommunicationSection leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} fetchManagers={fetchManagers} handleManagerSelect={handleManagerSelect} selectedManager={selectedManager} communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
                         </div>
                     }
 

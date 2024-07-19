@@ -5,15 +5,24 @@ import Message from '@/img/message.svg'
 import Phone from '@/img/phone.svg'
 import Deposit from '@/img/Deposit.svg'
 import Pending from '@/img/Pending.svg'
+import Others from '@/img/Others.svg'
 import Image from 'next/image';
 import AsyncSelect from "react-select/async";
 import TargetTabs from './Target Tabs'
-import { Skeleton } from '@mui/material'
+import { Grid, Skeleton } from '@mui/material'
 import { useSession } from 'next-auth/react'
 
-function CommunicationSection({ fetchManagers, handleManagerSelect, selectedManager, communicationLogLoading, paymentLoading, targetLoading, fetchCounsellors, selectedCounsellor, handleCounsellorSelect, communicationLog, payments, targets }) {
+function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManagers, handleManagerSelect, selectedManager, communicationLogLoading, paymentLoading, targetLoading, fetchCounsellors, selectedCounsellor, handleCounsellorSelect, communicationLog, payments, targets }) {
 
   const session = useSession()
+
+  function formatPercentage(value) {
+    if (typeof value === 'number' && !isNaN(value)) {
+        return value.toFixed(2);
+    } else {
+        return value;
+    }
+}
 
   const emails = communicationLog?.data?.emails || 0;
   const calls = communicationLog?.data?.calls || 0;
@@ -29,7 +38,45 @@ function CommunicationSection({ fetchManagers, handleManagerSelect, selectedMana
       <div className='weekly-leads communication mt-4'>
 
         <div className='flex '>
-          <div className=' w-7/12'>
+
+          <div style={{ height: '100%' }} className='graph w-5/12 p-3'>
+            <div className='total_sec d-flex flex items-center justify-between p-3'>
+              Country wise Application
+            </div>
+            <div className='border rounded-sm '>
+              {
+                leadSourceListLoading ?
+
+                  <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
+                    {[...Array(6)].map((_, index) => (
+                      <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                        <span> <Skeleton variant='rounded' width={90} height={20} /></span>
+                        <span><Skeleton variant='rounded' width={40} height={20} /></span>
+                      </Grid>
+                    ))}
+                  </Grid>
+
+                  :
+                  <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
+                    {
+                      leadCountryList?.data?.map((obj, index) => (
+
+                        <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                          <span style={{ lineHeight: 1 }}><Image src={Others} alt='alt' width={14} height={14} /> {obj?.country}</span>
+                          <span>{formatPercentage(obj?.value) || 0}%</span>
+                        </Grid>
+                      ))
+                    }
+                  </Grid>
+              }
+
+
+            </div>
+
+          </div>
+
+
+          {/* <div className=' w-7/12'>
             <div className='flex justify-between'>
               <div className=' w-5/12'>
                 <div className='comminication-block'>
@@ -102,7 +149,6 @@ function CommunicationSection({ fetchManagers, handleManagerSelect, selectedMana
                         <div className=' w-5/12'>
                           <div className='communication-details'>
                             <ul>
-                              {/* <li style={{lineHeight:1}} ><Image src={Deposit} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_paid_leads}</b>Deposit Paid</li> */}
                               <li><Image src={Pending} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_not_paid_leads}</b>Pending</li>
                             </ul>
                           </div>
@@ -112,9 +158,9 @@ function CommunicationSection({ fetchManagers, handleManagerSelect, selectedMana
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
-          <div className='graph w-5/12'>
+          <div className='graph w-7/12'>
             <div className='total_sec d-flex flex items-center justify-between pb-3'>
               Targets
 
