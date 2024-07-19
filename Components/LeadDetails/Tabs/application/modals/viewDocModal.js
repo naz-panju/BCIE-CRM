@@ -356,7 +356,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                     toast.error(response?.response?.data?.message)
                     setUploadLoading(false)
                 }
-                setLoading(false)
+                setUploadLoading(false)
             }).catch((error) => {
                 console.log(error);
                 toast.error(error?.response?.data?.message)

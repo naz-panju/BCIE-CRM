@@ -678,6 +678,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
 
         let params = {
             limit: limit,
+            deposit_not_paid:1,
             // application statuses:unsubmitted,
             // status: 'Admission Completed',
             returned: 1,

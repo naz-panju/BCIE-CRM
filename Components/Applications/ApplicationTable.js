@@ -697,6 +697,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
         let params = {
             limit: limit,
+            deposit_not_paid:1,
             // application statuses:unsubmitted,
             // status: 'Admission Completed',
             country_id: selectedCountry,

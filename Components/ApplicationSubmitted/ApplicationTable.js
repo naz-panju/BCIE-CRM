@@ -684,6 +684,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
 
         let params = {
             limit: limit,
+            deposit_not_paid:1,
             // application statuses:unsubmitted,
             // status: 'Admission Completed',
             submitted: 1,

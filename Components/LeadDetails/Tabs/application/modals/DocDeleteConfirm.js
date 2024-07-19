@@ -21,7 +21,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 
-export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, details,callback }) {
+export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, details, callback, fetchTable }) {
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
@@ -103,6 +103,11 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, det
                 setdeleteLoading(false)
                 setID()
                 callback()
+                if (changeStage) {
+                    if (fetchTable) {
+                        fetchTable()
+                    }
+                }
                 handleClose()
             } else {
                 toast.error(response?.response?.data?.message)

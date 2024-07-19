@@ -680,6 +680,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
 
         let params = {
             limit: limit,
+            deposit_not_paid:1,
             // application statuses:unsubmitted,
             // status: 'Admission Completed',
             country_id: selectedCountry,
