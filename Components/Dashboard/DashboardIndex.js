@@ -312,7 +312,9 @@ function DashboardIndex() {
                 type: 'lead_by_country',
                 date_from: moment(range[0]).format('YYYY-MM-DD'),
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
-                counselor: counsellorId
+                counselor: counsellorId,
+                intake: intakeId,
+
                 // office: officeId
             })
             console.log(response);
@@ -378,7 +380,8 @@ function DashboardIndex() {
                 date_from: moment(range[0]).format('YYYY-MM-DD'),
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
-                counselor: selectedCounsellor?.id
+                counselor: selectedCounsellor?.id,
+                intake: intakeId,
             })
             // console.log(response);
             setPayments(response?.data)
@@ -403,6 +406,7 @@ function DashboardIndex() {
                 // counselor: selectedAppCounsellor?.id,
                 counselor: counsellorId,
                 app_coordinator: selectedAppCoordinators?.id,
+                intake: intakeId,
             })
             // console.log(response);
             setApplicationStages(response?.data)
@@ -529,7 +533,7 @@ function DashboardIndex() {
         if (range[0]) {
             fetchLeadCountry()
         }
-    }, [range,counsellorId])
+    }, [range,counsellorId,intakeId])
     useEffect(() => {
         // console.log('loading....1');
         if (range[0]) {
@@ -541,8 +545,14 @@ function DashboardIndex() {
     }, [range, officeId,counsellorId])
     useEffect(() => {
         if (range[0]) {
-            fetchCommunicationLog()
+            // fetchCommunicationLog()
             fetchPayments()
+        }
+    }, [range, selectedCounsellor,counsellorId,intakeId])
+    useEffect(() => {
+        if (range[0]) {
+            fetchCommunicationLog()
+            // fetchPayments()
         }
     }, [range, selectedCounsellor,counsellorId])
     useEffect(() => {
@@ -550,7 +560,7 @@ function DashboardIndex() {
             fetchApplicationStages()
             fetchsubmitApplication()
         }
-    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor,counsellorId])
+    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor,counsellorId,intakeId])
     useEffect(() => {
         if (weeklyApplicationRange[0]) {
             fetchWeeklyApplication()
@@ -662,7 +672,7 @@ function DashboardIndex() {
                     }
 
                     <div className='app_sec'>
-                        <ApplicationSection paymentLoading={paymentLoading} fetchAppCoordinators={fetchAppCoordinators} fetchAppCounsellors={fetchAppCounsellors} handleAppCoordinatorSelect={handleAppCoordinatorSelect} handleAppCounsellorSelect={handleAppCounsellorSelect} selectedAppCoordinators={selectedAppCoordinators} selectedAppCounsellor={selectedAppCounsellor} intakeRange={range} submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
+                        <ApplicationSection payments={payments} paymentLoading={paymentLoading} fetchAppCoordinators={fetchAppCoordinators} fetchAppCounsellors={fetchAppCounsellors} handleAppCoordinatorSelect={handleAppCoordinatorSelect} handleAppCounsellorSelect={handleAppCounsellorSelect} selectedAppCoordinators={selectedAppCoordinators} selectedAppCounsellor={selectedAppCounsellor} intakeRange={range} submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
                     </div>
                 </div>
             </section>

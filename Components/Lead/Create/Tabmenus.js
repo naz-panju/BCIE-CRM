@@ -67,7 +67,7 @@ function a11yProps(index) {
 
 export default function CreateTabs({ handleClose, refresh, setRefresh, editId, handleRefresh, from, handleLeadRefresh }) {
 
-    const session=useSession()
+    const session = useSession()
 
     // console.log(session)
 
@@ -255,8 +255,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             } else {
                 setWhatsapp(value);
             }
-            if(!altPhone){
-                setValue('alt_phone',dialCode)
+            if (!altPhone) {
+                setValue('alt_phone', dialCode)
                 setAltCode(dialCode)
                 // setAltPhone(dialCode)
             }
@@ -329,11 +329,11 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                 setValue('phone', `+${data?.phonecode}`)
                 setCode(data?.phonecode)
             }
-            if (watch('alt_phone') == `+${altCode}` || watch('alt_phone')==altCode) {
+            if (watch('alt_phone') == `+${altCode}` || watch('alt_phone') == altCode) {
                 setValue('alt_phone', `+${data?.phonecode}`)
                 setAltCode(data?.phonecode)
             }
-            if (watch('whatsapp') == `+${whatsappCode}` || watch('whatsapp')==whatsappCode) {
+            if (watch('whatsapp') == `+${whatsappCode}` || watch('whatsapp') == whatsappCode) {
                 setValue('whatsapp', `+${data?.phonecode}`)
                 setWhatsappCode(data?.phonecode)
             }
@@ -412,11 +412,11 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             note: data?.note
         }
 
-        if(!altPhone){
-            dataToSubmit['alternate_phone_country_code']=code
+        if (!altPhone) {
+            dataToSubmit['alternate_phone_country_code'] = code
         }
-        if(!whatsappCode){
-            dataToSubmit['whatsapp_country_code']=code
+        if (!whatsappCode) {
+            dataToSubmit['whatsapp_country_code'] = code
         }
 
         console.log(dataToSubmit);
@@ -988,7 +988,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                         </div>
 
                         {
-                            watch('source')?.name == 'Referral' &&
+                            watch('source')?.id == 5 &&
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
                                     <a className='form-text'>Referred Student</a>
@@ -1011,7 +1011,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
 
                         {
-                            watch('source')?.name == 'Agency' &&
+                            watch('source')?.id == 6 &&
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
                                     <a className='form-text'>Referred Agency</a>
@@ -1029,7 +1029,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             </div>
                         }
                         {
-                            watch('source')?.name == 'University' &&
+                            watch('source')?.id == 7 &&
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
                                     <a className='form-text'>Referred University</a>
