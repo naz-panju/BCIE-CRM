@@ -20,6 +20,7 @@ import { Divider } from 'rsuite'
 import UniversityInfoModal from '@/Components/Applications/Modals/UniversityInfo'
 import { useSession } from 'next-auth/react'
 import SendMail from '../../Modals/SendMail'
+import { blue } from '@mui/material/colors'
 
 
 const HtmlTooltip = styled(({ className, ...props }) => (
@@ -499,7 +500,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
                                                                                         obj?.app_coordinator_status == 'Returned' &&
                                                                                         // <div className='d-flex align-center'>
                                                                                         <>
-                                                                                            <Button className='edit-btn-outline ' Button onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Resubmit</Button>
+                                                                                            <Button style={{backgroundColor:blue[500] }} className='blue-btn edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} size='small'>Resubmit</Button>
                                                                                             {
                                                                                                 obj?.app_coordinator_retun_status_note &&
                                                                                                 <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '15px', mr: 1, ml: -2 }} /></Tooltip>

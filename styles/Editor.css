@@ -2497,6 +2497,13 @@ span.profile-db {
     background: transparent !important;
 }
 
+
+.blue-btn{
+    background-color: rgb(33, 150, 243) !important;
+    color: white !important;
+  }
+  
+
 .app_tab_cntr tbody tr {
     border-radius: 3px;
     background: #FFF;
