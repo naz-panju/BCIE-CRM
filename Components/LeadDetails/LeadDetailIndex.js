@@ -76,6 +76,10 @@ function LeadDetails() {
   const handlePhoneRefresh = () => {
     setphoneCallRefresh(!phoneCallRefresh)
   }
+  const handlePhoneandDetailRefresh = () => {
+    handlePhoneRefresh()
+    setRefresh(!refresh)
+  }
 
   const handleTaskRefresh = () => {
     settaskRefresh(!taskRefresh)
@@ -282,13 +286,12 @@ function LeadDetails() {
       <SendMail from={'lead'} details={details} lead_id={details?.id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleRefresh} />
       <SendWhatsApp details={details} lead_id={details?.id} editId={whatsappId} setEditId={setWhatsappId} refresh={refresh} setRefresh={handleRefresh} from={'lead'} />
 
-      <PhoneCallModal lead_id={details?.id} editId={phonecallId} setEditId={setphonecallId} handleRefresh={handlePhoneRefresh} />
+      <PhoneCallModal lead_id={details?.id} editId={phonecallId} setEditId={setphonecallId} handleRefresh={handlePhoneandDetailRefresh} />
 
       <CreateTask lead_id={details?.id} from={'lead'} editId={taskId} setEditId={settaskId} refresh={refresh} setRefresh={settaskRefresh} handleRefresh={handleTaskRefresh} detailRefresh={handleRefresh} />
 
-
       {/* <FollowUpModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={followupId} setEditId={setfollowupId} data={details} /> */}
-      <LeadNoteModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} editId={noteId} setEditId={setNoteId} />
+      <LeadNoteModal from={'lead'} lead_id={details?.id} refresh={followRefresh} setRefresh={setFollowRefresh} handleDetailRefresh={handleRefresh} editId={noteId} setEditId={setNoteId} />
 
       <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
       <UnArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={unArchiveId} setID={setunArchiveId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
@@ -514,9 +517,9 @@ function LeadDetails() {
                                 return (
 
                                   ind == index && */}
-                                  {/* <h5 key={index}>{finalIndex / stages?.length * 100}%</h5> */}
-                                  <h5 >{details?.stage?.progress_percentage}%</h5>
-                                {/* )
+                            {/* <h5 key={index}>{finalIndex / stages?.length * 100}%</h5> */}
+                            <h5 >{details?.stage?.progress_percentage}%</h5>
+                            {/* )
                               })
                             } */}
 
@@ -552,31 +555,31 @@ function LeadDetails() {
                                 return (
 
                                   ind == index && */}
-                                  {/* // <h5 key={index}>{finalIndex / stages?.length * 100}%</h5> */}
-                                  <React.Fragment >
-                                    <CircularProgressbar
-                                      // value={finalIndex / stages?.length * 100}
-                                      value={details?.stage?.progress_percentage}
-                                      strokeWidth={5}
-                                      styles={buildStyles({
-                                        pathColor: 'url(#newGradient)',
-                                        trailColor: 'transparent',
-                                        // strokeLinecap: 'butt',
-                                        pathTransitionDuration: 0.5,
-                                        pathTransition: 'none',
-                                        // rotation: 0.75,  // Adjust this value to start the progress from the top
-                                      })}
-                                    />
-                                    <svg width="0" height="0">
-                                      <defs>
-                                        <linearGradient id="newGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                          <stop offset="0%" stopColor="#04FFFF" />
-                                          <stop offset="100%" stopColor="#0029FF" />
-                                        </linearGradient>
-                                      </defs>
-                                    </svg>
-                                  </React.Fragment>
-                                {/* )
+                            {/* // <h5 key={index}>{finalIndex / stages?.length * 100}%</h5> */}
+                            <React.Fragment >
+                              <CircularProgressbar
+                                // value={finalIndex / stages?.length * 100}
+                                value={details?.stage?.progress_percentage}
+                                strokeWidth={5}
+                                styles={buildStyles({
+                                  pathColor: 'url(#newGradient)',
+                                  trailColor: 'transparent',
+                                  // strokeLinecap: 'butt',
+                                  pathTransitionDuration: 0.5,
+                                  pathTransition: 'none',
+                                  // rotation: 0.75,  // Adjust this value to start the progress from the top
+                                })}
+                              />
+                              <svg width="0" height="0">
+                                <defs>
+                                  <linearGradient id="newGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stopColor="#04FFFF" />
+                                    <stop offset="100%" stopColor="#0029FF" />
+                                  </linearGradient>
+                                </defs>
+                              </svg>
+                            </React.Fragment>
+                            {/* )
                               })
                             } */}
 
@@ -668,9 +671,9 @@ function LeadDetails() {
                                 ind == index && */}
 
 
-                                <div  style={{ width: `${details?.stage?.progress_percentage}%` }} className='track-range'>
-                                </div>
-                              {/* )
+                          <div style={{ width: `${details?.stage?.progress_percentage}%` }} className='track-range'>
+                          </div>
+                          {/* )
                             })
                           } */}
                           {/* {

@@ -22,7 +22,7 @@ import { Skeleton } from '@mui/material';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import Image from 'next/image';
 
-export default function BasicSelect({ lead_id, from, app_id }) {
+export default function BasicSelect({ lead_id, from, app_id,refresh }) {
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [limit, setLimit] = useState(10)
@@ -55,7 +55,7 @@ export default function BasicSelect({ lead_id, from, app_id }) {
 
     useEffect(() => {
         getData()
-    }, [limit])
+    }, [limit,refresh])
 
 
     return (

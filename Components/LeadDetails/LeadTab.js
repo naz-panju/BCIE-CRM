@@ -104,7 +104,7 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
 
     {
       label: 'Timeline',
-      component: <LeadTimeline from='lead' lead_id={data?.id} />,
+      component: <LeadTimeline from='lead' lead_id={data?.id} refresh={refresh} />,
       icon: <AccessTimeIcon />
     },
     {

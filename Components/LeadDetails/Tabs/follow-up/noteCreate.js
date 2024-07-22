@@ -12,7 +12,7 @@ import DeleteIcon from '@/img/Delete.svg'
 import EditIcon from '@/img/Edit.svg'
 import Image from 'next/image';
 
-const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, app_id }) => {
+const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, app_id ,handleDetailRefresh}) => {
 
     const { register, handleSubmit, watch, setValue, reset } = useForm();
 
@@ -82,6 +82,9 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
                     toast.success(editID > 0 ? 'Note has been successfully updated.' : 'Note has been successfully added.')
                     setSubmitLoading(false)
                     fetchNotes()
+                    if(handleDetailRefresh){
+                        handleDetailRefresh()
+                    }
                     // if(refresh){
                     setRefresh(!refresh)
                     // }
