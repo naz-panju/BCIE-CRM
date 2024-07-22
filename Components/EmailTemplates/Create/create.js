@@ -134,6 +134,13 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         formData.append('body_footer', data?.body_footer)
         formData.append('default_cc', data?.default_cc)
 
+        if (isChecked) {
+            formData.append('is_private_template', 1)
+        } else {
+            formData.append('is_private_template', 0)
+        }
+
+
         if (file?.length > 0) {
             file?.map(obj => {
                 formData.append('attachments[]', obj)
@@ -199,6 +206,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         setValue('default_cc', '')
         setValue('body_footer', '')
         setcopied()
+        setIsChecked(false)
         setOpen(false)
     }
 
@@ -257,6 +265,11 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                     setIsSysytemTemplate(true)
                 }
 
+                if (data?.is_private_template == 1) {
+                    setIsChecked(true)
+                } else {
+                    setIsChecked(false)
+                }
                 setDataLoading(false)
             }
             setDataLoading(false)
@@ -583,7 +596,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         <Grid className='mb-5 forms-data flex items-center'>
 
                                                             {/* <Typography sx={{ fontWeight: '500' }}></Typography> */}
-                                                            <a className='form-text'>Is Public Template</a>
+                                                            <a className='form-text'>Is Private Template</a>
 
                                                             <Checkbox checked={isChecked} onChange={handleCheckboxChange} />
 

@@ -524,35 +524,43 @@ function DashboardIndex() {
     }
 
     useEffect(() => {
-        if (weeklyRange[0]) {
-            fetchWeeklyList()
-            fetchWeeklyStageList()
+        if(session?.data?.user?.role?.id !== 6){
+            if (weeklyRange[0]) {
+                fetchWeeklyList()
+                fetchWeeklyStageList()
+            }
         }
     }, [weeklyRange, officeId,counsellorId])
     useEffect(() => {
-        if (range[0]) {
-            fetchLeadCountry()
+        if(session?.data?.user?.role?.id !== 6){
+            if (range[0]) {
+                fetchLeadCountry()
+            }
         }
     }, [range,counsellorId,intakeId])
     useEffect(() => {
-        // console.log('loading....1');
-        if (range[0]) {
-            // console.log('loading....2');
-            // fetchLeadSource()
-            // fetchLeadCountry() called in seperatae useEffect due to no country
-            fetchLeadStage()
+        if(session?.data?.user?.role?.id !== 6){     
+            if (range[0]) {
+                // fetchLeadSource()
+                // fetchLeadCountry() called in seperatae useEffect due to no country
+                fetchLeadStage()
+            }
         }
     }, [range, officeId,counsellorId])
     useEffect(() => {
-        if (range[0]) {
-            // fetchCommunicationLog()
-            fetchPayments()
+        if(session?.data?.user?.role?.id !== 6){
+            if (range[0]) {
+                // fetchCommunicationLog()
+                fetchPayments()
+            }
         }
     }, [range, selectedCounsellor,counsellorId,intakeId])
     useEffect(() => {
-        if (range[0]) {
-            fetchCommunicationLog()
-            // fetchPayments()
+        if(session?.data?.user?.role?.id !== 6){     
+            if (range[0]) {
+                fetchCommunicationLog()
+                // fetchPayments()
+            }
         }
     }, [range, selectedCounsellor,counsellorId])
     useEffect(() => {
@@ -562,12 +570,16 @@ function DashboardIndex() {
         }
     }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor,counsellorId,intakeId])
     useEffect(() => {
-        if (weeklyApplicationRange[0]) {
-            fetchWeeklyApplication()
+        if(session?.data?.user?.role?.id !== 6){     
+            if (weeklyApplicationRange[0]) {
+                fetchWeeklyApplication()
+            }
         }
     }, [weeklyApplicationRange, selectedCountries, selectedUniversity,counsellorId])
     useEffect(() => {
-        fetchTargets()
+        if(session?.data?.user?.role?.id !== 6){
+            fetchTargets()
+        }
     }, [intakeId, selectedCounsellor, selectedManager,counsellorId])
 
 

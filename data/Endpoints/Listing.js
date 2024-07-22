@@ -1,6 +1,7 @@
 import { http } from '../config/http'
 
 export const ListingApi = {
+    leads: (data) => http.get(`listing/leads`,{ params: data }),
     country: (data) => http.get(`listing/countries`,{ params: data }),
     stages: (data) => http.get(`listing/stages`, { params: data }),
     substages: (data) => http.get(`listing/substages`, { params: data }),

@@ -61,9 +61,10 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
     ]
 
     const fetchLeads = (e) => {
-        return LeadApi.list({ keyword: e }).then(response => {
-            if (typeof response.data.data !== "undefined") {
-                return response.data.data;
+        return ListingApi.leads({ keyword: e }).then(response => {
+            // console.log(response?.data?.data?.data);
+            if (typeof response?.data?.data?.data !== "undefined") {
+                return response?.data?.data?.data;
             } else {
                 return [];
             }
@@ -119,11 +120,11 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
         // console.log(dataToSubmit);
 
         // if (lead_id) {
-            dataToSubmit['lead_id'] = lead_id || data?.users?.id
-            dataToSubmit['application_id'] = data?.application?.id || null
-            // if (from == 'app') {
-            //     dataToSubmit['application_id'] = app_id
-            // }
+        dataToSubmit['lead_id'] = lead_id || data?.users?.id
+        dataToSubmit['application_id'] = data?.application?.id || null
+        // if (from == 'app') {
+        //     dataToSubmit['application_id'] = app_id
+        // }
         // }
 
         let action;
@@ -351,11 +352,8 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                                         <a className='form-text'>Lead</a>
                                                         <Grid className='mb-5 forms-data  '>
                                                             <SelectX
-                                                                // placeholder='Assigned To'
                                                                 loadOptions={fetchLeads}
                                                                 control={control}
-                                                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
                                                                 name={'users'}
                                                                 defaultValue={watch('users')}
                                                             />
@@ -368,11 +366,8 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                                             <SelectX
                                                                 disabled={watch('users') ? false : true}
                                                                 key={appKey}
-                                                                // placeholder='Assigned To'
                                                                 loadOptions={fetchApplications}
                                                                 control={control}
-                                                                // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                                                // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
                                                                 name={'application'}
                                                                 defaultValue={watch('application')}
                                                             />

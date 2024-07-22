@@ -393,7 +393,6 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                     <div className='d-flex justify-between align-center'>
                                         <h2>{documentSelected?.title || documentSelected?.document_template?.name}</h2>
                                         {
-
                                             session?.data?.user?.role?.id != 6 &&
                                             (documentSelected?.status == 'Uploaded') &&
                                             <Edit onClick={() => handleEditDocument(documentSelected?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
@@ -406,9 +405,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                     <div className='d-flex justify-between align-center'>
                                         <div className='flex bh-lime-50 align-center'>
                                             <span style={{ fontSize: '13px', color: 'grey' }}><span style={{ fontWeight: 'bold' }}>Remarks:</span> {documentSelected?.note}</span>
-
                                         </div>
-
                                     </div>
                                 }
 
@@ -417,9 +414,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                     <div className='d-flex justify-between align-center'>
                                         <div className='flex bh-lime-50 align-center'>
                                             <span style={{ fontSize: '13px', color: red[300] }}><span style={{ fontWeight: 'bold' }}>Rejection Note:</span> {documentSelected?.reject_reason}</span>
-
                                         </div>
-
                                     </div>
                                 }
 
