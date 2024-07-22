@@ -43,8 +43,6 @@ export default function DocumentRejectPopup({ ID, setID, setLoading, title, load
         setchecked(event.target.checked)
     };
 
-    console.log(details);
-
     const onSubmit = () => {
         setLoading(true)
         let dataToSubmit = {

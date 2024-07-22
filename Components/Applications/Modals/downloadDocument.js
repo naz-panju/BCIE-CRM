@@ -131,7 +131,7 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
                         // give the zip file a name
                         saveAs(content, `${details?.lead?.name}_${details?.lead?.student_code}.zip`);
                     });
-                    // handleClose()
+                    handleClose()
                     setLoading(false);
                 })
                 .catch((error) => {

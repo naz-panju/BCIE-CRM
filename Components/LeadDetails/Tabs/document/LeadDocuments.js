@@ -6,7 +6,7 @@ import { LeadApi } from '@/data/Endpoints/Lead'
 import moment from 'moment'
 import LeadDocumentRequest from './request'
 import { CheckCircle, Edit, VisibilityOutlined, ZoomInOutlined } from '@mui/icons-material'
-import { blue } from '@mui/material/colors'
+import { blue, red } from '@mui/material/colors'
 import LeadDocumentDetailModal from './Modal'
 import DocumentConfirmPopup from './confirmPopup'
 import DocumentRejectPopup from './rejectPopup'
@@ -154,7 +154,6 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
     const [mandatoryDocuments, setmandatoryDocuments] = useState([])
     const mandatoryTemplate = () => {
         ListingApi.documentTemplate().then((response) => {
-            console.log(response?.data?.data);
             if (leadData?.lead_source?.id == 10) {
                 const carryoverDoc = response?.data?.data?.find(obj => obj?.id == 18)
                 setmandatoryDocuments([carryoverDoc])
@@ -412,7 +411,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                 {
                                     documentSelected && documentSelected?.reject_reason &&
                                     <div className='d-flex justify-between align-center'>
-                                        <div className='flex bh-lime-50 align-center'>
+                                        <div className='flex bh-lime-50 align-center mt-2'>
                                             <span style={{ fontSize: '13px', color: red[300] }}><span style={{ fontWeight: 'bold' }}>Rejection Note:</span> {documentSelected?.reject_reason}</span>
                                         </div>
                                     </div>

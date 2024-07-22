@@ -618,9 +618,10 @@ function LeadDetails() {
                         <div className='vari-right'>
                           {
                             session?.data?.user?.role?.id != 6 &&
+                            !details?.user && 
                             <a onClick={handleOpenStageModal}>Change Status</a>
                           }
-                        </div>
+                        </div> 
 
 
                       </div>

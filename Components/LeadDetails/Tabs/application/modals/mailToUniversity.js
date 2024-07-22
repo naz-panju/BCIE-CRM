@@ -26,6 +26,9 @@ import { ApplicationApi } from '@/data/Endpoints/Application';
 import DocumentSelectModal from './documentSelect';
 // import MyEditor from '@/Form/MyEditor';
 
+const CKEditorBox = dynamic(() => import("../../../../../Components/Editor/Editor"), {
+    ssr: false,
+});
 
 
 const MyEditor = dynamic(() => import("../../../../../Form/MyEditor"), {
@@ -281,6 +284,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
     const getDetails = () => {
         setmailLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
+            console.log(response);
             setappDetails(response?.data?.data)
 
             if (response?.data?.data?.university?.contacts?.length > 0) {
@@ -293,6 +297,8 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
 
                 setValue('default_cc', emails);
                 setafterMails(emails)
+                setmailLoading(false)
+            }else{
                 setmailLoading(false)
             }
             // if (response?.data?.data?.university?.contacts?.length > 0) {
@@ -442,7 +448,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                                         textBoxLoading ?
                                                             <Skeleton variant='rounded' width={'100%'} height={400} />
                                                             :
-                                                            <MyEditor key={editorKey} emoji={false} val={watch('body')}
+                                                            <CKEditorBox key={editorKey} emoji={false} val={watch('body')}
                                                                 onValueChange={e => setValue('body', e)} />
                                                     }
                                                     {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
@@ -459,7 +465,7 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
                                                         textBoxLoading ?
                                                             <Skeleton variant='rounded' width={'100%'} height={400} />
                                                             :
-                                                            <MyEditor key={editorKey} emoji={false} val={watch('body_footer')}
+                                                            <CKEditorBox key={editorKey} emoji={false} val={watch('body_footer')}
                                                                 onValueChange={e => setValue('body_footer', e)} />
                                                     }
                                                     {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}

@@ -450,7 +450,8 @@ function DashboardIndex() {
                 date_to: moment(weeklyApplicationRange[1]).format('YYYY-MM-DD'),
                 office: officeId,
                 country: selectedCountries?.id,
-                counselor: counsellorId
+                counselor: counsellorId,
+                intake: intakeId,
             })
             // console.log(response);
             setSubmitApplicationList(response?.data)
