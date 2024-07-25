@@ -3516,8 +3516,25 @@ a.not-found {
     /* Add some space between list items */
 }
 
+.ck-image-toolbar {
+    z-index: 100000; /* Change this value as needed */
+}
+.ck-content{
+    z-index: 10000 !important;
+}
+.MuiDrawer-modal {
+    z-index: 1 !important;
+}
 .no-clear .rs-input-group-addon {
     display: none;
+}
+
+.btn-svg-size svg{
+    width: 16px;
+}
+
+.application-btn-left{
+    text-align: left;
 }
 
 /* .css-1s5vo3j-MuiButtonBase-root-MuiButton-root.Mui-disabled{

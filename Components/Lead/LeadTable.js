@@ -575,9 +575,20 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const formatDate = (date) => {
     return date ? moment(date).format('DD-MM-YYYY') : ''; // Format the date to 'dd-MM-yyyy' format
   };
-
   const onSearch = () => {
-    setsearchRefresh(!searchRefresh)
+    if (page == 1) {
+      setsearchRefresh(!searchRefresh)
+    } else {
+      setPage(1)
+      if (withdraw) {
+        router.replace(`/withdrawn-leads?page=${1}`);
+      }
+      if (unassign) {
+        router.replace(`/un-assigned-leads?page=${1}`);
+      } else {
+        router.replace(`/lead?page=${1}`);
+      }
+    }
   }
   const handleClearSearch = (from) => {
     // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
@@ -599,7 +610,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setselectedAgency();
     setRange([null, null])
 
-    setsearchRefresh(!searchRefresh)
+    onSearch()
   }
 
   const customRanges = [

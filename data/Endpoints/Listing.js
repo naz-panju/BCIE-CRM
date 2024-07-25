@@ -31,6 +31,8 @@ export const ListingApi = {
     
     maxFileSize:(data) => http.get(`max-file-upload-size`, { params: data }),
 
+    students:(data) => http.get(`listing/students`, { params: data }),
+
 }
 
 

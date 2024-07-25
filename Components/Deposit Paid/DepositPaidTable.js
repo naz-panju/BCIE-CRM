@@ -639,8 +639,14 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
   const [searchRefresh, setsearchRefresh] = useState(false)
 
   const onSearch = () => {
-    setsearchRefresh(!searchRefresh)
+    if (page == 1) {
+      setsearchRefresh(!searchRefresh)
+    } else {
+      setPage(1)
+      router.replace(`/applications?page=${1}`);
+    }
   }
+  
   const handleClearSearch = (from) => {
 
     reset()
@@ -784,12 +790,12 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
 
   const [unId, setUniId] = useState()
   const handleUniId = (row, edit) => {
-      setDetails(row)
-      if (edit) {
-          setUniId(row?.id)
-      } else {
-          setUniId(0)
-      }
+    setDetails(row)
+    if (edit) {
+      setUniId(row?.id)
+    } else {
+      setUniId(0)
+    }
   }
 
   const [PortalId, setPortalId] = useState()

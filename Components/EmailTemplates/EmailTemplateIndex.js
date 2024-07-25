@@ -7,6 +7,7 @@ import CreateEmailTemplate from './Create/create';
 import TemplateTable from './TemplateTable';
 import { Grid } from '@mui/material';
 
+import dynamic from 'next/dynamic';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -91,8 +92,8 @@ export default function EmailTemplateIndex() {
           <div className='page-title-block-content justify-between'>
             <h1>Email Templates</h1>
             <Grid display={'flex'}>
-             
-                <Button className='add_lead_btn' sx={{ textTransform: 'none',height:30 }} onClick={handleCreateNew} variant='outlined'>Add</Button>
+
+              <Button className='add_lead_btn' sx={{ textTransform: 'none', height: 30 }} onClick={handleCreateNew} variant='outlined'>Add</Button>
 
             </Grid>
           </div>

@@ -641,7 +641,12 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
     const [searchRefresh, setsearchRefresh] = useState(false)
 
     const onSearch = () => {
-        setsearchRefresh(!searchRefresh)
+        if (page == 1) {
+            setsearchRefresh(!searchRefresh)
+        } else {
+            setPage(1)
+            router.replace(`/applications-submitted?page=${1}`);
+        }
     }
     const handleClearSearch = (from) => {
 
@@ -676,7 +681,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setValue('branch', '')
         setselectedBranch();
 
-        setsearchRefresh(!searchRefresh)
+        onSearch()
     }
 
     const fetchTable = () => {

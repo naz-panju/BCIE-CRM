@@ -639,7 +639,12 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
     const [searchRefresh, setsearchRefresh] = useState(false)
 
     const onSearch = () => {
-        setsearchRefresh(!searchRefresh)
+        if (page == 1) {
+            setsearchRefresh(!searchRefresh)
+        } else {
+            setPage(1)
+            router.replace(`/applications-unsubmitted?page=${1}`);
+        }
     }
     const handleClearSearch = (from) => {
 
@@ -673,7 +678,7 @@ export default function ApplicationUnsubmittedTable({ refresh, editId, setEditId
         setValue('branch', '')
         setselectedBranch();
 
-        setsearchRefresh(!searchRefresh)
+        onsearch()
     }
 
     const fetchTable = () => {

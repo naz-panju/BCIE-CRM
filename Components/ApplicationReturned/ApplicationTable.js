@@ -634,9 +634,13 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
     }
 
     const [searchRefresh, setsearchRefresh] = useState(false)
-
     const onSearch = () => {
-        setsearchRefresh(!searchRefresh)
+        if (page == 1) {
+            setsearchRefresh(!searchRefresh)
+        } else {
+            setPage(1)
+            router.replace(`/applications-returned?page=${1}`);
+        }
     }
     const handleClearSearch = (from) => {
 
@@ -670,7 +674,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
         setValue('branch', '')
         setselectedBranch();
 
-        setsearchRefresh(!searchRefresh)
+        onSearch()
     }
 
     const fetchTable = () => {

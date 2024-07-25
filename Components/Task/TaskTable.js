@@ -442,8 +442,12 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
   const [searchRefresh, setsearchRefresh] = useState(false)
 
   const onSearch = () => {
-    setsearchRefresh(!searchRefresh)
-  }
+    if (page == 1) {
+        setsearchRefresh(!searchRefresh)
+    } else {
+        setPage(1)
+    }
+}
   const handleClearSearch = (from) => {
     // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
     setValue('title', '')
@@ -461,7 +465,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
     setSelectedCreatedUser()
     setSelectedStatus()
 
-    setsearchRefresh(!searchRefresh)
+    onSearch()
   }
 
 

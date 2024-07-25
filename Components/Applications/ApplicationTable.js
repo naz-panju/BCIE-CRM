@@ -656,12 +656,16 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     const [searchRefresh, setsearchRefresh] = useState(false)
 
     const onSearch = () => {
-        setsearchRefresh(!searchRefresh)
+        if (page == 1) {
+            setsearchRefresh(!searchRefresh)
+        } else {
+            setPage(1)
+            router.replace(`/deposit-paid?page=${1}`);
+        }
     }
+
     const handleClearSearch = (from) => {
-
         // reset()
-
         setValue('country', '')
         setValue('university', '')
         setValue('subjectarea', '')
@@ -689,7 +693,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         setselectedStatus()
         setselectedDeposit()
 
-        setsearchRefresh(!searchRefresh)
+        onSearch()
     }
 
     const fetchTable = () => {
@@ -697,7 +701,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
         let params = {
             limit: limit,
-            deposit_not_paid:1,
+            deposit_not_paid: 1,
             // application statuses:unsubmitted,
             // status: 'Admission Completed',
             country_id: selectedCountry,

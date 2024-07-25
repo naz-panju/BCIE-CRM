@@ -537,8 +537,13 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
   };
 
   const onSearch = () => {
-    setsearchRefresh(!searchRefresh)
-  }
+    if (page == 1) {
+        setsearchRefresh(!searchRefresh)
+    } else {
+        setPage(1)
+        router.replace(`/archive?page=${1}`);
+    }
+}
   const handleClearSearch = (from) => {
     // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
     setValue('nameSearch', '')
@@ -559,7 +564,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     setselectedAgency();  
     setRange([null, null])
 
-    setsearchRefresh(!searchRefresh)
+    onSearch()
   }
 
   const customRanges = [

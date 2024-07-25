@@ -161,14 +161,14 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
     }
 
     const fetchStudents = (e) => {
-        return StudentApi.list({ keyword: e }).then(response => {
-            if (e) {
-                if (typeof response?.data?.data !== "undefined") {
-                    return response?.data?.data
-                } else {
-                    return [];
-                }
+        return ListingApi.students({ keyword: e }).then(response => {
+
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data?.data
+            } else {
+                return [];
             }
+
         })
     }
 

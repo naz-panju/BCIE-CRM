@@ -639,8 +639,14 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
     const [searchRefresh, setsearchRefresh] = useState(false)
 
     const onSearch = () => {
-        setsearchRefresh(!searchRefresh)
+        if (page == 1) {
+            setsearchRefresh(!searchRefresh)
+        } else {
+            setPage(1)
+            router.replace(`/alumni?page=${1}`);
+        }
     }
+
     const handleClearSearch = (from) => {
 
         reset()
@@ -672,7 +678,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
         setselectedStatus()
         setselectedDeposit()
 
-        setsearchRefresh(!searchRefresh)
+        onSearch()
     }
 
     const fetchTable = () => {
@@ -680,7 +686,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
 
         let params = {
             limit: limit,
-            deposit_not_paid:1,
+            // deposit_not_paid:1,
             // application statuses:unsubmitted,
             // status: 'Admission Completed',
             country_id: selectedCountry,

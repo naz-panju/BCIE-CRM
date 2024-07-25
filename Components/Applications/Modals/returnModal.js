@@ -35,6 +35,7 @@ export default function ReturnPopup({ ID, setID, setLoading, title, loading, det
 
     const handleClose = () => {
         setID();
+        setValue('note','')
         setOpen(false);
     };
 

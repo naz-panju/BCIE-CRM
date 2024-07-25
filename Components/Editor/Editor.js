@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 
+
 import {
 	ClassicEditor,
 	AccessibilityHelp,
@@ -144,7 +145,7 @@ export default function CKEditorBox(props) {
 				'|',
 				'accessibilityHelp'
 			],
-			shouldNotGroupWhenFull: false
+			// shouldNotGroupWhenFull: false
 		},
 		plugins: [
 			AccessibilityHelp,
@@ -165,6 +166,7 @@ export default function CKEditorBox(props) {
 			GeneralHtmlSupport,
 			Heading,
 			HtmlEmbed,
+			ImageInline,
 			ImageBlock,
 			ImageCaption,
 			ImageInline,
@@ -253,18 +255,12 @@ export default function CKEditorBox(props) {
 				}
 			]
 		},
-		image: {
-			toolbar: [
-				'toggleImageCaption',
-				'imageTextAlternative',
-				'|',
-				'imageStyle:inline',
-				'imageStyle:wrapText',
-				'imageStyle:breakText',
-				'|',
-				'resizeImage'
-			]
-		},
+		// image: {
+		// 	toolbar: ['imageTextAlternative', '|',  'imageStyle:alignLeft','imageStyle:alignCenter', 'imageStyle:alignRight'],
+		// 	styles: {
+		// 		options: [ 'alignLeft','alignCenter', 'alignRight']
+		// 	}
+		// },
 		link: {
 			addTargetToExternalLinks: true,
 			defaultProtocol: 'https://',
