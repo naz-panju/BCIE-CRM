@@ -504,13 +504,15 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             setValue('dob', data?.date_of_birth)
 
             setValue('source', data?.lead_source)
-            setValue('student', data?.referredStudent)
+           
             setValue('agency', data?.agency)
             setValue('referred_university', data?.referred_university)
             setValue('reference', data?.referrance_from)
 
             setValue('country_of_birth', data?.country_of_birth)
             setValue('country_of_residence', data?.country_of_residence)
+
+            setValue('student', data?.referredStudent)
 
             setValue('city', data?.city)
             setValue('address', data?.address)
