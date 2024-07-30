@@ -1561,3 +1561,12 @@ background-image: none !important;
 .delete-doc-popup .MuiDialog-paperScrollPaper{
   overflow-y: unset;
 }
+
+.ck-balloon-panel {
+  z-index: 1000 !important;
+}
+
+
+.ck-toolbar-image {
+  z-index: 1000 !important;
+}

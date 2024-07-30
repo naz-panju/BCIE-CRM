@@ -2498,11 +2498,11 @@ span.profile-db {
 }
 
 
-.blue-btn{
+.blue-btn {
     background-color: rgb(33, 150, 243) !important;
     color: white !important;
-  }
-  
+}
+
 
 .app_tab_cntr tbody tr {
     border-radius: 3px;
@@ -2647,11 +2647,12 @@ span.profile-db {
     margin-right: 5px;
 }
 
-.content-block.lead-table-cntr .filter_sec{
+.content-block.lead-table-cntr .filter_sec {
     display: none;
     transition: .25s;
 }
-.content-block.lead-table-cntr.active .filter_sec{
+
+.content-block.lead-table-cntr.active .filter_sec {
     display: block;
     transition: .25s;
 }
@@ -2997,7 +2998,7 @@ svg.MuiSvgIcon-root.dw-btn {
     margin-top: 0;
 }
 
- .react-tel-input .flag-dropdown {
+.react-tel-input .flag-dropdown {
     /* display: none; */
     background-color: #fff;
     border: 1px solid #fff;
@@ -3517,31 +3518,34 @@ a.not-found {
 }
 
 .ck-image-toolbar {
-    z-index: 100000; /* Change this value as needed */
+    z-index: 100000;
+    /* Change this value as needed */
 }
-.ck-content{
+
+.ck-content {
     z-index: 10000 !important;
 }
+
 .MuiDrawer-modal {
     z-index: 1 !important;
 }
+
 .no-clear .rs-input-group-addon {
     display: none;
 }
 
-.btn-svg-size svg{
+.btn-svg-size svg {
     width: 16px;
 }
 
-.application-btn-left{
+.application-btn-left {
     text-align: left;
 }
 
 .ck-balloon-panel {
     z-index: 1000 !important;
-  }
+}
 
 /* .css-1s5vo3j-MuiButtonBase-root-MuiButton-root.Mui-disabled{
     height: 35px;
 } */
-

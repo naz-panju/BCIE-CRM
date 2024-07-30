@@ -25,8 +25,7 @@ import Image from 'next/image'
 
 function Form({ data }) {
 
-    // console.log(data);
-
+    console.log(data);
 
     const myLoader = ({ src, width }) => {
         return `${src}?w=${width}`;
@@ -346,6 +345,10 @@ function Form({ data }) {
 
     }
 
+    const disableSpecificDateForDob = (date) => {
+        return moment(date).isAfter(moment().subtract(14, 'years'), 'day');
+    }
+
 
     const setTitleValue = () => {
         let getTitle = titles?.find((obj => obj?.name == currentTitle))
@@ -413,7 +416,7 @@ function Form({ data }) {
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <a className='form-text'>Date of Birth</a>
-                                    <DateInput placeholder='' control={control} name='dob' value={watch('dob')} />
+                                    <DateInput  shouldDisableDate={disableSpecificDateForDob} placeholder='' control={control} name='dob' value={watch('dob')} />
                                     {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
                                 </Grid>
                                 <Grid item xs={12} md={6}>

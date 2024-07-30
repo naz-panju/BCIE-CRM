@@ -275,7 +275,6 @@ function Form({  }) {
         LeadApi.publicAdd(dataToSubmit).then((response) => {
             // console.log(response);
             if (response?.data?.data) {
-
                 toast.success('Lead Has Been Successfully Created')
                 reset()
                 handleClear()
