@@ -476,7 +476,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
             // }
 
-            console.log(watch('alt_phone'));
             // console.log(`+${data?.phone_country_code}${data?.phone_number}`);
             setValue('name', data?.name)
             setValue('email', data?.email)
