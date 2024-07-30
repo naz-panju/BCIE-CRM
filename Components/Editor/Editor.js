@@ -255,12 +255,12 @@ export default function CKEditorBox(props) {
 				}
 			]
 		},
-		// image: {
-		// 	toolbar: ['imageTextAlternative', '|',  'imageStyle:alignLeft','imageStyle:alignCenter', 'imageStyle:alignRight'],
-		// 	styles: {
-		// 		options: [ 'alignLeft','alignCenter', 'alignRight']
-		// 	}
-		// },
+		image: {
+			toolbar: ['imageTextAlternative', '|',  'imageStyle:alignLeft','imageStyle:alignCenter', 'imageStyle:alignRight'],
+			styles: {
+				options: [ 'alignLeft','alignCenter', 'alignRight']
+			}
+		},
 		link: {
 			addTargetToExternalLinks: true,
 			defaultProtocol: 'https://',
