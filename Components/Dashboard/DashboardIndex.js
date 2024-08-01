@@ -317,7 +317,7 @@ function DashboardIndex() {
 
                 // office: officeId
             })
-            console.log(response);
+            // console.log(response);
             setLeadCountryList(response?.data)
             setLeadSourceListLoading(false)
         } catch (error) {

@@ -142,9 +142,9 @@ const Sidebar = () => {
             // },
             {
                 title: 'Email Templates',
-                icon: <svg class="task-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 17">
+                icon: <svg className="task-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 17">
                     <path d="M14.166 5.66659L8.49935 9.20825L2.83268 5.66659V4.24992L8.49935 7.79158L14.166 4.24992M14.166 2.83325H2.83268C2.04643 2.83325 1.41602 3.46367 1.41602 4.24992V12.7499C1.41602 13.1256 1.56527 13.486 1.83095 13.7517C2.09662 14.0173 2.45696 14.1666 2.83268 14.1666H14.166C14.5417 14.1666 14.9021 14.0173 15.1678 13.7517C15.4334 13.486 15.5827 13.1256 15.5827 12.7499V4.24992C15.5827 3.8742 15.4334 3.51386 15.1678 3.24818C14.9021 2.98251 14.5417 2.83325 14.166 2.83325Z" />
-                    <path d="M5.5 8.5l2 2 4-4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M5.5 8.5l2 2 4-4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>,
                 href: '/email-template'
             },

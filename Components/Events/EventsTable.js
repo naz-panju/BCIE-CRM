@@ -142,18 +142,18 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        <TableSortLabel
+                        {/* <TableSortLabel
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
-                        >
+                        > */}
                             {headCell.label}
-                            {orderBy === headCell.id ? (
+                            {/* {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                 </Box>
                             ) : null}
-                        </TableSortLabel>
+                        </TableSortLabel> */}
                     </TableCell>
                 ))}
             </TableRow>
@@ -398,6 +398,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
                                                             <TableCell
                                                                 onClick={() => handleDetailOpen(row?.id)}
                                                                 component="th"
+                                                            
                                                                 id={labelId}
                                                                 scope="row"
                                                                 padding="none"
@@ -405,10 +406,10 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
                                                             >
                                                                 {row.name}
                                                             </TableCell>
-                                                            <TableCell align="left">{row?.venue}</TableCell>
-                                                            <TableCell align="left">{row?.office?.name}</TableCell>
-                                                            <TableCell align="left">{row?.start_date && moment(row?.start_date).format('DD-MM-YYYY')}</TableCell>
-                                                            <TableCell align="left">{row?.end_date && moment(row?.end_date).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell align="left">{row?.venue || 'NA'}</TableCell>
+                                                            <TableCell align="left">{row?.office?.name || 'NA'}</TableCell>
+                                                            <TableCell align="left">{row?.start_date ? moment(row?.start_date).format('DD-MM-YYYY') : 'NA'}</TableCell>
+                                                            <TableCell align="left">{row?.end_date ? moment(row?.end_date).format('DD-MM-YYYY') :'NA'}</TableCell>
                                                             <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
 
                                                         </TableRow>

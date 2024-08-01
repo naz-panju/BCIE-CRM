@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const BarChartComponent = ({data,from}) => {
+const BarChartComponent = ({ data, from }) => {
     const chartRef = useRef(null);
 
     const getDayOfWeek = (dateString) => {
@@ -12,7 +12,7 @@ const BarChartComponent = ({data,from}) => {
 
     // Initialize an object to store the counts for each day of the week
 
-    
+
 
     useEffect(() => {
         const ctx = chartRef.current.getContext('2d');
@@ -22,7 +22,7 @@ const BarChartComponent = ({data,from}) => {
                 labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 datasets: [
                     {
-                        label:from=='app'?'Applications': 'Leads',
+                        label: from == 'app' ? 'Applications' : 'Leads',
                         data: data,
                         backgroundColor: '#29cc39', // Green color without alpha
                         borderWidth: 0, // Remove border
@@ -43,7 +43,9 @@ const BarChartComponent = ({data,from}) => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        // max: ,
+                        // Adjust the minimum value to add space between bars and top of the chart
+                        suggestedMin: 0, // This can be adjusted if you want more padding
+                        suggestedMax: Math.max(...data) * 1.1, // Optional: increases the max value to ensure space at the top
                         grid: {
                             display: false,
                         },

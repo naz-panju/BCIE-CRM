@@ -96,10 +96,10 @@ function EventRegistrations({ details }) {
                         <Tooltip title={`${currentURL}/forms/event/${details?.token}`}>  <Button sx={{ mr: 1 }} onClick={handleCopy} size='small' variant='outlined'>Event Registration Link </Button></Tooltip>
                         <IconButton size='small' ><a target='_blank' href={`${currentURL}/forms/event/${details?.token}`}><ArrowOutward /></a></IconButton>
                     </Grid>
-                    <Grid item container xs={6} sm={6} md={6}>
+                    {/* <Grid item container xs={6} sm={6} md={6}>
                         <Tooltip title={`${currentURL}/forms/lead`}>  <Button sx={{ mr: 1 }} onClick={handleLeadLinkCopy} size='small' variant='outlined'>Lead Registration Link </Button></Tooltip>
                         <IconButton size='small' ><a target='_blank' href={`${currentURL}/forms/lead`}><ArrowOutward /></a></IconButton>
-                    </Grid>
+                    </Grid> */}
                 </Grid >
 
                 <Grid p={2} container spacing={2} display={'flex'} justifyContent={'end'} >

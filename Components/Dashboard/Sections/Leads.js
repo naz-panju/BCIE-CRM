@@ -61,10 +61,10 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
     const counts = labels?.map(day => dayCounts[day]);
 
     const backgroundClasses = ['bg1', 'bg2', 'bg3', 'bg4'];
-    const spanClassess = ['Unverified', 'warm', 'cool', 'Hot'];
-    const spanClassessBg = ['UnverifiedBg', 'warmBg', 'coolBg', 'HotBg'];
+    const spanClassess = ['Unverified', 'cool', 'warm', 'Hot'];
+    const spanClassessBg = ['UnverifiedBg', 'coolBg', 'warmBg', 'HotBg'];
 
-    const icons = [Unverified, Hot, Cool, Warm];
+    const icons = [Unverified,Cool, Warm, Hot, ];
 
     const getIconSrc = (index) => {
         return icons[index] || DefaultIcon; // Provide a default icon in case index doesn't match

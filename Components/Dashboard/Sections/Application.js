@@ -127,9 +127,7 @@ function ApplicationSection({paymentLoading,payments, selectedAppCounsellor, sel
                                                         <div className='chart-info-title'>
                                                             <div className='total'><span>Total</span></div>
                                                         </div>
-                                                        {
-                                                            console.log(payments)
-                                                        }
+                                                      
                                                         <h2>{payments?.data?.deposit_paid_leads}</h2>
                                                         <h4>Total Deposit </h4>
 
