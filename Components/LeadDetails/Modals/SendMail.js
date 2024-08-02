@@ -301,248 +301,249 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
 
     return (
+        open &&
         <div>
             <DocumentSelectModal from={from || 'lead'} editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} />
 
-            <Drawer
-                anchor={anchor}
-                open={open}
-                onClose={handleClose}
-            >
-                <Grid width={750}>
-                    <Grid className='modal_title d-flex align-items-center  '>
+            {
 
-                        <a className='back_modal' onClick={handleClose}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
-                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </a>
-                        <a className='back_modal_head'> Send Mail </a>
+                <Grid Grid style={{ position: 'fixed', top: 0, right: 0, height: '100%', width: 750, background: 'white', zIndex: 100, borderLeft: '0.5px solid' }} display={'flex'}>
+                    <Grid width={750}>
+                        <Grid className='modal_title d-flex align-items-center  '>
+
+                            <a className='back_modal' onClick={handleClose}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                    <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </a>
+                            <a className='back_modal_head'> Send Mail </a>
 
 
 
 
-                    </Grid>
-                    <div className='form-data-cntr'>
+                        </Grid>
+                        <div style={{ overflow: 'auto', height: 'calc(100% - 77px)' }} className='form-data-cntr'>
 
-                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <form onSubmit={handleSubmit(onSubmit)}>
 
-                            {
-                                dataLoading ?
-                                    <LoadingEdit item={items} />
-                                    :
-                                    <div>
+                                {
+                                    dataLoading ?
+                                        <LoadingEdit item={items} />
+                                        :
+                                        <div >
 
-                                        <div className='application-input'>
-                                            <a className='form-text' > Select Template</a>
-                                            <Grid className='mb-5 forms-data'>
-                                                <AsyncSelect
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 9999 })
-                                                    }}
-                                                    // placeholder='Select Template'
-                                                    // isDisabled={!selectedUniversityId}
-                                                    // key={selectedUniversityId}
-                                                    name={'template'}
-                                                    defaultValue={watch('template')}
-                                                    // isClearable
-                                                    defaultOptions
-                                                    loadOptions={fetchTemplates}
-                                                    getOptionLabel={(e) => e.name}
-                                                    getOptionValue={(e) => e.id}
-                                                    onChange={handleTemplateChange}
-                                                />
-                                                {/* <SelectX
-                                                    // menuPlacement='top'
-                                                    loadOptions={fetchTemplates}
-                                                    control={control}
-                                                    name={'template'}
-                                                    defaultValue={watch('template')}
-                                                /> */}
-                                                {errors.template && <span className='form-validation'>{errors.template.message}</span>}
-                                            </Grid>
-                                        </div>
-
-
-
-                                        <div className='application-input'>
-                                            <a className='form-text' > To</a>
-                                            <Grid className='mb-5 forms-data  '>
-                                                <TextInput disabled control={control} name="to"
-                                                    value={watch('to')} />
-                                                {errors.to && <span className='form-validation'>{errors.to.message}</span>}
-                                            </Grid>
-                                        </div>
-
-
-
-                                        <div className='application-input'>
-                                            <a className='form-text' > CC</a>
-                                            <Grid className='mb-5 forms-data  '>
-                                                {
-                                                    textBoxLoading ?
-                                                        <Skeleton variant='rounded' width={'100%'} height={40} />
-                                                        :
-                                                        <TextInput control={control} name="default_cc"
-                                                            value={watch('default_cc')} />
-                                                }
-                                                {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
-                                            </Grid>
-                                        </div>
-
-
-                                        <div className='application-input'>
-                                            <a className='form-text' > Subject</a>
-
-                                            <Grid className='mb-5 forms-data  '>
-                                                {
-                                                    textBoxLoading ?
-                                                        <Skeleton variant='rounded' width={'100%'} height={40} />
-                                                        :
-                                                        <TextInput control={control} name="subject"
-                                                            value={watch('subject')} />
-                                                }
-                                                {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
-                                            </Grid>
-                                        </div>
-
-
-                                        <div className='application-input'>
-                                            <a className='form-text' > Body</a>
-                                            <Grid className='mb-5 forms-data  '>
-                                                {
-                                                    textBoxLoading ?
-                                                        <Skeleton variant='rounded' width={'100%'} height={400} />
-                                                        :
-                                                        <CKEditorBox key={editorKey} emoji={false} val={watch('body')}
-                                                            onValueChange={e => setValue('body', e)} />
-                                                }
-                                                {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
-                                            </Grid>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
-                                                <a className='form-text'>Body Footer</a>
-                                                <Grid className='mb-5 forms-data' >
+                                                <a className='form-text' > Select Template</a>
+                                                <Grid className='mb-5 forms-data'>
+                                                    <AsyncSelect
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 9999 })
+                                                        }}
+                                                        // placeholder='Select Template'
+                                                        // isDisabled={!selectedUniversityId}
+                                                        // key={selectedUniversityId}
+                                                        name={'template'}
+                                                        defaultValue={watch('template')}
+                                                        // isClearable
+                                                        defaultOptions
+                                                        loadOptions={fetchTemplates}
+                                                        getOptionLabel={(e) => e.name}
+                                                        getOptionValue={(e) => e.id}
+                                                        onChange={handleTemplateChange}
+                                                    />
+                                                    {/* <SelectX
+                                                        // menuPlacement='top'
+                                                        loadOptions={fetchTemplates}
+                                                        control={control}
+                                                        name={'template'}
+                                                        defaultValue={watch('template')}
+                                                    /> */}
+                                                    {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+                                                </Grid>
+                                            </div>
+
+
+
+                                            <div className='application-input'>
+                                                <a className='form-text' > To</a>
+                                                <Grid className='mb-5 forms-data  '>
+                                                    <TextInput disabled control={control} name="to"
+                                                        value={watch('to')} />
+                                                    {errors.to && <span className='form-validation'>{errors.to.message}</span>}
+                                                </Grid>
+                                            </div>
+
+
+
+                                            <div className='application-input'>
+                                                <a className='form-text' > CC</a>
+                                                <Grid className='mb-5 forms-data  '>
+                                                    {
+                                                        textBoxLoading ?
+                                                            <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                            :
+                                                            <TextInput control={control} name="default_cc"
+                                                                value={watch('default_cc')} />
+                                                    }
+                                                    {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
+                                                </Grid>
+                                            </div>
+
+
+                                            <div className='application-input'>
+                                                <a className='form-text' > Subject</a>
+
+                                                <Grid className='mb-5 forms-data  '>
+                                                    {
+                                                        textBoxLoading ?
+                                                            <Skeleton variant='rounded' width={'100%'} height={40} />
+                                                            :
+                                                            <TextInput control={control} name="subject"
+                                                                value={watch('subject')} />
+                                                    }
+                                                    {errors.subject && <span className='form-validation'>{errors.subject.message}</span>}
+                                                </Grid>
+                                            </div>
+
+
+                                            <div className='application-input'>
+                                                <a className='form-text' > Body</a>
+                                                <Grid className='mb-5 forms-data  '>
                                                     {
                                                         textBoxLoading ?
                                                             <Skeleton variant='rounded' width={'100%'} height={400} />
                                                             :
-                                                            <CKEditorBox key={editorKey} emoji={false} val={watch('body_footer')}
-                                                                onValueChange={e => setValue('body_footer', e)} />
+                                                            <CKEditorBox key={editorKey} emoji={false} val={watch('body')}
+                                                                onValueChange={e => setValue('body', e)} />
                                                     }
                                                     {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
-
                                                 </Grid>
                                             </div>
-                                        </div>
 
-                                        <div className='application-input'>
+                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                                <div className='application-input'>
+                                                    <a className='form-text'>Body Footer</a>
+                                                    <Grid className='mb-5 forms-data' >
+                                                        {
+                                                            textBoxLoading ?
+                                                                <Skeleton variant='rounded' width={'100%'} height={400} />
+                                                                :
+                                                                <CKEditorBox key={editorKey} emoji={false} val={watch('body_footer')}
+                                                                    onValueChange={e => setValue('body_footer', e)} />
+                                                        }
+                                                        {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
 
-                                            <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container >
-                                                <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
-                                                    {/* <label htmlFor="file-input"> */}
-                                                    {/* <input
+                                                    </Grid>
+                                                </div>
+                                            </div>
+
+                                            <div className='application-input'>
+
+                                                <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container >
+                                                    <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
+                                                        {/* <label htmlFor="file-input"> */}
+                                                        {/* <input
+                                                            type="file"
+                                                            id="file-input"
+                                                            style={{ display: 'none' }}
+                                                            onChange={handleFileChange}
+                                                        /> */}
+                                                        <Button onClick={handleDocumentSelectOpen} sx={{ textTransform: 'none', height: 30 }}
+                                                            variant='contained'
+                                                            className='bg-sky-800' size='small' component="span">
+                                                            Add Documents
+                                                        </Button>
+                                                        {/* </label> */}
+                                                        {/* <input
                                                         type="file"
-                                                        id="file-input"
+                                                        id="upload-button"
                                                         style={{ display: 'none' }}
-                                                        onChange={handleFileChange}
+                                                        onChange={handleFileUpload}
+                                                        key={fileInputKey}
                                                     /> */}
-                                                    <Button onClick={handleDocumentSelectOpen} sx={{ textTransform: 'none', height: 30 }}
-                                                        variant='contained'
-                                                        className='bg-sky-800' size='small' component="span">
-                                                        Add Documents
-                                                    </Button>
-                                                    {/* </label> */}
-                                                    {/* <input
-                                                    type="file"
-                                                    id="upload-button"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileUpload}
-                                                    key={fileInputKey}
-                                                /> */}
+                                                    </Grid>
+
+
+
+                                                    {/* {
+                                                    file &&
+                                                    <Grid display={'flex'} flexDirection={'column'} justifyContent={'space-between'} item pr={1} xs={8} md={8}>
+    
+                                                        {file?.map((obj, index) => (
+                                                            <Grid display={'flex'} xs={12} md={12} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item >
+                                                                <a style={{ color: 'grey', fontSize: '14px' }}>{obj?.name}</a>
+                                                                <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
+                                                                    <Delete fontSize='small' style={{ color: 'red' }} />
+                                                                </a>
+                                                            </Grid>
+                                                        ))}
+                                                    </Grid>
+                                                } */}
                                                 </Grid>
+                                            </div>
+                                            {
+                                                attachmentFiles?.length > 0 &&
+                                                <Grid>
+                                                    <span style={{ fontSize: '16px' }}>Student Documents</span>
+                                                    <List>
+                                                        {attachmentFiles?.map((document, index) => (
 
-
-
-                                                {/* {
-                                                file &&
-                                                <Grid display={'flex'} flexDirection={'column'} justifyContent={'space-between'} item pr={1} xs={8} md={8}>
-
-                                                    {file?.map((obj, index) => (
-                                                        <Grid display={'flex'} xs={12} md={12} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item >
-                                                            <a style={{ color: 'grey', fontSize: '14px' }}>{obj?.name}</a>
-                                                            <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
-                                                                <Delete fontSize='small' style={{ color: 'red' }} />
-                                                            </a>
-                                                        </Grid>
-                                                    ))}
+                                                            <ListItem key={index} className='list-item-mail ' >
+                                                                {/* <ListItemButton > */}
+                                                                <ListItemText sx={{ cursor: 'pointer' }} onClick={() => handleDocumentOpen(document?.file || document?.attachment)} primary={document?.title || document?.document_template?.name || trimUrlAndNumbers(document?.file_path)} />
+                                                                {/* </ListItemButton> */}
+                                                            </ListItem>
+                                                        ))}
+                                                    </List>
                                                 </Grid>
-                                            } */}
-                                            </Grid>
+                                            }
+
+                                            {
+                                                file?.length > 0 &&
+                                                <Grid mt={3}>
+                                                    <span style={{ fontSize: '16px' }}>Uploaded Files</span>
+                                                    <List >
+                                                        {file?.map((document, index) => (
+                                                            <ListItem key={index} className='list-item-mail '>
+                                                                <ListItemText primary={document?.name} />
+                                                            </ListItem>
+                                                        ))}
+                                                    </List>
+                                                </Grid>
+                                            }
+
+
+
+
                                         </div>
+                                }
+
+                                <Grid pb={3} display={'flex'} >
+                                    <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>
                                         {
-                                            attachmentFiles?.length > 0 &&
-                                            <Grid>
-                                                <span style={{ fontSize: '16px' }}>Student Documents</span>
-                                                <List>
-                                                    {attachmentFiles?.map((document, index) => (
-
-                                                        <ListItem key={index} className='list-item-mail ' >
-                                                            {/* <ListItemButton > */}
-                                                            <ListItemText sx={{ cursor: 'pointer' }} onClick={() => handleDocumentOpen(document?.file || document?.attachment)} primary={document?.title || document?.document_template?.name || trimUrlAndNumbers(document?.file_path)} />
-                                                            {/* </ListItemButton> */}
-                                                        </ListItem>
-                                                    ))}
-                                                </List>
-                                            </Grid>
+                                            loading ?
+                                                <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                                :
+                                                <>
+                                                    Send  <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                        <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                </>
                                         }
+                                    </LoadingButton>
 
-                                        {
-                                            file?.length > 0 &&
-                                            <Grid mt={3}>
-                                                <span style={{ fontSize: '16px' }}>Uploaded Files</span>
-                                                <List >
-                                                    {file?.map((document, index) => (
-                                                        <ListItem key={index} className='list-item-mail '>
-                                                            <ListItemText primary={document?.name} />
-                                                        </ListItem>
-                                                    ))}
-                                                </List>
-                                            </Grid>
-                                        }
+                                    <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                        <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg> </Button>
 
+                                </Grid>
 
-
-
-                                    </div>
-                            }
-
-                            <Grid p={1} pb={3} display={'flex'} >
-                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>
-                                    {
-                                        loading ?
-                                            <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
-                                            :
-                                            <>
-                                                Send  <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
-                                                    <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                </svg>
-                                            </>
-                                    }
-                                </LoadingButton>
-
-                                <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg> </Button>
-
-                            </Grid>
-
-                        </form>
-                    </div>
+                            </form>
+                        </div>
+                    </Grid>
                 </Grid>
-            </Drawer>
+            }
+
         </div >
     );
 }

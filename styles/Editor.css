@@ -3542,9 +3542,15 @@ a.not-found {
     text-align: left;
 }
 
-.ck-balloon-panel {
+/* .ck-balloon-panel {
     z-index: 1000 !important;
+} */
+
+.ck-balloon-panel_with-arrow.ck-balloon-panel_visible .ck.ck-balloon-rotator{
+    background-color: blue !important;
+    /* z-index: 1000 !important; */
 }
+
 
 /* .css-1s5vo3j-MuiButtonBase-root-MuiButton-root.Mui-disabled{
     height: 35px;

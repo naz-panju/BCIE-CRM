@@ -169,7 +169,7 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
             <div className='total_sec d-flex flex items-center justify-between pb-3'>
               Targets
 
-              {
+              {/* {
                 session?.data?.user?.role?.id == 3 &&
                 <div className='intake_dropdown'>
                   <AsyncSelect
@@ -185,8 +185,8 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
                     onChange={handleManagerSelect}
                   />
                 </div>
-              }
-              {
+              } */}
+              {/* {
                 session?.data?.user?.role?.id == 4 &&
                 <div className='intake_dropdown'>
                   <AsyncSelect
@@ -202,7 +202,7 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
                     onChange={handleCounsellorSelect}
                   />
                 </div>
-              }
+              } */}
             </div>
             {
               targetLoading ?

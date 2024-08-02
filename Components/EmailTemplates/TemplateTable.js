@@ -98,7 +98,7 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: '',
-        noSort:false
+        noSort: false
     },
 ];
 
@@ -138,8 +138,8 @@ function EnhancedTableHead(props) {
                                 direction={orderBy === headCell.id ? order : 'asc'}
                                 onClick={createSortHandler(headCell.id)}
                             > */}
-                                {headCell.label}
-                                {/* {orderBy === headCell.id ? (
+                        {headCell.label}
+                        {/* {orderBy === headCell.id ? (
                                     <Box component="span" sx={visuallyHidden}>
                                         {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                     </Box>
@@ -311,9 +311,10 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
     );
 
     const handleDetailOpen = (id) => {
-        setDetailId(id)
+        if (!editId) {
+            setDetailId(id)
+        }
     }
-
 
     const fetchTable = () => {
         setLoading(true)

@@ -314,6 +314,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         const handleClickOutside = (event) => {
             if (templateDataRef.current && !templateDataRef.current.contains(event.target)) {
                 // console.log('heer');
+                // handleClose()   
             } else {
                 setIsFocused(false);
             }
@@ -340,20 +341,23 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
 
 
     return (
-        <div style={{ overflow: 'hidden' }}>
+        open &&
+        <div ref={templateDataRef} >
 
             <ConfirmPopup loading={confirmLoading} ID={confirmId} setID={setconfirmId} clickFunc={handleDeleteFiles} title={`Do you want to Delete this Attachment?`} />
 
 
-            <Drawer
+            {/* <Drawer
                 anchor={anchor}
                 open={open}
                 onClose={handleClose}
-            >
-                <Grid display={'flex'}>
+            > */}
+            {
+
+                <Grid style={{ overflow: 'hidden', position: 'fixed', top: 0, right: 0, height: '100%', width: toggleTable ? 1250 : 750, background: 'white', zIndex: 100, borderLeft: '0.5px solid' }} display={'flex'}>
                     {
                         toggleTable &&
-                        <Grid width={500} ref={templateDataRef}>
+                        <Grid width={500} >
                             <TemplateData handleToggleTable={handleToggleTable} setValue={setcopied} isFocused={isFocused} setSubject={setSubject} />
                         </Grid>
                     }
@@ -629,7 +633,9 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                         </div>
                     </Grid>
                 </Grid>
-            </Drawer>
+            }
+
+            {/* </Drawer> */}
         </div>
     );
 }

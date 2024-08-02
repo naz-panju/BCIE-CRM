@@ -17,6 +17,7 @@ import toast from 'react-hot-toast';
 import TextInput from '@/Form/TextInput';
 import AsyncSelect from "react-select/async";
 import DynamicChip from '@/utils/DynamicChip';
+import { useSession } from 'next-auth/react';
 
 const style = {
     position: 'absolute',
@@ -51,6 +52,8 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
     const [selectedoption, setseletctedoption] = useState()
 
     const anchor = 'right'; // Set anchor to 'right'
+
+    const session = useSession()
 
 
     const handleDrawerClose = (event) => {
@@ -89,7 +92,12 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
         return ListingApi.users({ keyword: e, office_id: branchId, role_id: 5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 // console.log(response?.data?.data);
-                return response?.data?.data;
+                if (session?.data?.user?.role?.id == 5) {
+                    const returnCounsellor = response?.data?.data?.find((couns => couns?.id == session?.data?.user?.id))
+                    return [returnCounsellor]
+                } else {
+                    return response?.data?.data;
+                }
             } else {
                 return [];
             }

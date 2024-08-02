@@ -61,13 +61,24 @@ function DashboardIndex() {
     }
 
     const fetchCounsellor = (e) => {
-        return ListingApi.counsellors({ keyword: e }).then(response => {
-            if (typeof response.data.data !== "undefined") {
-                return response.data.data;
-            } else {
-                return [];
-            }
-        })
+        if (session?.data?.user?.role?.id == 3) {
+            return ListingApi.users({ keyword: e, role_id: 5, manager_id: selectedMangeId, office_id: officeId }).then(response => {
+                if (typeof response.data.data !== "undefined") {
+                    return response.data.data;
+                } else {
+                    return [];
+                }
+            })
+        } else if (session?.data?.user?.role?.id == 4) {
+            return ListingApi.counsellors({ keyword: e, office_id:officeId, officeIdrole_id: 5 }).then(response => {
+                if (typeof response.data.data !== "undefined") {
+                    return response.data.data;
+                } else {
+                    return [];
+                }
+            })
+        }
+
     }
 
 
@@ -152,14 +163,21 @@ function DashboardIndex() {
 
 
     const [selectedManager, setSelectedManager] = useState();
+    const [selectedMangeId, setselectedMangeId] = useState()
     const handleManagerSelect = (data) => {
-        setSelectedManager(data)
+        setselectedMangeId(data?.id || null)
+        setSelectedManager(data || null)
+
+        // if(!data){ 
+        setValue('counsellor', '')
+        setcounsellorId()
+        // }
     }
     const fetchManagers = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 4 }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 4, office_id: officeId }).then(response => {
             if (typeof response.data.data !== "undefined") {
 
-                setSelectedManager(response?.data?.data[0])
+                // setSelectedManager(response?.data?.data[0])
                 return response.data.data;
             } else {
                 return [];
@@ -170,9 +188,16 @@ function DashboardIndex() {
 
     const [officeId, setOfficeId] = useState();
     const handleOfficeChange = (data) => {
-
         setValue('office', data || '')
         setOfficeId(data?.id)
+
+        // if(!data){
+        setselectedMangeId()
+        setSelectedManager()
+        setValue('counsellor', '')
+        setcounsellorId()
+        // }
+
     }
 
     const [counsellorId, setcounsellorId] = useState()
@@ -249,7 +274,8 @@ function DashboardIndex() {
                 week_starts_from: moment(weeklyRange[0]).format('YYYY-MM-DD'),
                 week_ends_on: moment(weeklyRange[1]).format('YYYY-MM-DD'),
                 office: officeId,
-                counselor: counsellorId
+                counselor: counsellorId,
+                manager: selectedMangeId
             })
             setWeeklyList(response?.data)
             setWeeklyLoading(false)
@@ -269,7 +295,8 @@ function DashboardIndex() {
                 week_starts_from: moment(weeklyRange[0]).format('YYYY-MM-DD'),
                 week_ends_on: moment(weeklyRange[1]).format('YYYY-MM-DD'),
                 office: officeId,
-                counselor: counsellorId
+                counselor: counsellorId,
+                manager: selectedMangeId
             })
             // console.log(response);
             setWeeklyStageList(response?.data)
@@ -291,7 +318,8 @@ function DashboardIndex() {
                 date_from: moment(range[0]).format('YYYY-MM-DD'),
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
-                counselor: counsellorId
+                counselor: counsellorId,
+                manager: selectedMangeId
             })
             // console.log(response);
             setLeadSourceList(response?.data)
@@ -314,6 +342,7 @@ function DashboardIndex() {
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
                 counselor: counsellorId,
                 intake: intakeId,
+                manager: selectedMangeId
 
                 // office: officeId
             })
@@ -337,7 +366,8 @@ function DashboardIndex() {
                 date_from: moment(range[0]).format('YYYY-MM-DD'),
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
-                counselor: counsellorId
+                counselor: counsellorId,
+                manager: selectedMangeId
             })
             // console.log(response);
             setLeadStage(response?.data)
@@ -359,7 +389,8 @@ function DashboardIndex() {
                 date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
                 // counselor: selectedCounsellor?.id
-                counselor: counsellorId
+                counselor: counsellorId,
+                manager: selectedMangeId
             })
             // console.log(response);
             setCommunicationLog(response?.data)
@@ -382,6 +413,7 @@ function DashboardIndex() {
                 office: officeId,
                 counselor: selectedCounsellor?.id,
                 intake: intakeId,
+                manager: selectedMangeId
             })
             // console.log(response);
             setPayments(response?.data)
@@ -405,6 +437,7 @@ function DashboardIndex() {
                 country: selectedCountries?.id,
                 // counselor: selectedAppCounsellor?.id,
                 counselor: counsellorId,
+                manager: selectedMangeId,
                 app_coordinator: selectedAppCoordinators?.id,
                 intake: intakeId,
             })
@@ -428,7 +461,8 @@ function DashboardIndex() {
                 week_ends_on: moment(weeklyApplicationRange[1]).format('YYYY-MM-DD'),
                 country: selectedCountries?.id,
                 university: selectedUniversity?.id,
-                counselor: counsellorId
+                counselor: counsellorId,
+                manager: selectedMangeId
             })
             // console.log(response);
             setWeeklyApplicationList(response?.data)
@@ -451,6 +485,7 @@ function DashboardIndex() {
                 office: officeId,
                 country: selectedCountries?.id,
                 counselor: counsellorId,
+                manager: selectedMangeId,
                 intake: intakeId,
             })
             // console.log(response);
@@ -468,120 +503,132 @@ function DashboardIndex() {
         let params = {
             type: 'targets',
             intake: intakeId,
-            counselor: counsellorId
+            counselor: counsellorId,
+            manager: selectedMangeId
         }
 
-        if (session?.data?.user?.role?.id == 3) {
-            if (selectedManager) {
-                try {
-                    params['manager'] = selectedManager?.id
-                    const response = await DashboardApi.list(params)
-                    // console.log(response);
-                    setTargets(response?.data)
-                    setTargetLoading(false)
-                } catch (error) {
-                    console.log(error);
-                    setTargetLoading(false)
-                }
-            }
+        try {
+            const response = await DashboardApi.list(params)
+            console.log(response);
+            setTargets(response?.data)
+            setTargetLoading(false)
+        } catch (error) {
+            console.log(error);
+            setTargetLoading(false)
         }
 
-        if (session?.data?.user?.role?.id == 4) {
-            if (selectedCounsellor) {
-                // console.log(selectedCounsellor);
-                try {
-                    if (selectedCounsellor?.name == 'All') {
-                        params['manager'] = selectedCounsellor?.id
-                    } else {
-                        params['counselor'] = selectedCounsellor?.id
-                    }
-                    const response = await DashboardApi.list(params)
-                    // console.log(response);
-                    setTargets(response?.data)
-                    setTargetLoading(false)
-                } catch (error) {
-                    console.log(error);
-                    setTargetLoading(false)
-                }
-            }
-        }
+        // if (session?.data?.user?.role?.id == 3) {
+        //     if (selectedManager) {
+        //         try {
+        //             params['manager'] = selectedManager?.id
+        //             const response = await DashboardApi.list(params)
+        //             console.log(response);
+        //             setTargets(response?.data)
+        //             setTargetLoading(false)
+        //         } catch (error) {
+        //             console.log(error);
+        //             setTargetLoading(false)
+        //         }
+        //     }
+        // }
 
-        if (session?.data?.user?.role?.id == 5) {
-            // if (selectedCounsellor) {
-            // console.log(selectedCounsellor);
-            try {
-                params['counselor'] = session?.data?.user?.id
-                const response = await DashboardApi.list(params)
-                // console.log(response);
-                setTargets(response?.data)
-                setTargetLoading(false)
-            } catch (error) {
-                console.log(error);
-                setTargetLoading(false)
-            }
-            // }
-        }
+        // if (session?.data?.user?.role?.id == 4) {
+        //     if (selectedCounsellor) {
+        //         // console.log(selectedCounsellor);
+        //         try {
+        //             if (selectedCounsellor?.name == 'All') {
+        //                 params['manager'] = selectedCounsellor?.id
+        //             } else {
+        //                 params['counselor'] = selectedCounsellor?.id
+        //             }
+        //             const response = await DashboardApi.list(params)
+        //             // console.log(response);
+        //             setTargets(response?.data)
+        //             setTargetLoading(false)
+        //         } catch (error) {
+        //             console.log(error);
+        //             setTargetLoading(false)
+        //         }
+        //     }
+        // }
+
+        // if (session?.data?.user?.role?.id == 5) {
+        //     // if (selectedCounsellor) {
+        //     // console.log(selectedCounsellor);
+        //     try {
+        //         params['counselor'] = session?.data?.user?.id
+        //         const response = await DashboardApi.list(params)
+        //         // console.log(response);
+        //         setTargets(response?.data)
+        //         setTargetLoading(false)
+        //     } catch (error) {
+        //         console.log(error);
+        //         setTargetLoading(false)
+        //     }
+        //     // }
+        // }
 
     }
 
     useEffect(() => {
-        if(session?.data?.user?.role?.id !== 6){
+        if (session?.data?.user?.role?.id !== 6) {
             if (weeklyRange[0]) {
                 fetchWeeklyList()
                 fetchWeeklyStageList()
             }
         }
-    }, [weeklyRange, officeId,counsellorId])
+    }, [weeklyRange, officeId, counsellorId, selectedMangeId])
     useEffect(() => {
-        if(session?.data?.user?.role?.id !== 6){
+        if (session?.data?.user?.role?.id !== 6) {
             if (range[0]) {
                 fetchLeadCountry()
             }
         }
-    }, [range,counsellorId,intakeId])
+    }, [range, counsellorId, intakeId, selectedMangeId])
     useEffect(() => {
-        if(session?.data?.user?.role?.id !== 6){     
+        if (session?.data?.user?.role?.id !== 6) {
             if (range[0]) {
                 // fetchLeadSource()
                 // fetchLeadCountry() called in seperatae useEffect due to no country
                 fetchLeadStage()
             }
         }
-    }, [range, officeId,counsellorId])
+    }, [range, officeId, counsellorId, selectedMangeId])
     useEffect(() => {
-        if(session?.data?.user?.role?.id !== 6){
+        if (session?.data?.user?.role?.id !== 6) {
             if (range[0]) {
                 // fetchCommunicationLog()
                 fetchPayments()
             }
         }
-    }, [range, selectedCounsellor,counsellorId,intakeId])
+    }, [range, selectedCounsellor, counsellorId, intakeId, selectedMangeId])
     useEffect(() => {
-        if(session?.data?.user?.role?.id !== 6){     
+        if (session?.data?.user?.role?.id !== 6) {
             if (range[0]) {
                 fetchCommunicationLog()
                 // fetchPayments()
             }
         }
-    }, [range, selectedCounsellor,counsellorId])
+    }, [range, selectedCounsellor, counsellorId, selectedMangeId])
     useEffect(() => {
         if (range[0]) {
             fetchApplicationStages()
             fetchsubmitApplication()
         }
-    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor,counsellorId,intakeId])
+    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor, counsellorId, intakeId, selectedMangeId])
     useEffect(() => {
-        if(session?.data?.user?.role?.id !== 6){     
+        if (session?.data?.user?.role?.id !== 6) {
             if (weeklyApplicationRange[0]) {
                 fetchWeeklyApplication()
             }
         }
-    }, [weeklyApplicationRange, selectedCountries, selectedUniversity,counsellorId])
+    }, [weeklyApplicationRange, selectedCountries, selectedUniversity, counsellorId, selectedMangeId])
     useEffect(() => {
-        if(session?.data?.user?.role?.id !== 6){
-            fetchTargets()
+        if (session?.data?.user?.role?.id !== 6) {
+            if (counsellorId || selectedMangeId || intakeId || selectedManager || selectedCounsellor)
+                fetchTargets()
         }
-    }, [intakeId, selectedCounsellor, selectedManager,counsellorId])
+    }, [intakeId, selectedCounsellor, selectedManager, counsellorId, selectedMangeId])
 
 
     const handleClean = (event) => {
@@ -630,12 +677,36 @@ function DashboardIndex() {
                             </Grid>
 
                             {
-                                session?.data?.user?.role?.id !== 5 &&
+                                session?.data?.user?.role?.id == 3 &&
                                 <Grid mr={2} sx={{ width: 200 }} className='intake_dropdown'>
                                     <AsyncSelect
+                                        isDisabled={!officeId}
+                                        key={officeId}
+                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
+                                        defaultOptions
+                                        name='manager'
+                                        isClearable
+                                        value={selectedManager}
+                                        defaultValue={selectedManager}
+                                        loadOptions={fetchManagers}
+                                        getOptionLabel={(e) => e.name}
+                                        getOptionValue={(e) => e.id}
+                                        placeholder={<div>Manager</div>}
+                                        onChange={handleManagerSelect}
+                                    />
+                                </Grid>
+                            }
+
+                            {
+                                session?.data?.user?.role?.id !== 5 && session?.data?.user?.role?.id !== 6 &&
+                                <Grid mr={2} sx={{ width: 200 }} className='intake_dropdown'>
+                                    <AsyncSelect
+                                        isDisabled={!selectedManager}
+                                        key={selectedManager}
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
                                         placeholder='Counsellor'
                                         name={'counsellor'}
+                                        value={watch('counsellor')}
                                         defaultValue={watch('counsellor')}
                                         isClearable
                                         defaultOptions
@@ -646,6 +717,7 @@ function DashboardIndex() {
                                     />
                                 </Grid>
                             }
+
 
                             {/* <Grid sx={{ width: 230 }} className='intake_dropdown'>
                                 <DateRangePicker
@@ -676,7 +748,7 @@ function DashboardIndex() {
                         </div>
                     }
 
-                   
+
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='comm_sec'>
