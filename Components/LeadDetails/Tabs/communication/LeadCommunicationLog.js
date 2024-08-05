@@ -11,6 +11,7 @@ import PhoneCallModal from './Modals/SummaryModal';
 import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 import SendMail from '../../Modals/SendMail';
 import { useSession } from 'next-auth/react';
+import SendWhatsApp from '../../Modals/SendWhatsapp';
 
 
 export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallRefresh, setphoneCallRefresh, leadData,setDetailRefresh }) {
@@ -183,6 +184,13 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         }
     }
 
+    const [whatsappId, setwhatsappId] = useState()
+    const handleOpenWhatsappModal = () => {
+        if (lead_id) {
+            setwhatsappId(lead_id)
+        }
+    }
+
     const handleMailRefresh = () => {
         setDetailRefresh(!refresh)
         getSummary()
@@ -199,6 +207,13 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         getCallSummary()
         fetchCallList()
         setActiveTab(2)
+    }
+
+    const handleWhatsappRefresh = () => {
+        setDetailRefresh(!refresh)
+        getCallSummary()
+        fetchWhatsappList()
+        setActiveTab(1)
     }
 
     useEffect(() => {
@@ -225,6 +240,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         <>
             <PhoneCallModal lead_id={lead_id} editId={phonecallId} setEditId={setphonecallId} handleRefresh={handlePhoneRefresh} />
             <SendMail from={'lead'} details={leadData} lead_id={lead_id} editId={mailId} setEditId={setMailId} refresh={refresh} setRefresh={handleMailRefresh} />
+            <SendWhatsApp details={leadData} lead_id={lead_id} editId={whatsappId} setEditId={setwhatsappId} refresh={refresh} setRefresh={handleWhatsappRefresh} from={'lead'} />
 
             <div className='lead-tabpanel-content-block timeline'>
                 {/* <div className='lead-tabpanel-content-block-title'>
@@ -343,7 +359,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                             </div>
                             {
                                 session?.data?.user?.role?.id != 6 &&
-                                <Button variant='outlined' sx={{ mt: 2, mb: -2, textTransform: 'none' }}>Send Whatsapp</Button>
+                                <Button onClick={handleOpenWhatsappModal} variant='outlined' sx={{ mt: 2, mb: -2, textTransform: 'none' }}>Send Whatsapp</Button>
                             }
                         </div>
 

@@ -143,9 +143,9 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
         }
 
 
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0] + ': ' + pair[1]);
-        // }
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
         // if (attachmentFiles?.length > 0) {
         //     attachmentFiles?.map(obj => {
         //         // console.log(obj?.file_path);
@@ -163,14 +163,14 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
 
         let action;
 
-        if (editId > 0) {
-            // dataToSubmit['id'] = editId
-            // action = TaskApi.update(dataToSubmit)
-        } else {
-            action = LeadApi.sendWhatsapp(formData)
-        }
+        // if (editId > 0) {
+        //     // dataToSubmit['id'] = editId
+        //     action = TaskApi.update(dataToSubmit)
+        // } else {
+        //     action = LeadApi.sendWhatsapp(formData)
+        // }
 
-        action.then((response) => {
+        LeadApi.sendWhatsapp(formData).then((response) => {
             // console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success('Whatsapp Message Sent Successfully');
@@ -216,7 +216,6 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
             setOpen(false);
         }
     };
-
 
     const handleTemplateChange = (data) => {
         // console.log(data);
@@ -274,17 +273,18 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                 open={open}
                 onClose={handleClose}
             >
-                <Grid width={750}>
-                    <Grid p={1} display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
-                        <a style={{ fontWeight: 500, fontSize: '19px' }}>Send Whatsapp Message</a>
-                        <IconButton
-                            onClick={handleClose}
-                        >
-                            <Close />
-                        </IconButton>
+                <Grid width={650}>
+                    <Grid className='modal_title d-flex align-items-center  '>
+
+                        <a className='back_modal' onClick={handleClose}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </a>
+                        <a className='back_modal_head'> Send Whatsapp Message </a>
+
                     </Grid>
-                    <hr />
-                    <div>
+                    <div className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -294,88 +294,84 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                                     :
                                     <>
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={3} md={3}>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
                                                 <a className='form-text'>Select Template</a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={9} md={9}>
-                                                <AsyncSelect
-                                                    // isDisabled={!selectedUniversityId}
-                                                    // key={selectedUniversityId}
-                                                    name={'template'}
-                                                    defaultValue={watch('template')}
-                                                    // isClearable
-                                                    defaultOptions
-                                                    loadOptions={fetchTemplates}
-                                                    getOptionLabel={(e) => e.template_name}
-                                                    getOptionValue={(e) => e.id}
-                                                    onChange={handleTemplateChange}
-                                                    styles={{
-                                                        menu: provided => ({ ...provided, zIndex: 9999 })
-                                                    }}
-                                                />
-                                                {/* <SelectX
-                                                    // menuPlacement='top'
-                                                    loadOptions={fetchTemplates}
-                                                    control={control}
-                                                    name={'template'}
-                                                    defaultValue={watch('template')}
-                                                /> */}
-                                                {errors.template && <span className='form-validation'>{errors.template.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                                <Grid className='mb-5 forms-data'>
+                                                    <AsyncSelect
+                                                        // isDisabled={!selectedUniversityId}
+                                                        // key={selectedUniversityId}
+                                                        name={'template'}
+                                                        defaultValue={watch('template')}
+                                                        // isClearable
+                                                        defaultOptions
+                                                        loadOptions={fetchTemplates}
+                                                        getOptionLabel={(e) => e.title}
+                                                        getOptionValue={(e) => e.id}
+                                                        onChange={handleTemplateChange}
+                                                        styles={{
+                                                            menu: provided => ({ ...provided, zIndex: 9999 })
+                                                        }}
+                                                    />
+                                                    {errors.template && <span className='form-validation'>{errors.template.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid p={1} container >
-                                            <Grid item pr={1} xs={3} md={3}>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
                                                 <a className='form-text'>Message To</a>
-                                            </Grid>
-                                            <Grid item pr={1} xs={9} md={9}>
-                                                <PhoneInput
-                                                    {...register('whatsapp')}
+                                                <Grid className='mb-5 forms-data'>
+                                                    <PhoneInput
+                                                        {...register('whatsapp')}
 
-                                                    international
-                                                    // autoFormat
-                                                    disabled
-                                                    placeholder="Enter your number"
-                                                    country="in"
-                                                    value={watch('whatsapp')}
-                                                    // onChange={handleWhatsAppNumber}
-                                                    inputprops={{
-                                                        autoFocus: true,
-                                                        autoComplete: 'off',
-                                                        name: 'phone',
-                                                        required: true,
-                                                    }}
-                                                    inputstyle={{
-                                                        width: '100%',
-                                                        height: '40px',
-                                                        paddingLeft: '40px', // Adjust the padding to make space for the country symbol
-                                                    }}
-                                                    buttonstyle={{
-                                                        border: 'none',
-                                                        backgroundColor: 'transparent',
-                                                        marginLeft: '5px',
-                                                    }}
-                                                />
-                                                {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
-                                            </Grid>
-                                        </Grid>
+                                                        international
+                                                        // autoFormat
+                                                        disabled
+                                                        placeholder="Enter your number"
+                                                        country="in"
+                                                        value={watch('whatsapp')}
+                                                        // onChange={handleWhatsAppNumber}
+                                                        inputprops={{
+                                                            autoFocus: true,
+                                                            autoComplete: 'off',
+                                                            name: 'phone',
+                                                            required: true,
+                                                        }}
+                                                        inputstyle={{
+                                                            width: '100%',
+                                                            height: '40px',
+                                                            paddingLeft: '40px', // Adjust the padding to make space for the country symbol
+                                                        }}
+                                                        buttonstyle={{
+                                                            border: 'none',
+                                                            backgroundColor: 'transparent',
+                                                            marginLeft: '5px',
+                                                        }}
+                                                    />
+                                                    {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
 
-                                        <Grid display={'flex'} container p={1} item xs={12}>
-                                            <Grid item display={'flex'} xs={3} md={3}>
-                                                <Typography sx={{ fontWeight: '500' }}>Messsage</Typography>
-                                            </Grid>
-                                            <Grid item xs={9} md={9}>
-                                                {
-                                                    textBoxLoading ?
-                                                        <Skeleton variant='rounded' width={'100%'} height={400} />
-                                                        :
-                                                        <MyEditor key={editorKey} emoji={false} val={watch('body')}
-                                                            onValueChange={e => setValue('body', e)} />
-                                                }
-                                                {/* <MyEditor name={'body'} onValueChange={e => setValue('body', e)} value={watch('body')} /> */}
-                                            </Grid>
-                                        </Grid>
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Messsage</a>
+                                                <Grid className='mb-5 forms-data'>
+                                                    {
+
+                                                        textBoxLoading ?
+                                                            <><Skeleton height={230} width={'100%'} variant='rounded' /></>
+                                                            :
+                                                            <>
+                                                                <TextField disabled placeholder='' multiline rows={8} fullWidth control={control}  {...register('content')}
+                                                                    value={watch('body') || ''} />
+                                                                {errors.body && <span className='form-validation'>{errors.body.message}</span>}
+                                                            </>
+                                                    }
+                                                </Grid>
+                                            </div>
+                                        </div>
 
                                         {/* {
                                             attachmentFiles?.length > 0 &&
@@ -440,7 +436,23 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                                     </>
                             }
 
-                            <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
+                            <Grid pb={3} display={'flex'} >
+                                <LoadingButton className='save-btn' loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>  {
+                                    loading ?
+                                        <Grid display={'flex'} justifyContent={'center'}><div className="spinner"></div></Grid>
+                                        :
+                                        <>
+                                            Save  <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none">
+                                                <path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                        </>
+                                }</LoadingButton>
+                                <Button className='cancel-btn' onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel <svg svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg></Button>
+                            </Grid>
+
+                            {/* <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
                                 <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
                                 <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>                                {
                                     loading ?
@@ -452,7 +464,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                                             </svg>
                                         </>
                                 }</LoadingButton>
-                            </Grid>
+                            </Grid> */}
 
                         </form>
                     </div>

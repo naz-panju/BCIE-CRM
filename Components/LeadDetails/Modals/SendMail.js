@@ -132,9 +132,6 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         })
     }
 
-
-
-
     const onSubmit = async (data) => {
 
         setLoading(true)
@@ -163,6 +160,10 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
             file?.map(obj => {
                 formData.append('attachments[]', obj)
             })
+        }
+
+        for (const [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
         }
 
         // console.log(dataToSubmit);
@@ -235,8 +236,6 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
         TemplateApi.mailTemplate({ template_id: data?.id, lead_id: lead_id }).then((response) => {
 
-            console.log(response);
-
             if (response?.status == 200 || response?.status == 201) {
                 // let cc = 
                 // cc = response?.data?.data?.template?.default_cc?.map((obj) => {
@@ -298,6 +297,19 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
         }
         getInitialValue()
     }, [editId])
+
+    useEffect(() => {
+        if (open) {
+            document.body.classList.add('overflow-hidden');
+        } else {
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Cleanup function to remove the class when the component unmounts
+        return () => {
+            document.body.classList.remove('overflow-hidden');
+        };
+    }, [open]);
 
 
     return (

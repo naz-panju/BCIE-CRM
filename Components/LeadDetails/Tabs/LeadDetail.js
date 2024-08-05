@@ -255,20 +255,20 @@ function LeadDetail({ data, handleEdit, loading }) {
                             {/* referrance_from */}
 
                             {
-                                data?.lead_source?.name == 'Referral' &&
+                                data?.lead_source?.id == 5 &&
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Referred Student </label> {data?.referredStudent?.name || 'NA'}
                                 </div>
                             }
 
                             {
-                                data?.lead_source?.name == 'Agency' &&
+                                data?.lead_source?.id == 6 &&
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Referred Agency </label> {data?.agency?.name || 'NA'}
                                 </div>
                             }
                             {
-                                data?.lead_source?.name == 'University' &&
+                                data?.lead_source?.id == 7 &&
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Referred University </label> {data?.referred_university?.name || 'NA'}
                                 </div>

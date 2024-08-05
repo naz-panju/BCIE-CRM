@@ -339,6 +339,19 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         }
     }, [])
 
+    useEffect(() => {
+        if (open) {
+            document.body.classList.add('overflow-hidden');
+        } else {
+            document.body.classList.remove('overflow-hidden');
+        }
+
+        // Cleanup function to remove the class when the component unmounts
+        return () => {
+            document.body.classList.remove('overflow-hidden');
+        };
+    }, [open]);
+
 
     return (
         open &&

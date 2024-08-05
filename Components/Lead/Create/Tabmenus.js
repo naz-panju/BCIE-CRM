@@ -353,7 +353,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
     const [currentTitle, setcurrentTitle] = useState()
 
 
-    // console.log('here');
+    console.log(watch('student'),watch('source'));
 
     const onSubmit = async (data) => {
 
@@ -404,9 +404,9 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
             source_id: data?.source?.id || null,
 
-            agency_id: data?.source?.name == 'Agency' ? data?.agency?.id : null || null,
-            referred_student_id: data?.source?.name == 'Referral' ? data?.student?.id : null || null,
-            referral_university_id: data?.source?.name == 'University' ? data?.referred_university?.id : null || null,
+            agency_id: data?.source?.id == 6 ? data?.agency?.id : null || null,
+            referred_student_id: data?.source?.id == 5 ? data?.student?.id : null || null,
+            referral_university_id: data?.source?.id == 7 ? data?.referred_university?.id : null || null,
             // country_id: data?.country?.id,
 
             note: data?.note
@@ -1037,7 +1037,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                     <Grid className='mb-5 forms-data' >
                                         <SelectX
                                             placeholder=''
-                                            menuPlacement='auto'
+                                            menuPlacement='top'
                                             loadOptions={fetchUniversities}
                                             control={control}
                                             name={'referred_university'}

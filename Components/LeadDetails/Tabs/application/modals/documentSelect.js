@@ -34,7 +34,7 @@ const style = {
     p: 4,
 }
 
-export default function DocumentSelectModal({ editId, setEditId, SelectedDocuments, setSelectedDocuments, setSelectedAttachments,from ,SelectedAttachments}) {
+export default function DocumentSelectModal({ editId, setEditId, SelectedDocuments, setSelectedDocuments, setSelectedAttachments, from, SelectedAttachments }) {
 
 
     let scheme = yup.object().shape({
@@ -187,10 +187,10 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     const [Documents, setDocuments] = useState([])
     const [uniDocuments, setuniDocuments] = useState([])
     const getDetails = () => {
-    
+
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
-            // console.log(response);
+            console.log(response?.data?.data?.documents);
             // const mergedArray = response?.data?.data?.documents.concat(response?.data?.data?.university_documents);
             setuniDocuments(response?.data?.data?.university_documents)
             setDocuments(response?.data?.data?.documents)
@@ -203,9 +203,10 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     // console.log(Documents);
     const getLeadDetails = () => {
         setDataLoading(true)
-        LeadApi.listDocuments({ lead_id: editId ,limit:60}).then((response) => {
-            setDocuments(response?.data?.data)
-            console.log(response?.data?.data)
+        LeadApi.listDocuments({ lead_id: editId, limit: 100 }).then((response) => {
+            // console.log(response);
+            const datas = response?.data?.data?.filter((obj=>obj?.status !== 'Requested'))
+            setDocuments(datas)
             setDataLoading(false)
         }).catch((error) => {
             setDataLoading(false)
@@ -217,20 +218,20 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
 
     const handleAttach = () => {
         setSelectedDocuments(documentSelected)
-        setSelectedAttachments(file )
+        setSelectedAttachments(file)
         handleClose()
     }
 
-    
+
 
     useEffect(() => {
         if (editId > 0) {
             setOpen(true)
             if (Documents?.length == 0) {
-                if(from=='app'){
+                if (from == 'app') {
                     // console.log('here');
                     getDetails()
-                }else if(from=='lead'){
+                } else if (from == 'lead') {
                     getLeadDetails()
                 }
             }
@@ -240,6 +241,9 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
         setdocumentSelected(SelectedDocuments)
         setFile(SelectedAttachments || [])
     }, [editId])
+
+
+
 
 
     return (
@@ -271,7 +275,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                             loadingFields()
                             :
                             <div>
-                                <div><span style={{fontWeight:'bold',fontSize:'16px'}}>Student Documents</span></div>
+                                <div><span style={{ fontWeight: 'bold', fontSize: '16px' }}>Student Documents</span></div>
                                 <Grid>
                                     {
                                         Documents?.length > 0 ?
@@ -289,13 +293,13 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                                                 </Grid>
                                             </FormGroup>
                                             :
-                                           <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No Student Document Found</a></Grid>
+                                            <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No Student Document Found</a></Grid>
                                     }
 
 
                                 </Grid>
 
-                                <div><span style={{fontWeight:'bold',fontSize:'16px'}}>University Documents</span></div>
+                                <div><span style={{ fontWeight: 'bold', fontSize: '16px' }}>University Documents</span></div>
 
                                 <Grid>
                                     {
@@ -314,7 +318,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                                                 </Grid>
                                             </FormGroup>
                                             :
-                                           <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No University Document Found</a></Grid>
+                                            <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No University Document Found</a></Grid>
                                     }
 
 

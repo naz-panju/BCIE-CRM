@@ -14,6 +14,8 @@ import Deposit from '@/img/Deposit.svg'
 import Pending from '@/img/Pending.svg'
 import Others from '@/img/Others.svg'
 import Image from 'next/image';
+import moment from 'moment'
+import toast from 'react-hot-toast'
 function LeadSection({ communicationLogLoading, communicationLog, range, setRange, handleClean, intakeRange, weeklyList, weeklyLoading, weeklyStageListLoading, leadSourceListLoading, leadStageLoading, weeklyRange, setWeeklyRange, weeklyStageList, leadSourceList, leadStage, index, leadCountryList }) {
 
     function formatPercentage(value) {
@@ -64,7 +66,7 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
     const spanClassess = ['Unverified', 'cool', 'warm', 'Hot'];
     const spanClassessBg = ['UnverifiedBg', 'coolBg', 'warmBg', 'HotBg'];
 
-    const icons = [Unverified,Cool, Warm, Hot, ];
+    const icons = [Unverified, Cool, Warm, Hot,];
 
     const getIconSrc = (index) => {
         return icons[index] || DefaultIcon; // Provide a default icon in case index doesn't match
@@ -87,6 +89,27 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
     // Calculate the total
     const total = emails + calls + messages;
 
+    const handleDateSelect = (range,e) => {
+        const [start, end] = range;
+        // console.log(e);
+
+        e.preventDefault()
+
+        if (start && end) {
+            const startDate = moment(start);
+            const endDate = moment(end);
+            const diffInDays = endDate.diff(startDate, 'days');
+
+            console.log(diffInDays);
+
+            if (diffInDays > 7) {
+                toast.error('The selected date range should not exceed 7 days.');
+                // setWeeklyRange([start, null]); // Keep the start date and reset the end date
+            } else {
+                setWeeklyRange(range);
+            }
+        }     
+    };
 
     return (
         <div >
@@ -112,15 +135,15 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
                                             className='no-clear date-focused'
                                             ranges={[]}
                                             value={weeklyRange}
-                                            onChange={setWeeklyRange}
+                                            onChange={handleDateSelect}
                                             // placeholder="Select Date Range"
                                             style={{ width: 220 }}
                                             format='dd-MM-yyyy'
-                                            disabledDate={(date) => {
-                                                const startDate = intakeRange[0];
-                                                const endDate = intakeRange[1];
-                                                return date < startDate || date > endDate;
-                                            }}
+                                        // disabledDate={(date) => {
+                                        //     const startDate = intakeRange[0];
+                                        //     const endDate = intakeRange[1];
+                                        //     return date < startDate || date > endDate;
+                                        // }}
 
                                         />
                                     </div>

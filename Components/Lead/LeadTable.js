@@ -821,7 +821,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
               <TextField
                 fullWidth
-                type='number'
+                // type='number'
                 {...register('lead_id_search')}
                 size='small'
                 id="outlined-name"
