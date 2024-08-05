@@ -176,8 +176,8 @@ function EnhancedTableHead(props) {
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
             > */}
-              {headCell.label}
-              {/* {orderBy === headCell.id ? (
+            {headCell.label}
+            {/* {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
@@ -493,7 +493,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const fetchTable = () => {
     setLoading(true)
     let params = {
-     
+
       limit: limit,
       assigned_to: selectedAssignedTo,
       stage: selectedStage,
@@ -525,7 +525,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     LeadApi.list(params).then((response) => {
       // console.log(response);
       // if ()
-        setList(response?.data)
+      setList(response?.data)
       setLoading(false)
     }).catch((error) => {
       console.log(error);
@@ -951,7 +951,13 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                   }
                                   {/* {row?.assignedToUser?.name} */}
                                 </TableCell>
-                                <TableCell className='stage-colm' align="left"><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span></TableCell>
+                                <TableCell className='stage-colm' align="left">
+                                  {
+                                    row?.stage?
+                                    <span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span>
+                                    :''
+                                  }
+                                </TableCell>
                               </TableRow>
                             );
                           })

@@ -25,7 +25,8 @@ import Image from 'next/image'
 
 function Form({ data }) {
 
-    console.log(data);
+    // console.log(data);
+    const [formDatas, setformDatas] = useState(data)
 
     const myLoader = ({ src, width }) => {
         return `${src}?w=${width}`;
@@ -179,17 +180,17 @@ function Form({ data }) {
         const { dialCode } = country;
         setCode(dialCode)
         setValue('phone', value)
-        
-            setValue('whatsapp', value)
-            setWhatsappCode(dialCode)
-            setValue('whatsapp', value)
-            if (value.startsWith(dialCode)) {
-                const trimmedPhone = value.slice(dialCode.length);
-                setWhatsapp(trimmedPhone);
-            } else {
-                setWhatsapp(value);
-            }
-        
+
+        setValue('whatsapp', value)
+        setWhatsappCode(dialCode)
+        setValue('whatsapp', value)
+        if (value.startsWith(dialCode)) {
+            const trimmedPhone = value.slice(dialCode.length);
+            setWhatsapp(trimmedPhone);
+        } else {
+            setWhatsapp(value);
+        }
+
         if (value.startsWith(dialCode)) {
             const trimmedPhone = value.slice(dialCode.length);
             setPhone(trimmedPhone);
@@ -284,6 +285,7 @@ function Form({ data }) {
         }
 
         let dataToSubmit = {
+            referral_link_id: formDatas?.id,
             title: data?.title?.name,
             name: data?.name,
             email: data?.email,
@@ -317,10 +319,9 @@ function Form({ data }) {
 
             source_id: data?.source?.id || null,
 
-            agency_id: data?.source?.name == 'Agency' ? data?.agency?.id : null || null,
-            referred_student_id: data?.source?.name == 'Referral' ? data?.student?.id : null || null,
-            referral_university_id: data?.source?.name == 'University' ? data?.referred_university?.id : null || null,
-            // country_id: data?.country?.id,
+            agency_id: data?.source?.id == 6 ? data?.agency?.id : null || null,
+            referred_student_id: data?.source?.id == 5 ? data?.student?.id : null || null,
+            referral_university_id: data?.source?.id == 7 ? data?.referred_university?.id : null || null, // country_id: data?.country?.id,
 
             note: data?.note
         }
@@ -330,7 +331,7 @@ function Form({ data }) {
 
                 toast.success('Lead Has Been Successfully Created')
                 reset()
-                handleClear()
+                // handleClear()
                 setLoading(false)
                 location.reload()
             } else {
@@ -416,7 +417,7 @@ function Form({ data }) {
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <a className='form-text'>Date of Birth</a>
-                                    <DateInput  shouldDisableDate={disableSpecificDateForDob} placeholder='' control={control} name='dob' value={watch('dob')} />
+                                    <DateInput shouldDisableDate={disableSpecificDateForDob} placeholder='' control={control} name='dob' value={watch('dob')} />
                                     {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
                                 </Grid>
                                 <Grid item xs={12} md={6}>
