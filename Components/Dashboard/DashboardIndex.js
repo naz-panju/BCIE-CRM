@@ -408,8 +408,8 @@ function DashboardIndex() {
         try {
             const response = await DashboardApi.list({
                 type: 'deposits',
-                date_from: moment(range[0]).format('YYYY-MM-DD'),
-                date_to: moment(range[1]).format('YYYY-MM-DD'),
+                // date_from: moment(range[0]).format('YYYY-MM-DD'),
+                // date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
                 counselor: selectedCounsellor?.id,
                 intake: intakeId,
@@ -432,8 +432,8 @@ function DashboardIndex() {
             try {
                 const response = await DashboardApi.list({
                     type: 'applications_by_stages',
-                    date_from: moment(range[0]).format('YYYY-MM-DD'),
-                    date_to: moment(range[1]).format('YYYY-MM-DD'),
+                    // date_from: moment(range[0]).format('YYYY-MM-DD'),
+                    // date_to: moment(range[1]).format('YYYY-MM-DD'),
                     office: officeId,
                     country: selectedCountries?.id,
                     // counselor: selectedAppCounsellor?.id,
@@ -482,15 +482,15 @@ function DashboardIndex() {
         try {
             const response = await DashboardApi.list({
                 type: 'applications_by_submitted_status',
-                date_from: moment(weeklyApplicationRange[0]).format('YYYY-MM-DD'),
-                date_to: moment(weeklyApplicationRange[1]).format('YYYY-MM-DD'),
-                office: officeId,
-                country: selectedCountries?.id,
-                counselor: counsellorId,
-                manager: selectedMangeId,
-                intake: intakeId,
+                // date_from: moment(weeklyApplicationRange[0]).format('YYYY-MM-DD'),
+                // date_to: moment(weeklyApplicationRange[1]).format('YYYY-MM-DD'),
+                office: officeId || '',
+                country: selectedCountries?.id || '',
+                counselor: counsellorId || '',
+                manager: selectedMangeId || '',
+                intake: intakeId || '',
             })
-            // console.log(response);
+            console.log(response);
             setSubmitApplicationList(response?.data)
             setSubmitApplicationLoading(false)
         } catch (error) {

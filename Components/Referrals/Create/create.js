@@ -30,7 +30,7 @@ const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
 });
 
 const scheme = yup.object().shape({
-    country:yup.object().required('Country is Required'),
+    country: yup.object().required('Country is Required'),
     source: yup.object().required("Lead Source is Required"),
 })
 
@@ -193,7 +193,15 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
 
         formData.append('country_id', data?.country?.id)
 
-        formData.append('agency_id', data?.source?.id == 6 ? data?.agent?.id : null || null)
+        if (data?.source?.id == 6) {
+            if (data?.agent?.id) {
+                formData.append('agency_id', data?.agent?.id || null)
+            }
+        } else {
+            formData.append('agency_id', null)
+        }
+
+        // formData.append('agency_id', data?.source?.id == 6 ? data?.agent?.id : null || null)
 
         // formData.append('referred_student_id', data?.source?.id == 5 ? data?.student?.id : null || null)
 
@@ -227,7 +235,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         }
 
         action.then((response) => {
-            // console.log(response);
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Referral Link Has Been Successfully Updated' : 'Referral Link Has Been Successfully Created')
                 reset()
@@ -285,7 +293,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
             const response = await ReferralApi.view({ id: editId })
             if (response?.data?.data) {
                 let data = response?.data?.data
-                console.log(data);
+                // console.log(data);
 
                 setValue('title', data?.title)
                 setValue('source', data?.lead_source)
@@ -490,7 +498,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                         variant="outlined"
                                                         fullWidth
                                                         multiline
-                                                        rows={2}
+                                                        rows={4}
                                                         sx={{ width: '100%', }}
                                                     />
                                                     {errors.top_description && <span className='form-validation'>{errors.top_description.message}</span>}
@@ -507,7 +515,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                         variant="outlined"
                                                         fullWidth
                                                         multiline
-                                                        rows={2}
+                                                        rows={4}
                                                         sx={{ width: '100%', }}
                                                     />
                                                     {errors.bottom_description && <span className='form-validation'>{errors.bottom_description.message}</span>}
@@ -524,7 +532,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                         variant="outlined"
                                                         fullWidth
                                                         multiline
-                                                        rows={2}
+                                                        rows={4}
                                                         sx={{ width: '100%', }}
                                                     />
                                                     {errors.private_remarks && <span className='form-validation'>{errors.private_remarks.message}</span>}
