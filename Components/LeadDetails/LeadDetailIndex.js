@@ -253,6 +253,22 @@ function LeadDetails() {
     setappRefresh(!appRefresh)
   }
 
+  function formatPercentage(value) {
+    if (typeof value === 'number' && !isNaN(value)) {
+      const valueString = value.toFixed(2);
+      const [integerPart, decimalPart] = valueString.split('.');
+
+      if (parseInt(decimalPart, 10) >= 50) {
+        return parseInt(integerPart, 10) + 1;
+      } else {
+        return parseInt(integerPart, 10);
+      }
+    } else {
+      return value;
+    }
+  }
+
+
   const loadDetails = () => {
     getDetails()
     handleAppRefresh()
@@ -518,7 +534,7 @@ function LeadDetails() {
 
                                   ind == index && */}
                             {/* <h5 key={index}>{finalIndex / stages?.length * 100}%</h5> */}
-                            <h5 >{details?.stage?.progress_percentage}%</h5>
+                            <h5 >{formatPercentage(details?.stage?.progress_percentage)}%</h5>
                             {/* )
                               })
                             } */}
@@ -559,7 +575,7 @@ function LeadDetails() {
                             <React.Fragment >
                               <CircularProgressbar
                                 // value={finalIndex / stages?.length * 100}
-                                value={details?.stage?.progress_percentage}
+                                value={formatPercentage(details?.stage?.progress_percentage)}
                                 strokeWidth={5}
                                 styles={buildStyles({
                                   pathColor: 'url(#newGradient)',
@@ -618,10 +634,10 @@ function LeadDetails() {
                         <div className='vari-right'>
                           {
                             session?.data?.user?.role?.id != 6 &&
-                            !details?.user && 
+                            !details?.user &&
                             <a onClick={handleOpenStageModal}>Change Status</a>
                           }
-                        </div> 
+                        </div>
 
 
                       </div>

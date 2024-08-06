@@ -2,7 +2,7 @@ import { AddCircleOutline, ContentCopyOutlined, CopyAllOutlined } from '@mui/ico
 import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
-function TemplateData({ handleToggleTable, setValue, body,isFocused,setSubject }) {
+function TemplateData({ handleToggleTable, setValue, body, isFocused, setSubject }) {
 
     const Datas = [
         { title: 'Lead name', key: "{{1}}" },
@@ -26,10 +26,8 @@ function TemplateData({ handleToggleTable, setValue, body,isFocused,setSubject }
         { title: 'Student ID', key: "{{19}}" },
         { title: 'Assigned Counselor Address', key: "{{20}}" },
         { title: 'Assigned Office Address', key: "{{21}}" },
-
         { title: 'Assigned Office Email Ids', key: "{{22}}" },
         { title: 'Assigned Office Phone Numbers', key: "{{23}}" },
-
         { title: 'Applied Country', key: "{{30}}" },
         { title: 'Applied University', key: "{{31}}" },
         { title: 'Applied Course Level', key: "{{32}}" },
@@ -41,8 +39,17 @@ function TemplateData({ handleToggleTable, setValue, body,isFocused,setSubject }
         { title: 'Application Number', key: "{{38}}" },
         { title: 'Deposit Paid', key: "{{39}}" },
         { title: 'Deposit Paid On', key: "{{40}}" },
-        { title: 'Application Assigned App Coordinator Address', key: "{{41}}" }
+        { title: 'Application Assigned App Coordinator Address', key: "{{41}}" },
+        { title: 'Document title', key: "{{60}}" },
+        { title: 'Document note', key: "{{61}}" },
+        { title: 'Document status', key: "{{62}}" },
+        { title: 'Document', key: "{{63}}" },
+        { title: 'Document uploaded user', key: "{{64}}" },
+        { title: 'Document accepted user', key: "{{65}}" },
+        { title: 'Document rejected user', key: "{{66}}" },
+        { title: 'Document reject reason', key: "{{67}}" }
     ];
+
 
     const [searchKey, setSearchKey] = useState('');
 
@@ -54,9 +61,9 @@ function TemplateData({ handleToggleTable, setValue, body,isFocused,setSubject }
     const [copied, setcopied] = useState()
 
     const addToTextBox = (text) => {
-        if(isFocused){
+        if (isFocused) {
             setSubject(text)
-        }else{
+        } else {
             setValue(text)
         }
     }
@@ -135,7 +142,7 @@ function TemplateData({ handleToggleTable, setValue, body,isFocused,setSubject }
                                         <TableCell>{obj?.title}</TableCell>
                                         <TableCell>{obj?.key}</TableCell>
                                         <TableCell>
-                                            <Tooltip title={'Add to the Textbox'}> <AddCircleOutline sx={{ cursor: 'pointer' ,mr:2}} color='primary' fontSize='small' onClick={()=>addToTextBox(obj?.key)} /></Tooltip>
+                                            <Tooltip title={'Add to the Textbox'}> <AddCircleOutline sx={{ cursor: 'pointer', mr: 2 }} color='primary' fontSize='small' onClick={() => addToTextBox(obj?.key)} /></Tooltip>
                                             {
                                                 copied == obj?.key ?
                                                     <a style={{ color: 'grey' }}>copied</a>
