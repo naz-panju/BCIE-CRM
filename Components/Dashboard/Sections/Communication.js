@@ -12,17 +12,17 @@ import TargetTabs from './Target Tabs'
 import { Grid, Skeleton } from '@mui/material'
 import { useSession } from 'next-auth/react'
 
-function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManagers, handleManagerSelect, selectedManager, communicationLogLoading, paymentLoading, targetLoading, fetchCounsellors, selectedCounsellor, handleCounsellorSelect, communicationLog, payments, targets }) {
+function CommunicationSection({ leadCountryList, leadSourceListLoading, fetchManagers, handleManagerSelect, selectedManager, communicationLogLoading, paymentLoading, targetLoading, fetchCounsellors, selectedCounsellor, handleCounsellorSelect, communicationLog, payments, targets, selectedMangeId, counsellorId }) {
 
   const session = useSession()
 
   function formatPercentage(value) {
     if (typeof value === 'number' && !isNaN(value)) {
-        return value.toFixed(2);
+      return value.toFixed(2);
     } else {
-        return value;
+      return value;
     }
-}
+  }
 
   const emails = communicationLog?.data?.emails || 0;
   const calls = communicationLog?.data?.calls || 0;
@@ -39,8 +39,8 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
 
         <div className='flex '>
 
-          <div style={{ height: '100%' }} className='graph w-6/12 p-3'>
-            <div className='total_sec d-flex flex items-center justify-between p-3'>
+          <div style={{ height: '100%' }} className='graph w-6/12 pr-3'>
+            <div className='total_sec d-flex flex items-center justify-between p-2'>
               Country wise Application
             </div>
             <div className='border rounded-sm '>
@@ -59,18 +59,18 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
                   :
                   <Grid className='social-container' container display={'flex'} justifyContent={'space-between'} p={3}>
                     {
-                      leadCountryList?.data?.length>0?
-                      leadCountryList?.data?.map((obj, index) => (
+                      leadCountryList?.data?.length > 0 ?
+                        leadCountryList?.data?.map((obj, index) => (
 
-                        <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
-                          <span style={{ lineHeight: 1 }}><Image src={Others} alt='alt' width={14} height={14} /> {obj?.country}</span>
-                          <span>{formatPercentage(obj?.value) || 0}%</span>
+                          <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
+                            <span style={{ lineHeight: 1 }}><Image src={Others} alt='alt' width={14} height={14} /> {obj?.country}</span>
+                            <span>{formatPercentage(obj?.value) || 0}%</span>
+                          </Grid>
+                        ))
+                        :
+                        <Grid className='flex justify-center items-center' >
+                          No Application Found
                         </Grid>
-                      ))
-                      :
-                      <Grid className='flex justify-center items-center' >
-                        No Application Found
-                      </Grid>
                     }
                   </Grid>
               }
@@ -210,11 +210,23 @@ function CommunicationSection({leadCountryList,leadSourceListLoading, fetchManag
                   <Skeleton variant='rounded' width={'100%'} height={250} />
                 </div>
                 :
-                <div className='border rounded-sm '>
-                  <TargetTabs targets={targets?.data} />
-                  <div className=''>
+                session?.data?.user?.role?.id == 3 ?
+                  (selectedMangeId || counsellorId) ?
+                    <div className='border rounded-sm '>
+                      <TargetTabs targets={targets?.data} />
+                      <div className=''>
+                      </div>
+                    </div>
+                    :
+                    <div className='border rounded-sm h-[90%] d-flex items-center justify-center'>
+                     Please select a manager or counselor to view targets.
+                    </div>
+                  :
+                  <div className='border rounded-sm '>
+                    <TargetTabs targets={targets?.data} />
+                    <div className=''>
+                    </div>
                   </div>
-                </div>
             }
 
           </div>

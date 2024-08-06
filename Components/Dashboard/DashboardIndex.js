@@ -70,7 +70,7 @@ function DashboardIndex() {
                 }
             })
         } else if (session?.data?.user?.role?.id == 4) {
-            return ListingApi.counsellors({ keyword: e, office_id:officeId, officeIdrole_id: 5 }).then(response => {
+            return ListingApi.counsellors({ keyword: e, office_id: officeId, officeIdrole_id: 5 }).then(response => {
                 if (typeof response.data.data !== "undefined") {
                     return response.data.data;
                 } else {
@@ -428,25 +428,27 @@ function DashboardIndex() {
     const [applicationStagesLoading, SetApplicationStagesLoading] = useState(true);
     const fetchApplicationStages = async () => {
         SetApplicationStagesLoading(true)
-        try {
-            const response = await DashboardApi.list({
-                type: 'applications_by_stages',
-                date_from: moment(range[0]).format('YYYY-MM-DD'),
-                date_to: moment(range[1]).format('YYYY-MM-DD'),
-                office: officeId,
-                country: selectedCountries?.id,
-                // counselor: selectedAppCounsellor?.id,
-                counselor: counsellorId,
-                manager: selectedMangeId,
-                app_coordinator: selectedAppCoordinators?.id,
-                intake: intakeId,
-            })
-            // console.log(response);
-            setApplicationStages(response?.data)
-            SetApplicationStagesLoading(false)
-        } catch (error) {
-            console.log(error);
-            SetApplicationStagesLoading(false)
+        if (intakeId) {
+            try {
+                const response = await DashboardApi.list({
+                    type: 'applications_by_stages',
+                    date_from: moment(range[0]).format('YYYY-MM-DD'),
+                    date_to: moment(range[1]).format('YYYY-MM-DD'),
+                    office: officeId,
+                    country: selectedCountries?.id,
+                    // counselor: selectedAppCounsellor?.id,
+                    counselor: counsellorId,
+                    manager: selectedMangeId,
+                    app_coordinator: selectedAppCoordinators?.id,
+                    intake: intakeId,
+                })
+                // console.log(response);
+                setApplicationStages(response?.data)
+                SetApplicationStagesLoading(false)
+            } catch (error) {
+                console.log(error);
+                SetApplicationStagesLoading(false)
+            }
         }
     }
 
@@ -499,23 +501,36 @@ function DashboardIndex() {
     const [targets, setTargets] = useState([]);
     const [targetLoading, setTargetLoading] = useState(true);
     const fetchTargets = async () => {
+
         setTargetLoading(true)
-        let params = {
-            type: 'targets',
-            intake: intakeId,
-            counselor: counsellorId,
-            manager: selectedMangeId
+        if (intakeId) {
+
+            let params = {
+                type: 'targets',
+                intake: intakeId,
+                // counselor: counsellorId,
+                // manager: selectedMangeId
+            }
+            if (session?.data?.user?.role?.id == 4) {
+                params['manager'] = session?.data?.user?.id
+            } else if (session?.data?.user?.role?.id == 5) {
+                params['counselor'] = session?.data?.user?.id
+            } else {
+                params['counselor'] = counsellorId
+                params['manager'] = selectedMangeId
+            }
+
+
+            try {
+                const response = await DashboardApi.list(params)
+                setTargets(response?.data)
+                setTargetLoading(false)
+            } catch (error) {
+                console.log(error);
+                setTargetLoading(false)
+            }
         }
 
-        try {
-            const response = await DashboardApi.list(params)
-            console.log(response);
-            setTargets(response?.data)
-            setTargetLoading(false)
-        } catch (error) {
-            console.log(error);
-            setTargetLoading(false)
-        }
 
         // if (session?.data?.user?.role?.id == 3) {
         //     if (selectedManager) {
@@ -631,6 +646,13 @@ function DashboardIndex() {
     }, [intakeId, selectedCounsellor, selectedManager, counsellorId, selectedMangeId])
 
 
+    useEffect(() => {
+        if (session?.data?.user?.role?.id == 4) {
+            setselectedMangeId(session?.data?.user?.id)
+        }
+    }, [session?.data])
+
+
     const handleClean = (event) => {
         // Prevent default behavior which clears the date
         event.preventDefault();
@@ -701,8 +723,8 @@ function DashboardIndex() {
                                 session?.data?.user?.role?.id !== 5 && session?.data?.user?.role?.id !== 6 &&
                                 <Grid mr={2} sx={{ width: 200 }} className='intake_dropdown'>
                                     <AsyncSelect
-                                        isDisabled={!selectedManager}
-                                        key={selectedManager}
+                                        isDisabled={!selectedMangeId}
+                                        key={selectedMangeId}
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
                                         placeholder='Counsellor'
                                         name={'counsellor'}
@@ -752,7 +774,7 @@ function DashboardIndex() {
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='comm_sec'>
-                            <CommunicationSection leadSourceListLoading={leadSourceListLoading} leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} fetchManagers={fetchManagers} handleManagerSelect={handleManagerSelect} selectedManager={selectedManager} communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} />
+                            <CommunicationSection leadSourceListLoading={leadSourceListLoading} leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} fetchManagers={fetchManagers} handleManagerSelect={handleManagerSelect} selectedManager={selectedManager} communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} selectedMangeId={selectedMangeId} counsellorId={counsellorId}  />
                         </div>
                     }
 

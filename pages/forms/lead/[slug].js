@@ -96,14 +96,15 @@ function Form({ data }) {
     }
 
     const fetchStudents = (e) => {
-        return StudentApi.list({ keyword: e }).then(response => {
-            if (e) {
-                if (typeof response?.data?.data !== "undefined") {
-                    return response?.data?.data
-                } else {
-                    return [];
-                }
+        return ListingApi.students({ keyword: e }).then(response => {
+            console.log(response?.data?.data);
+
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data?.data
+            } else {
+                return [];
             }
+
         })
     }
 
@@ -268,6 +269,7 @@ function Form({ data }) {
     const [titles, settitles] = useState([])
     const [currentTitle, setcurrentTitle] = useState()
 
+    console.log(data);
 
 
     const onSubmit = async (data) => {
@@ -302,8 +304,8 @@ function Form({ data }) {
             preferred_course: data?.preffered_course,
             preferred_countries: data?.preferred_country,
 
-            passport: data?.passport_number,
-            passport_exp_date: passport_exp_date,
+            // passport: data?.passport_number,
+            // passport_exp_date: passport_exp_date,
 
             // course_level_id: data?.preffered_course_level?.id || null,
             // intake_id: data?.intake?.id,
@@ -317,11 +319,11 @@ function Form({ data }) {
 
             referrance_from: data?.reference,
 
-            source_id: data?.source?.id || null,
+            source_id: formDatas?.lead_source?.id || null,
 
-            agency_id: data?.source?.id == 6 ? data?.agency?.id : null || null,
-            referred_student_id: data?.source?.id == 5 ? data?.student?.id : null || null,
-            referral_university_id: data?.source?.id == 7 ? data?.referred_university?.id : null || null, // country_id: data?.country?.id,
+            agency_id: formDatas?.lead_source?.id == 6 ? formDatas?.agency?.id : null || null,
+            // referred_student_id: data?.source?.id == 5 ? data?.student?.id : null || null,
+            // referral_university_id: data?.source?.id == 7 ? data?.referred_university?.id : null || null, // country_id: data?.country?.id,
 
             note: data?.note
         }
@@ -364,9 +366,9 @@ function Form({ data }) {
         <Grid style={{ backgroundColor: '#f0f4f8', padding: '20px' }} container display="flex" alignItems="center" justifyContent="center">
             <Grid item xs={12} md={6} lg={6} style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} style={{ backgroundImage: data?.banner_image, backgroundSize: 'cover', backgroundPosition: 'center' }} className='modal-header'>
+                    <div style={{ backgroundImage: `url(${data?.banner_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }} className='modal-header'>
                         <h2>{data?.top_description}</h2>
-                    </Grid>
+                    </div>
                     <Grid item xs={12} className='form-data-cntr'>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <Grid container spacing={2}>
@@ -392,17 +394,17 @@ function Form({ data }) {
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <a className='form-text'>Enter Mobile Number</a>
-                                    <PhoneInput {...register('phone', { required: 'Please enter your mobile number' })} international placeholder="" value={watch('phone')} onChange={handlePhoneNumber} inputProps={{ autoComplete: 'off', required: true }} inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }} buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }} />
+                                    <PhoneInput {...register('phone', { required: 'Please enter your mobile number' })} country={formDatas?.country?.country_code?.toLowerCase()} international placeholder="" value={watch('phone')} onChange={handlePhoneNumber} inputProps={{ autoComplete: 'off', required: true }} inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }} buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }} />
                                     {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <a className='form-text'>Enter Alternate Number</a>
-                                    <PhoneInput {...register('alt_phone')} international placeholder="" value={watch('alt_phone')} onChange={handleAltPhoneNumber} inputProps={{ autoComplete: 'off', required: true }} inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }} buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }} />
+                                    <PhoneInput {...register('alt_phone')} international placeholder="" value={watch('alt_phone')} country={formDatas?.country?.country_code?.toLowerCase()} onChange={handleAltPhoneNumber} inputProps={{ autoComplete: 'off', required: true }} inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }} buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }} />
                                     {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
                                 </Grid>
                                 <Grid item xs={12} md={6}>
                                     <a className='form-text'>Enter Whatsapp Number</a>
-                                    <PhoneInput {...register('whatsapp')} international placeholder="" value={watch('whatsapp')} onChange={handleWhatsAppNumber} inputProps={{ autoComplete: 'off', required: true }} inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }} buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }} />
+                                    <PhoneInput {...register('whatsapp')} international placeholder="" value={watch('whatsapp')} country={formDatas?.country?.country_code?.toLowerCase()} onChange={handleWhatsAppNumber} inputProps={{ autoComplete: 'off', required: true }} inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }} buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }} />
                                     {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -420,7 +422,7 @@ function Form({ data }) {
                                     <DateInput shouldDisableDate={disableSpecificDateForDob} placeholder='' control={control} name='dob' value={watch('dob')} />
                                     {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
                                 </Grid>
-                                <Grid item xs={12} md={6}>
+                                {/* <Grid item xs={12} md={6}>
                                     <a className='form-text'>Passport Number</a>
                                     <TextInput placeholder='' control={control} {...register('passport_number')} value={watch('passport_number')} />
                                     {errors.passport_number && <span className='form-validation'>{errors.passport_number.message}</span>}
@@ -429,7 +431,7 @@ function Form({ data }) {
                                     <a className='form-text'>Passport Expiry Date</a>
                                     <DateInput placeholder='' control={control} name='passport_expiry' value={watch('passport_expiry')} />
                                     {errors.passport_expiry && <span className='form-validation'>{errors.passport_expiry.message}</span>}
-                                </Grid>
+                                </Grid> */}
                                 <Grid item xs={12}>
                                     <a className='form-text'>City</a>
                                     <TextInput placeholder='' control={control} {...register('city')} value={watch('city')} />
@@ -440,9 +442,9 @@ function Form({ data }) {
                                     <TextField placeholder='' multiline rows={2} fullWidth control={control} {...register('address')} value={watch('address') || ''} />
                                     {errors.address && <span className='form-validation'>{errors.address.message}</span>}
                                 </Grid>
-                                <Grid item xs={12} md={6}>
+                                {/* <Grid item xs={12} md={6}>
                                     <a className='form-text'>Lead Source</a>
-                                    <AsyncSelect placeholder='Select...' name='source' defaultValue={watch('source')} isClearable defaultOptions loadOptions={fetchSources} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={handleSourseChange} />
+                                    <AsyncSelect menuPlacement='auto' placeholder='Select...' name='source' defaultValue={watch('source')} isClearable defaultOptions loadOptions={fetchSources} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={handleSourseChange} />
                                     {errors.source && <span className='form-validation'>{errors.source.message}</span>}
                                 </Grid>
                                 <Grid item xs={12} md={6}>
@@ -450,18 +452,24 @@ function Form({ data }) {
                                     <ReactSelector placeholder='Select...' menuPlacement='auto' onInputChange={fetchReference} styles={{ menu: (provided) => ({ ...provided, zIndex: 9999 }) }} options={referenceOption} getOptionLabel={(option) => option.name} getOptionValue={(option) => option.name} value={referenceOption.filter((options) => options?.name == watch('reference'))} name='reference' isClearable defaultValue={watch('reference')} onChange={(selectedOption) => setValue('reference', selectedOption?.name || '')} />
                                     {errors.reference && <span className='form-validation'>{errors.reference.message}</span>}
                                 </Grid>
-                                {watch('source')?.name == 'Referral' && (
+                                {watch('source')?.id == 5 && (
                                     <Grid item xs={12}>
                                         <a className='form-text'>Referred Student</a>
                                         <AsyncSelect placeholder='Select...' name='student' defaultValue={watch('student')} isClearable defaultOptions loadOptions={fetchStudents} getOptionLabel={getOptionLabel} getOptionValue={(e) => e.id} onChange={(e) => setValue('student', e)} />
                                     </Grid>
                                 )}
-                                {watch('source')?.name == 'Agency' && (
+                                {watch('source')?.id == 6 && (
                                     <Grid item xs={12}>
                                         <a className='form-text'>Referred Agency</a>
-                                        <AsyncSelect name='agency' defaultValue={watch('agency')} isClearable defaultOptions loadOptions={fetchAgency} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={(e) => setValue('agency', e)} />
+                                        <AsyncSelect name='agency' defaultValue={watch('agency')} isClearable defaultOptions loadOptions={fetchAgencies} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={(e) => setValue('agency', e)} />
                                     </Grid>
                                 )}
+                                 {watch('source')?.id == 7 && (
+                                    <Grid item xs={12}>
+                                        <a className='form-text'>Referred University</a>
+                                        <AsyncSelect name='referred_university' defaultValue={watch('referred_university')} isClearable defaultOptions loadOptions={fetchAgencies} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={(e) => setValue('referred_university', e)} />
+                                    </Grid>
+                                )} */}
 
                             </Grid>
                             <Grid mt={3} pb={3} className='flex justify-end' >

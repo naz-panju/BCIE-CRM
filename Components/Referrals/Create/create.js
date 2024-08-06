@@ -30,6 +30,7 @@ const MyEditor = dynamic(() => import("../../../Form/MyEditor"), {
 });
 
 const scheme = yup.object().shape({
+    country:yup.object().required('Country is Required'),
     source: yup.object().required("Lead Source is Required"),
 })
 
@@ -95,6 +96,17 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         })
     }
 
+    const fetchCountries = (e) => {
+        return ListingApi.country({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+
     const fetchAgencies = (e) => {
         return ListingApi.agencies({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
@@ -122,6 +134,19 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
             } else {
                 return [];
             }
+        })
+    }
+
+    const fetchStudents = (e) => {
+        return ListingApi.students({ keyword: e }).then(response => {
+            console.log(response?.data?.data);
+
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data?.data
+            } else {
+                return [];
+            }
+
         })
     }
 
@@ -165,12 +190,18 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         if (data?.source?.id) {
             formData.append('lead_source_id', data?.source?.id)
         }
-        if (data?.agent) {
-            formData.append('agency_id', data?.agent?.id)
-        }
-        if (data?.events) {
-            formData.append('events_id', data?.events?.id)
-        }
+
+        formData.append('country_id', data?.country?.id)
+
+        formData.append('agency_id', data?.source?.id == 6 ? data?.agent?.id : null || null)
+
+        // formData.append('referred_student_id', data?.source?.id == 5 ? data?.student?.id : null || null)
+
+        // formData.append('referral_university_id', data?.source?.id == 7 ? data?.referred_university?.id : null || null)
+
+        // if (data?.events) {
+        //     formData.append('events_id', data?.events?.id)
+        // }
         if (data?.validity_date) {
             formData.append('last_date_of_validity', date)
         }
@@ -221,6 +252,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         setEditId()
         reset()
         setValue('title', '')
+        setValue('country', '')
         setAttachment()
         setValue('validity_date', '')
         setOpen(false)
@@ -253,12 +285,15 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
             const response = await ReferralApi.view({ id: editId })
             if (response?.data?.data) {
                 let data = response?.data?.data
-                // console.log(data);
+                console.log(data);
 
                 setValue('title', data?.title)
                 setValue('source', data?.lead_source)
+                setValue('country', data?.country)
                 setValue('validity_date', data?.last_date_of_validity)
                 setValue('agent', data?.agency)
+                // setValue('student', data?.referredStudent)
+                // setValue('referred_university', data?.referred_university)
                 setValue('top_description', data?.top_description)
                 setValue('bottom_description', data?.bottom_description)
                 setValue('private_remarks', data?.private_remarks)
@@ -275,6 +310,10 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
     const handleClick = () => {
         // This will trigger a click event on the input element, opening the file dialog
         document.getElementById('upload-button').click();
+    };
+
+    const getOptionLabel = (option) => {
+        return option.student_code ? `${option.name} (${option.student_code})` : option.name;
     };
 
 
@@ -341,6 +380,23 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
 
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
+                                                <a className='form-text'>Country</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <SelectX
+                                                        // placeholder='Select...'
+                                                        menuPlacement='auto'
+                                                        loadOptions={fetchCountries}
+                                                        control={control}
+                                                        name={'country'}
+                                                        defaultValue={watch('country')}
+                                                    />
+                                                    {errors?.country && <span className='form-validation'>{errors?.country.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
                                                 <a className='form-text'>Lead Source</a>
                                                 <Grid className='mb-5 forms-data' >
                                                     <AsyncSelect
@@ -359,7 +415,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                         </div>
 
                                         {
-                                            watch('source')?.name == 'Agency' &&
+                                            watch('source')?.id == 6 &&
                                             <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'>Referred Agency</a>
@@ -379,28 +435,20 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
 
 
 
-                                        {
-                                            watch('source')?.name == 'Events' &&
+                                        {/* {
+                                            watch('source')?.id == 5 &&
                                             <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
-                                                    <a className='form-text'>Event</a>
+                                                    <a className='form-text'>Referred Student</a>
                                                     <Grid className='mb-5 forms-data' >
-                                                        <SelectX
-                                                            // menuPlacement='top'
-                                                            loadOptions={fetchEvents}
-                                                            control={control}
-                                                            // error={errors?.assigned_to?.id ? errors?.assigned_to?.message : false}
-                                                            // error2={errors?.assigned_to?.message ? errors?.assigned_to?.message : false}
-                                                            name={'events'}
-                                                            defaultValue={watch('events')}
-                                                        />
+                                                        <AsyncSelect placeholder='Select...' name='student' defaultValue={watch('student')} isClearable defaultOptions loadOptions={fetchStudents} getOptionLabel={getOptionLabel} getOptionValue={(e) => e.id} onChange={(e) => setValue('student', e)} />
                                                     </Grid>
                                                 </div>
                                             </div>
-                                        }
+                                        } */}
 
-                                        {
-                                            watch('source')?.name == 'University' &&
+                                        {/* {
+                                            watch('source')?.id == 7 &&
                                             <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'>Referred University</a>
@@ -416,7 +464,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                     </Grid>
                                                 </div>
                                             </div>
-                                        }
+                                        } */}
 
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>

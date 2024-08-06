@@ -41,14 +41,16 @@ const BarColorChartComponent = ({ leadStage }) => {
         scales: {
           y: {
             beginAtZero: true,
-            // max: 5, // Adjust max value if your data requires it
+            // Adjust the minimum value to add space between bars and top of the chart
+            suggestedMin: 0, // This can be adjusted if you want more padding
+            suggestedMax: Math.max(...data) * 1.1, // Optional: increases the max value to ensure space at the top
             grid: {
-              display: false, // Hide grid lines
+                display: false,
             },
             ticks: {
-              display: false, // Hide x-axis tick marks and labels
+                display: false,
             },
-          },
+        },
           x: {
             grid: {
               display: false, // Hide grid lines
