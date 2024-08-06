@@ -397,7 +397,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
                                                                     id={labelId}
                                                                     scope="row"
                                                                     padding="none"
-                                                                    className='reg-name'
+                                                                    className='reg-name a_hover'
                                                                 >
                                                                     {row.name}
                                                                 </TableCell>

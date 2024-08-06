@@ -390,7 +390,7 @@ export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page
                                                                 id={labelId}
                                                                 scope="row"
                                                                 padding="none"
-                                                                className='reg-name'
+                                                                className='reg-name a_hover'
                                                             >
                                                                 {row.title}
                                                             </TableCell>

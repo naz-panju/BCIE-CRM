@@ -478,24 +478,25 @@ function DashboardIndex() {
     const [submitApplicationList, setSubmitApplicationList] = useState([]);
     const [submitApplicationLoading, setSubmitApplicationLoading] = useState(true);
     const fetchsubmitApplication = async () => {
-        setSubmitApplicationLoading(true)
-        try {
-            const response = await DashboardApi.list({
-                type: 'applications_by_submitted_status',
-                // date_from: moment(weeklyApplicationRange[0]).format('YYYY-MM-DD'),
-                // date_to: moment(weeklyApplicationRange[1]).format('YYYY-MM-DD'),
-                office: officeId || '',
-                country: selectedCountries?.id || '',
-                counselor: counsellorId || '',
-                manager: selectedMangeId || '',
-                intake: intakeId || '',
-            })
-            console.log(response);
-            setSubmitApplicationList(response?.data)
-            setSubmitApplicationLoading(false)
-        } catch (error) {
-            console.log(error);
-            setSubmitApplicationLoading(false)
+        if (intakeId) {
+            setSubmitApplicationLoading(true)
+            try {
+                const response = await DashboardApi.list({
+                    type: 'applications_by_submitted_status',
+                    // date_from: moment(weeklyApplicationRange[0]).format('YYYY-MM-DD'),
+                    // date_to: moment(weeklyApplicationRange[1]).format('YYYY-MM-DD'),
+                    office: officeId || '',
+                    country: selectedCountries?.id || '',
+                    counselor: counsellorId || '',
+                    manager: selectedMangeId || '',
+                    intake: intakeId || '',
+                })
+                setSubmitApplicationList(response?.data)
+                setSubmitApplicationLoading(false)
+            } catch (error) {
+                console.log(error);
+                setSubmitApplicationLoading(false)
+            }
         }
     }
     const [targets, setTargets] = useState([]);
@@ -774,7 +775,7 @@ function DashboardIndex() {
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='comm_sec'>
-                            <CommunicationSection leadSourceListLoading={leadSourceListLoading} leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} fetchManagers={fetchManagers} handleManagerSelect={handleManagerSelect} selectedManager={selectedManager} communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} selectedMangeId={selectedMangeId} counsellorId={counsellorId}  />
+                            <CommunicationSection leadSourceListLoading={leadSourceListLoading} leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} fetchManagers={fetchManagers} handleManagerSelect={handleManagerSelect} selectedManager={selectedManager} communicationLogLoading={communicationLogLoading} paymentLoading={paymentLoading} targetLoading={targetLoading} fetchCounsellors={fetchCounsellors} selectedCounsellor={selectedCounsellor} handleCounsellorSelect={handleCounsellorSelect} communicationLog={communicationLog} payments={payments} targets={targets} selectedMangeId={selectedMangeId} counsellorId={counsellorId} />
                         </div>
                     }
 

@@ -407,7 +407,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                                 id={labelId}
                                                                 scope="row"
                                                                 padding="none"
-                                                                className='reg-name'
+                                                                className='reg-name a_hover'
                                                             >
                                                                 {row?.title}
                                                             </TableCell>

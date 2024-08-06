@@ -402,7 +402,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
                                                                 id={labelId}
                                                                 scope="row"
                                                                 padding="none"
-                                                                className='reg-name'
+                                                                className='reg-name a_hover'
                                                             >
                                                                 {row.name}
                                                             </TableCell>

@@ -100,79 +100,82 @@ function Details({ data, loading }) {
             // </Grid>
 
             <div style={{ padding: '15px' }} className='lead-tabpanel-content-item'>
-            <div className="grid grid-cols-1 gap-4">
-                <div className="lead-details-list">
-                    <label style={{ fontWeight: 'bold' }}> Template Name:</label>
-                    <span> {data?.name}</span>
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}> Template Name:</label>
+                        <span> {data?.name}</span>
+                    </div>
                 </div>
-            </div>
 
-            <div className="grid grid-cols-1 gap-4">
-                <div className="lead-details-list">
-                    <label style={{ fontWeight: 'bold' }}>Subject:</label>
-                    <span>{data?.subject}</span>
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Subject:</label>
+                        <span>{data?.subject}</span>
+                    </div>
                 </div>
-            </div>
 
-            <div className="grid grid-cols-1 gap-4">
-                <div className="lead-details-list">
-                    <label style={{ fontWeight: 'bold' }}>Body:</label>
-                    <span>
-                        <div dangerouslySetInnerHTML={{ __html: data?.body }} />
-                    </span>
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Body:</label>
+                        <span>
+                            <div dangerouslySetInnerHTML={{ __html: data?.body }} />
+                        </span>
+                    </div>
                 </div>
-            </div>
 
-            <div className="grid grid-cols-1 gap-4">
-                <div className="lead-details-list">
-                    <label style={{ fontWeight: 'bold' }}>CC:</label>
-                    <span>{data?.default_cc}</span>
-                </div>
-            </div>
-
-           
-
-            <div className="grid grid-cols-1 gap-4">
-                <div className="lead-details-list">
-                    <label style={{ fontWeight: 'bold' }}>Body Footer:</label>
-                    <span>
-                        <div dangerouslySetInnerHTML={{ __html: data?.body_footer }} />
-                    </span>
-                </div>
-            </div>
-
-            {data?.attachments?.length > 0 && (
-                <>
+                {
+                    data?.default_cc &&
                     <div className="grid grid-cols-1 gap-4">
                         <div className="lead-details-list">
-                            <label style={{ fontWeight: 'bold' }}>Attachments:</label>
-                            {data?.attachments?.map((obj, index) => (
-                                <span key={index} style={{ color: 'blue', display: 'block' }}>
-                                    <a href={obj?.attachment} target='_blank' style={{ cursor: 'pointer' }}>
-                                        {trimUrlAndNumbers(obj?.attachment)}
-                                    </a>
-                                </span>
-                            ))}
+                            <label style={{ fontWeight: 'bold' }}>CC:</label>
+                            <span>{data?.default_cc}</span>
                         </div>
                     </div>
-                    <hr style={{ margin: '10px 0' }} />
-                </>
-            )}
+                }
 
-            <div className="grid grid-cols-2 gap-4">
-                <div className="lead-details-list">
-                    <label style={{ fontWeight: 'bold' }}>Created By:</label>
-                    <span>{data?.created_by?.name}</span>
+
+
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Body Footer:</label>
+                        <span>
+                            <div dangerouslySetInnerHTML={{ __html: data?.body_footer }} />
+                        </span>
+                    </div>
                 </div>
-                <div className="lead-details-list">
-                    <label style={{ fontWeight: 'bold' }}>Created At:</label>
-                    <span>
-                        {data?.updated_at && moment(data?.updated_at).format("DD-MM-YYYY")}
-                    </span>
+
+                {data?.attachments?.length > 0 && (
+                    <>
+                        <div className="grid grid-cols-1 gap-4">
+                            <div className="lead-details-list">
+                                <label style={{ fontWeight: 'bold' }}>Attachments:</label>
+                                {data?.attachments?.map((obj, index) => (
+                                    <span key={index} style={{ color: 'blue', display: 'block' }}>
+                                        <a href={obj?.attachment} target='_blank' style={{ cursor: 'pointer' }}>
+                                            {trimUrlAndNumbers(obj?.attachment)}
+                                        </a>
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        <hr style={{ margin: '10px 0' }} />
+                    </>
+                )}
+
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Created By:</label>
+                        <span>{data?.created_by?.name}</span>
+                    </div>
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Created At:</label>
+                        <span>
+                            {data?.updated_at && moment(data?.updated_at).format("DD-MM-YYYY")}
+                        </span>
+                    </div>
                 </div>
             </div>
-        </div>
-            
+
     )
 }
 

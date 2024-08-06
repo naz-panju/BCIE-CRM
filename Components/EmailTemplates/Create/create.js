@@ -132,7 +132,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         formData.append('subject', data?.subject)
         formData.append('body', data?.body)
         formData.append('body_footer', data?.body_footer)
-        formData.append('default_cc', data?.default_cc)
+        formData.append('default_cc', data?.default_cc || '')
 
         if (isChecked) {
             formData.append('is_private_template', 1)

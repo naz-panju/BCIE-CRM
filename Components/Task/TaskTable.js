@@ -707,7 +707,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
                                 id={labelId}
                                 scope="row"
                                 padding="none"
-                                className='reg-name'
+                                className='reg-name a_hover'
                               >
                                 {row?.title}
                               </TableCell>

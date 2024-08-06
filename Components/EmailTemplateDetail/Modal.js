@@ -55,7 +55,7 @@ export default function EmailTemplateDetailModal({ id, setId }) {
                 open={open}
                 onClose={handleClose}
             >
-                <Grid width={650}>
+                <Grid width={750}>
                     
                     <Grid>
                         <EmailTemplateDetailTabs id={id} setId={setId} close={handleClose} />

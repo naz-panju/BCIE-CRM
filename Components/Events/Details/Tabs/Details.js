@@ -12,79 +12,51 @@ function Details({ data, loading }) {
             // for loading
             loadingDetail()
             :
-            <Grid p={3}>
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Name:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.name}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
+            <div style={{ padding: '15px' }} className='lead-tabpanel-content-item'>
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Name:</label>
+                        <span>{data?.name}</span>
+                    </div>
+                </div>
 
 
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Venue:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.venue}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Branch:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.office?.name}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Venue:</label>
+                        <span>{data?.venue}</span>
+                    </div>
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Branch:</label>
+                        <span>{data?.office?.name}</span>
+                    </div>
+                </div>
 
-                <Grid container style={{ marginBottom: '10px' }}>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Start Date:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {
-                                data?.start_date &&
-                                moment(data?.start_date).format("DD-MM-YYYY")
-                            }
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6} sm={6}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            End Date:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {
-                                data?.end_date &&
-                                moment(data?.end_date).format("DD-MM-YYYY")
-                            }
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Divider sx={{ mb: 1 }} />
 
-                <Grid container spacing={2} style={{ marginBottom: '10px' }}>
-                    <Grid item xs={12} sm={12}>
-                        <Typography variant="" style={{ fontWeight: 'bold' }}>
-                            Description:
-                        </Typography>
-                        <Typography variant="body1" style={{ fontSize: '16px', color: 'grey' }}>
-                            {data?.description}
-                        </Typography>
-                    </Grid>
-                </Grid >
-                <Divider sx={{ mb: 1 }} />
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Start Date:</label>
+                        <span>
+                            {data?.start_date && moment(data?.start_date).format("DD-MM-YYYY")}
+                        </span>
+                    </div>
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>End Date:</label>
+                        <span>
+                            {data?.end_date && moment(data?.end_date).format("DD-MM-YYYY")}
+                        </span>
+                    </div>
+                </div>
 
-            </Grid>
+
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Description:</label>
+                        <span>{data?.description}</span>
+                    </div>
+                </div>
+            </div>
+
     )
 }
 
