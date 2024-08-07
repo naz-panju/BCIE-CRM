@@ -225,7 +225,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
             // console.log(response);
 
             if (response?.status == 200 || response?.status == 201) {
-                setValue('body', response?.data?.data?.content || '')
+                setValue('body', response?.data?.data?.template?.message || '')
                 seteditorKey(Math.random() * 0.23)
                 setTextBoxLoading(false)
             } else {
