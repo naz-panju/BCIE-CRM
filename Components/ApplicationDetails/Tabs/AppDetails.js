@@ -80,7 +80,7 @@ function LeadDetail({ data, handleEdit, loading, appDetails }) {
                         </div>
 
                         <div className="lead-details-list">
-                            <label style={{ fontWeight: 'bold' }} >Mobile Number  </label>: +{data?.phone_country_code} {data?.phone_number}
+                            <label style={{ fontWeight: 'bold' }} >Mobile Number  </label>: {data?.phone_number ? '+'+data?.phone_number:'NA'}
                         </div>
 
                         <div className="lead-details-list">

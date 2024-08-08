@@ -69,7 +69,7 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
                                                                             <div style={{
                                                                                 padding:0,
                                                                                 width: '3px',  // Width of the vertical line
-                                                                                borderLeft: obj?.type=='Whatsapp Send' ?'3px solid blue':'3px green',  // Vertical line
+                                                                                borderLeft: obj?.type=='Whatsapp Send' ?'3px solid blue':'3px solid green',  // Vertical line
                                                                                 height: '23px',  // Full height of the TableCell
                                                                                 marginRight: '8px',  // Space between the line and the text
                                                                                 marginLeft:'0%'
@@ -83,9 +83,9 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
                                                                     <TableCell>
                                                                         {
                                                                             moment(obj?.message_date).isSame(moment(), 'day') ?
-                                                                                moment(obj?.message_date).format('HH:mm')
+                                                                                moment(obj?.message_date).fromNow()
                                                                                 :
-                                                                                moment(obj?.message_date).format('DD MMM')
+                                                                                moment(obj?.message_date).format('DD MMM hh:mm A')
                                                                         }
                                                                     </TableCell>
                                                                 </TableRow>)

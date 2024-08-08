@@ -258,9 +258,9 @@ export default function ConvertLeadToStudent({ lead_id, details, editId, setEdit
         if (details) {
             setValue('name', details?.name)
             setValue('email', details?.email)
-            setValue('phone', `${details?.phone_country_code}${details?.phone_number}`)
-            setValue('alt_phone', `${details?.alternate_phone_country_code}${details?.alternate_phone_number}`)
-            setValue('whatsapp', `${details?.whatsapp_country_code}${details?.whatsapp_number}`)
+            setValue('phone', `${details?.phone_number}`)
+            setValue('alt_phone', `${details?.alternate_phone_number}`)
+            setValue('whatsapp', `${details?.whatsapp_number}`)
 
             setValue('country_of_residence', details?.country)
             setValue('country_of_birth', details?.country)

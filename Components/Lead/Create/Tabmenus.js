@@ -243,30 +243,30 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         }
 
         const { dialCode } = country;
-        setCode(dialCode)
+        // setCode(dialCode)
         setValue('phone', value)
         if (editId == 0) {
             setValue('whatsapp', value)
-            setWhatsappCode(dialCode)
+            // setWhatsappCode(dialCode)
             // setValue('whatsapp', value)
-            if (value.startsWith(dialCode)) {
-                const trimmedPhone = value.slice(dialCode.length);
-                setWhatsapp(trimmedPhone);
-            } else {
+            // if (value.startsWith(dialCode)) {
+            //     const trimmedPhone = value.slice(dialCode.length);
+            //     setWhatsapp(trimmedPhone);
+            // } else {
                 setWhatsapp(value);
-            }
+            // }
             if (!altPhone) {
                 setValue('alt_phone', dialCode)
-                setAltCode(dialCode)
+                // setAltCode(dialCode)
                 // setAltPhone(dialCode)
             }
         }
-        if (value.startsWith(dialCode)) {
-            const trimmedPhone = value.slice(dialCode.length);
-            setPhone(trimmedPhone);
-        } else {
+        // if (value.startsWith(dialCode)) {
+        //     const trimmedPhone = value.slice(dialCode.length);
+        //     setPhone(trimmedPhone);
+        // } else {
             setPhone(value);
-        }
+        // }
         // Trigger validation for the 'phone' field
         trigger('phone');
     };
@@ -280,15 +280,15 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             return;
         }
 
-        const { dialCode } = country;
-        setAltCode(dialCode)
+        // const { dialCode } = country;
+        // setAltCode(dialCode)
         setValue('alt_phone', value)
-        if (value.startsWith(dialCode)) {
-            const trimmedPhone = value.slice(dialCode.length);
-            setAltPhone(trimmedPhone);
-        } else {
+        // if (value.startsWith(dialCode)) {
+        //     const trimmedPhone = value.slice(dialCode.length);
+        //     setAltPhone(trimmedPhone);
+        // } else {
             setAltPhone(value);
-        }
+        // }
         // Trigger validation for the 'phone' field
         trigger('alt_phone');
     };
@@ -302,15 +302,15 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             return;
         }
 
-        const { dialCode } = country;
-        setWhatsappCode(dialCode)
+        // const { dialCode } = country;
+        // setWhatsappCode(dialCode)
         setValue('whatsapp', value)
-        if (value.startsWith(dialCode)) {
-            const trimmedPhone = value.slice(dialCode.length);
-            setWhatsapp(trimmedPhone);
-        } else {
+        // if (value.startsWith(dialCode)) {
+        //     const trimmedPhone = value.slice(dialCode.length);
+        //     setWhatsapp(trimmedPhone);
+        // } else {
             setWhatsapp(value);
-        }
+        // }
         // Trigger validation for the 'phone' field
         trigger('whatsapp');
     };
@@ -327,15 +327,15 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             // setCode(dialCode)
             if (watch('phone') == `+${code}` || watch('phone') == code) {
                 setValue('phone', `+${data?.phonecode}`)
-                setCode(data?.phonecode)
+                // setCode(data?.phonecode)
             }
             if (watch('alt_phone') == `+${altCode}` || watch('alt_phone') == altCode) {
                 setValue('alt_phone', `+${data?.phonecode}`)
-                setAltCode(data?.phonecode)
+                // setAltCode(data?.phonecode)
             }
             if (watch('whatsapp') == `+${whatsappCode}` || watch('whatsapp') == whatsappCode) {
                 setValue('whatsapp', `+${data?.phonecode}`)
-                setWhatsappCode(data?.phonecode)
+                // setWhatsappCode(data?.phonecode)
             }
 
             // setValue('alt_phone', `+${data?.phonecode}`)
@@ -351,13 +351,9 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
     const [titles, settitles] = useState([])
     const [currentTitle, setcurrentTitle] = useState()
-
-
-    console.log(watch('student'),watch('source'));
+    
 
     const onSubmit = async (data) => {
-
-        console.log(data);
 
         setLoading(true)
         let dob = ''
@@ -375,13 +371,13 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             name: data?.name,
             email: data?.email,
 
-            phone_country_code: code,
+            // phone_country_code: code,
             phone_number: phone,
 
-            alternate_phone_country_code: altCode || code,
+            // alternate_phone_country_code: altCode || code,
             alternate_phone_number: altPhone || null,
 
-            whatsapp_country_code: whatsappCode || code,
+            // whatsapp_country_code: whatsappCode || code,
             whatsapp_number: whatsapp || null,
 
             preferred_course: data?.preffered_course,
@@ -407,7 +403,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             agency_id: data?.source?.id == 6 ? data?.agency?.id : null || null,
             referred_student_id: data?.source?.id == 5 ? data?.student?.id : null || null,
             referral_university_id: data?.source?.id == 7 ? data?.referred_university?.id : null || null,
-            // country_id: data?.country?.id,
+            country_id: session?.data?.user?.office_country?.id,
 
             note: data?.note
         }
@@ -419,7 +415,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             dataToSubmit['whatsapp_country_code'] = code
         }
 
-        console.log(dataToSubmit);
+        // console.log(dataToSubmit);
 
         let action;
 
@@ -480,17 +476,17 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             setValue('name', data?.name)
             setValue('email', data?.email)
 
-            setValue('phone', `+${data?.phone_country_code}${data?.phone_number}`)
+            setValue('phone', `${data?.phone_number}`)
             setPhone(data?.phone_number)
-            setCode(data?.phone_country_code)
+            // setCode(data?.phone_country_code)
 
-            setValue('alt_phone', `+${data?.alternate_phone_country_code}${data?.alternate_phone_number}`)
+            setValue('alt_phone', `${data?.alternate_phone_number}`)
             setAltPhone(data?.alternate_phone_number)
-            setAltCode(data?.alternate_phone_country_code)
+            // setAltCode(data?.alternate_phone_country_code)
 
-            setValue('whatsapp', `+${data?.whatsapp_country_code}${data?.whatsapp_number}`)
+            setValue('whatsapp', `${data?.whatsapp_number}`)
             setWhatsapp(data?.whatsapp_number)
-            setWhatsappCode(data?.whatsapp_country_code)
+            // setWhatsappCode(data?.whatsapp_country_code)
 
             setValue('preferred_country', data?.preferred_countries)
             setValue('preffered_course', data?.preferred_course)

@@ -8,7 +8,7 @@ import { Skeleton } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image'
 
-function ApplicationSection({paymentLoading,payments, selectedAppCounsellor, selectedAppCoordinators, handleAppCounsellorSelect, handleAppCoordinatorSelect, fetchAppCounsellors, fetchAppCoordinators, intakeRange, weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList }) {
+function ApplicationSection({paymentLoading,payments, selectedAppCounsellor, selectedAppCoordinators, handleAppCounsellorSelect, handleAppCoordinatorSelect, fetchAppCounsellors, fetchAppCoordinators, intakeRange, weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList,officeId }) {
 
 
     const session = useSession()
@@ -224,8 +224,8 @@ function ApplicationSection({paymentLoading,payments, selectedAppCounsellor, sel
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
                                         isClearable
                                         defaultOptions
-                                        // isDisabled={!selectedCountries}
-                                        // key={selectedCountries?.id}
+                                        isDisabled={!officeId}
+                                        key={officeId}
                                         name='app_coordinator'
                                         value={selectedAppCoordinators}
                                         defaultValue={selectedAppCoordinators}

@@ -240,11 +240,13 @@ function LeadDetails() {
   const [toNoteTab, setToNoteTab] = useState(false)
   const switchNoteTab = () => {
     setToNoteTab(true)
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   }
 
   const [toTaskTab, setToTaskTab] = useState(false)
   const switchTaskTab = () => {
     setToTaskTab(true)
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   }
 
   const [appRefresh, setappRefresh] = useState(false)
@@ -431,30 +433,30 @@ function LeadDetails() {
 
                       <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-50'>
 
-                        <div>
-                          {
-                            loading ?
-                              <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
-                              :
+                        {
+                          loading ?
+                            <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
+                            :
+                            <div>
                               details?.email &&
                               <p><label>Email:</label> <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
                                 <path d="M2.875 7.66675L10.3906 12.6771C11.0624 13.125 11.9376 13.125 12.6094 12.6771L20.125 7.66675M4.875 18.2084H18.125C19.2296 18.2084 20.125 17.313 20.125 16.2084V6.79175C20.125 5.68718 19.2296 4.79175 18.125 4.79175H4.875C3.77043 4.79175 2.875 5.68718 2.875 6.79175V16.2084C2.875 17.313 3.77043 18.2084 4.875 18.2084Z" stroke="#0B0D23" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                               </svg> {details?.email}</p>
-                          }
-                        </div>
+                            </div>
+                        }
 
-                        <div>
-                          {
-                            loading ?
-                              <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
-                              :
+                        {
+                          loading ?
+                            <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
+                            :
+                            <div>
                               details?.phone_number &&
                               <p><label>Mobile:</label>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                   <path d="M3.44487 4.96848C4.2382 10.8128 9.18786 15.7625 15.0322 16.5558C15.9769 16.684 16.8019 15.9937 16.9889 15.0589L17.2011 13.9979C17.3779 13.1135 16.941 12.2202 16.1343 11.8168L15.3326 11.416C14.6578 11.0786 13.8383 11.272 13.3856 11.8756C13.0908 12.2687 12.6173 12.5083 12.1641 12.3184C10.6066 11.6655 8.33517 9.394 7.68229 7.83651C7.49233 7.38336 7.73199 6.90983 8.12507 6.61502C8.72861 6.16236 8.92208 5.34285 8.58468 4.66807L8.18381 3.86632C7.78047 3.05963 6.88711 2.62271 6.00272 2.79959L4.94175 3.01178C4.0069 3.19875 3.31663 4.02378 3.44487 4.96848Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>  +{details?.phone_country_code} {details?.phone_number}</p>
-                          }
-                        </div>
+                                </svg> {details?.phone_number ? '+' + details?.phone_number : 'NA'} </p>
+                            </div>
+                        }
 
                       </div>
 

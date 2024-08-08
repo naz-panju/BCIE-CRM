@@ -91,6 +91,9 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh, page,
                                                                 Date and Time
                                                             </Typography>
                                                         </TableCell>
+                                                        <TableCell>
+                                                            
+                                                        </TableCell>
 
                                                     </TableRow>
                                                 </TableHead>
@@ -138,7 +141,7 @@ function CallTab({ list, setCallLimit, loading, handleEdit, handleRefresh, page,
                                                                         {/* {obj?.call_summary} */}
                                                                     </TableCell>
 
-                                                                    <TableCell>{moment(obj?.date_time_of_call).format('DD-MM-YYYY HH:mm')}</TableCell>
+                                                                    <TableCell>{moment(obj?.date_time_of_call).format('DD-MM-YYYY hh:mm A')}</TableCell>
 
                                                                     <TableCell>
                                                                         <Edit onClick={() => handleEdit(obj?.id)} fontSize='small' sx={{ color: 'blue', cursor: 'pointer' }} />

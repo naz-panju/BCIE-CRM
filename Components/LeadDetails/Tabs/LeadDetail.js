@@ -127,7 +127,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Email Address </label> <svg xmlns="http://www.w3.org/2000/svg" width="23" height="24" viewBox="0 0 23 24" fill="none">
                                         <path d="M2.875 8.33433L10.399 13.2959C11.0669 13.7364 11.9331 13.7364 12.601 13.2959L20.125 8.33433M4.875 18.7618H18.125C19.2296 18.7618 20.125 17.8663 20.125 16.7618V7.49048C20.125 6.38591 19.2296 5.49048 18.125 5.49048H4.875C3.77043 5.49048 2.875 6.38591 2.875 7.49048V16.7618C2.875 17.8663 3.77043 18.7618 4.875 18.7618Z" stroke="#0B0D23" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg> {data?.email}
+                                    </svg> {data?.email || 'NA'}
                                 </div>
                             </div>
 
@@ -135,11 +135,13 @@ function LeadDetail({ data, handleEdit, loading }) {
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Mobile Number  </label> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
                                         <path d="M3.44776 5.6863C4.25031 11.4593 9.19682 16.3452 15.0355 17.1276C15.9789 17.254 16.8029 16.5661 16.9916 15.6332L17.1959 14.6226C17.3756 13.7339 16.9349 12.8355 16.1222 12.4335L15.3256 12.0396C14.6534 11.7071 13.8397 11.8988 13.3866 12.4964C13.091 12.8863 12.6193 13.1238 12.1671 12.9368C10.6106 12.2931 8.33851 10.0468 7.68355 8.50529C7.49267 8.05604 7.73179 7.58582 8.12381 7.295C8.72671 6.84772 8.91983 6.03122 8.58117 5.36126L8.18518 4.57785C7.78047 3.77721 6.89216 3.34401 6.01211 3.51812L4.94584 3.72906C4.00907 3.91438 3.31627 4.74047 3.44776 5.6863Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg> +{data?.phone_country_code} {data?.phone_number}
+                                    </svg> {data?.phone_number ? '+' : ''}{data?.phone_number || 'NA'}
                                 </div>
                             </div>
 
-
+                            {/* phone_country_code
+                            alternate_phone_country_code
+                            whatsapp_country_code */}
                             <div>
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Alternate Mobile Number </label> <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">
@@ -147,7 +149,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     </svg>
                                     {
                                         data?.alternate_phone_number ?
-                                            ` +${data?.alternate_phone_country_code} ${data?.alternate_phone_number}`
+                                            ` + ${data?.alternate_phone_number}`
                                             : ' NA'
                                     }
                                 </div>
@@ -161,7 +163,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     </svg>
                                     {
                                         data?.whatsapp_number ?
-                                            ` +${data?.whatsapp_country_code} ${data?.whatsapp_number}`
+                                            ` +${data?.whatsapp_number}`
                                             : ' NA'
                                     }
                                 </div>
@@ -219,7 +221,7 @@ function LeadDetail({ data, handleEdit, loading }) {
 
                             <div>
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Preferred Courses </label> {data?.preferred_course}
+                                    <label style={{ fontWeight: 'bold' }}>Preferred Courses </label> {data?.preferred_course || 'NA'}
                                 </div>
                             </div>
 

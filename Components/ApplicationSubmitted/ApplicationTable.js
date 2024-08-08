@@ -225,8 +225,8 @@ function EnhancedTableHead(props) {
                                 direction={orderBy === headCell.id ? order : 'asc'}
                                 onClick={createSortHandler(headCell.id)}
                             > */}
-                                {headCell.label}
-                                {/* {orderBy === headCell.id ? (
+                        {headCell.label}
+                        {/* {orderBy === headCell.id ? (
                                     <Box component="span" sx={visuallyHidden}>
                                         {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                     </Box>
@@ -443,7 +443,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         })
     }
     const fetchCoordinator = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 6 }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 6, office_id: selectedBranch }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -636,6 +636,8 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setValue('branch', e || '')
         setselectedCreatedBy();
         setValue('created_by', '')
+        setValue('app_coordinator', '')
+        setselectedcoordinator()
     }
 
     const [searchRefresh, setsearchRefresh] = useState(false)
@@ -648,6 +650,23 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
             router.replace(`/applications-submitted?page=${1}`);
         }
     }
+
+    const fetchSource = (e) => {
+        return ListingApi.leadSource({ keyword: e, }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const [selectedSource, setselectedSource] = useState()
+    const handleSelectSource = (e) => {
+        setselectedSource(e?.id || '');
+        setValue('source', e || '')
+    }
+
     const handleClearSearch = (from) => {
 
         // reset()
@@ -681,6 +700,9 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setValue('branch', '')
         setselectedBranch();
 
+        setValue('source', '')
+        setselectedSource()
+
         onSearch()
     }
 
@@ -689,7 +711,8 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
 
         let params = {
             limit: limit,
-            deposit_not_paid:1,
+            deposit_not_paid: 1,
+            source_id: selectedSource,
             // application statuses:unsubmitted,
             // status: 'Admission Completed',
             submitted: 1,
@@ -796,7 +819,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
         setDetails(row)
         if (edit) {
             setUniId(row?.id)
-        }else{
+        } else {
             setUniId(0)
         }
     }
@@ -1005,26 +1028,6 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
 
                     <div>
                         <div className='form-group'>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
-                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            <AsyncSelect
-                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
-                                isClearable
-                                defaultOptions
-                                name='app_coordinator'
-                                value={watch('app_coordinator')}
-                                defaultValue={watch('app_coordinator')}
-                                loadOptions={fetchCoordinator}
-                                getOptionLabel={(e) => e.name}
-                                getOptionValue={(e) => e.id}
-                                placeholder={<div>App Coordinator</div>}
-                                onChange={handleAppCoordinatorChange}
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <div className='form-group'>
 
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
                                 <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -1052,6 +1055,30 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                             <AsyncSelect
                                 styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                 isClearable
+                                isDisabled={!selectedBranch}
+                                key={selectedBranch}
+                                defaultOptions
+                                name='app_coordinator'
+                                value={watch('app_coordinator')}
+                                defaultValue={watch('app_coordinator')}
+                                loadOptions={fetchCoordinator}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>App Coordinator</div>}
+                                onChange={handleAppCoordinatorChange}
+                            />
+                        </div>
+                    </div>
+
+
+                    <div>
+                        <div className='form-group'>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
+                                <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <AsyncSelect
+                                styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                                isClearable
                                 defaultOptions
                                 isDisabled={!selectedBranch}
                                 key={selectedBranch}
@@ -1063,6 +1090,27 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                 getOptionValue={(e) => e.id}
                                 placeholder={<div>Counsellors</div>}
                                 onChange={handleCreatedByChangeChange}
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div className='form-group'>
+
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                                <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <AsyncSelect
+                                isClearable
+                                defaultOptions
+                                name='source'
+                                value={watch('source')}
+                                defaultValue={watch('source')}
+                                loadOptions={fetchSource}
+                                getOptionLabel={(e) => e.name}
+                                getOptionValue={(e) => e.id}
+                                placeholder={<div>Select Source</div>}
+                                onChange={handleSelectSource}
                             />
                         </div>
                     </div>
@@ -1217,7 +1265,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                     <br />
                                                                     {
                                                                         row?.application_number && row?.application_number != 'undefined' ?
-                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span onClick={() => handleUniId(row,true)} style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
+                                                                            <span style={{ fontSize: '13px', color: 'grey' }}>UNI ID:<span onClick={() => handleUniId(row, true)} style={{ color: 'black' }}> {row?.application_number && row?.application_number != 'undefined' ? row?.application_number : 'NA'}</span></span>
                                                                             :
                                                                             <Button onClick={() => handleUniId(row)} size='small' variant='outlined'>
                                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
@@ -1229,7 +1277,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                     <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
                                                                         className='a_hover text-sky-600'> {row?.lead?.name} </span>
                                                                 </TableCell>
-     
+
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>

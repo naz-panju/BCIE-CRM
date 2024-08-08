@@ -112,7 +112,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         let params = {
             lead_id: lead_id,
             limit: whatsappLimit,
-            type: ['Whatsapp Send', 'Whatsapp Receive'],
+            type: ['Whatsapp Send', 'Whatsapp'],
             page: whatsappPage,
         }
         if (from == 'app') {

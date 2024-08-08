@@ -80,19 +80,19 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                                         cursor: 'pointer',
                                                                         display: 'flex',
                                                                         alignItems: 'center',
-                                                                        paddingLeft:'0px'
-                                                                       
+                                                                        paddingLeft: '0px'
+
                                                                     }} onClick={() => handleDetailOpen(obj?.id)}>
-                                                                       <Tooltip title={obj?.type}>
+                                                                        <Tooltip title={obj?.type}>
                                                                             <div style={{
-                                                                                padding:0,
+                                                                                padding: 0,
                                                                                 width: '3px',  // Width of the vertical line
-                                                                                borderLeft: obj?.type=='Send' ?'3px solid blue':'3px green',  // Vertical line
+                                                                                borderLeft: obj?.type == 'Send' ? '3px solid blue' : '3px green',  // Vertical line
                                                                                 height: '23px',  // Full height of the TableCell
                                                                                 marginRight: '8px',  // Space between the line and the text
-                                                                                marginLeft:'0%'
+                                                                                marginLeft: '0%'
                                                                             }}></div>
-                                                                       </Tooltip>
+                                                                        </Tooltip>
                                                                         {
                                                                             obj?.subject?.length > 50 ?
                                                                                 <b className='a_hover'> {obj?.subject?.slice(0, 50)} ...</b>
@@ -112,9 +112,9 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                                     <TableCell>
                                                                         {
                                                                             moment(obj?.message_date).isSame(moment(), 'day') ?
-                                                                                moment(obj?.message_date).format('HH:mm')
+                                                                                moment(obj?.message_date).fromNow()
                                                                                 :
-                                                                                moment(obj?.message_date).format('DD MMM')
+                                                                                moment(obj?.message_date).format('DD MMM hh:mm A')
                                                                         }
                                                                     </TableCell>
                                                                 </TableRow>)

@@ -178,26 +178,25 @@ function Form({ data }) {
             return;
         }
 
-        const { dialCode } = country;
-        setCode(dialCode)
+        // const { dialCode } = country;
+        // setCode(dialCode)
         setValue('phone', value)
 
         setValue('whatsapp', value)
-        setWhatsappCode(dialCode)
-        setValue('whatsapp', value)
-        if (value.startsWith(dialCode)) {
-            const trimmedPhone = value.slice(dialCode.length);
-            setWhatsapp(trimmedPhone);
-        } else {
-            setWhatsapp(value);
-        }
+        // setWhatsappCode(dialCode)
+        // if (value.startsWith(dialCode)) {
+        //     const trimmedPhone = value.slice(dialCode.length);
+        //     setWhatsapp(trimmedPhone);
+        // } else {
+        setWhatsapp(value);
+        // }
 
-        if (value.startsWith(dialCode)) {
-            const trimmedPhone = value.slice(dialCode.length);
-            setPhone(trimmedPhone);
-        } else {
-            setPhone(value);
-        }
+        // if (value.startsWith(dialCode)) {
+        //     const trimmedPhone = value.slice(dialCode.length);
+        //     setPhone(trimmedPhone);
+        // } else {
+        setPhone(value);
+        // }
         // Trigger validation for the 'phone' field
         trigger('phone');
     };
@@ -211,15 +210,15 @@ function Form({ data }) {
             return;
         }
 
-        const { dialCode } = country;
-        setAltCode(dialCode)
+        // const { dialCode } = country;
+        // setAltCode(dialCode)
         setValue('alt_phone', value)
-        if (value.startsWith(dialCode)) {
-            const trimmedPhone = value.slice(dialCode.length);
-            setAltPhone(trimmedPhone);
-        } else {
-            setAltPhone(value);
-        }
+        // if (value.startsWith(dialCode)) {
+        //     const trimmedPhone = value.slice(dialCode.length);
+        //     setAltPhone(trimmedPhone);
+        // } else {
+        setAltPhone(value);
+        // }
         // Trigger validation for the 'phone' field
         trigger('alt_phone');
     };
@@ -231,15 +230,15 @@ function Form({ data }) {
             return;
         }
 
-        const { dialCode } = country;
-        setWhatsappCode(dialCode)
+        // const { dialCode } = country;
+        // setWhatsappCode(dialCode)
         setValue('whatsapp', value)
-        if (value.startsWith(dialCode)) {
-            const trimmedPhone = value.slice(dialCode.length);
-            setWhatsapp(trimmedPhone);
-        } else {
-            setWhatsapp(value);
-        }
+        // if (value.startsWith(dialCode)) {
+        //     const trimmedPhone = value.slice(dialCode.length);
+        //     setWhatsapp(trimmedPhone);
+        // } else {
+        setWhatsapp(value);
+        // }
         // Trigger validation for the 'phone' field
         trigger('whatsapp');
     };
@@ -292,13 +291,13 @@ function Form({ data }) {
             name: data?.name,
             email: data?.email,
 
-            phone_country_code: code,
+            // phone_country_code: code,
             phone_number: phone,
 
-            alternate_phone_country_code: altCode,
+            // alternate_phone_country_code: altCode,
             alternate_phone_number: altPhone,
 
-            whatsapp_country_code: whatsappCode,
+            // whatsapp_country_code: whatsappCode,
             whatsapp_number: whatsapp,
 
             preferred_course: data?.preffered_course,

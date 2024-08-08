@@ -151,7 +151,7 @@ function DashboardIndex() {
         setselectedAppCoordinators(data)
     }
     const fetchAppCoordinators = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 6 }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 6,office_id: officeId }).then(response => {
             // console.log(response);
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
@@ -187,13 +187,17 @@ function DashboardIndex() {
 
 
     const [officeId, setOfficeId] = useState();
+    
     const handleOfficeChange = (data) => {
         setValue('office', data || '')
         setOfficeId(data?.id)
 
+        if (session?.data?.user?.role?.id != 4) {
+            setselectedMangeId()
+            setSelectedManager()
+        }
         // if(!data){
-        setselectedMangeId()
-        setSelectedManager()
+
         setValue('counsellor', '')
         setcounsellorId()
         // }
@@ -724,8 +728,8 @@ function DashboardIndex() {
                                 session?.data?.user?.role?.id !== 5 && session?.data?.user?.role?.id !== 6 &&
                                 <Grid mr={2} sx={{ width: 200 }} className='intake_dropdown'>
                                     <AsyncSelect
-                                        isDisabled={!selectedMangeId}
-                                        key={selectedMangeId}
+                                        isDisabled={!selectedMangeId || !officeId}
+                                        key={selectedMangeId || officeId}
                                         styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), }}
                                         placeholder='Counsellor'
                                         name={'counsellor'}
@@ -780,7 +784,7 @@ function DashboardIndex() {
                     }
 
                     <div className='app_sec'>
-                        <ApplicationSection payments={payments} paymentLoading={paymentLoading} fetchAppCoordinators={fetchAppCoordinators} fetchAppCounsellors={fetchAppCounsellors} handleAppCoordinatorSelect={handleAppCoordinatorSelect} handleAppCounsellorSelect={handleAppCounsellorSelect} selectedAppCoordinators={selectedAppCoordinators} selectedAppCounsellor={selectedAppCounsellor} intakeRange={range} submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
+                        <ApplicationSection officeId={officeId} payments={payments} paymentLoading={paymentLoading} fetchAppCoordinators={fetchAppCoordinators} fetchAppCounsellors={fetchAppCounsellors} handleAppCoordinatorSelect={handleAppCoordinatorSelect} handleAppCounsellorSelect={handleAppCounsellorSelect} selectedAppCoordinators={selectedAppCoordinators} selectedAppCounsellor={selectedAppCounsellor} intakeRange={range} submitApplicationLoading={submitApplicationLoading} weeklyApplicationLoading={weeklyApplicationLoading} applicationStagesLoading={applicationStagesLoading} weeklyApplicationList={weeklyApplicationList} submitApplicationList={submitApplicationList} fetchUniversities={fetchUniversities} handleSelectUniversity={handleSelectUniversity} selectedUniversity={selectedUniversity} fetchCountries={fetchCountries} selectedCountries={selectedCountries} handleCountrySelect={handleCountrySelect} applicationStages={applicationStages} weeklyApplicationRange={weeklyApplicationRange} setWeeklyApplicationRange={setWeeklyApplicationRange} />
                     </div>
                 </div>
             </section>
