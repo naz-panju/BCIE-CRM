@@ -13,7 +13,7 @@ const Layout = ({ title, children }) => {
                     <Sidebar />
                 </div>
                 <div style={{width:'100%'}}>
-                    {/* <Header /> */}
+                    <Header />
                     {children}
                     <Footer />
                 </div>

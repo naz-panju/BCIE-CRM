@@ -3,6 +3,7 @@ import { Grid, MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, 
 import moment from 'moment';
 import { AttachmentOutlined, CachedOutlined } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
+import WhatsappMessageModal from '../Modals/WhatsappMessageModal';
 
 
 function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappLimit }) {
@@ -23,11 +24,16 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
         // setPage(1);
     };
 
+    const [whatsappMessageId, setwhatsappMessageId] = useState()
+    const handleWhatsMessageOpen = (id) => {
+        setwhatsappMessageId(id)
+    }
+
     return (
 
         <>
             {
-                <CommEmailDetailModal id={detailId} setId={setdetailId} />
+                <WhatsappMessageModal editId={whatsappMessageId} setEditId={setwhatsappMessageId} />
             }
             <div>
                 {
@@ -49,7 +55,7 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
                                                             </Typography>
                                                         </TableCell>
                                                         <TableCell>
-                                                            
+
                                                         </TableCell>
                                                     </TableRow>
                                                 </TableHead>
@@ -58,28 +64,28 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
                                                         list?.data?.map((obj, index) => {
                                                             return (
                                                                 <TableRow key={index}>
-                                                                   <TableCell sx={{
+                                                                    <TableCell sx={{
                                                                         cursor: 'pointer',
                                                                         display: 'flex',
                                                                         alignItems: 'center',
-                                                                        paddingLeft:'0px'
-                                                                       
+                                                                        paddingLeft: '0px'
+
                                                                     }}>
-                                                                       <Tooltip title={obj?.type}>
+                                                                        <Tooltip title={obj?.type}>
                                                                             <div style={{
-                                                                                padding:0,
+                                                                                padding: 0,
                                                                                 width: '3px',  // Width of the vertical line
-                                                                                borderLeft: obj?.type=='Whatsapp Send' ?'3px solid blue':'3px solid green',  // Vertical line
+                                                                                borderLeft: obj?.type == 'Whatsapp Send' ? '3px solid blue' : '3px solid green',  // Vertical line
                                                                                 height: '23px',  // Full height of the TableCell
                                                                                 marginRight: '8px',  // Space between the line and the text
-                                                                                marginLeft:'0%'
+                                                                                marginLeft: '0%'
                                                                             }}></div>
-                                                                       </Tooltip>
-                                                                      
-                                                                                <b>{obj?.body}</b>
-                                                                        
+                                                                        </Tooltip>
+
+                                                                        <b className='a_hover' onClick={()=>handleWhatsMessageOpen(obj?.id)}>{obj?.body}</b>
+
                                                                     </TableCell>
-                                                                
+
                                                                     <TableCell>
                                                                         {
                                                                             moment(obj?.message_date).isSame(moment(), 'day') ?

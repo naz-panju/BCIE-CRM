@@ -6,29 +6,21 @@ import { Tooltip } from '@mui/material';
 import { signOut, useSession } from 'next-auth/react';
 import { LockOpenIcon } from '@mui/icons-material/LockOpen';
 import { ExitToAppIcon } from '@mui/icons-material/ExitToApp';
-import { ExitToApp, LockOpen, Menu, MenuOpen } from '@mui/icons-material';
+import { ExitToApp, LockOpen, Menu, MenuOpen, NotificationsActiveOutlined } from '@mui/icons-material';
 import { blue } from '@mui/material/colors';
+import SimplePopper from './popper';
 
 
 const Header = ({ }) => {
+
 
   const { data: session, status } = useSession();
 
   const [isOpen, setIsOpen] = useState(false);
   // const [user, setUser] = useState()
 
-
-  const togglePopup = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const closePopup = () => {
-    setIsOpen(false);
-  };
-
   const handleSignout = () => {
     localStorage.removeItem('token')
-    window.location.href = '/login';
     signOut()
   }
 
@@ -41,13 +33,6 @@ const Header = ({ }) => {
     }
     return false;
   });
-
-  const handleButtonClick = () => {
-    // Toggle the state to add or remove the className
-    setSideBarActive(!sideBarActive)
-    localStorage.setItem('settings', JSON.stringify({ sidebar: !sideBarActive }));
-    setIsBodyClassAdded((prev) => !prev);
-  };
 
   const getFirstLettersOfTwoWords = (name) => {
     if (name) {
@@ -63,13 +48,6 @@ const Header = ({ }) => {
     return ""; // Return an empty string if name is not provided
   };
 
-  // useEffect(() => {
-  //     if (typeof window !== 'undefined') {
-  //         localStorage.setItem('settings', JSON.stringify({ sidebar: sideBarActive }));
-  //     }
-  // }, [sideBarActive]);
-
-  // Use a useEffect hook to add or remove the className on the body element
   useEffect(() => {
     if (sideBarActive) {
       document.body.classList.add('body-active');
@@ -104,7 +82,8 @@ const Header = ({ }) => {
               <ul>
                 <li>
                   <div className='dropdown headerDropDown userDropDown'>
-                    <button onClick={togglePopup} id="UserPop"><span>{getFirstLettersOfTwoWords(session?.user?.name)}</span></button>
+                    <SimplePopper />
+                    {/* <button onClick={togglePopup} id="UserPop"><span>{getFirstLettersOfTwoWords(session?.user?.name)}</span></button>
                     {isOpen && (
                       <div className="popup-content" onClick={closePopup}>
 
@@ -129,7 +108,7 @@ const Header = ({ }) => {
                         </div>
 
                       </div>
-                    )}
+                    )} */}
                   </div>
                 </li>
               </ul>

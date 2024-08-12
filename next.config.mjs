@@ -5,6 +5,22 @@ const nextConfig = {
   images: {
     domains: ['bcie.spider.ws'], // Add your external image domains here
   },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.(mp3|mpeg|wav)$/,  // Adjust file extensions as needed
+      use: {
+        loader: 'file-loader',
+        options: {
+          name: '[name].[ext]',
+          outputPath: 'static/media/',
+          publicPath: '/_next/static/media/',
+        },
+      },
+    });
+
+    return config;
+  },
+
 };
 
 export default nextConfig;
