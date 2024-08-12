@@ -133,7 +133,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     function trimUrlAndNumbers(url) {
         const lastSlashIndex = url?.lastIndexOf('/');
         let trimmedString = url?.substring(lastSlashIndex + 1);
-        trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
+        // trimmedString = trimmedString?.replace(/[0-9]/g, ''); // Replace all numeric characters with an empty string
         return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
     }
 
@@ -200,13 +200,13 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                     </audio>
                                 }
                                 {
-                                    !obj?.media?.mime_type?.includes('image') && !obj?.media?.mime_type?.includes('audio') &&
+                                   !obj?.media || (!obj?.media?.mime_type?.includes('image') && !obj?.media?.mime_type?.includes('audio')) &&
                                     <>
                                         <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(obj?.media?.file)} src={"https://e7.pngegg.com/pngimages/559/974/png-clipart-file-folders-computer-file-directory-computer-icons-filing-cabinet-angle-rectangle.png"} width={150} height={350} />
                                         <span style={{
                                             color: 'black',
                                             fontSize: '14px',
-                                        }}> {trimUrlAndNumbers(obj?.body)}</span>
+                                        }}> {trimUrlAndNumbers(obj?.media?.file)}</span>
                                     </>
                                 }
                                 {
