@@ -1566,7 +1566,14 @@ background-image: none !important;
   z-index: 1000 !important;
 }
 
-
 .ck-toolbar-image {
   z-index: 1000 !important;
+}
+
+.sticky-date {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 0; /* Adjust as needed */
+  z-index: 10;
+  background-color: white; /* Or the background color you need */
 }

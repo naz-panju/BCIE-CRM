@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Grid, MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
+import { Button, Grid, MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
 import { AttachmentOutlined, CachedOutlined } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
@@ -57,6 +57,9 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
                                                         <TableCell>
 
                                                         </TableCell>
+                                                        <TableCell>
+
+                                                        </TableCell>
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
@@ -82,8 +85,12 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
                                                                             }}></div>
                                                                         </Tooltip>
 
-                                                                        <b className='a_hover' onClick={()=>handleWhatsMessageOpen(obj?.id)}>{obj?.body}</b>
+                                                                        <b>{obj?.body}</b>
 
+                                                                    </TableCell>
+
+                                                                    <TableCell>
+                                                                        <span onClick={() => handleWhatsMessageOpen(obj?.id)} className='bg-lime-700 p-2 rounded-[8px] shadow-lg hover:bg-lime-800' style={{ cursor: 'pointer',color:'white' }}> Message</span>
                                                                     </TableCell>
 
                                                                     <TableCell>

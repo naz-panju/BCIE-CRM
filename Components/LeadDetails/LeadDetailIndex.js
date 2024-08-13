@@ -110,7 +110,7 @@ function LeadDetails() {
     }
   }
 
-  console.log(details);
+  // console.log(details);
   const handleStudentModalOpen = () => {
     setEditId(0)
   }
@@ -438,10 +438,10 @@ function LeadDetails() {
                             <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
                             :
                             <div>
-                              details?.email &&
+                              {details?.email &&
                               <p><label>Email:</label> <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
                                 <path d="M2.875 7.66675L10.3906 12.6771C11.0624 13.125 11.9376 13.125 12.6094 12.6771L20.125 7.66675M4.875 18.2084H18.125C19.2296 18.2084 20.125 17.313 20.125 16.2084V6.79175C20.125 5.68718 19.2296 4.79175 18.125 4.79175H4.875C3.77043 4.79175 2.875 5.68718 2.875 6.79175V16.2084C2.875 17.313 3.77043 18.2084 4.875 18.2084Z" stroke="#0B0D23" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg> {details?.email}</p>
+                              </svg> {details?.email}</p>}
                             </div>
                         }
 

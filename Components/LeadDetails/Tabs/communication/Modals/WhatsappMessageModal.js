@@ -22,6 +22,8 @@ import Image from 'next/image';
 import { WhatsAppTemplateApi } from '@/data/Endpoints/WhatsAppTemplate';
 import WhatsappBg from '@/img/whatsapp-bg.png';
 import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
+// import DocumentImg from '@/img/logo.png';
+import Doc from '@/img/Document.webp';
 
 
 const scheme = yup.object().shape({
@@ -51,8 +53,11 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
+    const [messaging, setmessaging] = useState(false)
     const onSubmit = async (data) => {
         console.log(data);
+
+        setmessaging(true)
 
         const formData = new FormData()
 
@@ -66,19 +71,20 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
             if (response?.status == 200 || response?.status == 201) {
                 getDetails()
                 setValue('message', '')
+                setmessaging(false)
                 // reset()
                 // handleClose()
                 // setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
-                setLoading(false)
+                setmessaging(false)
             }
 
             // setLoading(false)
         }).catch((error) => {
             console.log(error);
             toast.error(error?.message)
-            setLoading(false)
+            setmessaging(false)
         })
     }
 
@@ -112,19 +118,20 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     };
 
     const [Messages, setMessages] = useState()
+
     const getDetails = async () => {
         setDataLoading(true)
         const response = await CommunicationLogApi.view({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
-            console.log(data);
+            // console.log(data);
             setMessages(data)
 
         }
         setDataLoading(false)
     }
 
-    
+
     const handleTabOpen = (url) => {
         window.open(url, '_blank');
     }
@@ -146,6 +153,27 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
             setOpen(true)
         }
     }, [editId])
+
+//     useEffect(() => {
+//     const handleScroll = () => {
+//         const targetDiv = document.querySelector('.target-div-selector'); // Replace with your div selector
+//         const targetPosition = targetDiv.getBoundingClientRect().top;
+
+//         // Adjust the threshold for when you want it to become sticky
+//         if (targetPosition <= 0) {
+//             setShouldBeSticky(true);
+//         } else {
+//             setShouldBeSticky(false);
+//         }
+//     };
+
+//     window.addEventListener('scroll', handleScroll);
+//     return () => {
+//         window.removeEventListener('scroll', handleScroll);
+//     };
+// }, []);
+
+// const [shouldBeSticky, setShouldBeSticky] = useState(false);
 
     return (
         <Drawer
@@ -171,53 +199,93 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
 
                 {/* Chat Messages */}
 
-                <div style={{ height: '640px', overflowY: 'auto', padding: '15px', backgroundImage: `url(${"https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', flexDirection: 'column-reverse' }}>
+                <div style={{ height: 'calc(100% - 131px)', overflowY: 'auto', padding: '15px', backgroundImage: `url(${"https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', flexDirection: 'column-reverse' }}>
 
 
                     {Messages?.children?.slice()?.reverse()?.map((obj, index) => (
-                        <div key={index} className={`flex ${obj?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
-                            {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
-                            <div
-                                className={`max-w-xs px-4 py-2 rounded-lg ${obj?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
-                                style={{
-                                    borderTopRightRadius: obj?.type === 'Whatsapp Send' ? '0px' : '15px',
-                                    borderTopLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                    backgroundColor: obj?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
-                                    // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                    // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                    padding: '10px',
-                                }}
-                            >
-                                {
-                                    obj?.media?.mime_type?.includes('image') &&
-                                    <Image alt='img' style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(obj?.media?.file)} src={obj?.media?.file} width={150} height={350} />
-                                }
-                                {
-                                    obj?.media?.mime_type?.includes("audio") &&
-                                    <audio controls>
-                                        <source src={obj?.media?.file} type={obj?.media?.mime_type} />
-                                        Your browser does not support the audio element.
-                                    </audio>
-                                }
-                                {
-                                   !obj?.media || (!obj?.media?.mime_type?.includes('image') && !obj?.media?.mime_type?.includes('audio')) &&
-                                    <>
-                                        <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(obj?.media?.file)} src={"https://e7.pngegg.com/pngimages/559/974/png-clipart-file-folders-computer-file-directory-computer-icons-filing-cabinet-angle-rectangle.png"} width={150} height={350} />
+                        <React.Fragment key={index}>
+
+                            <div className={`flex ${obj?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
+                                {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
+                                <div
+                                    className={`flex flex-col max-w-xs px-4 py-2 rounded-lg ${obj?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
+                                    style={{
+                                        borderTopRightRadius: obj?.type === 'Whatsapp Send' ? '0px' : '15px',
+                                        borderTopLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                        backgroundColor: obj?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
+                                        // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                        // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                        padding: '10px',
+                                        paddingBottom: '2px'
+                                    }}
+                                >
+                                    {
+                                        obj?.media?.mime_type?.includes('image') &&
+                                        <Image alt='img' style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(obj?.media?.file)} src={obj?.media?.file} width={150} height={350} />
+                                    }
+                                    {
+                                        obj?.media?.mime_type?.includes("audio") &&
+                                        <audio controls>
+                                            <source src={obj?.media?.file} type={obj?.media?.mime_type} />
+                                            Your browser does not support the audio element.
+                                        </audio>
+                                    }
+                                    {
+                                        !obj?.media || (!obj?.media?.mime_type?.includes('image') && !obj?.media?.mime_type?.includes('audio')) &&
+                                        <>
+                                            <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(obj?.media?.file)} src={Doc} width={150} height={350} />
+                                            <span style={{
+                                                color: 'black',
+                                                fontSize: '14px',
+                                            }}> {trimUrlAndNumbers(obj?.media?.file)}</span>
+                                        </>
+                                    }
+                                    {
+                                        !obj?.media &&
                                         <span style={{
                                             color: 'black',
                                             fontSize: '14px',
-                                        }}> {trimUrlAndNumbers(obj?.media?.file)}</span>
-                                    </>
-                                }
-                                {
-                                    !obj?.media &&
-                                    <span style={{
-                                        color: 'black',
-                                        fontSize: '14px',
-                                    }}> {obj?.body}</span>
-                                }
+                                        }}> {obj?.body}</span>
+                                    }
+
+                                    {/* <br /> */}
+                                    <span className='text-end' style={{
+                                        // position: 'absolute',
+                                        // bottom: '5px',
+                                        // right: '10px',
+
+                                        fontSize: '10px',
+                                        color: 'gray',
+                                    }}>
+                                        {moment(obj?.created_at).format('h:mm A')}
+                                    </span>
+
+                                    {/* {
+                                        obj?.created_at
+                                    } */}
+
+                                </div>
                             </div>
-                        </div>
+
+                           
+                            {
+                                moment(obj?.message_date).format('DD-MM-YYYY') == moment(Messages?.message_date).format('DD-MM-YYYY') ? ""
+                                    :
+                                    moment(obj?.message_date).format('DD-MM-YYYY') != moment(Messages?.children[Messages?.children?.length - index - 2]?.message_date).format('DD-MM-YYYY') &&
+                                    <div className={`mb-3`} style={{
+                                        textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px',
+                                    }}>
+                                        {/* {
+                                            console.log(moment(obj?.message_date).format('DD-MM-YYYY'), moment(Messages?.children[Messages?.children?.length - index]?.message_date).format('DD-MM-YYYY'),)
+                                        } */}
+                                        <span className='rounded-md' style={{ backgroundColor: 'white', width: 'auto', padding: 10 }}>
+                                            {
+                                                moment(obj?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(obj?.message_date).format('DD/MM/YYYY')
+                                            }
+                                        </span>
+                                    </div>
+                            }
+                        </React.Fragment>
                     ))}
 
                     {
@@ -250,11 +318,14 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                         <div className='mb-3' style={{ textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px', }}>
                             <span className='rounded-md' style={{ backgroundColor: 'white', width: 'auto', padding: 10 }}>
                                 {
-                                    moment(Messages?.created_at).isSame(moment(), 'day') ? 'TODAY' : moment(Messages?.created_at).format('DD/MM/YYYY')
+                                    moment(Messages?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(Messages?.message_date).format('DD/MM/YYYY')
                                 }
                             </span>
                         </div>
                     }
+
+
+
                 </div>
 
                 {/* Input and Send Button */}
@@ -262,6 +333,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                     <Grid container spacing={2} alignItems="center">
                         <Grid item xs={11}>
                             <TextField
+                                disabled={messaging}
                                 {...register('message')}
                                 variant="outlined"
                                 fullWidth
@@ -302,13 +374,28 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                     height: '100%',
                                     backgroundColor: 'transparent'
                                 }}
+
+                                disabled={messaging}
                             >
-                                <Send style={{ color: 'green' }} />
+                                {messaging ? (
+                                    <div
+                                        style={{
+                                            width: '20px',
+                                            height: '20px',
+                                            border: '3px solid green',
+                                            borderTop: '3px solid transparent',
+                                            borderRadius: '50%',
+                                            animation: 'spin 1s linear infinite'
+                                        }}
+                                    />
+                                ) : (
+                                    <Send style={{ color: 'green' }} />
+                                )}
                             </Button>
                         </Grid>
                     </Grid>
                 </form>
             </div>
-        </Drawer>
+        </Drawer >
     );
 }
