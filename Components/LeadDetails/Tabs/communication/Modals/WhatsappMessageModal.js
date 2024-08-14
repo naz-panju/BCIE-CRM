@@ -55,10 +55,44 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
     const [messaging, setmessaging] = useState(false)
-    const onSubmit = async (data, callBack, docsSelected, docFiles, setDocLoadind) => {
-        console.log(data);
+    const onSubmit = async (data) => {
 
-        console.log(docsSelected);
+        setmessaging(true)
+
+        const formData = new FormData()
+
+        formData.append('id', editId)
+        formData.append('message', data?.message || 'Document Send')
+
+
+        // console.log(dataToSubmit);
+
+        WhatsAppTemplateApi.reply(formData).then((response) => {
+            console.log(response);
+            if (response?.status == 200 || response?.status == 201) {
+                getDetails()
+                setValue('message', '')
+                setmessaging(false)
+                setattachmentFiles([])
+                setFile([])
+               
+                // reset()
+                // handleClose()
+                // setLoading(false)
+            } else {
+                toast.error(response?.response?.data?.message)
+               
+                setmessaging(false)
+            }
+
+            // setLoading(false)
+        }).catch((error) => {
+            toast.error(error?.message)
+            setmessaging(false)
+        })
+    }
+
+    const onDocSubmit = async (data, callBack, docsSelected, docFiles, setDocLoadind) => {
 
         setmessaging(true)
 
@@ -111,7 +145,6 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
 
             // setLoading(false)
         }).catch((error) => {
-            console.log(error);
             toast.error(error?.message)
             setmessaging(false)
             if (setDocLoadind) {
@@ -119,6 +152,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
             }
         })
     }
+
 
 
     const handleClose = () => {
@@ -215,10 +249,82 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     const [attachmentFiles, setattachmentFiles] = useState([])
     const [file, setFile] = useState([])
 
+    const inputRender = () => (
+        <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 'auto', padding: '10px', borderTop: '1px solid #ddd', backgroundColor: '#f1f2f6' }}>
+            <Grid container spacing={2} alignItems="center">
+                <Grid item xs={0.8}>
+                    <Description onClick={handleDocumentSelectOpen} className='text-sky-700 hover:text-sky-800 cursor-pointer' />
+                </Grid>
+                <Grid item xs={10}>
+                    <TextField
+                        disabled={messaging}
+                        {...register('message')}
+                        variant="outlined"
+                        fullWidth
+                        placeholder="Type your message..."
+                        sx={{
+                            backgroundColor: '#fff',
+                            borderRadius: '5px',
+                            border: '1px solid #ccc',
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'transparent',
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'transparent',
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'transparent',
+                                },
+                            },
+                            '& .MuiInputBase-input': {
+                                fontSize: '14px',
+                                color: '#333',
+                                padding: '10px',
+                            },
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={1}>
+                    <Button
+                        type='submit'
+                        // onClick={onSubmit}
+                        className='bg-green-500 hover:bg-green-600 text-white'
+                        variant="contained"
+                        style={{
+                            borderRadius: '50%',
+                            minWidth: 'auto',
+                            padding: '8px',
+                            height: '100%',
+                            backgroundColor: 'transparent'
+                        }}
+
+                        disabled={messaging || !watch('message')}
+                    >
+                        {messaging ? (
+                            <div
+                                style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    border: '3px solid green',
+                                    borderTop: '3px solid transparent',
+                                    borderRadius: '50%',
+                                    animation: 'spin 1s linear infinite'
+                                }}
+                            />
+                        ) : (
+                            <Send style={{ color: 'green' }} />
+                        )}
+                    </Button>
+                </Grid>
+            </Grid>
+        </form>
+    )
+
 
     return (
         <>
-            <DocumentSelectModal from={'lead'} editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} sendMessage={onSubmit} />
+            <DocumentSelectModal from={'lead'} editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} sendMessage={onDocSubmit} />
             <Drawer
                 anchor={anchor}
                 open={open}
@@ -285,7 +391,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                                         {
                                                             (!child?.mime_type?.includes('image') && !child?.mime_type?.includes('audio')) &&
                                                             <>
-                                                                <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={Doc} width={150} height={350} />
+                                                                <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={Doc} width={50} height={50} />
                                                                 <span style={{
                                                                     color: 'black',
                                                                     fontSize: '14px',
@@ -330,7 +436,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                             fontSize: '10px',
                                             color: 'gray',
                                         }}>
-                                            {moment(obj?.created_at).format('h:mm A')}
+                                            {moment.utc(obj?.created_at).format('h:mm A')}
                                         </span>
 
                                         {/* {
@@ -438,7 +544,22 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
 
                     {/* Input and Send Button */}
 
-                    <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 'auto', padding: '10px', borderTop: '1px solid #ddd', backgroundColor: '#f1f2f6' }}>
+                    {
+                        Messages?.children?.length > 0 ?
+
+                            moment.utc(Messages?.children[Messages?.children?.length - 1]?.message_date).isBefore(moment.utc().subtract(24, 'hours')) ?
+
+                                noInput()
+                                :
+                                inputRender()
+                            :
+                            moment.utc(Messages?.message_date).isBefore(moment.utc().subtract(24, 'hours')) ?
+                                noInput()
+                                :
+                                inputRender()
+
+                    }
+                    {/* <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 'auto', padding: '10px', borderTop: '1px solid #ddd', backgroundColor: '#f1f2f6' }}>
                         <Grid container spacing={2} alignItems="center">
                             <Grid item xs={0.8}>
                                 <Description onClick={handleDocumentSelectOpen} className='text-sky-700 hover:text-sky-800 cursor-pointer' />
@@ -506,9 +627,30 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                 </Button>
                             </Grid>
                         </Grid>
-                    </form>
+                    </form> */}
                 </div>
             </Drawer >
         </>
     );
 }
+
+const noInput = () => (
+    <div style={{
+        marginTop: 'auto',
+        padding: '5px',
+        borderTop: '1px solid #ccc',
+        backgroundColor: '#f8f9fa',
+        color: '#333',
+        fontFamily: 'Arial, sans-serif',
+        textAlign: 'center',
+        boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.1)',
+        borderRadius: '0 0 10px 10px'
+    }}>
+        <p style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>
+            Your 24-hour communication window has closed.
+        </p>
+        <p style={{ margin: '5px 0 0', fontSize: '14px' }}>
+            To start a new conversation, please use the "Send WhatsApp" option.
+        </p>
+    </div>
+)

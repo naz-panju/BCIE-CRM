@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Button, Grid, MenuItem, Pagination, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material';
 import moment from 'moment';
-import { AttachmentOutlined, CachedOutlined } from '@mui/icons-material';
+import { AttachmentOutlined, CachedOutlined, Visibility } from '@mui/icons-material';
 import CommEmailDetailModal from '../details/email/detailModal';
 import WhatsappMessageModal from '../Modals/WhatsappMessageModal';
 
 
-function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappLimit,leadData }) {
+function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappLimit, leadData }) {
     const [detailId, setdetailId] = useState()
 
     // console.log(list);
@@ -90,14 +90,18 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
                                                                     </TableCell>
 
                                                                     <TableCell>
-                                                                        <span onClick={() => handleWhatsMessageOpen(obj?.id)} className='bg-lime-700 p-2 rounded-[8px] shadow-lg hover:bg-lime-800' style={{ cursor: 'pointer',color:'white' }}> Message</span>
+                                                                        {
+                                                                            // index == 0 &&
+                                                                            <Visibility onClick={() => handleWhatsMessageOpen(obj?.id)} className='text-gray-400  hover:text-gray-600 cursor-pointer' />
+                                                                            // <span  className='bg-sky-700 p-2 rounded-[8px] shadow-lg hover:bg-sky-800' style={{ cursor: 'pointer', color: 'white' }}> View</span>
+                                                                        }
                                                                     </TableCell>
 
                                                                     <TableCell>
                                                                         {
-                                                                            moment(obj?.message_date).isSame(moment(), 'day') ?
-                                                                                moment(obj?.message_date).fromNow()
-                                                                                :
+                                                                            // moment(obj?.message_date).isSame(moment(), 'day') ?
+                                                                            //     moment(obj?.message_date).fromNow()
+                                                                            //     :
                                                                                 moment(obj?.message_date).format('DD MMM hh:mm A')
                                                                         }
                                                                     </TableCell>

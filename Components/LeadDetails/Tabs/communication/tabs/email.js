@@ -111,9 +111,9 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                                     </TableCell>
                                                                     <TableCell>
                                                                         {
-                                                                            moment(obj?.message_date).isSame(moment(), 'day') ?
-                                                                                moment(obj?.message_date).fromNow()
-                                                                                :
+                                                                            // moment(obj?.message_date).isSame(moment(), 'day') ?
+                                                                            //     moment(obj?.message_date).fromNow()
+                                                                            //     :
                                                                                 moment(obj?.message_date).format('DD MMM hh:mm A')
                                                                         }
                                                                     </TableCell>
