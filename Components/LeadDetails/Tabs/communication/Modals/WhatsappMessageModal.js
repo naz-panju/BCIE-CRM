@@ -2,7 +2,7 @@ import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
 import { Avatar, Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
-import { Close, Refresh, Send } from '@mui/icons-material';
+import { Attachment, Close, Description, Refresh, Send } from '@mui/icons-material';
 import DateInput from '@/Form/DateInput';
 
 import { useState } from 'react';
@@ -24,6 +24,7 @@ import WhatsappBg from '@/img/whatsapp-bg.png';
 import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
 // import DocumentImg from '@/img/logo.png';
 import Doc from '@/img/Document.webp';
+import DocumentSelectModal from '../../application/modals/documentSelect';
 
 
 const scheme = yup.object().shape({
@@ -31,7 +32,7 @@ const scheme = yup.object().shape({
     // date_and_time: yup.string().required("Date and Time is Required"),
 })
 
-export default function WhatsappMessageModal({ lead_id, editId, setEditId, handleRefresh }) {
+export default function WhatsappMessageModal({ lead_id, editId, setEditId, handleRefresh, leadData }) {
 
     const myLoader = ({ src, width }) => {
         return `${src}?w=${width}`;
@@ -54,24 +55,49 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
     const [messaging, setmessaging] = useState(false)
-    const onSubmit = async (data) => {
+    const onSubmit = async (data, callBack,docsSelected,docFiles) => {
         console.log(data);
 
+        console.log(docsSelected);
+        
         setmessaging(true)
 
         const formData = new FormData()
 
         formData.append('id', editId)
-        formData.append('message', data?.message)
+        formData.append('message', data?.message || 'Document Send')
+
+        if (docsSelected?.length > 0) {
+            docsSelected?.map(obj => {
+                // console.log(obj?.file_path);
+                formData.append('attachment_files[]', obj?.file_path)
+            })
+        }
+
+        if (docFiles?.length > 0) {
+            docFiles?.map(obj => {
+                formData.append('attachments[]', obj)
+            })
+        }
+
+        for (const [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
+
 
         // console.log(dataToSubmit);
 
         WhatsAppTemplateApi.reply(formData).then((response) => {
-            // console.log(response);
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 getDetails()
                 setValue('message', '')
                 setmessaging(false)
+                setattachmentFiles([])
+                setFile([])
+                if (callBack) {
+                    callBack()
+                }
                 // reset()
                 // handleClose()
                 // setLoading(false)
@@ -124,7 +150,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         const response = await CommunicationLogApi.view({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
-            // console.log(data);
+            console.log(data);
             setMessages(data)
 
         }
@@ -154,248 +180,329 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         }
     }, [editId])
 
-//     useEffect(() => {
-//     const handleScroll = () => {
-//         const targetDiv = document.querySelector('.target-div-selector'); // Replace with your div selector
-//         const targetPosition = targetDiv.getBoundingClientRect().top;
+    //     useEffect(() => {
+    //     const handleScroll = () => {
+    //         const targetDiv = document.querySelector('.target-div-selector'); // Replace with your div selector
+    //         const targetPosition = targetDiv.getBoundingClientRect().top;
 
-//         // Adjust the threshold for when you want it to become sticky
-//         if (targetPosition <= 0) {
-//             setShouldBeSticky(true);
-//         } else {
-//             setShouldBeSticky(false);
-//         }
-//     };
+    //         // Adjust the threshold for when you want it to become sticky
+    //         if (targetPosition <= 0) {
+    //             setShouldBeSticky(true);
+    //         } else {
+    //             setShouldBeSticky(false);
+    //         }
+    //     };
 
-//     window.addEventListener('scroll', handleScroll);
-//     return () => {
-//         window.removeEventListener('scroll', handleScroll);
-//     };
-// }, []);
+    //     window.addEventListener('scroll', handleScroll);
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll);
+    //     };
+    // }, []);
 
-// const [shouldBeSticky, setShouldBeSticky] = useState(false);
+    // const [shouldBeSticky, setShouldBeSticky] = useState(false);
+
+    const [docOpenId, setdocOpenId] = useState()
+    const handleDocumentSelectOpen = () => {
+        setdocOpenId(leadData?.id)
+    }
+
+    const [attachmentFiles, setattachmentFiles] = useState([])
+    const [file, setFile] = useState([])
+
 
     return (
-        <Drawer
-            anchor={anchor}
-            open={open}
-            onClose={handleClose}
-        >
-            <div style={{ width: 650, height: '100%' }}>
-                {/* Header Section */}
-                <Grid container alignItems="center" className='modal_title' style={{ padding: '15px', borderBottom: '1px solid #ddd' }}>
-                    <Grid item>
-                        <Button onClick={handleClose} className='back_modal' style={{ minWidth: 'auto' }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
-                                <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                        </Button>
+        <>
+            <DocumentSelectModal from={'lead'} editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} sendMessage={onSubmit} />
+            <Drawer
+                anchor={anchor}
+                open={open}
+                onClose={handleClose}
+            >
+                <div style={{ width: 650, height: '100%' }}>
+
+
+                    {/* Header Section */}
+                    <Grid container alignItems="center" className='modal_title' style={{ padding: '15px', borderBottom: '1px solid #ddd' }}>
+                        <Grid item>
+                            <Button onClick={handleClose} className='back_modal' style={{ minWidth: 'auto' }}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 31 31" fill="none">
+                                    <path d="M21.9582 15.5H9.0415M9.0415 15.5L14.2082 20.6666M9.0415 15.5L14.2082 10.3333" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            {/* <Avatar>MM</Avatar> */}
+                            <span className='back_modal_head' style={{ fontWeight: 'bold', fontSize: '16px' }}>{Messages?.lead?.name}</span>
+                        </Grid>
                     </Grid>
-                    <Grid item>
-                        {/* <Avatar>MM</Avatar> */}
-                        <span className='back_modal_head' style={{ fontWeight: 'bold', fontSize: '16px' }}>{Messages?.lead?.name}</span>
-                    </Grid>
-                </Grid>
 
-                {/* Chat Messages */}
-
-                <div style={{ height: 'calc(100% - 131px)', overflowY: 'auto', padding: '15px', backgroundImage: `url(${"https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', flexDirection: 'column-reverse' }}>
+                    {/* Chat Messages */}
 
 
-                    {Messages?.children?.slice()?.reverse()?.map((obj, index) => (
-                        <React.Fragment key={index}>
+                    <div style={{ height: 'calc(100% - 131px)', overflowY: 'auto', padding: '15px', backgroundImage: `url(${"https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', flexDirection: 'column-reverse' }}>
 
-                            <div className={`flex ${obj?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
-                                {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
-                                <div
-                                    className={`flex flex-col max-w-xs px-4 py-2 rounded-lg ${obj?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
-                                    style={{
-                                        borderTopRightRadius: obj?.type === 'Whatsapp Send' ? '0px' : '15px',
-                                        borderTopLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                        backgroundColor: obj?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
-                                        // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                        // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                        padding: '10px',
-                                        paddingBottom: '2px'
-                                    }}
-                                >
-                                    {
-                                        obj?.media?.mime_type?.includes('image') &&
-                                        <Image alt='img' style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(obj?.media?.file)} src={obj?.media?.file} width={150} height={350} />
-                                    }
-                                    {
-                                        obj?.media?.mime_type?.includes("audio") &&
-                                        <audio controls>
-                                            <source src={obj?.media?.file} type={obj?.media?.mime_type} />
-                                            Your browser does not support the audio element.
-                                        </audio>
-                                    }
-                                    {
-                                        !obj?.media || (!obj?.media?.mime_type?.includes('image') && !obj?.media?.mime_type?.includes('audio')) &&
-                                        <>
-                                            <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(obj?.media?.file)} src={Doc} width={150} height={350} />
+
+                        {Messages?.children?.slice()?.reverse()?.map((obj, index) => (
+                            <React.Fragment key={index}>
+
+                                <div className={`flex ${obj?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
+                                    {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
+                                    <div
+                                        className={`flex flex-col max-w-xs px-4 py-2 rounded-lg ${obj?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
+                                        style={{
+                                            borderTopRightRadius: obj?.type === 'Whatsapp Send' ? '0px' : '15px',
+                                            borderTopLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                            backgroundColor: obj?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
+                                            // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                            // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                            padding: '10px',
+                                            paddingBottom: '2px'
+                                        }}
+                                    >
+                                        {
+                                            obj?.media?.length > 0 ?
+                                                obj?.media?.map((child, childIndex) => (
+                                                    <React.Fragment key={childIndex}>
+                                                        {
+                                                            child?.mime_type?.includes('image') &&
+                                                            <Image alt='img' style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={child?.file} width={150} height={350} />
+
+                                                        }
+                                                        {
+                                                            child?.mime_type?.includes("audio") &&
+                                                            <audio controls>
+                                                                <source src={child?.file} type={child?.mime_type} />
+                                                                Your browser does not support the audio element.
+                                                            </audio>
+                                                        }
+
+                                                        {
+                                                            (!child?.mime_type?.includes('image') && !child?.mime_type?.includes('audio')) &&
+                                                            <>
+                                                                <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={Doc} width={150} height={350} />
+                                                                <span style={{
+                                                                    color: 'black',
+                                                                    fontSize: '14px',
+                                                                }}> {trimUrlAndNumbers(child?.file)}</span>
+                                                            </>
+                                                        }
+
+                                                    </React.Fragment>
+                                                ))
+                                                :
+                                                obj?.body == 'Video received' ?
+                                                    <>
+                                                        {
+                                                            "❗" + obj?.body
+                                                        }
+                                                        <br />
+                                                        <span style={{ fontSize: '11px', color: 'grey' }}> We've received the video message, but it’s not supported in our system. Please ask the student to use another method to send this message.</span>
+
+                                                    </>
+                                                    :
+                                                    <span style={{
+                                                        color: 'black',
+                                                        fontSize: '14px',
+                                                    }}> {obj?.body}</span>
+                                        }
+
+
+                                        {/* {
+                                            !obj?.media &&
                                             <span style={{
                                                 color: 'black',
                                                 fontSize: '14px',
-                                            }}> {trimUrlAndNumbers(obj?.media?.file)}</span>
-                                        </>
-                                    }
+                                            }}> {obj?.body}</span>
+                                        } */}
+
+                                        {/* <br /> */}
+                                        <span className='text-end' style={{
+                                            // position: 'absolute',
+                                            // bottom: '5px',
+                                            // right: '10px',
+
+                                            fontSize: '10px',
+                                            color: 'gray',
+                                        }}>
+                                            {moment(obj?.created_at).format('h:mm A')}
+                                        </span>
+
+                                        {/* {
+                                            obj?.created_at
+                                        } */}
+
+                                    </div>
+                                </div>
+
+
+                                {
+                                    moment(obj?.message_date).format('DD-MM-YYYY') == moment(Messages?.message_date).format('DD-MM-YYYY') ? ""
+                                        :
+                                        moment(obj?.message_date).format('DD-MM-YYYY') != moment(Messages?.children[Messages?.children?.length - index - 2]?.message_date).format('DD-MM-YYYY') &&
+                                        <div className={`mb-3`} style={{
+                                            textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px',
+                                        }}>
+                                            {/* {
+                                                console.log(moment(obj?.message_date).format('DD-MM-YYYY'), moment(Messages?.children[Messages?.children?.length - index]?.message_date).format('DD-MM-YYYY'),)
+                                            } */}
+                                            <span className='rounded-md' style={{ backgroundColor: 'white', width: 'auto', padding: 10 }}>
+                                                {
+                                                    moment(obj?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(obj?.message_date).format('DD/MM/YYYY')
+                                                }
+                                            </span>
+                                        </div>
+                                }
+                            </React.Fragment>
+                        ))}
+
+                        {
+                            Messages &&
+                            <div className={`flex ${Messages?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
+                                {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
+                                <div
+                                    className={`max-w-xs px-4 py-2 rounded-lg ${Messages?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
+                                    style={{
+                                        borderTopRightRadius: Messages?.type === 'Whatsapp Send' ? '0px' : '15px',
+                                        borderTopLeftRadius: Messages?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                        backgroundColor: Messages?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
+
+                                        // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                        // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                        padding: '10px',
+                                    }}
+                                >
+
                                     {
-                                        !obj?.media &&
-                                        <span style={{
-                                            color: 'black',
-                                            fontSize: '14px',
-                                        }}> {obj?.body}</span>
+                                        Messages?.media?.length > 0 ?
+                                            Messages?.media?.map((child, childIndex) => (
+                                                <React.Fragment key={childIndex}>
+                                                    {
+                                                        child?.mime_type?.includes('image') &&
+                                                        <Image alt='img' style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={child?.file} width={150} height={350} />
+
+                                                    }
+                                                    {
+                                                        child?.mime_type?.includes("audio") &&
+                                                        <audio controls>
+                                                            <source src={child?.file} type={child?.mime_type} />
+                                                            Your browser does not support the audio element.
+                                                        </audio>
+                                                    }
+
+                                                    {
+                                                        (!child?.mime_type?.includes('image') && !child?.mime_type?.includes('audio')) &&
+                                                        <>
+                                                            <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={Doc} width={150} height={350} />
+                                                            <span style={{
+                                                                color: 'black',
+                                                                fontSize: '14px',
+                                                            }}> {trimUrlAndNumbers(child?.file)}</span>
+                                                        </>
+                                                    }
+
+                                                </React.Fragment>
+                                            ))
+                                            :
+
+                                            <span style={{
+                                                color: 'black',
+                                                fontSize: '14px',
+                                            }}>
+                                                {Messages?.body}</span>
                                     }
-
-                                    {/* <br /> */}
-                                    <span className='text-end' style={{
-                                        // position: 'absolute',
-                                        // bottom: '5px',
-                                        // right: '10px',
-
-                                        fontSize: '10px',
-                                        color: 'gray',
-                                    }}>
-                                        {moment(obj?.created_at).format('h:mm A')}
-                                    </span>
-
-                                    {/* {
-                                        obj?.created_at
-                                    } */}
-
                                 </div>
                             </div>
 
-                           
-                            {
-                                moment(obj?.message_date).format('DD-MM-YYYY') == moment(Messages?.message_date).format('DD-MM-YYYY') ? ""
-                                    :
-                                    moment(obj?.message_date).format('DD-MM-YYYY') != moment(Messages?.children[Messages?.children?.length - index - 2]?.message_date).format('DD-MM-YYYY') &&
-                                    <div className={`mb-3`} style={{
-                                        textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px',
-                                    }}>
-                                        {/* {
-                                            console.log(moment(obj?.message_date).format('DD-MM-YYYY'), moment(Messages?.children[Messages?.children?.length - index]?.message_date).format('DD-MM-YYYY'),)
-                                        } */}
-                                        <span className='rounded-md' style={{ backgroundColor: 'white', width: 'auto', padding: 10 }}>
-                                            {
-                                                moment(obj?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(obj?.message_date).format('DD/MM/YYYY')
-                                            }
-                                        </span>
-                                    </div>
-                            }
-                        </React.Fragment>
-                    ))}
+                        }
 
-                    {
-                        Messages &&
-                        <div className={`flex ${Messages?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
-                            {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
-                            <div
-                                className={`max-w-xs px-4 py-2 rounded-lg ${Messages?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
-                                style={{
-                                    borderTopRightRadius: Messages?.type === 'Whatsapp Send' ? '0px' : '15px',
-                                    borderTopLeftRadius: Messages?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                    backgroundColor: Messages?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
-
-                                    // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                    // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                    padding: '10px',
-                                }}
-                            >
-                                <span style={{
-                                    color: 'black',
-                                    fontSize: '14px',
-                                }}> {Messages?.body}</span>
+                        {
+                            Messages &&
+                            <div className='mb-3' style={{ textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px', }}>
+                                <span className='rounded-md' style={{ backgroundColor: 'white', width: 'auto', padding: 10 }}>
+                                    {
+                                        moment(Messages?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(Messages?.message_date).format('DD/MM/YYYY')
+                                    }
+                                </span>
                             </div>
-                        </div>
-
-                    }
-
-                    {
-                        Messages &&
-                        <div className='mb-3' style={{ textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px', }}>
-                            <span className='rounded-md' style={{ backgroundColor: 'white', width: 'auto', padding: 10 }}>
-                                {
-                                    moment(Messages?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(Messages?.message_date).format('DD/MM/YYYY')
-                                }
-                            </span>
-                        </div>
-                    }
+                        }
 
 
 
+                    </div>
+
+                    {/* Input and Send Button */}
+
+                    <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 'auto', padding: '10px', borderTop: '1px solid #ddd', backgroundColor: '#f1f2f6' }}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs={0.8}>
+                                <Description onClick={handleDocumentSelectOpen} className='text-sky-700 hover:text-sky-800 cursor-pointer' />
+                            </Grid>
+                            <Grid item xs={10}>
+                                <TextField
+                                    disabled={messaging}
+                                    {...register('message')}
+                                    variant="outlined"
+                                    fullWidth
+                                    placeholder="Type your message..."
+                                    sx={{
+                                        backgroundColor: '#fff',
+                                        borderRadius: '5px',
+                                        border: '1px solid #ccc',
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                            '&.Mui-focused fieldset': {
+                                                borderColor: 'transparent',
+                                            },
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '14px',
+                                            color: '#333',
+                                            padding: '10px',
+                                        },
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={1}>
+                                <Button
+                                    type='submit'
+                                    // onClick={onSubmit}
+                                    className='bg-green-500 hover:bg-green-600 text-white'
+                                    variant="contained"
+                                    style={{
+                                        borderRadius: '50%',
+                                        minWidth: 'auto',
+                                        padding: '8px',
+                                        height: '100%',
+                                        backgroundColor: 'transparent'
+                                    }}
+
+                                    disabled={messaging || !watch('message')}
+                                >
+                                    {messaging ? (
+                                        <div
+                                            style={{
+                                                width: '20px',
+                                                height: '20px',
+                                                border: '3px solid green',
+                                                borderTop: '3px solid transparent',
+                                                borderRadius: '50%',
+                                                animation: 'spin 1s linear infinite'
+                                            }}
+                                        />
+                                    ) : (
+                                        <Send style={{ color: 'green' }} />
+                                    )}
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </form>
                 </div>
-
-                {/* Input and Send Button */}
-                <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 'auto', padding: '10px', borderTop: '1px solid #ddd', backgroundColor: '#f1f2f6' }}>
-                    <Grid container spacing={2} alignItems="center">
-                        <Grid item xs={11}>
-                            <TextField
-                                disabled={messaging}
-                                {...register('message')}
-                                variant="outlined"
-                                fullWidth
-                                placeholder="Type your message..."
-                                sx={{
-                                    backgroundColor: '#fff',
-                                    borderRadius: '20px',
-                                    border: '1px solid #ccc',
-                                    '& .MuiOutlinedInput-root': {
-                                        '& fieldset': {
-                                            borderColor: 'transparent',
-                                        },
-                                        '&:hover fieldset': {
-                                            borderColor: 'transparent',
-                                        },
-                                        '&.Mui-focused fieldset': {
-                                            borderColor: 'transparent',
-                                        },
-                                    },
-                                    '& .MuiInputBase-input': {
-                                        fontSize: '14px',
-                                        color: '#333',
-                                        padding: '10px',
-                                    },
-                                }}
-                            />
-                        </Grid>
-                        <Grid item xs={1}>
-                            <Button
-                                type='submit'
-                                // onClick={onSubmit}
-                                className='bg-green-500 hover:bg-green-600 text-white'
-                                variant="contained"
-                                style={{
-                                    borderRadius: '50%',
-                                    minWidth: 'auto',
-                                    padding: '8px',
-                                    height: '100%',
-                                    backgroundColor: 'transparent'
-                                }}
-
-                                disabled={messaging}
-                            >
-                                {messaging ? (
-                                    <div
-                                        style={{
-                                            width: '20px',
-                                            height: '20px',
-                                            border: '3px solid green',
-                                            borderTop: '3px solid transparent',
-                                            borderRadius: '50%',
-                                            animation: 'spin 1s linear infinite'
-                                        }}
-                                    />
-                                ) : (
-                                    <Send style={{ color: 'green' }} />
-                                )}
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </form>
-            </div>
-        </Drawer >
+            </Drawer >
+        </>
     );
 }

@@ -53,7 +53,7 @@ export default function CreateTabs({ list, value, setValue, activeTab, setActive
             label: 'Email'
         },
         {
-            component: <WhatsappTab page={whatsappPage} setPage={setwhatsappPage} list={whatsappList} setwhatsappLimit={setwhatsappLimit} loading={whatsappLoading} whatsappLimit={whatsappLimit} />,
+            component: <WhatsappTab leadData={leadData} page={whatsappPage} setPage={setwhatsappPage} list={whatsappList} setwhatsappLimit={setwhatsappLimit} loading={whatsappLoading} whatsappLimit={whatsappLimit} />,
             label: 'Whatsapp'
         },
         {

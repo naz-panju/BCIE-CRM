@@ -34,7 +34,9 @@ const style = {
     p: 4,
 }
 
-export default function DocumentSelectModal({ editId, setEditId, SelectedDocuments, setSelectedDocuments, setSelectedAttachments, from, SelectedAttachments }) {
+export default function DocumentSelectModal({ editId, setEditId, SelectedDocuments, setSelectedDocuments, setSelectedAttachments, from, SelectedAttachments, sendMessage }) {
+
+    // console.log(editId);
 
 
     let scheme = yup.object().shape({
@@ -187,7 +189,6 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     const [Documents, setDocuments] = useState([])
     const [uniDocuments, setuniDocuments] = useState([])
     const getDetails = () => {
-
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
             console.log(response?.data?.data?.documents);
@@ -205,7 +206,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
         setDataLoading(true)
         LeadApi.listDocuments({ lead_id: editId, limit: 100 }).then((response) => {
             // console.log(response);
-            const datas = response?.data?.data?.filter((obj=>obj?.status !== 'Requested'))
+            const datas = response?.data?.data?.filter((obj => obj?.status !== 'Requested'))
             setDocuments(datas)
             setDataLoading(false)
         }).catch((error) => {
@@ -216,13 +217,26 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
 
     const isDocumentChecked = (value) => documentSelected.includes(value);
 
-    const handleAttach = () => {
-        setSelectedDocuments(documentSelected)
-        setSelectedAttachments(file)
+    const callBack = () => {
         handleClose()
+        setattachLoading(false)
     }
 
+    const [attachLoading, setattachLoading] = useState(false)
 
+    const handleAttach = () => {
+
+        if (sendMessage) {
+            // setSelectedDocuments(documentSelected)
+            // setSelectedAttachments(file)
+            setattachLoading(true)
+            sendMessage(null, callBack,documentSelected,file)
+        } else {
+            setSelectedDocuments(documentSelected)
+            setSelectedAttachments(file)
+            handleClose()
+        }
+    }
 
     useEffect(() => {
         if (editId > 0) {
@@ -333,6 +347,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                                                 style={{ display: 'none' }}
                                                 onChange={handleFileChange}
                                                 key={fileInputKey}
+                                                accept=".doc,.docx,.xls,.xlsx,.pdf,image/*"
                                             />
                                             <Button sx={{ textTransform: 'none', }}
                                                 variant='contained'
@@ -412,7 +427,22 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                                         sx={{ textTransform: 'none', height: 30 }}
                                     // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
                                     >
-                                        Attach
+                                        {
+                                            attachLoading ?
+                                                <div
+                                                    style={{
+                                                        width: '20px',
+                                                        height: '20px',
+                                                        border: '3px solid white',
+                                                        borderTop: '3px solid transparent',
+                                                        borderRadius: '50%',
+                                                        animation: 'spin 1s linear infinite'
+                                                    }}
+                                                />
+                                                :
+                                                "Send"
+                                        }
+
                                     </Button>
                                 </Grid>
                             </div>

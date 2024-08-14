@@ -6,7 +6,7 @@ import CommEmailDetailModal from '../details/email/detailModal';
 import WhatsappMessageModal from '../Modals/WhatsappMessageModal';
 
 
-function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappLimit }) {
+function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappLimit,leadData }) {
     const [detailId, setdetailId] = useState()
 
     // console.log(list);
@@ -33,7 +33,7 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
 
         <>
             {
-                <WhatsappMessageModal editId={whatsappMessageId} setEditId={setwhatsappMessageId} />
+                <WhatsappMessageModal editId={whatsappMessageId} setEditId={setwhatsappMessageId} leadData={leadData} />
             }
             <div>
                 {
