@@ -55,11 +55,11 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
 
     const [messaging, setmessaging] = useState(false)
-    const onSubmit = async (data, callBack,docsSelected,docFiles) => {
+    const onSubmit = async (data, callBack, docsSelected, docFiles, setDocLoadind) => {
         console.log(data);
 
         console.log(docsSelected);
-        
+
         setmessaging(true)
 
         const formData = new FormData()
@@ -103,6 +103,9 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                 // setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
+                if (setDocLoadind) {
+                    setDocLoadind(false)
+                }
                 setmessaging(false)
             }
 
@@ -111,6 +114,9 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
             console.log(error);
             toast.error(error?.message)
             setmessaging(false)
+            if (setDocLoadind) {
+                setDocLoadind(false)
+            }
         })
     }
 

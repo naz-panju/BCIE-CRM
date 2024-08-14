@@ -230,7 +230,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
             // setSelectedDocuments(documentSelected)
             // setSelectedAttachments(file)
             setattachLoading(true)
-            sendMessage(null, callBack,documentSelected,file)
+            sendMessage(null, callBack,documentSelected,file,setattachLoading)
         } else {
             setSelectedDocuments(documentSelected)
             setSelectedAttachments(file)
