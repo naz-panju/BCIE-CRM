@@ -92,7 +92,7 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
                                                                     <TableCell>
                                                                         {
                                                                             // index == 0 &&
-                                                                            <Visibility onClick={() => handleWhatsMessageOpen(obj?.id)} className='text-gray-400  hover:text-gray-600 cursor-pointer' />
+                                                                            <Visibility onClick={() => handleWhatsMessageOpen(obj?.id)} className='text-gray-400  hover:text-gray-600 cursor-pointer text-[20px]' />
                                                                             // <span  className='bg-sky-700 p-2 rounded-[8px] shadow-lg hover:bg-sky-800' style={{ cursor: 'pointer', color: 'white' }}> View</span>
                                                                         }
                                                                     </TableCell>

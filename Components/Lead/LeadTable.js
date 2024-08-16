@@ -38,6 +38,8 @@ import { format } from 'date-fns';
 import 'rsuite/dist/rsuite.min.css';
 import { blue } from '@mui/material/colors';
 import { useSession } from 'next-auth/react';
+import ExportExcel from '@/Form/Excel';
+import { CSVLink } from 'react-csv';
 
 
 
@@ -637,8 +639,21 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   }, [page, refresh, limit, searchRefresh])
 
 
+
   return (
     <>
+      <ExportExcel from={'lead'} fileName={'Leads'} params={{
+        limit: 1000,
+        assigned_to: selectedAssignedTo,
+        stage: selectedStage,
+        assign_to_office_id: selectedBranch,
+        agency: selectedAgency,
+        source_id: selectedSource,
+        name: watch('nameSearch'),
+        email: watch('emailSearch'),
+        phone_number: watch('numberSearch'),
+        lead_id: watch('lead_id_search'),
+      }} />
 
       <div className="filter_sec">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -953,9 +968,9 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 </TableCell>
                                 <TableCell className='stage-colm' align="left">
                                   {
-                                    row?.stage?
-                                    <span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span>
-                                    :''
+                                    row?.stage ?
+                                      <span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span>
+                                      : ''
                                   }
                                 </TableCell>
                               </TableRow>

@@ -114,8 +114,8 @@ export default function SimplePopper() {
             cluster: "ap2",
             //   encrypted: true,
         });
-        const channel = pusher.subscribe("mg-channel");
-        channel.bind("mg-event", (data) => {
+        const channel = pusher.subscribe("bcie-channel");
+        channel.bind("bcie-event", (data) => {
             if (data?.user_id == session?.data?.user?.id) {
                 if (open == true) {
                     noFetchList()
@@ -127,7 +127,7 @@ export default function SimplePopper() {
 
         });
         return () => {
-            pusher.unsubscribe("my-channel");
+            pusher.unsubscribe("bcie-channel");
             pusher.disconnect();
         };
     }, []);

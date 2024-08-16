@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Drawer from '@mui/material/Drawer';
-import { Avatar, Button, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
+import { Avatar, Box, Button, CircularProgress, Grid, IconButton, Skeleton, TextField, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { Attachment, Close, Description, Refresh, Send } from '@mui/icons-material';
 import DateInput from '@/Form/DateInput';
@@ -20,10 +20,9 @@ import DateTime from '@/Form/DateTime';
 import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 import Image from 'next/image';
 import { WhatsAppTemplateApi } from '@/data/Endpoints/WhatsAppTemplate';
-import WhatsappBg from '@/img/whatsapp-bg.png';
 import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
-// import DocumentImg from '@/img/logo.png';
-import Doc from '@/img/Document.webp';
+import WhatsappBG from '@/img/WhatsappBG.png';
+import Doc from '@/img/AllDoc.png';
 import DocumentSelectModal from '../../application/modals/documentSelect';
 
 
@@ -75,13 +74,13 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                 setmessaging(false)
                 setattachmentFiles([])
                 setFile([])
-               
+
                 // reset()
                 // handleClose()
                 // setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
-               
+
                 setmessaging(false)
             }
 
@@ -184,9 +183,11 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     };
 
     const [Messages, setMessages] = useState()
-
-    const getDetails = async () => {
-        setDataLoading(true)
+    const [startingLoading, setstartingLoading] = useState(true)
+    const getDetails = async (first) => {
+        if(first){
+            setDataLoading(true)
+        }
         const response = await CommunicationLogApi.view({ id: editId })
         if (response?.data?.data) {
             let data = response?.data?.data
@@ -211,14 +212,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     }
 
 
-    useEffect(() => {
-        if (editId > 0) {
-            setOpen(true)
-            getDetails()
-        } else if (editId == 0) {
-            setOpen(true)
-        }
-    }, [editId])
+
 
     //     useEffect(() => {
     //     const handleScroll = () => {
@@ -257,7 +251,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                 </Grid>
                 <Grid item xs={10}>
                     <TextField
-                        disabled={messaging}
+                        disabled={messaging || dataLoading}
                         {...register('message')}
                         variant="outlined"
                         fullWidth
@@ -321,6 +315,44 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         </form>
     )
 
+    const messageShow = (child, key,) => (
+        <React.Fragment key={key}>
+            {
+                child?.mime_type?.includes('image') &&
+                <Image alt='img' style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={child?.file} width={150} height={350} />
+
+            }
+            {
+                child?.mime_type?.includes("audio") &&
+                <audio controls>
+                    <source src={child?.file} type={child?.mime_type} />
+                    Your browser does not support the audio element.
+                </audio>
+            }
+
+            {
+                (!child?.mime_type?.includes('image') && !child?.mime_type?.includes('audio')) &&
+                <div className='flex justify-center items-center'>
+                    <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={Doc} width={100} height={100} />
+                    <span style={{
+                        color: 'grey',
+                        fontSize: '12px',
+                    }}> {trimUrlAndNumbers(child?.file)}</span>
+                </div>
+            }
+
+        </React.Fragment>
+    )
+
+    useEffect(() => {
+        if (editId > 0) {
+            setOpen(true)
+            getDetails(true)
+        } else if (editId == 0) {
+            setOpen(true)
+        }
+    }, [editId])
+
 
     return (
         <>
@@ -351,191 +383,158 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                     {/* Chat Messages */}
 
 
-                    <div style={{ height: 'calc(100% - 131px)', overflowY: 'auto', padding: '15px', backgroundImage: `url(${"https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png"})`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', flexDirection: 'column-reverse' }}>
+                    <div style={{ height: 'calc(100% - 131px)', overflowY: 'auto', padding: '15px', backgroundImage: `url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")`, backgroundSize: 'cover', backgroundPosition: 'center', display: 'flex', flexDirection: 'column-reverse' }}>
 
 
-                        {Messages?.children?.slice()?.reverse()?.map((obj, index) => (
-                            <React.Fragment key={index}>
+                        {
+                            dataLoading ?
+                                loadingBox()
+                                // <Box sx={{ display: 'flex',justifyContent:'center',alignItems:'center' }}>
+                                //     <CircularProgress />
+                                // </Box>
+                                :
+                                <>
+                                {
+                                        messaging &&
+                                        <div className={`flex justify-end mb-4`}>
+                                            {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
+                                            <div
+                                                className={`flex flex-col max-w-xs px-4 py-2 rounded-lg bg-blue-500 text-white`}
+                                                style={{
+                                                    borderTopRightRadius:  '0px' ,
+                                                    borderTopLeftRadius:  '15px',
+                                                    backgroundColor: '#d8fdd2',
+                                                    // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                                    // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                                    padding: '10px',
+                                                    // paddingBottom: '2px'
+                                                }}
+                                            >
+                                                {
 
-                                <div className={`flex ${obj?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
-                                    {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
-                                    <div
-                                        className={`flex flex-col max-w-xs px-4 py-2 rounded-lg ${obj?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
-                                        style={{
-                                            borderTopRightRadius: obj?.type === 'Whatsapp Send' ? '0px' : '15px',
-                                            borderTopLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                            backgroundColor: obj?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
-                                            // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                            // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                            padding: '10px',
-                                            paddingBottom: '2px'
-                                        }}
-                                    >
-                                        {
-                                            obj?.media?.length > 0 ?
-                                                obj?.media?.map((child, childIndex) => (
-                                                    <React.Fragment key={childIndex}>
-                                                        {
-                                                            child?.mime_type?.includes('image') &&
-                                                            <Image alt='img' style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={child?.file} width={150} height={350} />
-
-                                                        }
-                                                        {
-                                                            child?.mime_type?.includes("audio") &&
-                                                            <audio controls>
-                                                                <source src={child?.file} type={child?.mime_type} />
-                                                                Your browser does not support the audio element.
-                                                            </audio>
-                                                        }
-
-                                                        {
-                                                            (!child?.mime_type?.includes('image') && !child?.mime_type?.includes('audio')) &&
-                                                            <>
-                                                                <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={Doc} width={50} height={50} />
-                                                                <span style={{
-                                                                    color: 'black',
-                                                                    fontSize: '14px',
-                                                                }}> {trimUrlAndNumbers(child?.file)}</span>
-                                                            </>
-                                                        }
-
-                                                    </React.Fragment>
-                                                ))
-                                                :
-                                                obj?.body == 'Video received' ?
-                                                    <>
-                                                        {
-                                                            "❗" + obj?.body
-                                                        }
-                                                        <br />
-                                                        <span style={{ fontSize: '11px', color: 'grey' }}> We've received the video message, but it’s not supported in our system. Please ask the student to use another method to send this message.</span>
-
-                                                    </>
-                                                    :
                                                     <span style={{
                                                         color: 'black',
                                                         fontSize: '14px',
-                                                    }}> {obj?.body}</span>
-                                        }
+                                                    }}> <Skeleton height={30} width={150} /></span>
+                                                }
 
 
-                                        {/* {
-                                            !obj?.media &&
-                                            <span style={{
-                                                color: 'black',
-                                                fontSize: '14px',
-                                            }}> {obj?.body}</span>
-                                        } */}
+                                            </div>
+                                        </div>
+                                    }
+                                    {Messages?.children?.slice()?.reverse()?.map((obj, index) => (
+                                        <React.Fragment key={index}>
 
-                                        {/* <br /> */}
-                                        <span className='text-end' style={{
-                                            // position: 'absolute',
-                                            // bottom: '5px',
-                                            // right: '10px',
+                                            <div className={`flex ${obj?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
+                                                {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
+                                                <div
+                                                    className={`flex flex-col max-w-xs px-4 py-2 rounded-lg ${obj?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
+                                                    style={{
+                                                        borderTopRightRadius: obj?.type === 'Whatsapp Send' ? '0px' : '15px',
+                                                        borderTopLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                                        backgroundColor: obj?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
+                                                        // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                                        // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                                        padding: '10px',
+                                                        paddingBottom: '2px'
+                                                    }}
+                                                >
 
-                                            fontSize: '10px',
-                                            color: 'gray',
-                                        }}>
-                                            {moment.utc(obj?.created_at).format('h:mm A')}
-                                        </span>
+                                                    {
+                                                        obj?.media?.length > 0 ?
+                                                            obj?.media?.map((child, childIndex) => (
+                                                                messageShow(child, childIndex)
+                                                            ))
+                                                            :
+                                                            obj?.body == 'Video received' ?
+                                                                <>
+                                                                    {
+                                                                        "❗" + obj?.body
+                                                                    }
+                                                                    <br />
+                                                                    <span style={{ fontSize: '11px', color: 'grey' }}> We've received the video message, but it’s not supported in our system. Please ask the student to use another method to send this message.</span>
 
-                                        {/* {
-                                            obj?.created_at
-                                        } */}
+                                                                </>
+                                                                :
+                                                                <span style={{
+                                                                    color: 'black',
+                                                                    fontSize: '14px',
+                                                                }}> {obj?.body}</span>
+                                                    }
 
-                                    </div>
-                                </div>
+                                                    <span className='text-end' style={{
+                                                        fontSize: '10px',
+                                                        color: 'gray',
+                                                    }}>
+                                                        {moment.utc(obj?.created_at).format('h:mm A')}
+                                                    </span>
+                                                </div>
+                                            </div>
 
 
-                                {
-                                    moment(obj?.message_date).format('DD-MM-YYYY') == moment(Messages?.message_date).format('DD-MM-YYYY') ? ""
-                                        :
-                                        moment(obj?.message_date).format('DD-MM-YYYY') != moment(Messages?.children[Messages?.children?.length - index - 2]?.message_date).format('DD-MM-YYYY') &&
-                                        <div className={`mb-3`} style={{
-                                            textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px',
-                                        }}>
-                                            {/* {
-                                                console.log(moment(obj?.message_date).format('DD-MM-YYYY'), moment(Messages?.children[Messages?.children?.length - index]?.message_date).format('DD-MM-YYYY'),)
-                                            } */}
+                                            {
+                                                moment(obj?.message_date).format('DD-MM-YYYY') == moment(Messages?.message_date).format('DD-MM-YYYY') ? ""
+                                                    :
+                                                    moment(obj?.message_date).format('DD-MM-YYYY') != moment(Messages?.children[Messages?.children?.length - index - 2]?.message_date).format('DD-MM-YYYY') &&
+                                                    <div className={`mb-3`} style={{
+                                                        textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px',
+                                                    }}>
+                                                        <span className='rounded-md' style={{ backgroundColor: 'white', width: 'auto', padding: 10 }}>
+                                                            {
+                                                                moment(obj?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(obj?.message_date).format('DD/MM/YYYY')
+                                                            }
+                                                        </span>
+                                                    </div>
+                                            }
+                                        </React.Fragment>
+                                    ))}
+
+                                    {
+                                        Messages &&
+                                        <div className={`flex ${Messages?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
+                                            {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
+                                            <div
+                                                className={`max-w-xs px-4 py-2 rounded-lg ${Messages?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
+                                                style={{
+                                                    borderTopRightRadius: Messages?.type === 'Whatsapp Send' ? '0px' : '15px',
+                                                    borderTopLeftRadius: Messages?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                                    backgroundColor: Messages?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
+
+                                                    // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                                    // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                                                    padding: '10px',
+                                                }}
+                                            >
+
+                                                {
+                                                    Messages?.media?.length > 0 ?
+                                                        Messages?.media?.map((child, childIndex) => (
+                                                            messageShow(child, childIndex)
+                                                        ))
+                                                        :
+
+                                                        <span style={{
+                                                            color: 'black',
+                                                            fontSize: '14px',
+                                                        }}>
+                                                            {Messages?.body}</span>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    }
+                                    
+                                    {
+                                        Messages &&
+                                        <div className='mb-3' style={{ textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px', }}>
                                             <span className='rounded-md' style={{ backgroundColor: 'white', width: 'auto', padding: 10 }}>
                                                 {
-                                                    moment(obj?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(obj?.message_date).format('DD/MM/YYYY')
+                                                    moment(Messages?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(Messages?.message_date).format('DD/MM/YYYY')
                                                 }
                                             </span>
                                         </div>
-                                }
-                            </React.Fragment>
-                        ))}
-
-                        {
-                            Messages &&
-                            <div className={`flex ${Messages?.type === 'Whatsapp Send' ? 'justify-end' : 'justify-start'} mb-4`}>
-                                {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
-                                <div
-                                    className={`max-w-xs px-4 py-2 rounded-lg ${Messages?.type === 'Whatsapp Send' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
-                                    style={{
-                                        borderTopRightRadius: Messages?.type === 'Whatsapp Send' ? '0px' : '15px',
-                                        borderTopLeftRadius: Messages?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                        backgroundColor: Messages?.type === 'Whatsapp Send' ? '#d8fdd2' : 'white',
-
-                                        // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                        // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
-                                        padding: '10px',
-                                    }}
-                                >
-
-                                    {
-                                        Messages?.media?.length > 0 ?
-                                            Messages?.media?.map((child, childIndex) => (
-                                                <React.Fragment key={childIndex}>
-                                                    {
-                                                        child?.mime_type?.includes('image') &&
-                                                        <Image alt='img' style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={child?.file} width={150} height={350} />
-
-                                                    }
-                                                    {
-                                                        child?.mime_type?.includes("audio") &&
-                                                        <audio controls>
-                                                            <source src={child?.file} type={child?.mime_type} />
-                                                            Your browser does not support the audio element.
-                                                        </audio>
-                                                    }
-
-                                                    {
-                                                        (!child?.mime_type?.includes('image') && !child?.mime_type?.includes('audio')) &&
-                                                        <>
-                                                            <Image alt='img' loader={myLoader} style={{ cursor: 'pointer' }} onClick={() => handleTabOpen(child?.file)} src={Doc} width={150} height={350} />
-                                                            <span style={{
-                                                                color: 'black',
-                                                                fontSize: '14px',
-                                                            }}> {trimUrlAndNumbers(child?.file)}</span>
-                                                        </>
-                                                    }
-
-                                                </React.Fragment>
-                                            ))
-                                            :
-
-                                            <span style={{
-                                                color: 'black',
-                                                fontSize: '14px',
-                                            }}>
-                                                {Messages?.body}</span>
                                     }
-                                </div>
-                            </div>
-
-                        }
-
-                        {
-                            Messages &&
-                            <div className='mb-3' style={{ textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px', }}>
-                                <span className='rounded-md' style={{ backgroundColor: 'white', width: 'auto', padding: 10 }}>
-                                    {
-                                        moment(Messages?.message_date).isSame(moment(), 'day') ? 'TODAY' : moment(Messages?.message_date).format('DD/MM/YYYY')
-                                    }
-                                </span>
-                            </div>
+                                </>
                         }
 
 
@@ -650,7 +649,42 @@ const noInput = () => (
             Your 24-hour communication window has closed.
         </p>
         <p style={{ margin: '5px 0 0', fontSize: '14px' }}>
-            To start a new conversation, please use the "Send WhatsApp" option.
+            To start a new conversation, please use the "Send Whatsapp" option.
         </p>
     </div>
+)
+
+const loadingBox = () => (
+    [...Array(9)]?.map((_, index) => (
+        <React.Fragment key={index}>
+
+            <div className={`flex ${index % 2 == 0 ? 'justify-end' : 'justify-start'} mb-4`}>
+                {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
+                <div
+                    className={`flex flex-col max-w-xs px-4 py-2 rounded-lg ${index % 2 == 0 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-black'}`}
+                    style={{
+                        borderTopRightRadius: index % 2 == 0 ? '0px' : '15px',
+                        borderTopLeftRadius: index % 2 == 0 ? '15px' : '0px',
+                        backgroundColor: index % 2 == 0 ? '#d8fdd2' : 'white',
+                        // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                        // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
+                        padding: '10px',
+                        // paddingBottom: '2px'
+                    }}
+                >
+                    {
+
+                        <span style={{
+                            color: 'black',
+                            fontSize: '14px',
+                        }}> <Skeleton height={30} width={150} /></span>
+                    }
+
+
+                </div>
+            </div>
+
+
+        </React.Fragment>
+    ))
 )
