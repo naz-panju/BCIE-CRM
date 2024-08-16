@@ -46,9 +46,9 @@ function Form({ data }) {
     const scheme = yup.object().shape({
         name: yup.string().required("Name is Required"),
         email: yup.string().email("Invalid email format").required("Email is Required"),
-        alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
-            return value !== this.parent.phone;
-        }),
+        // alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
+        //     return value !== this.parent.phone;
+        // }),
         // phone: yup.string().required('Phone Number is Required'),
         // alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
         //     return value !== this.parent.phone;
@@ -320,10 +320,13 @@ function Form({ data }) {
 
             source_id: formDatas?.lead_source?.id || null,
 
-            agency_id: formDatas?.lead_source?.id == 6 ? formDatas?.agency?.id : null || null,
-            referred_student_id: formDatas?.source?.id == 5 ? formDatas?.referredStudent?.id : null || null,
-            referral_university_id: formDatas?.source?.id == 7 ? formDatas?.referred_university?.id : null || null, // country_id: data?.country?.id,
-            event_id: formDatas?.source?.id == 11 ? formDatas?.event?.id : null || null,
+            ...(formDatas?.lead_source?.id == 6?{agency_id:formDatas?.agency?.id}:{}),
+            ...(formDatas?.lead_source?.id == 5?{referred_student_id:formDatas?.referredStudent?.id}:{}),
+            ...(formDatas?.lead_source?.id == 7?{referral_university_id:formDatas?.referred_university?.id}:{}),
+            ...(formDatas?.lead_source?.id == 11?{event_id:formDatas?.event?.id}:{}),
+            // referred_student_id: formDatas?.source?.id == 5 ? formDatas?.referredStudent?.id : null || null,
+            // referral_university_id: formDatas?.source?.id == 7 ? formDatas?.referred_university?.id : null || null, // country_id: data?.country?.id,
+            // event_id: formDatas?.source?.id == 11 ? formDatas?.event?.id : null || null,
 
             note: data?.note
         }

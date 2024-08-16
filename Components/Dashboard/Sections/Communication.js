@@ -64,7 +64,7 @@ function CommunicationSection({ leadCountryList, leadSourceListLoading, fetchMan
 
                           <Grid key={index} display={'flex'} p={2} justifyContent={'space-between'} item md={5}>
                             <span style={{ lineHeight: 1 }}><Image src={Others} alt='alt' width={14} height={14} /> {obj?.country}</span>
-                            <span>{formatPercentage(obj?.value) || 0}%</span>
+                            <span>{formatPercentage(obj?.value) || 0}</span>
                           </Grid>
                         ))
                         :

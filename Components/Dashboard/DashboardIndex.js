@@ -445,6 +445,7 @@ function DashboardIndex() {
                     manager: selectedMangeId,
                     app_coordinator: selectedAppCoordinators?.id,
                     intake: intakeId,
+                    university:selectedUniversity
                 })
                 // console.log(response);
                 setApplicationStages(response?.data)
@@ -635,7 +636,7 @@ function DashboardIndex() {
             fetchApplicationStages()
             fetchsubmitApplication()
         }
-    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor, counsellorId, intakeId, selectedMangeId])
+    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor, counsellorId, intakeId, selectedMangeId,selectedUniversity])
     useEffect(() => {
         if (session?.data?.user?.role?.id !== 6) {
             if (weeklyApplicationRange[0]) {

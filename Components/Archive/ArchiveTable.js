@@ -413,10 +413,10 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
   }
 
   const fetchStage = (e) => {
-    return ListingApi.stages({ keyword: e, type: 'student', }).then(response => {
+    return ListingApi.stages({ keyword: e, type: 'student', changable: 1 }).then(response => {
       let returnOptions = []
       if (response?.status == 200 || response?.status == 201) {
-        let options = response?.data?.data?.map((obj) => {
+        response?.data?.data?.map((obj) => {
           if (obj?.sub_stages?.length > 0) {
             obj?.sub_stages?.map((sub) => {
               returnOptions?.push(sub)

@@ -6,9 +6,14 @@ import React, { useState } from 'react'
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import EventRegistrationModal from '../../Modals/Registration';
+import { ListingApi } from '@/data/Endpoints/Listing';
+import { LeadApi } from '@/data/Endpoints/Lead';
 
 
 function EventRegistrations({ details }) {
+
+    console.log(details);
+    
 
     const [copied, setcopied] = useState(false)
     const [leadCopied, setleadCopied] = useState(false)
@@ -59,7 +64,7 @@ function EventRegistrations({ details }) {
 
     const fetchRegistrations = () => {
         setloading(true)
-        EventRegistrationApi.list({ event_id: details?.id, limit, page: page }).then((response) => {
+        LeadApi.list({ event_id: details?.id, limit, page: page }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setloading(false)
@@ -93,8 +98,8 @@ function EventRegistrations({ details }) {
 
                 <Grid p={2} container spacing={2} >
                     <Grid item xs={6} sm={6} md={6}>
-                        <Tooltip title={`${currentURL}/forms/event/${details?.token}`}>  <Button sx={{ mr: 1 }} onClick={handleCopy} size='small' variant='outlined'>Event Registration Link </Button></Tooltip>
-                        <IconButton size='small' ><a target='_blank' href={`${currentURL}/forms/event/${details?.token}`}><ArrowOutward /></a></IconButton>
+                        <Tooltip title={`${currentURL}/forms/lead/${details?.referral_link?.token}`}>  <Button sx={{ mr: 1 }} onClick={handleCopy} size='small' variant='outlined'>Event Registration Link </Button></Tooltip>
+                        <IconButton size='small' ><a target='_blank' href={`/forms/lead/${details?.referral_link?.token}`}><ArrowOutward /></a></IconButton>
                     </Grid>
                     {/* <Grid item container xs={6} sm={6} md={6}>
                         <Tooltip title={`${currentURL}/forms/lead`}>  <Button sx={{ mr: 1 }} onClick={handleLeadLinkCopy} size='small' variant='outlined'>Lead Registration Link </Button></Tooltip>
@@ -102,9 +107,9 @@ function EventRegistrations({ details }) {
                     </Grid> */}
                 </Grid >
 
-                <Grid p={2} container spacing={2} display={'flex'} justifyContent={'end'} >
+                {/* <Grid p={2} container spacing={2} display={'flex'} justifyContent={'end'} >
                     <Button sx={{ mr: 1 }} onClick={handleEventRegisterOpen} size='small' variant='outlined'>Register </Button>
-                </Grid>
+                </Grid> */}
 
                 {/* <Grid p={2} container spacing={2} >
                     <Grid item xs={4} sm={4} md={4}>
@@ -195,7 +200,7 @@ function EventRegistrations({ details }) {
                                         list?.data?.length > 0 ?
                                             list?.data?.map((obj, index) => (
                                                 <TableRow key={obj?.id}>
-                                                    <TableCell>{obj?.name}</TableCell>
+                                                    <TableCell><a href={'/lead/'+obj?.id} target='_blank'>{obj?.name}</a></TableCell>
                                                     <TableCell>{obj?.email}</TableCell>
                                                     <TableCell>{obj?.phone_number}</TableCell>
 

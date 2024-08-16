@@ -437,10 +437,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
 
   const fetchStage = (e) => {
-    return ListingApi.stages({ keyword: e, type: 'student', }).then(response => {
+    return ListingApi.stages({ keyword: e, type: 'student', changable: 1 }).then(response => {
       let returnOptions = []
       if (response?.status == 200 || response?.status == 201) {
-        let options = response?.data?.data?.map((obj) => {
+        response?.data?.data?.map((obj) => {
           if (obj?.sub_stages?.length > 0) {
             obj?.sub_stages?.map((sub) => {
               returnOptions?.push(sub)
@@ -868,8 +868,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       </div>
 
       {
-       ( session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
-        <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={withdraw?'Withdrawn Leads':unassign?"Un Assigned Leads":"Leads"} params={{
+        (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+        <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={withdraw ? 'Withdrawn Leads' : unassign ? "Un Assigned Leads" : "Leads"} params={{
           limit: 1000,
           assigned_to: selectedAssignedTo,
           stage: selectedStage,
