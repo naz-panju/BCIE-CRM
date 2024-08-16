@@ -24,11 +24,11 @@ function Details({ data, loading }) {
                 <div className="grid grid-cols-2 gap-4">
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Venue:</label>
-                        <span>{data?.venue}</span>
+                        <span>{data?.venue || 'NA'}</span>
                     </div>
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Branch:</label>
-                        <span>{data?.office?.name}</span>
+                        <span>{data?.office?.name || 'NA'}</span>
                     </div>
                 </div>
 
@@ -37,13 +37,13 @@ function Details({ data, loading }) {
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Start Date:</label>
                         <span>
-                            {data?.start_date && moment(data?.start_date).format("DD-MM-YYYY")}
+                            {data?.start_date && moment(data?.start_date).format("DD-MM-YYYY") || 'NA'}
                         </span>
                     </div>
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>End Date:</label>
                         <span>
-                            {data?.end_date && moment(data?.end_date).format("DD-MM-YYYY")}
+                            {data?.end_date && moment(data?.end_date).format("DD-MM-YYYY") || 'NA'}
                         </span>
                     </div>
                 </div>
@@ -52,7 +52,7 @@ function Details({ data, loading }) {
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Description:</label>
-                        <span>{data?.description}</span>
+                        <span>{data?.description || 'NA'}</span>
                     </div>
                 </div>
             </div>

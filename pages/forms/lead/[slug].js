@@ -366,7 +366,7 @@ function Form({ data }) {
         <Grid style={{ backgroundColor: '#f0f4f8', padding: '20px' }} container display="flex" alignItems="center" justifyContent="center">
             <Grid item xs={12} md={6} lg={6} style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
                 <Grid container spacing={2}>
-                    <div style={{ backgroundImage: `url(${data?.banner_image})`, backgroundSize: 'cover', backgroundPosition: 'center' }} className='modal-header'>
+                    <div style={{ backgroundImage: `url(${data?.banner_image || 'https:\/\/bcie.spider.ws\/uploads\/referral_links\/banners\/1720096455_header-bg.png'})`, backgroundSize: 'cover', backgroundPosition: 'center' }} className='modal-header'>
                         <h2>{data?.top_description}</h2>
                     </div>
                     <Grid item xs={12} className='form-data-cntr'>
@@ -491,9 +491,12 @@ function Form({ data }) {
 
                             </Grid>
 
-                            <Grid item xs={12} className='modal-footer flex items-center justify-center' style={{ backgroundColor: '#060a11', backgroundSize: 'cover', backgroundPosition: 'center' }} >
-                                <h2> {data?.bottom_description}</h2>
-                            </Grid>
+                            {
+                                data?.bottom_description &&
+                                <Grid item xs={12} className='modal-footer flex items-center justify-center' style={{ backgroundColor: '#060a11', backgroundSize: 'cover', backgroundPosition: 'center' }} >
+                                    <h2> {data?.bottom_description}</h2>
+                                </Grid>
+                            }
 
                         </form>
                     </Grid>
