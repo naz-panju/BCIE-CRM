@@ -45,6 +45,7 @@ import PortalPermissionModal from './Modals/PortalPermissions';
 import { blue } from '@mui/material/colors';
 import EditPaymentModal from './Modals/editPaymentModal';
 import SaveApplicationSumber from './Modals/ApplicationId';
+import ExportExcel from '@/Form/Excel';
 
 
 
@@ -724,8 +725,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             limit: limit,
             deposit_not_paid: 1,
             source_id: selectedSource,
-            // application statuses:unsubmitted,
-            // status: 'Admission Completed',
             country_id: selectedCountry,
             university_id: selectedUniversity,
             intake_id: 'selectedIntake',
@@ -1322,6 +1321,30 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                 </div>
 
             </div>
+
+            {
+                (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+                <ExportExcel tableLoading={loading} data={list?.data} from={'app'} fileName={selectedStatus == 'Submitted' ? 'Applications Submitted' : selectedStatus == 'Unsubmitted' ? "Applications UnSubmitted" : selectedStatus == 'Returned' ? "Applications Returned" : "Applications"} params={{
+                    limit: 1000,
+                    deposit_not_paid: 1,
+                    source_id: selectedSource,
+                    country_id: selectedCountry,
+                    university_id: selectedUniversity,
+                    intake_id: 'selectedIntake',
+                    subject_area_id: selectedStream,
+                    course_level_id: selectedcourselevel,
+                    app_coordinator_id: selectedcoordinator,
+                    assign_to_office_id: selectedBranch,
+                    stage_id: selectedstage,
+                    assigned_to_counsellor_id: selectedCreatedBy,
+                    assign_to_office_id: selectedBranch,
+                    course: watch('course'),
+                    application_number: watch('application_number'),
+                    student_code: watch('student_code'),
+                    ...(showAllIntake ? { intake_id: "All" } : { intake_id: selectedIntake }),
+                    ...(selectedStatus == 'Submitted' ? { submitted: 1 } : selectedStatus == 'Unsubmitted' ? { unsubmitted: 1 } : selectedStatus == 'Returned' ? { returned: 1 } : {}),
+                }} />
+            }
 
 
             {

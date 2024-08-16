@@ -217,7 +217,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function TemplateTable({ refresh, editId, setEditId, page, setPage }) {
+export default function TemplateTable({ refresh, editId, setEditId, page, setPage, searchTerm, searching }) {
 
     const router = useRouter();
 
@@ -318,7 +318,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
 
     const fetchTable = () => {
         setLoading(true)
-        TemplateApi.list({ limit: limit, page: page }).then((response) => {
+        TemplateApi.list({ limit: limit, page: page,keyword:searchTerm }).then((response) => {
             // console.log(response?.data);
             setList(response?.data)
             setLoading(false)
@@ -329,7 +329,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit])
+    }, [page, refresh, limit,searching])
 
     return (
 

@@ -321,8 +321,9 @@ function Form({ data }) {
             source_id: formDatas?.lead_source?.id || null,
 
             agency_id: formDatas?.lead_source?.id == 6 ? formDatas?.agency?.id : null || null,
-            // referred_student_id: data?.source?.id == 5 ? data?.student?.id : null || null,
-            // referral_university_id: data?.source?.id == 7 ? data?.referred_university?.id : null || null, // country_id: data?.country?.id,
+            referred_student_id: formDatas?.source?.id == 5 ? formDatas?.referredStudent?.id : null || null,
+            referral_university_id: formDatas?.source?.id == 7 ? formDatas?.referred_university?.id : null || null, // country_id: data?.country?.id,
+            event_id: formDatas?.source?.id == 11 ? formDatas?.event?.id : null || null,
 
             note: data?.note
         }

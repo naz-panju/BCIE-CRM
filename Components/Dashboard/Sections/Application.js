@@ -257,7 +257,7 @@ function ApplicationSection({paymentLoading,payments, selectedAppCounsellor, sel
 
                                             <div key={index} className='application-stages-block-item'>
                                                 <span>{obj?.application_count}</span>
-                                                <h4>{obj?.name}</h4>
+                                                <h4>{obj?.name?.toUpperCase()}</h4>
                                             </div>
                                         ))
                                     }

@@ -192,6 +192,16 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         })
     }
 
+    const fetchEvents = (e) => {
+        return ListingApi.events({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
     const fetchSources = (e) => {
         return ListingApi.leadSource({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
@@ -253,7 +263,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             //     const trimmedPhone = value.slice(dialCode.length);
             //     setWhatsapp(trimmedPhone);
             // } else {
-                setWhatsapp(value);
+            setWhatsapp(value);
             // }
             if (!altPhone) {
                 setValue('alt_phone', dialCode)
@@ -265,7 +275,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         //     const trimmedPhone = value.slice(dialCode.length);
         //     setPhone(trimmedPhone);
         // } else {
-            setPhone(value);
+        setPhone(value);
         // }
         // Trigger validation for the 'phone' field
         trigger('phone');
@@ -287,7 +297,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         //     const trimmedPhone = value.slice(dialCode.length);
         //     setAltPhone(trimmedPhone);
         // } else {
-            setAltPhone(value);
+        setAltPhone(value);
         // }
         // Trigger validation for the 'phone' field
         trigger('alt_phone');
@@ -309,7 +319,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         //     const trimmedPhone = value.slice(dialCode.length);
         //     setWhatsapp(trimmedPhone);
         // } else {
-            setWhatsapp(value);
+        setWhatsapp(value);
         // }
         // Trigger validation for the 'phone' field
         trigger('whatsapp');
@@ -351,7 +361,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
     const [titles, settitles] = useState([])
     const [currentTitle, setcurrentTitle] = useState()
-    
+
 
     const onSubmit = async (data) => {
 
@@ -403,6 +413,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             agency_id: data?.source?.id == 6 ? data?.agency?.id : null || null,
             referred_student_id: data?.source?.id == 5 ? data?.student?.id : null || null,
             referral_university_id: data?.source?.id == 7 ? data?.referred_university?.id : null || null,
+            event_id: data?.source?.id == 11 ? data?.referred_event?.id : null || null,
             country_id: session?.data?.user?.office_country?.id,
 
             note: data?.note
@@ -499,10 +510,11 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             setValue('dob', data?.date_of_birth)
 
             setValue('source', data?.lead_source)
-           
+
             setValue('agency', data?.agency)
             setValue('referred_university', data?.referred_university)
             setValue('reference', data?.referrance_from)
+            setValue('referred_event', data?.event)
 
             setValue('country_of_birth', data?.country_of_birth)
             setValue('country_of_residence', data?.country_of_residence)
@@ -1038,6 +1050,25 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                             control={control}
                                             name={'referred_university'}
                                             defaultValue={watch('referred_university')}
+                                        />
+                                    </Grid>
+                                </div>
+                            </div>
+                        }
+
+                        {
+                            watch('source')?.id == 11 &&
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                <div className='application-input'>
+                                    <a className='form-text'>Referred Events</a>
+                                    <Grid className='mb-5 forms-data' >
+                                        <SelectX
+                                            placeholder=''
+                                            menuPlacement='top'
+                                            loadOptions={fetchEvents}
+                                            control={control}
+                                            name={'referred_event'}
+                                            defaultValue={watch('referred_event')}
                                         />
                                     </Grid>
                                 </div>

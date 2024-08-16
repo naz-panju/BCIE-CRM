@@ -639,22 +639,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   }, [page, refresh, limit, searchRefresh])
 
 
-
   return (
     <>
-      <ExportExcel from={'lead'} fileName={'Leads'} params={{
-        limit: 1000,
-        assigned_to: selectedAssignedTo,
-        stage: selectedStage,
-        assign_to_office_id: selectedBranch,
-        agency: selectedAgency,
-        source_id: selectedSource,
-        name: watch('nameSearch'),
-        email: watch('emailSearch'),
-        phone_number: watch('numberSearch'),
-        lead_id: watch('lead_id_search'),
-      }} />
-
       <div className="filter_sec">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
@@ -880,6 +866,25 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
         </div>
 
       </div>
+
+      {
+       ( session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+        <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={withdraw?'Withdrawn Leads':unassign?"Un Assigned Leads":"Leads"} params={{
+          limit: 1000,
+          assigned_to: selectedAssignedTo,
+          stage: selectedStage,
+          assign_to_office_id: selectedBranch,
+          agency: selectedAgency,
+          source_id: selectedSource,
+          name: watch('nameSearch'),
+          email: watch('emailSearch'),
+          phone_number: watch('numberSearch'),
+          lead_id: watch('lead_id_search'),
+          ...(withdraw ? { withdrawn: 1 } : {}),
+          ...(unassign ? { unassigned: 1 } : {}),
+          ...(range[0] && range[1] ? { from: moment(range[0]).format('YYYY-MM-DD'), to: moment(range[1]).format('YYYY-MM-DD') } : {}),
+        }} />
+      }
 
       {
         loading ?

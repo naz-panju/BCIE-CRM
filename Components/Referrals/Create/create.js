@@ -197,8 +197,18 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
             if (data?.agent?.id) {
                 formData.append('agency_id', data?.agent?.id || null)
             }
-        } else {
-            formData.append('agency_id', null)
+        } else if (data?.source?.id == 5) {
+            if (data?.student?.id) {
+                formData.append('referred_student_id', data?.student?.id || null)
+            }
+        } else if (data?.source?.id == 7) {
+            if (data?.student?.id) {
+                formData.append('referral_university_id', data?.referred_university?.id || null)
+            }
+        } else if (data?.source?.id == 11) {
+            if (data?.student?.id) {
+                formData.append('event_id', data?.referred_event?.id || null)
+            }
         }
 
         // formData.append('agency_id', data?.source?.id == 6 ? data?.agent?.id : null || null)
@@ -213,9 +223,9 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         if (data?.validity_date) {
             formData.append('last_date_of_validity', date)
         }
-        formData.append('top_description', data?.top_description)
-        formData.append('bottom_description', data?.bottom_description)
-        formData.append('private_remarks', data?.private_remarks)
+        formData.append('top_description', data?.top_description || '')
+        formData.append('bottom_description', data?.bottom_description || '')
+        formData.append('private_remarks', data?.private_remarks || '')
 
         if (attachment) {
             formData.append('image', attachment)
@@ -300,6 +310,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                 setValue('country', data?.country)
                 setValue('validity_date', data?.last_date_of_validity)
                 setValue('agent', data?.agency)
+                setValue('referred_event', data?.event)
                 // setValue('student', data?.referredStudent)
                 // setValue('referred_university', data?.referred_university)
                 setValue('top_description', data?.top_description)
@@ -443,27 +454,37 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
 
 
 
-                                        {/* {
+                                        {
                                             watch('source')?.id == 5 &&
-                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'>Referred Student</a>
                                                     <Grid className='mb-5 forms-data' >
-                                                        <AsyncSelect placeholder='Select...' name='student' defaultValue={watch('student')} isClearable defaultOptions loadOptions={fetchStudents} getOptionLabel={getOptionLabel} getOptionValue={(e) => e.id} onChange={(e) => setValue('student', e)} />
+                                                        <AsyncSelect
+                                                            placeholder=''
+                                                            name={'student'}
+                                                            defaultValue={watch('student')}
+                                                            isClearable
+                                                            defaultOptions
+                                                            loadOptions={fetchStudents}
+                                                            getOptionLabel={getOptionLabel}
+                                                            getOptionValue={(e) => e.id}
+                                                            onChange={(e) => setValue('student', e)}
+                                                        />
                                                     </Grid>
                                                 </div>
                                             </div>
-                                        } */}
+                                        }
 
-                                        {/* {
+                                        {
                                             watch('source')?.id == 7 &&
-                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                                 <div className='application-input'>
                                                     <a className='form-text'>Referred University</a>
                                                     <Grid className='mb-5 forms-data' >
                                                         <SelectX
-                                                            // placeholder='Referred University'
-                                                            menuPlacement='auto'
+                                                            placeholder=''
+                                                            menuPlacement='top'
                                                             loadOptions={fetchUniversities}
                                                             control={control}
                                                             name={'referred_university'}
@@ -472,7 +493,26 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                     </Grid>
                                                 </div>
                                             </div>
-                                        } */}
+                                        }
+
+                                        {
+                                            watch('source')?.id == 11 &&
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                                <div className='application-input'>
+                                                    <a className='form-text'>Events</a>
+                                                    <Grid className='mb-5 forms-data' >
+                                                        <SelectX
+                                                            placeholder=''
+                                                            menuPlacement='top'
+                                                            loadOptions={fetchEvents}
+                                                            control={control}
+                                                            name={'referred_event'}
+                                                            defaultValue={watch('referred_event')}
+                                                        />
+                                                    </Grid>
+                                                </div>
+                                            </div>
+                                        }
 
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>

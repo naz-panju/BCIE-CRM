@@ -275,6 +275,12 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     <label style={{ fontWeight: 'bold' }}>Referred University </label> {data?.referred_university?.name || 'NA'}
                                 </div>
                             }
+                            {
+                                data?.lead_source?.id == 11 &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Referred Event </label> {data?.event?.name || 'NA'}
+                                </div>
+                            }
 
                             {
                                 data?.referrance_from &&

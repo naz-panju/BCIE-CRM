@@ -216,7 +216,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page, setPage }) {
+export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page, setPage,searchTerm, searching }) {
 
     const router = useRouter();
 
@@ -316,7 +316,7 @@ export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page
 
     const fetchTable = () => {
         setLoading(true)
-        WhatsAppTemplateApi.list({ limit: limit, page: page }).then((response) => {
+        WhatsAppTemplateApi.list({ limit: limit, page: page,keyword:searchTerm }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -327,7 +327,7 @@ export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit])
+    }, [page, refresh, limit,searching])
 
     return (
 

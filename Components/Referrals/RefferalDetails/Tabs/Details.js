@@ -103,12 +103,45 @@ function Details({ data, loading }) {
                     </div>
                 </div>
 
+                {data?.lead_source?.id == 5 && (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="lead-details-list">
+                                <label style={{ fontWeight: 'bold' }}>Reffered Student:</label>
+                                <span>{data?.referredStudent?.name}</span>
+                            </div>
+                        </div>
+                    </>
+                )}
+
                 {data?.lead_source?.id == 6 && (
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="lead-details-list">
-                                <label style={{ fontWeight: 'bold' }}>Agency:</label>
+                                <label style={{ fontWeight: 'bold' }}>Referred Agency:</label>
                                 <span>{data?.agency?.name}</span>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {data?.lead_source?.id == 7 && (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="lead-details-list">
+                                <label style={{ fontWeight: 'bold' }}>Referred University:</label>
+                                <span>{data?.referred_university?.name}</span>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {data?.lead_source?.id == 11 && (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="lead-details-list">
+                                <label style={{ fontWeight: 'bold' }}>Referred Event:</label>
+                                <span>{data?.event?.name}</span>
                             </div>
                         </div>
                     </>
@@ -128,21 +161,21 @@ function Details({ data, loading }) {
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Top Description:</label>
-                        <span>{data?.top_description}</span>
+                        <span>{data?.top_description || "NA"}</span>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Bottom Description:</label>
-                        <span>{data?.bottom_description}</span>
+                        <span>{data?.bottom_description || "NA"}</span>
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Private Remarks:</label>
-                        <span>{data?.private_remarks}</span>
+                        <span>{data?.private_remarks || "NA"}</span>
                     </div>
                 </div>
 

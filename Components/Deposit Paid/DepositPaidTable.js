@@ -46,6 +46,7 @@ import UniversityInfoModal from '../Applications/Modals/UniversityInfo';
 import PortalPermissionModal from '../Applications/Modals/PortalPermissions';
 import EditPaymentModal from '../Applications/Modals/editPaymentModal';
 import SaveApplicationSumber from '../Applications/Modals/ApplicationId';
+import ExportExcel from '@/Form/Excel';
 
 
 
@@ -1192,6 +1193,31 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
         </div>
 
       </div>
+
+      {
+        (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+        <ExportExcel tableLoading={loading} data={list?.data} from={'app'} fileName={"Deposit Paid"} params={{
+          limit: 1000,
+          deposit_paid: 1,
+          source_id: selectedSource,
+          country_id: selectedCountry,
+          university_id: selectedUniversity,
+          intake_id: 'selectedIntake',
+          subject_area_id: selectedStream,
+          course_level_id: selectedcourselevel,
+          app_coordinator_id: selectedcoordinator,
+          assign_to_office_id: selectedBranch,
+          stage_id: selectedstage,
+          assigned_to_counsellor_id: selectedCreatedBy,
+          assign_to_office_id: selectedBranch,
+          course: watch('course'),
+          application_number: watch('application_number'),
+          student_code: watch('student_code'),
+          ...(showAllIntake ? { intake_id: "All" } : { intake_id: selectedIntake }),
+        }} />
+      }
+
+
 
 
       {

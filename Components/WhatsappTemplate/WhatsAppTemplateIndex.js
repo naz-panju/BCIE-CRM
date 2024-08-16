@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import WhatsAppTemplateTable from './TemplateTable';
 import CreateWhatsAppTemplate from './Create/create';
+import { InputAdornment, TextField } from '@mui/material';
+import { Add, Clear, Search } from '@mui/icons-material';
 
 
 const StyledMenu = styled((props) => (
@@ -81,6 +83,22 @@ export default function WhatsappTemplateIndex() {
     setRefresh(!refresh)
   }
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searching, setsearching] = useState(false)
+
+  const handleSearch = () => {
+    if(searchTerm){
+      setsearching(!searching)
+    }
+  };
+
+  const handleClear = () => {
+    setSearchTerm('');
+    if(searchTerm){
+      setsearching(!searching)
+    }
+  };
+
   return (
 
     <>
@@ -90,7 +108,22 @@ export default function WhatsappTemplateIndex() {
           <div className='page-title-block-content justify-between'>
             <h1>WhatsApp Templates</h1>
             <div className='flex'>
-              <Button className='add_lead_btn' sx={{ textTransform: 'none',height:30 }} onClick={handleCreateNew} size='small' variant='outlined'>Add</Button>
+              <TextField
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder='Search template'
+                variant='outlined'
+                size='small'
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Clear onClick={handleClear} sx={{ cursor: 'pointer' }} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <div onClick={handleSearch} className='flex justify-center items-center border p-1 bg-sky-200 hover:cursor-pointer hover:bg-sky-300' style={{ marginRight: 20 }}> <Search /></div>
+              <Button className='add_lead_btn' sx={{ textTransform: 'none' }} onClick={handleCreateNew} variant='outlined'><Add /> Add Template</Button>
             </div>
           </div>
 
@@ -99,7 +132,7 @@ export default function WhatsappTemplateIndex() {
 
 
         <div className='content-block lead-table-cntr'>
-          <WhatsAppTemplateTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
+          <WhatsAppTemplateTable searchTerm={searchTerm} searching={searching} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>
     </>

@@ -46,6 +46,7 @@ import SubmitToUniversityModal from '../Applications/Modals/UniversitySubmit';
 import SaveApplicationSumber from '../Applications/Modals/ApplicationId';
 import UniversityInfoModal from '../Applications/Modals/UniversityInfo';
 import PortalPermissionModal from '../Applications/Modals/PortalPermissions';
+import ExportExcel from '@/Form/Excel';
 
 
 
@@ -223,8 +224,8 @@ function EnhancedTableHead(props) {
                                 direction={orderBy === headCell.id ? order : 'asc'}
                                 onClick={createSortHandler(headCell.id)}
                             > */}
-                                {headCell.label}
-                                {/* {orderBy === headCell.id ? (
+                        {headCell.label}
+                        {/* {orderBy === headCell.id ? (
                                     <Box component="span" sx={visuallyHidden}>
                                         {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                     </Box>
@@ -441,7 +442,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
         })
     }
     const fetchCoordinator = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 6,office_id:selectedBranch  }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 6, office_id: selectedBranch }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -742,11 +743,11 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
             params['returned'] = 1
         }
 
-        if (selectedDeposit == 'Yes') {
-            params['deposit_paid'] = 1
-        } else if (selectedDeposit == 'No') {
-            params['deposit_paid'] = 0
-        }
+        // if (selectedDeposit == 'Yes') {
+        //     params['deposit_paid'] = 1
+        // } else if (selectedDeposit == 'No') {
+        //     params['deposit_paid'] = 0
+        // }
 
         // console.log('here');
 
@@ -1040,7 +1041,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                         </div>
                     </div>
 
-                    
+
                     <div>
                         <div className='form-group'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
@@ -1113,7 +1114,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                         </div>
                     </div>
 
-                    <div>
+                    {/* <div>
                         <div className='form-group'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
                                 <path d="M1 6.66667H17M1 6.66667V14.978C1 16.0358 1 16.5645 1.21799 16.9686C1.40973 17.324 1.71547 17.6132 2.0918 17.7943C2.5192 18 3.07899 18 4.19691 18H13.8031C14.921 18 15.48 18 15.9074 17.7943C16.2837 17.6132 16.5905 17.324 16.7822 16.9686C17 16.5649 17 16.037 17 14.9812V6.66667M1 6.66667V5.9113C1 4.85342 1 4.32409 1.21799 3.92003C1.40973 3.56461 1.71547 3.27586 2.0918 3.09477C2.51962 2.88889 3.08009 2.88889 4.2002 2.88889H5M17 6.66667V5.90819C17 4.85238 17 4.32369 16.7822 3.92003C16.5905 3.56461 16.2837 3.27586 15.9074 3.09477C15.4796 2.88889 14.9203 2.88889 13.8002 2.88889H13M13 1V2.88889M13 2.88889H5M5 1V2.88889" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -1139,7 +1140,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                                 onChange={(selectedOption) => handleDepositChange(selectedOption)}
                             />
                         </div>
-                    </div>
+                    </div> */}
 
                     <div>
                         <div className='form-group'>
@@ -1228,6 +1229,32 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                 </div>
 
             </div>
+
+
+            {
+                (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+                <ExportExcel tableLoading={loading} data={list?.data} from={'app'} fileName={"Alumni"} params={{
+                    limit: 1000,
+                    source_id: selectedSource,
+                    country_id: selectedCountry,
+                    university_id: selectedUniversity,
+                    intake_id: selectedIntake,
+                    subject_area_id: selectedStream,
+                    course_level_id: selectedcourselevel,
+                    app_coordinator_id: selectedcoordinator,
+                    assign_to_office_id: selectedBranch,
+                    stage_id: selectedstage,
+                    assigned_to_counsellor_id: selectedCreatedBy,
+                    assign_to_office_id: selectedBranch,
+                    course: watch('course'),
+                    application_number: watch('application_number'),
+                    student_code: watch('student_code'),
+                    alumni: 1,
+                    ...(showAllIntake ? { intake_id: "All" } : { intake_id: selectedIntake }),
+                    ...(selectedStatus == 'Submitted' ? { submitted: 1 } : selectedStatus == 'Unsubmitted' ? { unsubmitted: 1 } : selectedStatus == 'Returned' ? { returned: 1 } : {}),
+                }} />
+            }
+
 
 
             {

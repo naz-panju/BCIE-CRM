@@ -5,9 +5,10 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import CreateEmailTemplate from './Create/create';
 import TemplateTable from './TemplateTable';
-import { Grid } from '@mui/material';
+import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 
 import dynamic from 'next/dynamic';
+import { Add, Clear, Search } from '@mui/icons-material';
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -83,6 +84,22 @@ export default function EmailTemplateIndex() {
     setRefresh(!refresh)
   }
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searching, setsearching] = useState(false)
+
+  const handleSearch = () => {
+    if(searchTerm){
+      setsearching(!searching)
+    }
+  };
+
+  const handleClear = () => {
+    setSearchTerm('');
+    if(searchTerm){
+      setsearching(!searching)
+    }
+  };
+
   return (
 
     <>
@@ -92,8 +109,22 @@ export default function EmailTemplateIndex() {
           <div className='page-title-block-content justify-between'>
             <h1>Email Templates</h1>
             <Grid display={'flex'}>
-
-              <Button className='add_lead_btn' sx={{ textTransform: 'none', height: 30 }} onClick={handleCreateNew} variant='outlined'>Add</Button>
+              <TextField
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder='Search template'
+                variant='outlined'
+                size='small'
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Clear onClick={handleClear} sx={{cursor:'pointer'}} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <div onClick={handleSearch} className='flex justify-center items-center border p-1 bg-sky-200 hover:cursor-pointer hover:bg-sky-300' style={{ marginRight: 20 }}> <Search /></div>
+              <Button className='add_lead_btn' sx={{ textTransform: 'none' }} onClick={handleCreateNew} variant='outlined'><Add /> Add Template</Button>
 
             </Grid>
           </div>
@@ -103,7 +134,7 @@ export default function EmailTemplateIndex() {
 
 
         <div className='content-block lead-table-cntr'>
-          <TemplateTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
+          <TemplateTable searchTerm={searchTerm} searching={searching} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>
     </>

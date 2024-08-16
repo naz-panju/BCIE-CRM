@@ -133,11 +133,16 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         formData.append('body', data?.body)
         formData.append('body_footer', data?.body_footer)
         formData.append('default_cc', data?.default_cc || '')
-
         if (isChecked) {
             formData.append('is_private_template', 1)
         } else {
             formData.append('is_private_template', 0)
+        }
+
+        if (isSysytemTemplate) {
+            formData.append('is_system_template', 1)
+        } else {
+            formData.append('is_system_template', 0)
         }
 
 
@@ -208,6 +213,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         setcopied()
         setIsChecked(false)
         setOpen(false)
+        setIsSysytemTemplate(false)
     }
 
     const handleDrawerClose = (event) => {
@@ -261,7 +267,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                 setSelectedPriority(data?.priority)
                 setValue('default_cc', data?.default_cc)
                 setattachmentFiles(data?.attchments)
-                if (data?.system_template == 1) {
+                if (data?.is_system_template == 1) {
                     setIsSysytemTemplate(true)
                 }
 
@@ -326,6 +332,9 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
         };
     }, [])
 
+    const handleSystemTemplateChnage = (event) => {
+        setIsSysytemTemplate(event.target.checked);
+    };
 
     const setSubject = (text) => {
         setValue('subject')
@@ -425,7 +434,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                             {/* <Typography sx={{ fontWeight: '500' }}>System Template</Typography> */}
                                                             <a className='form-text'>System Template</a>
 
-                                                            <Checkbox checked={isSysytemTemplate} disabled />
+                                                            <Checkbox checked={isSysytemTemplate} onChange={handleSystemTemplateChnage} />
 
                                                         </Grid>
                                                     </div>
@@ -436,7 +445,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         <a className='form-text'>Template Name</a>
                                                         <Grid className='mb-5 forms-data'>
 
-                                                            <TextInput disabled={isSysytemTemplate} control={control} name="name"
+                                                            <TextInput control={control} name="name"
                                                                 value={watch('name')} />
                                                             {errors.name && <span className='form-validation'>{errors.name.message}</span>}
 
@@ -463,7 +472,7 @@ export default function CreateEmailTemplate({ editId, setEditId, refresh, setRef
                                                         <a className='form-text'> CC</a>
                                                         <Grid className='mb-5 forms-data'>
 
-                                                            <TextInput disabled={isSysytemTemplate} control={control} name="default_cc"
+                                                            <TextInput control={control} name="default_cc"
                                                                 value={watch('default_cc')} />
                                                             {errors.default_cc && <span className='form-validation'>{errors.default_cc.message}</span>}
 

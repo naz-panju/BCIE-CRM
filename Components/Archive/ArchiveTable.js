@@ -36,6 +36,8 @@ import 'rsuite/dist/rsuite.min.css';
 import { DateRangePicker } from 'rsuite';
 import moment from 'moment';
 import { format } from 'date-fns';
+import ExportExcel from '@/Form/Excel';
+import { useSession } from 'next-auth/react';
 
 
 
@@ -174,8 +176,8 @@ function EnhancedTableHead(props) {
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
             > */}
-              {headCell.label}
-              {/* {orderBy === headCell.id ? (
+            {headCell.label}
+            {/* {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
@@ -368,6 +370,8 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     [order, orderBy, page, limit],
   );
 
+  const session = useSession()
+
   const fetchUser = (e) => {
     return ListingApi.permissionUser({ keyword: e, office_id: selectedBranch }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
@@ -473,7 +477,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       stage: selectedStage,
       assign_to_office_id: selectedBranch,
       agency: selectedAgency,
-      source_id:selectedSource,
+      source_id: selectedSource,
 
       name: watch('nameSearch'),
       email: watch('emailSearch'),
@@ -538,12 +542,12 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
 
   const onSearch = () => {
     if (page == 1) {
-        setsearchRefresh(!searchRefresh)
+      setsearchRefresh(!searchRefresh)
     } else {
-        setPage(1)
-        router.replace(`/archive?page=${1}`);
+      setPage(1)
+      router.replace(`/archive?page=${1}`);
     }
-}
+  }
   const handleClearSearch = (from) => {
     // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
     setValue('nameSearch', '')
@@ -561,7 +565,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     setSelectedStage()
     setselectedBranch();
     setselectedSource()
-    setselectedAgency();  
+    setselectedAgency();
     setRange([null, null])
 
     onSearch()
@@ -814,6 +818,24 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       </div>
 
       {
+        (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+        <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={'Archived Leads'} params={{
+          limit: 1000,
+          closed: 1,
+          assigned_to: selectedAssignedTo,
+          stage: selectedStage,
+          assign_to_office_id: selectedBranch,
+          agency: selectedAgency,
+          source_id: selectedSource,
+          name: watch('nameSearch'),
+          email: watch('emailSearch'),
+          phone_number: watch('numberSearch'),
+          lead_id: watch('lead_id_search'),
+          ...(range[0] && range[1] ? { from: moment(range[0]).format('YYYY-MM-DD'), to: moment(range[1]).format('YYYY-MM-DD') } : {}),
+        }} />
+      }
+
+      {
         loading ?
           <LoadingTable columns={3} columnWidth={100} columnHeight={20} rows={10} rowWidth={200} rowHeight={20} />
           :
@@ -880,7 +902,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
                                   padding="none"
                                   className='reg-name'
                                 >
-                                   <span className='a_hover text-sky-500' onClick={()=>handleleadOpen(row?.id)}>{row.name}</span>
+                                  <span className='a_hover text-sky-500' onClick={() => handleleadOpen(row?.id)}>{row.name}</span>
                                 </TableCell>
                                 <TableCell align="left">{row?.assignedToOffice?.name || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.country_of_residence?.name || 'NA'}</TableCell>
