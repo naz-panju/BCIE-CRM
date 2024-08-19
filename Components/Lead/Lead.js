@@ -247,7 +247,8 @@ export default function CustomizedMenus() {
                   session?.data?.user?.role?.id !== 5 &&
                   <>
                     <Button sx={{ mr: 2, textTransform: 'none' }} variant='outlined' onClick={handleUploadOpen} className='add_lead_btn'>
-                      <UploadOutlined fontSize='small' /> Import Leads
+                      <DownloadOutlined fontSize='small' /> Import Leads
+                      
                     </Button>
 
                     <Tooltip title={selected?.length === 0 && 'Please select one or more Lead'}>

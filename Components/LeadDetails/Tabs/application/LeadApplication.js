@@ -217,7 +217,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
     const fetchList = async () => {
         setLoading(true)
         // console.log(lead_id);
-        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, intake_id: 'All',withdrawn:1 })
+        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, intake_id: 'All',withdrawn:1,all:1 })
         console.log(response);
         setList(response?.data)
         setLoading(false)
@@ -226,7 +226,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
 
     const fetchLoadingList = async () => {
         setdocLoading(true)
-        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, intake_id: 'All' })
+        const response = await ApplicationApi.list({ limit: limit, lead_id: lead_id, page: page, intake_id: 'All',withdrawn:1,all:1 })
         setList(response?.data)
         setdocLoading(false)
     }

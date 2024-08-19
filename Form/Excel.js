@@ -89,7 +89,7 @@ function ExportExcel({ from, fileName, params, data, tableLoading }) {
                 {
                     loading ?
                         <div className="spinner"></div>
-                        : <><DownloadOutlined fontSize='small' sx={{mr:1}} />Export</>
+                        : <><UploadOutlined fontSize='small' sx={{mr:1}} />Export</>
                 }
             </Button>
         </div>
