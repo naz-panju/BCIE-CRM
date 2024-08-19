@@ -452,7 +452,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                                                         "❗" + obj?.body
                                                                     }
                                                                     <br />
-                                                                    <span style={{ fontSize: '11px', color: 'grey' }}> We've received the video message, but it’s not supported in our system. Please ask the student to use another method to send this message.</span>
+                                                                    <span style={{ fontSize: '11px', color: 'grey' }}> We`&apos;`ve received the video message, but it’s not supported in our system. Please ask the student to use another method to send this message.</span>
 
                                                                 </>
                                                                 :
@@ -649,7 +649,7 @@ const noInput = () => (
             Your 24-hour communication window has closed.
         </p>
         <p style={{ margin: '5px 0 0', fontSize: '14px' }}>
-            To start a new conversation, please use the "Send Whatsapp" option.
+            To start a new conversation, please use the `&quot;`Send Whatsapp`&quot;` option.
         </p>
     </div>
 )
