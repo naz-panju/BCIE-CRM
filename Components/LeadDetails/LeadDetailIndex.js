@@ -293,6 +293,9 @@ function LeadDetails() {
     getStageList()
   }, [])
 
+  console.log(details);
+  
+
   const gradientId = 'myGradient';
 
   return (
@@ -632,9 +635,10 @@ function LeadDetails() {
 
 
                         <div className='vari-right'>
+                        {/* || details?.stage?.action_type=='alumni' */}
                           {
                             session?.data?.user?.role?.id != 6 &&
-                            !details?.user || details?.stage?.action_type=='alumni' &&
+                            !details?.user  &&
                             <a onClick={handleOpenStageModal}>Change Status</a>
                           }
                         </div>
