@@ -7,7 +7,7 @@ import CreateLead from './Create/Create';
 import { useRouter } from 'next/router';
 import { Grid } from '@mui/material';
 import AssignLeadModal from './Modal/AssignModal';
-import { DownloadOutlined, GroupsOutlined, ImportExportOutlined, PersonAddAlt1Outlined } from '@mui/icons-material';
+import { DownloadOutlined, GroupsOutlined, ImportExportOutlined, PersonAddAlt1Outlined, UploadOutlined } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { useEffect } from 'react';
 import Tooltip from '@mui/material/Tooltip';
@@ -247,7 +247,7 @@ export default function CustomizedMenus() {
                   session?.data?.user?.role?.id !== 5 &&
                   <>
                     <Button sx={{ mr: 2, textTransform: 'none' }} variant='outlined' onClick={handleUploadOpen} className='add_lead_btn'>
-                      <DownloadOutlined fontSize='small' /> Import Leads
+                      <UploadOutlined fontSize='small' /> Import Leads
                     </Button>
 
                     <Tooltip title={selected?.length === 0 && 'Please select one or more Lead'}>

@@ -151,6 +151,8 @@ export default function SendUniversityMail({ details, editId, setEditId, lead_id
         formData.append('body_footer', data?.body_footer)
         formData.append('lead_id', lead_id || '')
 
+        formData.append('mail_to_university', 1)
+
         if (from == 'app') {
             formData.append('application_id', app_id || '')
         }

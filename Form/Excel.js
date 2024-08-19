@@ -1,5 +1,6 @@
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import { LeadApi } from '@/data/Endpoints/Lead';
+import { DownloadOutlined } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { Button } from '@mui/material';
 import { blue } from '@mui/material/colors';
@@ -88,7 +89,7 @@ function ExportExcel({ from, fileName, params, data, tableLoading }) {
                 {
                     loading ?
                         <div className="spinner"></div>
-                        : "Export"
+                        : <><DownloadOutlined fontSize='small' sx={{mr:1}} />Export</>
                 }
             </Button>
         </div>

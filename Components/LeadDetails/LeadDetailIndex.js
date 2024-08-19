@@ -385,7 +385,6 @@ function LeadDetails() {
                             <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M18.5 19.3264C17.8971 16.6041 15.6249 15 11.5001 15C7.37535 15 5.10289 16.6041 4.5 19.3264M11.5 22C17.299 22 22 17.299 22 11.5C22 5.70101 17.299 1 11.5 1C5.70101 1 1 5.70101 1 11.5C1 17.299 5.70101 22 11.5 22ZM11.5 11.5C13.0556 11.5 13.8333 10.6667 13.8333 8.58333C13.8333 6.5 13.0556 5.66667 11.5 5.66667C9.94444 5.66667 9.16667 6.5 9.16667 8.58333C9.16667 10.6667 9.94444 11.5 11.5 11.5Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-
                             {/*
                               loading ?
                                 <Skeleton variant="circular" width={30} height={30} />

@@ -530,7 +530,10 @@ export async function getServerSideProps(context) {
                 props: {
                     data: null
                 },
-                notFound: true
+                redirect: {
+                    destination: '/notFound', // Replace with your custom error page path
+                    permanent: false,
+                },
 
             };
         }
@@ -541,7 +544,10 @@ export async function getServerSideProps(context) {
             props: {
                 data: null, // or handle the error in a way that makes sense for your application
             },
-            notFound: true
+            redirect: {
+                destination: '/notFound', // Replace with your custom error page path
+                permanent: false,
+            },
         };
     }
 }
