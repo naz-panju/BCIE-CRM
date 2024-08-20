@@ -1069,7 +1069,7 @@ svg.svg-inline--fa.fa-qrcode {
   padding: 10px;
 }
 
-.lead-tab-item {
+.lead-tab .lead-tab-item {
   display: flex !important;
   flex-direction: row !important;
   justify-content: unset !important;
@@ -1100,7 +1100,7 @@ svg.svg-inline--fa.fa-qrcode {
   border-left: 0px !important;
 }
 
-.lead-tab-item.Mui-selected {
+.lead-tab .lead-tab-item.Mui-selected {
   color: #fff !important;
   font-weight: 500 !important;
   background-color: #f8f8f8;
