@@ -91,13 +91,13 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'id',
+    id: 'leads.id',
     numeric: false,
     disablePadding: true,
     label: 'Lead Id',
   },
   {
-    id: 'name',
+    id: 'leads.name',
     numeric: false,
     disablePadding: true,
     label: 'Registered Name',
@@ -115,19 +115,19 @@ const headCells = [
     label: 'Country of Residence',
   },
   {
-    id: 'city',
+    id: 'leads.city',
     numeric: false,
     disablePadding: true,
     label: 'City of Student',
   },
   {
-    id: 'preferred_countries',
+    id: 'leads.preferred_countries',
     numeric: false,
     disablePadding: true,
     label: 'Preferred Country',
   },
   {
-    id: 'counselors.name',
+    id: 'users.name',
     numeric: true,
     disablePadding: false,
     label: 'Assigned To',
@@ -137,6 +137,7 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: 'Stage',
+    
   },
 ];
 
@@ -147,7 +148,7 @@ function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
+    onRequestSort(event, property?.id);
     field = property?.id
   };
 

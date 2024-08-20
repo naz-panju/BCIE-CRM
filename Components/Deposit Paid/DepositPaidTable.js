@@ -95,47 +95,45 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'id',
+    id: 'applications.id',
     numeric: false,
     disablePadding: true,
     label: 'Student Id',
     noSort: false
   },
+
   {
-    id: 'student',
+    id: 'leads.student_code',
     numeric: false,
     disablePadding: false,
     label: 'Student',
     noSort: false
   },
-  // {
-  //     id: 'email',
-  //     numeric: false,
-  //     disablePadding: false,
-  //     label: 'email ',
-  // },
-  // {
-  //     id: 'phone',
-  //     numeric: true,
-  //     disablePadding: false,
-  //     label: 'Phone Number ',
-  // },
+
   {
-    id: 'country',
+    id: 'leads.date_of_birth',
+    numeric: false,
+    disablePadding: false,
+    label: 'Student DOB',
+    noSort: false
+  },
+
+  {
+    id: 'countries.name',
     numeric: false,
     disablePadding: false,
     label: 'Country',
     noSort: false
   },
   {
-    id: 'university',
+    id: 'universities.name',
     numeric: false,
     disablePadding: false,
     label: 'University',
     noSort: false
   },
   {
-    id: 'course_level',
+    id: 'course_levels.name',
     numeric: false,
     disablePadding: false,
     label: 'Course Level',
@@ -148,47 +146,43 @@ const headCells = [
     label: 'Course',
     noSort: false
   },
-  // {
-  //   id: 'subject_area',
-  //   numeric: false,
-  //   disablePadding: false,
-  //   label: 'Subject Area',
-  //   noSort: false
-  // },
+
   {
-    id: 'intake',
+    id: ['intakes.year', 'intakes.month'],
     numeric: false,
     disablePadding: false,
     label: 'Intake',
     noSort: false
   },
   {
-    id: 'stage',
+    id: 'stages.name',
     numeric: false,
     disablePadding: false,
     label: 'Stage',
     noSort: false
   },
   {
-    id: 'counsellor',
+    id: 'submitted_to_university_on',
+    numeric: false,
+    disablePadding: false,
+    label: 'Submited to University',
+    noSort: false
+  },
+  {
+    id: 'users.name',
     numeric: false,
     disablePadding: false,
     label: 'Counsellor',
     noSort: false
   },
   {
-    id: 'deposit',
+    id: 'applications.deposit_amount_paid',
     numeric: false,
     disablePadding: false,
     label: 'Uni.Deposit',
     noSort: false
   },
-  // {
-  //     id: 'return',
-  //     numeric: false,
-  //     disablePadding: false,
-  //     label: '',
-  // },
+
   {
     id: 'icons',
     numeric: false,
@@ -198,11 +192,15 @@ const headCells = [
   },
 ];
 
+let field = ''
+let sortOrder = true
+
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
+    onRequestSort(event, property?.id);
+    field = property?.id
   };
 
 
@@ -217,21 +215,21 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            {/* {
+            {
               !headCell?.noSort &&
               <TableSortLabel
                 active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={createSortHandler(headCell.id)}
-              > */}
-            {headCell.label}
-            {/* {orderBy === headCell.id ? (
+                direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+                onClick={createSortHandler(headCell)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
-                    {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                    {sortOrder ? 'sorted ascending' : 'sorted descending'}
                   </Box>
                 ) : null}
               </TableSortLabel>
-            } */}
+            }
           </TableCell>
         ))}
       </TableRow>
@@ -472,6 +470,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
   }
 
   const handleRequestSort = (event, property) => {
+    sortOrder = !sortOrder
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -708,6 +707,9 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
     setLoading(true)
 
     let params = {
+      sort_field: field,
+      sort_order: sortOrder ? 'asc' : 'desc',
+
       limit: limit,
       // application statuses:unsubmitted,
       // status: 'Admission Completed',
@@ -859,7 +861,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
 
   useEffect(() => {
     fetchTable()
-  }, [page, refresh, limit, searchRefresh])
+  }, [page, refresh, limit, searchRefresh, sortOrder])
 
 
   return (
@@ -1197,6 +1199,8 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
       {
         (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
         <ExportExcel tableLoading={loading} data={list?.data} from={'app'} fileName={"Deposit Paid"} params={{
+          sort_field: field,
+          sort_order: sortOrder ? 'asc' : 'desc',
           limit: 1000,
           deposit_paid: 1,
           source_id: selectedSource,
@@ -1300,8 +1304,9 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
                                   <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
                                     className='a_hover text-sky-600'> {row?.lead?.name} </span>
                                 </TableCell>
-                                {/* <TableCell align="left">{row?.student?.email}</TableCell>
-                                                                <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
+                                <TableCell align="left">
+                                  {moment(row?.lead?.date_of_birth).format('DD-MM-YYYY')}
+                                </TableCell>
                                 <TableCell align="left"> {row?.country?.name}</TableCell>
                                 <TableCell align="left">
                                   <div className='d-flex justify-between items-center'>
@@ -1326,6 +1331,9 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
                                 <TableCell align="left"> {row?.course}</TableCell>
                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                 <TableCell className='stage-colm' align="left"><Tooltip title={row?.stage_note}><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span></Tooltip></TableCell>
+                                <TableCell align="left">
+                                  {row?.submitted_to_university_on ? moment(row?.submitted_to_university_on).format('DD-MM-YYYY') : 'NA'}
+                                </TableCell>
                                 <TableCell align="left">{row?.lead?.assignedToCounsellor?.name}</TableCell>
                                 <TableCell align="left">
                                   {
@@ -1428,7 +1436,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
                                 width: '100%',
                               }}
                             >
-                              <TableCell colSpan={11} align="center">
+                              <TableCell colSpan={13} align="center">
                                 <div className='no-table-ask-block'>
                                   <h4 style={{ color: 'grey' }}>No Application Found</h4>
                                 </div>

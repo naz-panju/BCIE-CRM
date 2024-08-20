@@ -5,6 +5,7 @@ import { LoadingButton } from '@mui/lab';
 import { Button } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import FileSaver from 'file-saver';
+import moment from 'moment';
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { Grid } from 'rsuite';
@@ -70,12 +71,14 @@ function ExportExcel({ from, fileName, params, data, tableLoading }) {
                     "Student Id": obj?.lead?.student_code || 'NA',
                     "University Id": obj?.application_number || 'NA',
                     "Student": obj?.lead?.name || 'NA',
+                    "Student DOB": moment(obj?.lead?.date_of_birth).format('DD-MM-YYYY'),
                     "Country": obj?.country?.name || 'NA',
                     "University": obj?.university?.name || 'NA',
                     "Course Level": obj?.course_level?.name || 'NA',
                     "Course": obj?.course || 'NA',
                     "Intake": obj?.intake?.name || 'NA',
                     "Stage": obj?.stage?.name || 'NA',
+                    "Submited to University": obj?.submitted_to_university_on ? moment(obj?.submitted_to_university_on).format('DD-MM-YYYY') : 'NA',
                     "Counsellor": obj?.lead?.assignedToCounsellor?.name || 'NA',
                     "University Deposit": obj?.deposit_amount_paid || 'NA',
                 })
@@ -89,7 +92,7 @@ function ExportExcel({ from, fileName, params, data, tableLoading }) {
                 {
                     loading ?
                         <div className="spinner"></div>
-                        : <><UploadOutlined fontSize='small' sx={{mr:1}} />Export</>
+                        : <><UploadOutlined fontSize='small' sx={{ mr: 1 }} />Export</>
                 }
             </Button>
         </div>
