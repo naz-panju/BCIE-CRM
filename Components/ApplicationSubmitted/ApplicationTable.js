@@ -1301,7 +1301,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                 </TableCell>
                                                                 <TableCell align="left"> {row?.course_level?.name}</TableCell>
                                                                 <TableCell align="left"> {row?.course}</TableCell>
-                                                                <TableCell align="left"> {row?.subject_area?.name}</TableCell>
+                                                                {/* <TableCell align="left"> {row?.subject_area?.name}</TableCell> */}
                                                                 <TableCell><Tooltip title={row?.differ_intake_note}>{row?.intake?.name}</Tooltip></TableCell>
                                                                 <TableCell className='stage-colm' align="left"><Tooltip title={row?.stage_note}><span style={{ backgroundColor: row?.stage?.colour }} className='stage-span'>{row?.stage?.name}</span></Tooltip></TableCell>
                                                                 <TableCell align="left">
