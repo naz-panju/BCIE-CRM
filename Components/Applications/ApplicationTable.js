@@ -108,6 +108,14 @@ const headCells = [
         label: 'Student',
         noSort: false
     },
+
+    {
+        id: 'date_of_birth',
+        numeric: false,
+        disablePadding: false,
+        label: 'Student DOB',
+        noSort: false
+    },
     // {
     //     id: 'email',
     //     numeric: false,
@@ -167,6 +175,13 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'Stage',
+        noSort: false
+    },
+    {
+        id: 'submitted_to_university_on',
+        numeric: false,
+        disablePadding: false,
+        label: 'Submited to University',
         noSort: false
     },
     {
@@ -1446,6 +1461,9 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                     <span onClick={() => window.open(`/lead/${row?.lead_id}`, '_blank')}
                                                                         className='a_hover text-sky-600'> {row?.lead?.name} </span>
                                                                 </TableCell>
+                                                                <TableCell align="left">
+                                                                    {moment(row?.lead?.date_of_birth).format('DD-MM-YYYY')}
+                                                                </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
@@ -1481,6 +1499,9 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                         selectedStatus == 'Returned' && */}
                                                                     {/* <ReplayOutlined fontSize='small' className='ml-1' /> */}
                                                                     {/* } */}
+                                                                </TableCell>
+                                                                <TableCell align="left">
+                                                                    {row?.submitted_to_university_on ? moment(row?.submitted_to_university_on).format('DD-MM-YYYY') : 'NA'}
                                                                 </TableCell>
                                                                 <TableCell align="left">{row?.lead?.assignedToCounsellor?.name}</TableCell>
                                                                 <TableCell align="left">

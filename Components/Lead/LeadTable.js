@@ -90,7 +90,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'lead_id',
+    id: 'id',
     numeric: false,
     disablePadding: true,
     label: 'Lead Id',
@@ -102,13 +102,13 @@ const headCells = [
     label: 'Registered Name',
   },
   {
-    id: 'office',
+    id: 'leads.assign_to_office_id',
     numeric: false,
     disablePadding: true,
     label: 'Office',
   },
   {
-    id: 'residence',
+    id: 'country_of_residence',
     numeric: false,
     disablePadding: true,
     label: 'Country of Residence',
@@ -120,30 +120,34 @@ const headCells = [
     label: 'City of Student',
   },
   {
-    id: 'preferred',
+    id: 'preferred_countries',
     numeric: false,
     disablePadding: true,
     label: 'Preferred Country',
   },
   {
-    id: 'assigned_to',
+    id: 'leads.assign_to_user_id',
     numeric: true,
     disablePadding: false,
     label: 'Assigned To',
   },
   {
-    id: 'stage',
+    id: 'leads.stage_id',
     numeric: false,
     disablePadding: false,
     label: 'Stage',
   },
 ];
 
+let field = ''
+let sortOrder = true
+
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
+    field = property?.id
   };
 
   return (
@@ -173,18 +177,18 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            {/* <TableSortLabel
+            <TableSortLabel
               active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            > */}
-            {headCell.label}
-            {/* {orderBy === headCell.id ? (
+              direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+              onClick={createSortHandler(headCell)}
+            >
+              {headCell.label}
+              {orderBy === headCell.id ? (
                 <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                  {sortOrder ? 'sorted ascending' : 'sorted descending'}
                 </Box>
               ) : null}
-            </TableSortLabel> */}
+            </TableSortLabel>
           </TableCell>
         ))}
       </TableRow>
@@ -308,6 +312,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   // const [searchType, setsearchType] = useState(second)
 
   const handleRequestSort = (event, property) => {
+    sortOrder = !sortOrder
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -495,6 +500,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const fetchTable = () => {
     setLoading(true)
     let params = {
+      sort_field: field,
+      sort_order: sortOrder ? 'asc' : 'desc',
 
       limit: limit,
       assigned_to: selectedAssignedTo,
@@ -636,7 +643,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   // table use
   useEffect(() => {
     fetchTable()
-  }, [page, refresh, limit, searchRefresh])
+  }, [page, refresh, limit, searchRefresh, sortOrder])
 
 
   return (
@@ -870,6 +877,8 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       {
         (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
         <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={withdraw ? 'Withdrawn Leads' : unassign ? "Un Assigned Leads" : "Leads"} params={{
+          sort_field: field,
+          sort_order: sortOrder ? 'asc' : 'desc',
           limit: 1000,
           assigned_to: selectedAssignedTo,
           stage: selectedStage,
