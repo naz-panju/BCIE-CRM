@@ -936,6 +936,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             setdeleteLoading(false)
         })
     }
+// console.log();
 
     useEffect(() => {
         fetchTable()

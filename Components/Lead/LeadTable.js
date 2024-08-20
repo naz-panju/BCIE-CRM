@@ -108,7 +108,7 @@ const headCells = [
     label: 'Office',
   },
   {
-    id: 'country_of_residence',
+    id: 'countries.name',
     numeric: false,
     disablePadding: true,
     label: 'Country of Residence',
@@ -126,7 +126,7 @@ const headCells = [
     label: 'Preferred Country',
   },
   {
-    id: 'leads.assign_to_user_id',
+    id: 'counselors.name',
     numeric: true,
     disablePadding: false,
     label: 'Assigned To',
