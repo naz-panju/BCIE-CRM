@@ -34,7 +34,7 @@ const style = {
 };
 
 
-export default function AssignLeadModal({ selected, setSelected, editId, setEditId, handleRefresh, handlePopClose, setsingle, single, assignToUser, setassignToUser }) {
+export default function AssignLeadModal({ selected, setSelected, editId, setEditId, handleRefresh, handlePopClose, setsingle, single, assignToUser, setassignToUser, reAssign, setreAssign }) {
     const scheme = yup.object().shape({
 
         // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -76,9 +76,14 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
         if (handlePopClose) {
             handlePopClose()
         }
-        setsingle(false)
+        if (setsingle) {
+            setsingle(false)
+        }
         if (setassignToUser) {
             setassignToUser()
+        }
+        if (reAssign) {
+            setreAssign(false)
         }
         setseletctedoption()
         setSelected([])
@@ -89,7 +94,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
 
     const fetchCounsellor = (e) => {
-        return ListingApi.users({ keyword: e, office_id: branchId, role_id: 5 }).then(response => {
+        return ListingApi.users({ keyword: e, office_id: branchId || assignToUser?.assignedToOffice?.id, role_id: 5 }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 // console.log(response?.data?.data);
                 if (session?.data?.user?.role?.id == 5) {
@@ -165,13 +170,31 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                 toast.error('Please Select a Counsellor')
                 setLoading(false)
             } else {
-                dataToSubmit = {
-                    user_id: watch('counsellor')?.id,
-                    leads: selected,
-                    assign_to_office_id: watch('branch')?.id
+                let dataToSubmit = {
+                }
+
+                let action;
+                console.log(reAssign);
+                if (reAssign) {
+                    
+                    dataToSubmit = {
+                        user_id: watch('counsellor')?.id,
+                        lead_id: selected,
+                        assign_to_office_id: watch('branch')?.id
+                    }
+
+                    action = LeadApi.reassign(dataToSubmit)
+
+                } else {
+                    dataToSubmit = {
+                        user_id: watch('counsellor')?.id,
+                        leads: selected,
+                        assign_to_office_id: watch('branch')?.id
+                    }
+                    action = LeadApi.bulkAssign(dataToSubmit)
                 }
                 // console.log(dataToSubmit)
-                LeadApi.bulkAssign(dataToSubmit).then((response) => {
+                action.then((response) => {
                     // console.log(response);
                     if (response?.status == 200 || response?.status == 201) {
                         toast.success(response?.data?.message)

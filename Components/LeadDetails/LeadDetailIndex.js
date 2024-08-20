@@ -6,7 +6,7 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
 import moment from 'moment';
 import { Button, Grid, Skeleton, Tooltip } from '@mui/material';
-import { PieChart, SettingsBackupRestoreOutlined } from '@mui/icons-material';
+import { PieChart, SettingsBackupRestoreOutlined, SwapHorizOutlined } from '@mui/icons-material';
 import ConvertLeadToStudent from './Modals/ConvertToStudent';
 import BasicPie from './Chart/Pie';
 import SendMail from './Modals/SendMail';
@@ -32,6 +32,9 @@ import WithdrawPopup from './Modals/WithdrawConfirmModal';
 function LeadDetails() {
 
   const session = useSession()
+
+  console.log(session);
+
 
 
   const [details, setDetails] = useState()
@@ -101,11 +104,17 @@ function LeadDetails() {
     try {
       // console.log(urlID);
       const response = await LeadApi.view({ id: urlID })
+      if (response?.status == 200 || response?.status == 201) {
+        setDetails(response?.data?.data)
+        setLoading(false)
+      } else {
+        router.push('/404')
+        setLoading(false)
+      }
       // console.log(response);
-      setDetails(response?.data?.data)
-      setLoading(false)
     } catch (error) {
       console.log(error);
+      router.push('/404')
       setLoading(false)
     }
   }
@@ -230,10 +239,20 @@ function LeadDetails() {
   const [assignId, setAssignId] = useState()
   const [singleAssign, setsingleAssign] = useState(false)
   const [selected, setSelected] = useState([]);
+  const [reAssign, setreAssign] = useState(false)
 
-  const handleSigleAssign = () => {
-    setAssignId(0)
-    setSelected([details?.id])
+  const handleSigleAssign = (re) => {
+    // setAssignId(0)
+    if (re) {
+      setAssignId(details?.id)
+      setreAssign(true)
+      setSelected(details?.id)
+    } else {
+      setAssignId(0)
+      setreAssign(false)
+      setSelected([details?.id])
+    }
+
     setsingleAssign(true)
   }
 
@@ -294,6 +313,11 @@ function LeadDetails() {
   }, [])
 
   console.log(details);
+  const obj = {
+    assignedToOffice: details?.assignedToOffice,
+    assignedToCounsellor: details?.assignedToCounsellor
+
+  }
 
 
   const gradientId = 'myGradient';
@@ -317,7 +341,7 @@ function LeadDetails() {
       <ArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={confirmId} setID={setconfirmId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
       <UnArchiveConfirmPopup getDetails={getDetails} loading={confirmLoading} ID={unArchiveId} setID={setunArchiveId} setLoading={setconfirmLoading} title={`${details?.name}`} details={details} />
 
-      <AssignLeadModal single={singleAssign} setsingle={setsingleAssign} selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} />
+      <AssignLeadModal assignToUser={obj} reAssign={reAssign} setreAssign={setreAssign} single={singleAssign} setsingle={setsingleAssign} selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} />
 
       <WithdrawPopup ID={withdrawId} setID={setwithdrawId} details={details} getDetails={loadDetails} title={details?.withdrawn == 1 ? `Resume ${details?.name}?` : `Withdraw ${details?.name}?`} />
 
@@ -349,7 +373,7 @@ function LeadDetails() {
 
               {
                 session?.data?.user?.role?.id != 6 && details?.withdrawn != 1 && details?.completed != 1 &&
-                <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>
+                <Button disabled={!details} onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M6.59937 9H17.3994M6.59937 9C6.03932 9 5.75859 9 5.54468 9.10899C5.35652 9.20487 5.20365 9.35774 5.10778 9.5459C4.99878 9.75981 4.99878 10.04 4.99878 10.6001V15.8001C4.99878 16.9202 4.99878 17.4804 5.21677 17.9082C5.40852 18.2845 5.71426 18.5905 6.09058 18.7822C6.51798 19 7.07778 19 8.19569 19H15.8015C16.9194 19 17.4784 19 17.9058 18.7822C18.2821 18.5905 18.5893 18.2844 18.781 17.9081C18.9988 17.4807 18.9988 16.9216 18.9988 15.8037V10.591C18.9988 10.037 18.9988 9.75865 18.8904 9.5459C18.7945 9.35774 18.6409 9.20487 18.4528 9.10899C18.2389 9 17.9594 9 17.3994 9M6.59937 9H4.97409C4.125 9 3.7007 9 3.45972 8.85156C3.13813 8.65347 2.9558 8.29079 2.98804 7.91447C3.01222 7.63223 3.26495 7.29089 3.77124 6.60739C3.91768 6.40971 3.99092 6.31084 4.08055 6.23535C4.20006 6.1347 4.34188 6.06322 4.4939 6.02709C4.60791 6 4.73029 6 4.97632 6H19.0207C19.2667 6 19.3894 6 19.5034 6.02709C19.6555 6.06322 19.7972 6.1347 19.9168 6.23535C20.0064 6.31084 20.0799 6.40924 20.2263 6.60693C20.7326 7.29042 20.9858 7.63218 21.0099 7.91442C21.0422 8.29074 20.8592 8.65347 20.5376 8.85156C20.2966 9 19.8713 9 19.0222 9H17.3994M9.99878 14H13.9988" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
@@ -357,7 +381,7 @@ function LeadDetails() {
               }
               {
                 session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.completed != 1 &&
-                <Button onClick={details && handleWithdrawOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white ml-2'>
+                <Button sx={{ ml: 2 }} disabled={!details} onClick={details && handleWithdrawOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white ml-2'>
                   {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M6.59937 9H17.3994M6.59937 9C6.03932 9 5.75859 9 5.54468 9.10899C5.35652 9.20487 5.20365 9.35774 5.10778 9.5459C4.99878 9.75981 4.99878 10.04 4.99878 10.6001V15.8001C4.99878 16.9202 4.99878 17.4804 5.21677 17.9082C5.40852 18.2845 5.71426 18.5905 6.09058 18.7822C6.51798 19 7.07778 19 8.19569 19H15.8015C16.9194 19 17.4784 19 17.9058 18.7822C18.2821 18.5905 18.5893 18.2844 18.781 17.9081C18.9988 17.4807 18.9988 16.9216 18.9988 15.8037V10.591C18.9988 10.037 18.9988 9.75865 18.8904 9.5459C18.7945 9.35774 18.6409 9.20487 18.4528 9.10899C18.2389 9 17.9594 9 17.3994 9M6.59937 9H4.97409C4.125 9 3.7007 9 3.45972 8.85156C3.13813 8.65347 2.9558 8.29079 2.98804 7.91447C3.01222 7.63223 3.26495 7.29089 3.77124 6.60739C3.91768 6.40971 3.99092 6.31084 4.08055 6.23535C4.20006 6.1347 4.34188 6.06322 4.4939 6.02709C4.60791 6 4.73029 6 4.97632 6H19.0207C19.2667 6 19.3894 6 19.5034 6.02709C19.6555 6.06322 19.7972 6.1347 19.9168 6.23535C20.0064 6.31084 20.0799 6.40924 20.2263 6.60693C20.7326 7.29042 20.9858 7.63218 21.0099 7.91442C21.0422 8.29074 20.8592 8.65347 20.5376 8.85156C20.2966 9 19.8713 9 19.0222 9H17.3994M9.99878 14H13.9988" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg> */}
@@ -637,7 +661,7 @@ function LeadDetails() {
                         <div className='vari-right'>
                           {/* || details?.stage?.action_type=='alumni' */}
                           {
-                            session?.data?.user?.role?.id != 6 &&
+                            session?.data?.user?.role?.id != 6 && details &&
                             !details?.user && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
                             <a onClick={handleOpenStageModal}>Change Status</a>
                           }
@@ -823,7 +847,7 @@ function LeadDetails() {
                         {/*<p> <span>{commDetails?.whatsapp_send_summary}</span> Whatsapp Sent  </p> */}
                         {
                           session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
-                          <a className='btn' onClick={handlePhoneCallOpen} > Add Call Log </a>
+                          <a className='btn' onClick={details && handlePhoneCallOpen} > Add Call Log </a>
                         }
                       </li>
                     </ul>
@@ -947,11 +971,16 @@ function LeadDetails() {
                             <p>NA</p>
                             :
                             details?.assignedToCounsellor ?
-                              <p> {details?.assignedToCounsellor?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToCounsellor?.name)}</span>} {details?.assignedToCounsellor?.name || 'NA'}</p>
+                              <span className='flex justify-between items-center'>
+                                <p> {details?.assignedToCounsellor?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToCounsellor?.name)}</span>} {details?.assignedToCounsellor?.name || 'NA'}
+
+                                </p>
+                                <Tooltip title={'Re Assign'}><SwapHorizOutlined onClick={() => handleSigleAssign(true)} sx={{ ml: 2,cursor:'pointer' }} /></Tooltip>
+                              </span>
                               :
 
                               session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 ?
-                                <Button onClick={handleSigleAssign} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
+                                <Button disabled={!details} onClick={details && handleSigleAssign} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
                                 :
                                 'NA'
                         }

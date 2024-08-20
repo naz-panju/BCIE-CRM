@@ -38,6 +38,7 @@ export const LeadApi = {
 
     bulkAssign: (data) => http.post(`leads/bulk-assign`, data),
     roundRobin: (data) => http.post(`leads/round-robin-assign`, data),
+    reassign:(data) => http.post(`leads/re-assign`, data),
 
     stageChange: (data) => http.post(`leads/change-stage`, data),
 

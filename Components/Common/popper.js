@@ -71,7 +71,7 @@ export default function SimplePopper() {
     const fetchCount = () => {
         NotificationApi.count().then((response) => {
             // console.log(response?.data?.data);
-            if(open==false){
+            if (open == false) {
                 setcount(response?.data?.data)
             }
         })
@@ -110,12 +110,14 @@ export default function SimplePopper() {
     const [count, setcount] = useState(0)
     useEffect(() => {
 
-        const pusher = new Pusher("04731417008963908ebf", {
+        const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
             cluster: "ap2",
             //   encrypted: true,
         });
         const channel = pusher.subscribe("bcie-channel");
         channel.bind("bcie-event", (data) => {
+            console.log(data);
+
             if (data?.user_id == session?.data?.user?.id) {
                 if (open == true) {
                     noFetchList()
@@ -141,7 +143,7 @@ export default function SimplePopper() {
 
     useEffect(() => {
         // console.log(open);
-        if(open==false){
+        if (open == false) {
             fetchCount()
         }
     }, [])

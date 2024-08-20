@@ -20,8 +20,8 @@ function LeadDetail({ data, handleEdit, loading }) {
                     <div className='lead-detail-title'>
                         Edit and Preview Details of Students
                         {
-                            session?.data?.user?.role?.id != 6 &&  data?.closed != 1 && data?.withdrawn != 1 &&  data?.completed != 1 && 
-                            <a onClick={handleEdit} className='edit-btn' style={{ cursor: 'pointer' }}> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            session?.data?.user?.role?.id != 6 && data?.closed != 1 && data?.withdrawn != 1 && data?.completed != 1 &&
+                            <a onClick={data && handleEdit} className='edit-btn' style={{ cursor: 'pointer' }}> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="black" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>  Edit Details </a>
                         }

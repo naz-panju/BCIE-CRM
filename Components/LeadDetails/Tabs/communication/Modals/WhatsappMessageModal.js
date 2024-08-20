@@ -24,6 +24,9 @@ import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
 import WhatsappBG from '@/img/WhatsappBG.png';
 import Doc from '@/img/AllDoc.png';
 import DocumentSelectModal from '../../application/modals/documentSelect';
+import Pusher from "pusher-js";
+import { useSession } from 'next-auth/react';
+
 
 
 const scheme = yup.object().shape({
@@ -32,6 +35,35 @@ const scheme = yup.object().shape({
 })
 
 export default function WhatsappMessageModal({ lead_id, editId, setEditId, handleRefresh, leadData }) {
+
+    const session = useSession()
+
+    useEffect(() => {
+
+        const pusher = new Pusher("04731417008963908ebf", {
+            cluster: "ap2",
+            //   encrypted: true,
+        });
+        const channel = pusher.subscribe("bcie-channel");
+        channel.bind("bcie-event", (data) => {
+            console.log(data);
+            
+            if (data?.user_id == session?.data?.user?.id) {
+                getDetails()
+                // if (open == true) {
+                //     // noFetchList()
+                // } else if (open == false) {
+                //     // fetchCount()
+                //     fetchList()
+                // }
+            }
+
+        });
+        return () => {
+            pusher.unsubscribe("bcie-channel");
+            pusher.disconnect();
+        };
+    }, []);
 
     const myLoader = ({ src, width }) => {
         return `${src}?w=${width}`;
