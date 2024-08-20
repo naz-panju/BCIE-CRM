@@ -124,12 +124,12 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
     },
     {
       label: 'Payments',
-      component: <LeadPayments from='lead' lead_id={data?.id} />,
+      component: <LeadPayments from='lead' lead_id={data?.id} leadData={data} />,
       icon: <Payment />
     },
     {
       label: 'Task',
-      component: <LeadTask from='lead' lead_id={data?.id} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} detailRefresh={handleRefresh} />,
+      component: <LeadTask leadData={data} from='lead' lead_id={data?.id} taskRefresh={taskRefresh} handleTaskRefresh={handleTaskRefresh} detailRefresh={handleRefresh} />,
       icon: <TaskSharp />
     },
     {

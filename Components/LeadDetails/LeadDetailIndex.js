@@ -294,7 +294,7 @@ function LeadDetails() {
   }, [])
 
   console.log(details);
-  
+
 
   const gradientId = 'myGradient';
 
@@ -348,7 +348,7 @@ function LeadDetails() {
               <Button sx={{ mr: 2 }} onClick={details && handleFollowupOpen} variant='contained' className='bg-sky-700 text-white hover:bg-sky-800 text-white'>Add Followup</Button> */}
 
               {
-                session?.data?.user?.role?.id != 6 &&
+                session?.data?.user?.role?.id != 6 && details?.withdrawn != 1 && details?.completed != 1 &&
                 <Button onClick={details && handleConfirmOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white'>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M6.59937 9H17.3994M6.59937 9C6.03932 9 5.75859 9 5.54468 9.10899C5.35652 9.20487 5.20365 9.35774 5.10778 9.5459C4.99878 9.75981 4.99878 10.04 4.99878 10.6001V15.8001C4.99878 16.9202 4.99878 17.4804 5.21677 17.9082C5.40852 18.2845 5.71426 18.5905 6.09058 18.7822C6.51798 19 7.07778 19 8.19569 19H15.8015C16.9194 19 17.4784 19 17.9058 18.7822C18.2821 18.5905 18.5893 18.2844 18.781 17.9081C18.9988 17.4807 18.9988 16.9216 18.9988 15.8037V10.591C18.9988 10.037 18.9988 9.75865 18.8904 9.5459C18.7945 9.35774 18.6409 9.20487 18.4528 9.10899C18.2389 9 17.9594 9 17.3994 9M6.59937 9H4.97409C4.125 9 3.7007 9 3.45972 8.85156C3.13813 8.65347 2.9558 8.29079 2.98804 7.91447C3.01222 7.63223 3.26495 7.29089 3.77124 6.60739C3.91768 6.40971 3.99092 6.31084 4.08055 6.23535C4.20006 6.1347 4.34188 6.06322 4.4939 6.02709C4.60791 6 4.73029 6 4.97632 6H19.0207C19.2667 6 19.3894 6 19.5034 6.02709C19.6555 6.06322 19.7972 6.1347 19.9168 6.23535C20.0064 6.31084 20.0799 6.40924 20.2263 6.60693C20.7326 7.29042 20.9858 7.63218 21.0099 7.91442C21.0422 8.29074 20.8592 8.65347 20.5376 8.85156C20.2966 9 19.8713 9 19.0222 9H17.3994M9.99878 14H13.9988" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -356,7 +356,7 @@ function LeadDetails() {
                   {details?.closed == 1 ? 'UnArchive' : 'Archive'}</Button>
               }
               {
-                session?.data?.user?.role?.id != 6 &&
+                session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.completed != 1 &&
                 <Button onClick={details && handleWithdrawOpen} variant='contained' className='bg-sky-800 text-white hover:bg-sky-900 text-white ml-2'>
                   {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M6.59937 9H17.3994M6.59937 9C6.03932 9 5.75859 9 5.54468 9.10899C5.35652 9.20487 5.20365 9.35774 5.10778 9.5459C4.99878 9.75981 4.99878 10.04 4.99878 10.6001V15.8001C4.99878 16.9202 4.99878 17.4804 5.21677 17.9082C5.40852 18.2845 5.71426 18.5905 6.09058 18.7822C6.51798 19 7.07778 19 8.19569 19H15.8015C16.9194 19 17.4784 19 17.9058 18.7822C18.2821 18.5905 18.5893 18.2844 18.781 17.9081C18.9988 17.4807 18.9988 16.9216 18.9988 15.8037V10.591C18.9988 10.037 18.9988 9.75865 18.8904 9.5459C18.7945 9.35774 18.6409 9.20487 18.4528 9.10899C18.2389 9 17.9594 9 17.3994 9M6.59937 9H4.97409C4.125 9 3.7007 9 3.45972 8.85156C3.13813 8.65347 2.9558 8.29079 2.98804 7.91447C3.01222 7.63223 3.26495 7.29089 3.77124 6.60739C3.91768 6.40971 3.99092 6.31084 4.08055 6.23535C4.20006 6.1347 4.34188 6.06322 4.4939 6.02709C4.60791 6 4.73029 6 4.97632 6H19.0207C19.2667 6 19.3894 6 19.5034 6.02709C19.6555 6.06322 19.7972 6.1347 19.9168 6.23535C20.0064 6.31084 20.0799 6.40924 20.2263 6.60693C20.7326 7.29042 20.9858 7.63218 21.0099 7.91442C21.0422 8.29074 20.8592 8.65347 20.5376 8.85156C20.2966 9 19.8713 9 19.0222 9H17.3994M9.99878 14H13.9988" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -441,9 +441,9 @@ function LeadDetails() {
                             :
                             <div>
                               {details?.email &&
-                              <p><label>Email:</label> <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
-                                <path d="M2.875 7.66675L10.3906 12.6771C11.0624 13.125 11.9376 13.125 12.6094 12.6771L20.125 7.66675M4.875 18.2084H18.125C19.2296 18.2084 20.125 17.313 20.125 16.2084V6.79175C20.125 5.68718 19.2296 4.79175 18.125 4.79175H4.875C3.77043 4.79175 2.875 5.68718 2.875 6.79175V16.2084C2.875 17.313 3.77043 18.2084 4.875 18.2084Z" stroke="#0B0D23" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg> {details?.email}</p>}
+                                <p><label>Email:</label> <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
+                                  <path d="M2.875 7.66675L10.3906 12.6771C11.0624 13.125 11.9376 13.125 12.6094 12.6771L20.125 7.66675M4.875 18.2084H18.125C19.2296 18.2084 20.125 17.313 20.125 16.2084V6.79175C20.125 5.68718 19.2296 4.79175 18.125 4.79175H4.875C3.77043 4.79175 2.875 5.68718 2.875 6.79175V16.2084C2.875 17.313 3.77043 18.2084 4.875 18.2084Z" stroke="#0B0D23" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg> {details?.email}</p>}
                             </div>
                         }
 
@@ -635,10 +635,10 @@ function LeadDetails() {
 
 
                         <div className='vari-right'>
-                        {/* || details?.stage?.action_type=='alumni' */}
+                          {/* || details?.stage?.action_type=='alumni' */}
                           {
                             session?.data?.user?.role?.id != 6 &&
-                            !details?.user  &&
+                            !details?.user && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
                             <a onClick={handleOpenStageModal}>Change Status</a>
                           }
                         </div>
@@ -807,7 +807,7 @@ function LeadDetails() {
                             </div>
                             {/*  <p><span>{commDetails?.email_send_summary}</span>    Sent  </p> */}
                             {
-                              session?.data?.user?.role?.id != 6 &&
+                              session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
                               <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
                             }
                           </li>
@@ -822,7 +822,7 @@ function LeadDetails() {
                         </div>
                         {/*<p> <span>{commDetails?.whatsapp_send_summary}</span> Whatsapp Sent  </p> */}
                         {
-                          session?.data?.user?.role?.id != 6 &&
+                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
                           <a className='btn' onClick={handlePhoneCallOpen} > Add Call Log </a>
                         }
                       </li>
@@ -869,7 +869,7 @@ function LeadDetails() {
                       </div>
                       <div>
                         {
-                          session?.data?.user?.role?.id != 6 &&
+                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
                           <a className='btn' onClick={details && handleTaskOpen} >Add Task</a>
                         }
                       </div>
@@ -902,7 +902,7 @@ function LeadDetails() {
                       </div>
                       <div>
                         {
-                          session?.data?.user?.role?.id != 6 &&
+                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
                           <a className='btn' onClick={details && handleNoteOpen}>  Add Note </a>
                         }
                       </div>
@@ -950,7 +950,7 @@ function LeadDetails() {
                               <p> {details?.assignedToCounsellor?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToCounsellor?.name)}</span>} {details?.assignedToCounsellor?.name || 'NA'}</p>
                               :
 
-                              session?.data?.user?.role?.id != 6 ?
+                              session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 ?
                                 <Button onClick={handleSigleAssign} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
                                 :
                                 'NA'
