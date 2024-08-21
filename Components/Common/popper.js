@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
-import { DeleteOutline, NotificationsActiveOutlined } from '@mui/icons-material';
+import {  DeleteOutline, NotificationsActiveOutlined } from '@mui/icons-material';
 import { Badge, Grid } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { useState } from 'react';
@@ -119,10 +119,10 @@ export default function SimplePopper() {
                 if (open === true) {
                     noFetchList()
                 } else if (open === false) {
-                    fetchCount()
+                    fetchCount()   
                     fetchList()
                 }
-            }
+            }   
 
         });
         return () => {
@@ -147,9 +147,7 @@ export default function SimplePopper() {
 
 
     console.log(list);
-
-    const [page, setPage] = useState(1)
-
+    
 
     return (
         <div>
@@ -188,23 +186,13 @@ export default function SimplePopper() {
 
                     {
                         list?.data?.length > 0 ?
-                            <>
-                                list?.data?.map((obj, index) => (
+                            list?.data?.map((obj, index) => (
 
                                 <Grid key={index} container className={`p-5 border border-3 fade ${deletingId === obj.id ? 'out' : ''}`}>
                                     <Grid item md={11} style={{ fontWeight: obj?.status == 'not read' ? 'bold' : '' }}> {obj?.description}</Grid>
                                     <Grid item md={1} className='flex justify-end '><DeleteOutline onClick={() => handleDelete(obj?.id)} sx={{ color: red[400], cursor: 'pointer' }} fontSize='small' /> </Grid>
                                 </Grid>
-                                ))
-                                {
-                                    (list?.meta?.length < list?.meta?.total) &&
-                                    <div className='loadmore-btn-block'>
-                                        {/* <CachedIcon />Load More */}
-                                        <button className='loadmore-btn' onClick={() => setPage(page + 1)} >  {loadMore ? 'Loading ...' : 'Load More'} </button>
-                                    </div>
-                                }
-
-                            </>
+                            ))
                             :
                             <Grid style={{ height: '400px' }} className=' flex items-center justify-center'>
                                 No Notification Found
