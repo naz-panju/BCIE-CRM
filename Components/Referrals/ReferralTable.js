@@ -227,7 +227,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ReferralTable({ refresh, editId, setEditId, page, setPage searchTerm, searching }) {
+export default function ReferralTable({ refresh, editId, setEditId, page, setPage, searchTerm, searching }) {
 
     const router = useRouter();
 
