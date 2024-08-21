@@ -1163,7 +1163,7 @@ ul.search-document-block-pred li div span {
 
 .degree-btn {
     border-radius: 3px;
-    background: #0047CD;
+    background: #0047CD !important;
     color: #FFF !important;
     font-family: Inter;
     font-size: 15px;
@@ -1177,10 +1177,12 @@ ul.search-document-block-pred li div span {
     justify-content: space-between;
     gap: 10px;
 }
-
+.degree-btn:hover {
+    background: #012568 !important;
+}
 .Reject-btn {
     border-radius: 4px;
-    background: #0B0D23;
+    background: #0B0D23 !important;
     color: #FFF !important;
     font-family: Inter;
     font-size: 15px;
@@ -1195,12 +1197,10 @@ ul.search-document-block-pred li div span {
     gap: 10px;
 }
 
-.degree-btn:hover {
-    background-color: #0B0D23 !important;
-}
+
 
 .Reject-btn:hover {
-    background-color: #0047CD !important;
+    background-color: #000000 !important;
 }
 
 .doc-req-icon.doc-request {
