@@ -24,6 +24,7 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import Editor from '@/Form/Editor';
 import { List } from 'rsuite';
 import DocumentSelectModal from '../Tabs/application/modals/documentSelect';
+import AlertPopup from './AlertPopup';
 
 
 
@@ -263,12 +264,26 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
     }
 
+    const [alertPopup, setalertPopup] = useState(false)
+    const handleAlertClose = () => {
+        setalertPopup(false)
+        handleClose()
+    }
 
     const getInitialValue = () => {
         if (from == 'app') {
             setValue('to', details?.student?.email)
+            if (details && !details?.student?.email) {
+                // console.log('here');
+
+                setalertPopup(true)
+            }
         } else if (from == 'lead') {
             setValue('to', details?.email)
+            if (details && !details?.email) {
+              
+                setalertPopup(true)
+            }
         }
 
     }
@@ -315,6 +330,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
     return (
         open &&
         <div>
+            <AlertPopup openPopup={alertPopup} onClose={handleAlertClose} title={'Email Address not found'} subTitle={'Please add Email Address to Send mail'} />
             <DocumentSelectModal from={from || 'lead'} editId={docOpenId} setEditId={setdocOpenId} SelectedDocuments={attachmentFiles} setSelectedDocuments={setattachmentFiles} SelectedAttachments={file} setSelectedAttachments={setFile} />
 
             {

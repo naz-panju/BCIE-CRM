@@ -463,6 +463,7 @@ function LeadDetails() {
                           loading ?
                             <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
                             :
+                            details?.email &&
                             <div>
                               {details?.email &&
                                 <p><label>Email:</label> <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none">
@@ -475,6 +476,7 @@ function LeadDetails() {
                           loading ?
                             <Skeleton sx={{ mt: 1 }} variant="rectangular" width={250} height={20} />
                             :
+                            details?.phone_number &&
                             <div>
                               <p><label>Mobile:</label>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -514,10 +516,6 @@ function LeadDetails() {
                         </div>
 
                       </div>
-
-
-
-
 
                     </div>
                   </>
@@ -975,7 +973,7 @@ function LeadDetails() {
                                 <p> {details?.assignedToCounsellor?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToCounsellor?.name)}</span>} {details?.assignedToCounsellor?.name || 'NA'}
 
                                 </p>
-                                <Tooltip title={'Re Assign'}><SwapHorizOutlined onClick={() => handleSigleAssign(true)} sx={{ ml: 2,cursor:'pointer' }} /></Tooltip>
+                                <Tooltip title={'Re Assign'}><SwapHorizOutlined onClick={() => handleSigleAssign(true)} sx={{ ml: 2, cursor: 'pointer' }} /></Tooltip>
                               </span>
                               :
 

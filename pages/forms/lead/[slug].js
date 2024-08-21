@@ -19,12 +19,14 @@ import { StudentApi } from '@/data/Endpoints/Student'
 import AsyncSelect from "react-select/async";
 import axios from 'axios'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 
 
 
 
 function Form({ data }) {
 
+    const router=useRouter()
     // console.log(data);
     const [formDatas, setformDatas] = useState(data)
 
@@ -268,8 +270,6 @@ function Form({ data }) {
     const [titles, settitles] = useState([])
     const [currentTitle, setcurrentTitle] = useState()
 
-    console.log(data);
-
 
     const onSubmit = async (data) => {
 
@@ -334,11 +334,12 @@ function Form({ data }) {
             // console.log(response);
             if (response?.data?.data) {
 
-                toast.success('Lead Has Been Successfully Created')
+                // toast.success('Lead Has Been Successfully Created')
                 reset()
                 // handleClear()
-                setLoading(false)
-                location.reload()
+                // setLoading(false)
+                // location.reload()
+                router.push('/thankyou')
             } else {
                 toast.error(response?.response?.data?.message)
                 setLoading(false)

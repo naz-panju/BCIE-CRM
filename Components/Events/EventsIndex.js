@@ -6,7 +6,8 @@ import { useRouter } from 'next/router';
 import EventsTable from './EventsTable';
 import CreateEvent from './Create/create';
 import { Grid } from 'rsuite';
-import { EventOutlined } from '@mui/icons-material';
+import { Clear, EventOutlined, Search } from '@mui/icons-material';
+import { InputAdornment, TextField } from '@mui/material';
 
 
 const StyledMenu = styled((props) => (
@@ -83,6 +84,22 @@ export default function EventsIndex() {
     setRefresh(!refresh)
   }
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searching, setsearching] = useState(false)
+
+  const handleSearch = () => {
+    if (searchTerm) {
+      setsearching(!searching)
+    }
+  };
+
+  const handleClear = () => {
+    setSearchTerm('');
+    if (searchTerm) {
+      setsearching(!searching)
+    }
+  };
+
   return (
 
     <>
@@ -91,10 +108,26 @@ export default function EventsIndex() {
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>
             <h1>Events</h1>
-            <Grid className=' flex justify-end' >
-                <Button sx={{ mr: 2, textTransform: 'none' }} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
-                  <EventOutlined fontSize='small' /> Add Event
-                </Button>
+            <Grid className='flex justify-end' >
+              <TextField
+              style={{marginLeft:'auto'}}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder='Search template'
+                variant='outlined'
+                size='small'
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Clear onClick={handleClear} sx={{ cursor: 'pointer' }} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <div onClick={handleSearch} className='flex justify-center items-center border p-1 bg-sky-200 hover:cursor-pointer hover:bg-sky-300' style={{ marginRight: 20 }}> <Search /></div>
+              <Button style={{marginLeft:'auto'}} sx={{ mr: 2, textTransform: 'none' }} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
+                <EventOutlined fontSize='small' /> Add Event
+              </Button>
             </Grid>
 
           </div>
@@ -106,7 +139,7 @@ export default function EventsIndex() {
 
 
         <div className='content-block lead-table-cntr'>
-          <EventsTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
+          <EventsTable searchTerm={searchTerm} searching={searching} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>
     </>

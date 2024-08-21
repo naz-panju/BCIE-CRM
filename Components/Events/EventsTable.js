@@ -225,7 +225,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function EventsTable({ refresh, editId, setEditId, page, setPage }) {
+export default function EventsTable({ refresh, editId, setEditId, page, setPage,searchTerm, searching }) {
 
     const router = useRouter();
 
@@ -325,7 +325,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
 
     const fetchTable = () => {
         setLoading(true)
-        EventsApi.list({ limit: limit, page: page }).then((response) => {
+        EventsApi.list({ limit: limit, page: page,keyword:searchTerm }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -336,7 +336,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage 
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit])
+    }, [page, refresh, limit,searching])
 
     return (
 

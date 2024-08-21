@@ -108,7 +108,7 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: '',
-        noSort:true
+        noSort: true
     },
 ];
 
@@ -148,8 +148,8 @@ function EnhancedTableHead(props) {
                                 direction={orderBy === headCell.id ? order : 'asc'}
                                 onClick={createSortHandler(headCell.id)}
                             > */}
-                                {headCell.label}
-                                {/* {orderBy === headCell.id ? (
+                        {headCell.label}
+                        {/* {orderBy === headCell.id ? (
                                     <Box component="span" sx={visuallyHidden}>
                                         {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                     </Box>
@@ -227,7 +227,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ReferralTable({ refresh, editId, setEditId, page, setPage }) {
+export default function ReferralTable({ refresh, editId, setEditId, page, setPage searchTerm, searching }) {
 
     const router = useRouter();
 
@@ -330,7 +330,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
 
     const fetchTable = () => {
         setLoading(true)
-        ReferralApi.list({ limit: limit, page: page }).then((response) => {
+        ReferralApi.list({ limit: limit, page: page, keyword: searchTerm }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -345,7 +345,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
     useEffect(() => {
         setcurrentURL(window?.location?.origin)
         fetchTable()
-    }, [page, refresh, limit])
+    }, [page, refresh, limit, searching])
 
     return (
 

@@ -1,9 +1,6 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { IconButton } from 'rsuite';
-import { Close, DeleteOutline, Mail, NotificationsActiveOutlined } from '@mui/icons-material';
+import { DeleteOutline, NotificationsActiveOutlined } from '@mui/icons-material';
 import { Badge, Grid } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { useState } from 'react';
@@ -108,20 +105,20 @@ export default function SimplePopper() {
 
     const [loading, setloading] = useState(false)
     const [count, setcount] = useState(0)
-    useEffect(() => {
 
+    useEffect(() => {
         const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
             cluster: "ap2",
             //   encrypted: true,
         });
         const channel = pusher.subscribe("bcie-channel");
         channel.bind("bcie-event", (data) => {
-            console.log(data);
+            // console.log(data);
 
             if (data?.user_id == session?.data?.user?.id) {
-                if (open == true) {
+                if (open === true) {
                     noFetchList()
-                } else if (open == false) {
+                } else if (open === false) {
                     fetchCount()
                     fetchList()
                 }
@@ -147,6 +144,12 @@ export default function SimplePopper() {
             fetchCount()
         }
     }, [])
+
+
+    console.log(list);
+
+    const [page, setPage] = useState(1)
+
 
     return (
         <div>
@@ -185,13 +188,23 @@ export default function SimplePopper() {
 
                     {
                         list?.data?.length > 0 ?
-                            list?.data?.map((obj, index) => (
+                            <>
+                                list?.data?.map((obj, index) => (
 
                                 <Grid key={index} container className={`p-5 border border-3 fade ${deletingId === obj.id ? 'out' : ''}`}>
                                     <Grid item md={11} style={{ fontWeight: obj?.status == 'not read' ? 'bold' : '' }}> {obj?.description}</Grid>
                                     <Grid item md={1} className='flex justify-end '><DeleteOutline onClick={() => handleDelete(obj?.id)} sx={{ color: red[400], cursor: 'pointer' }} fontSize='small' /> </Grid>
                                 </Grid>
-                            ))
+                                ))
+                                {
+                                    (list?.meta?.length < list?.meta?.total) &&
+                                    <div className='loadmore-btn-block'>
+                                        {/* <CachedIcon />Load More */}
+                                        <button className='loadmore-btn' onClick={() => setPage(page + 1)} >  {loadMore ? 'Loading ...' : 'Load More'} </button>
+                                    </div>
+                                }
+
+                            </>
                             :
                             <Grid style={{ height: '400px' }} className=' flex items-center justify-center'>
                                 No Notification Found

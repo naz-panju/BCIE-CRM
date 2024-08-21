@@ -110,9 +110,9 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         scheme = yup.object().shape({
             name: yup.string().required("Name is Required"),
             email: yup.string().email("Invalid email format").required("Email is Required"),
-            alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
-                return value !== this.parent.phone;
-            }),
+            // alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
+            //     return value !== this.parent.phone;
+            // }),
             // phone: yup.string().required('Phone Number is Required'),
             // alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
             //     return value !== this.parent.phone;

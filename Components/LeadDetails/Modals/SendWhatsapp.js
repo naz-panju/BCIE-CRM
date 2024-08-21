@@ -24,6 +24,7 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 import PhoneInput from 'react-phone-input-2';
 import { WhatsAppTemplateApi } from '@/data/Endpoints/WhatsAppTemplate';
 import Editor from '@/Form/Editor';
+import AlertPopup from './AlertPopup';
 
 
 
@@ -240,21 +241,39 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
 
     }
 
+    console.log(details?.whatsapp_number);
 
-    const getInitialValue = () => {
-        // setValue('whatsapp', details?.whatsapp_number)
-        if (from == 'app') {
-            setValue('whatsapp', `${details?.student?.whatsapp_number}`)
-        }
-        else if (from == 'lead') {
-            setValue('whatsapp', `+${details?.whatsapp_country_code}${details?.whatsapp_number}`)
-        }
-    }
+
 
     const handleClick = () => {
         // This will trigger a click event on the input element, opening the file dialog
         document.getElementById('upload-button').click();
     };
+
+
+    const [alertPopup, setalertPopup] = useState(false)
+    const handleAlertClose = () => {
+        setalertPopup(false)
+        handleClose()
+    }
+
+
+    const getInitialValue = () => {
+        // setValue('whatsapp', details?.whatsapp_number)
+        if (from == 'app') {
+            setValue('whatsapp', `${details?.student?.whatsapp_number}`)
+            if (open && !details?.student?.whatsapp_number) {
+                setalertPopup(true)
+            }
+        }
+        else if (from == 'lead') {
+            setValue('whatsapp', `${details?.whatsapp_number}`)
+            if (open && !details?.whatsapp_number) {
+                setalertPopup(true)
+            }
+        }
+    }
+
 
     useEffect(() => {
         if (editId > 0) {
@@ -263,11 +282,20 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
             setOpen(true)
         }
         getInitialValue()
+
+
     }, [editId])
+
+    
+    useEffect(() => {
+        getInitialValue()
+    }, [open])
 
 
     return (
         <div>
+            <AlertPopup openPopup={alertPopup} onClose={handleAlertClose} title={'whatsapp number not found'} subTitle={'Please add whatsapp number to Send whatsapp message'} />
+
             <Drawer
                 anchor={anchor}
                 open={open}

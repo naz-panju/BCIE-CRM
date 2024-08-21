@@ -5,8 +5,8 @@ import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import ReferralTable from './ReferralTable';
 import CreateReferral from './Create/create';
-import { LinkOffOutlined, LinkOutlined } from '@mui/icons-material';
-import { Grid } from '@mui/material';
+import { Clear, LinkOffOutlined, LinkOutlined, Search } from '@mui/icons-material';
+import { Grid, InputAdornment, TextField } from '@mui/material';
 
 
 const StyledMenu = styled((props) => (
@@ -83,6 +83,22 @@ export default function ReferralIndex() {
     setRefresh(!refresh)
   }
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searching, setsearching] = useState(false)
+
+  const handleSearch = () => {
+    if (searchTerm) {
+      setsearching(!searching)
+    }
+  };
+
+  const handleClear = () => {
+    setSearchTerm('');
+    if (searchTerm) {
+      setsearching(!searching)
+    }
+  };
+
   return (
 
     <>
@@ -95,19 +111,33 @@ export default function ReferralIndex() {
             <Grid display={'flex'} >
 
               <Grid display={'flex'}>
-
-                <Button sx={{ mr: 2 ,textTransform:'none'}} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
+                <TextField
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder='Search template'
+                  variant='outlined'
+                  size='small'
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position='end'>
+                        <Clear onClick={handleClear} sx={{ cursor: 'pointer' }} />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+                <div onClick={handleSearch} className='flex justify-center items-center border p-1 bg-sky-200 hover:cursor-pointer hover:bg-sky-300' style={{ marginRight: 20 }}> <Search /></div>
+                <Button sx={{ mr: 2, textTransform: 'none' }} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
                   <LinkOutlined fontSize='small' /> Add Link
                 </Button>
-         
+
               </Grid>
-               </Grid>
+            </Grid>
           </div>
         </div>
 
 
         <div className='content-block lead-table-cntr'>
-          <ReferralTable editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
+          <ReferralTable searchTerm={searchTerm} searching={searching} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>
     </>

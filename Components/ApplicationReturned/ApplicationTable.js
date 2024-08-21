@@ -196,7 +196,8 @@ function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
         props;
     const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
+        onRequestSort(event, property?.id);
+        field = property?.id
     };
 
 
@@ -211,21 +212,21 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        {/* {
+                        {
                             !headCell?.noSort &&
                             <TableSortLabel
                                 active={orderBy === headCell.id}
-                                direction={orderBy === headCell.id ? order : 'asc'}
-                                onClick={createSortHandler(headCell.id)}
-                            > */}
-                        {headCell.label}
-                        {/* {orderBy === headCell.id ? (
+                                direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+                                onClick={createSortHandler(headCell)}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
                                     <Box component="span" sx={visuallyHidden}>
-                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                        {sortOrder ? 'sorted ascending' : 'sorted descending'}
                                     </Box>
                                 ) : null}
                             </TableSortLabel>
-                        } */}
+                        }
                     </TableCell>
                 ))}
             </TableRow>
@@ -467,6 +468,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
 
 
     const handleRequestSort = (event, property) => {
+        sortOrder = !sortOrder
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -700,6 +702,10 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
         setLoading(true)
 
         let params = {
+
+            sort_field: field,
+            sort_order: sortOrder ? 'asc' : 'desc',
+
             limit: limit,
             deposit_not_paid: 1,
             source_id: selectedSource,
@@ -814,7 +820,7 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
 
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit, searchRefresh])
+    }, [page, refresh, limit, searchRefresh,sortOrder])
 
 
     return (

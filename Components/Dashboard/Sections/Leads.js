@@ -276,7 +276,7 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
                                                 </div>
                                                 <div className=' w-full mt-2 px-2'>
                                                     <div className='communication-details'>
-                                                        <ul clas>
+                                                        <ul className=''>
                                                             <li><Image src={Mail} alt='Mail' width={22} height={22} /><b>{communicationLog?.data?.emails}</b>Emails</li>
                                                             <li><Image src={Phone} alt='Mail' width={22} height={22} /><b>{communicationLog?.data?.calls}</b>Calls</li>
                                                             <li><Image src={Message} alt='Mail' width={22} height={22} /><b>{communicationLog?.data?.whatsapp}</b>Messages</li>
