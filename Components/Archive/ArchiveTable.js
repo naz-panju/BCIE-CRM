@@ -407,6 +407,16 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     })
   }
 
+  const fetchEvents = (e) => {
+    return ListingApi.events({ keyword: e, }).then(response => {
+      if (typeof response.data.data !== "undefined") {
+        return response.data.data;
+      } else {
+        return [];
+      }
+    })
+  }
+
   const fetchSource = (e) => {
     return ListingApi.leadSource({ keyword: e, }).then(response => {
       if (typeof response.data.data !== "undefined") {
@@ -459,10 +469,22 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     setValue('agency', e || '')
   }
 
+  const [selectedEvents, setselectedEvents] = useState()
+  const handleSelectEvent = (e) => {
+    setselectedEvents(e?.id || '');
+    setValue('events', e || '')
+  }
+
   const [selectedSource, setselectedSource] = useState()
   const handleSelectSource = (e) => {
     setselectedSource(e?.id || '');
     setValue('source', e || '')
+
+    setselectedEvents('');
+    setValue('')
+
+    setselectedAgency('');
+    setValue('')
   }
 
   const [selectedBranch, setselectedBranch] = useState()
@@ -484,8 +506,12 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       assigned_to: selectedAssignedTo,
       stage: selectedStage,
       assign_to_office_id: selectedBranch,
-      agency: selectedAgency,
+      // agency: selectedAgency,
       source_id: selectedSource,
+      
+      ...(selectedSource == 6 ? { agency: selectedAgency } : {}),
+      ...(selectedSource == 11 ? { event_id: selectedEvents } : {}),
+
 
       name: watch('nameSearch'),
       email: watch('emailSearch'),
@@ -568,6 +594,9 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     setValue('branch', '')
     setValue('agency', '')
     setValue('source', '')
+
+    setValue('events', '')
+    setselectedEvents()
 
     setSelectedAssignedTo()
     setSelectedStage()
@@ -707,26 +736,53 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
             </div>
           </div>
 
-          <div>
-            <div className='form-group'>
+          {
+            watch('source')?.id == 6 &&
+            <div>
+              <div className='form-group'>
 
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
-                <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <AsyncSelect
-                isClearable
-                defaultOptions
-                name='agency'
-                value={watch('agency')}
-                defaultValue={watch('agency')}
-                loadOptions={fetchAgency}
-                getOptionLabel={(e) => e.name}
-                getOptionValue={(e) => e.id}
-                placeholder={<div>Select Agency</div>}
-                onChange={handleSelectAgency}
-              />
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                  <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <AsyncSelect
+                  isClearable
+                  defaultOptions
+                  name='agency'
+                  value={watch('agency')}
+                  defaultValue={watch('agency')}
+                  loadOptions={fetchAgency}
+                  getOptionLabel={(e) => e.name}
+                  getOptionValue={(e) => e.id}
+                  placeholder={<div>Select Agency</div>}
+                  onChange={handleSelectAgency}
+                />
+              </div>
             </div>
-          </div>
+          }
+
+          {
+            watch('source')?.id == 11 &&
+            <div>
+              <div className='form-group'>
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                  <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <AsyncSelect
+                  isClearable
+                  defaultOptions
+                  name='events'
+                  value={watch('events')}
+                  defaultValue={watch('events')}
+                  loadOptions={fetchEvents}
+                  getOptionLabel={(e) => e.name}
+                  getOptionValue={(e) => e.id}
+                  placeholder={<div>Select Event</div>}
+                  onChange={handleSelectEvent}
+                />
+              </div>
+            </div>
+          }
 
           <div>
             <div className='form-group'>
@@ -830,12 +886,16 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
         <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={'Archived Leads'} params={{
           sort_field: field,
           sort_order: sortOrder ? 'asc' : 'desc',
+          // event_id:selectedEvents,
           limit: 1000,
           closed: 1,
           assigned_to: selectedAssignedTo,
           stage: selectedStage,
           assign_to_office_id: selectedBranch,
-          agency: selectedAgency,
+          // agency: selectedAgency,
+          ...(selectedSource == 6 ? { agency: selectedAgency } : {}),
+          ...(selectedSource == 11 ? { event_id: selectedEvents } : {}),
+    
           source_id: selectedSource,
           name: watch('nameSearch'),
           email: watch('emailSearch'),

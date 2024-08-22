@@ -241,10 +241,6 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
 
     }
 
-    console.log(details?.whatsapp_number);
-
-
-
     const handleClick = () => {
         // This will trigger a click event on the input element, opening the file dialog
         document.getElementById('upload-button').click();

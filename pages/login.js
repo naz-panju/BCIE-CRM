@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
 import Image from 'next/image';
 import HmSl1 from "@/img/log.png";
+import logo from '@/img/logoSmall.png';
+
 
 function Login() {
 
@@ -39,7 +41,9 @@ function Login() {
 
       <div className='log-right'>
         <div className='log-rht-cntr'>
-          <h4>Management Portal</h4>
+          <h4>
+          <Image src={logo} width={150} height={100} />
+          Management Portal</h4>
 
 
           <h1 className="brand-name">Welcome Back</h1>

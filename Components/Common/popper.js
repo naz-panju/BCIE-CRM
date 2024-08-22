@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Popover from '@mui/material/Popover';
-import {  DeleteOutline, NotificationsActiveOutlined } from '@mui/icons-material';
+import { DeleteOutline, NotificationsActiveOutlined } from '@mui/icons-material';
 import { Badge, Grid } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { useState } from 'react';
@@ -9,6 +9,7 @@ import { NotificationApi } from '@/data/Endpoints/Notification';
 import { useEffect } from 'react';
 import Pusher from "pusher-js";
 import { useSession } from 'next-auth/react';
+import Link from 'next/link';
 
 export default function SimplePopper() {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -23,7 +24,8 @@ export default function SimplePopper() {
         setAnchorEl(null);
     };
 
-    // build
+    const [page, setPage] = useState(1)
+    const [loadMore, setloadMore] = useState(false)
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
@@ -63,6 +65,22 @@ export default function SimplePopper() {
         })
     }
 
+    const loadMoreList = () => {
+        NotificationApi.list({page}).then((response) => {
+            if (response?.status == 200 || response?.status == 200) {
+                setlist(response?.data)
+                if (open == true) {
+                    NotificationApi.read().then((Res) => {
+                        setcount(0)
+                    })
+                }
+                setloading(false)
+            }
+        }).catch((error) => {
+
+        })
+    }
+
 
 
     const fetchCount = () => {
@@ -73,6 +91,9 @@ export default function SimplePopper() {
             }
         })
     }
+
+    // console.log(list);
+    
 
     const [deletingId, setDeletingId] = useState(null);
     const handleDelete = (id) => {
@@ -94,6 +115,8 @@ export default function SimplePopper() {
         }, 500); // Wait for the fade-out transition to complete
         // Optionally make an API call to update the server-side data
         NotificationApi.delete({ id: id }).then((response) => {
+            console.log(response);
+            
             if (response?.status == 200 || response?.status == 201) {
                 fetchList()
                 // setlist(response?.data);
@@ -116,13 +139,17 @@ export default function SimplePopper() {
             // console.log(data);
 
             if (data?.user_id == session?.data?.user?.id) {
-                if (open === true) {
+                console.log(open);
+                
+                if (open) {
+                    console.log('open');
                     noFetchList()
-                } else if (open === false) {
-                    fetchCount()   
+                } else {
+                    console.log('not open');
+                    fetchCount()
                     fetchList()
                 }
-            }   
+            }
 
         });
         return () => {
@@ -131,12 +158,24 @@ export default function SimplePopper() {
         };
     }, []);
 
+    // console.log(open);
+    
+
     useEffect(() => {
         fetchList()
         if (open) {
             setcount(0)
         }
     }, [open])
+
+    // useEffect(() => {
+    //     if(page>1){
+    //         fetchList({page})
+    //         if (open) {
+    //             setcount(0)
+    //         }
+    //     }
+    // }, [page])
 
     useEffect(() => {
         // console.log(open);
@@ -146,8 +185,9 @@ export default function SimplePopper() {
     }, [])
 
 
-    console.log(list);
+    // console.log(list);
     
+
 
     return (
         <div>
@@ -186,13 +226,24 @@ export default function SimplePopper() {
 
                     {
                         list?.data?.length > 0 ?
-                            list?.data?.map((obj, index) => (
+                            <>
 
-                                <Grid key={index} container className={`p-5 border border-3 fade ${deletingId === obj.id ? 'out' : ''}`}>
-                                    <Grid item md={11} style={{ fontWeight: obj?.status == 'not read' ? 'bold' : '' }}> {obj?.description}</Grid>
-                                    <Grid item md={1} className='flex justify-end '><DeleteOutline onClick={() => handleDelete(obj?.id)} sx={{ color: red[400], cursor: 'pointer' }} fontSize='small' /> </Grid>
-                                </Grid>
-                            ))
+                                {list?.data?.map((obj, index) => (
+
+                                    <Grid key={index} container className={`p-5 border border-3 fade ${deletingId === obj.id ? 'out' : ''}`}>
+                                        <Grid item md={11} style={{ fontWeight: obj?.status == 'not read' ? 'bold' : '' }}> {obj?.description}</Grid>
+                                        <Grid item md={1} className='flex justify-end '><DeleteOutline onClick={() => handleDelete(obj?.id)} sx={{ color: red[400], cursor: 'pointer' }} fontSize='small' /> </Grid>
+                                    </Grid>
+                                ))
+                                }
+                                {
+                                    (list?.data?.length < list?.meta?.total) &&
+                                    <div className='loadmore-btn-block p-2'>
+                                        {/* <CachedIcon />Load More */}
+                                        <Link href={'/notifications'} style={{textDecoration:'none'}}><button className='loadmore-btn' >  { 'View More'} </button></Link>
+                                    </div>
+                                }
+                            </>
                             :
                             <Grid style={{ height: '400px' }} className=' flex items-center justify-center'>
                                 No Notification Found

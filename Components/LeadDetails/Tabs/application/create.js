@@ -18,6 +18,7 @@ import TextInput from '@/Form/TextInput';
 import AddCourse from './addCourse';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import { useRef } from 'react';
+import Image from 'next/image';
 
 
 const HtmlTooltip = styled(({ className, ...props }) => (
@@ -570,8 +571,18 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                 )}
                                             </Grid>
                                         </Grid>
+                                        {
+                                            console.log(watch('university'))
+
+                                        }
                                         {isExpanded && (
                                             <>
+                                                {
+                                                    watch('university')?.logo &&
+                                                    <div className='flex items-center justify-center'>
+                                                        <Image src={watch('university')?.logo} alt='uni logo' width={100} height={30} />
+                                                    </div>
+                                                }
                                                 {(watch('university')?.extra_university_info ||
                                                     watch('university')?.extra_scholarship_info) ? (
                                                     <Grid p={2}>

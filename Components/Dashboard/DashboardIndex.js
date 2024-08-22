@@ -519,6 +519,7 @@ function DashboardIndex() {
             }
             if (session?.data?.user?.role?.id == 4) {
                 params['manager'] = session?.data?.user?.id
+                params['counselor'] = session?.data?.user?.id
             } else if (session?.data?.user?.role?.id == 5) {
                 params['counselor'] = session?.data?.user?.id
             } else {

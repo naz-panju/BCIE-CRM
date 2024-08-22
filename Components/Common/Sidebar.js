@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import Image from "next/image";
 import LogoIcon from '@/styles/logo65cc654bac92a.png';
-import Logo from '@/styles/logo65cc655649912.png';
+import logo from '@/img/logoSmall.png';
 
 import { ArchiveOutlined, CrisisAlertOutlined, DescriptionOutlined, Email, EmailOutlined, EventOutlined, GroupOutlined, Groups2, Groups2Outlined, LinkOutlined, MenuOpen, NoteAltOutlined, Person2Outlined, PersonOutline, SettingsApplications, WhatsApp } from '@mui/icons-material';
 import Link from 'next/link';
@@ -466,10 +466,10 @@ const Sidebar = () => {
     return (
         // 0047CD
         // 0B0D23
-        <nav id="sidebar" className={`sidebar sidebar-mask active `}
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-        >
+        <nav id="sidebar" className={`sidebar sidebar-mask active ${isExpanded ? 'active' : 'not-active'}`}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+    >
             <div className="sidebar__inner scrollCustom">
                 <div className="site-logo onlyDesktop">
 
@@ -479,20 +479,24 @@ const Sidebar = () => {
                     </a>*/}
 
                     <div className='logo-text-wrap  w-100'>
-                        <div className='d-flex align-items-center justify-content-between w-100'>
+                        <div className='header-logo-block d-flex align-items-center justify-content-between w-100'>
 
-                            <div>  <svg xmlns="http://www.w3.org/2000/svg" width="49" height="15" viewBox="0 0 49 15" fill="none">
-                                <path d="M37.125 14.6921V0.30835H49.0018V2.95906H40.0017V6.16458H48.6731V8.81529H40.0017V12.0208H49.0018V14.6921H37.125Z" fill="white" />
-                                <path d="M34.5232 0.30835V14.6921H31.6465V0.30835H34.5232Z" fill="white" />
-                                <path d="M17.0701 7.52063C17.0701 10.2946 19.166 12.2467 22.0839 12.2467C24.1592 12.2467 25.7825 11.2809 26.5839 9.71929H29.625C28.7415 12.9453 25.7825 15.0002 22.0839 15.0002C17.5838 15.0002 14.1934 11.7947 14.1934 7.52063C14.1934 3.18497 17.5633 0 22.0839 0C25.7825 0 28.7209 2.05482 29.625 5.28088H26.5839C25.8031 3.69867 24.1798 2.75345 22.0839 2.75345C19.1455 2.75345 17.0701 4.68498 17.0701 7.52063Z" fill="white" />
-                                <path d="M0 14.6921V0.30835H7.27405C10.2535 0.30835 12.2673 1.78782 12.2673 4.06866C12.2673 5.48649 11.3837 6.65773 10.0275 7.31528C11.8152 7.91117 12.9248 9.10297 12.9248 10.6852C12.9248 13.0893 10.5207 14.6921 7.27405 14.6921H0ZM9.5138 4.52072C9.5138 3.47277 8.56859 2.77413 7.27405 2.77413H2.87674V6.22622H7.27405C8.48639 6.22622 9.5138 5.50704 9.5138 4.52072ZM10.0275 10.418C10.0275 9.2468 9.0001 8.60981 7.27405 8.60981H2.87674V12.2057H7.27405C8.93845 12.2057 10.0275 11.5276 10.0275 10.418Z" fill="white" />
-                            </svg>
+                            <div>
 
-                                <div className='logo_sub'>Students Management Portal</div></div>
+                                <Image className='logo-img' src={logo} width={150} height={180} />
+                                {/* <svg xmlns="http://www.w3.org/2000/svg" width="49" height="15" viewBox="0 0 49 15" fill="none">
+                                    <path d="M37.125 14.6921V0.30835H49.0018V2.95906H40.0017V6.16458H48.6731V8.81529H40.0017V12.0208H49.0018V14.6921H37.125Z" fill="white" />
+                                    <path d="M34.5232 0.30835V14.6921H31.6465V0.30835H34.5232Z" fill="white" />
+                                    <path d="M17.0701 7.52063C17.0701 10.2946 19.166 12.2467 22.0839 12.2467C24.1592 12.2467 25.7825 11.2809 26.5839 9.71929H29.625C28.7415 12.9453 25.7825 15.0002 22.0839 15.0002C17.5838 15.0002 14.1934 11.7947 14.1934 7.52063C14.1934 3.18497 17.5633 0 22.0839 0C25.7825 0 28.7209 2.05482 29.625 5.28088H26.5839C25.8031 3.69867 24.1798 2.75345 22.0839 2.75345C19.1455 2.75345 17.0701 4.68498 17.0701 7.52063Z" fill="white" />
+                                    <path d="M0 14.6921V0.30835H7.27405C10.2535 0.30835 12.2673 1.78782 12.2673 4.06866C12.2673 5.48649 11.3837 6.65773 10.0275 7.31528C11.8152 7.91117 12.9248 9.10297 12.9248 10.6852C12.9248 13.0893 10.5207 14.6921 7.27405 14.6921H0ZM9.5138 4.52072C9.5138 3.47277 8.56859 2.77413 7.27405 2.77413H2.87674V6.22622H7.27405C8.48639 6.22622 9.5138 5.50704 9.5138 4.52072ZM10.0275 10.418C10.0275 9.2468 9.0001 8.60981 7.27405 8.60981H2.87674V12.2057H7.27405C8.93845 12.2057 10.0275 11.5276 10.0275 10.418Z" fill="white" />
+                                </svg> */}
+
+                                <div className='logo_sub'>Students Management Portal</div>
+                            </div>
 
                             <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
-                                    <path d="M3.5 3.5H17.5M11.375 10.5H17.5M3.5 17.5H17.5M11.375 7H17.5M11.375 14H17.5M3.5 10.5L7 7.875V13.125L3.5 10.5Z" stroke="#F0F0F0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M3.5 3.5H17.5M11.375 10.5H17.5M3.5 17.5H17.5M11.375 7H17.5M11.375 14H17.5M3.5 10.5L7 7.875V13.125L3.5 10.5Z" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
                         </div>
@@ -502,19 +506,22 @@ const Sidebar = () => {
 
 
                     <div className='logo-text-small'>
-                        BCIE
-                        <div className='d-flex align-items-center  '>
+                        <Image className='logo-img' src={logo} width={150} height={180} />
+
+                        <div className='d-flex align-items-center justify-center '>
                             <button onClick={handleButtonClick} type="button" className="inbl bgnone bdrnone pdnone valigntop sbarCollapsebtn sidebarCollapse">
 
 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
-                                    <path d="M17.5 17.5L3.5 17.5M9.625 10.5L3.5 10.5M17.5 3.5L3.5 3.5M9.625 14L3.5 14M9.625 7L3.5 7M17.5 10.5L14 13.125L14 7.875L17.5 10.5Z" stroke="#F0F0F0" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    <path d="M17.5 17.5L3.5 17.5M9.625 10.5L3.5 10.5M17.5 3.5L3.5 3.5M9.625 14L3.5 14M9.625 7L3.5 7M17.5 10.5L14 13.125L14 7.875L17.5 10.5Z" stroke="#000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
 
 
 
 
-                            </button> <a style={{ fontSize: '10px' }}>Expand</a></div>
+                            </button>
+                            {/* <a style={{ fontSize: '10px' }}>Expand</a> */}
+                        </div>
                     </div>
 
                 </div>

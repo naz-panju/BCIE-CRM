@@ -12,7 +12,7 @@ import { PhoneCallApi } from '@/data/Endpoints/PhoneCall';
 import SendMail from '../../Modals/SendMail';
 import { useSession } from 'next-auth/react';
 import SendWhatsApp from '../../Modals/SendWhatsapp';
-
+import Pusher from "pusher-js";
 
 export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallRefresh, setphoneCallRefresh, leadData, setDetailRefresh }) {
 
@@ -217,12 +217,35 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
     }
 
     useEffect(() => {
+        const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
+            cluster: "ap2",
+            //   encrypted: true,
+        });
+        const channel = pusher.subscribe("bcie-channel");
+        channel.bind("bcie-event", (data) => {
+            console.log(data);
+
+            if (data?.user_id == session?.data?.user?.id) {
+                fetchWhatsappList()
+                getSummary()
+            }
+
+        });
+        return () => {
+            pusher.unsubscribe("bcie-channel");
+            pusher.disconnect();
+        };
+    }, []);
+
+    useEffect(() => {
         getSummary()
         // getCallSummary()
     }, [emailLimit, whatsappLimit, refresh])
     useEffect(() => {
         getCallSummary()
     }, [phoneCallRefresh])
+
+
 
 
     useEffect(() => {

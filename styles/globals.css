@@ -1674,3 +1674,14 @@ input[type="number"] {
   background: linear-gradient(to bottom,#ffff);
   animation: gradientAnimation 15s ease infinite;
 }
+
+.fade {
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade.out {
+  opacity: 0;
+  transform: translateX(-20px); /* Adjust the value as needed */
+}
