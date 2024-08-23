@@ -67,9 +67,6 @@ function Form({ data }) {
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm({ resolver: yupResolver(scheme) })
     const phoneValue = watch('phone');
 
-    const [referenceOption, setreferenceOption] = useState([])
-
-
     const [selectedCountryID, setselectedCountryID] = useState()
     const [selectedInstituteID, setselectedInstituteID] = useState()
     const [selectedCourseID, setselectedCourseID] = useState()
@@ -130,10 +127,26 @@ function Form({ data }) {
         })
     }
 
+    
+    const [referenceOption, setreferenceOption] = useState([
+        {
+            name: 'No sponsor',
+            value: 'No sponsor',
+        },
+        {
+            name: 'Family Sponsor',
+            value: 'Family Sponsor',
+        },
+        {
+            name: 'Still to Find',
+            value: 'Government funding',
+        },
+    ])
+
     const fetchSources = (e) => {
         return ListingApi.leadSource({ keyword: e }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
-                return response?.data?.data
+                return referenceOption
             } else {
                 return [];
             }
