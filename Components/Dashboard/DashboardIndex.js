@@ -514,7 +514,7 @@ function DashboardIndex() {
             let params = {
                 type: 'targets',
                 intake: intakeId,
-                office: officeId || '',
+                // office: officeId || '',
                 // counselor: counsellorId,
                 // manager: selectedMangeId
             }
@@ -625,7 +625,7 @@ function DashboardIndex() {
                 fetchPayments()
             }
         }
-    }, [range, selectedCounsellor, counsellorId, intakeId, selectedMangeId])
+    }, [range, selectedCounsellor, counsellorId, intakeId, selectedMangeId,officeId])
     useEffect(() => {
         if (session?.data?.user?.role?.id !== 6) {
             if (range[0]) {
@@ -652,7 +652,7 @@ function DashboardIndex() {
             if (counsellorId || selectedMangeId || intakeId || selectedManager || selectedCounsellor)
                 fetchTargets()
         }
-    }, [intakeId, selectedCounsellor, selectedManager, counsellorId, selectedMangeId,officeId])
+    }, [intakeId, selectedCounsellor, selectedManager, counsellorId, selectedMangeId])
 
 
     useEffect(() => {
