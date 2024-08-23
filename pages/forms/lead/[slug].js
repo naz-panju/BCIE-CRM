@@ -2,7 +2,7 @@ import DateInput from '@/Form/DateInput'
 import SelectX from '@/Form/SelectX'
 import TextInput from '@/Form/TextInput'
 import { ListingApi } from '@/data/Endpoints/Listing'
-import { Button, Grid, TextField, Typography } from '@mui/material'
+import { Button, Checkbox, FormControlLabel, FormGroup, Grid, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import 'react-phone-input-2/lib/style.css'
 import PhoneInput from 'react-phone-input-2'
@@ -26,7 +26,7 @@ import { useRouter } from 'next/router'
 
 function Form({ data }) {
 
-    const router=useRouter()
+    const router = useRouter()
     // console.log(data);
     const [formDatas, setformDatas] = useState(data)
 
@@ -55,7 +55,7 @@ function Form({ data }) {
         // alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
         //     return value !== this.parent.phone;
         // }),
-        preffered_course: yup.string().required("Preffered Course is Required"),
+        // preffered_course: yup.string().required("Preffered Course is Required"),
         // assigned_to: yup.object().required("Please Choose an User").typeError("Please choose a User"),
         // country: yup.object().required("Please Choose a Country").typeError("Please choose a User"),
         // institute: yup.object().required("Please Choose a Country").typeError("Please choose an University"),
@@ -251,6 +251,10 @@ function Form({ data }) {
         setValue('agency', '')
     }
 
+    const handleSponsorChange = (data) => {
+        setValue('sponser', data || '')
+    }
+
     const handleResidenceChange = (data) => {
         setValue('country_of_residence', data || '')
         if (data) {
@@ -270,6 +274,21 @@ function Form({ data }) {
     const [titles, settitles] = useState([])
     const [currentTitle, setcurrentTitle] = useState()
 
+    const [selectedCountries, setSelectedCountries] = useState([]);
+    const handleCountryChange = (event) => {
+        const value = event.target.value;
+
+        setSelectedCountries((prevSelectedCountries) => {
+            if (prevSelectedCountries.includes(value)) {
+                // Remove the country if it's already selected
+                return prevSelectedCountries.filter((country) => country !== value);
+            } else {
+                // Add the country if it's not selected
+                return [...prevSelectedCountries, value];
+            }
+        });
+    };
+
 
     const onSubmit = async (data) => {
 
@@ -285,6 +304,8 @@ function Form({ data }) {
             passport_exp_date = moment(data?.passport_expiry).format('YYYY-MM-DD')
         }
 
+        let countries = selectedCountries?.join(', ')
+
         let dataToSubmit = {
             referral_link_id: formDatas?.id,
             title: data?.title?.name,
@@ -295,13 +316,13 @@ function Form({ data }) {
             phone_number: phone,
 
             // alternate_phone_country_code: altCode,
-            alternate_phone_number: altPhone,
+            // alternate_phone_number: altPhone,
 
             // whatsapp_country_code: whatsappCode,
             whatsapp_number: whatsapp,
 
             preferred_course: data?.preffered_course,
-            preferred_countries: data?.preferred_country,
+            preferred_countries: countries,
 
             // passport: data?.passport_number,
             // passport_exp_date: passport_exp_date,
@@ -309,27 +330,31 @@ function Form({ data }) {
             // course_level_id: data?.preffered_course_level?.id || null,
             // intake_id: data?.intake?.id,
 
-            date_of_birth: dob,
-            address: data?.address,
-            city: data?.city,
+            // date_of_birth: dob,
+            // address: data?.address,
+            // city: data?.city,
 
-            country_of_birth_id: data?.country_of_birth?.id || null,
-            country_of_residence_id: data?.country_of_residence?.id || null,
+            // country_of_birth_id: data?.country_of_birth?.id || null,
+            // country_of_residence_id: data?.country_of_residence?.id || null,
 
             referrance_from: data?.reference,
+            note: data?.note,
 
             source_id: formDatas?.lead_source?.id || null,
 
-            ...(formDatas?.lead_source?.id == 6?{agency_id:formDatas?.agency?.id}:{}),
-            ...(formDatas?.lead_source?.id == 5?{referred_student_id:formDatas?.referredStudent?.id}:{}),
-            ...(formDatas?.lead_source?.id == 7?{referral_university_id:formDatas?.referred_university?.id}:{}),
-            ...(formDatas?.lead_source?.id == 11?{event_id:formDatas?.event?.id}:{}),
+            ...(formDatas?.lead_source?.id == 6 ? { agency_id: formDatas?.agency?.id } : {}),
+            ...(formDatas?.lead_source?.id == 5 ? { referred_student_id: formDatas?.referredStudent?.id } : {}),
+            ...(formDatas?.lead_source?.id == 7 ? { referral_university_id: formDatas?.referred_university?.id } : {}),
+            ...(formDatas?.lead_source?.id == 11 ? { event_id: formDatas?.event?.id } : {}),
             // referred_student_id: formDatas?.source?.id == 5 ? formDatas?.referredStudent?.id : null || null,
             // referral_university_id: formDatas?.source?.id == 7 ? formDatas?.referred_university?.id : null || null, // country_id: data?.country?.id,
             // event_id: formDatas?.source?.id == 11 ? formDatas?.event?.id : null || null,
 
             note: data?.note
         }
+
+        console.log(dataToSubmit);
+
         LeadApi.publicAdd(dataToSubmit).then((response) => {
             // console.log(response);
             if (response?.data?.data) {
@@ -366,6 +391,11 @@ function Form({ data }) {
         return option.student_code ? `${option.name} (${option.student_code})` : option.name;
     };
 
+    useEffect(() => {
+        fetchReference()
+    }, [])
+
+
     return (
         <Grid style={{ backgroundColor: '#f0f4f8', padding: '20px' }} container display="flex" alignItems="center" justifyContent="center">
             <Grid item xs={12} md={6} lg={6} style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
@@ -377,55 +407,89 @@ function Form({ data }) {
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={6}>
-                                    <a className='form-text'>Name</a>
+                                    <a className='form-text'>Full Name</a>
                                     <TextInput placeholder='' control={control} {...register('name', { required: 'The Name field is required' })} value={watch('name')} />
                                     {errors.name && <span className='form-validation'>{errors.name.message}</span>}
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <a className='form-text'>Email</a>
+                                    <a className='form-text'>Email Address</a>
                                     <TextInput control={control} {...register('email', { required: 'Please enter your email', pattern: { value: /^\S+@\S+$/i, message: 'Please enter valid email address' } })} value={watch('email')} />
                                     {errors.email && <span className='form-validation'>{errors.email.message}</span>}
                                 </Grid>
-                                <Grid item xs={12} md={6}>
+                                {/* <Grid item xs={12} md={6}>
                                     <a className='form-text'>Country of Birth</a>
                                     <AsyncSelect name='country_of_birth' defaultValue={watch('country_of_birth')} isClearable defaultOptions loadOptions={fetchGlobalCountry} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={(data) => setValue('country_of_birth', data)} />
                                     {errors.country_of_birth && <span className='form-validation'>{errors.country_of_birth.message}</span>}
-                                </Grid>
-                                <Grid item xs={12} md={6}>
+                                </Grid> */}
+                                {/* <Grid item xs={12} md={6}> 
                                     <a className='form-text'>Country of Residence</a>
                                     <AsyncSelect name='country_of_residence' defaultValue={watch('country_of_residence')} isClearable defaultOptions loadOptions={fetchGlobalCountry} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={handleResidenceChange} />
                                     {errors.country_of_residence && <span className='form-validation'>{errors.country_of_residence.message}</span>}
-                                </Grid>
+                                </Grid> */}
                                 <Grid item xs={12} md={6}>
-                                    <a className='form-text'>Enter Mobile Number</a>
+                                    <a className='form-text'>Mobile Phone number</a>
                                     <PhoneInput {...register('phone', { required: 'Please enter your mobile number' })} country={formDatas?.country?.country_code?.toLowerCase()} international placeholder="" value={watch('phone')} onChange={handlePhoneNumber} inputProps={{ autoComplete: 'off', required: true }} inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }} buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }} />
                                     {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
                                 </Grid>
-                                <Grid item xs={12} md={6}>
+                                {/* <Grid item xs={12} md={6}>
                                     <a className='form-text'>Enter Alternate Number</a>
                                     <PhoneInput {...register('alt_phone')} international placeholder="" value={watch('alt_phone')} country={formDatas?.country?.country_code?.toLowerCase()} onChange={handleAltPhoneNumber} inputProps={{ autoComplete: 'off', required: true }} inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }} buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }} />
                                     {errors.alt_phone && <span className='form-validation'>{errors.alt_phone.message}</span>}
-                                </Grid>
+                                </Grid> */}
                                 <Grid item xs={12} md={6}>
-                                    <a className='form-text'>Enter Whatsapp Number</a>
+                                    <a className='form-text'>Whatsapp Number</a>
                                     <PhoneInput {...register('whatsapp')} international placeholder="" value={watch('whatsapp')} country={formDatas?.country?.country_code?.toLowerCase()} onChange={handleWhatsAppNumber} inputProps={{ autoComplete: 'off', required: true }} inputStyle={{ width: '100%', height: '40px', paddingLeft: '40px' }} buttonStyle={{ border: 'none', backgroundColor: 'transparent', marginLeft: '5px' }} />
                                     {errors.whatsapp && <span className='form-validation'>{errors.whatsapp.message}</span>}
                                 </Grid>
+
                                 <Grid item xs={12} md={6}>
-                                    <a className='form-text'>Preferred Countries</a>
-                                    <TextInput placeholder='' control={control} {...register('preferred_country')} value={watch('preferred_country')} />
-                                    {errors.preferred_country && <span className='form-validation'>{errors.preferred_country.message}</span>}
-                                </Grid>
-                                <Grid item xs={12} md={6}>
-                                    <a className='form-text'>Preferred Courses</a>
+                                    <a className='form-text'>What course are you interested in?</a>
                                     <TextInput placeholder='' control={control} {...register('preffered_course')} value={watch('preffered_course')} />
                                     {errors.preffered_course && <span className='form-validation'>{errors.preffered_course.message}</span>}
                                 </Grid>
                                 <Grid item xs={12} md={6}>
+                                    <a className='form-text'>How did you hear about BCIE Ltd?</a>
+                                    <ReactSelector placeholder='Select...' menuPlacement='auto' onInputChange={fetchReference} styles={{ menu: (provided) => ({ ...provided, zIndex: 9999 }) }} options={referenceOption} getOptionLabel={(option) => option.name} getOptionValue={(option) => option.name} value={referenceOption.filter((options) => options?.name == watch('reference'))} name='reference' isClearable defaultValue={watch('reference')} onChange={(selectedOption) => setValue('reference', selectedOption?.name || '')} />
+                                    {errors.reference && <span className='form-validation'>{errors.reference.message}</span>}
+                                </Grid>
+
+                                <Grid item xs={12} md={12}>
+                                    <a className='form-text'>Where would you like to study?</a>
+                                    <div className='flex'>
+                                        <FormGroup row className='responsive-checkbox-group'>
+                                            {['UK', 'Australia', 'USA', 'Canada'].map((country, index) => (
+                                                <FormControlLabel
+                                                    style={{ marginRight: 30 }}
+                                                    key={country}
+                                                    control={
+                                                        <Checkbox
+                                                            {...register('preferred_country')}
+                                                            checked={selectedCountries.includes(country)}
+                                                            onChange={handleCountryChange}
+                                                            value={country}
+                                                        />
+                                                    }
+                                                    label={country}
+                                                />
+                                            ))}
+                                        </FormGroup>
+                                    </div>
+                                    {errors.preferred_country && (
+                                        <span className='form-validation'>{errors.preferred_country.message}</span>
+                                    )}
+                                </Grid>
+
+
+                                <Grid item xs={12} md={6}>
+                                    <a className='form-text'>If you have a sponsor please state who</a>
+                                    <AsyncSelect menuPlacement='auto' placeholder='Select...' name='sponser' defaultValue={watch('sponser')} isClearable defaultOptions loadOptions={fetchSources} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={handleSponsorChange} />
+                                    {errors.sponser && <span className='form-validation'>{errors.sponser.message}</span>}
+                                </Grid>
+                                {/* <Grid item xs={12} md={6}>
                                     <a className='form-text'>Date of Birth</a>
                                     <DateInput shouldDisableDate={disableSpecificDateForDob} placeholder='' control={control} name='dob' value={watch('dob')} />
                                     {errors.dob && <span className='form-validation'>{errors.dob.message}</span>}
-                                </Grid>
+                                </Grid> */}
                                 {/* <Grid item xs={12} md={6}>
                                     <a className='form-text'>Passport Number</a>
                                     <TextInput placeholder='' control={control} {...register('passport_number')} value={watch('passport_number')} />
@@ -436,16 +500,24 @@ function Form({ data }) {
                                     <DateInput placeholder='' control={control} name='passport_expiry' value={watch('passport_expiry')} />
                                     {errors.passport_expiry && <span className='form-validation'>{errors.passport_expiry.message}</span>}
                                 </Grid> */}
-                                <Grid item xs={12}>
+                                {/* <Grid item xs={12}>
                                     <a className='form-text'>City</a>
                                     <TextInput placeholder='' control={control} {...register('city')} value={watch('city')} />
                                     {errors.city && <span className='form-validation'>{errors.city.message}</span>}
-                                </Grid>
-                                <Grid item xs={12}>
+                                </Grid> */}
+                                {/* <Grid item xs={12}>
                                     <a className='form-text'>Address</a>
                                     <TextField placeholder='' multiline rows={2} fullWidth control={control} {...register('address')} value={watch('address') || ''} />
                                     {errors.address && <span className='form-validation'>{errors.address.message}</span>}
+                                </Grid> */}
+
+                                <Grid item xs={12}>
+                                    <a className='form-text'>Any further comments</a>
+                                    <TextField placeholder='' multiline rows={3} fullWidth control={control} {...register('note')} value={watch('note') || ''} />
+                                    {errors.note && <span className='form-validation'>{errors.note.message}</span>}
                                 </Grid>
+
+
                                 {/* <Grid item xs={12} md={6}>
                                     <a className='form-text'>Lead Source</a>
                                     <AsyncSelect menuPlacement='auto' placeholder='Select...' name='source' defaultValue={watch('source')} isClearable defaultOptions loadOptions={fetchSources} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={handleSourseChange} />

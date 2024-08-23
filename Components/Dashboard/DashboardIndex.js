@@ -151,7 +151,7 @@ function DashboardIndex() {
         setselectedAppCoordinators(data)
     }
     const fetchAppCoordinators = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 6,office_id: officeId }).then(response => {
+        return ListingApi.users({ keyword: e, role_id: 6, office_id: officeId }).then(response => {
             // console.log(response);
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
@@ -187,7 +187,7 @@ function DashboardIndex() {
 
 
     const [officeId, setOfficeId] = useState();
-    
+
     const handleOfficeChange = (data) => {
         setValue('office', data || '')
         setOfficeId(data?.id)
@@ -445,7 +445,7 @@ function DashboardIndex() {
                     manager: selectedMangeId,
                     app_coordinator: selectedAppCoordinators?.id,
                     intake: intakeId,
-                    university:selectedUniversity
+                    university: selectedUniversity
                 })
                 // console.log(response);
                 setApplicationStages(response?.data)
@@ -514,12 +514,14 @@ function DashboardIndex() {
             let params = {
                 type: 'targets',
                 intake: intakeId,
+                office: officeId || '',
                 // counselor: counsellorId,
                 // manager: selectedMangeId
             }
             if (session?.data?.user?.role?.id == 4) {
                 params['manager'] = session?.data?.user?.id
                 params['counselor'] = session?.data?.user?.id
+
             } else if (session?.data?.user?.role?.id == 5) {
                 params['counselor'] = session?.data?.user?.id
             } else {
@@ -637,7 +639,7 @@ function DashboardIndex() {
             fetchApplicationStages()
             fetchsubmitApplication()
         }
-    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor, counsellorId, intakeId, selectedMangeId,selectedUniversity])
+    }, [range, officeId, selectedCountries, selectedAppCoordinators, selectedAppCounsellor, counsellorId, intakeId, selectedMangeId, selectedUniversity])
     useEffect(() => {
         if (session?.data?.user?.role?.id !== 6) {
             if (weeklyApplicationRange[0]) {
@@ -650,7 +652,7 @@ function DashboardIndex() {
             if (counsellorId || selectedMangeId || intakeId || selectedManager || selectedCounsellor)
                 fetchTargets()
         }
-    }, [intakeId, selectedCounsellor, selectedManager, counsellorId, selectedMangeId])
+    }, [intakeId, selectedCounsellor, selectedManager, counsellorId, selectedMangeId,officeId])
 
 
     useEffect(() => {
