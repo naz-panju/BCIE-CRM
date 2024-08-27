@@ -417,12 +417,13 @@ function Form({ data }) {
 
     return (
         <Grid style={{ backgroundColor: '#f0f4f8', padding: '20px' }} container display="flex" alignItems="center" justifyContent="center">
-            <Grid item xs={12} md={6} lg={6} style={{ backgroundColor: 'white', padding: '20px', borderRadius: '8px' }}>
-                <Grid container spacing={2}>
-                    <div style={{ backgroundImage: `url(${data?.banner_image || 'https:\/\/bcie.spider.ws\/uploads\/referral_links\/banners\/1720096455_header-bg.png'})`, backgroundSize: 'cover', backgroundPosition: 'center' }} className='modal-header'>
-                        <h2>{data?.top_description}</h2>
+            <div className='m-auto p-[20px] max-w-[700px]' style={{ backgroundColor: 'white', borderRadius: '8px' }}>
+                <div className='block'>
+                    <div style={{ backgroundImage: `url(${data?.banner_image || 'https:\/\/bcie.spider.ws\/uploads\/referral_links\/banners\/1720096455_header-bg.png'})`, backgroundSize: '120% 140%', backgroundPosition: 'center' }} className='p-[25px]'>
+                        <h2 className='text-[18px] text-[#fff] text-left'>{data?.top_description}</h2>
                     </div>
-                    <Grid item xs={12} className='form-data-cntr'>
+
+                    <div className='form-data-cntr block'>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12} md={6}>
@@ -594,10 +595,10 @@ function Form({ data }) {
                             }
 
                         </form>
-                    </Grid>
+                    </div>
 
-                </Grid>
-            </Grid>
+                </div>
+            </div>
         </Grid>
 
     )
