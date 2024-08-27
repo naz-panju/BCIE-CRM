@@ -407,6 +407,8 @@ function DashboardIndex() {
 
     const [payments, setPayments] = useState([]);
     const [paymentLoading, setPaymentLoading] = useState(true);
+    // console.log(selectedCounsellor);
+    
     const fetchPayments = async () => {
         setPaymentLoading(true)
         try {
@@ -415,11 +417,11 @@ function DashboardIndex() {
                 // date_from: moment(range[0]).format('YYYY-MM-DD'),
                 // date_to: moment(range[1]).format('YYYY-MM-DD'),
                 office: officeId,
-                counselor: selectedCounsellor?.id,
+                counselor: counsellorId,
                 intake: intakeId,
                 manager: selectedMangeId
             })
-            // console.log(response);
+            // console.log(response?.config?.params);
             setPayments(response?.data)
             setPaymentLoading(false)
         } catch (error) {
@@ -626,7 +628,7 @@ function DashboardIndex() {
             }
 
         }
-    }, [range, selectedCounsellor, counsellorId, intakeId, selectedMangeId,officeId])
+    }, [range, counsellorId, counsellorId, intakeId, selectedMangeId,officeId])
     useEffect(() => {
         if (session?.data?.user?.role?.id !== 6) {
             if (range[0]) {
