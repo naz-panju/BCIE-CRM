@@ -508,7 +508,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       assign_to_office_id: selectedBranch,
       // agency: selectedAgency,
       source_id: selectedSource,
-      
+
       ...(selectedSource == 5 ? { referred_student_id: watch('referred_student')?.id } : {}),
       ...(selectedSource == 6 ? { agency: watch('agency')?.id } : {}),
       ...(selectedSource == 7 ? { referral_university_id: watch('referred_university')?.id } : {}),
@@ -984,7 +984,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
           // agency: selectedAgency,
           ...(selectedSource == 6 ? { agency: selectedAgency } : {}),
           ...(selectedSource == 11 ? { event_id: selectedEvents } : {}),
-    
+
           source_id: selectedSource,
           name: watch('nameSearch'),
           email: watch('emailSearch'),

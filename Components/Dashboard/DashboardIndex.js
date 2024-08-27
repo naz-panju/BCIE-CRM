@@ -624,6 +624,7 @@ function DashboardIndex() {
                 // fetchCommunicationLog()
                 fetchPayments()
             }
+
         }
     }, [range, selectedCounsellor, counsellorId, intakeId, selectedMangeId,officeId])
     useEffect(() => {

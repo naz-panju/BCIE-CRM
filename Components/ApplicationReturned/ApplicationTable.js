@@ -658,6 +658,11 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
     const handleSelectSource = (e) => {
         setselectedSource(e?.id || '');
         setValue('source', e || '')
+
+        setValue('agency', '')
+        setValue('referred_student', '')
+        setValue('referred_university', '')
+        setValue('events', '')
     }
 
     const handleClearSearch = (from) => {
@@ -682,6 +687,11 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
         setValue('student_code', '')
         setValue('application_number', '')
         setValue('course', '')
+
+        setValue('agency', '')
+        setValue('referred_student', '')
+        setValue('referred_university', '')
+        setValue('events', '')
 
         setselectedCountry()
         // setselectedIntake()
@@ -718,6 +728,11 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
             limit: limit,
             deposit_not_paid: 1,
             source_id: selectedSource,
+
+            ...(selectedSource == 5 ? { referred_student_id: watch('referred_student')?.id } : {}),
+            ...(selectedSource == 6 ? { agency: watch('agency')?.id } : {}),
+            ...(selectedSource == 7 ? { referral_university_id: watch('referred_university')?.id } : {}),
+            ...(selectedSource == 11 ? { event_id: watch('events')?.id } : {}),
             // application statuses:unsubmitted,
             // status: 'Admission Completed',
             returned: 1,
@@ -830,6 +845,58 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
     useEffect(() => {
         fetchTable()
     }, [page, refresh, limit, searchRefresh,sortOrder])
+
+    const fetchStudents = (e) => {
+        return ListingApi.students({ keyword: e }).then(response => {
+
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data?.data
+            } else {
+                return [];
+            }
+
+        })
+    }
+
+    const fetchAgencies = (e) => {
+        return ListingApi.agencies({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchUniversities = (e) => {
+        return ListingApi.universities({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchAgency = (e) => {
+        return ListingApi.agencies({ keyword: e, }).then(response => {
+            if (typeof response.data.data !== "undefined") {
+                return response.data.data;
+            } else {
+                return [];
+            }
+        })
+    }
+
+    const fetchEvents = (e) => {
+        return ListingApi.events({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
 
 
     return (
@@ -1070,6 +1137,105 @@ export default function ApplicationReturnedTable({ refresh, editId, setEditId, p
                             />
                         </div>
                     </div>
+
+                    {
+                        watch('source')?.id == 5 &&
+                        <div>
+                            <div className='form-group'>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                                    <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                <AsyncSelect
+                                    isClearable
+                                    defaultOptions
+                                    name='referred_student'
+                                    value={watch('referred_student')}
+                                    defaultValue={watch('referred_student')}
+                                    loadOptions={fetchStudents}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    placeholder={<div>Select Referred Student</div>}
+                                    onChange={(options) => setValue('referred_student', options)}
+                                />
+                            </div>
+                        </div>
+                    }
+
+                    {
+                        watch('source')?.id == 6 &&
+                        <div>
+                            <div className='form-group'>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                                    <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                <AsyncSelect
+                                    isClearable
+                                    defaultOptions
+                                    name='agency'
+                                    value={watch('agency')}
+                                    defaultValue={watch('agency')}
+                                    loadOptions={fetchAgency}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    placeholder={<div>Select Agency</div>}
+                                    // onChange={handleSelectAgency}
+                                    onChange={(options) => setValue('agency', options)}
+                                />
+                            </div>
+                        </div>
+                    }
+
+                    {
+                        watch('source')?.id == 7 &&
+                        <div>
+                            <div className='form-group'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                                    <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                <AsyncSelect
+                                    isClearable
+                                    defaultOptions
+                                    name='referred_university'
+                                    value={watch('referred_university')}
+                                    defaultValue={watch('referred_university')}
+                                    loadOptions={fetchUniversities}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    placeholder={<div>Select Referred University</div>}
+                                    onChange={(options) => setValue('referred_university', options)}
+                                />
+                            </div>
+                        </div>
+                    }
+
+                    {
+                        watch('source')?.id == 11 &&
+                        <div>
+                            <div className='form-group'>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                                    <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                <AsyncSelect
+                                    isClearable
+                                    defaultOptions
+                                    name='events'
+                                    value={watch('events')}
+                                    defaultValue={watch('events')}
+                                    loadOptions={fetchEvents}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    placeholder={<div>Select Event</div>}
+                                    // onChange={handleSelectEvent}
+                                    onChange={(options) => setValue('events', options)}
+
+                                />
+                            </div>
+                        </div>
+                    }
+
 
                     <div>
                         <div className='form-group'>

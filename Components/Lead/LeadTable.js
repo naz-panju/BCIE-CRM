@@ -653,6 +653,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setValue('stage', '')
     setValue('branch', '')
     setValue('source', '')
+
     setValue('agency', '')
     setValue('referred_student', '')
     setValue('referred_university', '')
@@ -706,15 +707,6 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     })
   }
 
-  const fetchAgencies = (e) => {
-    return ListingApi.agencies({ keyword: e }).then(response => {
-      if (typeof response?.data?.data !== "undefined") {
-        return response?.data?.data
-      } else {
-        return [];
-      }
-    })
-  }
 
   const fetchUniversities = (e) => {
     return ListingApi.universities({ keyword: e }).then(response => {
@@ -725,6 +717,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       }
     })
   }
+
 
 
 
