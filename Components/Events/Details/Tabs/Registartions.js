@@ -12,7 +12,6 @@ import { LeadApi } from '@/data/Endpoints/Lead';
 
 function EventRegistrations({ details }) {
 
-    console.log(details);
     
 
     const [copied, setcopied] = useState(false)
@@ -43,7 +42,7 @@ function EventRegistrations({ details }) {
     const handleCopy = async () => {
         setcopied(true)
         toast.success('Event Registration Link Copied')
-        await navigator.clipboard.writeText(`${currentURL}/forms/event/${details?.token}`);
+        await navigator.clipboard.writeText(`${currentURL}/forms/lead/${details?.referral_link?.token}`);
         setTimeout(() => {
             setcopied(false)
         }, 1000);

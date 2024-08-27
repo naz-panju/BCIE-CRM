@@ -588,8 +588,8 @@ function Form({ data }) {
 
                             {
                                 data?.bottom_description &&
-                                <Grid item xs={12} className='modal-footer flex items-center justify-center' style={{ backgroundColor: '#060a11', backgroundSize: 'cover', backgroundPosition: 'center' }} >
-                                    <h2> {data?.bottom_description}</h2>
+                                <Grid item xs={12} className='p-[25px]' style={{ backgroundColor: '#f5f5f5' }} >
+                                    <h2 className='text-[15px] text-[#666]'> {data?.bottom_description}</h2>
                                 </Grid>
                             }
 
