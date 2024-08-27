@@ -30,7 +30,6 @@ function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappL
     }
 
     return (
-
         <>
             {
                 <WhatsappMessageModal editId={whatsappMessageId} setEditId={setwhatsappMessageId} leadData={leadData} />

@@ -133,7 +133,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
         setLoading(true)
         const formData = new FormData()
 
-        formData.append('to', data?.whatsapp?.substring(1))
+        formData.append('to', data?.whatsapp)
         // formData.append('to', data?.whatsapp)
         formData.append('template_id', data?.template?.id)
         formData.append('message', data?.body || '')
@@ -255,7 +255,7 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
 
 
     const getInitialValue = () => {
-        // setValue('whatsapp', details?.whatsapp_number)
+       
         if (from == 'app') {
             setValue('whatsapp', `${details?.student?.whatsapp_number}`)
             if (open && !details?.student?.whatsapp_number) {

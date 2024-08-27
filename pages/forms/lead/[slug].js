@@ -127,7 +127,7 @@ function Form({ data }) {
         })
     }
 
-    
+
     const [referenceOption, setreferenceOption] = useState([
         {
             name: 'No sponsor',
@@ -145,7 +145,7 @@ function Form({ data }) {
             name: 'Government funding',
             value: 'Government funding',
         },
-        
+
     ])
 
     const fetchSources = (e) => {
@@ -341,6 +341,7 @@ function Form({ data }) {
 
             preferred_course: data?.preffered_course,
             preferred_countries: countries,
+            sponser_details: data?.sponser?.value,
 
             // passport: data?.passport_number,
             // passport_exp_date: passport_exp_date,

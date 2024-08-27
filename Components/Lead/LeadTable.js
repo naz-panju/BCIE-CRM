@@ -491,7 +491,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
   const [selectedAgency, setselectedAgency] = useState()
   const handleSelectAgency = (e) => {
-    setselectedAgency(e?.id || '');
+    // setselectedAgency(e?.id || '');
     setValue('agency', e || '')
   }
 
@@ -511,6 +511,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
     setselectedAgency('');
     setValue('')
+
+    setValue('agency', '')
+    setValue('referred_student', '')
+    setValue('referred_university', '')
+    setValue('events', '')
+
   }
 
   const [selectedBranch, setselectedBranch] = useState()
@@ -534,8 +540,17 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       // agency: selectedAgency,
       source_id: selectedSource,
 
-      ...(selectedSource == 6 ? { agency: selectedAgency } : {}),
-      ...(selectedSource == 11 ? { event_id: selectedEvents } : {}),
+      // agency_id: data?.source?.id == 6 ? data?.agency?.id : null || null,
+      // referred_student_id: data?.source?.id == 5 ? data?.student?.id : null || null,
+      // referral_university_id: data?.source?.id == 7 ? data?.referred_university?.id : null || null,
+      // event_id: data?.source?.id == 11 ? data?.referred_event?.id : null || null,
+      // country_id: session?.data?.user?.office_country?.id,
+
+
+      ...(selectedSource == 5 ? { referred_student_id: watch('referred_student')?.id } : {}),
+      ...(selectedSource == 6 ? { agency: watch('agency')?.id } : {}),
+      ...(selectedSource == 7 ? { referral_university_id: watch('referred_university')?.id } : {}),
+      ...(selectedSource == 11 ? { event_id: watch('events')?.id } : {}),
 
       name: watch('nameSearch'),
       email: watch('emailSearch'),
@@ -637,10 +652,13 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setValue('assignedTo', null)
     setValue('stage', '')
     setValue('branch', '')
-    setValue('agency', '')
     setValue('source', '')
-
+    setValue('agency', '')
+    setValue('referred_student', '')
+    setValue('referred_university', '')
     setValue('events', '')
+
+
     setselectedEvents()
 
     setSelectedAssignedTo()
@@ -674,6 +692,40 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   useEffect(() => {
     fetchTable()
   }, [page, refresh, limit, searchRefresh, sortOrder])
+
+
+  const fetchStudents = (e) => {
+    return ListingApi.students({ keyword: e }).then(response => {
+
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data?.data
+      } else {
+        return [];
+      }
+
+    })
+  }
+
+  const fetchAgencies = (e) => {
+    return ListingApi.agencies({ keyword: e }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data
+      } else {
+        return [];
+      }
+    })
+  }
+
+  const fetchUniversities = (e) => {
+    return ListingApi.universities({ keyword: e }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data
+      } else {
+        return [];
+      }
+    })
+  }
+
 
 
   return (
@@ -783,6 +835,30 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
           </div>
 
           {
+            watch('source')?.id == 5 &&
+            <div>
+              <div className='form-group'>
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                  <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <AsyncSelect
+                  isClearable
+                  defaultOptions
+                  name='referred_student'
+                  value={watch('referred_student')}
+                  defaultValue={watch('referred_student')}
+                  loadOptions={fetchStudents}
+                  getOptionLabel={(e) => e.name}
+                  getOptionValue={(e) => e.id}
+                  placeholder={<div>Select Referred Student</div>}
+                  onChange={(options) => setValue('referred_student', options)}
+                />
+              </div>
+            </div>
+          }
+
+          {
             watch('source')?.id == 6 &&
             <div>
               <div className='form-group'>
@@ -800,7 +876,31 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                   getOptionLabel={(e) => e.name}
                   getOptionValue={(e) => e.id}
                   placeholder={<div>Select Agency</div>}
-                  onChange={handleSelectAgency}
+                  // onChange={handleSelectAgency}
+                  onChange={(options) => setValue('agency', options)}
+                />
+              </div>
+            </div>
+          }
+
+          {
+            watch('source')?.id == 7 &&
+            <div>
+              <div className='form-group'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                  <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <AsyncSelect
+                  isClearable
+                  defaultOptions
+                  name='referred_university'
+                  value={watch('referred_university')}
+                  defaultValue={watch('referred_university')}
+                  loadOptions={fetchUniversities}
+                  getOptionLabel={(e) => e.name}
+                  getOptionValue={(e) => e.id}
+                  placeholder={<div>Select Referred University</div>}
+                  onChange={(options) => setValue('referred_university', options)}
                 />
               </div>
             </div>
@@ -824,7 +924,9 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                   getOptionLabel={(e) => e.name}
                   getOptionValue={(e) => e.id}
                   placeholder={<div>Select Event</div>}
-                  onChange={handleSelectEvent}
+                  // onChange={handleSelectEvent}
+                  onChange={(options) => setValue('events', options)}
+
                 />
               </div>
             </div>
@@ -942,8 +1044,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
           assigned_to: selectedAssignedTo,
           stage: selectedStage,
           assign_to_office_id: selectedBranch,
-          ...(selectedSource == 6 ? { agency: selectedAgency } : {}),
-          ...(selectedSource == 11 ? { event_id: selectedEvents } : {}),
+          ...(selectedSource == 5 ? { referred_student_id: watch('referred_student')?.id } : {}),
+          ...(selectedSource == 6 ? { agency: watch('agency')?.id } : {}),
+          ...(selectedSource == 7 ? { referral_university_id: watch('referred_university')?.id } : {}),
+          ...(selectedSource == 11 ? { event_id: watch('events')?.id } : {}),
           source_id: selectedSource,
           name: watch('nameSearch'),
           email: watch('emailSearch'),

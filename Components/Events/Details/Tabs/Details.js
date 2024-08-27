@@ -48,6 +48,12 @@ function Details({ data, loading }) {
                     </div>
                 </div>
 
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Email Content:</label>
+                        <span>{data?.email_content || 'NA'}</span>
+                    </div>
+                </div>
 
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">

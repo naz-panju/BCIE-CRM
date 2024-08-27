@@ -82,6 +82,7 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
             venue: data?.venue,
             office_id: data?.branch?.id,
             description: data?.description,
+            email_content:data?.email_content
         }
 
         console.log(dataToSubmit);
@@ -137,6 +138,7 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
         setValue('body', '')
         setValue('default_cc', '')
         setValue('body_footer', '')
+        setValue('email_content', '')
         setOpen(false)
     }
 
@@ -157,6 +159,8 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
         setDataLoading(true)
         try {
             const response = await EventsApi.view({ id: editId })
+            console.log(response?.data?.data);
+            
             if (response?.data?.data) {
                 let data = response?.data?.data
                 setValue('name', data?.name)
@@ -165,6 +169,7 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
                 setValue('venue', data?.venue)
                 setValue('branch', data?.office)
                 setValue('description', data?.description)
+                setValue('email_content', data?.email_content)
                 setDataLoading(false)
             }
             setDataLoading(false)
@@ -257,6 +262,18 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
                                                 </Grid>
                                             </div>
                                         </div>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Email Content</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <TextInput control={control} name="email_content"
+                                                        value={watch('email_content')} />
+                                                    {errors.email_content && <span className='form-validation'>{errors.email_content.message}</span>}
+                                                </Grid>
+                                            </div>
+                                        </div>
+
 
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
 

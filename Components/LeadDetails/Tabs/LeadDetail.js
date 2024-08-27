@@ -283,6 +283,15 @@ function LeadDetail({ data, handleEdit, loading }) {
                             }
 
                             {
+                                data?.sponser_details &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Sponser Detail </label> {data?.sponser_details || 'NA'}
+                                </div>
+                            }
+
+                            
+
+                            {
                                 data?.referrance_from &&
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Here about us from </label> {data?.referrance_from}

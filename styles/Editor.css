@@ -2737,7 +2737,7 @@ input::placeholder {
 }
 
 .lead-table-cntr.app_type.active .filter_sec {
-    height: 260px;
+    height: 300px;
     margin-bottom: 30px;
     transition: all .3s;
     opacity: 1;
@@ -2745,7 +2745,7 @@ input::placeholder {
 }
 
 .lead-table-cntr.app.active .filter_sec {
-    height: 260px;
+    height: 320px;
     margin-bottom: 30px;
     transition: all .3s;
     opacity: 1;
