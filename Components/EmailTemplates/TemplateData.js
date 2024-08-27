@@ -28,6 +28,7 @@ function TemplateData({ handleToggleTable, setValue, body, isFocused, setSubject
         { title: 'Assigned Office Address', key: "{{21}}" },
         { title: 'Assigned Office Email Ids', key: "{{22}}" },
         { title: 'Assigned Office Phone Numbers', key: "{{23}}" },
+        { title: 'Lead Id', key: "{{24}}" },
         { title: 'Applied Country', key: "{{30}}" },
         { title: 'Applied University', key: "{{31}}" },
         { title: 'Applied Course Level', key: "{{32}}" },
@@ -47,7 +48,9 @@ function TemplateData({ handleToggleTable, setValue, body, isFocused, setSubject
         { title: 'Document uploaded user', key: "{{64}}" },
         { title: 'Document accepted user', key: "{{65}}" },
         { title: 'Document rejected user', key: "{{66}}" },
-        { title: 'Document reject reason', key: "{{67}}" }
+        { title: 'Document reject reason', key: "{{67}}" },
+        { title: 'Event title', key: "{{80}}" },
+        { title: 'Email content for event', key: "{{81}}" }
     ];
 
 
