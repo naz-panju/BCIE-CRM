@@ -601,7 +601,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
     setValue('referred_student', '')
     setValue('referred_university', '')
     setValue('events', '')
-    
+
     setselectedEvents()
 
     setSelectedAssignedTo()
@@ -633,6 +633,39 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
   useEffect(() => {
     fetchTable()
   }, [page, refresh, limit, searchRefresh, sortOrder])
+
+  const fetchStudents = (e) => {
+    return ListingApi.students({ keyword: e }).then(response => {
+
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data?.data
+      } else {
+        return [];
+      }
+
+    })
+  }
+
+  const fetchAgencies = (e) => {
+    return ListingApi.agencies({ keyword: e }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data
+      } else {
+        return [];
+      }
+    })
+  }
+
+  const fetchUniversities = (e) => {
+    return ListingApi.universities({ keyword: e }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data
+      } else {
+        return [];
+      }
+    })
+  }
+
 
 
   return (
