@@ -89,7 +89,7 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
     // Calculate the total
     const total = emails + calls + messages;
 
-    const handleDateSelect = (range,e) => {
+    const handleDateSelect = (range, e) => {
         const [start, end] = range;
         // console.log(e);
 
@@ -108,7 +108,7 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
             } else {
                 setWeeklyRange(range);
             }
-        }     
+        }
     };
 
     return (
@@ -328,7 +328,7 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
 
                     </div> */}
 
-                    <div style={{ height: '100%' }} className='graph w-7/12 p-3'>
+                    <div style={{ height: '100%' }} className='graph w-8/12 p-3'>
                         <div className='flex'>
                             <div className='border rounded-sm w-3/6'>
 
@@ -347,11 +347,11 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
                             </div>
 
                             <div className=' w-3/6'>
-                                <div className='chart-info-block'>
+                                <div className='chart-info-block '>
                                     <h2>Chart info</h2>
 
 
-                                    <div className='flex g-5'>
+                                    <div className='flex g-5 chart-info-scroll max-h-[270px] overflow-y-auto '>
                                         {
                                             leadStageLoading ?
                                                 <Grid display={'flex'} container justifyContent={'space-between'} >
@@ -361,12 +361,14 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
                                                 </Grid>
                                                 :
 
-                                                <ul>
+                                                <ul >
+                                                 
                                                     {
                                                         leadStage?.data?.map((obj, index) => (
-                                                            <li key={index}><span style={{ background: obj?.colour }}></span>{obj?.name}</li>
+                                                            <li key={index}><span style={{ background: obj?.colour }}></span><div className='flex justify-between'>{obj?.name}  ({obj?.lead_count})</div></li>
                                                         ))
                                                     }
+
                                                     {/* <li><span></span>Unverified</li>
                                             <li><span></span>Warm</li>
                                             <li><span></span>Application Preparation</li>
