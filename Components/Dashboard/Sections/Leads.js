@@ -350,8 +350,7 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
                                 <div className='chart-info-block '>
                                     <h2>Chart info</h2>
 
-
-                                    <div className='flex g-5 chart-info-scroll max-h-[270px] overflow-y-auto '>
+                                    <div className='flex g-5 chart-info-scroll max-h-[270px]'>
                                         {
                                             leadStageLoading ?
                                                 <Grid display={'flex'} container justifyContent={'space-between'} >

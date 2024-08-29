@@ -1551,6 +1551,23 @@ canvas.custom-height {
     width: 46%;
 }
 
+@-moz-document url-prefix() {
+    .chart-info-block ul li {
+        color: #2F435B;
+        font-family: Inter;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 18px;
+        padding: 1px 0;
+        width: 50%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 46%;
+    }
+  }
+
 .chart-info-block ul li span {
     border-radius: 14px;
     background: #9473F1;
