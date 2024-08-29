@@ -446,9 +446,9 @@ function DashboardIndex() {
                     manager: selectedMangeId,
                     app_coordinator: selectedAppCoordinators?.id,
                     intake: intakeId,
-                    university: selectedUniversity
+                    university: selectedUniversity?.id
                 })
-                // console.log(response);
+                console.log(response);
                 setApplicationStages(response?.data)
                 SetApplicationStagesLoading(false)
             } catch (error) {
