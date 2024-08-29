@@ -448,7 +448,7 @@ function DashboardIndex() {
                     intake: intakeId,
                     university: selectedUniversity?.id
                 })
-                console.log(response);
+                // console.log(response);
                 setApplicationStages(response?.data)
                 SetApplicationStagesLoading(false)
             } catch (error) {
