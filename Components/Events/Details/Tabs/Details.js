@@ -27,8 +27,8 @@ function Details({ data, loading }) {
                         <span>{data?.venue || 'NA'}</span>
                     </div>
                     <div className="lead-details-list">
-                        <label style={{ fontWeight: 'bold' }}>Branch:</label>
-                        <span>{data?.office?.name || 'NA'}</span>
+                        <label style={{ fontWeight: 'bold' }}>Country:</label>
+                        <span>{data?.country?.name || 'NA'}</span>
                     </div>
                 </div>
 
@@ -51,7 +51,8 @@ function Details({ data, loading }) {
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Email Content:</label>
-                        <span>{data?.email_content || 'NA'}</span>
+                        <span dangerouslySetInnerHTML={{ __html: data?.email_content || "NA" }} />
+                        {/* <span>{data?.email_content || 'NA'}</span> */}
                     </div>
                 </div>
 

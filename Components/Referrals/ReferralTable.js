@@ -85,6 +85,12 @@ const headCells = [
         disablePadding: true,
         label: 'Title',
     },
+    {
+        id: 'country',
+        numeric: false,
+        disablePadding: false,
+        label: 'Country ',
+    },
     // {
     //     id: 'link',
     //     numeric: false,
@@ -227,7 +233,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function ReferralTable({ refresh, editId, setEditId, page, setPage, searchTerm, searching }) {
+export default function ReferralTable({ refresh, editId, setEditId, page, setPage, searchTerm, searching, createOpen }) {
 
     const router = useRouter();
 
@@ -402,7 +408,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                                 />
                                                             </TableCell> */}
                                                             <TableCell
-                                                                onClick={() => handleDetailOpen(row?.id)}
+                                                                onClick={() => (!createOpen && createOpen!=0) && handleDetailOpen(row?.id)}
                                                                 component="th"
                                                                 id={labelId}
                                                                 scope="row"
@@ -411,6 +417,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                             >
                                                                 {row?.title}
                                                             </TableCell>
+                                                            <TableCell align="left">{row?.country?.name}</TableCell>
                                                             {/* <TableCell align="left"><a style={{ color: 'blue' }}>{`${currentURL}/forms/lead`}</a></TableCell> */}
                                                             <TableCell align="left">{row?.lead_source?.name}</TableCell>
                                                             <TableCell align="left">{moment(row?.date_of_validity).format('DD-MM-YYYY')}</TableCell>

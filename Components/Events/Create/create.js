@@ -10,13 +10,19 @@ import TextInput from '@/Form/TextInput';
 import { useState } from 'react';
 import moment from 'moment';
 import toast from 'react-hot-toast';
-
+import dynamic from 'next/dynamic';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoadingButton } from '@mui/lab';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import { EventsApi } from '@/data/Endpoints/Events';
+
+const CKEditorBox = dynamic(() => import("../../../Components/Editor/Editor"), {
+    ssr: false,
+})
+
+
 
 const scheme = yup.object().shape({
 
@@ -59,6 +65,17 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
         })
     }
 
+    const fetchCountries = (e) => {
+        return ListingApi.country({ keyword: e }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
+
 
     const onSubmit = async (data) => {
 
@@ -80,9 +97,9 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
             start_date: start_date,
             end_date: end_date,
             venue: data?.venue,
-            office_id: data?.branch?.id,
+            country_id: data?.country?.id,
             description: data?.description,
-            email_content:data?.email_content
+            email_content: data?.email_content
         }
 
         console.log(dataToSubmit);
@@ -160,14 +177,14 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
         try {
             const response = await EventsApi.view({ id: editId })
             console.log(response?.data?.data);
-            
+
             if (response?.data?.data) {
                 let data = response?.data?.data
                 setValue('name', data?.name)
                 setValue('start_date', data?.start_date)
                 setValue('end_date', data?.end_date)
                 setValue('venue', data?.venue)
-                setValue('branch', data?.office)
+                setValue('country', data?.country)
                 setValue('description', data?.description)
                 setValue('email_content', data?.email_content)
                 setDataLoading(false)
@@ -193,16 +210,15 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
 
 
     return (
+        open &&
         <div>
-
-
-
-            <Drawer
+            {/* <Drawer
                 anchor={anchor}
                 open={open}
                 onClose={handleClose}
-            >
-                <Grid width={550}>
+            > */}
+            <Grid style={{ position: 'fixed', top: 0, right: 0, height: '100%', width: 750, background: 'white', zIndex: 100, borderLeft: '0.5px solid' }} display={'flex'}>
+                <Grid width={750}>
 
                     <Grid className='modal_title d-flex align-items-center'>
 
@@ -216,7 +232,7 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
 
                     </Grid>
 
-                    <div className='form-data-cntr'>
+                    <div style={{ overflow: 'auto', height: 'calc(100% - 77px)' }} className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -267,8 +283,11 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
                                             <div className='application-input'>
                                                 <a className='form-text'>Email Content</a>
                                                 <Grid className='mb-5 forms-data' >
-                                                    <TextInput control={control} name="email_content"
-                                                        value={watch('email_content')} />
+                                                    {/* <TextInput control={control} name="email_content"
+                                                        value={watch('email_content')} /> */}
+                                                    <CKEditorBox emoji={false} val={watch('email_content')}
+                                                        onValueChange={e => setValue('email_content', e)}
+                                                    />
                                                     {errors.email_content && <span className='form-validation'>{errors.email_content.message}</span>}
                                                 </Grid>
                                             </div>
@@ -278,13 +297,13 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
 
                                             <div className='application-input'>
-                                                <a className='form-text'>Select Branch</a>
+                                                <a className='form-text'>Select Country</a>
                                                 <Grid className='mb-5 forms-data' >
                                                     <SelectX
-                                                        loadOptions={fetchBranches}
+                                                        loadOptions={fetchCountries}
                                                         control={control}
-                                                        name={'branch'}
-                                                        defaultValue={watch('branch')}
+                                                        name={'country'}
+                                                        defaultValue={watch('country')}
                                                     />
                                                 </Grid>
                                             </div>
@@ -356,7 +375,8 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
                         </form>
                     </div>
                 </Grid>
-            </Drawer>
+            </Grid>
+            {/* </Drawer> */}
         </div >
     );
 }

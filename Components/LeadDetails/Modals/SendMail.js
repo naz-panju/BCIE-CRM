@@ -335,7 +335,7 @@ export default function SendMail({ details, editId, setEditId, lead_id, refresh,
 
             {
 
-                <Grid Grid style={{ position: 'fixed', top: 0, right: 0, height: '100%', width: 750, background: 'white', zIndex: 100, borderLeft: '0.5px solid' }} display={'flex'}>
+                <Grid style={{ position: 'fixed', top: 0, right: 0, height: '100%', width: 750, background: 'white', zIndex: 100, borderLeft: '0.5px solid' }} display={'flex'}>
                     <Grid width={750}>
                         <Grid className='modal_title d-flex align-items-center  '>
 

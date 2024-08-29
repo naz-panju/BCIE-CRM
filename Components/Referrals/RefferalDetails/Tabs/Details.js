@@ -151,7 +151,7 @@ function Details({ data, loading }) {
                     <>
                         <div className="grid grid-cols-1 gap-4">
                             <div className="lead-details-list">
-                                <label style={{ fontWeight: 'bold' }}>Banner Image:</label>
+                                <label style={{ fontWeight: 'bold',maxWidth:'unset',minWidth:'unset' }}>Banner Image (preferred size 660x125)</label>
                                 <Image loader={myLoader} src={data?.banner_image || ''} width={250} height={250} />
                             </div>
                         </div>
@@ -161,14 +161,16 @@ function Details({ data, loading }) {
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Top Description:</label>
-                        <span>{data?.top_description || "NA"}</span>
+                        {/* <span>{data?.top_description || "NA"}</span> */}
+                        <span dangerouslySetInnerHTML={{ __html: data?.top_description || "NA" }} />
                     </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Bottom Description:</label>
-                        <span>{data?.bottom_description || "NA"}</span>
+                        {/* <span>{data?.bottom_description || "NA"}</span> */}
+                        <span dangerouslySetInnerHTML={{ __html: data?.bottom_description || "NA" }} />
                     </div>
                 </div>
 

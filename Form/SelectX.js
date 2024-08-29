@@ -70,7 +70,7 @@ const SelectX = (props) => {
                         getOptionLabel={e => e?.name || e?.name || e?.reason || e?.university?.name}
                         getOptionValue={e => e.id}
                         menuPortalTarget={document.body}
-                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                        styles={{ menuPortal:base => ({ ...base, zIndex: 9999 })}}
                         onInputChange={props.onInputChange} // Pass the provided onInputChange handler
                         menuPlacement={props?.menuPlacement || 'auto'}
                     />

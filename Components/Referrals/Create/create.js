@@ -20,6 +20,9 @@ import DateInput from '@/Form/DateInput';
 import { ReferralApi } from '@/data/Endpoints/Referrals';
 import Image from 'next/image';
 import Doc from '@/img/doc.png';
+const CKEditorBox = dynamic(() => import("../../../Components/Editor/Editor"), {
+    ssr: false,
+})
 
 
 
@@ -271,9 +274,10 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
         reset()
         setValue('title', '')
         setValue('country', '')
-        setAttachment()
+        setAttachment(null)
         setValue('validity_date', '')
         setOpen(false)
+        setdetails()
     }
 
     const handleDrawerClose = (event) => {
@@ -355,14 +359,16 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
     }, [])
 
     return (
+        open &&
         <div>
 
-            <Drawer
+            {/* <Drawer
                 anchor={anchor}
                 open={open}
                 onClose={handleClose}
-            >
-                <Grid width={550}>
+            > */}
+            <Grid style={{ position: 'fixed', top: 0, right: 0, height: '100%', width: 750, background: 'white', zIndex: 100, borderLeft: '0.5px solid' }} display={'flex'}>
+                <Grid width={750} >
                     <Grid className='modal_title d-flex align-items-center'>
 
                         <a className='back_modal' onClick={handleClose}>
@@ -374,7 +380,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                         <a className='back_modal_head'> {editId > 0 ? "Edit Referral Link" : 'Create Referral Link'} </a>
 
                     </Grid>
-                    <div className='form-data-cntr'>
+                    <div style={{ overflow: 'auto', height: 'calc(100% - 77px)' }} className='form-data-cntr'>
 
                         <form onSubmit={handleSubmit(onSubmit)}>
 
@@ -397,7 +403,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                             </div>
                                         </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Country</a>
                                                 <Grid className='mb-5 forms-data' >
@@ -412,30 +418,57 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                     {errors?.country && <span className='form-validation'>{errors?.country.message}</span>}
                                                 </Grid>
                                             </div>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Lead Source</a>
                                                 <Grid className='mb-5 forms-data' >
-                                                    <AsyncSelect
+                                                    <SelectX
+                                                        // placeholder='Select...'
+                                                        menuPlacement='auto'
+                                                        loadOptions={fetchSources}
+                                                        control={control}
                                                         name={'source'}
                                                         defaultValue={watch('source')}
-                                                        isClearable
-                                                        defaultOptions
-                                                        loadOptions={fetchSources}
-                                                        getOptionLabel={(e) => e.name}
-                                                        getOptionValue={(e) => e.id}
-                                                        onChange={handleSourseChange}
                                                     />
                                                     {errors?.source && <span className='form-validation'>{errors?.source.message}</span>}
                                                 </Grid>
                                             </div>
                                         </div>
 
-                                        {
-                                            watch('source')?.id == 6 &&
-                                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                        {/* <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                                <div className='application-input'>
+                                                    <a className='form-text'>Lead Source</a>
+                                                    <Grid className='mb-5 forms-data' >
+                                                    <SelectX
+                                                            // placeholder='Select...'
+                                                            menuPlacement='auto'
+                                                            loadOptions={fetchSources}
+                                                            control={control}
+                                                            name={'source'}
+                                                            defaultValue={watch('source')}
+                                                        />
+                                                        {errors?.source && <span className='form-validation'>{errors?.source.message}</span>}
+                                                    </Grid>
+                                                </div>
+                                            </div> */}
+
+
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                            <div className='application-input'>
+                                                <a className='form-text'>Last date of Validity</a>
+                                                <Grid className='mb-5 forms-data' >
+                                                    <DateInput
+                                                        control={control}
+                                                        name="validity_date"
+                                                        value={watch('validity_date')}
+                                                    // placeholder='Due Date'
+                                                    />
+                                                    {errors.validity_date && <span className='form-validation'>{errors.validity_date.message}</span>}
+                                                </Grid>
+                                            </div>
+
+                                            {
+                                                watch('source')?.id == 6 &&
                                                 <div className='application-input'>
                                                     <a className='form-text'>Referred Agency</a>
                                                     <Grid className='mb-5 forms-data' >
@@ -449,14 +482,12 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                         />
                                                     </Grid>
                                                 </div>
-                                            </div>
-                                        }
+                                            }
 
 
 
-                                        {
-                                            watch('source')?.id == 5 &&
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                            {
+                                                watch('source')?.id == 5 &&
                                                 <div className='application-input'>
                                                     <a className='form-text'>Referred Student</a>
                                                     <Grid className='mb-5 forms-data' >
@@ -473,12 +504,10 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                         />
                                                     </Grid>
                                                 </div>
-                                            </div>
-                                        }
+                                            }
 
-                                        {
-                                            watch('source')?.id == 7 &&
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                            {
+                                                watch('source')?.id == 7 &&
                                                 <div className='application-input'>
                                                     <a className='form-text'>Referred University</a>
                                                     <Grid className='mb-5 forms-data' >
@@ -492,12 +521,10 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                         />
                                                     </Grid>
                                                 </div>
-                                            </div>
-                                        }
+                                            }
 
-                                        {
-                                            watch('source')?.id == 11 &&
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
+                                            {
+                                                watch('source')?.id == 11 &&
                                                 <div className='application-input'>
                                                     <a className='form-text'>Events</a>
                                                     <Grid className='mb-5 forms-data' >
@@ -511,36 +538,26 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                                         />
                                                     </Grid>
                                                 </div>
-                                            </div>
-                                        }
 
-                                        <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
-                                            <div className='application-input'>
-                                                <a className='form-text'>Last date of Validity</a>
-                                                <Grid className='mb-5 forms-data' >
-                                                    <DateInput
-                                                        control={control}
-                                                        name="validity_date"
-                                                        value={watch('validity_date')}
-                                                    // placeholder='Due Date'
-                                                    />
-                                                    {errors.validity_date && <span className='form-validation'>{errors.validity_date.message}</span>}
-                                                </Grid>
-                                            </div>
+                                            }
                                         </div>
 
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Top Description</a>
                                                 <Grid className='mb-5 forms-data' >
-                                                    <TextField
-                                                        {...register('top_description')}
-                                                        variant="outlined"
-                                                        fullWidth
-                                                        multiline
-                                                        rows={4}
-                                                        sx={{ width: '100%', }}
+
+                                                    <CKEditorBox emoji={false} val={watch('top_description')}
+                                                        onValueChange={e => setValue('top_description', e)}
                                                     />
+                                                    {/* <TextField
+                                                            {...register('top_description')}
+                                                            variant="outlined"
+                                                            fullWidth
+                                                            multiline
+                                                            rows={4}
+                                                            sx={{ width: '100%', }}
+                                                        /> */}
                                                     {errors.top_description && <span className='form-validation'>{errors.top_description.message}</span>}
                                                 </Grid>
                                             </div>
@@ -549,15 +566,18 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
                                                 <a className='form-text'>Bottom Description</a>
-                                                <Grid className='mb-5 forms-data' >
-                                                    <TextField
-                                                        {...register('bottom_description')}
-                                                        variant="outlined"
-                                                        fullWidth
-                                                        multiline
-                                                        rows={4}
-                                                        sx={{ width: '100%', }}
+                                                <Grid className='mb-5 forms-data'>
+                                                    <CKEditorBox emoji={false} val={watch('bottom_description')}
+                                                        onValueChange={e => setValue('bottom_description', e)}
                                                     />
+                                                    {/* <TextField
+                                                            {...register('bottom_description')}
+                                                            variant="outlined"
+                                                            fullWidth
+                                                            multiline
+                                                            rows={4}
+                                                            sx={{ width: '100%', }}
+                                                        /> */}
                                                     {errors.bottom_description && <span className='form-validation'>{errors.bottom_description.message}</span>}
                                                 </Grid>
                                             </div>
@@ -581,9 +601,9 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                                         </div>
 
 
+
                                         <div onDrop={handleDrop}
                                             onDragOver={handleDragOver} >
-
                                             <input
                                                 type="file"
                                                 onChange={handleFileUpload}
@@ -596,6 +616,9 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
 
                                                 <h3><span>Select File</span>  or Drag and Drop Here</h3>
                                                 <h4>Max {size} MB files are allowed</h4>
+                                                <h4>Preferred size 660x125</h4>
+                                                {/* <span className='text-gray-500 text[10px]'>preferred size 660x125</span> */}
+
 
                                             </label>
 
@@ -652,14 +675,15 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
                             </Grid>
 
                             {/* <Grid p={1} pb={3} display={'flex'} justifyContent={'end'}>
-                                <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
-                                <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
-                            </Grid> */}
+                                    <Button onClick={handleClose} size='small' sx={{ textTransform: 'none', mr: 2 }} variant='outlined'>Cancel</Button>
+                                    <LoadingButton loading={loading} disabled={loading || dataLoading} size='small' type='submit' sx={{ textTransform: 'none', height: 30 }} variant='contained'>Save</LoadingButton>
+                                </Grid> */}
 
                         </form>
                     </div>
                 </Grid>
-            </Drawer>
+            </Grid>
+            {/* </Drawer> */}
         </div >
     );
 }

@@ -139,7 +139,7 @@ export default function EventsIndex() {
 
 
         <div className='content-block lead-table-cntr'>
-          <EventsTable searchTerm={searchTerm} searching={searching} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
+          <EventsTable createOpen={editId} searchTerm={searchTerm} searching={searching} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>
     </>

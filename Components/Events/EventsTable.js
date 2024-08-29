@@ -82,16 +82,16 @@ const headCells = [
         label: 'Event Name',
     },
     {
+        id: 'country',
+        numeric: false,
+        disablePadding: false,
+        label: 'Country ',
+    },
+    {
         id: 'venue',
         numeric: false,
         disablePadding: false,
         label: 'Venue ',
-    },
-    {
-        id: 'branch',
-        numeric: false,
-        disablePadding: false,
-        label: 'Branch ',
     },
     {
         id: 'start_date',
@@ -147,8 +147,8 @@ function EnhancedTableHead(props) {
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
                         > */}
-                            {headCell.label}
-                            {/* {orderBy === headCell.id ? (
+                        {headCell.label}
+                        {/* {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                 </Box>
@@ -225,7 +225,7 @@ EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
 
-export default function EventsTable({ refresh, editId, setEditId, page, setPage,searchTerm, searching }) {
+export default function EventsTable({ refresh, editId, setEditId, page, setPage, searchTerm, searching, createOpen }) {
 
     const router = useRouter();
 
@@ -325,7 +325,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage,
 
     const fetchTable = () => {
         setLoading(true)
-        EventsApi.list({ limit: limit, page: page,keyword:searchTerm }).then((response) => {
+        EventsApi.list({ limit: limit, page: page, keyword: searchTerm }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -336,7 +336,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage,
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit,searching])
+    }, [page, refresh, limit, searching])
 
     return (
 
@@ -396,9 +396,8 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage,
                                                                 />
                                                             </TableCell> */}
                                                             <TableCell
-                                                                onClick={() => handleDetailOpen(row?.id)}
+                                                                onClick={() => (!createOpen && createOpen != 0) && handleDetailOpen(row?.id)}
                                                                 component="th"
-                                                            
                                                                 id={labelId}
                                                                 scope="row"
                                                                 padding="none"
@@ -406,10 +405,10 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage,
                                                             >
                                                                 {row.name}
                                                             </TableCell>
+                                                            <TableCell align="left">{row?.country?.name || 'NA'}</TableCell>
                                                             <TableCell align="left">{row?.venue || 'NA'}</TableCell>
-                                                            <TableCell align="left">{row?.office?.name || 'NA'}</TableCell>
                                                             <TableCell align="left">{row?.start_date ? moment(row?.start_date).format('DD-MM-YYYY') : 'NA'}</TableCell>
-                                                            <TableCell align="left">{row?.end_date ? moment(row?.end_date).format('DD-MM-YYYY') :'NA'}</TableCell>
+                                                            <TableCell align="left">{row?.end_date ? moment(row?.end_date).format('DD-MM-YYYY') : 'NA'}</TableCell>
                                                             <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
 
                                                         </TableRow>

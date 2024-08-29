@@ -137,7 +137,7 @@ export default function ReferralIndex() {
 
 
         <div className='content-block lead-table-cntr'>
-          <ReferralTable searchTerm={searchTerm} searching={searching} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
+          <ReferralTable createOpen={editId} searchTerm={searchTerm} searching={searching} editId={editId} setEditId={setEditId} refresh={refresh} setRefresh={setRefresh} page={page} setPage={setPage} />
         </div>
       </section>
     </>
