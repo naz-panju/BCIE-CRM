@@ -223,13 +223,12 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         });
         const channel = pusher.subscribe("bcie-channel");
         channel.bind("bcie-event", (data) => {
-            console.log(data);
-
-            if (data?.user_id == session?.data?.user?.id) {
-                fetchWhatsappList()
-                getSummary()
+            if (data?.lead_id) {
+                if (data?.lead_id == leadData?.id) {
+                    fetchWhatsappList()
+                    getSummary()
+                }
             }
-
         });
         return () => {
             pusher.unsubscribe("bcie-channel");

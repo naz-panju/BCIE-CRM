@@ -616,7 +616,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
 
                                                 <h3><span>Select File</span>  or Drag and Drop Here</h3>
                                                 <h4>Max {size} MB files are allowed</h4>
-                                                <h4>Preferred size 660x125</h4>
+                                                <h4>Preferred size 660x350</h4>
                                                 {/* <span className='text-gray-500 text[10px]'>preferred size 660x125</span> */}
 
 

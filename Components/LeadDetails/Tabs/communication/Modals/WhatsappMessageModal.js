@@ -26,6 +26,7 @@ import Doc from '@/img/AllDoc.png';
 import DocumentSelectModal from '../../application/modals/documentSelect';
 import Pusher from "pusher-js";
 import { useSession } from 'next-auth/react';
+import WhatsappSound from '../../../../../public/WhatsappAudio.mp3';
 
 
 
@@ -36,31 +37,36 @@ const scheme = yup.object().shape({
 
 export default function WhatsappMessageModal({ lead_id, editId, setEditId, handleRefresh, leadData }) {
 
+
+    var audio = new Audio(WhatsappSound);
+
+    const playMessageAudio = () => {
+        audio.play().catch(error => {
+            console.error("Audio playback failed:", error);
+        });
+    };
+
     const session = useSession()
 
     useEffect(() => {
 
-        const pusher = new Pusher("04731417008963908ebf", {
+        const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
             cluster: "ap2",
             //   encrypted: true,
         });
         const channel = pusher.subscribe("bcie-channel");
         channel.bind("bcie-event", (data) => {
-            console.log(data);
-            
-            if (data?.user_id == session?.data?.user?.id) {
-                getDetails()
-                // if (open == true) {
-                //     // noFetchList()
-                // } else if (open == false) {
-                //     // fetchCount()
-                //     fetchList()
-                // }
+            if (data?.lead_id) {
+                if (data?.lead_id == leadData?.id) {
+                    getDetails().then(() => {
+                        playMessageAudio()
+                    })
+                }
             }
 
         });
         return () => {
-            pusher.unsubscribe("bcie-channel");
+            pusher.unsubscribe("bcie-event");
             pusher.disconnect();
         };
     }, []);
@@ -95,6 +101,9 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         formData.append('id', editId)
         formData.append('message', data?.message || 'Document Send')
 
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
 
         // console.log(dataToSubmit);
 
@@ -215,15 +224,19 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     };
 
     const [Messages, setMessages] = useState()
+
+    console.log(Messages);
+
     const [startingLoading, setstartingLoading] = useState(true)
     const getDetails = async (first) => {
-        if(first){
+        if (first) {
             setDataLoading(true)
         }
         const response = await CommunicationLogApi.view({ id: editId })
         if (response?.data?.data) {
+            console.log();
+
             let data = response?.data?.data
-            console.log(data);
             setMessages(data)
 
         }
@@ -426,15 +439,15 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                 // </Box>
                                 :
                                 <>
-                                {
+                                    {
                                         messaging &&
                                         <div className={`flex justify-end mb-4`}>
                                             {/* {obj?.type !== 'Whatsapp Send' && <Avatar className='mr-2'>OP</Avatar>} */}
                                             <div
                                                 className={`flex flex-col max-w-xs px-4 py-2 rounded-lg bg-blue-500 text-white`}
                                                 style={{
-                                                    borderTopRightRadius:  '0px' ,
-                                                    borderTopLeftRadius:  '15px',
+                                                    borderTopRightRadius: '0px',
+                                                    borderTopLeftRadius: '15px',
                                                     backgroundColor: '#d8fdd2',
                                                     // borderBottomRightRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
                                                     // borderBottomLeftRadius: obj?.type === 'Whatsapp Send' ? '15px' : '0px',
@@ -498,7 +511,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                                         fontSize: '10px',
                                                         color: 'gray',
                                                     }}>
-                                                        {moment.utc(obj?.created_at).format('h:mm A')}
+                                                        {moment.utc(obj?.message_date).format('h:mm A')}
                                                     </span>
                                                 </div>
                                             </div>
@@ -545,17 +558,27 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                                         ))
                                                         :
 
-                                                        <span style={{
-                                                            color: 'black',
-                                                            fontSize: '14px',
-                                                        }}>
-                                                            {Messages?.body}</span>
+                                                        <>
+                                                        {/* mos */}
+                                                            <span style={{
+                                                                color: 'black',
+                                                                fontSize: '14px',
+                                                            }}>
+                                                                {Messages?.body}</span>
+                                                            <span className='text-end' style={{
+                                                                fontSize: '10px',
+                                                                color: 'gray',
+                                                            }}>
+                                                                {moment.utc(Messages?.message_date).format('h:mm A')}
+                                                            </span>
+                                                        </>
                                                 }
+
                                             </div>
                                         </div>
 
                                     }
-                                    
+
                                     {
                                         Messages &&
                                         <div className='mb-3' style={{ textAlign: 'center', margin: '15px 0', color: '#888', fontSize: '13px', }}>
@@ -590,75 +613,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                 inputRender()
 
                     }
-                    {/* <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 'auto', padding: '10px', borderTop: '1px solid #ddd', backgroundColor: '#f1f2f6' }}>
-                        <Grid container spacing={2} alignItems="center">
-                            <Grid item xs={0.8}>
-                                <Description onClick={handleDocumentSelectOpen} className='text-sky-700 hover:text-sky-800 cursor-pointer' />
-                            </Grid>
-                            <Grid item xs={10}>
-                                <TextField
-                                    disabled={messaging}
-                                    {...register('message')}
-                                    variant="outlined"
-                                    fullWidth
-                                    placeholder="Type your message..."
-                                    sx={{
-                                        backgroundColor: '#fff',
-                                        borderRadius: '5px',
-                                        border: '1px solid #ccc',
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                            '&.Mui-focused fieldset': {
-                                                borderColor: 'transparent',
-                                            },
-                                        },
-                                        '& .MuiInputBase-input': {
-                                            fontSize: '14px',
-                                            color: '#333',
-                                            padding: '10px',
-                                        },
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={1}>
-                                <Button
-                                    type='submit'
-                                    // onClick={onSubmit}
-                                    className='bg-green-500 hover:bg-green-600 text-white'
-                                    variant="contained"
-                                    style={{
-                                        borderRadius: '50%',
-                                        minWidth: 'auto',
-                                        padding: '8px',
-                                        height: '100%',
-                                        backgroundColor: 'transparent'
-                                    }}
 
-                                    disabled={messaging || !watch('message')}
-                                >
-                                    {messaging ? (
-                                        <div
-                                            style={{
-                                                width: '20px',
-                                                height: '20px',
-                                                border: '3px solid green',
-                                                borderTop: '3px solid transparent',
-                                                borderRadius: '50%',
-                                                animation: 'spin 1s linear infinite'
-                                            }}
-                                        />
-                                    ) : (
-                                        <Send style={{ color: 'green' }} />
-                                    )}
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </form> */}
                 </div>
             </Drawer >
         </>

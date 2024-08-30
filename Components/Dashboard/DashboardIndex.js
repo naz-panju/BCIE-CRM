@@ -176,8 +176,6 @@ function DashboardIndex() {
     const fetchManagers = (e) => {
         return ListingApi.users({ keyword: e, role_id: 4, office_id: officeId }).then(response => {
             if (typeof response.data.data !== "undefined") {
-
-                // setSelectedManager(response?.data?.data[0])
                 return response.data.data;
             } else {
                 return [];
@@ -273,14 +271,17 @@ function DashboardIndex() {
     const fetchWeeklyList = async () => {
         setWeeklyLoading(true)
         try {
-            const response = await DashboardApi.list({
+            let params = {
                 type: 'weekly_leads',
                 week_starts_from: moment(weeklyRange[0]).format('YYYY-MM-DD'),
                 week_ends_on: moment(weeklyRange[1]).format('YYYY-MM-DD'),
                 office: officeId,
                 counselor: counsellorId,
                 manager: selectedMangeId
-            })
+            }
+            const response = await DashboardApi.list(params)
+            console.log(params);
+            console.log(response);
             setWeeklyList(response?.data)
             setWeeklyLoading(false)
         } catch (error) {
@@ -289,6 +290,9 @@ function DashboardIndex() {
         }
 
     }
+
+    console.log(selectedMangeId);
+
     const [weeklyStageList, setWeeklyStageList] = useState([]);
     const [weeklyStageListLoading, setWeeklyStageListLoading] = useState(true);
     const fetchWeeklyStageList = async () => {
@@ -349,7 +353,6 @@ function DashboardIndex() {
                 manager: selectedMangeId,
                 office: officeId
             })
-            console.log(response);
             setLeadCountryList(response?.data)
             setLeadSourceListLoading(false)
         } catch (error) {
@@ -596,20 +599,28 @@ function DashboardIndex() {
     }
 
     useEffect(() => {
-        if (session?.data?.user?.role?.id !== 6) {
+        if (session?.data?.user?.role?.id !== 6 && session?.data?.user?.role?.id !== 4) {
             if (weeklyRange[0]) {
                 fetchWeeklyList()
                 fetchWeeklyStageList()
             }
         }
+        if (session?.data?.user?.role?.id == 4) {
+
+            if (selectedMangeId) {
+                fetchWeeklyList()
+                fetchWeeklyStageList()
+            }
+        }
+        // console.log(selectedMangeId);
     }, [weeklyRange, officeId, counsellorId, selectedMangeId])
     useEffect(() => {
         if (session?.data?.user?.role?.id !== 6) {
             // if (range[0]) {
-                fetchLeadCountry()
+            fetchLeadCountry()
             // }
         }
-    }, [ counsellorId, intakeId, selectedMangeId,officeId])
+    }, [counsellorId, intakeId, selectedMangeId, officeId])
     useEffect(() => {
         if (session?.data?.user?.role?.id !== 6) {
             if (range[0]) {
@@ -780,8 +791,6 @@ function DashboardIndex() {
                             <LeadSection range={range} setRange={setRange} handleClean={handleClean} intakeRange={range} weeklyList={weeklyList} weeklyLoading={weeklyLoading} weeklyStageListLoading={weeklyStageListLoading} leadSourceListLoading={leadSourceListLoading} leadStageLoading={leadStageLoading} weeklyRange={weeklyRange} setWeeklyRange={setWeeklyRange} weeklyStageList={weeklyStageList} leadSourceList={leadSourceList} leadCountryList={leadCountryList} leadStage={leadStage} communicationLogLoading={communicationLogLoading} communicationLog={communicationLog} />
                         </div>
                     }
-
-
                     {
                         session?.data?.user?.role?.id != 6 &&
                         <div className='comm_sec'>

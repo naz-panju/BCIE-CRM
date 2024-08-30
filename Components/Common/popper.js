@@ -66,7 +66,7 @@ export default function SimplePopper() {
     }
 
     const loadMoreList = () => {
-        NotificationApi.list({page}).then((response) => {
+        NotificationApi.list({ page }).then((response) => {
             if (response?.status == 200 || response?.status == 200) {
                 setlist(response?.data)
                 if (open == true) {
@@ -93,7 +93,7 @@ export default function SimplePopper() {
     }
 
     // console.log(list);
-    
+
 
     const [deletingId, setDeletingId] = useState(null);
     const handleDelete = (id) => {
@@ -116,7 +116,7 @@ export default function SimplePopper() {
         // Optionally make an API call to update the server-side data
         NotificationApi.delete({ id: id }).then((response) => {
             console.log(response);
-            
+
             if (response?.status == 200 || response?.status == 201) {
                 fetchList()
                 // setlist(response?.data);
@@ -136,21 +136,20 @@ export default function SimplePopper() {
         });
         const channel = pusher.subscribe("bcie-channel");
         channel.bind("bcie-event", (data) => {
-            // console.log(data);
+            if (data?.user_id) {
+                if (data?.user_id == session?.data?.user?.id) {
+                    console.log(open);
 
-            if (data?.user_id == session?.data?.user?.id) {
-                console.log(open);
-                
-                if (open) {
-                    console.log('open');
-                    noFetchList()
-                } else {
-                    console.log('not open');
-                    fetchCount()
-                    fetchList()
+                    if (open) {
+                        console.log('open');
+                        noFetchList()
+                    } else {
+                        console.log('not open');
+                        fetchCount()
+                        fetchList()
+                    }
                 }
             }
-
         });
         return () => {
             pusher.unsubscribe("bcie-channel");
@@ -159,7 +158,7 @@ export default function SimplePopper() {
     }, []);
 
     // console.log(open);
-    
+
 
     useEffect(() => {
         fetchList()
@@ -186,7 +185,7 @@ export default function SimplePopper() {
 
 
     // console.log(list);
-    
+
 
 
     return (
@@ -240,7 +239,7 @@ export default function SimplePopper() {
                                     (list?.data?.length < list?.meta?.total) &&
                                     <div className='loadmore-btn-block p-2'>
                                         {/* <CachedIcon />Load More */}
-                                        <Link href={'/notifications'} style={{textDecoration:'none'}}><button className='loadmore-btn' >  { 'View More'} </button></Link>
+                                        <Link href={'/notifications'} style={{ textDecoration: 'none' }}><button className='loadmore-btn' >  {'View More'} </button></Link>
                                     </div>
                                 }
                             </>

@@ -151,7 +151,7 @@ function Details({ data, loading }) {
                     <>
                         <div className="grid grid-cols-1 gap-4">
                             <div className="lead-details-list">
-                                <label style={{ fontWeight: 'bold',maxWidth:'unset',minWidth:'unset' }}>Banner Image (preferred size 660x125)</label>
+                                <label style={{ fontWeight: 'bold',maxWidth:'unset',minWidth:'unset' }}>Banner Image (preferred size 660x350)</label>
                                 <Image loader={myLoader} src={data?.banner_image || ''} width={250} height={250} />
                             </div>
                         </div>
