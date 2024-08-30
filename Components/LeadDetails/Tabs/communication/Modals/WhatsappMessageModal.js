@@ -225,19 +225,19 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
 
     const [Messages, setMessages] = useState()
 
-    console.log(Messages);
 
     const [startingLoading, setstartingLoading] = useState(true)
+    const [detailKey, setdetailKey] = useState(1)
     const getDetails = async (first) => {
         if (first) {
             setDataLoading(true)
         }
         const response = await CommunicationLogApi.view({ id: editId })
         if (response?.data?.data) {
-            console.log();
 
             let data = response?.data?.data
             setMessages(data)
+            setdetailKey(detailKey+1)
 
         }
         setDataLoading(false)
@@ -438,7 +438,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                 //     <CircularProgress />
                                 // </Box>
                                 :
-                                <>
+                                <React.Fragment key={detailKey}>
                                     {
                                         messaging &&
                                         <div className={`flex justify-end mb-4`}>
@@ -559,7 +559,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                                         :
 
                                                         <>
-                                                        {/* mos */}
+                                                            {/* mos */}
                                                             <span style={{
                                                                 color: 'black',
                                                                 fontSize: '14px',
@@ -589,7 +589,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                             </span>
                                         </div>
                                     }
-                                </>
+                                </React.Fragment>
                         }
 
 

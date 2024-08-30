@@ -280,8 +280,6 @@ function DashboardIndex() {
                 manager: selectedMangeId
             }
             const response = await DashboardApi.list(params)
-            console.log(params);
-            console.log(response);
             setWeeklyList(response?.data)
             setWeeklyLoading(false)
         } catch (error) {
