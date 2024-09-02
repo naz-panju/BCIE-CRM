@@ -26,7 +26,6 @@ import Doc from '@/img/AllDoc.png';
 import DocumentSelectModal from '../../application/modals/documentSelect';
 import Pusher from "pusher-js";
 import { useSession } from 'next-auth/react';
-import WhatsappSound from '../../../../../public/WhatsappAudio.mp3';
 import { useBoolean } from '@/Context/MessageModalContext';
 
 
@@ -39,15 +38,6 @@ const scheme = yup.object().shape({
 export default function WhatsappMessageModal({ lead_id, editId, setEditId, handleRefresh, leadData }) {
 
     const { isTrue, toggleBoolean } = useBoolean();
-
-
-    var audio = new Audio(WhatsappSound);
-
-    const playMessageAudio = () => {
-        audio.play().catch(error => {
-            console.error("Audio playback failed:", error);
-        });
-    };
 
     const session = useSession()
 
@@ -253,12 +243,8 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         const channel = pusher.subscribe("bcie-channel");
         channel.bind("bcie-event", (data) => {
             if (data?.lead_id) {
-                if (data?.lead_id == leadData?.id) {                    
-                    getDetails().then(() => {
-                        // setTimeout(() => {
-                        //     playMessageAudio()
-                        // }, 500);
-                    })
+                if (data?.lead_id == leadData?.id) {
+                    getDetails()
                 }
             }
 
@@ -268,6 +254,8 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
             pusher.disconnect();
         };
     }, [editId]);
+
+ 
 
 
     const inputRender = () => (
@@ -382,13 +370,12 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
 
 
     useEffect(() => {
-        if(open){
+        if (open) {
             toggleBoolean(true)
-        }else{
+        } else {
             toggleBoolean(false)
-        }    
+        }
     }, [open])
- 
 
     return (
         <>
@@ -590,16 +577,16 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                     {/* Input and Send Button */}
 
                     {
-                        Messages?.children?.length > 0 ?
+                        Messages?.children?.length > 0  ?
 
-                            moment.utc(Messages?.children[Messages?.children?.length - 1]?.message_date).isBefore(moment.utc().subtract(24, 'hours')) ?
+                            moment.utc(Messages?.children[Messages?.children?.length - 1]?.message_date).isBefore(moment.utc().subtract(24, 'hours')) || Messages?.communication_channel_status=="Close" ?
 
-                                noInput()
+                                noInput(Messages?.communication_channel_status)
                                 :
                                 inputRender()
                             :
-                            moment.utc(Messages?.message_date).isBefore(moment.utc().subtract(24, 'hours')) ?
-                                noInput()
+                            moment.utc(Messages?.message_date).isBefore(moment.utc().subtract(24, 'hours')) || Messages?.communication_channel_status=="Close" ?
+                                noInput(Messages?.communication_channel_status)
                                 :
                                 inputRender()
 
@@ -611,7 +598,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     );
 }
 
-const noInput = () => (
+const noInput = (channelStatus) => (
     <div style={{
         marginTop: 'auto',
         padding: '5px',
@@ -624,10 +611,15 @@ const noInput = () => (
         borderRadius: '0 0 10px 10px'
     }}>
         <p style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>
-            Your 24-hour communication window has closed.
+           {
+                channelStatus=='Close'?
+                "Communication Ended":
+          
+                ' Your 24-hour communication window has closed.'
+            }
         </p>
         <p style={{ margin: '5px 0 0', fontSize: '14px' }}>
-            To start a new conversation, please use the `&quot;`Send Whatsapp`&quot;` option.
+            To start a new conversation, please use the &quot;Send Whatsapp&quot; option.
         </p>
     </div>
 )

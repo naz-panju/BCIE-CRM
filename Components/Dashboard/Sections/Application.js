@@ -140,14 +140,13 @@ function ApplicationSection({ paymentLoading, payments, selectedAppCounsellor, s
 
                                                     </div>
                                                 </div>
-                                                <div className=' w-5/12'>
+                                                {/* <div className=' w-5/12'>
                                                     <div className='communication-details'>
                                                         <ul>
-                                                            {/* <li style={{lineHeight:1}} ><Image src={Deposit} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_paid_leads}</b>Deposit Paid</li> */}
                                                             <li><Image src={Pending} alt='Mail' width={22} height={22} /><b>{payments?.data?.deposit_not_paid_leads}</b>Pending</li>
                                                         </ul>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                             </div>
                                     }
                                 </div>
@@ -155,7 +154,7 @@ function ApplicationSection({ paymentLoading, payments, selectedAppCounsellor, s
                     }
 
 
-                    <div style={{ height: '100%' }} className='graph w-8/12 p-3 pt-0 '>
+                    <div style={{ height: '100%' }} className='graph w-/12 p-3 pt-0 '>
                         <div className='total_sec d-flex flex items-center justify-between p-3'>
                             Application Stages
 

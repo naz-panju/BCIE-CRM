@@ -29,7 +29,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import WithdrawPopup from './Modals/WithdrawConfirmModal';
 import Pusher from "pusher-js";
-import WhatsappSound from '../../public/WhatsappAudio.mp3';
+// import WhatsappSound from '../../public/WhatsappAudio.mp3';
 import { useBoolean } from '@/Context/MessageModalContext';
 
 function LeadDetails() {
@@ -320,15 +320,6 @@ function LeadDetails() {
 
   }
 
-
-  var audio = new Audio(WhatsappSound);
-
-  const playMessageAudio = () => {
-      audio.play().catch(error => {
-          console.error("Audio playback failed:", error);
-      });
-  };
-
   useEffect(() => {
     const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
       cluster: "ap2",
@@ -340,7 +331,6 @@ function LeadDetails() {
         if (data?.lead_id === details?.id) {
           if (!isTrue) {
             toast.success('You have a new message on WhatsApp', { autoClose: 10000 });
-            playMessageAudio();
           }
         }
       }
@@ -350,7 +340,7 @@ function LeadDetails() {
       pusher.unsubscribe("bcie-channel");
       pusher.disconnect();
     };
-  }, [details, isTrue,WhatsappSound]);
+  }, [details, isTrue]);
 
   const gradientId = 'myGradient';
 
@@ -381,7 +371,7 @@ function LeadDetails() {
       <section>
         <div className={`page-title-block`}>
           <div className='page-title-block-content justify-between'>
-            <h1 onClick={playMessageAudio}>Lead Details</h1>
+            <h1>Lead Details</h1>
 
             {/* disabled={details?.verification_status == 'Yes'} */}
             <Grid>
