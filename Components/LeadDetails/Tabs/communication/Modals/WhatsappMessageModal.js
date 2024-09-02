@@ -250,7 +250,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         channel.bind("bcie-event", (data) => {
             if (data?.lead_id) {
                 if (data?.lead_id == leadData?.id) {
-                    getDetails().then(()=>{
+                    getDetails().then(() => {
                         setTimeout(() => {
                             playMessageAudio()
                         }, 500);
@@ -540,12 +540,15 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                                                 fontSize: '14px',
                                                             }}>
                                                                 {Messages?.body}</span>
-                                                            <span className='text-end' style={{
-                                                                fontSize: '10px',
-                                                                color: 'gray',
-                                                            }}>
-                                                                {moment.utc(Messages?.message_date).format('h:mm A')}
-                                                            </span>
+                                                            <br />
+                                                            <div className='flex justify-end'>
+                                                                <span className='text-end' style={{
+                                                                    fontSize: '10px',
+                                                                    color: 'gray',
+                                                                }}>
+                                                                    {moment.utc(Messages?.message_date).format('h:mm A')}
+                                                                </span>
+                                                            </div>
                                                         </>
                                                 }
 

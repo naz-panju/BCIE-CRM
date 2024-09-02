@@ -4,11 +4,12 @@ import BarColorChartComponent from '../Charts/BarColorGraph'
 import { DateRangePicker } from 'rsuite'
 import Pending from '@/img/Pending.svg'
 import AsyncSelect from "react-select/async";
-import { Skeleton } from '@mui/material';
+import { Skeleton, Tooltip } from '@mui/material';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image'
+import { InfoOutlined } from '@mui/icons-material'
 
-function ApplicationSection({paymentLoading,payments, selectedAppCounsellor, selectedAppCoordinators, handleAppCounsellorSelect, handleAppCoordinatorSelect, fetchAppCounsellors, fetchAppCoordinators, intakeRange, weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList,officeId }) {
+function ApplicationSection({ paymentLoading, payments, selectedAppCounsellor, selectedAppCoordinators, handleAppCounsellorSelect, handleAppCoordinatorSelect, fetchAppCounsellors, fetchAppCoordinators, intakeRange, weeklyApplicationList, submitApplicationLoading, weeklyApplicationLoading, applicationStagesLoading, fetchUniversities, handleSelectUniversity, selectedUniversity, fetchCountries, selectedCountries, handleCountrySelect, applicationStages, weeklyApplicationRange, setWeeklyApplicationRange, submitApplicationList, officeId }) {
 
 
     const session = useSession()
@@ -127,7 +128,7 @@ function ApplicationSection({paymentLoading,payments, selectedAppCounsellor, sel
                                                         <div className='chart-info-title'>
                                                             <div className='total'><span>Total</span></div>
                                                         </div>
-                                                      
+
                                                         <h2>{payments?.data?.deposit_paid_leads}</h2>
                                                         <h4>Total Deposit </h4>
 
@@ -236,9 +237,11 @@ function ApplicationSection({paymentLoading,payments, selectedAppCounsellor, sel
                                         onChange={handleAppCoordinatorSelect}
                                     />
                                 }
+                                {
+                                    (session?.data?.user?.role?.id != 6 && !officeId) &&
+                                    <Tooltip title={'Please choose an office from the top to enable the coordinator.'} ><InfoOutlined sx={{ height: '13px',cursor:'pointer' }} /></Tooltip>
 
-
-
+                                }
 
 
                             </div>
