@@ -255,9 +255,9 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
             if (data?.lead_id) {
                 if (data?.lead_id == leadData?.id) {                    
                     getDetails().then(() => {
-                        setTimeout(() => {
-                            playMessageAudio()
-                        }, 500);
+                        // setTimeout(() => {
+                        //     playMessageAudio()
+                        // }, 500);
                     })
                 }
             }
