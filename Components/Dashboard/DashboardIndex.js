@@ -280,6 +280,8 @@ function DashboardIndex() {
                 manager: selectedMangeId
             }
             const response = await DashboardApi.list(params)
+            // console.log(response);
+            
             setWeeklyList(response?.data)
             setWeeklyLoading(false)
         } catch (error) {
@@ -288,8 +290,6 @@ function DashboardIndex() {
         }
 
     }
-
-    console.log(selectedMangeId);
 
     const [weeklyStageList, setWeeklyStageList] = useState([]);
     const [weeklyStageListLoading, setWeeklyStageListLoading] = useState(true);

@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
 const BarChartComponent = ({ data, from }) => {
+    
     const chartRef = useRef(null);
 
     const getDayOfWeek = (dateString) => {
@@ -19,7 +20,7 @@ const BarChartComponent = ({ data, from }) => {
         const chart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                labels: ['Sun','Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', ],
                 datasets: [
                     {
                         label: from == 'app' ? 'Applications' : 'Leads',

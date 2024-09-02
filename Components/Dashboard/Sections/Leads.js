@@ -10,9 +10,6 @@ import Warm from '@/img/Warm.png'
 import Mail from '@/img/mail.svg'
 import Message from '@/img/message.svg'
 import Phone from '@/img/phone.svg'
-import Deposit from '@/img/Deposit.svg'
-import Pending from '@/img/Pending.svg'
-import Others from '@/img/Others.svg'
 import Image from 'next/image';
 import moment from 'moment'
 import toast from 'react-hot-toast'
@@ -34,30 +31,28 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
         return total + currentItem.count;
     }, 0);
 
-
     const getDayOfWeek = (dateString) => {
         const date = new Date(dateString);
-        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun',];
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return days[date.getDay()];
     };
 
     // Initialize an object to store the counts for each day of the week
     const dayCounts = {
-
+        'Sun': 0,  // Adjusted order to match the correct day indices
         'Mon': 0,
         'Tue': 0,
         'Wed': 0,
         'Thu': 0,
         'Fri': 0,
         'Sat': 0,
-        'Sun': 0,
     };
 
     weeklyList?.data?.forEach(item => {
         const dayOfWeek = getDayOfWeek(item.day);
+        // console.log(`Date: ${item.day} - Day of Week: ${dayOfWeek} - count:${item?.count}`);
         dayCounts[dayOfWeek] += item.count;
     });
-
     // // Convert the dayCounts object to an array of counts
     const labels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const counts = labels?.map(day => dayCounts[day]);
@@ -361,7 +356,7 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
                                                 :
 
                                                 <ul >
-                                                 
+
                                                     {
                                                         leadStage?.data?.map((obj, index) => (
                                                             <li key={index}><span style={{ background: obj?.colour }}></span><div className='flex justify-between'>{obj?.name}  ({obj?.lead_count})</div></li>

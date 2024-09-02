@@ -107,8 +107,10 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
 
     const [whatsappLoading, setwhatsappLoading] = useState(false)
 
-    const fetchWhatsappList = async () => {
-        setwhatsappLoading(true)
+    const fetchWhatsappList = async (messageLoading) => {
+        if(!messageLoading){
+            setwhatsappLoading(true)
+        }
         let params = {
             lead_id: lead_id,
             limit: whatsappLimit,
@@ -225,7 +227,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         channel.bind("bcie-event", (data) => {
             if (data?.lead_id) {
                 if (data?.lead_id == leadData?.id) {
-                    fetchWhatsappList()
+                    fetchWhatsappList(true)
                     getSummary()
                 }
             }

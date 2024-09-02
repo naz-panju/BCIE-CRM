@@ -37,7 +37,6 @@ const scheme = yup.object().shape({
 
 export default function WhatsappMessageModal({ lead_id, editId, setEditId, handleRefresh, leadData }) {
 
-
     var audio = new Audio(WhatsappSound);
 
     const playMessageAudio = () => {
@@ -47,29 +46,6 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     };
 
     const session = useSession()
-
-    useEffect(() => {
-
-        const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
-            cluster: "ap2",
-            //   encrypted: true,
-        });
-        const channel = pusher.subscribe("bcie-channel");
-        channel.bind("bcie-event", (data) => {
-            if (data?.lead_id) {
-                if (data?.lead_id == leadData?.id) {
-                    getDetails().then(() => {
-                        playMessageAudio()
-                    })
-                }
-            }
-
-        });
-        return () => {
-            pusher.unsubscribe("bcie-event");
-            pusher.disconnect();
-        };
-    }, []);
 
     const myLoader = ({ src, width }) => {
         return `${src}?w=${width}`;
@@ -233,11 +209,10 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
             setDataLoading(true)
         }
         const response = await CommunicationLogApi.view({ id: editId })
-        if (response?.data?.data) {
-
+        if (response?.status == 200 || response?.status == 201) {
             let data = response?.data?.data
             setMessages(data)
-            setdetailKey(detailKey+1)
+            setdetailKey(detailKey + 1)
 
         }
         setDataLoading(false)
@@ -257,29 +232,6 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
     }
 
 
-
-
-    //     useEffect(() => {
-    //     const handleScroll = () => {
-    //         const targetDiv = document.querySelector('.target-div-selector'); // Replace with your div selector
-    //         const targetPosition = targetDiv.getBoundingClientRect().top;
-
-    //         // Adjust the threshold for when you want it to become sticky
-    //         if (targetPosition <= 0) {
-    //             setShouldBeSticky(true);
-    //         } else {
-    //             setShouldBeSticky(false);
-    //         }
-    //     };
-
-    //     window.addEventListener('scroll', handleScroll);
-    //     return () => {
-    //         window.removeEventListener('scroll', handleScroll);
-    //     };
-    // }, []);
-
-    // const [shouldBeSticky, setShouldBeSticky] = useState(false);
-
     const [docOpenId, setdocOpenId] = useState()
     const handleDocumentSelectOpen = () => {
         setdocOpenId(leadData?.id)
@@ -287,6 +239,32 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
 
     const [attachmentFiles, setattachmentFiles] = useState([])
     const [file, setFile] = useState([])
+
+    useEffect(() => {
+
+        const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
+            cluster: "ap2",
+            //   encrypted: true,
+        });
+        const channel = pusher.subscribe("bcie-channel");
+        channel.bind("bcie-event", (data) => {
+            if (data?.lead_id) {
+                if (data?.lead_id == leadData?.id) {
+                    getDetails().then(()=>{
+                        setTimeout(() => {
+                            playMessageAudio()
+                        }, 500);
+                    })
+                }
+            }
+
+        });
+        return () => {
+            pusher.unsubscribe("bcie-event");
+            pusher.disconnect();
+        };
+    }, [editId]);
+
 
     const inputRender = () => (
         <form onSubmit={handleSubmit(onSubmit)} style={{ marginTop: 'auto', padding: '10px', borderTop: '1px solid #ddd', backgroundColor: '#f1f2f6' }}>
@@ -438,7 +416,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                 //     <CircularProgress />
                                 // </Box>
                                 :
-                                <React.Fragment key={detailKey}>
+                                <React.Fragment key={Messages?.children}>
                                     {
                                         messaging &&
                                         <div className={`flex justify-end mb-4`}>
@@ -456,14 +434,11 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
                                                 }}
                                             >
                                                 {
-
                                                     <span style={{
                                                         color: 'black',
                                                         fontSize: '14px',
                                                     }}> <Skeleton height={30} width={150} /></span>
                                                 }
-
-
                                             </div>
                                         </div>
                                     }

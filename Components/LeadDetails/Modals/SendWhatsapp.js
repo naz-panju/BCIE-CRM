@@ -147,29 +147,8 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
         for (let pair of formData.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
         }
-        // if (attachmentFiles?.length > 0) {
-        //     attachmentFiles?.map(obj => {
-        //         // console.log(obj?.file_path);
-        //         formData.append('attachment_files[]', obj?.file_path)
-        //     })
-        // }
-
-        // if (file?.length > 0) {
-        //     file?.map(obj => {
-        //         formData.append('attachments[]', obj)
-        //     })
-        // }
-
-        // console.log(dataToSubmit);
-
+       
         let action;
-
-        // if (editId > 0) {
-        //     // dataToSubmit['id'] = editId
-        //     action = TaskApi.update(dataToSubmit)
-        // } else {
-        //     action = LeadApi.sendWhatsapp(formData)
-        // }
 
         LeadApi.sendWhatsapp(formData).then((response) => {
             // console.log(response);
@@ -396,64 +375,6 @@ export default function SendWhatsApp({ details, editId, setEditId, lead_id, refr
                                                 </Grid>
                                             </div>
                                         </div>
-
-                                        {/* {
-                                            attachmentFiles?.length > 0 &&
-                                            <Grid display={'flex'} container p={1.5} item xs={12}>
-                                                <Grid item display={'flex'} xs={3} md={3}>
-                                                    <Typography sx={{ fontWeight: '500' }}>Attachments</Typography>
-                                                </Grid>
-                                                <Grid item xs={9} md={9}>
-                                                    {
-                                                        attachmentFiles?.map((obj, index) => (
-                                                            <p style={{ textDecoration: 'underLine', color: 'blue', cursor: 'pointer' }} key={index} className="text-gray-700">
-                                                                <a target='_blank' href={obj?.attachment}>{trimUrlAndNumbers(obj?.attachment)}</a>
-                                                            </p>
-                                                        ))
-                                                    }
-                                                </Grid>
-                                            </Grid>
-                                        } */}
-
-                                        {/* <Grid p={1} mt={1} mb={1} display={'flex'} alignItems={'center'} container className='bg-sky-100'  >
-                                            <Grid item pr={1} alignItems={'center'} xs={4} md={4}>
-                                                <label htmlFor="file-input">
-                                                    <input
-                                                        type="file"
-                                                        id="file-input"
-                                                        style={{ display: 'none' }}
-                                                        onChange={handleFileChange}
-                                                    />
-                                                    <Button sx={{ textTransform: 'none', height: 30 }}
-                                                        variant='contained'
-                                                        className='bg-sky-800' size='small' component="span">
-                                                        Add Attachments
-                                                    </Button>
-                                                </label>
-                                                <input
-                                                    type="file"
-                                                    id="upload-button"
-                                                    style={{ display: 'none' }}
-                                                    onChange={handleFileUpload}
-                                                    key={fileInputKey}
-                                                />
-                                            </Grid>
-
-                                            {
-                                                file &&
-                                                <Grid display={'flex'} flexDirection={'column'} justifyContent={'space-between'} item pr={1} xs={8} md={8}>
-
-                                                    {file?.map((obj, index) => (
-                                                        <Grid display={'flex'} xs={12} md={12} justifyContent={'space-between'} key={index} sx={{ pl: 1, mt: 0.5 }} item >
-                                                            <a style={{ color: 'grey', fontSize: '14px' }}>{obj?.name}</a>
-                                                            <a style={{ cursor: 'pointer' }} onClick={() => handleDeleteAttachment(index)}>
-                                                                <Delete fontSize='small' style={{ color: 'red' }} />
-                                                            </a>
-                                                        </Grid>
-                                                    ))}
-                                                </Grid>
-                                            }
-                                        </Grid> */}
 
 
 
