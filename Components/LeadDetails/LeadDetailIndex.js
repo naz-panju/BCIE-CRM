@@ -336,8 +336,6 @@ function LeadDetails() {
 
     const channel = pusher.subscribe("bcie-channel");
     channel.bind("bcie-event", (data) => {
-      console.log(data);
-
       if (data?.lead_id) {
         if (data?.lead_id === details?.id) {
           if (!isTrue) {
