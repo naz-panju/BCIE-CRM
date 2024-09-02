@@ -310,89 +310,97 @@ function Form({ data }) {
 
     const onSubmit = async (data) => {
 
-        setLoading(true)
+        if (agree1 && agree2) {
 
-        let dob = ''
-        if (data?.dob) {
-            dob = moment(data?.dob).format('YYYY-MM-DD')
-        }
 
-        let passport_exp_date = ''
-        if (data?.passport_expiry) {
-            passport_exp_date = moment(data?.passport_expiry).format('YYYY-MM-DD')
-        }
 
-        let countries = selectedCountries?.join(', ')
+            setLoading(true)
 
-        let dataToSubmit = {
-            referral_link_id: formDatas?.id,
-            title: data?.title?.name,
-            name: data?.name,
-            email: data?.email,
-
-            // phone_country_code: code,
-            phone_number: phone,
-
-            // alternate_phone_country_code: altCode,
-            // alternate_phone_number: altPhone,
-
-            // whatsapp_country_code: whatsappCode,
-            whatsapp_number: whatsapp,
-
-            preferred_course: data?.preffered_course,
-            preferred_countries: countries,
-            sponser_details: data?.sponser?.value,
-
-            // passport: data?.passport_number,
-            // passport_exp_date: passport_exp_date,
-
-            // course_level_id: data?.preffered_course_level?.id || null,
-            // intake_id: data?.intake?.id,
-
-            // date_of_birth: dob,
-            // address: data?.address,
-            // city: data?.city,
-
-            // country_of_birth_id: data?.country_of_birth?.id || null,
-            // country_of_residence_id: data?.country_of_residence?.id || null,
-
-            referrance_from: data?.reference,
-            note: data?.note,
-
-            source_id: formDatas?.lead_source?.id || null,
-
-            ...(formDatas?.lead_source?.id == 6 ? { agency_id: formDatas?.agency?.id } : {}),
-            ...(formDatas?.lead_source?.id == 5 ? { referred_student_id: formDatas?.referredStudent?.id } : {}),
-            ...(formDatas?.lead_source?.id == 7 ? { referral_university_id: formDatas?.referred_university?.id } : {}),
-            ...(formDatas?.lead_source?.id == 11 ? { event_id: formDatas?.event?.id } : {}),
-            // referred_student_id: formDatas?.source?.id == 5 ? formDatas?.referredStudent?.id : null || null,
-            // referral_university_id: formDatas?.source?.id == 7 ? formDatas?.referred_university?.id : null || null, // country_id: data?.country?.id,
-            // event_id: formDatas?.source?.id == 11 ? formDatas?.event?.id : null || null,
-
-            note: data?.note
-        }
-
-        console.log(dataToSubmit);
-
-        LeadApi.publicAdd(dataToSubmit).then((response) => {
-            // console.log(response);
-            if (response?.data?.data) {
-
-                // toast.success('Lead Has Been Successfully Created')
-                reset()
-                // handleClear()
-                // setLoading(false)
-                // location.reload()
-                router.push('/thankyou')
-            } else {
-                toast.error(response?.response?.data?.message)
-                setLoading(false)
+            let dob = ''
+            if (data?.dob) {
+                dob = moment(data?.dob).format('YYYY-MM-DD')
             }
-        }).catch((error) => {
-            console.log(error);
-            toast.error(error?.message)
-            setLoading(false)
-        })
+
+            let passport_exp_date = ''
+            if (data?.passport_expiry) {
+                passport_exp_date = moment(data?.passport_expiry).format('YYYY-MM-DD')
+            }
+
+            let countries = selectedCountries?.join(', ')
+
+            let dataToSubmit = {
+                referral_link_id: formDatas?.id,
+                title: data?.title?.name,
+                name: data?.name,
+                email: data?.email,
+
+                // phone_country_code: code,
+                phone_number: phone,
+
+                // alternate_phone_country_code: altCode,
+                // alternate_phone_number: altPhone,
+
+                // whatsapp_country_code: whatsappCode,
+                whatsapp_number: whatsapp,
+
+                preferred_course: data?.preffered_course,
+                preferred_countries: countries,
+                sponser_details: data?.sponser?.value,
+
+                // passport: data?.passport_number,
+                // passport_exp_date: passport_exp_date,
+
+                // course_level_id: data?.preffered_course_level?.id || null,
+                // intake_id: data?.intake?.id,
+
+                // date_of_birth: dob,
+                // address: data?.address,
+                // city: data?.city,
+
+                // country_of_birth_id: data?.country_of_birth?.id || null,
+                // country_of_residence_id: data?.country_of_residence?.id || null,
+
+                referrance_from: data?.reference,
+                note: data?.note,
+
+                source_id: formDatas?.lead_source?.id || null,
+
+                ...(formDatas?.lead_source?.id == 6 ? { agency_id: formDatas?.agency?.id } : {}),
+                ...(formDatas?.lead_source?.id == 5 ? { referred_student_id: formDatas?.referredStudent?.id } : {}),
+                ...(formDatas?.lead_source?.id == 7 ? { referral_university_id: formDatas?.referred_university?.id } : {}),
+                ...(formDatas?.lead_source?.id == 11 ? { event_id: formDatas?.event?.id } : {}),
+                // referred_student_id: formDatas?.source?.id == 5 ? formDatas?.referredStudent?.id : null || null,
+                // referral_university_id: formDatas?.source?.id == 7 ? formDatas?.referred_university?.id : null || null, // country_id: data?.country?.id,
+                // event_id: formDatas?.source?.id == 11 ? formDatas?.event?.id : null || null,
+
+                note: data?.note
+            }
+            dataToSubmit['sign_up_for_external_parties'] = agree3 ? 1 : 0
+
+            console.log(dataToSubmit);
+
+            LeadApi.publicAdd(dataToSubmit).then((response) => {
+                // console.log(response);
+                if (response?.data?.data) {
+
+                    // toast.success('Lead Has Been Successfully Created')
+                    reset()
+                    // handleClear()
+                    // setLoading(false)
+                    // location.reload()
+                    router.push('/thankyou')
+                } else {
+                    toast.error(response?.response?.data?.message)
+                    setLoading(false)
+                }
+            }).catch((error) => {
+                console.log(error);
+                toast.error(error?.message)
+                setLoading(false)
+            })
+        } else {
+            toast.error('You must agree to all terms and conditions before submitting.');
+        }
 
     }
 
@@ -409,6 +417,10 @@ function Form({ data }) {
     const getOptionLabel = (option) => {
         return option.student_code ? `${option.name} (${option.student_code})` : option.name;
     };
+
+    const [agree1, setagree1] = useState(false)
+    const [agree2, setagree2] = useState(false)
+    const [agree3, setagree3] = useState(false)
 
     useEffect(() => {
         fetchReference()
@@ -476,6 +488,17 @@ function Form({ data }) {
                                     {errors.reference && <span className='form-validation'>{errors.reference.message}</span>}
                                 </Grid>
 
+                                <Grid item xs={12} md={6}>
+                                    <a className='form-text'>City</a>
+                                    <TextInput placeholder='' control={control} {...register('city')} value={watch('city')} />
+                                    {errors.city && <span className='form-validation'>{errors.city.message}</span>}
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <a className='form-text'>If you have a sponsor please state who</a>
+                                    <AsyncSelect menuPlacement='auto' placeholder='Select...' name='sponser' defaultValue={watch('sponser')} isClearable defaultOptions loadOptions={fetchSources} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={handleSponsorChange} />
+                                    {errors.sponser && <span className='form-validation'>{errors.sponser.message}</span>}
+                                </Grid>
+
                                 <Grid item xs={12} md={12}>
                                     <a className='form-text'>Where would you like to study?</a>
                                     <div className='flex'>
@@ -502,12 +525,6 @@ function Form({ data }) {
                                     )}
                                 </Grid>
 
-
-                                <Grid item xs={12} md={6}>
-                                    <a className='form-text'>If you have a sponsor please state who</a>
-                                    <AsyncSelect menuPlacement='auto' placeholder='Select...' name='sponser' defaultValue={watch('sponser')} isClearable defaultOptions loadOptions={fetchSources} getOptionLabel={(e) => e.name} getOptionValue={(e) => e.id} onChange={handleSponsorChange} />
-                                    {errors.sponser && <span className='form-validation'>{errors.sponser.message}</span>}
-                                </Grid>
                                 {/* <Grid item xs={12} md={6}>
                                     <a className='form-text'>Date of Birth</a>
                                     <DateInput shouldDisableDate={disableSpecificDateForDob} placeholder='' control={control} name='dob' value={watch('dob')} />
@@ -537,8 +554,103 @@ function Form({ data }) {
                                 <Grid item xs={12}>
                                     <a className='form-text'>Any further comments</a>
                                     <TextField placeholder='' multiline rows={3} fullWidth control={control} {...register('note')} value={watch('note') || ''} />
-                                    {errors.note && <span className='form-validation'>{errors.note.message}</span>}
+                                    {errors.note && <span className='form-validation '>{errors.note.message}</span>}
                                 </Grid>
+
+
+                                <Grid item xs={12}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                name='disclosureAgreement'
+                                                value={agree1}
+                                                onChange={(e) => setagree1(e.target.checked)}
+                                                color="primary"
+                                                sx={{
+                                                    padding: '0px', // Reduces padding around the checkbox for better alignment
+                                                    marginTop: '-2px', // Aligns checkbox with the label
+                                                    transform: 'scale(0.8)', // Scales the checkbox to match the label's size
+                                                }}
+                                            />
+                                        }
+                                        label="I understand that when I attend this event, BCIE Ltd may disclose the registration information I provide to the University and Institution partners that are participating in the event or work with them."
+                                        style={{
+                                            alignItems: 'flex-start', // Aligns the checkbox with the top of the label
+                                        }}
+                                        componentsProps={{
+                                            typography: {
+                                                style: {
+                                                    marginTop: '-2px',
+                                                    fontSize: '12px',
+                                                    lineHeight: '1.5',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                value={agree2}
+                                                onChange={(e) => setagree2(e.target.checked)}
+                                                color="primary"
+                                                sx={{
+                                                    padding: '0px', // Reduces padding around the checkbox for better alignment
+                                                    marginTop: '-2px', // Aligns checkbox with the label
+                                                    transform: 'scale(0.8)', // Scales the checkbox to match the label's size
+                                                }}
+                                            />
+                                        }
+                                        label=" By registering, I agree to BCIE Ltd contacting me by phone, Whatsapp, email or SMS to aid my application to Study Abroad."
+                                        style={{
+                                            alignItems: 'flex-start', // Aligns the checkbox with the top of the label
+                                        }}
+                                        componentsProps={{
+                                            typography: {
+                                                style: {
+                                                    marginTop: '-2px',
+                                                    fontSize: '12px',
+                                                    lineHeight: '1.5',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                value={agree3}
+                                                onChange={(e) => setagree3(e.target.checked)}
+                                                color="primary"
+                                                sx={{
+                                                    padding: '0px', // Reduces padding around the checkbox for better alignment
+                                                    marginTop: '-2px', // Aligns checkbox with the label
+                                                    transform: 'scale(0.8)', // Scales the checkbox to match the label's size
+                                                }}
+                                            />
+                                        }
+                                        label="Sign me up for information from our partner Universities, about study abroad, scholarships etc to aid my application to Study Abroad."
+                                        style={{
+                                            alignItems: 'flex-start', // Aligns the checkbox with the top of the label
+                                        }}
+                                        componentsProps={{
+                                            typography: {
+                                                style: {
+                                                    marginTop: '-2px',
+                                                    fontSize: '12px',
+                                                    lineHeight: '1.5',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                </Grid>
+
+
+
 
 
                                 {/* <Grid item xs={12} md={6}>
@@ -603,7 +715,7 @@ function Form({ data }) {
 
                 </div>
             </div>
-        </Grid>
+        </Grid >
 
     )
 }
@@ -641,10 +753,10 @@ export async function getServerSideProps(context) {
             props: {
                 data: null, // or handle the error in a way that makes sense for your application
             },
-            redirect: {
-                destination: '/notFound', // Replace with your custom error page path
-                permanent: false,
-            },
+            // redirect: {
+            //     destination: '/notFound', // Replace with your custom error page path
+            //     permanent: false,
+            // },
         };
     }
 }

@@ -9,7 +9,6 @@ function LeadDetail({ data, handleEdit, loading }) {
     const session = useSession()
 
 
-
     return (
         <div className='lead-tabpanel-content-block'>
             <div className='lead-tabpanel-content-block-title'>
@@ -289,7 +288,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                                 </div>
                             }
 
-                            
+
 
                             {
                                 data?.referrance_from &&
@@ -297,6 +296,21 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     <label style={{ fontWeight: 'bold' }}>Here about us from </label> {data?.referrance_from}
                                 </div>
                             }
+
+                            {
+                                data?.campaign &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Campaign </label> {data?.campaign?.name}
+                                </div>
+                            }
+
+                            {
+                                data?.sign_up_for_external_parties &&
+                                <div className="lead-details-list">
+                                    <label style={{ fontWeight: 'bold' }}>Sign up for external parties </label> {data?.sign_up_for_external_parties?'yes':'no'}
+                                </div>
+                            }
+                            
 
 
                             {
@@ -335,6 +349,8 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     <label style={{ fontWeight: 'bold' }}>Withdrawn Reason</label>: {data?.withdraw_reason}
                                 </div>
                             }
+
+
 
 
 

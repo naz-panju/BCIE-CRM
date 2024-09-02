@@ -6,7 +6,7 @@ import CommEmailDetailModal from '../details/email/detailModal';
 import WhatsappMessageModal from '../Modals/WhatsappMessageModal';
 
 
-function WhatsappTab({ list, setwhatsappLimit, loading, page, setPage, whatsappLimit, leadData }) {
+function WhatsappTab({getShowNotification, list, setwhatsappLimit, loading, page, setPage, whatsappLimit, leadData }) {
     const [detailId, setdetailId] = useState()
 
     // console.log(list);

@@ -12,6 +12,7 @@ import 'react-phone-input-2/lib/style.css';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { useEffect } from "react";
 import { ListingApi } from "@/data/Endpoints/Listing";
+import { BooleanProvider } from "@/Context/MessageModalContext";
 
 
 export default function App({ Component, pageProps: { session, ...pageProps } }) {
@@ -19,21 +20,23 @@ export default function App({ Component, pageProps: { session, ...pageProps } })
   // console.log(pageProps);
   useEffect(() => {
 
-    const session=sessionStorage.getItem('size')
-    if(!session){
-      ListingApi.maxFileSize().then((response)=>{
-        sessionStorage.setItem('size',response?.data?.size)
+    const session = sessionStorage.getItem('size')
+    if (!session) {
+      ListingApi.maxFileSize().then((response) => {
+        sessionStorage.setItem('size', response?.data?.size)
       })
     }
-    
+
   }, [])
 
-  
+
 
   return <SessionProvider session={session}>
-    <Toaster />
-    <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <Component {...pageProps} />
-    </LocalizationProvider>
+    <BooleanProvider>
+      <Toaster />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <Component {...pageProps} />
+      </LocalizationProvider>
+    </BooleanProvider>
   </SessionProvider>
 }

@@ -28,14 +28,15 @@ import { useSession } from 'next-auth/react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import WithdrawPopup from './Modals/WithdrawConfirmModal';
+import Pusher from "pusher-js";
+import WhatsappSound from '../../public/WhatsappAudio.mp3';
+import { useBoolean } from '@/Context/MessageModalContext';
 
 function LeadDetails() {
 
+  const { isTrue, toggleBoolean } = useBoolean();
+
   const session = useSession()
-
-  console.log(session);
-
-
 
   const [details, setDetails] = useState()
   const [refresh, setRefresh] = useState(false)
@@ -320,6 +321,39 @@ function LeadDetails() {
   }
 
 
+  var audio = new Audio(WhatsappSound);
+
+  const playMessageAudio = () => {
+      audio.play().catch(error => {
+          console.error("Audio playback failed:", error);
+      });
+  };
+
+  useEffect(() => {
+    const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
+      cluster: "ap2",
+    });
+
+    const channel = pusher.subscribe("bcie-channel");
+    channel.bind("bcie-event", (data) => {
+      console.log(data);
+
+      if (data?.lead_id) {
+        if (data?.lead_id === details?.id) {
+          if (!isTrue) {
+            toast.success('You have a new message on WhatsApp', { autoClose: 10000 });
+            playMessageAudio();
+          }
+        }
+      }
+    });
+
+    return () => {
+      pusher.unsubscribe("bcie-channel");
+      pusher.disconnect();
+    };
+  }, [details, isTrue,WhatsappSound]);
+
   const gradientId = 'myGradient';
 
   return (
@@ -349,7 +383,7 @@ function LeadDetails() {
       <section>
         <div className={`page-title-block`}>
           <div className='page-title-block-content justify-between'>
-            <h1>Lead Details</h1>
+            <h1 onClick={playMessageAudio}>Lead Details</h1>
 
             {/* disabled={details?.verification_status == 'Yes'} */}
             <Grid>

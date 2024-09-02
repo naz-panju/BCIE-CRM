@@ -27,6 +27,7 @@ import DocumentSelectModal from '../../application/modals/documentSelect';
 import Pusher from "pusher-js";
 import { useSession } from 'next-auth/react';
 import WhatsappSound from '../../../../../public/WhatsappAudio.mp3';
+import { useBoolean } from '@/Context/MessageModalContext';
 
 
 
@@ -36,6 +37,9 @@ const scheme = yup.object().shape({
 })
 
 export default function WhatsappMessageModal({ lead_id, editId, setEditId, handleRefresh, leadData }) {
+
+    const { isTrue, toggleBoolean } = useBoolean();
+
 
     var audio = new Audio(WhatsappSound);
 
@@ -249,7 +253,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         const channel = pusher.subscribe("bcie-channel");
         channel.bind("bcie-event", (data) => {
             if (data?.lead_id) {
-                if (data?.lead_id == leadData?.id) {
+                if (data?.lead_id == leadData?.id) {                    
                     getDetails().then(() => {
                         setTimeout(() => {
                             playMessageAudio()
@@ -376,6 +380,15 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         }
     }, [editId])
 
+
+    useEffect(() => {
+        if(open){
+            toggleBoolean(true)
+        }else{
+            toggleBoolean(false)
+        }    
+    }, [open])
+ 
 
     return (
         <>

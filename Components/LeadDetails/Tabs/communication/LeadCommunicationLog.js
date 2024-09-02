@@ -13,6 +13,9 @@ import SendMail from '../../Modals/SendMail';
 import { useSession } from 'next-auth/react';
 import SendWhatsApp from '../../Modals/SendWhatsapp';
 import Pusher from "pusher-js";
+import toast from 'react-hot-toast';
+import WhatsappSound from '../../../../public/WhatsappAudio.mp3';
+
 
 export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallRefresh, setphoneCallRefresh, leadData, setDetailRefresh }) {
 
@@ -58,6 +61,14 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
             setPage: setcallPage
         },
     })
+
+    var audio = new Audio(WhatsappSound);
+
+    const playMessageAudio = () => {
+        audio.play().catch(error => {
+            console.error("Audio playback failed:", error);
+        });
+    };
 
 
 

@@ -97,7 +97,8 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
             start_date: start_date,
             end_date: end_date,
             venue: data?.venue,
-            country_id: data?.country?.id,
+            ...(data?.country?.id ? { country_id: data?.country?.id } : {}),
+            // country_id: data?.country?.id,
             description: data?.description,
             email_content: data?.email_content
         }
@@ -126,7 +127,7 @@ export default function CreateEvent({ editId, setEditId, refresh, setRefresh, le
         }
 
         action.then((response) => {
-            // console.log(response?.data);
+            console.log(response);
             if (response?.status == 200 || response?.status == 201) {
                 toast.success(editId > 0 ? 'Event Has Been Successfully Updated' : 'Event Has Been Successfully Created')
                 reset()
