@@ -240,8 +240,10 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
             cluster: "ap2",
             //   encrypted: true,
         });
+       
         const channel = pusher.subscribe("bcie-channel");
         channel.bind("bcie-event", (data) => {
+           
             if (data?.lead_id) {
                 if (data?.lead_id == leadData?.id) {
                     getDetails()

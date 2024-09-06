@@ -138,13 +138,9 @@ export default function SimplePopper() {
         channel.bind("bcie-event", (data) => {
             if (data?.user_id) {
                 if (data?.user_id == session?.data?.user?.id) {
-                    console.log(open);
-
                     if (open) {
-                        console.log('open');
                         noFetchList()
                     } else {
-                        console.log('not open');
                         fetchCount()
                         fetchList()
                     }

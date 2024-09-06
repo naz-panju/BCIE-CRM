@@ -967,6 +967,14 @@ a.form-text {
     font-weight: 400;
 }
 
+label.form-text{
+    color: #0B0D23;
+    font-size: 16px;
+    margin-bottom: 6px;
+    display: block;
+    font-weight: 400;
+}
+
 .application-input .form_group {
     background: transparent !important;
     width: 100%;
@@ -3135,7 +3143,7 @@ a.not-found {
 
 .form-data-cntr .cancel-btn {
     border-radius: 3px;
-    background: #000;
+    background: #000 !important;
     padding: 14px 15px;
     color: var(--icon-color, #FFF);
     font-family: Inter;

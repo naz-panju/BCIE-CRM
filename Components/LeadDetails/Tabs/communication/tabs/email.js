@@ -83,11 +83,11 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                                         paddingLeft: '0px'
 
                                                                     }} onClick={() => handleDetailOpen(obj?.id)}>
-                                                                        <Tooltip title={obj?.type}>
+                                                                        <Tooltip title={obj?.type == 'Gmail' ? 'Recieved' : obj?.type}>
                                                                             <div style={{
                                                                                 padding: 0,
                                                                                 width: '3px',  // Width of the vertical line
-                                                                                borderLeft: obj?.type == 'Send' ? '3px solid blue' : '3px green',  // Vertical line
+                                                                                borderLeft: obj?.type == 'Send' ? '3px solid blue' : '3px solid green',  // Vertical line
                                                                                 height: '23px',  // Full height of the TableCell
                                                                                 marginRight: '8px',  // Space between the line and the text
                                                                                 marginLeft: '0%'
@@ -114,7 +114,7 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                                             // moment(obj?.message_date).isSame(moment(), 'day') ?
                                                                             //     moment(obj?.message_date).fromNow()
                                                                             //     :
-                                                                                moment(obj?.message_date).format('DD MMM hh:mm A')
+                                                                            moment(obj?.message_date).format('DD MMM hh:mm A')
                                                                         }
                                                                     </TableCell>
                                                                 </TableRow>)

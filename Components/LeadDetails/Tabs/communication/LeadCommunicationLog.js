@@ -92,7 +92,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         let params = {
             lead_id: lead_id,
             limit: emailLimit,
-            type: ['Send', 'Receive'],
+            type: ['Send', 'Gmail'],
             page: emailPage,
             // page: page + 1
         }

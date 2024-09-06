@@ -193,7 +193,6 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     <label style={{ fontWeight: 'bold' }}>Address </label> {data?.address}
                                 </div>
                             }
-
                             {
                                 data?.date_of_birth &&
                                 <div className="lead-details-list">
@@ -223,8 +222,6 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     <label style={{ fontWeight: 'bold' }}>Preferred Courses </label> {data?.preferred_course || 'NA'}
                                 </div>
                             </div>
-
-
                             {
                                 data?.preferred_countries &&
                                 <div>
@@ -233,7 +230,6 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     </div>
                                 </div>
                             }
-
                             {
                                 data?.passport &&
                                 <div className="lead-details-list">
@@ -246,7 +242,6 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     <label style={{ fontWeight: 'bold' }}>Passport Expiry Date </label>{moment(data?.passport_exp_date).format('DD-MM-YYYY')}
                                 </div>
                             }
-
                             {
                                 data?.lead_source &&
                                 <div className="lead-details-list">
@@ -254,7 +249,6 @@ function LeadDetail({ data, handleEdit, loading }) {
                                 </div>
                             }
                             {/* referrance_from */}
-
                             {
                                 data?.lead_source?.id == 5 &&
                                 <div className="lead-details-list">
@@ -280,16 +274,12 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     <label style={{ fontWeight: 'bold' }}>Event </label> {data?.event?.name || 'NA'}
                                 </div>
                             }
-
                             {
                                 data?.sponser_details &&
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Sponser Detail </label> {data?.sponser_details || 'NA'}
                                 </div>
                             }
-
-
-
                             {
                                 data?.referrance_from &&
                                 <div className="lead-details-list">
@@ -303,25 +293,18 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     <label style={{ fontWeight: 'bold' }}>Campaign </label> {data?.campaign?.name}
                                 </div>
                             }
-
                             {
-                                data?.sign_up_for_external_parties &&
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Sign up for external parties </label> {data?.sign_up_for_external_parties?'yes':'no'}
+                                    <label style={{ fontWeight: 'bold' }}>Sign up for external parties </label>
+                                    {data?.sign_up_for_external_parties ? 'yes' : 'no'}
                                 </div>
                             }
-                            
-
-
                             {
                                 data?.note &&
                                 <div className="lead-details-list">
                                     <label style={{ fontWeight: 'bold' }}>Note </label> {data?.note}
                                 </div>
                             }
-
-
-
                             {
                                 data?.substage &&
                                 <div className="lead-details-list">
@@ -349,38 +332,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                                     <label style={{ fontWeight: 'bold' }}>Withdrawn Reason</label>: {data?.withdraw_reason}
                                 </div>
                             }
-
-
-
-
-
-
-
                         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        {/* <div className="lead-details-list">
-                            <label>Forms Applied </label>: {data?.applyingForCourse?.name}
-                        </div> */}
 
                     </div>
             }

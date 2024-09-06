@@ -580,6 +580,12 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         { label: 'Note', multi: true },
     ]
 
+    const handleBlur = () => {
+        console.log('Text box unfocused');
+        // Add any additional logic you need here
+      };
+    
+
     return (
         <div className='form-data-cntr'>
 
@@ -612,21 +618,14 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                 value={watch('name')} />
                             {errors.name && <span className='form-validation'>{errors.name.message}</span>}
 
-
-
                         </div>
-
-
-
-
-
 
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                             <div className='application-input'>
-                                <a className='form-text'>Email</a>
+                                <label className='form-text'>Email</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
-                                    <TextInput placeholder='' control={control} {...register('email', {
+                                    <TextInput onBlur={handleBlur} placeholder='' control={control} {...register('email', {
                                         required: 'Please enter your email',
                                         pattern: {
                                             value: /^\S+@\S+$/i,
@@ -641,7 +640,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
                             <div className='application-input'>
-                                <a className='form-text'>Country of Birth</a>
+                                <label className='form-text'>Country of Birth</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
                                     <SelectX
@@ -657,7 +656,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                 </Grid>
                             </div>
                             <div className='application-input'>
-                                <a className='form-text'>Country of Residence</a>
+                                <label className='form-text'>Country of Residence</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
 
@@ -689,7 +688,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
                             <div className='application-input'>
-                                <a className='form-text'>Enter Mobile Number</a>
+                                <label className='form-text'>Enter Mobile Number</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
                                     <PhoneInput
@@ -723,7 +722,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
 
                             <div className='application-input'>
-                                <a className='form-text'>Enter Alternate Number</a>
+                                <label className='form-text'>Enter Alternate Number</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
                                     <PhoneInput
@@ -760,7 +759,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
                             <div className='application-input'>
-                                <a className='form-text'>Enter Whatsapp Number</a>
+                                <label className='form-text'>Enter Whatsapp Number</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
                                     <PhoneInput
@@ -794,7 +793,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                 </Grid>
                             </div>
                             <div className='application-input'>
-                                <a className='form-text'>Preferred Countries</a>
+                                <label className='form-text'>Preferred Countries</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
                                     <TextInput placeholder='' control={control} {...register('preferred_country')}
@@ -810,7 +809,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
 
                             <div className='application-input'>
-                                <a className='form-text'>Preferred Courses</a>
+                                <label className='form-text'>Preferred Courses</label>
                                 <Grid className='mb-5 forms-data' >
                                     <TextInput placeholder='' control={control} {...register('preffered_course')}
                                         value={watch('preffered_course')} />
@@ -819,7 +818,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                 </Grid>
                             </div>
                             <div className='application-input'>
-                                <a className='form-text'>Date of Birth</a>
+                                <label className='form-text'>Date of Birth</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
                                     <DateInput
@@ -837,7 +836,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
 
                             <div className='application-input'>
-                                <a className='form-text'>Passport Number</a>
+                                <label className='form-text'>Passport Number</label>
                                 <Grid className='mb-5 forms-data' >
                                     <TextInput placeholder='' control={control} {...register('passport_number')}
                                         value={watch('passport_number')} />
@@ -846,7 +845,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                 </Grid>
                             </div>
                             <div className='application-input'>
-                                <a className='form-text'>Passport Expiry Date</a>
+                                <label className='form-text'>Passport Expiry Date</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
                                     <DateInput
@@ -925,7 +924,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                             <div className='application-input'>
-                                <a className='form-text'>City</a>
+                                <label className='form-text'>City</label>
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
                                     <TextInput placeholder='' control={control} {...register('city')}
@@ -938,7 +937,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                             <div className='application-input'>
-                                <a className='form-text'>Address</a>
+                                <label className='form-text'>Address</label>
                                 <Grid className='mb-5 forms-data' >
                                     <TextField placeholder='' multiline rows={2} fullWidth control={control}  {...register('address')}
                                         value={watch('address') || ''} />
@@ -949,7 +948,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                             <div className='application-input'>
-                                <a className='form-text'>Lead Source</a>
+                                <label className='form-text'>Lead Source</label>
                                 <Grid className='mb-5 forms-data' >
                                     <AsyncSelect
                                         placeholder=''
@@ -970,7 +969,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             </div>
 
                             <div className='application-input'>
-                                <a className='form-text'>How did you hear about us?</a>
+                                <label className='form-text'>How did you hear about us?</label>
                                 <Grid className='mb-5 forms-data' >
                                     <ReactSelector
                                         placeholder=''
@@ -1000,7 +999,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             watch('source')?.id == 5 &&
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
-                                    <a className='form-text'>Referred Student</a>
+                                    <label className='form-text'>Referred Student</label>
                                     <Grid className='mb-5 forms-data' >
                                         <AsyncSelect
                                             placeholder=''
@@ -1023,7 +1022,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             watch('source')?.id == 6 &&
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
-                                    <a className='form-text'>Referred Agency</a>
+                                    <label className='form-text'>Referred Agency</label>
                                     <Grid className='mb-5 forms-data' >
                                         <SelectX
                                             placeholder=''
@@ -1041,7 +1040,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             watch('source')?.id == 7 &&
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
-                                    <a className='form-text'>Referred University</a>
+                                    <label className='form-text'>Referred University</label>
                                     <Grid className='mb-5 forms-data' >
                                         <SelectX
                                             placeholder=''
@@ -1060,7 +1059,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             watch('source')?.id == 11 &&
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0">
                                 <div className='application-input'>
-                                    <a className='form-text'>Referred Events</a>
+                                    <label className='form-text'>Referred Events</label>
                                     <Grid className='mb-5 forms-data' >
                                         <SelectX
                                             placeholder=''
@@ -1078,7 +1077,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                             <div className='application-input'>
-                                <a className='form-text'>Note</a>
+                                <label className='form-text'>Note</label>
                                 <Grid className='mb-5 forms-data' >
                                     <TextField placeholder='' multiline rows={2} fullWidth control={control}  {...register('note')}
                                         value={watch('note') || ''} />

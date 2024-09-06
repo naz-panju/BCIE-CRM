@@ -281,7 +281,7 @@ function DashboardIndex() {
             }
             const response = await DashboardApi.list(params)
             // console.log(response);
-            
+
             setWeeklyList(response?.data)
             setWeeklyLoading(false)
         } catch (error) {
@@ -410,23 +410,25 @@ function DashboardIndex() {
     // console.log(selectedCounsellor);
 
     const fetchPayments = async () => {
-        setPaymentLoading(true)
-        try {
-            const response = await DashboardApi.list({
-                type: 'deposits',
-                // date_from: moment(range[0]).format('YYYY-MM-DD'),
-                // date_to: moment(range[1]).format('YYYY-MM-DD'),
-                office: officeId,
-                counselor: counsellorId,
-                intake: intakeId,
-                manager: selectedMangeId
-            })
-            // console.log(response?.config?.params);
-            setPayments(response?.data)
-            setPaymentLoading(false)
-        } catch (error) {
-            console.log(error);
-            setPaymentLoading(false)
+        if (intakeId) {
+            setPaymentLoading(true)
+            try {
+                const response = await DashboardApi.list({
+                    type: 'deposits',
+                    // date_from: moment(range[0]).format('YYYY-MM-DD'),
+                    // date_to: moment(range[1]).format('YYYY-MM-DD'),
+                    office: officeId,
+                    counselor: counsellorId,
+                    intake: intakeId,
+                    manager: selectedMangeId
+                })
+                // console.log(response?.config?.params);
+                setPayments(response?.data)
+                setPaymentLoading(false)
+            } catch (error) {
+                console.log(error);
+                setPaymentLoading(false)
+            }
         }
     }
 

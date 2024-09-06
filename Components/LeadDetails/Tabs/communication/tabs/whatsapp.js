@@ -96,11 +96,9 @@ function WhatsappTab({getShowNotification, list, setwhatsappLimit, loading, page
                                                                         }
                                                                     </TableCell>
 
-                                                                    <TableCell>
+                                                                    <TableCell sx={{ whiteSpace: 'nowrap', textAlign: 'right', minWidth: '150px' }}>
                                                                         {
-                                                                            // moment(obj?.message_date).isSame(moment(), 'day') ?
-                                                                            //     moment(obj?.message_date).fromNow()
-                                                                            //     :
+                                                                            
                                                                                 moment(obj?.message_date).format('DD MMM hh:mm A')
                                                                         }
                                                                     </TableCell>

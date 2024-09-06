@@ -29,7 +29,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import WithdrawPopup from './Modals/WithdrawConfirmModal';
 import Pusher from "pusher-js";
-// import WhatsappSound from '../../public/WhatsappAudio.mp3';
+import WhatsappSound from '../../public/WhatsappAudio.mp3';
 import { useBoolean } from '@/Context/MessageModalContext';
 
 function LeadDetails() {
@@ -320,17 +320,46 @@ function LeadDetails() {
 
   }
 
+  var audio = new Audio(WhatsappSound);
+
+  const playMessageAudio = () => {
+    audio.play().catch(error => {
+      console.error("Audio playback failed:", error);
+    });
+  };
+
   useEffect(() => {
     const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
       cluster: "ap2",
     });
 
+    console.log('Pusher connection object:', pusher.connection);
+    pusher.connection.bind('error', function (err) {
+      console.error('Pusher connection error:', err);
+      toast.error(`Connection Error: ${err.message || 'Unknown error'}`, {
+        autoClose: 10000,
+        position: "top-right",
+      });
+    });
     const channel = pusher.subscribe("bcie-channel");
     channel.bind("bcie-event", (data) => {
+      console.log(data);
       if (data?.lead_id) {
         if (data?.lead_id === details?.id) {
           if (!isTrue) {
-            toast.success('You have a new message on WhatsApp', { autoClose: 10000 });
+            toast.success('You have a new message on WhatsApp', {
+              autoClose: 3000, // 3 seconds
+              style: {
+                backgroundColor: '#4caf50',  
+                color: '#fff',                
+                fontSize: '16px',            
+                fontWeight: 'bold',           
+                padding: '16px',             
+                borderRadius: '8px',         
+                boxShadow: '0 0 10px rgba(0, 0, 0, 0.3)',
+              },
+            });
+            // playMessageAudio()
           }
         }
       }
@@ -341,8 +370,6 @@ function LeadDetails() {
       pusher.disconnect();
     };
   }, [details, isTrue]);
-
-  const gradientId = 'myGradient';
 
   return (
 
