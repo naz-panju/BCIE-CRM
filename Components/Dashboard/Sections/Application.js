@@ -114,7 +114,7 @@ function ApplicationSection({ paymentLoading, payments, selectedAppCounsellor, s
                             // </div>
 
                             <div className=' w-5/12'>
-                                <div className='comminication-block  p-5'>
+                                <div className='comminication-block  p-5 pt-8'>
                                     <div className='section-title'>Payments</div>
                                     {
                                         paymentLoading ?
@@ -122,8 +122,9 @@ function ApplicationSection({ paymentLoading, payments, selectedAppCounsellor, s
                                                 <Skeleton variant='rounded' width={400} height={200} />
                                             </div>
                                             :
-                                            <div className='flex justify-between'>
-                                                <div className=' w-6/12'>
+                                            <div className='flex justify-between '>
+                                                <div style={{width:300}}>
+                                                {/* className='w-6/12' */}
                                                     <div className='communication-graph'>
                                                         <div className='chart-info-title'>
                                                             <div className='total'><span>Total</span></div>
