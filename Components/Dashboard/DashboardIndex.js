@@ -524,7 +524,7 @@ function DashboardIndex() {
             }
             if (session?.data?.user?.role?.id == 4) {
                 params['manager'] = session?.data?.user?.id
-                params['counselor'] = session?.data?.user?.id
+                params['counselor'] = counsellorId
 
             } else if (session?.data?.user?.role?.id == 5) {
                 params['counselor'] = session?.data?.user?.id
@@ -534,8 +534,11 @@ function DashboardIndex() {
             }
 
 
+            console.log(params);
+            
             try {
                 const response = await DashboardApi.list(params)
+                console.log(response);
                 setTargets(response?.data)
                 setTargetLoading(false)
             } catch (error) {

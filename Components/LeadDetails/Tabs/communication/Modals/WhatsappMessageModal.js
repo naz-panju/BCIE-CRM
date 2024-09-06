@@ -252,7 +252,7 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
 
         });
         return () => {
-            pusher.unsubscribe("bcie-event");
+            pusher.unsubscribe("bcie-channel");
             pusher.disconnect();
         };
     }, [editId]);
