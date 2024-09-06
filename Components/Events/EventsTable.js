@@ -449,7 +449,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage,
                                                             <TableCell align="left">{row?.end_date ? moment(row?.end_date).format('DD-MM-YYYY') : 'NA'}</TableCell>
                                                             <TableCell align="left">
                                                                 {
-                                                                    row?.status == 1 ?
+                                                                    row?.referral_link?.status == 1 ?
                                                                         <CheckCircle  fontSize='small' style={{ color: 'green' }} onClick={() => handleStatusToggle(row?.id)}></CheckCircle>
                                                                         :
                                                                         <Cancel fontSize='small' style={{ color: 'red' }} onClick={() => handleStatusToggle(row?.id)}></Cancel>

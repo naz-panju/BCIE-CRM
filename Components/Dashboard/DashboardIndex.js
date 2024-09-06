@@ -534,11 +534,11 @@ function DashboardIndex() {
             }
 
 
-            console.log(params);
+            // console.log(params);
             
             try {
                 const response = await DashboardApi.list(params)
-                console.log(response);
+                // console.log(response);
                 setTargets(response?.data)
                 setTargetLoading(false)
             } catch (error) {
