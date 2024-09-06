@@ -20,6 +20,7 @@ import AsyncSelect from "react-select/async";
 import axios from 'axios'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import BannerImage from '@/img/header-bg.png'
 
 
 
@@ -431,10 +432,7 @@ function Form({ data }) {
         <Grid style={{ backgroundColor: '#f0f4f8', padding: '20px' }} container display="flex" alignItems="center" justifyContent="center">
             <div className='m-auto p-[20px] max-w-[700px]' style={{ backgroundColor: 'white', borderRadius: '8px' }}>
                 <div className='block'>
-                    {/* <div style={{ backgroundImage: `url(${data?.banner_image || 'https:\/\/bcie.spider.ws\/uploads\/referral_links\/banners\/1720096455_header-bg.png'})`, backgroundSize: '120% 140%', backgroundPosition: 'center' }} className='p-[25px]'>
-                        <span className='text-[18px] text-[#fff] text-left' dangerouslySetInnerHTML={{ __html: data?.top_description  }} />
-                    </div> */}
-                    <Image src={data?.banner_image} className='w-[100%] h-[auto]' width={660} height={350} />
+                    <Image src={data?.banner_image || BannerImage} className='w-[100%] h-[auto]' width={660} height={350} />
                     <div>
                         <span className='text-[18px] text-[#fff] text-left' dangerouslySetInnerHTML={{ __html: data?.top_description }} />
                     </div>
@@ -725,7 +723,7 @@ export default Form
 export async function getServerSideProps(context) {
     try {
         const formCheck = await axios.get(process.env.NEXT_PUBLIC_API_PATH + `referral-links/form/${context?.query?.slug}`)
-        // console.log('ss', formCheck);
+        // console.log('errorrr', formCheck?.data);
         if (formCheck?.status == 200 || formCheck?.status == 201) {
             return {
                 props: {

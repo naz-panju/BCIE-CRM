@@ -24,11 +24,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button, Grid, MenuItem, Pagination, Select } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
-import { Edit } from '@mui/icons-material';
+import {  Cancel, CheckCircle, CheckCircleOutline, Edit } from '@mui/icons-material';
 import { EventsApi } from '@/data/Endpoints/Events';
 import moment from 'moment';
 import EventDetailModal from './Details/Modal';
 import { Stack } from 'rsuite';
+import ConfirmPopup from '../Common/Popup/confirm';
+import toast from 'react-hot-toast';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -104,6 +106,12 @@ const headCells = [
         numeric: true,
         disablePadding: false,
         label: 'End Date',
+    },
+    {
+        id: 'status',
+        numeric: true,
+        disablePadding: false,
+        label: 'Status',
     },
     {
         id: 'edit',
@@ -323,6 +331,34 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage,
     }
 
 
+    const [confirmLoading, setconfirmLoading] = useState(false)
+    const [statusId, setstatusId] = useState()
+    const handleStatusToggle = (id) => {
+        setstatusId(id)
+    }
+
+    const handleChangeStatus = () => {
+        setconfirmLoading(true)
+        try {
+            EventsApi.changeStage(statusId).then((response) => {
+                if (response?.status == 200 || response?.status == 201) {
+                    setconfirmLoading(false)
+                    toast.success(response?.data?.message)
+                    setstatusId()
+                    fetchTable()
+                } else {
+                    toast.error(response?.response?.data?.message)
+                    setconfirmLoading(false)
+                }
+            })
+        } catch (error) {
+            toast.error(error?.response?.data?.message)
+            setconfirmLoading(false)
+        }
+
+    }
+
+
     const fetchTable = () => {
         setLoading(true)
         EventsApi.list({ limit: limit, page: page, keyword: searchTerm }).then((response) => {
@@ -338,10 +374,12 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage,
         fetchTable()
     }, [page, refresh, limit, searching])
 
+
     return (
 
         <>
             <EventDetailModal id={detailId} setId={setDetailId} />
+            <ConfirmPopup loading={confirmLoading} ID={statusId} setID={setstatusId} clickFunc={handleChangeStatus} title={`Do you want to change the status?`} />
 
             {
 
@@ -409,6 +447,14 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage,
                                                             <TableCell align="left">{row?.venue || 'NA'}</TableCell>
                                                             <TableCell align="left">{row?.start_date ? moment(row?.start_date).format('DD-MM-YYYY') : 'NA'}</TableCell>
                                                             <TableCell align="left">{row?.end_date ? moment(row?.end_date).format('DD-MM-YYYY') : 'NA'}</TableCell>
+                                                            <TableCell align="left">
+                                                                {
+                                                                    row?.status == 1 ?
+                                                                        <CheckCircle  fontSize='small' style={{ color: 'green' }} onClick={() => handleStatusToggle(row?.id)}></CheckCircle>
+                                                                        :
+                                                                        <Cancel fontSize='small' style={{ color: 'red' }} onClick={() => handleStatusToggle(row?.id)}></Cancel>
+                                                                }
+                                                            </TableCell>
                                                             <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
 
                                                         </TableRow>

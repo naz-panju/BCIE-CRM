@@ -27,12 +27,15 @@ import { useRouter } from 'next/router';
 import { Button, Grid, MenuItem, Pagination, Select } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { TemplateApi } from '@/data/Endpoints/Template';
-import { Edit } from '@mui/icons-material';
+import { Cancel, CheckCircle, Edit } from '@mui/icons-material';
 import EmailTemplateDetailModal from '../EmailTemplateDetail/Modal';
 import { ReferralApi } from '@/data/Endpoints/Referrals';
 import moment from 'moment';
 import ReferralDetailModal from './RefferalDetails/Modal';
 import { Stack } from 'rsuite';
+import ConfirmPopup from '../Common/Popup/confirm';
+import toast from 'react-hot-toast';
+import { EventsApi } from '@/data/Endpoints/Events';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -108,6 +111,12 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'Validity',
+    },
+    {
+        id: 'status',
+        numeric: true,
+        disablePadding: false,
+        label: 'Status',
     },
     {
         id: 'edit',
@@ -333,6 +342,31 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
         setDetailId(id)
     }
 
+    const [confirmLoading, setconfirmLoading] = useState(false)
+    const [statusId, setstatusId] = useState()
+    const handleStatusToggle = (id) => {
+        setstatusId(id)
+    }
+    const handleChangeStatus = () => {
+        setconfirmLoading(true)
+        try {
+            ReferralApi.changeStage(statusId).then((response) => {
+                if (response?.status == 200 || response?.status == 201) {
+                    setconfirmLoading(false)
+                    toast.success(response?.data?.message)
+                    setstatusId()
+                    fetchTable()
+                } else {
+                    toast.error(response?.response?.data?.message)
+                    setconfirmLoading(false)
+                }
+            })
+        } catch (error) {
+            toast.error(error?.response?.data?.message)
+            setconfirmLoading(false)
+        }
+    }
+
 
     const fetchTable = () => {
         setLoading(true)
@@ -357,6 +391,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
 
         <>
             <ReferralDetailModal id={detailId} setId={setDetailId} />
+            <ConfirmPopup loading={confirmLoading} ID={statusId} setID={setstatusId} clickFunc={handleChangeStatus} title={`Do you want to change the status?`} />
 
             {
 
@@ -408,7 +443,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                                 />
                                                             </TableCell> */}
                                                             <TableCell
-                                                                onClick={() => (!createOpen && createOpen!=0) && handleDetailOpen(row?.id)}
+                                                                onClick={() => (!createOpen && createOpen != 0) && handleDetailOpen(row?.id)}
                                                                 component="th"
                                                                 id={labelId}
                                                                 scope="row"
@@ -421,6 +456,14 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                             {/* <TableCell align="left"><a style={{ color: 'blue' }}>{`${currentURL}/forms/lead`}</a></TableCell> */}
                                                             <TableCell align="left">{row?.lead_source?.name}</TableCell>
                                                             <TableCell align="left">{moment(row?.date_of_validity).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell align="left">
+                                                                {
+                                                                    row?.status == 1 ?
+                                                                        <CheckCircle fontSize='small' style={{ color: 'green' }} onClick={() => handleStatusToggle(row?.id)}></CheckCircle>
+                                                                        :
+                                                                        <Cancel fontSize='small' style={{ color: 'red' }} onClick={() => handleStatusToggle(row?.id)}></Cancel>
+                                                                }
+                                                            </TableCell>
                                                             <TableCell align="left"><Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}><Edit fontSize='small' /></Button></TableCell>
 
                                                         </TableRow>

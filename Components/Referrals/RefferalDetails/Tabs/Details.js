@@ -97,61 +97,61 @@ function Details({ data, loading }) {
                         <label style={{ fontWeight: 'bold' }}>Lead Source:</label>
                         <span>{data?.lead_source?.name || "Null"}</span>
                     </div>
+
                     <div className="lead-details-list">
                         <label style={{ fontWeight: 'bold' }}>Last Date of Validity:</label>
                         <span>{data?.created_at && moment(data?.last_date_of_validity).format("DD-MM-YYYY")}</span>
                     </div>
                 </div>
 
-                {data?.lead_source?.id == 5 && (
-                    <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Status:</label>
+                        <span>{data?.status == 1 ? 'Open' : 'Close'}</span>
+                    </div>
+                    {data?.lead_source?.id == 5 && (
+                        <>
                             <div className="lead-details-list">
                                 <label style={{ fontWeight: 'bold' }}>Reffered Student:</label>
                                 <span>{data?.referredStudent?.name}</span>
                             </div>
-                        </div>
-                    </>
-                )}
+                        </>
+                    )}
 
-                {data?.lead_source?.id == 6 && (
-                    <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {data?.lead_source?.id == 6 && (
+                        <>
                             <div className="lead-details-list">
                                 <label style={{ fontWeight: 'bold' }}>Referred Agency:</label>
                                 <span>{data?.agency?.name}</span>
                             </div>
-                        </div>
-                    </>
-                )}
+                        </>
+                    )}
 
-                {data?.lead_source?.id == 7 && (
-                    <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {data?.lead_source?.id == 7 && (
+                        <>
                             <div className="lead-details-list">
                                 <label style={{ fontWeight: 'bold' }}>Referred University:</label>
                                 <span>{data?.referred_university?.name}</span>
                             </div>
-                        </div>
-                    </>
-                )}
+                        </>
+                    )}
 
-                {data?.lead_source?.id == 11 && (
-                    <>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {data?.lead_source?.id == 11 && (
+                        <>
                             <div className="lead-details-list">
                                 <label style={{ fontWeight: 'bold' }}>Referred Event:</label>
                                 <span>{data?.event?.name}</span>
                             </div>
-                        </div>
-                    </>
-                )}
+                        </>
+                    )}
+
+                </div>
 
                 {data?.banner_image && (
                     <>
                         <div className="grid grid-cols-1 gap-4">
                             <div className="lead-details-list">
-                                <label style={{ fontWeight: 'bold',maxWidth:'unset',minWidth:'unset' }}>Banner Image (preferred size 660x350)</label>
+                                <label style={{ fontWeight: 'bold', maxWidth: 'unset', minWidth: 'unset' }}>Banner Image (preferred size 660x350)</label>
                                 <Image loader={myLoader} src={data?.banner_image || ''} width={250} height={250} />
                             </div>
                         </div>

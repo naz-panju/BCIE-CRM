@@ -47,6 +47,13 @@ function Details({ data, loading }) {
                         </span>
                     </div>
                 </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="lead-details-list">
+                        <label style={{ fontWeight: 'bold' }}>Status:</label>
+                        <span>{data?.status == 1 ? 'Open' : 'Close'}</span>
+                    </div>
+                </div>
 
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">

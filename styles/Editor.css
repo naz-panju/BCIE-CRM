@@ -527,7 +527,8 @@ span.stage-span {
 }
 
 .lead-table-cntr tbody td svg path {
-    fill: #0B0D23 !important;
+    /* fill: #0B0D23 !important; */
+    /* fill: #0B0D23; */
 
 }
 
