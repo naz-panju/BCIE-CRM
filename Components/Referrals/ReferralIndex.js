@@ -114,7 +114,7 @@ export default function ReferralIndex() {
                 <TextField
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder='Search template'
+                  placeholder='Search link'
                   variant='outlined'
                   size='small'
                   InputProps={{

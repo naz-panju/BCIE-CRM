@@ -113,7 +113,7 @@ export default function EventsIndex() {
               style={{marginLeft:'auto'}}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder='Search template'
+                placeholder='Search event'
                 variant='outlined'
                 size='small'
                 InputProps={{

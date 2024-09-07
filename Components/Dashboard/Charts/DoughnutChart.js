@@ -15,13 +15,14 @@ const DoughnutChartComponent = ({ data }) => {
             label: '',
             data: [data?.achievement, data?.target],
             backgroundColor: ['#e73f76', '#322fc8'], // Example colors for each slice
-            borderWidth: 10, // Adjust border width as desired
+            // borderWidth: 10, // Adjust border width as desired
             borderColor: '#fff', // Set white border color
           },
         ],
       },
       options: {
         responsive: true,
+        cutout: '60%',
         plugins: {
           legend: {
             display: false, // Hide legend by default
@@ -66,7 +67,7 @@ const DoughnutChartComponent = ({ data }) => {
     };
   }, [data]);
 
-  return <canvas ref={chartRef}></canvas>;
+  return <canvas ref={chartRef} ></canvas>;
 };
 
 export default DoughnutChartComponent;
