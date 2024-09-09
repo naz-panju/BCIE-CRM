@@ -226,7 +226,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
     const [branchId, setbranchId] = useState()
     const handleBranchChange = (e) => {
-        setbranchId(e.id)
+        setbranchId(e?.id)
         setValue('branch', e || '');
         setValue('counsellors', '');
         setValue('counsellor', '');
@@ -313,8 +313,8 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                                             isClearable
                                             defaultOptions
                                             loadOptions={fetchBranches}
-                                            getOptionLabel={(e) => e.name}
-                                            getOptionValue={(e) => e.id}
+                                            getOptionLabel={(e) => e?.name}
+                                            getOptionValue={(e) => e?.id}
                                             onChange={handleBranchChange}
                                         />
                                         {errors.branch && <span className='form-validation'>{errors.branch.message}</span>}
@@ -339,8 +339,8 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                                             isClearable
                                             defaultOptions
                                             loadOptions={fetchCounsellor}
-                                            getOptionLabel={(e) => e.name}
-                                            getOptionValue={(e) => e.id}
+                                            getOptionLabel={(e) => e?.name}
+                                            getOptionValue={(e) => e?.id}
                                             onChange={handleBulkCouncsellorChange}
                                         />
                                         {errors.counsellors && <span className='form-validation'>{errors.counsellors.message}</span>}
@@ -364,8 +364,8 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                                             isClearable
                                             defaultOptions
                                             loadOptions={fetchCounsellor}
-                                            getOptionLabel={(e) => e.name}
-                                            getOptionValue={(e) => e.id}
+                                            getOptionLabel={(e) => e?.name}
+                                            getOptionValue={(e) => e?.id}
                                             onChange={handleCouncsellorChange}
                                         />
                                         {errors.counsellor && <span className='form-validation'>{errors.counsellor.message}</span>}

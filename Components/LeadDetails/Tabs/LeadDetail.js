@@ -329,7 +329,7 @@ function LeadDetail({ data, handleEdit, loading }) {
                             {
                                 data?.withdrawn == 1 && data?.withdraw_reason &&
                                 <div className="lead-details-list">
-                                    <label style={{ fontWeight: 'bold' }}>Withdrawn Reason</label>: {data?.withdraw_reason}
+                                    <label style={{ fontWeight: 'bold' }}>Withdrawn Reason</label> {data?.withdraw_reason}
                                 </div>
                             }
                         </div>
