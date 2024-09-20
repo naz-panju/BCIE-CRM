@@ -88,19 +88,19 @@ const headCells = [
     label: 'Title',
   },
   {
-    id: 'assigned_to',
+    id: 'assignedToUser.name',
     numeric: true,
     disablePadding: false,
     label: 'Assigned To ',
   },
   {
-    id: 'created_by',
+    id: 'createdBy.name',
     numeric: true,
     disablePadding: false,
     label: 'Created By',
   },
   {
-    id: 'due',
+    id: 'due_date',
     numeric: true,
     disablePadding: false,
     label: 'Due Date',
@@ -113,13 +113,13 @@ const headCells = [
     label: 'Status',
   },
   {
-    id: 'student',
+    id: 'lead.name',
     numeric: true,
     disablePadding: false,
     label: 'Student',
   },
   {
-    id: 'uni_name',
+    id: 'applicaion.university.name',
     numeric: true,
     disablePadding: false,
     label: 'University',
@@ -128,22 +128,25 @@ const headCells = [
     id: 'icon',
     numeric: true,
     disablePadding: false,
-    // label: 'Status',
+    noSort: true
   },
 ];
+
+let field = ''
+let sortOrder = true
 
 function EnhancedTableHead(props) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property);
+    onRequestSort(event, property?.id);
+    field = property?.id
   };
 
   return (
 
     <TableHead>
       <TableRow>
-
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -151,18 +154,21 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            {/* <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            > */}
-              {headCell.label}
-              {/* {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel> */}
+            {
+              !headCell?.noSort &&
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+                onClick={createSortHandler(headCell)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component="span" sx={visuallyHidden}>
+                    {sortOrder ? 'sorted ascending' : 'sorted descending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            }
           </TableCell>
         ))}
       </TableRow>
@@ -246,7 +252,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
   const [selected, setSelected] = React.useState([]);
   // const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [limit, setLimit] = React.useState(10);
+  const [limit, setLimit] = React.useState(50);
   const [list, setList] = useState([])
   const [loading, setLoading] = useState(false)
 
@@ -262,6 +268,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
   const [detailId, setDetailId] = useState()
 
   const handleRequestSort = (event, property) => {
+    sortOrder = !sortOrder
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
@@ -355,6 +362,8 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
       created_by: selectedCreatedUser,
       status: selectedStatus,
       keyword: watch('title'),
+      sort_field: field,
+      sort_order: sortOrder ? 'asc' : 'desc',
       page: page
     }
     if (archived) {
@@ -443,11 +452,11 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
 
   const onSearch = () => {
     if (page == 1) {
-        setsearchRefresh(!searchRefresh)
+      setsearchRefresh(!searchRefresh)
     } else {
-        setPage(1)
+      setPage(1)
     }
-}
+  }
   const handleClearSearch = (from) => {
     // if (watch('nameSearch') || watch('emailSearch') || watch('numberSearch') || watch('lead_id_search') || watch('assignedTo') || watch('stage')) {
     setValue('title', '')
@@ -480,7 +489,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
 
   useEffect(() => {
     fetchTable()
-  }, [page, refresh, limit, searchRefresh])
+  }, [page, refresh, limit, searchRefresh, sortOrder])
 
 
   return (
@@ -737,9 +746,9 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
                               <TableCell align="left">
                                 {
                                   session?.data?.user?.id == row?.createdBy?.id &&
-                                   row?.status != 'Completed' &&
+                                  row?.status != 'Completed' &&
                                   <Button style={{ textTransform: 'none' }} onClick={() => handleEdit(row?.id)}>
-                                    <Edit style={{color:'blue'}} fontSize='small' />
+                                    <Edit style={{ color: 'blue' }} fontSize='small' />
                                   </Button>
                                 }
                               </TableCell>
@@ -780,9 +789,9 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
           <div className='d-flex justify-content-between align-items-center'>
             <div className='select-row-box'>
               <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={15}>15</MenuItem>
-                <MenuItem value={25}>25</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+                <MenuItem value={100}>100</MenuItem>
+                <MenuItem value={150}>150</MenuItem>
               </Select>
               <label>Rows per page</label>
             </div>

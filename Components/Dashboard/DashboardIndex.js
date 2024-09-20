@@ -62,7 +62,7 @@ function DashboardIndex() {
 
     const fetchCounsellor = (e) => {
         if (session?.data?.user?.role?.id == 3) {
-            return ListingApi.users({ keyword: e, role_id: 5, manager_id: selectedMangeId, office_id: officeId }).then(response => {
+            return ListingApi.counsellors({ keyword: e, role_id: 5, manager_id: selectedMangeId, office_id: officeId }).then(response => {
                 if (typeof response.data.data !== "undefined") {
                     return response.data.data;
                 } else {
@@ -70,7 +70,7 @@ function DashboardIndex() {
                 }
             })
         } else if (session?.data?.user?.role?.id == 4) {
-            return ListingApi.counsellors({ keyword: e, office_id: officeId, officeIdrole_id: 5 }).then(response => {
+            return ListingApi.counsellors({ keyword: e, office_id: officeId, }).then(response => {
                 if (typeof response.data.data !== "undefined") {
                     return response.data.data;
                 } else {

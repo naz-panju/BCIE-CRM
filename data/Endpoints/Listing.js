@@ -26,6 +26,8 @@ export const ListingApi = {
     applicationStages:(data) => http.get(`listing/next-stages/${data?.id}`, { params: data }),
     applications:(data) => http.get(`listing/applications/${data?.id}`, { params: data }),
     counsellors:(data) => http.get(`listing/counselors`, { params: data }),
+    uniDocuments:(data) => http.get(`listing/university-documents-leads/${data?.lead_id}`, { params: data }),
+    campaigns:(data) => http.get(`listing/lead-campaigns/${data?.source_id}`, { params: data }),
 
     permissionUser:(data) => http.get(`listing/accessable-users`, { params: data }),
     

@@ -89,7 +89,7 @@ const headCells = [
         label: 'Title',
     },
     {
-        id: 'country',
+        id: 'country.name',
         numeric: false,
         disablePadding: false,
         label: 'Country ',
@@ -101,7 +101,7 @@ const headCells = [
     //     label: 'Referral Link',
     // },
     {
-        id: 'source',
+        id: 'lead_source.name',
         numeric: false,
         disablePadding: false,
         label: 'Lead Source',
@@ -127,11 +127,15 @@ const headCells = [
     },
 ];
 
+let field = ''
+let sortOrder = true
+
 function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
         props;
     const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
+        onRequestSort(event, property?.id);
+        field = property?.id
     };
 
 
@@ -156,21 +160,21 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        {/* {
+                        {
                             !headCell?.noSort &&
                             <TableSortLabel
                                 active={orderBy === headCell.id}
-                                direction={orderBy === headCell.id ? order : 'asc'}
-                                onClick={createSortHandler(headCell.id)}
-                            > */}
-                        {headCell.label}
-                        {/* {orderBy === headCell.id ? (
+                                direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+                                onClick={createSortHandler(headCell)}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
                                     <Box component="span" sx={visuallyHidden}>
-                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                        {sortOrder ? 'sorted ascending' : 'sorted descending'}
                                     </Box>
                                 ) : null}
                             </TableSortLabel>
-                        } */}
+                        }
                     </TableCell>
                 ))}
             </TableRow>
@@ -268,6 +272,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
 
 
     const handleRequestSort = (event, property) => {
+        sortOrder = !sortOrder
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -370,7 +375,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
 
     const fetchTable = () => {
         setLoading(true)
-        ReferralApi.list({ limit: limit, page: page, keyword: searchTerm }).then((response) => {
+        ReferralApi.list({ limit: limit, page: page, keyword: searchTerm,sort_field: field,sort_order: sortOrder ? 'asc' : 'desc', }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -385,7 +390,7 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
     useEffect(() => {
         setcurrentURL(window?.location?.origin)
         fetchTable()
-    }, [page, refresh, limit, searching])
+    }, [page, refresh, limit, searching,sortOrder])
 
     return (
 
@@ -455,7 +460,13 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                             <TableCell align="left">{row?.country?.name}</TableCell>
                                                             {/* <TableCell align="left"><a style={{ color: 'blue' }}>{`${currentURL}/forms/lead`}</a></TableCell> */}
                                                             <TableCell align="left">{row?.lead_source?.name}</TableCell>
-                                                            <TableCell align="left">{moment(row?.date_of_validity).format('DD-MM-YYYY')}</TableCell>
+                                                            <TableCell align="left">
+                                                                {
+                                                                    row?.last_date_of_validity ?
+                                                                        moment(row?.date_of_validity).format('DD-MM-YYYY')
+                                                                        : 'NA'
+                                                                }
+                                                            </TableCell>
                                                             <TableCell align="left">
                                                                 {
                                                                     row?.status == 1 ?

@@ -153,7 +153,7 @@ function Details({ data, loading }) {
                     <div className="grid grid-cols-1 gap-4">
                         <div className="lead-details-list">
                             <label style={{ fontWeight: 'bold' }}>Description:</label>
-                            <span>{data?.description}</span>
+                            <div dangerouslySetInnerHTML={{ __html: data?.description }} />
                         </div>
                     </div>
                 }

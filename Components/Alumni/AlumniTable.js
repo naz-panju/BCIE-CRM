@@ -329,7 +329,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
     const [selected, setSelected] = React.useState([]);
     // const [page, setPage] = React.useState(pageNumber);
     const [dense, setDense] = React.useState(false);
-    const [limit, setLimit] = React.useState(10);
+    const [limit, setLimit] = React.useState(50);
     const [list, setList] = useState([])
 
     const [loading, setLoading] = useState(false)
@@ -468,6 +468,16 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
         })
     }
 
+    const fetchCampaigns = (e) => {
+        return ListingApi.campaigns({ keyword: e, source_id: selectedSource }).then(response => {
+            if (typeof response?.data?.data !== "undefined") {
+                return response?.data?.data
+            } else {
+                return [];
+            }
+        })
+    }
+
 
     const handleRequestSort = (event, property) => {
         sortOrder = !sortOrder
@@ -519,6 +529,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
     const handleChangeRowsPerPage = (event) => {
         setLimit(parseInt(event.target.value));
         setPage(1);
+        router.replace(`/alumni?page=1`);
     };
 
     const handleChangeDense = (event) => {
@@ -663,6 +674,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
         setselectedSource(e?.id || '');
         setValue('source', e || '')
 
+        setValue('campaigns', '')
         setValue('agency', '')
         setValue('referred_student', '')
         setValue('referred_university', '')
@@ -698,6 +710,8 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
         setValue('application_number', '')
         setValue('course', '')
 
+        setValue('campaigns', '')
+
         setselectedCountry()
         // setselectedIntake()
         setselectedUniversity()
@@ -728,11 +742,11 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
             email: watch('emailSearch'),
             phone_number: watch('numberSearch'),
 
+            ...((selectedSource == 1 || selectedSource == 2) ? { lead_campaign_id: watch('campaigns')?.id } : {}),
             ...(selectedSource == 5 ? { referred_student_id: watch('referred_student')?.id } : {}),
             ...(selectedSource == 6 ? { agency: watch('agency')?.id } : {}),
             ...(selectedSource == 7 ? { referral_university_id: watch('referred_university')?.id } : {}),
             ...(selectedSource == 11 ? { event_id: watch('events')?.id } : {}),
-
 
             limit: limit,
             source_id: selectedSource,
@@ -1113,6 +1127,29 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                     </div>
 
                     {
+                        (watch('source')?.id == 1 || watch('source')?.id == 2) &&
+                        <div>
+                            <div className='form-group'>
+
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                                    <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                <AsyncSelect
+                                    isClearable
+                                    defaultOptions
+                                    name='campaigns'
+                                    value={watch('campaigns')}
+                                    defaultValue={watch('campaigns')}
+                                    loadOptions={fetchCampaigns}
+                                    getOptionLabel={(e) => e.name}
+                                    getOptionValue={(e) => e.id}
+                                    placeholder={<div>Select Campaign</div>}
+                                    onChange={(options) => setValue('campaigns', options)}
+                                />
+                            </div>
+                        </div>
+                    }
+                    {
                         watch('source')?.id == 5 &&
                         <div>
                             <div className='form-group'>
@@ -1385,7 +1422,8 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                     name: watch('nameSearch'),
                     email: watch('emailSearch'),
                     phone_number: watch('numberSearch'),
-
+                    
+                    ...((selectedSource == 1 || selectedSource == 2) ? { lead_campaign_id: watch('campaigns')?.id } : {}),
                     ...(selectedSource == 5 ? { referred_student_id: watch('referred_student')?.id } : {}),
                     ...(selectedSource == 6 ? { agency: watch('agency')?.id } : {}),
                     ...(selectedSource == 7 ? { referral_university_id: watch('referred_university')?.id } : {}),
@@ -1570,9 +1608,9 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <div className='select-row-box'>
                                         <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
-                                            <MenuItem value={10}>10</MenuItem>
-                                            <MenuItem value={15}>15</MenuItem>
-                                            <MenuItem value={25}>25</MenuItem>
+                                            <MenuItem value={50}>50</MenuItem>
+                                            <MenuItem value={100}>100</MenuItem>
+                                            <MenuItem value={150}>150</MenuItem>
                                         </Select>
                                         <label>Rows per page</label>
                                     </div>

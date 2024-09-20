@@ -652,7 +652,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                         defaultValue={watch('country_of_birth')}
                                     />
                                     {errors.country_of_birth && <span className='form-validation'>{errors.country_of_birth.message}</span>}
-
                                 </Grid>
                             </div>
                             <div className='application-input'>
@@ -680,8 +679,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                     defaultValue={watch('country_of_residence')}
                                 /> */}
                                     {errors.country_of_residence && <span className='form-validation'>{errors.country_of_residence.message}</span>}
-
-
                                 </Grid>
                             </div>
                         </div>
@@ -719,7 +716,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                     {errors.phone && <span className='form-validation'>{errors.phone.message}</span>}
                                 </Grid>
                             </div>
-
 
                             <div className='application-input'>
                                 <label className='form-text'>Enter Alternate Number</label>

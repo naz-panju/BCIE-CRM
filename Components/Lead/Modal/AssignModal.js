@@ -94,15 +94,9 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
 
     const fetchCounsellor = (e) => {
-        return ListingApi.users({ keyword: e, office_id: branchId || assignToUser?.assignedToOffice?.id, role_id: 5 }).then(response => {
+        return ListingApi.counsellors({ keyword: e, office_id: branchId || assignToUser?.assignedToOffice?.id, }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
-                // console.log(response?.data?.data);
-                if (session?.data?.user?.role?.id == 5) {
-                    const returnCounsellor = response?.data?.data?.find((couns => couns?.id == session?.data?.user?.id))
-                    return [returnCounsellor]
-                } else {
-                    return response?.data?.data;
-                }
+                    return response?.data?.data;   
             } else {
                 return [];
             }
@@ -344,7 +338,6 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                                             onChange={handleBulkCouncsellorChange}
                                         />
                                         {errors.counsellors && <span className='form-validation'>{errors.counsellors.message}</span>}
-
                                     </Grid>
                                 </div>
                             </div>

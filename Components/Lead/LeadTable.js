@@ -127,6 +127,12 @@ const headCells = [
     label: 'Preferred Country',
   },
   {
+    id: 'created_at',
+    numeric: false,
+    disablePadding: true,
+    label: 'Created date',
+  },
+  {
     id: 'users.name',
     numeric: true,
     disablePadding: false,
@@ -281,7 +287,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   // const [selected, setSelected] = React.useState([]);  //recieving props from parent lead componnet
   // const [page, setPage] = React.useState(pageNumber);
   const [dense, setDense] = React.useState(false);
-  const [limit, setLimit] = React.useState(10);
+  const [limit, setLimit] = React.useState(50);
   const [list, setList] = useState([])
   const [lastPage, setlastPage] = useState()
   const [current_page, setCurrent_page] = useState()
@@ -379,6 +385,14 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   const handleChangeRowsPerPage = (event) => {
     setLimit(parseInt(event.target.value));
     setPage(1);
+    if (withdraw) {
+      router.replace(`/withdrawn-leads?page=1`);
+    }
+    if (unassign) {
+      router.replace(`/un-assigned-leads?page=1`);
+    } else {
+      router.replace(`/lead?page=1`);
+    }
   };
 
   const handleChangeDense = (event) => {
@@ -512,6 +526,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setselectedAgency('');
     setValue('')
 
+    setValue('campaigns', '')
     setValue('agency', '')
     setValue('referred_student', '')
     setValue('referred_university', '')
@@ -546,7 +561,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       // event_id: data?.source?.id == 11 ? data?.referred_event?.id : null || null,
       // country_id: session?.data?.user?.office_country?.id,
 
-
+      ...((selectedSource == 1 || selectedSource == 2) ? { lead_campaign_id: watch('campaigns')?.id } : {}),
       ...(selectedSource == 5 ? { referred_student_id: watch('referred_student')?.id } : {}),
       ...(selectedSource == 6 ? { agency: watch('agency')?.id } : {}),
       ...(selectedSource == 7 ? { referral_university_id: watch('referred_university')?.id } : {}),
@@ -658,7 +673,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     setValue('referred_student', '')
     setValue('referred_university', '')
     setValue('events', '')
-
+    setValue('campaigns', '')
 
     setselectedEvents()
 
@@ -718,8 +733,15 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     })
   }
 
-
-
+  const fetchCampaigns = (e) => {
+    return ListingApi.campaigns({ keyword: e,source_id:selectedSource }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data
+      } else {
+        return [];
+      }
+    })
+  }
 
   return (
     <>
@@ -826,6 +848,30 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
               />
             </div>
           </div>
+
+          {
+            (watch('source')?.id == 1 || watch('source')?.id == 2) &&
+            <div>
+              <div className='form-group'>
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
+                  <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <AsyncSelect
+                  isClearable
+                  defaultOptions
+                  name='campaigns'
+                  value={watch('campaigns')}
+                  defaultValue={watch('campaigns')}
+                  loadOptions={fetchCampaigns}
+                  getOptionLabel={(e) => e.name}
+                  getOptionValue={(e) => e.id}
+                  placeholder={<div>Select Campaign</div>}
+                  onChange={(options) => setValue('campaigns', options)}
+                />
+              </div>
+            </div>
+          }
 
           {
             watch('source')?.id == 5 &&
@@ -1037,10 +1083,13 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
           assigned_to: selectedAssignedTo,
           stage: selectedStage,
           assign_to_office_id: selectedBranch,
+
+          ...((selectedSource == 1 || selectedSource == 2) ? { lead_campaign_id: watch('campaigns')?.id } : {}),
           ...(selectedSource == 5 ? { referred_student_id: watch('referred_student')?.id } : {}),
           ...(selectedSource == 6 ? { agency: watch('agency')?.id } : {}),
           ...(selectedSource == 7 ? { referral_university_id: watch('referred_university')?.id } : {}),
           ...(selectedSource == 11 ? { event_id: watch('events')?.id } : {}),
+
           source_id: selectedSource,
           name: watch('nameSearch'),
           email: watch('emailSearch'),
@@ -1124,6 +1173,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 <TableCell align="left">{row?.country_of_residence?.name || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.city || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.preferred_countries || 'NA'}</TableCell>
+                                <TableCell align="left">{row?.created_at ? moment(row?.created_at).format('DD-MM-YYYY') : 'NA'}</TableCell>
                                 <TableCell sx={{ display: 'flex', alignItems: 'center' }} align="left" className='assigned-colm'>
                                   {
                                     row?.assignedToCounsellor &&
@@ -1184,9 +1234,9 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                 <div className='d-flex justify-content-between align-items-center'>
                   <div className='select-row-box'>
                     <Select value={limit} onChange={handleChangeRowsPerPage} inputprops={{ 'aria-label': 'Rows per page' }}>
-                      <MenuItem value={10}>10</MenuItem>
-                      <MenuItem value={15}>15</MenuItem>
-                      <MenuItem value={25}>25</MenuItem>
+                      <MenuItem value={50}>50</MenuItem>
+                      <MenuItem value={100}>100</MenuItem>
+                      <MenuItem value={150}>150</MenuItem>
                     </Select>
                     <label>Rows per page</label>
                   </div>

@@ -75,19 +75,19 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'name',
+        id: 'title',
         numeric: false,
         disablePadding: true,
         label: 'Title',
     },
     {
-        id: 'approval',
+        id: 'approved',
         numeric: false,
         disablePadding: false,
         label: 'Approval',
     },
     {
-        id: 'created_by',
+        id: 'created_by.name',
         numeric: false,
         disablePadding: false,
         label: 'Created By ',
@@ -97,15 +97,18 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: '',
-        noSort: false
+        noSort: true
     },
 ];
 
+let field = ''
+let sortOrder = true
 function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
         props;
     const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
+        onRequestSort(event, property?.id);        
+        field = property?.id
     };
 
 
@@ -130,21 +133,21 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        {/* {
+                        {
                             !headCell?.noSort &&
                             <TableSortLabel
                                 active={orderBy === headCell.id}
-                                direction={orderBy === headCell.id ? order : 'asc'}
-                                onClick={createSortHandler(headCell.id)}
-                            > */}
+                                direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+                                onClick={createSortHandler(headCell)}
+                            >
                                 {headCell.label}
-                                {/* {orderBy === headCell.id ? (
+                                {orderBy === headCell.id ? (
                                     <Box component="span" sx={visuallyHidden}>
-                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                        {sortOrder ? 'sorted ascending' : 'sorted descending'}
                                     </Box>
                                 ) : null}
                             </TableSortLabel>
-                        } */}
+                        }
                     </TableCell>
                 ))}
             </TableRow>
@@ -239,10 +242,12 @@ export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page
 
 
     const handleRequestSort = (event, property) => {
+        sortOrder = !sortOrder
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
+
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
@@ -316,7 +321,7 @@ export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page
 
     const fetchTable = () => {
         setLoading(true)
-        WhatsAppTemplateApi.list({ limit: limit, page: page,keyword:searchTerm }).then((response) => {
+        WhatsAppTemplateApi.list({ limit: limit, page: page,keyword:searchTerm,sort_field: field,sort_order: sortOrder ? 'asc' : 'desc' }).then((response) => {
             // console.log(response);
             setList(response?.data)
             setLoading(false)
@@ -327,7 +332,7 @@ export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit,searching])
+    }, [page, refresh, limit,searching,sortOrder])
 
     return (
 

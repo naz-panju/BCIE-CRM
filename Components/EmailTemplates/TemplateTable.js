@@ -7,28 +7,23 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import TableSortLabel from '@mui/material/TableSortLabel';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
 import { useEffect } from 'react';
-import { LeadApi } from '@/data/Endpoints/Lead';
 import { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Grid, MenuItem, Pagination, Select, Stack } from '@mui/material';
+import { Button, Grid, MenuItem, Pagination, Select, Stack, TableSortLabel } from '@mui/material';
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { TemplateApi } from '@/data/Endpoints/Template';
 import { Edit } from '@mui/icons-material';
 import EmailTemplateDetailModal from '../EmailTemplateDetail/Modal';
+import { visuallyHidden } from '@mui/utils';
 
 
 function createData(id, name, calories, fat, carbs, protein) {
@@ -98,17 +93,20 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: '',
-        noSort: false
+        noSort: true
     },
 ];
 
+let field = ''
+let sortOrder = true
 function EnhancedTableHead(props) {
     const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
         props;
     const createSortHandler = (property) => (event) => {
-        onRequestSort(event, property);
+        onRequestSort(event, property?.id);        
+        field = property?.id
     };
-
+    
 
     return (
         <TableHead>
@@ -131,21 +129,21 @@ function EnhancedTableHead(props) {
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.id ? order : false}
                     >
-                        {/* {
+                        {
                             !headCell?.noSort &&
                             <TableSortLabel
                                 active={orderBy === headCell.id}
-                                direction={orderBy === headCell.id ? order : 'asc'}
-                                onClick={createSortHandler(headCell.id)}
-                            > */}
-                        {headCell.label}
-                        {/* {orderBy === headCell.id ? (
+                                direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+                                onClick={createSortHandler(headCell)}
+                            >
+                                {headCell.label}
+                                {orderBy === headCell.id ? (
                                     <Box component="span" sx={visuallyHidden}>
-                                        {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                        {sortOrder ? 'sorted ascending' : 'sorted descending'}
                                     </Box>
                                 ) : null}
                             </TableSortLabel>
-                        } */}
+                        }
                     </TableCell>
                 ))}
             </TableRow>
@@ -240,6 +238,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
 
 
     const handleRequestSort = (event, property) => {
+        sortOrder = !sortOrder
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
@@ -318,8 +317,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
 
     const fetchTable = () => {
         setLoading(true)
-        TemplateApi.list({ limit: limit, page: page,keyword:searchTerm }).then((response) => {
-            // console.log(response?.data);
+        TemplateApi.list({ limit: limit, page: page, keyword: searchTerm , sort_field: field,sort_order: sortOrder ? 'asc' : 'desc',}).then((response) => {
             setList(response?.data)
             setLoading(false)
         }).catch((error) => {
@@ -329,7 +327,7 @@ export default function TemplateTable({ refresh, editId, setEditId, page, setPag
     }
     useEffect(() => {
         fetchTable()
-    }, [page, refresh, limit,searching])
+    }, [page, refresh, limit, searching,sortOrder])
 
     return (
 

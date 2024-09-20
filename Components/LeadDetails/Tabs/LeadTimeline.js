@@ -22,7 +22,7 @@ import { Skeleton } from '@mui/material';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import Image from 'next/image';
 
-export default function BasicSelect({ lead_id, from, app_id,refresh }) {
+export default function BasicSelect({ lead_id, from, app_id, refresh }) {
     const [select, setAge] = React.useState('');
     const [list, setList] = useState([])
     const [limit, setLimit] = useState(10)
@@ -55,7 +55,7 @@ export default function BasicSelect({ lead_id, from, app_id,refresh }) {
 
     useEffect(() => {
         getData()
-    }, [limit,refresh])
+    }, [limit, refresh])
 
 
     return (
@@ -99,31 +99,34 @@ export default function BasicSelect({ lead_id, from, app_id,refresh }) {
                                                     <TimelineConnector />
                                                 </TimelineSeparator>
                                                 <TimelineContent className='timeline-content-content-block'>
-                                                    <div className='timeline-content-content'>
-                                                        <p>{obj?.description}</p>
+                                                    <div className='timeline-content-content '>
+                                                        <div className='flex justify-between w-full items-center'>
+                                                            <p className='leading-5 mr-2'>{obj?.description}</p>
+                                                            {
+                                                                obj?.type && (
+                                                                    <>
+                                                                        {obj.type === 'email_send' || obj.type === 'email_received' ? (
+                                                                            <span style={{ background: 'green' }} className='timeline-content-content-span'></span>
+                                                                        ) : obj.type === 'phone_call_created' ? (
+                                                                            <span style={{ background: 'orange' }} className='timeline-content-content-span'></span>
+                                                                        ) : obj.type.startsWith('lead_') ? (
+                                                                            <span style={{ background: 'blue' }} className='timeline-content-content-span'></span>
+                                                                        ) : obj.type.startsWith('application_') ? (
+                                                                            <span style={{ background: 'yellow' }} className='timeline-content-content-span'></span>
+                                                                        ) : obj.type.startsWith('stage_') ? (
+                                                                            <span style={{ background: 'grey' }} className='timeline-content-content-span'></span>
+                                                                        ) : obj.type.startsWith('task_') ? (
+                                                                            <span style={{ background: 'aqua' }} className='timeline-content-content-span'></span>
+                                                                        ) : <span style={{ background: 'black' }} className='timeline-content-content-span'></span>}
+                                                                    </>
+                                                                )
+                                                            }
+                                                        </div>
                                                         {/* <span>+10</span> */}
 
                                                         <svg className='timeline-content-content-svg' xmlns="http://www.w3.org/2000/svg" width="9" height="12" viewBox="0 0 9 12" fill="none"><path d="M-2.62268e-07 6L9 0.803848L9 11.1962L-2.62268e-07 6Z" fill="white" /></svg>
 
-                                                        {
-                                                            obj?.type && (
-                                                                <>
-                                                                    {obj.type === 'email_send' || obj.type === 'email_received' ? (
-                                                                        <span style={{ background: 'green' }} className='timeline-content-content-span'></span>
-                                                                    ) : obj.type === 'phone_call_created' ? (
-                                                                        <span style={{ background: 'orange' }} className='timeline-content-content-span'></span>
-                                                                    ) : obj.type.startsWith('lead_') ? (
-                                                                        <span style={{ background: 'blue' }} className='timeline-content-content-span'></span>
-                                                                    ) : obj.type.startsWith('application_') ? (
-                                                                        <span style={{ background: 'yellow' }} className='timeline-content-content-span'></span>
-                                                                    ) : obj.type.startsWith('stage_') ? (
-                                                                        <span style={{ background: 'grey' }} className='timeline-content-content-span'></span>
-                                                                    ) : obj.type.startsWith('task_') ? (
-                                                                        <span style={{ background: 'aqua' }} className='timeline-content-content-span'></span>
-                                                                    ) : <span style={{ background: 'black' }} className='timeline-content-content-span'></span>}
-                                                                </>
-                                                            )
-                                                        }
+
                                                     </div>
                                                 </TimelineContent>
                                             </TimelineItem>

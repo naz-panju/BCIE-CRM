@@ -87,7 +87,7 @@ export default function EventsDetailTab({ id, close }) {
         },
         {
             component: <EventRegistrations details={details} />,
-            label: 'Registrations'
+            label: 'Registration'
         },
     ];
 
@@ -117,7 +117,7 @@ export default function EventsDetailTab({ id, close }) {
                         <div onClick={() => setActiveTab(1)} className='communication-log-item '>
                             <div className={`lead-score-block-tab tab flex ${activeTab == 1 ? 'lead-tab-active' : 'bg-trans'}`} >
                                 <span style={{ color: 'white' }}>
-                                    Registartions</span>
+                                Registration</span>
                             </div>
                         </div>
                     </div>

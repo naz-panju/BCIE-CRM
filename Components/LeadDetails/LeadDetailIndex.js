@@ -320,7 +320,7 @@ function LeadDetails() {
 
   }
 
-  var audio = new Audio(WhatsappSound);
+  var audio = new Audio('https://bcie.spider.ws/whatsapp_audio.mp3');
 
   const playMessageAudio = () => {
     audio.play().catch(error => {
@@ -333,17 +333,15 @@ function LeadDetails() {
       cluster: "ap2",
     });
 
-    console.log('Pusher connection object:', pusher.connection);
     pusher.connection.bind('error', function (err) {
-      console.error('Pusher connection error:', err);
       toast.error(`Connection Error: ${err.message || 'Unknown error'}`, {
         autoClose: 10000,
         position: "top-right",
       });
     });
+
     const channel = pusher.subscribe("bcie-channel");
     channel.bind("bcie-event", (data) => {
-      console.log(data);
       if (data?.lead_id) {
         if (data?.lead_id === details?.id) {
           if (!isTrue) {

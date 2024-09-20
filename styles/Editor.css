@@ -650,7 +650,7 @@ span.stage-span {
     width: fit-content;
     transition: .5s;
     margin: 0px auto;
-    min-width: 165px;
+    min-width: 170px;
 }
 
 
@@ -662,8 +662,8 @@ span.stage-span {
 
 span.timeline-content-content-span {
     background: #0047CD;
-    width: 18px;
-    height: 18px;
+    min-width: 18px;
+    min-height: 18px;
     border-radius: 50%;
 }
 

@@ -61,6 +61,7 @@ function ExportExcel({ from, fileName, params, data, tableLoading }) {
                     "Country of Residence": obj?.country_of_residence?.name || 'NA',
                     "City of Student": obj?.city || 'NA',
                     "Preferred Country": obj?.preferred_countries || 'NA',
+                    "Created Date": moment(row?.created_at).format('DD-MM-YYYY'),
                     "Assigned To": obj?.assignedToCounsellor?.name || 'NA',
                     "Stage": obj?.stage?.name || 'NA',
                 })

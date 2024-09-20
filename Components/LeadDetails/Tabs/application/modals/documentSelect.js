@@ -186,12 +186,13 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
         }
     }
 
+
     const [Documents, setDocuments] = useState([])
     const [uniDocuments, setuniDocuments] = useState([])
     const getDetails = () => {
         setDataLoading(true)
         ApplicationApi.view({ id: editId }).then((response) => {
-            console.log(response?.data?.data?.documents);
+            console.log(response);
             // const mergedArray = response?.data?.data?.documents.concat(response?.data?.data?.university_documents);
             setuniDocuments(response?.data?.data?.university_documents)
             setDocuments(response?.data?.data?.documents)
@@ -202,18 +203,28 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     }
 
     // console.log(Documents);
-    const getLeadDetails = () => {
+    const getLeadDetails = async () => {
         setDataLoading(true)
-        LeadApi.listDocuments({ lead_id: editId, limit: 100 }).then((response) => {
-            // console.log(response);
+        try {
+            const response = await LeadApi.listDocuments({ lead_id: editId, limit: 100 })
+            const uniResponse = await ListingApi.uniDocuments({ lead_id: editId, limit: 100 })
+            console.log(uniResponse);
             const datas = response?.data?.data?.filter((obj => obj?.status !== 'Requested'))
             setDocuments(datas)
+            setuniDocuments(uniResponse?.data?.data)
             setDataLoading(false)
-        }).catch((error) => {
-            setDataLoading(false)
-        })
-    }
+        } catch (error) {
 
+        }
+        // LeadApi.listDocuments({ lead_id: editId, limit: 100 }).then((response) => {
+        //     console.log(response);
+        //     const datas = response?.data?.data?.filter((obj => obj?.status !== 'Requested'))
+        //     setDocuments(datas)
+        //     setDataLoading(false)
+        // }).catch((error) => {
+        //     setDataLoading(false)
+        // })
+    }
 
     const isDocumentChecked = (value) => documentSelected.includes(value);
 
@@ -230,7 +241,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
             // setSelectedDocuments(documentSelected)
             // setSelectedAttachments(file)
             setattachLoading(true)
-            sendMessage(null, callBack,documentSelected,file,setattachLoading)
+            sendMessage(null, callBack, documentSelected, file, setattachLoading)
         } else {
             setSelectedDocuments(documentSelected)
             setSelectedAttachments(file)
@@ -243,7 +254,6 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
             setOpen(true)
             if (Documents?.length == 0) {
                 if (from == 'app') {
-                    // console.log('here');
                     getDetails()
                 } else if (from == 'lead') {
                     getLeadDetails()
@@ -254,11 +264,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
         }
         setdocumentSelected(SelectedDocuments)
         setFile(SelectedAttachments || [])
-    }, [editId])
-
-
-
-
+    }, [editId, open])
 
     return (
         <div>
@@ -313,10 +319,40 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
 
                                 </Grid>
 
-                                <div><span style={{ fontWeight: 'bold', fontSize: '16px' }}>University Documents</span></div>
+                                <div className='mb-3'><span style={{ fontWeight: 'bold', fontSize: '16px' }}>University Documents</span></div>
 
-                                <Grid>
-                                    {
+                                {
+                                    from == 'lead' ?
+                                        uniDocuments?.length > 0 ?
+                                            uniDocuments?.map((obj, index) => (
+                                                <div key={index}>
+                                                    <div><span style={{ fontWeight: 'bold', fontSize: '13px', color: 'grey' }}>{obj?.university}</span></div>
+                                                    <Grid>
+
+                                                        <FormGroup style={{}}>
+                                                            <Grid container sx={{ display: 'flex', }}>
+                                                                {
+                                                                    obj?.documents?.map((document, docIndex) => (
+                                                                        obj &&
+                                                                        <Grid key={docIndex} mb={2} item xs={12} sm={6}>
+                                                                            <FormControlLabel control={<Checkbox onChange={() => handleDocumentSelect(document)} value={document} checked={isDocumentChecked(document)} />} label={document?.document_template?.name} />
+                                                                        </Grid>
+
+                                                                    ))
+                                                                }
+                                                            </Grid>
+                                                        </FormGroup>
+
+
+
+                                                    </Grid>
+                                                </div>
+                                            ))
+                                            :
+                                            <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No University Document Found</a></Grid>
+
+                                        :
+
                                         uniDocuments?.length > 0 ?
                                             <FormGroup style={{}}>
                                                 <Grid container sx={{ display: 'flex', }}>
@@ -333,10 +369,8 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
                                             </FormGroup>
                                             :
                                             <Grid height={100} display={'flex'} alignItems={'center'} justifyContent={'center'}> <a>No University Document Found</a></Grid>
-                                    }
 
-
-                                </Grid>
+                                }
 
                                 <Grid display={'flex'} container item xs={12}>
                                     <Grid item xs={12} md={12}>
