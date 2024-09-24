@@ -75,13 +75,13 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'title',
+        id: 'whatsapp_templates.title',
         numeric: false,
         disablePadding: true,
         label: 'Title',
     },
     {
-        id: 'approved',
+        id: 'whatsapp_templates.approved',
         numeric: false,
         disablePadding: false,
         label: 'Approval',

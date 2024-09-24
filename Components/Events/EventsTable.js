@@ -78,7 +78,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'name',
+        id: 'events.name',
         numeric: false,
         disablePadding: true,
         label: 'Event Name',
@@ -90,19 +90,19 @@ const headCells = [
         label: 'Country ',
     },
     {
-        id: 'venue',
+        id: 'events.venue',
         numeric: false,
         disablePadding: false,
         label: 'Venue ',
     },
     {
-        id: 'start_date',
+        id: 'events.start_date',
         numeric: true,
         disablePadding: false,
         label: 'Start Date',
     },
     {
-        id: 'end_date',
+        id: 'events.end_date',
         numeric: true,
         disablePadding: false,
         label: 'End Date',
@@ -112,6 +112,7 @@ const headCells = [
         numeric: true,
         disablePadding: false,
         label: 'Status',
+        noSort: true,
     },
     {
         id: 'edit',

@@ -320,10 +320,8 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                     date = moment(data?.paid_date).format('YYYY-MM-DD')
                 }
                 formData.append('deposit_paid_on', date)
-                formData.append('deposit_amount', data?.amount)
+                formData.append('deposit_amount_paid', data?.amount)
                 formData.append('deposit_mode_of_payment', data?.payment_mode)
-
-
             }
 
             // for (const [key, value] of formData.entries()) {

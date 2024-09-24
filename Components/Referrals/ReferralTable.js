@@ -83,7 +83,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
-        id: 'title',
+        id: 'referral_links.title',
         numeric: false,
         disablePadding: true,
         label: 'Title',
@@ -107,16 +107,17 @@ const headCells = [
         label: 'Lead Source',
     },
     {
-        id: 'validity',
+        id: 'referral_links.validity',
         numeric: false,
         disablePadding: false,
         label: 'Validity',
     },
     {
-        id: 'status',
+        id: 'referral_links.status',
         numeric: true,
         disablePadding: false,
         label: 'Status',
+        noSort: true
     },
     {
         id: 'edit',

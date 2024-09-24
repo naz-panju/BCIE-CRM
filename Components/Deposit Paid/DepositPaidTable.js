@@ -47,6 +47,8 @@ import PortalPermissionModal from '../Applications/Modals/PortalPermissions';
 import EditPaymentModal from '../Applications/Modals/editPaymentModal';
 import SaveApplicationSumber from '../Applications/Modals/ApplicationId';
 import ExportExcel from '@/Form/Excel';
+import DepositConfirmPopup from './popup/depositDeletePopup';
+import DocDeleteConfirmPopup from '../LeadDetails/Tabs/application/modals/DocDeleteConfirm';
 
 
 
@@ -450,7 +452,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
   }
 
   const fetchCounsellors = (e) => {
-    return ListingApi.users({ keyword: e, role_id: 5, office_id: selectedBranch }).then(response => {
+    return ListingApi.counsellors({ keyword: e, office_id: selectedBranch }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response.data.data;
       } else {
@@ -868,17 +870,52 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
   }
 
   const [deleteAmount, setdeleteAmount] = useState()
+  const [deletableData, setdeletableData] = useState()
   const handleDeletePaymentOpen = (obj) => {
+    setdeletableData(obj)
     setdeleteAmount(obj?.id)
   }
-  const handleDeleteAmount = () => {
+    
+  const handleDeleteAmount = (stage) => {
     setsubmitLoading(true)
-    ApplicationApi.deletePayment({ id: deleteAmount }).then((response) => {
+    let dataToSubmit = {
+      id: deleteAmount,
+    }
+
+    ApplicationApi.deletePayment(dataToSubmit).then((response) => {
+      // console.log(response);
+      if (response?.status == 200 || response?.status == 201) {
+        toast.success(response?.data?.message)
+        setsubmitLoading(false)
+        setdeletableData()
+        setdeleteAmount()
+        fetchTable()
+      } else {
+        toast.error(response?.response?.data?.message)
+        setsubmitLoading(false)
+      }
+    }).catch((error) => {
+      toast.error(error?.response?.data?.message)
+      setdeleteLoading(false)
+    })
+  }
+
+  const handleDeleteAmountWithStage = (stage) => {
+
+    setsubmitLoading(true)
+    
+    let dataToSubmit = {
+      id: deleteAmount,
+      stage:stage?.id
+    }
+    
+    ApplicationApi.deleteUniversityDocument(dataToSubmit).then((response) => {
       // console.log(response);
       if (response?.status == 200 || response?.status == 201) {
         toast.success(response?.data?.message)
         setsubmitLoading(false)
         setdeleteAmount()
+        setdeletableData()
         fetchTable()
       } else {
         toast.error(response?.response?.data?.message)
@@ -947,7 +984,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
   }
 
   const fetchCampaigns = (e) => {
-    return ListingApi.campaigns({ keyword: e,source_id:selectedSource }).then(response => {
+    return ListingApi.campaigns({ keyword: e, source_id: selectedSource }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response?.data?.data
       } else {
@@ -977,7 +1014,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
       <PortalPermissionModal editId={PortalId} setEditId={setPortalId} details={details} setDetails={setDetails} />
 
       <EditPaymentModal editId={editPaymentId} setEditId={seteditPaymentId} refresh={fetchTable} />
-      <ConfirmPopup loading={submitLoading} ID={deleteAmount} setID={setdeleteAmount} clickFunc={handleDeleteAmount} title={`Do you want to Delete Deposit Amount?`} />
+      <DepositConfirmPopup delatableData={deletableData} setdeletableData={setdeletableData} loading={submitLoading} ID={deleteAmount} setID={setdeleteAmount} clickFunc={handleDeleteAmount} stageChangeFunction={handleDeleteAmountWithStage} title={`Do you want to Delete Deposit Amount?`} />
 
       <SaveApplicationSumber editId={unId} setEditId={setUniId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
@@ -1181,7 +1218,6 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
 
           <div>
             <div className='form-group'>
-
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="14" viewBox="0 0 20 14" fill="none" className='sear-ic'>
                 <path d="M19 9.00012L10 13.0001L1 9.00012M19 5.00012L10 9.00012L1 5.00012L10 1.00012L19 5.00012Z" stroke="#0B0D23" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>

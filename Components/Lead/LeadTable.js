@@ -417,7 +417,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   );
 
   const fetchUser = (e) => {
-    return ListingApi.permissionUser({ keyword: e, office_id: selectedBranch, role_id: 5 }).then(response => {
+    return ListingApi.counsellors({ keyword: e, office_id: selectedBranch}).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response.data.data;
       } else {
@@ -1204,7 +1204,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 width: '100%',
                               }}
                             >
-                              <TableCell colSpan={9} align="center">
+                              <TableCell colSpan={10} align="center">
                                 <div className='no-table-ask-block'>
                                   <h4 style={{ color: 'grey' }}>No Lead Found</h4>
                                 </div>

@@ -3239,7 +3239,7 @@ a.not-found {
 
 .log-left img {
     width: 582px;
-    height: calc(882px - 50px);
+    height: calc(100vh - 50px);
     object-fit: cover;
 }
 

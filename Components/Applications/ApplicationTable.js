@@ -467,7 +467,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
     }
 
     const fetchCounsellors = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 5, office_id: selectedBranch }).then(response => {
+        return ListingApi.counsellors({ keyword: e, office_id: selectedBranch }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {

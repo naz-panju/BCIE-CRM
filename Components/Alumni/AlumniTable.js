@@ -449,7 +449,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
     }
 
     const fetchCounsellors = (e) => {
-        return ListingApi.users({ keyword: e, role_id: 5, office_id: selectedBranch }).then(response => {
+        return ListingApi.counsellors({ keyword: e, office_id: selectedBranch }).then(response => {
             if (typeof response?.data?.data !== "undefined") {
                 return response.data.data;
             } else {
@@ -1422,7 +1422,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                     name: watch('nameSearch'),
                     email: watch('emailSearch'),
                     phone_number: watch('numberSearch'),
-                    
+
                     ...((selectedSource == 1 || selectedSource == 2) ? { lead_campaign_id: watch('campaigns')?.id } : {}),
                     ...(selectedSource == 5 ? { referred_student_id: watch('referred_student')?.id } : {}),
                     ...(selectedSource == 6 ? { agency: watch('agency')?.id } : {}),

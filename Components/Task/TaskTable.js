@@ -82,7 +82,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'title',
+    id: 'tasks.title',
     numeric: false,
     disablePadding: true,
     label: 'Title',
@@ -100,14 +100,14 @@ const headCells = [
     label: 'Created By',
   },
   {
-    id: 'due_date',
+    id: 'tasks.due_date',
     numeric: true,
     disablePadding: false,
     label: 'Due Date',
   },
 
   {
-    id: 'status',
+    id: 'tasks.status',
     numeric: true,
     disablePadding: false,
     label: 'Status',
@@ -258,7 +258,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
 
   const [selectedUser, setselectedUser] = useState()
   const [selectedCreatedUser, setSelectedCreatedUser] = useState()
-  const [selectedStatus, setSelectedStatus] = useState()
+  const [selectedStatus, setSelectedStatus] = useState('Not Started')
 
   const [taskDetails, setTaskDetails] = useState()
   const [statusOpen, setStatusOpen] = useState(false)
@@ -488,6 +488,7 @@ export default function TaskTable({ refresh, editId, setEditId, page, setPage, a
 
 
   useEffect(() => {
+    setValue('status','Not Started')
     fetchTable()
   }, [page, refresh, limit, searchRefresh, sortOrder])
 
