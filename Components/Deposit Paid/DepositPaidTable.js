@@ -905,7 +905,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
     setsubmitLoading(true)
     
     let dataToSubmit = {
-      id: deleteAmount,
+      id: deletableData?.university_deposit_document?.id,
       stage:stage?.id
     }
     
