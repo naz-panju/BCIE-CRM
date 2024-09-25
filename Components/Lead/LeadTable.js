@@ -1173,7 +1173,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 <TableCell align="left">{row?.country_of_residence?.name || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.city || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.preferred_countries || 'NA'}</TableCell>
-                                <TableCell align="left">{row?.created_at ? moment(row?.created_at).format('DD-MM-YYYY') : 'NA'}</TableCell>
+                                <TableCell align="left">{row?.created_at ? <>{moment(row?.created_at).format('DD-MM-YYYY')} <br />{moment(row?.created_at).format('HH:MM A')}</> : 'NA'}</TableCell>
                                 <TableCell sx={{ display: 'flex', alignItems: 'center' }} align="left" className='assigned-colm'>
                                   {
                                     row?.assignedToCounsellor &&

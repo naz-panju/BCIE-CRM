@@ -1111,7 +1111,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
                                 <TableCell align="left">{row?.country_of_residence?.name || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.city || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.preferred_countries || 'NA'}</TableCell>
-                                <TableCell align="left">{row?.created_at ? moment(row?.created_at).format('DD-MM-YYYY') : 'NA'}</TableCell>
+                                <TableCell align="left">{row?.created_at ? <>{moment(row?.created_at).format('DD-MM-YYYY')} <br />{moment(row?.created_at).format('HH:MM A')}</> : 'NA'}</TableCell>
                                 <TableCell align="left" className='assigned-colm'>
                                   {
                                     row?.assignedToCounsellor &&
