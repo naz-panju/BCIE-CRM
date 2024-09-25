@@ -113,13 +113,13 @@ const headCells = [
     label: 'Status',
   },
   {
-    id: 'lead.name',
+    id: 'leads.name',
     numeric: true,
     disablePadding: false,
     label: 'Student',
   },
   {
-    id: 'applicaion.university.name',
+    id: 'universities.name',
     numeric: true,
     disablePadding: false,
     label: 'University',
