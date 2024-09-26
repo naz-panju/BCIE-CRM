@@ -107,7 +107,7 @@ const headCells = [
         label: 'Lead Source',
     },
     {
-        id: 'referral_links.validity',
+        id: 'last_date_of_validity',
         numeric: false,
         disablePadding: false,
         label: 'Validity',

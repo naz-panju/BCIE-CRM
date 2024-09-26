@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: false,
   transpilePackages: ['@mui/x-charts'],
   images: {
-    domains: ['bcie.spider.ws'], // Add your external image domains here
+    domains: ['crm.studywithbcie.co.uk'], // Add your external image domains here
   },
   webpack: (config) => {
     config.module.rules.push({
