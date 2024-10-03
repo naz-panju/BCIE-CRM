@@ -312,9 +312,7 @@ function Form({ data }) {
     const onSubmit = async (data) => {
 
         if (agree1 && agree2) {
-
-
-
+            
             setLoading(true)
 
             let dob = ''

@@ -571,15 +571,11 @@ export default function LeadApplicationModal({ lead_id, editId, setEditId, handl
                                                 )}
                                             </Grid>
                                         </Grid>
-                                        {
-                                            console.log(watch('university'))
-
-                                        }
                                         {isExpanded && (
                                             <>
                                                 {
                                                     watch('university')?.logo &&
-                                                    <div className='flex items-center justify-center'>
+                                                    <div className='flex items-center justify-center mt-2'>
                                                         <Image src={watch('university')?.logo} alt='uni logo' width={100} height={30} />
                                                     </div>
                                                 }

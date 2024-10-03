@@ -339,7 +339,6 @@ function DashboardIndex() {
 
     const [leadCountryList, setLeadCountryList] = useState()
     const fetchLeadCountry = async () => {
-        // console.log('works');
         setLeadSourceListLoading(true)
         try {
             const response = await DashboardApi.list({
@@ -351,6 +350,7 @@ function DashboardIndex() {
                 manager: selectedMangeId,
                 office: officeId
             })
+            console.log(response);
             setLeadCountryList(response?.data)
             setLeadSourceListLoading(false)
         } catch (error) {
@@ -535,7 +535,7 @@ function DashboardIndex() {
 
 
             // console.log(params);
-            
+
             try {
                 const response = await DashboardApi.list(params)
                 // console.log(response);
