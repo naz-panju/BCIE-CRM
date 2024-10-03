@@ -72,7 +72,6 @@ export default function DownloadDocumentModal({ editId, setEditId, handleRefresh
             // console.log(obj);
             let fileType = getLastExtension(obj?.file)
             const fileName=extractFileName(obj?.file_path)
-            console.log(fileName);
             let object = {
                 name: fileName,
                 url: obj?.file,
