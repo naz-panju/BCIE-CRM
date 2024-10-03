@@ -811,8 +811,15 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         handlePopoverClose()
         setreturnId(id)
     }
+    
     const handleFirstPage = () => {
-        setPage(1)
+        if(page !== 1){
+            console.log('table refresh');
+            
+            fetchTable()
+        }else{
+            setPage(1)
+        }
     }
 
     const [detailId, setDetailId] = useState()
@@ -1032,7 +1039,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             <SendUniversityMail from={'lead'} details={details} lead_id={details?.lead_id} editId={mailId} setEditId={setMailId} />
             <UniversityDeposit editId={depositId} setEditId={setdepositId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
 
-            <ReturnPopup getDetails={handleFirstPage} loading={confirmLoading} ID={returnId} setID={setreturnId} setLoading={setconfirmLoading} title={`Do you want to return this Application to the Counsellor?`} />
+            <ReturnPopup fetchTable={fetchTable} getDetails={handleFirstPage} loading={confirmLoading} ID={returnId} setID={setreturnId} setLoading={setconfirmLoading} title={`Do you want to return this Application to the Counsellor?`} />
 
             <ApplicationDetail id={detailId} setId={setDetailId} />
             <ConfirmPopup loading={submitLoading} ID={submitId} setID={setsubmitId} clickFunc={handleClickSubmit} title={`Do you want to Submit this Application to the App Cordinator?`} />
@@ -1045,7 +1052,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
 
             <SaveApplicationSumber editId={unId} setEditId={setUniId} details={details} setDetails={setDetails} refresh={refresh} setRefresh={setRefresh} />
             <ConfirmPopup loading={submitLoading} ID={uniSubmitId} setID={setuniSubmitId} clickFunc={handleUniversitySubmit} title={`Do you want to Submit this Application to the University?`} />
-
 
             <div className="filter_sec">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -1766,19 +1772,19 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                         >
                                                                             <List>
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id !== 5 && row?.app_coordinator_status == 'Submitted') &&
+                                                                                    (session?.data?.user?.role?.id !== 5 && row?.app_coordinator_status == 'Submitted' && row?.stage?.action_type !== 'Application Submitted') &&
                                                                                     <ListItem button onClick={() => handleReturnPopupOpen(row?.id)}>
                                                                                         Return Application
                                                                                     </ListItem>
                                                                                 }
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id != 6 && row?.app_coordinator_status == null) &&
+                                                                                    (session?.data?.user?.role?.id != 6 && row?.app_coordinator_status == null || row?.app_coordinator_status == "Returned") &&
                                                                                     <ListItem button onClick={() => handleSubmitOpen(row?.id)}>
                                                                                         Submit Application to Coordinator
                                                                                     </ListItem>
                                                                                 }
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id != 5 && row?.app_coordinator_status == 'Submitted') &&
+                                                                                    (session?.data?.user?.role?.id != 5 && row?.app_coordinator_status == 'Submitted' && row?.stage?.action_type !== 'Application Submitted') &&
                                                                                     <ListItem button onClick={() => handleUniSubmitId(row)}>
                                                                                         Submit Application to University
                                                                                     </ListItem>

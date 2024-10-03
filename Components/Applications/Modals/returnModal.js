@@ -21,7 +21,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" ref={ref} {...props} />;
 });
 
-export default function ReturnPopup({ ID, setID, setLoading, title, loading, details, getDetails }) {
+export default function ReturnPopup({ ID, setID, setLoading, title, loading, details, getDetails ,fetchTable}) {
 
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
@@ -57,6 +57,9 @@ export default function ReturnPopup({ ID, setID, setLoading, title, loading, det
                 toast.success(response?.data?.message)
                 setID()
                 getDetails()
+                if(fetchTable){
+                    fetchTable()
+                }
                 setLoading(false)
             } else {
                 toast.error(response?.response?.data?.message)
