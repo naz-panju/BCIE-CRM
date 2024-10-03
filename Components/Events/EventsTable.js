@@ -95,6 +95,12 @@ const headCells = [
         disablePadding: false,
         label: 'Venue ',
     },
+    // {
+    //     id: 'created_at',
+    //     numeric: false,
+    //     disablePadding: false,
+    //     label: 'Created Date',
+    // },
     {
         id: 'events.start_date',
         numeric: true,
@@ -454,6 +460,7 @@ export default function EventsTable({ refresh, editId, setEditId, page, setPage,
                                                             </TableCell>
                                                             <TableCell align="left">{row?.country?.name || 'NA'}</TableCell>
                                                             <TableCell align="left">{row?.venue || 'NA'}</TableCell>
+                                                            {/* <TableCell align="left">{row?.created_at ? moment(row?.created_at).format('DD-MM-YYYY') : 'NA'}</TableCell> */}
                                                             <TableCell align="left">{row?.start_date ? moment(row?.start_date).format('DD-MM-YYYY') : 'NA'}</TableCell>
                                                             <TableCell align="left">{row?.end_date ? moment(row?.end_date).format('DD-MM-YYYY') : 'NA'}</TableCell>
                                                             <TableCell align="left">

@@ -113,6 +113,12 @@ const headCells = [
         label: 'Validity',
     },
     {
+        id: 'created_at',
+        numeric: false,
+        disablePadding: false,
+        label: 'Created Date',
+    },
+    {
         id: 'referral_links.status',
         numeric: true,
         disablePadding: false,
@@ -465,6 +471,13 @@ export default function ReferralTable({ refresh, editId, setEditId, page, setPag
                                                                 {
                                                                     row?.last_date_of_validity ?
                                                                         moment(row?.date_of_validity).format('DD-MM-YYYY')
+                                                                        : 'NA'
+                                                                }
+                                                            </TableCell>
+                                                            <TableCell align="left">
+                                                                {
+                                                                    row?.created_at ?
+                                                                        moment(row?.created_at).format('DD-MM-YYYY')
                                                                         : 'NA'
                                                                 }
                                                             </TableCell>
