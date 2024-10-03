@@ -232,9 +232,7 @@ export default function UnAssignedLeads() {
                     <path d="M20 20L15.6569 15.6569M15.6569 15.6569C17.1046 14.2091 18 12.2091 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C12.2091 18 14.2091 17.1046 15.6569 15.6569Z" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </Button>
-                <Button sx={{ mr: 2, textTransform: 'none' }} variant='outlined' onClick={handleCreateNew} className='add_lead_btn'>
-                  <PersonAddAlt1Outlined fontSize='small' /> Add Lead
-                </Button>
+              
 
                 <Tooltip title={selected?.length === 0 && 'Please select one or more Lead'}>
 
