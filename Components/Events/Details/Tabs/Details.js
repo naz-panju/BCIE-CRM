@@ -57,7 +57,7 @@ function Details({ data, loading }) {
 
                 <div className="grid grid-cols-1 gap-4">
                     <div className="lead-details-list">
-                        <label style={{ fontWeight: 'bold' }}>Email Content:</label>
+                        <label style={{ fontWeight: 'bold' }}>Email Content :</label>
                         <span dangerouslySetInnerHTML={{ __html: data?.email_content || "NA" }} />
                         {/* <span>{data?.email_content || 'NA'}</span> */}
                     </div>

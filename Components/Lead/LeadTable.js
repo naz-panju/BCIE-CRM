@@ -417,7 +417,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   );
 
   const fetchUser = (e) => {
-    return ListingApi.counsellors({ keyword: e, office_id: selectedBranch}).then(response => {
+    return ListingApi.counsellors({ keyword: e, office_id: selectedBranch }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response.data.data;
       } else {
@@ -734,7 +734,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   }
 
   const fetchCampaigns = (e) => {
-    return ListingApi.campaigns({ keyword: e,source_id:selectedSource }).then(response => {
+    return ListingApi.campaigns({ keyword: e, source_id: selectedSource }).then(response => {
       if (typeof response?.data?.data !== "undefined") {
         return response?.data?.data
       } else {
@@ -742,6 +742,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       }
     })
   }
+
 
   return (
     <>

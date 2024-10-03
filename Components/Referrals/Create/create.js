@@ -544,7 +544,7 @@ export default function CreateReferral({ editId, setEditId, refresh, setRefresh,
 
                                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                             <div className='application-input'>
-                                                <a className='form-text'>Top Description</a>
+                                                <a className='form-text'>Top Description <span className='text-[12px] text-gray-500 ml-2'>(Preferred Image Size 600 X 151)</span></a>
                                                 <Grid className='mb-5 forms-data' >
 
                                                     <CKEditorBox emoji={false} val={watch('top_description')}
