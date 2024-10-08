@@ -62,9 +62,6 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
 
     const handlePrintFetch = useReactToPrint({ contentRef })
 
-    // const handlePrintFetch = useReactToPrint({
-    //     content: () => contentRef.current,
-    // });
 
     const handlePrint = async () => {
         try {

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Button, Skeleton, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
+import { Button, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { CommunicationLogApi } from '@/data/Endpoints/CommunicationLog';
-import { AttachmentOutlined } from '@mui/icons-material';
+import { AttachmentOutlined, PrintOutlined } from '@mui/icons-material';
 import moment from 'moment';
 import Checkbox from '@mui/material/Checkbox';
 import CreateTabs from './commTabs';
@@ -14,6 +14,8 @@ import { useSession } from 'next-auth/react';
 import SendWhatsApp from '../../Modals/SendWhatsapp';
 import Pusher from "pusher-js";
 import toast from 'react-hot-toast';
+import { LoadingButton } from '@mui/lab';
+import { useReactToPrint } from 'react-to-print';
 
 
 export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallRefresh, setphoneCallRefresh, leadData, setDetailRefresh }) {
@@ -108,7 +110,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
     const [whatsappLoading, setwhatsappLoading] = useState(false)
 
     const fetchWhatsappList = async (messageLoading) => {
-        if(!messageLoading){
+        if (!messageLoading) {
             setwhatsappLoading(true)
         }
         let params = {
@@ -217,6 +219,51 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
         fetchWhatsappList()
         setActiveTab(1)
     }
+
+    const contentRef = React.useRef()
+    const [printLoad, setPrintLoad] = useState(false)
+    const [printEmailList, setprintEmailList] = useState()
+    const [printWhatsappList, setprintWhatsappList] = useState()
+    const [printCallList, setprintCallList] = useState()
+
+    const handlePrintFetch = useReactToPrint({ contentRef })
+
+
+    const handlePrint = async () => {
+        try {
+            setPrintLoad(true);
+            const emailResponse = await CommunicationLogApi.list({
+                lead_id: lead_id,
+                limit: 1000,
+                type: ['Send', 'Gmail'],
+            });
+            setprintEmailList(emailResponse?.data);
+
+            const whatsappResponse = await CommunicationLogApi.list({
+                lead_id: lead_id,
+                limit: 1000,
+                type: ['Whatsapp Send', 'Whatsapp'],
+            });
+            setprintWhatsappList(whatsappResponse?.data);
+
+            const callResponse = await CommunicationLogApi.list({
+                lead_id: lead_id,
+                limit: 1000,
+                type: ['Inbound', 'Outbound'],
+            });
+            setprintCallList(callResponse?.data);
+
+            setTimeout(() => {
+                handlePrintFetch();
+                setPrintLoad(false);
+            }, 1000);
+
+            // Trigger print after data is ready
+        } catch (error) {
+            console.error('Error fetching data for print', error);
+            setPrintLoad(false);
+        }
+    };
 
     useEffect(() => {
         const pusher = new Pusher("eec1f38e41cbf8c3acc7", {
@@ -449,6 +496,12 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
 
 
 
+                <div className='flex justify-end'>
+                    <LoadingButton loading={printLoad} disabled={printLoad} variant='contained' onClick={handlePrint} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
+                        <PrintOutlined fontSize='small' />
+                        Print
+                    </LoadingButton>
+                </div>
 
                 <div className=' md:w-12/12 lg:w-12/12 mt-3'>
                     <div className='communication-log-block-tab-block tab-block'>
@@ -481,6 +534,233 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
 
                 <CreateTabs leadData={leadData} whatsappLoading={whatsappLoading} callLoading={callLoading} setEmailPage={setEmailPage} emailPage={emailPage} callPage={callPage} whatsappPage={whatsappPage} setcallPage={setcallPage} setwhatsappPage={setwhatsappPage} list={list} whatsappList={whatsappList} callList={callList} value={tabValue} setValue={setTabValue} activeTab={activeTab} setActiveTab={setActiveTab} setEmailLimit={handleEmailLimit} setwhatsappLimit={setwhatsappLimit} setCallLimit={setCallLimit} loading={loading} handleCallEdit={setphonecallId} handlePhoneRefresh={handlePhoneRefresh} emailLimit={emailLimit} whatsappLimit={whatsappLimit} callLimit={callLimit} />
 
+            </div>
+
+            {/* print table */}
+            <div style={{ display: 'none' }} >
+                <div ref={contentRef}>
+                    <div className='text[16px] font-semibold p-5 flex justify-center'>
+                        Email
+                    </div>
+                    <TableContainer>
+                        <Table>
+                            <TableHead className='bg-[#232648] text-white'>
+                                <TableRow>
+                                    <TableCell >
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            Type
+                                        </Typography>
+
+                                    </TableCell>
+                                    <TableCell >
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            Subject
+                                        </Typography>
+
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            From
+                                        </Typography>
+
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            To
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+
+                                    </TableCell>
+                                    <TableCell>
+
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            {
+                                printEmailList?.data?.length > 0 ?
+                                    <TableBody>
+
+                                        {
+                                            printEmailList?.data?.map((obj, index) => (
+                                                <React.Fragment key={obj?.id}>
+                                                    <TableRow className='application-tr' >
+                                                        <TableCell>
+                                                            {obj?.type == 'Gmail' ? 'Recieved' : obj?.type}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {obj?.subject}
+                                                        </TableCell>
+                                                        <TableCell>{obj?.from || obj?.created_by?.name}</TableCell>
+                                                        <TableCell>{obj?.to || leadData?.email}</TableCell>
+                                                        <TableCell>
+                                                            {
+                                                                obj?.attachments?.length > 0 &&
+                                                                <AttachmentOutlined fontSize='small' sx={{ color: 'grey' }} />
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {
+                                                                moment(obj?.message_date).format('DD MMM hh:mm A')
+                                                            }
+                                                        </TableCell>
+
+                                                    </TableRow>
+
+                                                </React.Fragment>
+                                            ))
+                                        }
+
+
+                                    </TableBody>
+                                    :
+                                    (
+                                        <TableBody>
+                                            <TableRow sx={{ height: 250, color: 'transparent' }}>
+                                                <TableCell colSpan={8} style={{ textAlign: 'center' }}>
+                                                    No Data Available
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    )}
+                        </Table>
+                    </TableContainer>
+
+                    <div className='text[16px] font-semibold p-5 flex justify-center'>
+                        WhatsApp
+                    </div>
+                    <TableContainer>
+                        <Table>
+                            <TableHead className='bg-[#232648] text-white'>
+                                <TableRow>
+                                    <TableCell >
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            Type
+                                        </Typography>
+
+                                    </TableCell>
+                                    <TableCell >
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            Content
+                                        </Typography>
+
+                                    </TableCell>
+                                    <TableCell >
+
+                                    </TableCell>
+
+                                </TableRow>
+                            </TableHead>
+                            {
+                                printWhatsappList?.data?.length > 0 ?
+                                    <TableBody>
+
+                                        {
+                                            printWhatsappList?.data?.map((obj, index) => (
+                                                <React.Fragment key={obj?.id}>
+                                                    <TableRow className='application-tr' >
+                                                        <TableCell>
+                                                            {obj?.type == 'Gmail' ? 'Recieved' : obj?.type}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {obj?.body}
+                                                        </TableCell>
+                                                        <TableCell sx={{ whiteSpace: 'nowrap', textAlign: 'right', minWidth: '150px' }}>
+                                                            {
+
+                                                                moment(obj?.message_date).format('DD MMM hh:mm A')
+                                                            }
+                                                        </TableCell>
+
+                                                    </TableRow>
+
+                                                </React.Fragment>
+                                            ))
+                                        }
+
+
+                                    </TableBody>
+                                    :
+                                    (
+                                        <TableBody>
+                                            <TableRow sx={{ height: 250, color: 'transparent' }}>
+                                                <TableCell colSpan={8} style={{ textAlign: 'center' }}>
+                                                    No Data Available
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    )}
+                        </Table>
+                    </TableContainer>
+
+                    <div className='text[16px] font-semibold p-5 flex justify-center'>
+                        Call Summary
+                    </div>
+                    <TableContainer>
+                        <Table>
+                            <TableHead className='bg-[#232648] text-white'>
+                                <TableRow>
+                                    <TableCell >
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            Type
+                                        </Typography>
+
+                                    </TableCell>
+                                    <TableCell >
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            Summary
+                                        </Typography>
+
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            Date and Time
+                                        </Typography>
+
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
+                                            To
+                                        </Typography>
+                                    </TableCell>
+                                </TableRow>
+                            </TableHead>
+                            {
+                                printCallList?.data?.length > 0 ?
+                                    <TableBody>
+
+                                        {
+                                            printCallList?.data?.map((obj, index) => (
+                                                <React.Fragment key={obj?.id}>
+                                                    <TableRow className='application-tr' >
+                                                        <TableCell>
+                                                            {obj?.type}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {obj?.call_summary}
+                                                        </TableCell>
+                                                        <TableCell>{moment(obj?.date_time_of_call).format('DD-MM-YYYY hh:mm A')}</TableCell>
+                                                    </TableRow>
+
+                                                </React.Fragment>
+                                            ))
+                                        }
+
+
+                                    </TableBody>
+                                    :
+                                    (
+                                        <TableBody>
+                                            <TableRow sx={{ height: 250, color: 'transparent' }}>
+                                                <TableCell colSpan={8} style={{ textAlign: 'center' }}>
+                                                    No Data Available
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    )}
+                        </Table>
+                    </TableContainer>
+                </div>
             </div>
         </>
 
