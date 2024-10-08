@@ -44,5 +44,7 @@ export const LeadApi = {
 
     import: (data) => http.post(`leads/import`, data),
 
+    removeDuplicate: (data) => http.post(`leads/remove-duplicate`, data),
+
 
 }

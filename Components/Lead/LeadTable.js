@@ -28,7 +28,7 @@ import { Button, Grid, InputAdornment, MenuItem, Pagination, Select, Stack, Text
 import LoadingTable from '../Common/Loading/LoadingTable';
 import { ListingApi } from '@/data/Endpoints/Listing';
 import AsyncSelect from "react-select/async";
-import { Close, PersonAdd, PersonAddAlt, PersonOutline, Search } from '@mui/icons-material';
+import { Close, KeyboardReturnOutlined, PersonAdd, PersonAddAlt, PersonOutline, Search } from '@mui/icons-material';
 import ReactSelector from 'react-select';
 import { useForm } from 'react-hook-form';
 import UserProfile from '../Common/Profile';
@@ -40,6 +40,8 @@ import { blue } from '@mui/material/colors';
 import { useSession } from 'next-auth/react';
 import ExportExcel from '@/Form/Excel';
 import { CSVLink } from 'react-csv';
+import ConfirmPopup from '../Common/Popup/confirm';
+import toast from 'react-hot-toast';
 
 
 
@@ -131,6 +133,14 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: 'Created date',
+    noLead: true
+  },
+  {
+    id: 'duplicate_last_got_on',
+    numeric: false,
+    disablePadding: true,
+    label: 'Duplicated date',
+    duplicate: true
   },
   {
     id: 'users.name',
@@ -143,75 +153,85 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: 'Stage',
-
+  },
+  {
+    id: 'button',
+    numeric: false,
+    disablePadding: false,
+    label: '',
+    noSort: true,
+    duplicate: true
   },
 ];
 
 let field = ''
 let sortOrder = true
 
-function EnhancedTableHead(props) {
-  const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
-    props;
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property?.id);
-    field = property?.id
-  };
+// function EnhancedTableHead(props) {
+//   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+//     props;
+//   const createSortHandler = (property) => (event) => {
+//     onRequestSort(event, property?.id);
+//     field = property?.id
+//   };
 
-  return (
-    <TableHead>
+//   return (
+//     <TableHead>
 
-      <TableRow>
-        <TableCell padding="checkbox">
-          <div className="form-group">
-            <input id='html2'
-              type='checkbox'
-              color="primary"
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              // checked={rowCount > 0 && numSelected === rowCount}
-              checked={numSelected > 0}
-              onChange={onSelectAllClick}
-              inputprops={{
-                'aria-label': 'select all desserts',
-              }}
-            />
-            <label htmlFor="html2"> </label>
-          </div>
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align={headCell.numeric ? 'left' : 'left'}
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
-              onClick={createSortHandler(headCell)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span" sx={visuallyHidden}>
-                  {sortOrder ? 'sorted ascending' : 'sorted descending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-  );
-}
+//       <TableRow>
+//         <TableCell padding="checkbox">
+//           <div className="form-group">
+//             <input id='html2'
+//               type='checkbox'
+//               color="primary"
+//               indeterminate={numSelected > 0 && numSelected < rowCount}
+//               // checked={rowCount > 0 && numSelected === rowCount}
+//               checked={numSelected > 0}
+//               onChange={onSelectAllClick}
+//               inputprops={{
+//                 'aria-label': 'select all desserts',
+//               }}
+//             />
+//             <label htmlFor="html2"> </label>
+//           </div>
+//         </TableCell>
+//         {headCells.map((headCell) => (
+//           headCell?.duplicate?
 
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
+//           :
+//           <TableCell
+//             key={headCell.id}
+//             align={headCell.numeric ? 'left' : 'left'}
+//             padding={headCell.disablePadding ? 'none' : 'normal'}
+//             sortDirection={orderBy === headCell.id ? order : false}
+//           >
+//             <TableSortLabel
+//               active={orderBy === headCell.id}
+//               direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+//               onClick={createSortHandler(headCell)}
+//             >
+//               {headCell.label}
+//               {orderBy === headCell.id ? (
+//                 <Box component="span" sx={visuallyHidden}>
+//                   {sortOrder ? 'sorted ascending' : 'sorted descending'}
+//                 </Box>
+//               ) : null}
+//             </TableSortLabel>
+//           </TableCell>
+//         ))}
+//       </TableRow>
+//     </TableHead>
+//   );
+// }
+
+// EnhancedTableHead.propTypes = {
+//   numSelected: PropTypes.number.isRequired,
+//   onRequestSort: PropTypes.func.isRequired,
+//   onSelectAllClick: PropTypes.func.isRequired,
+//   order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+//   orderBy: PropTypes.string.isRequired,
+//   rowCount: PropTypes.number.isRequired,
+// };
 
 function EnhancedTableToolbar(props) {
   const { numSelected } = props;
@@ -268,7 +288,113 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive, unassign, withdraw }) {
+export default function EnhancedTable({ refresh, page, setPage, selected, setSelected, openAssign, handleEditAssign, searchactive, unassign, withdraw, duplicate }) {
+
+  function EnhancedTableHead(props) {
+    const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
+      props;
+    const createSortHandler = (property) => (event) => {
+      onRequestSort(event, property?.id);
+      field = property?.id
+    };
+
+    return (
+      <TableHead>
+
+        <TableRow>
+          <TableCell padding="checkbox">
+            <div className="form-group">
+              <input id='html2'
+                type='checkbox'
+                color="primary"
+                indeterminate={numSelected > 0 && numSelected < rowCount}
+                // checked={rowCount > 0 && numSelected === rowCount}
+                checked={numSelected > 0}
+                onChange={onSelectAllClick}
+                inputprops={{
+                  'aria-label': 'select all desserts',
+                }}
+              />
+              <label htmlFor="html2"> </label>
+            </div>
+          </TableCell>
+          {headCells.map((headCell) => (
+            headCell?.duplicate ?
+              (duplicate && !headCell?.noLead) &&
+              <TableCell
+                key={headCell.id}
+                align={headCell.numeric ? 'left' : 'left'}
+                padding={headCell.disablePadding ? 'none' : 'normal'}
+                sortDirection={orderBy === headCell.id ? order : false}
+              >
+                {
+                  !headCell?.noSort &&
+                  <TableSortLabel
+                    active={orderBy === headCell.id}
+                    direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+                    onClick={createSortHandler(headCell)}
+                  >
+                    {headCell.label}
+                    {orderBy === headCell.id ? (
+                      <Box component="span" sx={visuallyHidden}>
+                        {sortOrder ? 'sorted ascending' : 'sorted descending'}
+                      </Box>
+                    ) : null}
+                  </TableSortLabel>
+                }
+              </TableCell>
+              :
+              <>
+                {
+                  duplicate && !headCell?.noLead &&
+                  <TableCell
+                    key={headCell.id}
+                    align={headCell.numeric ? 'left' : 'left'}
+                    padding={headCell.disablePadding ? 'none' : 'normal'}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                  >
+                    <TableSortLabel
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+                      onClick={createSortHandler(headCell)}
+                    >
+                      {headCell.label}
+                      {orderBy === headCell.id ? (
+                        <Box component="span" sx={visuallyHidden}>
+                          {sortOrder ? 'sorted ascending' : 'sorted descending'}
+                        </Box>
+                      ) : null}
+                    </TableSortLabel>
+                  </TableCell>
+                }
+                {
+                  !duplicate &&
+                  <TableCell
+                    key={headCell.id}
+                    align={headCell.numeric ? 'left' : 'left'}
+                    padding={headCell.disablePadding ? 'none' : 'normal'}
+                    sortDirection={orderBy === headCell.id ? order : false}
+                  >
+                    <TableSortLabel
+                      active={orderBy === headCell.id}
+                      direction={orderBy === headCell.id ? sortOrder ? 'asc' : 'desc' : 'asc'}
+                      onClick={createSortHandler(headCell)}
+                    >
+                      {headCell.label}
+                      {orderBy === headCell.id ? (
+                        <Box component="span" sx={visuallyHidden}>
+                          {sortOrder ? 'sorted ascending' : 'sorted descending'}
+                        </Box>
+                      ) : null}
+                    </TableSortLabel>
+                  </TableCell>
+                }
+              </>
+          ))}
+        </TableRow>
+      </TableHead>
+    );
+  }
 
   const session = useSession()
 
@@ -375,9 +501,13 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     if (withdraw) {
       router.replace(`/withdrawn-leads?page=${newPage}`);
     }
-    if (unassign) {
+    else if (unassign) {
       router.replace(`/un-assigned-leads?page=${newPage}`);
-    } else {
+    }
+    else if (duplicate) {
+      router.replace(`/duplicate-leads?page=${newPage}`);
+    }
+    else {
       router.replace(`/lead?page=${newPage}`);
     }
   };
@@ -388,9 +518,13 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     if (withdraw) {
       router.replace(`/withdrawn-leads?page=1`);
     }
-    if (unassign) {
+    else if (unassign) {
       router.replace(`/un-assigned-leads?page=1`);
-    } else {
+    }
+    else if (duplicate) {
+      router.replace(`/duplicate-leads?page=1`);
+    }
+    else {
       router.replace(`/lead?page=1`);
     }
   };
@@ -481,6 +615,40 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
           }
         })
         return returnOptions;
+      } else {
+        return [];
+      }
+    })
+  }
+
+
+  const fetchStudents = (e) => {
+    return ListingApi.students({ keyword: e }).then(response => {
+
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data?.data
+      } else {
+        return [];
+      }
+
+    })
+  }
+
+
+  const fetchUniversities = (e) => {
+    return ListingApi.universities({ keyword: e }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data
+      } else {
+        return [];
+      }
+    })
+  }
+
+  const fetchCampaigns = (e) => {
+    return ListingApi.campaigns({ keyword: e, source_id: selectedSource }).then(response => {
+      if (typeof response?.data?.data !== "undefined") {
+        return response?.data?.data
       } else {
         return [];
       }
@@ -579,6 +747,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       params['unassigned'] = 1
     }
 
+    if (duplicate) {
+      params['duplicate'] = 1
+    }
+
     if (withdraw) {
       params['withdrawn'] = 1
     }
@@ -650,9 +822,13 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       if (withdraw) {
         router.replace(`/withdrawn-leads?page=${1}`);
       }
-      if (unassign) {
+      else if (unassign) {
         router.replace(`/un-assigned-leads?page=${1}`);
-      } else {
+      }
+      else if (duplicate) {
+        router.replace(`/duplicate-leads?page=${1}`);
+      }
+      else {
         router.replace(`/lead?page=${1}`);
       }
     }
@@ -698,6 +874,30 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
     }
   ];
 
+  const [submitLoading, setsubmitLoading] = useState(false)
+  const [convertId, setconvertId] = useState()
+  const handleConvertPopupOpen = (id) => {
+    setconvertId(id)
+  }
+
+  const handleClickSubmit = () => {
+    setsubmitLoading(true)
+    LeadApi.removeDuplicate({ id: convertId }).then((response) => {
+      if (response?.status == 200 || response?.status == 201) {
+        toast.success(response?.data?.message)
+        setsubmitLoading(false)
+        setconvertId()
+        fetchTable()
+      } else {
+        toast.error(response?.response?.data?.message)
+        setsubmitLoading(false)
+      }
+    }).catch((error) => {
+      toast.error(error?.response?.data?.message)
+      setsubmitLoading(false)
+    })
+  }
+
   useEffect(() => {
     setValue('searchType', searchOptions[0]?.name)
     // getInitialValue()
@@ -710,42 +910,12 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   }, [page, refresh, limit, searchRefresh, sortOrder])
 
 
-  const fetchStudents = (e) => {
-    return ListingApi.students({ keyword: e }).then(response => {
-
-      if (typeof response?.data?.data !== "undefined") {
-        return response?.data?.data?.data
-      } else {
-        return [];
-      }
-
-    })
-  }
-
-
-  const fetchUniversities = (e) => {
-    return ListingApi.universities({ keyword: e }).then(response => {
-      if (typeof response?.data?.data !== "undefined") {
-        return response?.data?.data
-      } else {
-        return [];
-      }
-    })
-  }
-
-  const fetchCampaigns = (e) => {
-    return ListingApi.campaigns({ keyword: e, source_id: selectedSource }).then(response => {
-      if (typeof response?.data?.data !== "undefined") {
-        return response?.data?.data
-      } else {
-        return [];
-      }
-    })
-  }
-
-
   return (
     <>
+
+      <ConfirmPopup loading={submitLoading} ID={convertId} setID={setconvertId} clickFunc={handleClickSubmit} title={`Do you want to Convert this from Duplicate to Lead?`} />
+
+
       <div className="filter_sec">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
@@ -1076,7 +1246,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
       {
         (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
-        <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={withdraw ? 'Withdrawn Leads' : unassign ? "Un Assigned Leads" : "Leads"} params={{
+        <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={withdraw ? 'Withdrawn Leads' : unassign ? "Un Assigned Leads" : duplicate ? "Duplicate Leads" : "Leads"} params={{
           sort_field: field,
           sort_order: sortOrder ? 'asc' : 'desc',
           event_id: selectedEvents,
@@ -1098,6 +1268,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
           lead_id: watch('lead_id_search'),
           ...(withdraw ? { withdrawn: 1 } : {}),
           ...(unassign ? { unassigned: 1 } : {}),
+          ...(duplicate ? { duplicate: 1 } : {}),
           ...(range[0] && range[1] ? { from: moment(range[0]).format('YYYY-MM-DD'), to: moment(range[1]).format('YYYY-MM-DD') } : {}),
         }} />
       }
@@ -1174,7 +1345,14 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 <TableCell align="left">{row?.country_of_residence?.name || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.city || 'NA'}</TableCell>
                                 <TableCell align="left">{row?.preferred_countries || 'NA'}</TableCell>
-                                <TableCell align="left">{row?.created_at ? <>{moment(row?.created_at).format('DD-MM-YYYY')} <br />{moment(row?.created_at).format('HH:MM A')}</> : 'NA'}</TableCell>
+                                <TableCell align="left">
+                                  {
+                                    duplicate?
+                                    row?.duplicate_last_got_on ? <>{moment(row?.duplicate_last_got_on).format('DD-MM-YYYY')} <br />{moment(row?.duplicate_last_got_on).format('HH:MM A')}</> : 'NA'
+                                    :
+                                    row?.created_at ? <>{moment(row?.created_at).format('DD-MM-YYYY')} <br />{moment(row?.created_at).format('HH:MM A')}</> : 'NA'
+                                  }
+                                </TableCell>
                                 <TableCell sx={{ display: 'flex', alignItems: 'center' }} align="left" className='assigned-colm'>
                                   {
                                     row?.assignedToCounsellor &&
@@ -1195,6 +1373,14 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                       : ''
                                   }
                                 </TableCell>
+                                {
+                                  duplicate &&
+                                  <TableCell className='stage-colm' align="left">
+                                    <Tooltip title={'Convert'}>
+                                      <Button size='small' variant='outlined' style={{ textTransform: 'none' }} onClick={() => handleConvertPopupOpen(row?.id)}><KeyboardReturnOutlined fontSize='small' /> </Button>
+                                    </Tooltip>
+                                  </TableCell>
+                                }
                               </TableRow>
                             );
                           })

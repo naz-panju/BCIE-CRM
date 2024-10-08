@@ -849,6 +849,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         handlePopoverClose()
         setsubmitId(id)
     }
+    
     const handleClickSubmit = () => {
         setsubmitLoading(true)
         ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
