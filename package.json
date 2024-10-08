@@ -55,6 +55,7 @@
     "react-phone-input-2": "^2.15.1",
     "react-router-dom": "^6.22.1",
     "react-select": "^5.8.0",
+    "react-to-print": "^3.0.1",
     "reactjs-popup": "^2.0.6",
     "recharts": "^2.12.7",
     "rsuite": "^5.62.1",

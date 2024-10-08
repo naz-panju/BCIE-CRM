@@ -90,7 +90,7 @@ function ExportExcel({ from, fileName, params, data, tableLoading, duplicate }) 
 
     return (
         <div className='flex justify-end mb-3'>
-            <Button disabled={loading || tableLoading || data?.length == 0} style={{ backgroundColor: blue[500], color: 'white', textTransform: 'none' }} onClick={handleExport}>
+            <Button disabled={loading || tableLoading || data?.length == 0} style={{ backgroundColor: blue[500], color: 'white', textTransform: 'none',width:90 }} onClick={handleExport}>
                 {
                     loading ?
                         <div className="spinner"></div>

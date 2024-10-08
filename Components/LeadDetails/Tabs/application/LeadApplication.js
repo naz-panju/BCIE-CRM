@@ -1,5 +1,5 @@
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Pagination, Paper, Select, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, Tooltip, Typography, styled, tooltipClasses } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useEffect } from 'react'
 import moment from 'moment'
 import LeadApplicationModal from './create'
@@ -14,13 +14,15 @@ import ConfirmPopup from '@/Components/Common/Popup/confirm'
 import UniversityDeposit from './modals/universityDepost'
 import DeferIntake from './modals/deferIntake'
 import ViewDocumentModal from './modals/viewDocModal'
-import { InfoOutlined, Note } from '@mui/icons-material'
+import { InfoOutlined, Note, Print, PrintOutlined } from '@mui/icons-material'
 import CreateLead from '@/Components/Lead/Create/Create'
 import { Divider } from 'rsuite'
 import UniversityInfoModal from '@/Components/Applications/Modals/UniversityInfo'
 import { useSession } from 'next-auth/react'
 import SendMail from '../../Modals/SendMail'
 import { blue } from '@mui/material/colors'
+import { useReactToPrint } from 'react-to-print'
+import { LoadingButton } from '@mui/lab'
 
 
 const HtmlTooltip = styled(({ className, ...props }) => (
@@ -248,6 +250,47 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
 
     }, [refresh, page, appRefresh, limit])
 
+    const contentRef = useRef()
+    const [printLoad, setPrintLoad] = useState(false)
+    const [printList, setPrintList] = useState()
+
+    const handlePrintFetch = useReactToPrint({ contentRef })
+
+    // const handlePrintFetch = useReactToPrint({
+    //     content: () => contentRef.current,
+    // });
+
+    const handlePrint = async () => {
+        try {
+            setPrintLoad(true);
+            const response = await ApplicationApi.list({
+                limit: 1000,
+                lead_id: lead_id,
+                page: page,
+                intake_id: 'All',
+                withdrawn: 1,
+                all: 1
+            });
+            setPrintList(response?.data);
+           
+            // Trigger print after data is ready
+        } catch (error) {
+            console.error('Error fetching data for print', error);
+            setPrintLoad(false);
+        }
+    };
+
+    useEffect(() => {
+        if (printList?.data?.length > 0) {
+            setTimeout(() => {
+                handlePrintFetch();
+                setPrintLoad(false);
+            }, 1000);
+        }
+    }, [printList])
+
+
+
     return (
         <>
             <CreateLead from='app' editId={leadEditId} setEditId={setleadEditId} refresh={refresh} setRefresh={setRefresh} handleRefresh={handleRefresh} handleLeadRefresh={handleLeadRefresh} />
@@ -302,7 +345,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
                                             disabled={(data?.stage?.action_type !== 'Hot Lead' || data?.assignedToCounsellor == null)}
                                             onClick={handleLeadEditOpen}
                                             variant='contained'
-                                            className='bg-sky-600 text-white hover:bg-sky-700 text-white'
+                                            className='bg-sky-600 hover:bg-sky-700 text-white'
                                         >
                                             Submit Applicant Data
                                         </Button>
@@ -311,12 +354,31 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
 
                             </Grid>
                         }
-                        <Grid>
+
+                        <Grid className='mr-3'>
+
                             {
 
                                 (session?.data?.user?.role?.id != 6 && data?.closed != 1 && data?.withdrawn != 1 && data?.completed != 1) &&
-                                   ( data?.user ?
-                                    <Button  variant='contained' onClick={handleCreate} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 17H15M9 14H15M13.0004 3.00087C12.9048 3 12.7974 3 12.6747 3H8.2002C7.08009 3 6.51962 3 6.0918 3.21799C5.71547 3.40973 5.40973 3.71547 5.21799 4.0918C5 4.51962 5 5.08009 5 6.2002V17.8002C5 18.9203 5 19.4801 5.21799 19.9079C5.40973 20.2842 5.71547 20.5905 6.0918 20.7822C6.51921 21 7.079 21 8.19694 21L15.8031 21C16.921 21 17.48 21 17.9074 20.7822C18.2837 20.5905 18.5905 20.2842 18.7822 19.9079C19 19.4805 19 18.9215 19 17.8036V9.32568C19 9.20302 18.9999 9.09553 18.999 9M13.0004 3.00087C13.2858 3.00348 13.4657 3.01407 13.6382 3.05547C13.8423 3.10446 14.0379 3.18526 14.2168 3.29492C14.4186 3.41857 14.5918 3.59181 14.9375 3.9375L18.063 7.06298C18.4089 7.40889 18.5809 7.58136 18.7046 7.78319C18.8142 7.96214 18.8953 8.15726 18.9443 8.36133C18.9857 8.53379 18.9964 8.71454 18.999 9M13.0004 3.00087L13 5.80021C13 6.92031 13 7.48015 13.218 7.90797C13.4097 8.2843 13.7155 8.59048 14.0918 8.78223C14.5192 9 15.079 9 16.1969 9H18.999" stroke="#232648" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>Apply</Button>
+                                (data?.user &&
+                                    <LoadingButton loading={printLoad} variant='contained' onClick={handlePrint} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
+                                        <PrintOutlined fontSize='small' />
+                                        Print
+                                    </LoadingButton>
+                                )
+                            }
+
+                        </Grid>
+
+                        <Grid>
+
+                            {
+
+                                (session?.data?.user?.role?.id != 6 && data?.closed != 1 && data?.withdrawn != 1 && data?.completed != 1) &&
+                                (data?.user ?
+                                    <Button variant='contained' onClick={handleCreate} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 17H15M9 14H15M13.0004 3.00087C12.9048 3 12.7974 3 12.6747 3H8.2002C7.08009 3 6.51962 3 6.0918 3.21799C5.71547 3.40973 5.40973 3.71547 5.21799 4.0918C5 4.51962 5 5.08009 5 6.2002V17.8002C5 18.9203 5 19.4801 5.21799 19.9079C5.40973 20.2842 5.71547 20.5905 6.0918 20.7822C6.51921 21 7.079 21 8.19694 21L15.8031 21C16.921 21 17.48 21 17.9074 20.7822C18.2837 20.5905 18.5905 20.2842 18.7822 19.9079C19 19.4805 19 18.9215 19 17.8036V9.32568C19 9.20302 18.9999 9.09553 18.999 9M13.0004 3.00087C13.2858 3.00348 13.4657 3.01407 13.6382 3.05547C13.8423 3.10446 14.0379 3.18526 14.2168 3.29492C14.4186 3.41857 14.5918 3.59181 14.9375 3.9375L18.063 7.06298C18.4089 7.40889 18.5809 7.58136 18.7046 7.78319C18.8142 7.96214 18.8953 8.15726 18.9443 8.36133C18.9857 8.53379 18.9964 8.71454 18.999 9M13.0004 3.00087L13 5.80021C13 6.92031 13 7.48015 13.218 7.90797C13.4097 8.2843 13.7155 8.59048 14.0918 8.78223C14.5192 9 15.079 9 16.1969 9H18.999" stroke="#232648" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>Apply
+                                    </Button>
                                     :
                                     <Tooltip title="Only for Applicants" >
                                         <a>
@@ -577,6 +639,164 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
                 }
 
             </div >
+
+            {/* print table */}
+            <div style={{ display: "none" }} >
+                <div ref={contentRef}>
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow style={{ backgroundColor: '#232648' }} className=' text-white' >
+                                    <TableCell>
+                                        {/* #0B0D23 svg white color */}
+                                        <Typography style={{ color: '#ffffff' }} className='app-tab-title ' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+
+                                            University
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell>
+
+                                        <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                            Subject Area
+                                        </Typography>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                            Course
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell>
+                                        <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                            Intake
+                                        </Typography>
+                                    </TableCell>
+
+
+                                    <TableCell>
+                                        <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                            Stage
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell>
+                                        <Typography style={{ color: '#ffffff' }} className='app-tab-title' variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
+                                            Uni. Deposit
+                                        </Typography>
+                                    </TableCell>
+
+                                    <TableCell>
+
+                                    </TableCell>
+
+                                </TableRow>
+                            </TableHead>
+                            {
+                                printList?.data?.length > 0 ?
+                                    <TableBody>
+
+                                        {
+                                            list?.data?.map((obj, index) => (
+                                                <React.Fragment key={obj?.id}>
+                                                    {/* sx={{ height: isRowExpanded(obj.id) ? 300 : null }} */}
+                                                    <TableRow className='application-tr' >
+                                                        <TableCell>
+                                                            <div className='d-flex justify-between items-center '>
+                                                                <span style={{ cursor: 'pointer' }} onClick={() => handlUniInfoOpen(obj)} className='a_hover text-sky-600'> {obj?.university?.name}</span>
+
+                                                            </div>
+                                                        </TableCell>
+                                                        <TableCell>{obj?.subject_area?.name}</TableCell>
+                                                        <TableCell>{obj?.course}</TableCell>
+                                                        <TableCell><Tooltip title={obj?.differ_intake_note}>{obj?.intake?.name}</Tooltip></TableCell>
+                                                        <TableCell><Tooltip title={obj?.stage_note}>{obj?.stage?.name}</Tooltip></TableCell>
+                                                        <TableCell>
+                                                            {
+                                                                obj?.deposit_amount_paid ?
+                                                                    <>
+                                                                        <a> {obj?.deposit_amount_paid} </a>
+                                                                        <br />
+                                                                        {
+                                                                            obj?.deposit_paid_on &&
+                                                                            <a style={{ fontSize: '13px', color: 'grey' }}>Date :{moment(obj?.deposit_paid_on).format('DD-MM-YYYY')}</a>
+                                                                        }
+                                                                    </>
+                                                                    :
+                                                                    'NA'
+
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell>
+
+                                                        </TableCell>
+
+                                                    </TableRow>
+
+                                                    {
+                                                        obj?.withdrawn != 1 &&
+                                                        <TableCell colSpan={8} style={{ padding: 0, borderTop: 'none' }} >
+                                                            <div className='appl_act_cntr' >
+
+
+                                                                <div className='all_act_cntr application'>
+
+                                                                    <div className='application-btn-right m-auto mr-0'>
+                                                                        {
+                                                                            obj?.app_coordinator &&
+                                                                            <span style={{ fontSize: '14px' }} className='mr-3'> <span style={{ color: 'grey' }}>Submitted to :</span> {obj?.app_coordinator?.name}</span>
+                                                                        }
+
+                                                                        {
+                                                                            obj?.app_coordinator_status == null &&
+                                                                            <Button className='edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
+                                                                        }
+                                                                        {
+                                                                            obj?.app_coordinator_status == 'Returned' &&
+                                                                            // <div className='d-flex align-center'>
+                                                                            <>
+                                                                                <Button style={{ backgroundColor: blue[500] }} className='blue-btn edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} size='small'>Resubmit</Button>
+                                                                                {
+                                                                                    obj?.app_coordinator_retun_status_note &&
+                                                                                    <Tooltip title={obj?.app_coordinator_retun_status_note}><InfoOutlined fontSize='small' sx={{ color: '#689df6', fontSize: '15px', mr: 1, ml: -2 }} /></Tooltip>
+                                                                                }
+                                                                            </>
+                                                                            // </div>
+                                                                        }
+
+                                                                        {/* edit application */}
+
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </TableCell>
+                                                    }
+
+                                                </React.Fragment>
+                                            ))
+                                        }
+
+
+                                    </TableBody>
+                                    :
+                                    (
+                                        <TableBody>
+                                            <TableRow sx={{ height: 250, color: 'transparent' }}>
+                                                <TableCell colSpan={8} style={{ textAlign: 'center' }}>
+                                                    No Data Available
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    )}
+                        </Table>
+                    </TableContainer>
+                </div>
+            </div>
+
+
         </>
     )
 }
