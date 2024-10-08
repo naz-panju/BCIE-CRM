@@ -1,6 +1,4 @@
-import * as React from 'react';
-
-
+import React, { useEffect, useRef, useState } from 'react'
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
@@ -15,12 +13,13 @@ import TimelineOppositeContent, {
     timelineOppositeContentClasses,
 } from '@mui/lab/TimelineOppositeContent';
 import { LeadApi } from '@/data/Endpoints/Lead';
-import { useEffect } from 'react';
-import { useState } from 'react';
 import moment from 'moment';
 import { Skeleton } from '@mui/material';
 import { ApplicationApi } from '@/data/Endpoints/Application';
 import Image from 'next/image';
+import { LoadingButton } from '@mui/lab';
+import { useReactToPrint } from 'react-to-print';
+import { PrintOutlined } from '@mui/icons-material';
 
 export default function BasicSelect({ lead_id, from, app_id, refresh }) {
     const [select, setAge] = React.useState('');
@@ -57,25 +56,52 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
         getData()
     }, [limit, refresh])
 
+    const contentRef = useRef()
+    const [printLoad, setPrintLoad] = useState(false)
+    const [printList, setPrintList] = useState()
+
+    const handlePrintFetch = useReactToPrint({ contentRef })
+
+    // const handlePrintFetch = useReactToPrint({
+    //     content: () => contentRef.current,
+    // });
+
+    const handlePrint = async () => {
+        try {
+            setPrintLoad(true);
+            const response = await LeadApi.timeline({
+                limit: 1000,
+                id: lead_id
+            });
+            setPrintList(response?.data);
+            setTimeout(() => {
+                handlePrintFetch();
+                setPrintLoad(false);
+            }, 1000);
+
+            // Trigger print after data is ready
+        } catch (error) {
+            console.error('Error fetching data for print', error);
+            setPrintLoad(false);
+        }
+    };
+
+    // useEffect(() => {
+    //     if (printList?.data?.length > 0) {            
+    //         setTimeout(() => {
+
+    //         }, 1000);
+    //     }
+    // }, [printList])
+
 
     return (
 
         <div className='lead-tabpanel-content-block timeline'>
-            {/* <div className='lead-tabpanel-content-block-title'>
-                
-                <div className='timeline-top-right-block'>
-                    <Box className="" sx={{ minWidth: 120 }}>
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                            <Select className='tabpanel-select' labelId="demo-simple-select-label" id="demo-simple-select" value={select} label="Select" onChange={handleChange} >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                </div>
-            </div> */}
+            <LoadingButton loading={printLoad} variant='contained' onClick={handlePrint} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
+                <PrintOutlined fontSize='small' />
+                Print
+            </LoadingButton>
 
             {
                 laoding ?
@@ -151,6 +177,70 @@ export default function BasicSelect({ lead_id, from, app_id, refresh }) {
 
                     </div>
             }
+
+            {/* print table */}
+            <div style={{ display: "none" }}>
+                <div ref={contentRef} className='timeline-content-block-item'>
+                    {
+                        printList?.data?.length > 0 ?
+                            <Timeline className='timeline-content-block-item-block' sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
+                                {
+                                    list?.data?.map((obj, index) => (
+                                        <TimelineItem key={index} className='TimelineItemClass'>
+                                            <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
+                                                <div className='TimelineOppositeContent-block'>
+                                                    {moment(obj?.created_at).format('DD MMM YYYY hh:mm A')}
+                                                </div>
+
+                                            </TimelineOppositeContent>
+                                            <TimelineSeparator>
+                                                <Image className='TimelineDotIcon' src={TimelineDotIcon} alt='TimelineDotIcon' width={18} height={18} />
+                                                <TimelineConnector />
+                                            </TimelineSeparator>
+                                            <TimelineContent className='timeline-content-content-block'>
+                                                <div className='timeline-content-content '>
+                                                    <div className='flex justify-between w-full items-center'>
+                                                        <p className='leading-5 mr-2'>{obj?.description}</p>
+                                                        {
+                                                            obj?.type && (
+                                                                <>
+                                                                    {obj.type === 'email_send' || obj.type === 'email_received' ? (
+                                                                        <span style={{ background: 'green' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type === 'phone_call_created' ? (
+                                                                        <span style={{ background: 'orange' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type.startsWith('lead_') ? (
+                                                                        <span style={{ background: 'blue' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type.startsWith('application_') ? (
+                                                                        <span style={{ background: 'yellow' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type.startsWith('stage_') ? (
+                                                                        <span style={{ background: 'grey' }} className='timeline-content-content-span'></span>
+                                                                    ) : obj.type.startsWith('task_') ? (
+                                                                        <span style={{ background: 'aqua' }} className='timeline-content-content-span'></span>
+                                                                    ) : <span style={{ background: 'black' }} className='timeline-content-content-span'></span>}
+                                                                </>
+                                                            )
+                                                        }
+                                                    </div>
+                                                    {/* <span>+10</span> */}
+
+                                                    <svg className='timeline-content-content-svg' xmlns="http://www.w3.org/2000/svg" width="9" height="12" viewBox="0 0 9 12" fill="none"><path d="M-2.62268e-07 6L9 0.803848L9 11.1962L-2.62268e-07 6Z" fill="white" /></svg>
+
+
+                                                </div>
+                                            </TimelineContent>
+                                        </TimelineItem>
+                                    ))
+                                }
+
+                            </Timeline>
+                            :
+                            <div className='no-follw-up-block'>
+                                <h4>No Timeline for this Lead</h4>
+                            </div>
+                    }
+
+                </div>
+            </div>
         </div>
 
 

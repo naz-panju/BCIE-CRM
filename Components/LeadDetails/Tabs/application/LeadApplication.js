@@ -272,7 +272,6 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
                 all: 1
             });
             setPrintList(response?.data);
-           
             // Trigger print after data is ready
         } catch (error) {
             console.error('Error fetching data for print', error);
