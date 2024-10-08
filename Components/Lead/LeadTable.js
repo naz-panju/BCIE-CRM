@@ -1246,7 +1246,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
 
       {
         (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
-        <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={withdraw ? 'Withdrawn Leads' : unassign ? "Un Assigned Leads" : duplicate ? "Duplicate Leads" : "Leads"} params={{
+        <ExportExcel duplicate={duplicate ? true : false} tableLoading={loading} data={list?.data} from={'lead'} fileName={withdraw ? 'Withdrawn Leads' : unassign ? "Un Assigned Leads" : duplicate ? "Duplicate Leads" : "Leads"} params={{
           sort_field: field,
           sort_order: sortOrder ? 'asc' : 'desc',
           event_id: selectedEvents,
@@ -1347,10 +1347,10 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 <TableCell align="left">{row?.preferred_countries || 'NA'}</TableCell>
                                 <TableCell align="left">
                                   {
-                                    duplicate?
-                                    row?.duplicate_last_got_on ? <>{moment(row?.duplicate_last_got_on).format('DD-MM-YYYY')} <br />{moment(row?.duplicate_last_got_on).format('HH:MM A')}</> : 'NA'
-                                    :
-                                    row?.created_at ? <>{moment(row?.created_at).format('DD-MM-YYYY')} <br />{moment(row?.created_at).format('HH:MM A')}</> : 'NA'
+                                    duplicate ?
+                                      row?.duplicate_last_got_on ? <>{moment(row?.duplicate_last_got_on).format('DD-MM-YYYY')} <br />{moment(row?.duplicate_last_got_on).format('HH:MM A')}</> : 'NA'
+                                      :
+                                      row?.created_at ? <>{moment(row?.created_at).format('DD-MM-YYYY')} <br />{moment(row?.created_at).format('HH:MM A')}</> : 'NA'
                                   }
                                 </TableCell>
                                 <TableCell sx={{ display: 'flex', alignItems: 'center' }} align="left" className='assigned-colm'>

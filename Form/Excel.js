@@ -11,7 +11,7 @@ import toast from 'react-hot-toast';
 import { Grid } from 'rsuite';
 import XLSX from 'sheetjs-style';
 
-function ExportExcel({ from, fileName, params, data, tableLoading }) {
+function ExportExcel({ from, fileName, params, data, tableLoading, duplicate }) {
 
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
     const fileExtension = '.xlsx';
@@ -35,7 +35,7 @@ function ExportExcel({ from, fileName, params, data, tableLoading }) {
             setLoading(false)
         }).catch((error) => {
             console.log(error);
-            toast.error(error?.response?.data?.message)
+            toast.error(error?.response?.data?.message || error)
             setLoading(false)
         })
     }
@@ -61,7 +61,8 @@ function ExportExcel({ from, fileName, params, data, tableLoading }) {
                     "Country of Residence": obj?.country_of_residence?.name || 'NA',
                     "City of Student": obj?.city || 'NA',
                     "Preferred Country": obj?.preferred_countries || 'NA',
-                    "Created Date": moment(row?.created_at).format('DD-MM-YYYY'),
+                    ...(duplicate ? { 'Duplicated date': moment(obj?.duplicate_last_got_on).format('DD-MM-YYYY') } : { 'Created date': moment(obj?.created_at).format('DD-MM-YYYY') }),
+                    // "Created Date": moment(obj?.created_at).format('DD-MM-YYYY'),
                     "Assigned To": obj?.assignedToCounsellor?.name || 'NA',
                     "Stage": obj?.stage?.name || 'NA',
                 })
