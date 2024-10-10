@@ -21,7 +21,7 @@ const Header = ({ }) => {
 
   const handleSignout = () => {
     localStorage.removeItem('token')
-    signOut()
+    signOut({ callbackUrl: '/login' })
   }
 
   const [isBodyClassAdded, setIsBodyClassAdded] = useState(false);

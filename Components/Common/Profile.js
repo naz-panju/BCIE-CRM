@@ -22,7 +22,7 @@ const UserProfile = () => {
 
     const handleSignout = () => {
         localStorage.removeItem('token')
-        signOut()
+        signOut({ callbackUrl: '/login' })
     }
 
 

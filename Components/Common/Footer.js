@@ -19,9 +19,9 @@ function Footer() {
   };
 
   const handleSignout = () => {
-    signOut()
-    window.location.href = '/login';
     localStorage.removeItem('token')
+    signOut({ callbackUrl: '/login' })
+    // window.location.href = '/login';
   }
 
 
