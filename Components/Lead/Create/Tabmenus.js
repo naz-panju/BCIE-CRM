@@ -87,16 +87,16 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         scheme = yup.object().shape({
             name: yup.string().required("Name is Required"),
             email: yup.string().email("Invalid email format").required("Email is Required"),
-            dob: yup.string().required('Date of Birth is Required'),
+            // dob: yup.string().required('Date of Birth is Required'),
             address: yup.string().required('Address is Required'),
             city: yup.string().required('City is Required'),
             reference: yup.string().required('Reference is Required'),
             phone: yup.string().required('Phone number is Required'),
-            alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
-                return value !== this.parent.phone;
-            }),
-            passport_number: yup.string().required("Passport Number is Required"),
-            passport_expiry: yup.string().required("Passport Expiry Date is Required"),
+            // alt_phone: yup.string().test('not-equal', 'Alternate number must be different from mobile number', function (value) {
+            //     return value !== this.parent.phone;
+            // }),
+            // passport_number: yup.string().required("Passport Number is Required"),
+            // passport_expiry: yup.string().required("Passport Expiry Date is Required"),
             preffered_course: yup.string().required("Preffered Course is Required"),
             preferred_country: yup.string().required("Preffered Country is Required"),
             // preffered_course_level: yup.object().required("Course Level is required").typeError("Please choose a Course"),

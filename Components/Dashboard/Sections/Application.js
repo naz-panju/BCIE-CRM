@@ -55,7 +55,7 @@ function ApplicationSection({ paymentLoading, payments, selectedAppCounsellor, s
                             submitApplicationLoading ?
                                 <Skeleton style={{ marginTop: '70px' }} variant='rounded' width={600} height={200} />
                                 :
-                                <div style={{ height: '100%', marginTop: '70px' }} className='stage w-5/12 flex items-center justify-evenly application-submit-sec'>
+                                <div style={{ height: '100%', marginTop: '70px' }} className='stage w-5/12 flex items-center justify-evenly application-submit-sec gap-4 pl-[15px]'>
                                     {
                                         submitApplicationList?.data?.map((obj, index) => (
 
@@ -249,12 +249,12 @@ function ApplicationSection({ paymentLoading, payments, selectedAppCounsellor, s
 
                         {
                             applicationStagesLoading ?
-                                <div className='application-stages-block'>
+                                <div className='application-stages-block '>
                                     <Skeleton variant='rounded' width={'100%'} height={200} />
                                 </div>
                                 :
 
-                                <div className='application-stages-block'>
+                                <div className='application-stages-block grid grid-cols-5 gap-8'>
                                     {
                                         applicationStages?.data?.map((obj, index) => (
 

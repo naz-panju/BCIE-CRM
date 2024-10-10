@@ -112,7 +112,7 @@ function LeadDetails() {
         router.push('/404')
         setLoading(false)
       }
-      // console.log(response);
+      console.log(response);
     } catch (error) {
       console.log(error);
       router.push('/404')

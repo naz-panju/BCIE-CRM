@@ -1739,9 +1739,9 @@ ul.search-document-block-pred li.Active svg path {
 }
 
 .application-stages-block {
-    display: flex;
+    /* display: flex;
     flex-wrap: wrap;
-    gap: 40px;
+    gap: 40px; */
     border-radius: 9px;
     border: 1px solid #E7E7E7;
     background: #FFF;
@@ -1778,8 +1778,9 @@ ul.search-document-block-pred li.Active svg path {
     font-size: 12px;
     font-style: normal;
     font-weight: 400;
-    line-height: 28px;
+    line-height: 18px;
     text-align: center;
+    margin-top: 10px;
 }
 
 .application-stages-block-item:nth-child(2) span {
