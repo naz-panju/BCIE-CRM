@@ -913,7 +913,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
   return (
     <>
 
-      <ConfirmPopup loading={submitLoading} ID={convertId} setID={setconvertId} clickFunc={handleClickSubmit} title={`Do you want to Convert this from Duplicate to Lead?`} />
+      <ConfirmPopup loading={submitLoading} ID={convertId} setID={setconvertId} clickFunc={handleClickSubmit} title={`Do you want to Remove this from duplicate leads?`} />
 
 
       <div className="filter_sec">
@@ -1376,7 +1376,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
                                 {
                                   duplicate &&
                                   <TableCell className='stage-colm' align="left">
-                                    <Tooltip title={'Convert'}>
+                                    <Tooltip title={'Remove from duplicate'}>
                                       <Button size='small' variant='outlined' style={{ textTransform: 'none' }} onClick={() => handleConvertPopupOpen(row?.id)}><KeyboardReturnOutlined fontSize='small' /> </Button>
                                     </Tooltip>
                                   </TableCell>

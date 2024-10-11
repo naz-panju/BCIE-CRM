@@ -11,7 +11,7 @@ function TemplateData({ handleToggleTable, setValue, body, isFocused, setSubject
         { title: 'Alternate Phone Number', key: "{{4}}" },
         { title: 'Whatsapp Number', key: "{{5}}" },
         { title: 'Preferred Countries', key: "{{6}}" },
-        { title: 'Course Level', key: "{{7}}" },
+        // { title: 'Course Level', key: "{{7}}" },
         { title: 'Preferred Courses', key: "{{8}}" },
         { title: 'Date of Birth', key: "{{9}}" },
         { title: 'Country of Birth', key: "{{10}}" },
