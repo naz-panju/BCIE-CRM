@@ -202,12 +202,11 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         if (first) {
             setDataLoading(true)
         }
-        const response = await CommunicationLogApi.view({ id: editId })
+        const response = await CommunicationLogApi.view({ id: editId })        
         if (response?.status == 200 || response?.status == 201) {
             let data = response?.data?.data
             setMessages(data)
             setdetailKey(detailKey + 1)
-
         }
         setDataLoading(false)
     }
