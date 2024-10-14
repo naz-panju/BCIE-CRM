@@ -320,6 +320,7 @@ export default function WhatsAppTemplateTable({ refresh, editId, setEditId, page
 
 
     const fetchTable = () => {
+        
         setLoading(true)
         WhatsAppTemplateApi.list({ limit: limit, page: page,keyword:searchTerm,sort_field: field,sort_order: sortOrder ? 'asc' : 'desc' }).then((response) => {
             // console.log(response);

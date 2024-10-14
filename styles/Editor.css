@@ -3239,8 +3239,9 @@ a.not-found {
 }
 
 .login-page-sec {
-    padding: 25px 0;
+    padding: 25px ;
     max-width: 1440px;
+    height: 100vh;
     margin: 0 auto;
 }
 
@@ -3248,13 +3249,17 @@ a.not-found {
     position: relative;
     border-radius: 15px;
     overflow: hidden;
-    min-width: 580px;
+    max-width: 580px;
+    margin: 0 auto;
 }
 
 .log-left img {
-    width: 582px;
-    height: calc(100vh - 50px);
-    object-fit: cover;
+    max-width: 582px;
+    width: 100%;
+    height:auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
 }
 
 .log-left-cap {
@@ -3281,8 +3286,9 @@ a.not-found {
 
 .log-right {
 
-    min-width: 552px;
-    width: 60%;
+    max-width: 552px;
+    width: 100%;
+    margin: 0 auto\;
 }
 
 .log-rht-cntr {
@@ -3304,7 +3310,7 @@ a.not-found {
     padding-left: 105px;
 }
 
-.log-rht-cntr h4::after {
+/* .log-rht-cntr h4::after {
     content: "";
     position: absolute;
     left: 0;
@@ -3312,7 +3318,7 @@ a.not-found {
     width: 98px;
     height: 1px;
     background-color: #000;
-}
+} */
 
 .log-rht-cntr h1 {
     color: #0B0D23;

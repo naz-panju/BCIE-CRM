@@ -20,8 +20,9 @@ function Login() {
   // }, [])
 
   return (
-    <div className="login-page-sec d-flex align-items-center">
+    <div className="login-page-sec grid grid-cols-1 sm:grid-cols-2 gap-14 align-items-center">
 
+     <div>
       <div className='log-left'>
         <div className='log-left-cap'>
           {/* <svg xmlns="http://www.w3.org/2000/svg" width="49" height="15" viewBox="0 0 49 15" fill="none">
@@ -37,8 +38,9 @@ function Login() {
         </div>
         <Image unoptimized src={HmSl1.src} alt={"banner image"} width={343} height={457} />
       </div>
+      </div>
 
-
+<div>
       <div className='log-right'>
         <div className='log-rht-cntr'>
           <h4>
@@ -55,6 +57,7 @@ function Login() {
           </svg> Report Error.</h5> */}
 
         </div>
+      </div>
       </div>
 
     </div>

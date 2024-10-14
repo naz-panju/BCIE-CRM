@@ -961,11 +961,11 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
                                                                         }
 
                                                                         {
-                                                                            obj?.app_coordinator_status == null &&
+                                                                            (session?.data?.user?.role?.id != 6 && row?.submitted_to_university != 1) && row?.app_coordinator_status == null &&
                                                                             <Button className='edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
                                                                         }
                                                                         {
-                                                                            obj?.app_coordinator_status == 'Returned' &&
+                                                                           session?.data?.user?.role?.id != 6 && obj?.app_coordinator_status == 'Returned' &&
                                                                             // <div className='d-flex align-center'>
                                                                             <>
                                                                                 <Button style={{ backgroundColor: blue[500] }} className='blue-btn edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} size='small'>Resubmit</Button>

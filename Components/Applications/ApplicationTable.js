@@ -811,13 +811,13 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         handlePopoverClose()
         setreturnId(id)
     }
-    
+
     const handleFirstPage = () => {
-        if(page !== 1){
+        if (page !== 1) {
             console.log('table refresh');
-            
+
             fetchTable()
-        }else{
+        } else {
             setPage(1)
         }
     }
@@ -849,7 +849,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
         handlePopoverClose()
         setsubmitId(id)
     }
-    
+
     const handleClickSubmit = () => {
         setsubmitLoading(true)
         ApplicationApi.submitToCordinator({ id: submitId }).then((response) => {
@@ -1773,19 +1773,19 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                         >
                                                                             <List>
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id !== 5 && row?.app_coordinator_status == 'Submitted' && row?.stage?.action_type !== 'Application Submitted') &&
+                                                                                    (session?.data?.user?.role?.id !== 5 && row?.submitted_to_university != 1) && row?.app_coordinator_status == 'Submitted' &&
                                                                                     <ListItem button onClick={() => handleReturnPopupOpen(row?.id)}>
                                                                                         Return Application
                                                                                     </ListItem>
                                                                                 }
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id != 6 && row?.app_coordinator_status == null || row?.app_coordinator_status == "Returned") &&
+                                                                                    (session?.data?.user?.role?.id != 6 && row?.submitted_to_university != 1) && row?.app_coordinator_status == null &&
                                                                                     <ListItem button onClick={() => handleSubmitOpen(row?.id)}>
                                                                                         Submit Application to Coordinator
                                                                                     </ListItem>
                                                                                 }
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id != 5 && row?.app_coordinator_status == 'Submitted' && row?.stage?.action_type !== 'Application Submitted') &&
+                                                                                    (session?.data?.user?.role?.id != 5 && row?.submitted_to_university != 1) && row?.app_coordinator_status && row?.app_coordinator_status != 'Submitted' && row?.app_coordinator_status != "Returned" &&
                                                                                     <ListItem button onClick={() => handleUniSubmitId(row)}>
                                                                                         Submit Application to University
                                                                                     </ListItem>
