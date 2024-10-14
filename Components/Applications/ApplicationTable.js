@@ -1785,7 +1785,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                                     </ListItem>
                                                                                 }
                                                                                 {
-                                                                                    (session?.data?.user?.role?.id != 5 && row?.submitted_to_university != 1) && row?.app_coordinator_status && row?.app_coordinator_status != 'Submitted' && row?.app_coordinator_status != "Returned" &&
+                                                                                    (session?.data?.user?.role?.id != 5 && row?.submitted_to_university != 1) && row?.app_coordinator_status && row?.app_coordinator_status != "Returned" &&
                                                                                     <ListItem button onClick={() => handleUniSubmitId(row)}>
                                                                                         Submit Application to University
                                                                                     </ListItem>
