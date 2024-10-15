@@ -212,6 +212,11 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
     const handleCursorPosition = (e) => {
         setCursorPosition(e.target.selectionStart);
     };
+    const handleTextboxChange = (e) => {        
+        setValue('content',e.target.value)
+        setCursorPosition(e.target.selectionStart);
+    };
+
     const setTemplateValue = (data, event) => {
         const currentContent = watch('content') || '';
         const newValue =
@@ -252,7 +257,6 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
                     {
                         toggleTable &&
                         <Grid width={500} >
-                            {/* setValue={setcopied} isFocused={isFocused} setSubject={setSubject} */}
                             <WhatsAppTemplateData handleToggleTable={handleToggleTable} setValue={setTemplateValue} />
                         </Grid>
                     }
@@ -333,7 +337,7 @@ export default function CreateWhatsAppTemplate({ editId, setEditId, refresh, set
                                                 <div className='application-input'>
                                                     <a className='form-text'>Template Content</a>
                                                     <Grid className='mb-5 forms-data'>
-                                                        <TextField onClick={handleCursorPosition} ref={contentRef} placeholder='' multiline rows={8} fullWidth control={control}  {...register('content')}
+                                                        <TextField onClick={handleCursorPosition} onChange={handleTextboxChange} ref={contentRef} placeholder='' multiline rows={8} fullWidth control={control} 
                                                             value={watch('content') || ''} />
                                                     </Grid>
                                                 </div>
