@@ -21,7 +21,7 @@ const NotificationsPage = () => {
         if (!noLoad) {
             setLoading(true);
         }
-        NotificationApi.list().then((response) => {
+        NotificationApi.list({limit:500}).then((response) => {
             if (response?.status === 200) {
                 setNotifications(response?.data);
             } else {
@@ -80,8 +80,6 @@ const NotificationsPage = () => {
         });
     };
 
-    console.log(notifications);
-
 
     return (
         <Layout>
@@ -101,16 +99,15 @@ const NotificationsPage = () => {
                                     </Grid>
                                     // </li>
                                 ))}
-                                {
+                                {/* {
                                     (notifications?.data?.length < notifications?.meta?.total) &&
                                     <div className='loadmore-btn-block p-2'>
-                                        {/* <CachedIcon />Load More */}
                                         <button onClick={fetchLoadMoreNotifications} className='loadmore-btn' >  {loadMore ? 'Loading' : 'Load More'} </button>
                                     </div>
-                                }
+                                } */}
                             </>
                         ) : (
-                            <p style={styles.noNotifications}>No notifications available.</p>
+                            <p style={styles.noNotifications}>No notification.</p>
                         )}
                     </ul>
                 )}

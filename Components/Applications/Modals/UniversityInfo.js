@@ -113,7 +113,7 @@ export default function UniversityInfoModal({ editId, setEditId, details, setDet
                     {
                         (!details?.university?.extra_university_info && !details?.university?.extra_scholarship_info) &&
                         <Grid display={'flex'} justifyContent={'center'} alignItems={'center'} height={150}>
-                            <a style={{ fontSize: '20px' }}>University Information Not Found</a>
+                            <a style={{ fontSize: '20px' }}>University Information not found</a>
                         </Grid>
 
                     }
