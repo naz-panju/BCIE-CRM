@@ -671,9 +671,11 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
 
                                                     <a className='not-found' style={{ marginLeft: 10 }}><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 2.20706L22 22.0011M6.562 2.51506C8.568 1.91306 14.316 1.79206 17.724 2.39706C18.549 2.54406 19.344 3.07606 19.778 3.78206C20.504 4.96506 20.465 6.34206 20.465 7.72406L20.345 16.1791M4 4.17206C3.368 6.43906 3.453 10.6001 3.494 16.7421C3.5 17.5321 3.537 18.3321 3.775 19.0871C4.144 20.2571 4.758 20.9671 6.107 21.5371C6.682 21.7811 7.313 21.8611 7.94 21.8611H11.983C15.779 21.7691 17.311 21.3731 18.989 19.1831M10.487 21.8611C12.868 20.6541 14.095 20.4861 13.783 17.4501C13.723 16.6641 14.173 15.7251 14.977 15.4731M20.405 12.0451C20.162 13.4811 19.999 14.0151 19.03 14.8461" stroke="#525252" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>No Document Found</a>
                                                     :
-                                                    <a className='not-found' style={{ marginLeft: 10 }}>
+                                                    <a className='not-found' style={{ marginLeft: 10, fontWeight: '500', fontSize: '16px', color: '#d9534f' }}>
                                                         You have to submit an application to the university to add university documents.
-                                                    </a>}
+                                                    </a>
+
+                                            }
 
                                         </Grid>}
                         </Grid>

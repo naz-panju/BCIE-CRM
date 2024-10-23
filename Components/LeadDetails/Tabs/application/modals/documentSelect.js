@@ -99,72 +99,7 @@ export default function DocumentSelectModal({ editId, setEditId, SelectedDocumen
     };
 
 
-    const onSubmit = (data) => {
-        // console.log(selectedFile);
-        if (!selectedFile) {
-            toast.error('Please select a File')
-        } else {
-            setLoading(true)
-            // console.log(data);
-
-            const formData = new FormData()
-
-            // application:id
-            formData.append('id', app_id)
-            formData.append('document_template_id', data?.template?.id)
-            if (selectedFile) {
-                formData.append('document', selectedFile)
-            }
-
-            if (data?.template?.stage?.id) {
-                formData.append('stage', data?.template?.stage?.id)
-            }
-
-            if (data?.template?.stage?.action_type == 'Get Application Id') {
-                formData.append('application_number', data?.application_id)
-            }
-
-            if (data?.template?.stage?.action_type == 'Deposit Paid') {
-                let date = ''
-                if (data?.paid_date) {
-                    date = moment(data?.paid_date).format('YYYY-MM-DD')
-                }
-                formData.append('deposit_paid_on', date)
-                formData.append('deposit_amount', data?.amount)
-            }
-
-            let action;
-
-            if (editId > 0) {
-                // formData.append('id', editId)
-                action = ApplicationApi.uploadUniversityDocument(formData)
-            } else {
-                action = ApplicationApi.uploadUniversityDocument(formData)
-            }
-
-            action.then((response) => {
-                // console.log(response);
-                if (response?.status == 200 || response?.status == 201) {
-                    handleClose()
-                    toast.success(response?.data?.message)
-                    handleRefresh()
-                    if (fetchTable) {
-                        fetchTable()
-                    }
-                    setLoading(false)
-                } else {
-                    toast.error(response?.response?.data?.message)
-                    setLoading(false)
-                }
-                setLoading(false)
-            }).catch((error) => {
-                console.log(error);
-                toast.error(error?.response?.data?.message)
-                setLoading(false)
-            })
-        }
-
-    }
+  
 
     function trimUrlAndNumbers(url) {
         const lastSlashIndex = url?.lastIndexOf('/');
