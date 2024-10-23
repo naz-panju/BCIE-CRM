@@ -180,6 +180,13 @@ const headCells = [
         label: 'Uni.Deposit',
         noSort: false
     },
+    {
+        id: 'submit',
+        numeric: false,
+        disablePadding: false,
+        label: '',
+        noSort: true
+    },
 
     {
         id: 'icons',

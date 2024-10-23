@@ -767,11 +767,8 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
       params['intake_id'] = selectedIntake
     }
 
-    console.log(params);
-
 
     ApplicationApi.list(params).then((response) => {
-      console.log(response);
       setList(response?.data)
       setLoading(false)
     }).catch((error) => {

@@ -961,7 +961,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
                                                                         }
 
                                                                         {
-                                                                            (session?.data?.user?.role?.id != 6 && row?.submitted_to_university != 1) && row?.app_coordinator_status == null &&
+                                                                            (session?.data?.user?.role?.id != 6 && obj?.submitted_to_university != 1) && obj?.app_coordinator_status == null &&
                                                                             <Button className='edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
                                                                         }
                                                                         {

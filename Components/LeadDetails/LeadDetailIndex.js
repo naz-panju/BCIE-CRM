@@ -313,7 +313,7 @@ function LeadDetails() {
     getStageList()
   }, [])
 
-  console.log(details);
+  // console.log(details);
   const obj = {
     assignedToOffice: details?.assignedToOffice,
     assignedToCounsellor: details?.assignedToCounsellor
