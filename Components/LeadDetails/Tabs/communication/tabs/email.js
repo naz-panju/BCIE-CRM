@@ -51,17 +51,8 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                                 Email Type
                                                             </Typography>
                                                         </TableCell> */}
-                                                        <TableCell>
-                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                From
-                                                            </Typography>
-
-                                                        </TableCell>
-                                                        <TableCell>
-                                                            <Typography variant="subtitle1" sx={{ color: 'black' }} fontWeight="bold">
-                                                                To
-                                                            </Typography>
-                                                        </TableCell>
+                                                      
+                                                  
                                                         <TableCell>
 
                                                         </TableCell>
@@ -94,15 +85,14 @@ function EmailTab({ list, setEmailLimit, loading, page, setPage, emailLimit, lea
                                                                             }}></div>
                                                                         </Tooltip>
                                                                         {
-                                                                            obj?.subject?.length > 50 ?
-                                                                                <b className='a_hover'> {obj?.subject?.slice(0, 50)} ...</b>
+                                                                            obj?.subject?.length > 90 ?
+                                                                                <b className='a_hover'> {obj?.subject?.substring(0, 90)} ...</b>
                                                                                 :
                                                                                 <b className='a_hover'>{obj?.subject}</b>
                                                                         }
                                                                     </TableCell>
                                                                     {/* <TableCell>{obj?.type}</TableCell> */}
-                                                                    <TableCell>{obj?.from || obj?.created_by?.name}</TableCell>
-                                                                    <TableCell>{obj?.to || leadData?.email}</TableCell>
+                                                                   
                                                                     <TableCell>
                                                                         {
                                                                             obj?.attachments?.length > 0 &&
