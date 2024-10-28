@@ -882,17 +882,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                                         </Typography>
 
                                     </TableCell>
-                                    <TableCell>
-                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
-                                            From
-                                        </Typography>
-
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="subtitle1" sx={{ color: 'white' }} fontWeight="bold">
-                                            To
-                                        </Typography>
-                                    </TableCell>
+                          
                                     <TableCell>
 
                                     </TableCell>
@@ -915,8 +905,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                                                         <TableCell>
                                                             {obj?.subject}
                                                         </TableCell>
-                                                        <TableCell>{obj?.from || obj?.created_by?.name}</TableCell>
-                                                        <TableCell>{obj?.to || leadData?.email}</TableCell>
+                                                       
                                                         <TableCell>
                                                             {
                                                                 obj?.attachments?.length > 0 &&

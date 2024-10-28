@@ -54,7 +54,7 @@ http.interceptors.response.use(
         if (response?.response?.status === 401 || response?.response?.statusText === 'Unauthorized') {
             // console.log(response);
             console.log("Sign out now");
-            // signOut({ callbackUrl: '/login' })
+            signOut({ callbackUrl: '/login' })
         }
         return response;
     },
