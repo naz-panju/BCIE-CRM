@@ -21,7 +21,7 @@ function Details({ data, loading }) {
 
     const handleCopy = async () => {
         setcopied(true)
-        await navigator.clipboard.writeText(`${currentURL}/forms/event/${data?.token}`);
+        await navigator.clipboard.writeText(`${currentURL}/forms/lead/${data?.token}`);
         setTimeout(() => {
             setcopied(false)
         }, 1000);
