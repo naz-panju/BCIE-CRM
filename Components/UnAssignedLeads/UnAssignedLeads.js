@@ -217,7 +217,7 @@ export default function UnAssignedLeads() {
   return (
 
     <>
-      <AssignLeadModal assignToUser={assignToUser} setassignToUser={setassignToUser} single={singleAssign} setsingle={setsingleAssign} selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} handlePopClose={handleClose} />
+      <AssignLeadModal unAssigned={true} assignToUser={assignToUser} setassignToUser={setassignToUser} single={singleAssign} setsingle={setsingleAssign} selected={selected} setSelected={setSelected} editId={assignId} setEditId={setAssignId} handleRefresh={handleRefresh} handlePopClose={handleClose} />
       <section>
         <div className='page-title-block'>
           <div className='page-title-block-content justify-between'>

@@ -358,8 +358,8 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
 
                             {
 
-                                (session?.data?.user?.role?.id != 6 && data?.closed != 1 && data?.withdrawn != 1 && data?.completed != 1) &&
                                 (data?.user &&
+                                    list?.data?.length > 0 &&
                                     <LoadingButton loading={printLoad} variant='contained' onClick={handlePrint} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
                                         <PrintOutlined fontSize='small' />
                                         Print
@@ -647,7 +647,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
 
                             <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                                 <div>
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Name </label>
                                         {data?.name}
                                     </div>
@@ -661,29 +661,29 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
 
                                 {
                                     data?.stage &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Lead Stage </label> {data?.stage?.name}
                                     </div>
                                 }
 
                                 <div>
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Email Address </label>
                                         {data?.email || 'NA'}
                                     </div>
                                 </div>
 
                                 <div>
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Mobile Number  </label>
                                         {data?.phone_number ? '+' : ''}{data?.phone_number || 'NA'}
                                     </div>
                                 </div>
 
                                 <div>
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
-                                        <label style={{ fontWeight: 'bold' }}>Alternate Mobile Number </label> 
-                                        
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
+                                        <label style={{ fontWeight: 'bold' }}>Alternate Mobile Number </label>
+
                                         {
                                             data?.alternate_phone_number ?
                                                 ` + ${data?.alternate_phone_number}`
@@ -694,9 +694,9 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
 
 
                                 <div>
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
-                                        <label style={{ fontWeight: 'bold' }}>WhatsApp Number </label> 
-                                        
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
+                                        <label style={{ fontWeight: 'bold' }}>WhatsApp Number </label>
+
                                         {
                                             data?.whatsapp_number ?
                                                 ` +${data?.whatsapp_number}`
@@ -708,147 +708,147 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
 
                                 {
                                     data?.country_of_birth &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Country of Birth </label> {data?.country_of_birth?.name}
                                     </div>
                                 }
                                 {
                                     data?.country_of_residence &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Country of Residence </label> {data?.country_of_residence?.name}
                                     </div>
                                 }
                                 {
                                     data?.city &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>City </label> {data?.city}
                                     </div>
                                 }
                                 {
                                     data?.address &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Address </label> {data?.address}
                                     </div>
                                 }
                                 {
                                     data?.date_of_birth &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Date of Birth </label> {moment(data?.date_of_birth).format('DD-MM-YYYY')}
                                     </div>
                                 }
 
                                 <div>
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Preferred Courses </label> {data?.preferred_course || 'NA'}
                                     </div>
                                 </div>
                                 {
                                     data?.preferred_countries &&
                                     <div>
-                                        <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                        <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                             <label style={{ fontWeight: 'bold' }}>Preferred Countries </label> {data?.preferred_countries}
                                         </div>
                                     </div>
                                 }
                                 {
                                     data?.passport &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Passport Number </label> {data?.passport}
                                     </div>
                                 }
                                 {
                                     data?.passport_exp_date &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Passport Expiry Date </label>{moment(data?.passport_exp_date).format('DD-MM-YYYY')}
                                     </div>
                                 }
                                 {
                                     data?.lead_source &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Lead Source </label> {data?.lead_source?.name}
                                     </div>
                                 }
                                 {/* referrance_from */}
                                 {
                                     data?.lead_source?.id == 5 &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Referred Student </label> {data?.referredStudent?.name || 'NA'}
                                     </div>
                                 }
 
                                 {
                                     data?.lead_source?.id == 6 &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Referred Agency </label> {data?.agency?.name || 'NA'}
                                     </div>
                                 }
                                 {
                                     data?.lead_source?.id == 7 &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Referred University </label> {data?.referred_university?.name || 'NA'}
                                     </div>
                                 }
                                 {
                                     data?.lead_source?.id == 11 &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Event </label> {data?.event?.name || 'NA'}
                                     </div>
                                 }
                                 {
                                     data?.sponser_details &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Sponser Detail </label> {data?.sponser_details || 'NA'}
                                     </div>
                                 }
                                 {
                                     data?.referrance_from &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Here about us from </label> {data?.referrance_from}
                                     </div>
                                 }
 
                                 {
                                     data?.campaign &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Campaign </label> {data?.campaign?.name}
                                     </div>
                                 }
                                 {
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Sign up for external parties </label>
                                         {data?.sign_up_for_external_parties ? 'yes' : 'no'}
                                     </div>
                                 }
                                 {
                                     data?.note &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Note </label> {data?.note}
                                     </div>
                                 }
                                 {
                                     data?.substage &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Lead Sub Stage </label>: {data?.substage?.name}
                                     </div>
                                 }
 
                                 {
                                     data?.closed == 1 && data?.archive_reason &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Archive Reason </label> {data?.archive_reason}
                                     </div>
                                 }
 
                                 {
                                     data?.closed == 1 && data?.archive_note &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Archive Note </label> {data?.archive_note}
                                     </div>
                                 }
 
                                 {
                                     data?.withdrawn == 1 && data?.withdraw_reason &&
-                                    <div style={{margin:'5px',paddingBottom:'10px'}} className="lead-details-list print-detail">
+                                    <div style={{ margin: '5px', paddingBottom: '10px' }} className="lead-details-list print-detail">
                                         <label style={{ fontWeight: 'bold' }}>Withdrawn Reason</label> {data?.withdraw_reason}
                                     </div>
                                 }
@@ -965,7 +965,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
                                                                             <Button className='edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} variant='outlined' size='small'>Submit</Button>
                                                                         }
                                                                         {
-                                                                           session?.data?.user?.role?.id != 6 && obj?.app_coordinator_status == 'Returned' &&
+                                                                            session?.data?.user?.role?.id != 6 && obj?.app_coordinator_status == 'Returned' &&
                                                                             // <div className='d-flex align-center'>
                                                                             <>
                                                                                 <Button style={{ backgroundColor: blue[500] }} className='blue-btn edit-btn-outline' onClick={() => handleSubmitOpen(obj?.id)} size='small'>Resubmit</Button>

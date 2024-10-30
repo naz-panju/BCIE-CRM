@@ -34,7 +34,7 @@ const style = {
 };
 
 
-export default function AssignLeadModal({ selected, setSelected, editId, setEditId, handleRefresh, handlePopClose, setsingle, single, assignToUser, setassignToUser, reAssign, setreAssign }) {
+export default function AssignLeadModal({ selected, setSelected, editId, setEditId, handleRefresh, handlePopClose, setsingle, single, assignToUser, setassignToUser, reAssign, setreAssign, unAssigned }) {
     const scheme = yup.object().shape({
 
         // template: yup.object().required("Please Choose a Template").typeError("Please choose a Template"),
@@ -94,23 +94,44 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
 
 
     const fetchCounsellor = (e) => {
-        return ListingApi.counsellors({ keyword: e, office_id: branchId || assignToUser?.assignedToOffice?.id, }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
-                    return response?.data?.data;   
-            } else {
-                return [];
-            }
-        })
+        if (unAssigned) {
+            return ListingApi.unAssignCounsellor({ keyword: e, office_id: branchId  }).then(response => {
+                if (typeof response?.data?.data !== "undefined") {
+                    return response?.data?.data;
+                } else {
+                    return [];
+                }
+            })
+        } else {
+            return ListingApi.counsellors({ keyword: e, office_id: branchId || assignToUser?.assignedToOffice?.id, }).then(response => {
+                if (typeof response?.data?.data !== "undefined") {
+                    return response?.data?.data;
+                } else {
+                    return [];
+                }
+            })
+        }
     }
 
     const fetchBranches = (e) => {
-        return ListingApi.office({ keyword: e }).then(response => {
-            if (typeof response?.data?.data !== "undefined") {
-                return response?.data?.data;
-            } else {
-                return [];
-            }
-        })
+        if (unAssigned) {
+            return ListingApi.unAssignOffice({ keyword: e }).then(response => {
+                if (typeof response?.data?.data !== "undefined") {
+                    return response?.data?.data;
+                } else {
+                    return [];
+                }
+            })
+        } else {
+            return ListingApi.office({ keyword: e }).then(response => {
+                if (typeof response?.data?.data !== "undefined") {
+                    return response?.data?.data;
+                } else {
+                    return [];
+                }
+            })
+        }
+
     }
 
     const onSubmit = () => {
@@ -170,7 +191,7 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                 let action;
                 console.log(reAssign);
                 if (reAssign) {
-                    
+
                     dataToSubmit = {
                         user_id: watch('counsellor')?.id,
                         lead_id: selected,

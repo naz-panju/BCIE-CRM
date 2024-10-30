@@ -29,6 +29,10 @@ export const ListingApi = {
     uniDocuments:(data) => http.get(`listing/university-documents-leads/${data?.lead_id}`, { params: data }),
     campaigns:(data) => http.get(`listing/lead-campaigns/${data?.source_id}`, { params: data }),
 
+   
+    unAssignCounsellor:(data)=>http.get(`listing/counselors/all`, { params: data }),
+    unAssignOffice:(data)=>http.get(`listing/offices/all`, { params: data }),
+
     permissionUser:(data) => http.get(`listing/accessable-users`, { params: data }),
     
     maxFileSize:(data) => http.get(`max-file-upload-size`, { params: data }),
