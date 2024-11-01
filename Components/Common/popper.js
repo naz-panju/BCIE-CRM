@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import Pusher from "pusher-js";
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function SimplePopper() {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -30,6 +31,7 @@ export default function SimplePopper() {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
+    
     const [list, setlist] = useState([])
     const fetchList = () => {
         setloading(true)
@@ -153,6 +155,8 @@ export default function SimplePopper() {
         };
     }, []);
 
+
+  
     // console.log(open);
 
 

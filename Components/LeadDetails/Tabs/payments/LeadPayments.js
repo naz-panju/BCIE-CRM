@@ -84,7 +84,7 @@ function LeadPayments({ lead_id, from, app_id,leadData }) {
                         Find payments and invoice
                     </div>
                     {
-                        session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && leadData?.completed != 1 &&
+                        session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && 
                         <Grid display={'flex'} alignItems={'end'}>
                             <Button sx={{ textTransform: 'none' }} onClick={handleCreate} className='Request-Document-btn' ><svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M7 10.5H10.5M10.5 10.5H14M10.5 10.5V14M10.5 10.5V7M3.5 14.7002V6.30017C3.5 5.32008 3.5 4.82967 3.69074 4.45532C3.85852 4.12604 4.12604 3.85852 4.45532 3.69074C4.82967 3.5 5.32008 3.5 6.30017 3.5H14.7002C15.6803 3.5 16.1701 3.5 16.5444 3.69074C16.8737 3.85852 17.1417 4.12604 17.3094 4.45532C17.5002 4.82967 17.5002 5.31971 17.5002 6.29981V14.6998C17.5002 15.6799 17.5002 16.17 17.3094 16.5443C17.1417 16.8736 16.8737 17.1417 16.5444 17.3094C16.1704 17.5 15.6813 17.5 14.7031 17.5H6.29729C5.31912 17.5 4.8293 17.5 4.45532 17.3094C4.12604 17.1417 3.85852 16.8737 3.69074 16.5444C3.5 16.1701 3.5 15.6803 3.5 14.7002Z" stroke="#3D405D" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />

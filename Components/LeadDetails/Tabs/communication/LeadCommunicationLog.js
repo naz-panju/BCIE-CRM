@@ -374,7 +374,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                                 </div>
                             </div>
                             {
-                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && leadData?.completed != 1 &&
+                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && 
                                 <Button onClick={handleOpenMailModal} variant='outlined' sx={{ mt: 2, mb: -2, textTransform: 'none' }}>Send Mail</Button>
                             }
                         </div>
@@ -429,7 +429,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                                 </div>
                             </div>
                             {
-                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && leadData?.completed != 1 &&
+                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && 
                                 <Button onClick={handleOpenWhatsappModal} variant='outlined' sx={{ mt: 2, mb: -2, textTransform: 'none' }}>Send Whatsapp</Button>
                             }
                         </div>
@@ -485,7 +485,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                                 </div>
                             </div>
                             {
-                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && leadData?.completed != 1 &&
+                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && 
                                 <Button onClick={handlePhoneCallOpen} variant='outlined' sx={{ mt: 2, mb: -2, textTransform: 'none' }}>Add Call</Button>
                             }
                         </div>

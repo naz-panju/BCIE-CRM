@@ -1012,7 +1012,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       </div>
 
       {
-        (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+        (session?.data?.user?.role?.id == 3 ) &&
         <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={'Archived Leads'} params={{
           sort_field: field,
           sort_order: sortOrder ? 'asc' : 'desc',

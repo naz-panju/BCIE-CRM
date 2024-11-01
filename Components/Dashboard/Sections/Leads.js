@@ -89,21 +89,22 @@ function LeadSection({ communicationLogLoading, communicationLog, range, setRang
         // console.log(e);
 
         e.preventDefault()
+        setWeeklyRange(range);
 
-        if (start && end) {
-            const startDate = moment(start);
-            const endDate = moment(end);
-            const diffInDays = endDate.diff(startDate, 'days');
+        // if (start && end) {
+        //     const startDate = moment(start);
+        //     const endDate = moment(end);
+        //     const diffInDays = endDate.diff(startDate, 'days');
 
-            console.log(diffInDays);
+        //     console.log(diffInDays);
 
-            if (diffInDays > 7) {
-                toast.error('The selected date range should not exceed 7 days.');
-                // setWeeklyRange([start, null]); // Keep the start date and reset the end date
-            } else {
-                setWeeklyRange(range);
-            }
-        }
+        //     if (diffInDays > 7) {
+        //         toast.error('The selected date range should not exceed 7 days.');
+        //         // setWeeklyRange([start, null]); // Keep the start date and reset the end date
+        //     } else {
+        //         setWeeklyRange(range);
+        //     }
+        // }
     };
 
     return (

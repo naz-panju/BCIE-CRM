@@ -1245,7 +1245,7 @@ export default function EnhancedTable({ refresh, page, setPage, selected, setSel
       </div>
 
       {
-        (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+        (session?.data?.user?.role?.id == 3) &&
         <ExportExcel duplicate={duplicate ? true : false} tableLoading={loading} data={list?.data} from={'lead'} fileName={withdraw ? 'Withdrawn Leads' : unassign ? "Un Assigned Leads" : duplicate ? "Duplicate Leads" : "Leads"} params={{
           sort_field: field,
           sort_order: sortOrder ? 'asc' : 'desc',

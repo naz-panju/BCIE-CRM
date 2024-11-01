@@ -100,14 +100,17 @@ function LeadDetails() {
   const router = useRouter()
   const urlID = router?.query?.slug
 
+
   const getDetails = async () => {
     setLoading(true)
+   
     try {
       // console.log(urlID);
       const response = await LeadApi.view({ id: urlID })
       if (response?.status == 200 || response?.status == 201) {
         setDetails(response?.data?.data)
         setLoading(false)
+       
       } else {
         router.push('/404')
         setLoading(false)
@@ -876,7 +879,7 @@ function LeadDetails() {
                             </div>
                             {/*  <p><span>{commDetails?.email_send_summary}</span>    Sent  </p> */}
                             {
-                              session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
+                              session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && 
                               <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
                             }
                           </li>
@@ -891,7 +894,7 @@ function LeadDetails() {
                         </div>
                         {/*<p> <span>{commDetails?.whatsapp_send_summary}</span> Whatsapp Sent  </p> */}
                         {
-                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
+                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && 
                           <a className='btn' onClick={details && handlePhoneCallOpen} > Add Call Log </a>
                         }
                       </li>
@@ -938,7 +941,7 @@ function LeadDetails() {
                       </div>
                       <div>
                         {
-                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
+                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && 
                           <a className='btn' onClick={details && handleTaskOpen} >Add Task</a>
                         }
                       </div>
@@ -971,7 +974,7 @@ function LeadDetails() {
                       </div>
                       <div>
                         {
-                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 &&
+                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && 
                           <a className='btn' onClick={details && handleNoteOpen}>  Add Note </a>
                         }
                       </div>
@@ -1024,7 +1027,7 @@ function LeadDetails() {
                               </span>
                               :
 
-                              session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 && details?.completed != 1 ?
+                              (session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1)  ?
                                 <Button disabled={!details} onClick={details && handleSigleAssign} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
                                 :
                                 'NA'

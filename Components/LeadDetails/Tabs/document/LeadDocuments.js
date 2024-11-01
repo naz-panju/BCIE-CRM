@@ -240,7 +240,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                     </div>
 
                     {
-                        session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && leadData?.completed != 1 &&
+                        session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && 
                         <Grid display={'flex'} alignItems={'end'}>
                             {/* <Button onClick={handleCreate} className='bg-sky-500 mr-4' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>Add</Button> */}
                             <Button onClick={handleRequest} className='bg-sky-400 Request-Document-btn' ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">  <path d="M19 19L16 16M10.0002 20H7.19692C6.07901 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4796 4 18.9074 4.21799C19.2837 4.40973 19.5905 4.71547 19.7822 5.0918C20 5.5192 20 6.07899 20 7.19691V10.0002M13.5 17C11.567 17 10 15.433 10 13.5C10 11.567 11.567 10 13.5 10C15.433 10 17 11.567 17 13.5C17 15.433 15.433 17 13.5 17Z" stroke="#232648" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg> Request Document</Button>
@@ -321,7 +321,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                             </div>
 
                             {
-                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && leadData?.completed != 1 &&
+                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && 
                                 <div onClick={handleCreate} style={{ cursor: 'pointer' }} className='add-document-block'>
                                     <Image src={Doc} alt='Doc' width={200} height={200} />
 
@@ -391,7 +391,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                     <div className='d-flex justify-between align-center'>
                                         <h2>{documentSelected?.title || documentSelected?.document_template?.name}</h2>
                                         {
-                                            session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && leadData?.completed != 1 &&
+                                            session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && 
                                             (documentSelected?.status == 'Uploaded') && 
                                             <Edit onClick={() => handleEditDocument(documentSelected?.id)} sx={{ color: blue[400], cursor: 'pointer' }} fontSize='small' />
                                         }
@@ -417,7 +417,7 @@ function LeadDocuments({ lead_id, from, app_id, app_details, appRefresh, leadDat
                                 }
 
                                 {
-                                    session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && leadData?.completed != 1 && documentSelected &&
+                                    session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 &&  documentSelected &&
                                     <div className='degree-btn-block'>
                                         <Button disabled={!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested") || documentSelected?.status == "Accepted" || documentSelected?.status == "Rejected"} onClick={() => handleAccept(documentSelected?.id)} className={`degree-btn ${!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested") || documentSelected?.status == "Accepted" || documentSelected?.status == "Rejected" ? 'Doc-Button-disabled' : ''} `}>Accept <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" viewBox="0 0 27 27" fill="none"><path d="M7.875 13.5H19.125M19.125 13.5L14.625 9M19.125 13.5L14.625 18" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></Button>
                                         <Button disabled={!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested") || documentSelected?.status == "Accepted" || documentSelected?.status == "Rejected"} onClick={() => handleReject(documentSelected?.id)} className={`Reject-btn ${!documentSelected || (!documentSelected?.file && documentSelected?.status == "Requested") || documentSelected?.status == "Accepted" || documentSelected?.status == "Rejected" ? 'Doc-Button-disabled' : ''} `}>Reject <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 9L11.9999 11.9999M11.9999 11.9999L14.9999 14.9999M11.9999 11.9999L9 14.9999M11.9999 11.9999L14.9999 9M4 16.8002V7.2002C4 6.08009 4 5.51962 4.21799 5.0918C4.40973 4.71547 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.08009 4 7.2002 4H16.8002C17.9203 4 18.4801 4 18.9079 4.21799C19.2842 4.40973 19.5905 4.71547 19.7822 5.0918C20.0002 5.51962 20.0002 6.07967 20.0002 7.19978V16.7998C20.0002 17.9199 20.0002 18.48 19.7822 18.9078C19.5905 19.2841 19.2842 19.5905 18.9079 19.7822C18.4805 20 17.9215 20 16.8036 20H7.19691C6.07899 20 5.5192 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2842 4.21799 18.9079C4 18.4801 4 17.9203 4 16.8002Z" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></Button>

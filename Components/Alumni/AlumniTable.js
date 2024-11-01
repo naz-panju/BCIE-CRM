@@ -1414,7 +1414,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
 
 
             {
-                (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+                (session?.data?.user?.role?.id == 3) &&
                 <ExportExcel tableLoading={loading} data={list?.data} from={'app'} fileName={"Alumni"} params={{
                     sort_field: field,
                     sort_order: sortOrder ? 'asc' : 'desc',

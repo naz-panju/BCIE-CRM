@@ -1465,7 +1465,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
       </div>
 
       {
-        (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+        (session?.data?.user?.role?.id == 3 ) &&
         <ExportExcel tableLoading={loading} data={list?.data} from={'app'} fileName={"Deposit Paid"} params={{
           sort_field: field,
           sort_order: sortOrder ? 'asc' : 'desc',

@@ -1535,7 +1535,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
             </div>
 
             {
-                (session?.data?.user?.role?.id == 3 || session?.data?.user?.role?.id == 4) &&
+                (session?.data?.user?.role?.id == 3) &&
                 <ExportExcel tableLoading={loading} data={list?.data} from={'app'} fileName={selectedStatus == 'Submitted' ? 'Applications Submitted' : selectedStatus == 'Unsubmitted' ? "Applications UnSubmitted" : selectedStatus == 'Returned' ? "Applications Returned" : "Applications"} params={{
                     sort_field: field,
                     sort_order: sortOrder ? 'asc' : 'desc',

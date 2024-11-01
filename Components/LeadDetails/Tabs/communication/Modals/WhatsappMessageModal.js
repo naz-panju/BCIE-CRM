@@ -71,9 +71,6 @@ export default function WhatsappMessageModal({ lead_id, editId, setEditId, handl
         formData.append('id', editId)
         formData.append('message', data?.message || 'Document Send')
 
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
 
         // console.log(dataToSubmit);
 
