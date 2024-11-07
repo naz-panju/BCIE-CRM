@@ -24,6 +24,8 @@ import { ApplicationApi } from '@/data/Endpoints/Application';
 
 const scheme = yup.object().shape({
     title: yup.string().required("Title is Required"),
+
+    assigned_to:yup.object().required("assigned to is required").typeError("assigned to is required"),
     // description: yup.string().required("Description is Required"),
 })
 
@@ -113,20 +115,15 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
             description: data?.description,
             due_date: dueDate,
             assigned_to_user_id: data?.assigned_to?.id,
+            ...((lead_id || data?.users?.id)?{'lead_id':lead_id || data?.users?.id}:{}),
+            ...(data?.application?.id?{'application_id':data?.application?.id}:{})
             // reviewer_id: data?.reviewer?.id,
             // priority: selectedPriority,
         }
 
-        // console.log(dataToSubmit);
-
-        // if (lead_id) {
-        dataToSubmit['lead_id'] = lead_id || data?.users?.id
-        dataToSubmit['application_id'] = data?.application?.id || null
-        // if (from == 'app') {
-        //     dataToSubmit['application_id'] = app_id
-        // }
-        // }
-
+        // dataToSubmit['lead_id'] = lead_id || data?.users?.id || null
+        // dataToSubmit['application_id'] = data?.application?.id || null
+       
         let action;
 
         console.log(dataToSubmit);
@@ -197,13 +194,14 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
             const response = await TaskApi.view({ id: editId })
             if (response?.data?.data) {
                 let data = response?.data?.data
-                // console.log(data);
+                console.log(data);
 
                 setValue('title', data?.title)
                 setValue('date', data?.due_date)
                 setValue('assigned_to', data?.assignedToUser)
                 // setSelectedPriority(data?.priority)
                 setValue('description', data?.description)
+                setValue('users', data?.lead)
                 setValue('application', data?.applicaion)
                 setDataLoading(false)
             }
@@ -322,6 +320,7 @@ export default function CreateTask({ editId, setEditId, refresh, setRefresh, lea
                                                         name={'assigned_to'}
                                                         defaultValue={watch('assigned_to')}
                                                     />
+                                                    {errors.assigned_to && <span className='form-validation'>{errors.assigned_to.message}</span>}
                                                 </Grid>
                                             </div>
                                         </div>

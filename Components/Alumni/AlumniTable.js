@@ -1589,7 +1589,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
                                                         >
                                                             <TableCell colSpan={13} align="center">
                                                                 <div className='no-table-ask-block'>
-                                                                    <h4 style={{ color: 'grey' }}>No Application Found</h4>
+                                                                    <h4 style={{ color: 'grey' }}>No Alumni Found</h4>
                                                                 </div>
                                                             </TableCell>
                                                         </TableRow>
