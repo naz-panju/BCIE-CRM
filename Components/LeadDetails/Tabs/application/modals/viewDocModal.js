@@ -30,7 +30,7 @@ import DocDeleteConfirmPopup from './DocDeleteConfirm';
 
 
 
-export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleUniDocOpen, fetchTable, appSubmit }) {
+export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleUniDocOpen, fetchTable, appSubmit,handleLeadRefresh }) {
 
     const [open, setOpen] = useState(false)
 
@@ -54,7 +54,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
         if (details?.id) {
             setValue('application_id', details?.application_number || '')
             setdocId(0)
-            setapplicationId(details?.id)
+            setapplicationId(details?.id)            
         }
     }
 
@@ -310,9 +310,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                 formData.append('stage', data?.template?.stage?.id)
             }
 
-            // if (data?.template?.stage?.action_type == 'Get Application Id') {
             formData.append('application_number', data?.application_id)
-            // }
 
             if (data?.template?.stage?.action_type == 'Deposit Paid') {
                 let date = ''
@@ -347,6 +345,9 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                     setChangeStage(true)
                     if (fetchTable) {
                         fetchTable()
+                    }
+                    if(handleLeadRefresh){
+                        handleLeadRefresh()
                     }
                     getDetails()
                     setUploadLoading(false)
