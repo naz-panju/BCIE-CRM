@@ -332,7 +332,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
     const [limit, setLimit] = React.useState(50);
     const [list, setList] = useState([])
 
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const [details, setDetails] = useState()
 
@@ -340,7 +340,7 @@ export default function AlumniTable({ refresh, editId, setEditId, page, setPage,
     const [selectedUniversity, setselectedUniversity] = useState()
     const [selectedIntake, setselectedIntake] = useState()
     const [selectedStream, setselectedStream] = useState()
-
+  
     const [stageId, setStageId] = useState()
     const [uniDocId, setuniDocId] = useState()
     const [applicationId, setapplicationId] = useState()

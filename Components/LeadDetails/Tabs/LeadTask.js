@@ -82,7 +82,6 @@ function LeadTask({ lead_id, from, app_id, taskRefresh, handleTaskRefresh,detail
         setLoading(false)
     }
 
-    console.log(list);
 
     const [completeId, setcompleteId] = useState()
     const [completeLoading, setcompleteLoading] = useState(false)

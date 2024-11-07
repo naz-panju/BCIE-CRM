@@ -140,29 +140,29 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, det
                 keepMounted
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
-                PaperProps={{
-                    style: {
-                        // transform: 'translateY(-75%)',
-                        // height:300
-                    },
-                }}
+                // PaperProps={{
+                //     style: {
+                //         top: '0',                       // Sets the top position to 0
+                //         position: 'absolute',           // Positions it absolutely within the viewport
+                //         margin: 50                       // Removes margin for a precise top placement
+                //     },
+                // }}
             >
                 <DialogTitle>Are you sure want to delete this Document?</DialogTitle>
                 <DialogContent style={{ overflowY: 'unset' }}>
-                    {/* <DialogContentText id="alert-dialog-slide-description">
-                        {title}
-                    </DialogContentText> */}
 
-                    <div className='application-input'>
-                        {/* <a className='form-text'>Select Stage</a> */}
-                        <Grid className='mb-5 forms-data' >
-                            <FormControlLabel
-                                control={<Checkbox checked={changeStage} onChange={handleCheckboxChange} />}
-                                label="Do you want to change stage?"
-                            />
+                    {
+                        details?.stage?.action_type != "Alumni" &&
+                        <div className='application-input'>
+                            <Grid className='mb-5 forms-data' >
+                                <FormControlLabel
+                                    control={<Checkbox checked={changeStage} onChange={handleCheckboxChange} />}
+                                    label="Do you want to change stage?"
+                                />
 
-                        </Grid>
-                    </div>
+                            </Grid>
+                        </div>
+                    }
                     {
                         changeStage &&
                         <div className='application-input'>
