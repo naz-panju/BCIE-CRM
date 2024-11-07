@@ -252,9 +252,11 @@ function LeadDetails() {
       setreAssign(true)
       setSelected(details?.id)
     } else {
-      setAssignId(0)
-      setreAssign(false)
-      setSelected([details?.id])
+      if(details){
+        setAssignId(0)
+        setreAssign(false)
+        setSelected([details?.id])
+      }
     }
 
     setsingleAssign(true)
@@ -1027,7 +1029,7 @@ function LeadDetails() {
                               :
 
                               (session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1) ?
-                                <Button disabled={!details} onClick={details && ()=> handleSigleAssign(false)} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
+                                <Button disabled={!details} onClick={()=> handleSigleAssign(false)} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
                                 :
                                 'NA'
                         }
