@@ -189,12 +189,11 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                 }
 
                 let action;
-                console.log(reAssign);
-                if (reAssign) {
-
+                if (reAssign || assignToUser?.assignedToCounsellor) {
+                    let reSelect=selected?.length>0?selected[0]:selected
                     dataToSubmit = {
                         user_id: watch('counsellor')?.id,
-                        lead_id: selected,
+                        lead_id: reSelect,
                         assign_to_office_id: watch('branch')?.id
                     }
 
@@ -372,7 +371,6 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                                     <Grid className='mb-5 forms-data'>
                                         <AsyncSelect
                                             key={branchId}
-                                            // placeholder='Select Counsellor'
                                             name={'counsellor'}
                                             defaultValue={watch('counsellor')}
                                             isClearable
@@ -413,30 +411,6 @@ export default function AssignLeadModal({ selected, setSelected, editId, setEdit
                         }
                     </div>
 
-
-                    {/* <Grid mt={2} display={'flex'} justifyContent={'end'}>
-
-                        <Button
-                            onClick={handleClose}
-                            variant='outlined'
-                            size='small'
-                            sx={{ textTransform: 'none', height: 30, mr: 2 }}
-                        >
-                            Cancel
-                        </Button>
-                        <LoadingButton
-                            type='submit'
-                            onClick={onSubmit}
-                            variant='contained'
-                            disabled={loading || !selectedoption}
-                            loading={loading}
-                            size='small'
-                            sx={{ textTransform: 'none', height: 30 }}
-                        // className="mt-2 bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded"
-                        >
-                            Submit
-                        </LoadingButton>
-                    </Grid> */}
                 </Grid>
             </Drawer>
         </div>

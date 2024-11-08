@@ -247,11 +247,15 @@ function LeadDetails() {
 
   const handleSigleAssign = (re) => {
     // setAssignId(0)
+    console.log(re);
     if (re) {
+      console.log('re');
+      
       setAssignId(details?.id)
       setreAssign(true)
       setSelected(details?.id)
     } else {
+      console.log('!re');
       if(details){
         setAssignId(0)
         setreAssign(false)
@@ -591,64 +595,18 @@ function LeadDetails() {
 
                         <div className='vari-left'>
                           <div className='vari-left-cap'>
-                            {/* {
-                              stages?.map((obj, index) => {
-                                let ind;
-                                ind = stages.findIndex(obj =>
-                                  obj.sub_stages.some(subStage =>
-                                    subStage.name === details?.stage.name
-                                  ) || obj.name === details?.stage.name
-                                );
-                                let finalIndex;
-                                if (ind >= 0) {
-                                  finalIndex = ind + 1
-                                } else {
-                                  ind = stages.findIndex(obj => obj?.name == details?.stage?.name)
-                                  finalIndex = ind + 1
-                                }
-
-                                return (
-
-                                  ind == index && */}
-                            {/* <h5 key={index}>{finalIndex / stages?.length * 100}%</h5> */}
                             <h5 >{formatPercentage(details?.stage?.progress_percentage)}%</h5>
-                            {/* )
-                              })
-                            } */}
 
                             {
                               stages?.length > 0 &&
                               <label>Complete</label>
                             }
+                            
                           </div>
 
 
-                          {/* <RadialBarChartComponent /> */}
-
-                          {/* <CircularProgressbar value={30} />; */}
-
                           <div style={{ width: 129, height: 129 }}>
 
-                            {/* {
-                              stages?.map((obj, index) => {
-                                let ind;
-                                ind = stages.findIndex(obj =>
-                                  obj.sub_stages.some(subStage =>
-                                    subStage.name === details?.stage.name
-                                  ) || obj.name === details?.stage.name
-                                );
-                                let finalIndex;
-                                if (ind >= 0) {
-                                  finalIndex = ind + 1
-                                } else {
-                                  ind = stages.findIndex(obj => obj?.name == details?.stage?.name)
-                                  finalIndex = ind + 1
-                                }
-
-                                return (
-
-                                  ind == index && */}
-                            {/* // <h5 key={index}>{finalIndex / stages?.length * 100}%</h5> */}
                             <React.Fragment >
                               <CircularProgressbar
                                 // value={finalIndex / stages?.length * 100}
@@ -672,33 +630,9 @@ function LeadDetails() {
                                 </defs>
                               </svg>
                             </React.Fragment>
-                            {/* )
-                              })
-                            } */}
+                          
 
                           </div>
-
-                          {/* <svg xmlns="http://www.w3.org/2000/svg" width="129" height="129" viewBox="0 0 129 129" fill="none">
-                        <g filter="url(#filter0_d_1041_732)">
-                          <path fillRule="evenodd" clipRule="evenodd" d="M64.5 10.05C75.2692 10.05 85.7965 13.2434 94.7508 19.2265C103.705 25.2095 110.684 33.7134 114.805 43.6629C118.926 53.6123 120.005 64.5604 117.904 75.1227C115.803 85.6849 110.617 95.387 103.002 103.002C95.387 110.617 85.6849 115.803 75.1227 117.904C64.5604 120.005 53.6123 118.926 43.6629 114.805C33.7134 110.684 25.2095 103.705 19.2265 94.7508C13.2434 85.7965 10.05 75.2692 10.05 64.5H4C4 66.6155 4.1109 68.7225 4.33023 70.813C5.3515 80.5471 8.72355 89.9218 14.1961 98.112C20.8439 108.061 30.2927 115.816 41.3476 120.395C52.4026 124.974 64.5671 126.172 76.3029 123.837C88.0388 121.503 98.8189 115.741 107.28 107.28C115.741 98.8189 121.503 88.0388 123.837 76.3029C126.172 64.5671 124.974 52.4026 120.395 41.3476C115.816 30.2927 108.061 20.8439 98.112 14.1961C89.9218 8.72355 80.5471 5.3515 70.813 4.33023C68.7225 4.1109 66.6155 4 64.5 4V10.05Z" fill="url(#paint0_linear_1041_732)" />
-                        </g>
-                        <defs>
-                          <filter id="filter0_d_1041_732" x="0" y="0" width="129" height="129" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                            <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
-                            <feOffset />
-                            <feGaussianBlur stdDeviation="2" />
-                            <feComposite in2="hardAlpha" operator="out" />
-                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" />
-                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1041_732" />
-                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1041_732" result="shape" />
-                          </filter>
-                          <linearGradient id="paint0_linear_1041_732" x1="125" y1="13.7326" x2="9.78696" y2="130.787" gradientUnits="userSpaceOnUse">
-                            <stop stopColor="#04FFFF" />
-                            <stop offset="1" stopColor="#0029FF" />
-                          </linearGradient>
-                        </defs>
-                      </svg> */}
 
                         </div>
 

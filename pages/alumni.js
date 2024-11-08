@@ -14,9 +14,9 @@ function Applicants() {
 
     useEffect(() => {
 
-        // if (session?.data?.user?.role?.id == 6) {
-        //     router.push('/404')
-        // }
+        if (session?.data?.user?.role?.id == 6) {
+            router.push('/404')
+        }
 
     }, [session])
 
