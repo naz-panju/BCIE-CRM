@@ -158,9 +158,14 @@ function LeadPayments({ lead_id, from, app_id, leadData }) {
                                                     Reciept
                                                 </Typography>
                                             </TableCell>
-                                            <TableCell>
 
-                                            </TableCell>
+
+                                            {
+                                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 &&
+                                                <TableCell>
+
+                                                </TableCell>
+                                            }
 
                                         </TableRow>
                                     </TableHead>
