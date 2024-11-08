@@ -504,7 +504,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                     <Grid container>
                                         <Grid pr={1} mt={2} md={12}>
                                             <FormControlLabel
-                                                control={<Checkbox checked={changeStage} onChange={handleCheckboxChange} />}
+                                                control={<Checkbox  checked={changeStage} onChange={handleCheckboxChange} />}
                                                 label="Change Stage"
                                             />
 

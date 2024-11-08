@@ -69,10 +69,6 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
     const onSubmit = async (data) => {
 
         setLoading(true)
-        // let date = ''
-        // if (data?.date) {
-        //     date = moment(data?.date).format('YYYY-MM-DD')
-        // }
 
         let dataToSubmit = {
             id: details?.id,
@@ -87,13 +83,6 @@ export default function DeferIntake({ details, editId, setEditId, refresh, setRe
         let action;
 
         action = ApplicationApi.deferIntake(dataToSubmit)
-
-        // if (editId > 0) {
-        //     // dataToSubmit['id'] = editId
-        //     // action = TaskApi.update(dataToSubmit)
-        // } else {
-        //     action = ApplicationApi.addDeposit(dataToSubmit)
-        // }
 
         action.then((response) => {
             console.log(response);

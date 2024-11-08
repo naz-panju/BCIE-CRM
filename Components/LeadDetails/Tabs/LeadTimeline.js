@@ -178,7 +178,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, data }) {
                         printList?.data?.length > 0 ?
                             <Timeline className='timeline-content-block-item-block' sx={{ [`& .${timelineOppositeContentClasses.root}`]: { flex: 0.2, }, }}>
                                 {
-                                    list?.data?.map((obj, index) => (
+                                    printList?.data?.map((obj, index) => (
                                         <TimelineItem key={index} className='TimelineItemClass'>
                                             <TimelineOppositeContent className='TimelineOppositeContent' color="text.secondary">
                                                 <div className='TimelineOppositeContent-block'>

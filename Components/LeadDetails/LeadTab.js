@@ -28,6 +28,7 @@ import LeadPayments from './Tabs/payments/LeadPayments';
 import StudentDetail from './Tabs/StudentDetail';
 import ConvertLeadToStudent from './Modals/ConvertToStudent';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -67,9 +68,11 @@ function a11yProps(index) {
   };
 }
 
-export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh, taskRefresh, handleTaskRefresh, toNoteTab, setToNoteTab, toTaskTab, setToTaskTab,appRefresh }) {
+export default function VerticalTabs({ data, refresh, setRefresh, loading, handleRefresh, handleStudentModalOpen, setFollowRefresh, followRefresh, phoneCallRefresh, setphoneCallRefresh, taskRefresh, handleTaskRefresh, toNoteTab, setToNoteTab, toTaskTab, setToTaskTab, appRefresh }) {
   const [value, setValue] = useState(0);
   const [editId, setEditId] = useState()
+
+  const session = useSession()
 
   const [studentEditId, setstudentEditId] = useState()
 
@@ -107,11 +110,16 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
       component: <LeadTimeline from='lead' lead_id={data?.id} refresh={refresh} data={data} />,
       icon: <AccessTimeIcon />
     },
-    {
-      label: 'Notes',
-      component: <FollowUp from='lead' data={data} lead_id={data?.id} refresh={followRefresh} setRefresh={setFollowRefresh} />,
-      icon: <ChecklistIcon />
-    },
+    ...(session?.data?.user?.role?.id != 6 ?
+      [{
+        label: 'Notes',
+        component: <FollowUp from='lead' data={data} lead_id={data?.id} refresh={followRefresh} setRefresh={setFollowRefresh} />,
+        icon: <ChecklistIcon />
+      }]
+      :
+      []
+    )
+    ,
     {
       label: 'Communication Logs',
       component: <LeadCommunicationLog leadData={data} refresh={refresh} setDetailRefresh={setRefresh} from='lead' lead_id={data?.id} phoneCallRefresh={phoneCallRefresh} setphoneCallRefresh={setphoneCallRefresh} />,
