@@ -283,7 +283,14 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
         return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
     }
 
-    const [changeStage, setChangeStage] = useState(details?.stage?.action_type == "Alumni"?false:true);
+    const [changeStage, setChangeStage] = useState(details?.stage?.action_type == "Alumni" ? false : true);
+
+    useEffect(() => {
+        setChangeStage(details?.stage?.action_type == "Alumni" ? false : true);
+    }, [details?.stage])
+    
+    
+
     const handleCheckboxChange = (event) => {
         setChangeStage(event.target.checked);
     };
@@ -337,7 +344,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                 if (response?.status == 200 || response?.status == 201) {
                     handleDocumentClose()
                     toast.success(response?.data?.message)
-                    setChangeStage(true)
+                    setChangeStage(details?.stage?.action_type == "Alumni" ? false : true)
                     if (fetchTable) {
                         fetchTable()
                     }
