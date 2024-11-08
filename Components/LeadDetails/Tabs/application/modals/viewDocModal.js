@@ -30,7 +30,7 @@ import DocDeleteConfirmPopup from './DocDeleteConfirm';
 
 
 
-export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleUniDocOpen, fetchTable, appSubmit,handleLeadRefresh }) {
+export default function ViewDocumentModal({ editId, setEditId, refresh, setRefresh, handleUniDocOpen, fetchTable, appSubmit, handleLeadRefresh }) {
 
     const [open, setOpen] = useState(false)
 
@@ -54,7 +54,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
         if (details?.id) {
             setValue('application_id', details?.application_number || '')
             setdocId(0)
-            setapplicationId(details?.id)            
+            setapplicationId(details?.id)
         }
     }
 
@@ -283,7 +283,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
         return trimmedString?.replace(/_/g, ''); // Replace all underscores with an empty string
     }
 
-    const [changeStage, setChangeStage] = useState(true);
+    const [changeStage, setChangeStage] = useState(details?.stage?.action_type == "Alumni"?false:true);
     const handleCheckboxChange = (event) => {
         setChangeStage(event.target.checked);
     };
@@ -341,7 +341,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                     if (fetchTable) {
                         fetchTable()
                     }
-                    if(handleLeadRefresh){
+                    if (handleLeadRefresh) {
                         handleLeadRefresh()
                     }
                     getDetails()
@@ -373,7 +373,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
         }
     }, [])
 
-    
+
 
     return (
         <div>
@@ -447,7 +447,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                 <button disabled style={{ display: 'flex', alignItems: 'center', backgroundColor: '#A6E9A9', color: '#0B0D23', padding: '8px 15px', fontSize: '14px', borderRadius: 5 }}><svg style={{ marginRight: '10px' }} width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.75 10.0834H7.33333M5.04167 12.3751V7.79175M13.2917 12.8334C16.694 12.8334 18.4644 14.0051 19.0377 16.3484C19.3002 17.4214 18.3546 18.3334 17.25 18.3334H9.33334C8.22877 18.3334 7.28316 17.4214 7.54565 16.3484C8.11894 14.0051 9.88932 12.8334 13.2917 12.8334ZM13.2917 9.16675C14.8194 9.16675 15.5833 8.38103 15.5833 6.41675C15.5833 4.45246 14.8194 3.66675 13.2917 3.66675C11.7639 3.66675 11 4.45246 11 6.41675C11 8.38103 11.7639 9.16675 13.2917 9.16675Z" stroke="#232648" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>University Document</button>
 
                                 {
-                                    (details?.app_coordinator && details?.submitted_to_university == 1 && details?.stage?.action_type != "Alumni") && 
+                                    (details?.app_coordinator && details?.submitted_to_university == 1) &&
                                     <Button className='add-btn' sx={{ fontSize: '14px', height: '25px', mr: 2, display: 'flex', alignItems: 'center' }} size='small' variant='outlined' onClick={handleDocumentOpen}>
                                         Add </Button>
                                 }
@@ -504,7 +504,7 @@ export default function ViewDocumentModal({ editId, setEditId, refresh, setRefre
                                     <Grid container>
                                         <Grid pr={1} mt={2} md={12}>
                                             <FormControlLabel
-                                                control={<Checkbox  checked={changeStage} onChange={handleCheckboxChange} />}
+                                                control={<Checkbox disabled={details?.stage?.action_type == "Alumni"} checked={changeStage} onChange={handleCheckboxChange} />}
                                                 label="Change Stage"
                                             />
 

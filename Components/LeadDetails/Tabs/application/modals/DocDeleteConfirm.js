@@ -26,16 +26,6 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, det
     const { register, handleSubmit, watch, formState: { errors }, control, Controller, setValue, getValues, reset, trigger } = useForm()
 
 
-    // const fetchStages = (e) => {
-    //     return ListingApi.agencies({ keyword: e, }).then(response => {
-    //         if (typeof response.data.data !== "undefined") {
-    //             // setstages(response.data.data)
-    //             return response.data.data;
-    //         } else {
-    //             return [];
-    //         }
-    //     })
-    // }
 
     const fetchStages = (e) => {
         return ListingApi.stages({ keyword: e, type: 'application' }).then(response => {
@@ -151,18 +141,16 @@ export default function DocDeleteConfirmPopup({ ID, setID, clickFunc, title, det
                 <DialogTitle>Are you sure want to delete this Document?</DialogTitle>
                 <DialogContent style={{ overflowY: 'unset' }}>
 
-                    {
-                        details?.stage?.action_type != "Alumni" &&
+                   
                         <div className='application-input'>
                             <Grid className='mb-5 forms-data' >
                                 <FormControlLabel
-                                    control={<Checkbox checked={changeStage} onChange={handleCheckboxChange} />}
+                                    control={<Checkbox disabled={details?.stage?.action_type == "Alumni"} checked={changeStage} onChange={handleCheckboxChange} />}
                                     label="Do you want to change stage?"
                                 />
 
                             </Grid>
                         </div>
-                    }
                     {
                         changeStage &&
                         <div className='application-input'>
