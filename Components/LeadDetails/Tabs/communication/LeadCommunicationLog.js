@@ -253,7 +253,6 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                 limit: 10,
                 type: ['Inbound', 'Outbound'],
             });
-            console.log(callResponse);
             
             setprintCallList(callResponse?.data);
 

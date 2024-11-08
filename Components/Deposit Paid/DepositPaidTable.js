@@ -1663,12 +1663,12 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
                                       }}
                                     >
                                       <List>
-                                        {
+                                        {/* {
                                           (session?.data?.user?.role?.id == 6 && row?.app_coordinator_status == 'Submitted') &&
                                           <ListItem button onClick={() => handleReturnPopupOpen(row?.id)}>
                                             Return Application
                                           </ListItem>
-                                        }
+                                        } */}
                                         {
                                           (session?.data?.user?.role?.id == 5 && row?.app_coordinator_status == null) &&
                                           <ListItem button onClick={() => handleSubmitOpen(row?.id)}>
