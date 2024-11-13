@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React from 'react'
 
 function PrintDetails({leadData}) {

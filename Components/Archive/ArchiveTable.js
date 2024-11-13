@@ -580,6 +580,10 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
 
   }
 
+  const handleleadOpen = (id) => {
+    window.open(`/lead/${id}`, '_blank');
+  }
+
   const [searchRefresh, setsearchRefresh] = useState(false)
   const formatDate = (date) => {
     return date ? moment(date).format('DD-MM-YYYY') : ''; // Format the date to 'dd-MM-yyyy' format
@@ -1012,7 +1016,7 @@ export default function ArchiveTable({ refresh, page, setPage, selected, setSele
       </div>
 
       {
-        (session?.data?.user?.role?.id == 3 ) &&
+        (session?.data?.user?.role?.id == 3) &&
         <ExportExcel tableLoading={loading} data={list?.data} from={'lead'} fileName={'Archived Leads'} params={{
           sort_field: field,
           sort_order: sortOrder ? 'asc' : 'desc',
