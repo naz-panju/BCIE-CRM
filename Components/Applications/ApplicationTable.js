@@ -1025,8 +1025,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                 return [];
             }
         })
-    }
-
+    }    
 
     return (
 
@@ -1471,7 +1470,6 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                         </div>
                     </div>
 
-                    {/* from here */}
                     <div>
                         <div className='form-group'>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="19" viewBox="0 0 18 19" fill="none" className='sear-ic'>
@@ -1680,7 +1678,8 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
                                                                 <TableCell align="left">
                                                                     <div className='d-flex justify-between items-center'>
-                                                                        <span onClick={() => handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
+                                                                       
+                                                                        <span onClick={() => handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span> 
                                                                         {/* <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
@@ -1732,6 +1731,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                                 {
                                                                                     (session?.data?.user?.role?.id !== 5) &&
                                                                                     <div style={{}} className='text-start'>
+                                                                                       
                                                                                         <EditOutlined style={{ cursor: 'pointer', fontSize: '17px' }} onClick={() => handleEditPaymentOpen(row)} className='icon_hover' fontSize='small' />
                                                                                         <DeleteOutline style={{ cursor: 'pointer', marginLeft: '0px', fontSize: '17px' }} onClick={() => handleDeletePaymentOpen(row)} className='ml-2 icon_hover' fontSize='small' />
                                                                                     </div>
@@ -1785,6 +1785,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                                 }
                                                                                 {
                                                                                     (session?.data?.user?.role?.id != 5 && row?.submitted_to_university != 1) && row?.app_coordinator_status && row?.app_coordinator_status != "Returned" &&
+                                                                                    // here
                                                                                     <ListItem button onClick={() => handleUniSubmitId(row)}>
                                                                                         Submit Application to University
                                                                                     </ListItem>
