@@ -1512,7 +1512,7 @@ export default function ApplicationSubmittedTable({ refresh, editId, setEditId, 
                                                                         className='a_hover text-sky-600'> {row?.lead?.name} </span>
                                                                 </TableCell>
                                                                 <TableCell align="left">
-                                                                    {moment(row?.lead?.date_of_birth).format('DD-MM-YYYY')}
+                                                                    {row?.lead?.date_of_birth?moment(row?.lead?.date_of_birth).format('DD-MM-YYYY'):'NA'}
                                                                 </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
