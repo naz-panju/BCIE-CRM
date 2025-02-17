@@ -24,7 +24,6 @@ function ExportExcel({ from, fileName, params, data, tableLoading, duplicate }) 
         let Datas = []
         if (from == 'lead') {
             action = LeadApi.list(params)
-
         } else if (from == 'app') {
             params['full_lead'] = 1
             action = ApplicationApi.list(params)
@@ -32,6 +31,8 @@ function ExportExcel({ from, fileName, params, data, tableLoading, duplicate }) 
         action.then((response) => {
             // console.log(response);
             // setcsvData(response?.data?.data)
+            console.log(response?.data?.data);
+            
             filterArray(response?.data?.data, Datas)
             ExportFunction(Datas)
             setLoading(false)
@@ -131,7 +132,6 @@ function ExportExcel({ from, fileName, params, data, tableLoading, duplicate }) 
                     // Lead details 
 
                     "Lead Id": obj?.lead?.lead_unique_id || 'NA',
-
                     // Dates and Status Information
                     ...(duplicate ? { 'Lead Duplicated Date': moment(obj?.lead?.duplicate_last_got_on).format('DD-MM-YYYY') } : { 'Created Date': moment(obj?.lead?.created_at).format('DD-MM-YYYY') }),
                     "Lead Stage": obj?.lead?.stage?.name || 'NA',
