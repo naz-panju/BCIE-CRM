@@ -124,6 +124,7 @@ function ExportExcel({ from, fileName, params, data, tableLoading, duplicate }) 
                     "Course Level": obj?.course_level?.name || 'NA',
                     "Course": obj?.course || 'NA',
                     "Intake": obj?.intake?.name || 'NA',
+                    "Subject Area": obj?.subject_area?.name || 'NA',
                     "Application Stage": obj?.stage?.name || 'NA',
                     "Submited to University": obj?.submitted_to_university_on ? moment(obj?.submitted_to_university_on).format('DD-MM-YYYY') : 'NA',
                     "Counsellor": obj?.lead?.assignedToCounsellor?.name || 'NA',
