@@ -253,7 +253,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                 limit: 10,
                 type: ['Inbound', 'Outbound'],
             });
-            
+
             setprintCallList(callResponse?.data);
 
             setTimeout(() => {
@@ -498,13 +498,15 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                 </div>
 
 
-
-                <div className='flex justify-end'>
-                    <LoadingButton loading={printLoad} disabled={printLoad} variant='contained' onClick={handlePrint} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
-                        <PrintOutlined fontSize='small' />
-                        Print
-                    </LoadingButton>
-                </div>
+                {
+                    session?.data?.user?.role?.id == 3 &&
+                    <div className='flex justify-end'>
+                        <LoadingButton loading={printLoad} disabled={printLoad} variant='contained' onClick={handlePrint} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
+                            <PrintOutlined fontSize='small' />
+                            Print
+                        </LoadingButton>
+                    </div>
+                }
 
                 <div className=' md:w-12/12 lg:w-12/12 mt-3'>
                     <div className='communication-log-block-tab-block tab-block'>

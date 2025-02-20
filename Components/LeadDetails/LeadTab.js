@@ -110,15 +110,17 @@ export default function VerticalTabs({ data, refresh, setRefresh, loading, handl
       component: <LeadTimeline from='lead' lead_id={data?.id} refresh={refresh} data={data} />,
       icon: <AccessTimeIcon />
     },
-    ...(session?.data?.user?.role?.id != 6 ?
-      [{
-        label: 'Notes',
-        component: <FollowUp from='lead' data={data} lead_id={data?.id} refresh={followRefresh} setRefresh={setFollowRefresh} />,
-        icon: <ChecklistIcon />
-      }]
-      :
-      []
-    )
+    // ...(session?.data?.user?.role?.id != 6 ?
+    //   [
+        {
+          label: 'Notes',
+          component: <FollowUp from='lead' data={data} lead_id={data?.id} refresh={followRefresh} setRefresh={setFollowRefresh} />,
+          icon: <ChecklistIcon />
+        }
+    //   ]
+    //   :
+    //   []
+    // )
     ,
     {
       label: 'Communication Logs',

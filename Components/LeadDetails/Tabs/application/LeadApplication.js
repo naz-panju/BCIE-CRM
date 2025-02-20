@@ -249,7 +249,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
             fetchList()
         }
 
-    }, [refresh, page, appRefresh, limit,lead_id])
+    }, [refresh, page, appRefresh, limit, lead_id])
 
     const contentRef = useRef()
     const [printLoad, setPrintLoad] = useState(false)
@@ -360,7 +360,7 @@ function LeadApplication({ data, lead_id, handleLeadRefresh, appRefresh, setDeta
                             {
 
                                 (data?.user &&
-                                    list?.data?.length > 0 &&
+                                    list?.data?.length > 0 && session?.data?.user?.role?.id == 3 &&
                                     <LoadingButton loading={printLoad} variant='contained' onClick={handlePrint} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
                                         <PrintOutlined fontSize='small' />
                                         Print

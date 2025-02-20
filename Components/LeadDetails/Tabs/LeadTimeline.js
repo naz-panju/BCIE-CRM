@@ -21,6 +21,7 @@ import { LoadingButton } from '@mui/lab';
 import { useReactToPrint } from 'react-to-print';
 import { PrintOutlined } from '@mui/icons-material';
 import PrintDetails from '../common/printDetails';
+import { useSession } from 'next-auth/react';
 
 export default function BasicSelect({ lead_id, from, app_id, refresh, data }) {
     const [select, setAge] = React.useState('');
@@ -28,6 +29,9 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, data }) {
     const [limit, setLimit] = useState(10)
     const [laoding, setLaoding] = useState(false)
     const [total, setTotal] = useState(5)
+
+        const session = useSession()
+    
 
     const handleChange = (event) => {
         setAge(event.target.value);
@@ -87,10 +91,13 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, data }) {
     return (
 
         <div className='lead-tabpanel-content-block timeline'>
-            <LoadingButton loading={printLoad} variant='contained' onClick={handlePrint} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
-                <PrintOutlined fontSize='small' />
-                Print
-            </LoadingButton>
+            {
+                session?.data?.user?.role?.id == 3 &&
+                <LoadingButton LoadingButton loading={printLoad} variant='contained' onClick={handlePrint} className='edit-btn' sx={{ color: 'white', '&:hover': { backgroundColor: '#0c8ac2' } }}>
+                    <PrintOutlined fontSize='small' />
+                    Print
+                </LoadingButton>
+            }
 
             {
                 laoding ?
@@ -234,7 +241,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, data }) {
 
                 </div>
             </div>
-        </div>
+        </div >
 
 
     );

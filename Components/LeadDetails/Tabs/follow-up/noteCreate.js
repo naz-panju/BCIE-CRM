@@ -39,7 +39,8 @@ const LeadNoteModal = ({ lead_id, editId, setEditId, refresh, setRefresh, from, 
         if (from == 'app') {
             params['application_id'] = app_id
         }
-        LeadApi.listNote(params).then((notes) => {
+        LeadApi.
+        listNote(params).then((notes) => {
             // console.log(notes);
             if (notes?.data?.data?.length > 0) {
                 setNotes(notes.data)
