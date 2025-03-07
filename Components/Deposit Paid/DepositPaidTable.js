@@ -872,7 +872,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
     setdeletableData(obj)
     setdeleteAmount(obj?.id)
   }
-    
+
   const handleDeleteAmount = (stage) => {
     setsubmitLoading(true)
     let dataToSubmit = {
@@ -900,12 +900,12 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
   const handleDeleteAmountWithStage = (stage) => {
 
     setsubmitLoading(true)
-    
+
     let dataToSubmit = {
       id: deletableData?.university_deposit_document?.id,
-      stage:stage?.id
+      stage: stage?.id
     }
-    
+
     ApplicationApi.deleteUniversityDocument(dataToSubmit).then((response) => {
       // console.log(response);
       if (response?.status == 200 || response?.status == 201) {
@@ -1465,7 +1465,7 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
       </div>
 
       {
-        (session?.data?.user?.role?.id == 3 ) &&
+        (session?.data?.user?.role?.id == 3) &&
         <ExportExcel tableLoading={loading} data={list?.data} from={'app'} fileName={"Deposit Paid"} params={{
           sort_field: field,
           sort_order: sortOrder ? 'asc' : 'desc',
@@ -1681,9 +1681,12 @@ export default function DepositPaidTable({ refresh, editId, setEditId, page, set
                                         <ListItem button onClick={() => handleDeferOpen(row)}>
                                           Defer Intake
                                         </ListItem>
-                                        <ListItem button onClick={() => handleMailOpen(row)}>
-                                          Mail to University
-                                        </ListItem>
+                                        {
+                                          !session?.data?.user?.is_restricted_counsellor && 
+                                          <ListItem button onClick={() => handleMailOpen(row)}>
+                                            Mail to University
+                                          </ListItem>
+                                        }
                                         <ListItem button onClick={() => handleDocOpen(row)}>
                                           Documents
                                         </ListItem>

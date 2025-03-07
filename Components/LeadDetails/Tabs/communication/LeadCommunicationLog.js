@@ -289,25 +289,34 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
     }, []);
 
     useEffect(() => {
-        getSummary()
-        // getCallSummary()
-    }, [emailLimit, whatsappLimit, refresh])
+        if (lead_id) {
+            getSummary()
+        }
+    }, [lead_id, emailLimit, whatsappLimit, refresh])
     useEffect(() => {
-        getCallSummary()
-    }, [phoneCallRefresh])
+        if (lead_id) {
+            getCallSummary()
+        }
+    }, [lead_id, phoneCallRefresh])
 
 
 
 
     useEffect(() => {
-        fetchList()
-    }, [emailLimit, refresh, emailPage])
+        if (lead_id) {
+            fetchList()
+        }
+    }, [lead_id, emailLimit, refresh, emailPage])
     useEffect(() => {
-        fetchWhatsappList()
-    }, [whatsappLimit, refresh, whatsappPage])
+        if (lead_id) {
+            fetchWhatsappList()
+        }
+    }, [lead_id, whatsappLimit, refresh, whatsappPage])
     useEffect(() => {
-        fetchCallList()
-    }, [callLimit, phoneCallRefresh, callPage])
+        if (lead_id) {
+            fetchCallList()
+        }
+    }, [lead_id, callLimit, phoneCallRefresh, callPage])
 
     return (
 
@@ -377,7 +386,7 @@ export default function BasicSelect({ lead_id, from, app_id, refresh, phoneCallR
                                 </div>
                             </div>
                             {
-                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 &&
+                                session?.data?.user?.role?.id != 6 && leadData?.closed != 1 && leadData?.withdrawn != 1 && leadData?.no_email != 1 && 
                                 <Button onClick={handleOpenMailModal} variant='outlined' sx={{ mt: 2, mb: -2, textTransform: 'none' }}>Send Mail</Button>
                             }
                         </div>

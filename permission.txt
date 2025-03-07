@@ -1,0 +1,6 @@
+lead edit modal ln:526
+lead detail tab ln:336
+lead detail index ln:819
+lead communication log ln:381
+application list ln:1800
+deposit paid ln:1685

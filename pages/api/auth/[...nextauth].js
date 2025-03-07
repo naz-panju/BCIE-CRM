@@ -18,7 +18,7 @@ export default NextAuth({
           const response = await axios.post(process.env.NEXT_PUBLIC_API_PATH + 'login', { email: credentials.email, password: credentials.password });
 
           if (response.data) {
-            console.log('yyy', response);
+            console.log('yyy',  response.data);
             const user = {
               id: response?.data?.data?.id,
               unassign_permission: response?.data?.data?.has_permission_to_access_unallocated_leads,
@@ -27,8 +27,10 @@ export default NextAuth({
               phone: response?.data?.data?.phone_number,
               token: response?.data?.data?._token,
               user_id: response.data?.data?.user?.user_id,
+              is_restricted_counsellor: response.data?.data?.is_restricted_counsellor,
               role: response?.data?.data?.role,
               office_country:response?.data?.data?.office_country,
+              
             };
             return Promise.resolve(user);
           } else {

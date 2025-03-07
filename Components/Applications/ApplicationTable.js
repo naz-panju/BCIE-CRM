@@ -1025,7 +1025,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                 return [];
             }
         })
-    }    
+    }
 
     return (
 
@@ -1671,15 +1671,15 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                         className='a_hover text-sky-600'> {row?.lead?.name} </span>
                                                                 </TableCell>
                                                                 <TableCell align="left">
-                                                                    {row?.lead?.date_of_birth?moment(row?.lead?.date_of_birth).format('DD-MM-YYYY'):'NA'}
+                                                                    {row?.lead?.date_of_birth ? moment(row?.lead?.date_of_birth).format('DD-MM-YYYY') : 'NA'}
                                                                 </TableCell>
                                                                 {/* <TableCell align="left">{row?.student?.email}</TableCell>
                                                                 <TableCell align="left">{row?.student?.phone_number}</TableCell> */}
                                                                 <TableCell align="left"> {row?.country?.name}</TableCell>
                                                                 <TableCell align="left">
                                                                     <div className='d-flex justify-between items-center'>
-                                                                       
-                                                                        <span onClick={() => handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span> 
+
+                                                                        <span onClick={() => handlUniInfoOpen(row)} className='a_hover text-sky-600'> {row?.university?.name}</span>
                                                                         {/* <HtmlTooltip
                                                                             title={
                                                                                 <React.Fragment>
@@ -1731,7 +1731,7 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                                 {
                                                                                     (session?.data?.user?.role?.id !== 5) &&
                                                                                     <div style={{}} className='text-start'>
-                                                                                       
+
                                                                                         <EditOutlined style={{ cursor: 'pointer', fontSize: '17px' }} onClick={() => handleEditPaymentOpen(row)} className='icon_hover' fontSize='small' />
                                                                                         <DeleteOutline style={{ cursor: 'pointer', marginLeft: '0px', fontSize: '17px' }} onClick={() => handleDeletePaymentOpen(row)} className='ml-2 icon_hover' fontSize='small' />
                                                                                     </div>
@@ -1796,9 +1796,12 @@ export default function ApplicationTable({ refresh, editId, setEditId, page, set
                                                                                 <ListItem button onClick={() => handleDeferOpen(row)}>
                                                                                     Defer Intake
                                                                                 </ListItem>
-                                                                                <ListItem button onClick={() => handleMailOpen(row)}>
-                                                                                    Mail to University
-                                                                                </ListItem>
+                                                                                {
+                                                                                    !session?.data?.user?.is_restricted_counsellor &&
+                                                                                    <ListItem button onClick={() => handleMailOpen(row)}>
+                                                                                        Mail to University
+                                                                                    </ListItem>
+                                                                                }
                                                                                 <ListItem button onClick={() => handleDocOpen(row)}>
                                                                                     Documents
                                                                                 </ListItem>

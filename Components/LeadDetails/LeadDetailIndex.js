@@ -250,13 +250,13 @@ function LeadDetails() {
     console.log(re);
     if (re) {
       console.log('re');
-      
+
       setAssignId(details?.id)
       setreAssign(true)
       setSelected(details?.id)
     } else {
       console.log('!re');
-      if(details){
+      if (details) {
         setAssignId(0)
         setreAssign(false)
         setSelected([details?.id])
@@ -601,7 +601,7 @@ function LeadDetails() {
                               stages?.length > 0 &&
                               <label>Complete</label>
                             }
-                            
+
                           </div>
 
 
@@ -630,7 +630,7 @@ function LeadDetails() {
                                 </defs>
                               </svg>
                             </React.Fragment>
-                          
+
 
                           </div>
 
@@ -792,7 +792,7 @@ function LeadDetails() {
                   </h4>
                   <div className='lead-communication-status-bg commu-txt'>
 
-                    <ul>
+                    <ul className='flex'>
 
                       {
                         summaryLoading ?
@@ -816,6 +816,7 @@ function LeadDetails() {
                             {/*  <p><span>{commDetails?.email_send_summary}</span>    Sent  </p> */}
                             {
                               session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 &&
+                               details?.no_email != 1 &&
                               <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
                             }
                           </li>
@@ -963,7 +964,7 @@ function LeadDetails() {
                               :
 
                               (session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1) ?
-                                <Button disabled={!details} onClick={()=> handleSigleAssign(false)} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
+                                <Button disabled={!details} onClick={() => handleSigleAssign(false)} sx={{ textTransform: 'none' }} variant='outlined' size='small'>Assign</Button>
                                 :
                                 'NA'
                         }

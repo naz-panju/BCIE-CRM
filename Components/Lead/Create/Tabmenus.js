@@ -1,15 +1,10 @@
 import * as React from 'react';
 import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Detail from './Tabs/Detail';
 import { useState } from 'react';
-import TabPanel from '@/utils/TabPanel';
 import { useForm } from 'react-hook-form';
 import { ListingApi } from '@/data/Endpoints/Listing';
-import { StudentApi } from '@/data/Endpoints/Student';
 import { LeadApi } from '@/data/Endpoints/Lead';
 import * as yup from "yup";
 import toast from 'react-hot-toast';
@@ -20,7 +15,7 @@ import SelectX from '@/Form/SelectX';
 import AsyncSelect from "react-select/async";
 import DateInput from '@/Form/DateInput';
 import { LoadingButton } from '@mui/lab';
-import { Button, Grid, TextField, Tooltip } from '@mui/material';
+import { Button, Checkbox, FormControlLabel, FormGroup, Grid, TextField, Tooltip } from '@mui/material';
 import ReactSelector from 'react-select';
 import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import moment from 'moment';
@@ -416,6 +411,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             event_id: data?.source?.id == 11 ? data?.referred_event?.id : null || null,
             country_id: session?.data?.user?.office_country?.id,
 
+            no_email: mailPermission,
+
             note: data?.note
         }
 
@@ -523,21 +520,15 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
 
             setValue('city', data?.city)
             setValue('address', data?.address)
+
+            setmailPermission(data?.no_email)
+
             setValue('note', data?.note)
 
         }
         setDataLoading(false)
     }
 
-    // useEffect(() => {
-    //     if (watch('country')) {
-    //         setselectedCountryID(watch('country')?.id)
-    //     } if (watch('course')) {
-    //         setselectedCourseID(watch('course')?.id)
-    //     } if (watch('institute')) {
-    //         setselectedInstituteID(watch('institute')?.id)
-    //     }
-    // }, [watch('source'), watch('course'), watch('institute')])
     const setTitleValue = () => {
         let getTitle = titles?.find((obj => obj?.name == currentTitle))
         setValue('title', getTitle)
@@ -555,6 +546,11 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         return moment(date).isAfter(moment().subtract(14, 'years'), 'day');
     }
 
+    const [mailPermission, setmailPermission] = useState(false)
+    const handleMailPermission = (e) => {
+        setmailPermission(e.target?.checked)
+    }
+
     useEffect(() => {
         setTitleValue()
     }, [titles])
@@ -563,8 +559,12 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         if (editId > 0) {
             getDetails()
         }
+        if (editId == 0) {
+            if (session.data.user.is_restricted_counsellor) {
+                setmailPermission(true)
+            }
+        }
         fetchReference()
-        // setValue('alt_phone','234')
     }, [editId])
 
     const items = [
@@ -583,8 +583,8 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
     const handleBlur = () => {
         console.log('Text box unfocused');
         // Add any additional logic you need here
-      };
-    
+    };
+
 
     return (
         <div className='form-data-cntr'>
@@ -752,7 +752,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             </div>
                         </div>
 
-
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
                             <div className='application-input'>
                                 <label className='form-text'>Enter Whatsapp Number</label>
@@ -799,8 +798,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                 </Grid>
                             </div>
                         </div>
-
-
 
                         <div className='grid grid-cols-1 md:grid-cols-2 gap-8 gap-y-0'>
 
@@ -1070,6 +1067,16 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             </div>
                         }
 
+                        {
+                            editId > 0 &&
+                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                <div className='application-input'>
+                                    <Grid mb={2} item xs={12} sm={6}>
+                                        <FormControlLabel control={<Checkbox key={mailPermission} onChange={handleMailPermission} value={mailPermission} checked={mailPermission} />} label={'Do not Allow sending emails to this lead'} />
+                                    </Grid>
+                                </div>
+                            </div>
+                        }
 
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                             <div className='application-input'>
