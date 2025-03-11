@@ -348,4 +348,4 @@ function LeadDetail({ data, handleEdit, loading }) {
     )
 }
 
-export default LeadDetail
+export default LeadDetail 
