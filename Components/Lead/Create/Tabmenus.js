@@ -596,6 +596,33 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                     :
                     <form onSubmit={handleSubmit(onSubmit)}>
 
+                        {
+                            editId > 0 && (
+                                <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
+                                    <div className="application-input bg-yellow-100 border-l-4 border-yellow-500 p-2 rounded-md shadow-md mb-3">
+                                        <Grid className='mb-[0px]' mb={2} item xs={12} sm={6}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        key={mailPermission}
+                                                        onChange={handleMailPermission}
+                                                        value={mailPermission}
+                                                        checked={mailPermission}
+                                                        className="text-yellow-600"
+                                                    />
+                                                }
+                                                label={
+                                                    <span className="text-yellow-800 font-semibold">
+                                                        Do not allow sending emails to this lead
+                                                    </span>
+                                                }
+                                            />
+                                        </Grid>
+                                    </div>
+                                </div>
+                            )
+                        }
+
                         <div className='form_group d-flex align-items-center frm-nam-fild '>
 
                             <div className='frm-nam-select' >
@@ -1062,17 +1089,6 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                                             name={'referred_event'}
                                             defaultValue={watch('referred_event')}
                                         />
-                                    </Grid>
-                                </div>
-                            </div>
-                        }
-
-                        {
-                            editId > 0 &&
-                            <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
-                                <div className='application-input'>
-                                    <Grid mb={2} item xs={12} sm={6}>
-                                        <FormControlLabel control={<Checkbox key={mailPermission} onChange={handleMailPermission} value={mailPermission} checked={mailPermission} />} label={'Do not Allow sending emails to this lead'} />
                                     </Grid>
                                 </div>
                             </div>
