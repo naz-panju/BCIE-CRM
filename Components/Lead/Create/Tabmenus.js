@@ -411,7 +411,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             event_id: data?.source?.id == 11 ? data?.referred_event?.id : null || null,
             country_id: session?.data?.user?.office_country?.id,
 
-            no_email: mailPermission,
+            no_email: mailPermission ? 1 : 0,
 
             note: data?.note
         }
@@ -521,7 +521,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             setValue('city', data?.city)
             setValue('address', data?.address)
 
-            setmailPermission(data?.no_email)
+            setmailPermission(data?.no_email ? true : false)
 
             setValue('note', data?.note)
 
