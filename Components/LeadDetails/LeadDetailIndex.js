@@ -816,7 +816,7 @@ function LeadDetails() {
                             {/*  <p><span>{commDetails?.email_send_summary}</span>    Sent  </p> */}
                             {
                               session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 &&
-                               details?.no_email != 1 &&
+                              details?.no_email != 1 &&
                               <a className='btn' onClick={details && handleOpenMailModal}>Send Mail</a>
                             }
                           </li>
@@ -911,7 +911,7 @@ function LeadDetails() {
                       </div>
                       <div>
                         {
-                          session?.data?.user?.role?.id != 6 && details?.closed != 1 && details?.withdrawn != 1 &&
+                          details?.closed != 1 && details?.withdrawn != 1 &&
                           <a className='btn' onClick={details && handleNoteOpen}>  Add Note </a>
                         }
                       </div>
@@ -959,7 +959,10 @@ function LeadDetails() {
                                 <p> {details?.assignedToCounsellor?.name && <span>{getFirstLettersOfTwoWords(details?.assignedToCounsellor?.name)}</span>} {details?.assignedToCounsellor?.name || 'NA'}
 
                                 </p>
+                                {/* {
+                                  session?.data?.user?.role?.id != 6 && */}
                                 <Tooltip title={'Re Assign'}><SwapHorizOutlined onClick={() => handleSigleAssign(true)} sx={{ ml: 2, cursor: 'pointer' }} /></Tooltip>
+                                {/* } */}
                               </span>
                               :
 
