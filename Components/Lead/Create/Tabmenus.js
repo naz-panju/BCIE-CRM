@@ -21,13 +21,14 @@ import LoadingEdit from '@/Components/Common/Loading/LoadingEdit';
 import moment from 'moment';
 import TextInput from '@/Form/TextInput';
 import { useSession } from 'next-auth/react';
-
-
+import { useRef } from 'react';
 
 
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
+
+
 
     return (
         <div
@@ -63,6 +64,8 @@ function a11yProps(index) {
 export default function CreateTabs({ handleClose, refresh, setRefresh, editId, handleRefresh, from, handleLeadRefresh }) {
 
     const session = useSession()
+
+    const mailChangeRef = useRef(null);
 
     // console.log(session)
 
@@ -230,7 +233,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
         })
     }
 
-    const fetchIntakes = (e) => {
+    const fetchName = (e) => {
         return ListingApi.intakes({ keyword: e, }).then(response => {
             if (typeof response.data.data !== "undefined") {
                 return response.data.data;
@@ -357,8 +360,35 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
     const [titles, settitles] = useState([])
     const [currentTitle, setcurrentTitle] = useState()
 
+    const [mailChangeError, setmailChangeError] = useState(false)
+    const [confirmChangedMailId, setconfirmChangedMailId] = useState()
+    const [existMailId, setExistMailId] = useState()
+
+    const handleCancelChange = () => {
+        setconfirmChangedMailId(2)
+        setValue('email', existMailId)
+        setmailChangeError(false)
+
+    };
+
+    const handleConfirmChange = () => {
+        setconfirmChangedMailId(1)
+        // setExistMailId(watch('email'))
+        setValue('email', existMailId)
+        setmailChangeError(false)
+    };
+
+
 
     const onSubmit = async (data) => {
+
+        if (data?.email != existMailId && !confirmChangedMailId) {
+            setmailChangeError(true)
+            setTimeout(() => {
+                mailChangeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100); // slight delay to ensure DOM is updated
+            return
+        }
 
         setLoading(true)
         let dob = ''
@@ -375,6 +405,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             title: data?.title?.name,
             name: data?.name,
             email: data?.email,
+            ...(confirmChangedMailId == 1 ? { update_user_email: 1 } : {}),
 
             // phone_country_code: code,
             phone_number: phone,
@@ -466,6 +497,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
     // const [dataLoading, setDataLoading] = useState(false)
 
     const [numKey, setnumKey] = useState(0)
+
     const getDetails = async () => {
         setDataLoading(true)
         const response = await LeadApi.view({ id: editId })
@@ -483,6 +515,7 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
             // console.log(`+${data?.phone_country_code}${data?.phone_number}`);
             setValue('name', data?.name)
             setValue('email', data?.email)
+            setExistMailId(data?.email)
 
             setValue('phone', `${data?.phone_number}`)
             setPhone(data?.phone_number)
@@ -646,10 +679,60 @@ export default function CreateTabs({ handleClose, refresh, setRefresh, editId, h
                             {errors.name && <span className='form-validation'>{errors.name.message}</span>}
 
                         </div>
+                        {
+                            mailChangeError && (
+                                <div ref={mailChangeRef} className="w-full bg-yellow-50 shadow-md rounded-lg p-6 mt-4 border-l-4 border-yellow-400 my-2">
+                                    <div className="flex items-start gap-3">
+                                        <div className="flex-1">
+                                            <h2 className="text-base font-semibold text-yellow-700 mb-2">
+                                                Would you like to update the user email address?
+                                            </h2>
+                                            <div className="flex justify-end gap-3">
+                                                <button
+                                                    type="button"
+                                                    onClick={handleCancelChange}
+                                                    className="px-4 py-1.5 rounded-md bg-gray-100 text-gray-800 border border-gray-300 hover:bg-gray-200 transition"
+                                                >
+                                                    No
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={handleConfirmChange}
+                                                    className="px-4 py-1.5 rounded-md bg-yellow-500 text-white hover:bg-yellow-600 transition"
+                                                >
+                                                    Yes
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            )
+                        }
 
                         <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                             <div className='application-input'>
-                                <label className='form-text'>Email</label>
+                                <label className="block text-sm font-medium text-gray-700">
+                                    Email
+                                    {confirmChangedMailId == 1 && (
+                                        <span className="ml-2 inline-flex items-center text-xs text-red-600 italic">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                className="w-4 h-4 mr-1 fill-red-600"
+                                                viewBox="0 0 20 20"
+                                            >
+                                                <path
+                                                    fillRule="evenodd"
+                                                    d="M8.257 3.099c.765-1.36 2.721-1.36 3.486 0l6.518 11.595c.75 1.335-.213 3.006-1.742 3.006H3.481c-1.529 0-2.492-1.671-1.742-3.006L8.257 3.1zM10 13a1 1 0 100 2 1 1 0 000-2zm-.75-6.75a.75.75 0 011.5 0v4a.75.75 0 01-1.5 0v-4z"
+                                                    clipRule="evenodd"
+                                                />
+                                            </svg>
+                                            (Update user's email)
+                                        </span>
+                                    )}
+                                </label>
+
+
                                 {/* className='form_group */}
                                 <Grid className='mb-5 forms-data' >
                                     <TextInput onBlur={handleBlur} placeholder='' control={control} {...register('email', {
