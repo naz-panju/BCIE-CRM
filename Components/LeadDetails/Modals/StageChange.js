@@ -266,7 +266,7 @@ export default function StageChangeModal({ details, editId, setEditId, refresh, 
                                             watch('stage')?.sub_stages?.length > 0 &&
                                             <div className="grid grid-cols-1 md:grid-cols-1 gap-8 gap-y-0">
                                                 <div className='application-input'>
-                                                    <a className='form-text'>Select Sub Stag</a>
+                                                    <a className='form-text'>Select Sub Stage</a>
 
                                                     <Grid className='mb-5 forms-data  ' >
 
